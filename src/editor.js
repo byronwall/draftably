@@ -1099,8 +1099,14 @@ listen(document, 'click',e=>{
 listen(document, 'pointerdown',e=>{if(!$('popover').hidden&&!e.target.closest('#popover,#file-menu-btn,#edit-menu-btn,#layout-options-btn,#export-btn,#routing-options-btn'))closePopover();});
 listen($('inspector'), 'change',e=>{if(e.target.dataset.field)changeField(e.target);});
 listen($('layer-search'), 'input',renderLibrary);
-listen($('document-title'), 'change',e=>{const title=e.target.value.trim()||'Untitled diagram';change('Rename diagram',()=>{D.title=title;});});
-listen($('document-title'), 'keydown',e=>{if(e.key==='Enter'){$('document-title').blur();$('canvas').focus();}});
+function commitDocumentTitle(){
+ const input=$('document-title'),title=input.value.trim()||'Untitled diagram';
+ if(title===D.title){input.value=D.title;return;}
+ change('Rename diagram',()=>{D.title=title;});
+}
+listen($('document-title'), 'change',commitDocumentTitle);
+listen($('document-title'), 'blur',commitDocumentTitle);
+listen($('document-title'), 'keydown',e=>{if(e.key==='Enter'){e.preventDefault();commitDocumentTitle();$('document-title').blur();$('canvas').focus();}});
 listen($('popover'), 'keydown',e=>{
  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closePopover();return;}
  if(['ArrowDown','ArrowUp'].includes(e.key)&&e.target.tagName==='BUTTON'){const items=[...$('popover').querySelectorAll('button:not(:disabled),input,select')],i=items.indexOf(e.target);e.preventDefault();items[(i+(e.key==='ArrowDown'?1:-1)+items.length)%items.length]?.focus();}
