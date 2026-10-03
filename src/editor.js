@@ -1099,7 +1099,7 @@ listen(document, 'click',e=>{
 listen(document, 'pointerdown',e=>{if(!$('popover').hidden&&!e.target.closest('#popover,#file-menu-btn,#edit-menu-btn,#layout-options-btn,#export-btn,#routing-options-btn'))closePopover();});
 listen($('inspector'), 'change',e=>{if(e.target.dataset.field)changeField(e.target);});
 listen($('layer-search'), 'input',renderLibrary);
-listen($('document-title'), 'change',e=>change('Rename diagram',()=>{D.title=e.target.value.trim()||'Untitled diagram';}));
+listen($('document-title'), 'change',e=>{const title=e.target.value.trim()||'Untitled diagram';change('Rename diagram',()=>{D.title=title;});});
 listen($('document-title'), 'keydown',e=>{if(e.key==='Enter'){$('document-title').blur();$('canvas').focus();}});
 listen($('popover'), 'keydown',e=>{
  if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closePopover();return;}
