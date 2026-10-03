@@ -1,0 +1,22 @@
+{
+  "name": "diagram-studio",
+  "private": true,
+  "version": "8.0.0",
+  "type": "module",
+  "packageManager": "pnpm@11.9.0",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --pretty false",
+    "test:engines": "node tests/engine-layout.mjs && node tests/engine-sculpt.mjs && node tests/engine-parity.mjs"
+  },
+  "dependencies": {
+    "solid-js": "^1.9.9"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "typescript": "~5.8.3",
+    "vite": "^6.3.5",
+    "vite-plugin-solid": "^2.11.6"
+  }
+}
