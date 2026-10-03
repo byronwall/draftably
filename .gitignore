@@ -1,0 +1,7 @@
+node_modules/
+.pnpm-store/
+dist/
+tmp/
+*.tsbuildinfo
+__pycache__/
+.DS_Store

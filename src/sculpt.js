@@ -34,7 +34,7 @@ function sculptRestoreArchive(){
 async function journeyCompute(doc,opts){
  let worker;
  try{
-  worker=new Worker(new URL('./workers/sculpt-worker.js', import.meta.url),{type:'module'});
+  worker=new Worker(new URL('./workers/sculpt-worker.ts', import.meta.url),{type:'module'});
  }catch(err){console.warn('[journey] Worker unavailable; yielding main-thread solve',err);return SculptLab.journey(doc,opts);}
  journeyWorker=worker;
  return new Promise((resolve,reject)=>{

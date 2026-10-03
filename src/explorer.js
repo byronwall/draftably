@@ -78,7 +78,7 @@ function exSetProgress(text,error=false){$('ex-progress').textContent=text;$('ex
 function exWorkerCandidate(baseline,spec,config,owner){
  let worker;
  try{
-  worker=new Worker(new URL('./workers/explorer-worker.js', import.meta.url),{type:'module'});
+  worker=new Worker(new URL('./workers/explorer-worker.ts', import.meta.url),{type:'module'});
  }catch(error){console.warn('[compare] Worker unavailable; using local engine',error);return ExplorerLab.candidate(baseline,spec,config);}
  owner.worker=worker;
  return new Promise((resolve,reject)=>{

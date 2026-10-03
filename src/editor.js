@@ -329,7 +329,7 @@ async function computeInWorker(doc,opts){
  // to the same async engine with periodic event-loop yields, not another layout.
  let worker;
  try{
-  worker=new Worker(new URL('./workers/layout-worker.js', import.meta.url),{type:'module'});
+  worker=new Worker(new URL('./workers/layout-worker.ts', import.meta.url),{type:'module'});
  }catch(error){console.warn('[layout] Worker unavailable; using yielding main thread',error);const r=await LayoutLab.compute(doc,opts);r.report.thread='main-thread fallback';return r;}
  layoutWorker=worker;
  return new Promise((resolve,reject)=>{

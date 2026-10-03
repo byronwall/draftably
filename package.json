@@ -5,11 +5,11 @@
   "type": "module",
   "packageManager": "pnpm@11.9.0",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "preview": "vite preview --host 0.0.0.0",
+    "dev": "vite",
+    "preview": "vite preview",
     "build": "tsc -b && node scripts/check-bindings.ts && vite build",
     "typecheck": "tsc -b --pretty false && node scripts/check-bindings.ts",
-    "test:engines": "node tests/engine-layout.mjs && node tests/engine-sculpt.mjs && node tests/engine-parity.mjs"
+    "test:engines": "node tests/engine-layout.mjs && node tests/engine-sculpt.mjs && node tests/engine-parity.ts"
   },
   "dependencies": {
     "solid-js": "^1.9.9"
@@ -19,5 +19,8 @@
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-solid": "^2.11.6"
+  },
+  "engines": {
+    "node": ">=22.21.0"
   }
 }

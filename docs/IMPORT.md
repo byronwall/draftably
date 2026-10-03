@@ -8,11 +8,15 @@ The initial commit imports the final Diagram Studio v7 release from the
 - Archive: `diagram-studio-v7.zip`, 64 files.
 - Archive SHA-256: `2774d6007e1e4dd62a890ea9b79945c7cb1018555011aa1b369f0300af56b168`.
 - Initial commit: `df9f919` (`Import final Diagram Studio v7 release`).
-- Integrity: all 63 file checksums in `MANIFEST.sha256` passed before the import commit.
+- Integrity: all 63 file checksums passed before the import commit.
 
 The initial commit preserves the source, standalone app, documents, 13 examples,
 previews, and verification files exactly as downloaded. Earlier release bundles
 were not imported. The v6 change guide was part of the final v7 bundle.
+
+The unchanged release is now under `reference/v7/`. Its checksum list is
+`reference/v7/MANIFEST.sha256`. The application under `src/` is the maintained
+SolidJS version.
 
 The intent dump contains the product history, layout research, references,
 interaction rules, and migration proposals. The parameter reference describes

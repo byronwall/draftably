@@ -1,0 +1,186 @@
+{
+  "schemaVersion": 2,
+  "id": "Crowded boxes",
+  "title": "Crowded boxes",
+  "graph": {
+    "nodes": [
+      {
+        "id": "a",
+        "title": "a"
+      },
+      {
+        "id": "b",
+        "title": "b"
+      },
+      {
+        "id": "c",
+        "title": "c"
+      },
+      {
+        "id": "d",
+        "title": "d"
+      },
+      {
+        "id": "e",
+        "title": "e"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e0",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e1",
+        "from": "b",
+        "to": "c",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e2",
+        "from": "c",
+        "to": "d",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "a": {
+        "x": 100,
+        "y": 100,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "b": {
+        "x": 170,
+        "y": 120,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "c": {
+        "x": 210,
+        "y": 150,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "d": {
+        "x": 380,
+        "y": 110,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "e": {
+        "x": 700,
+        "y": 350,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "e0": {},
+      "e1": {},
+      "e2": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "a": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "b": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "c": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "d": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "e": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "auto",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6
+    }
+  },
+  "camera": {
+    "x": 146.40000000000003,
+    "y": 104.50000000000001,
+    "k": 1.2
+  },
+  "theme": "light"
+}
