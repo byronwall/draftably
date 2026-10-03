@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="light dark" name="color-scheme"/><title>Diagram Studio</title>{{styles}}</head><body>
+<div class="right-closed" id="app">
+<header class="topbar">
+<button aria-label="File and examples" class="icon ghost" data-action="file-menu" data-icon="more" id="file-menu-btn" title="File and examples"></button>
+<div class="title-block"><input aria-label="Diagram title" id="document-title" spellcheck="false" value=""/><span aria-live="polite" id="save-status">Saved</span></div>
+<div aria-label="Drawing tools" class="toolbelt" role="toolbar">
+<span class="sep"></span>
+<button aria-label="Select (V)" class="icon ghost" data-icon="cursor" data-tool="select" title="Edit / select · V · drag objects or marquee"></button>
+<button aria-label="Pan (H)" class="icon ghost" data-icon="hand" data-tool="pan" title="Navigate · H · drag anywhere to pan; click to inspect"></button>
+<span class="sep"></span>
+<button aria-label="Rectangle (R)" class="icon ghost" data-icon="box" data-tool="box" title="Rectangle · R · click or drag"></button>
+<button aria-label="Diamond (D)" class="icon ghost" data-icon="diamond" data-tool="diamond" title="Diamond · D"></button>
+<button aria-label="Ellipse (O)" class="icon ghost" data-icon="circle" data-tool="circle" title="Ellipse · O"></button>
+<button aria-label="Text (T)" class="icon ghost" data-icon="text" data-tool="text" title="Text · T"></button>
+<button aria-label="Container (G)" class="icon ghost" data-icon="group" data-tool="container" title="Draw a container · G · Ctrl/⌘ G wraps selection"></button>
+<button aria-label="Connect (C)" class="icon ghost" data-icon="connect" data-tool="connect" title="Connect · C · stays active until Escape"></button>
+<span class="sep"></span>
+<button aria-label="Undo" class="icon ghost" data-action="undo" data-icon="undo" id="undo-btn" title="Undo · Ctrl/⌘ Z"></button>
+<button aria-label="Redo" class="icon ghost" data-action="redo" data-icon="redo" id="redo-btn" title="Redo · Ctrl/⌘ Shift Z"></button>
+<button class="ghost edit-menu" data-action="edit-menu" id="edit-menu-btn" title="Duplicate, group, align, pin, delete">Edit<span data-icon="chevron"></span></button>
+</div>
+<button aria-label="Build from a list (B)" class="icon ghost" data-action="quick-build" data-icon="layers" title="Build from a list · B"></button><select aria-label="Quick layout approach" id="algorithm-quick"><optgroup label="Nested systems"><option value="compound-flow">Compound flow</option><option value="boundary-align">Boundary alignment</option><option value="compound-spring">Compound spring</option></optgroup><option value="tidy">Local tidy</option><option value="stress">Stress descent</option><option value="force">Spring network</option><option value="flow">Directional flow</option><option value="layered">Layered + fold</option><option value="tree">Subtree tree</option><option value="grid">Soft grid</option><option value="separate">Separate overlaps</option></select><div class="layout-split"><button class="primary" data-action="layout" id="layout-btn" title="Improve layout · L · bounded movement, no camera reset"><span data-icon="layout"></span><span class="layout-label">Improve</span><kbd>L</kbd></button><button aria-label="Layout options" class="primary icon" data-action="layout-menu" data-icon="chevron" id="layout-options-btn" title="Layout options · Alt L"></button></div>
+<button class="ghost sculpt-launch" data-action="journey-open" id="journey-btn" title="Layout timeline · Alt T"><span data-icon="journey"></span><span>Timeline</span></button><button aria-label="Layout brush (W)" class="icon ghost" data-action="brush-toggle" data-icon="brush" id="brush-btn" title="Layout brush · W · improve locally without a selection"></button><button class="ghost" data-action="compare-layouts" id="compare-btn" title="Compare layouts and routing parameters · Alt E"><span aria-hidden="true" class="ex-compare-icon"><i></i><i></i><i></i><i></i></span><span class="compare-label">Compare</span></button><div class="route-split"><button aria-label="Reroute connections" class="ghost icon" data-action="reroute" data-icon="branch" title="Reroute only · Alt R · shapes stay put"></button><button aria-label="Routing options" class="ghost icon" data-action="routing-menu" data-icon="chevron" id="routing-options-btn" title="Routing options"></button></div><div class="top-actions">
+<button aria-label="Toggle objects" class="icon ghost" data-action="toggle-left" data-icon="panel-left" title="Objects · ["></button>
+<button aria-label="Toggle inspector" class="icon ghost" data-action="toggle-right" data-icon="panel-right" title="Inspector · ]"></button>
+<button aria-label="Keyboard shortcuts" class="icon ghost help-button" data-action="help" data-icon="help" title="Keyboard shortcuts · ?"></button>
+<button class="ghost" data-action="export-menu" id="export-btn" title="Export diagram"><span data-icon="export"></span><span class="export-label">Export</span></button>
+</div>
+<button class="ghost danger" data-action="layout-cancel" hidden="" id="layout-cancel">Cancel</button></header>
+<div class="workspace left-closed" id="workspace">
+<aside aria-label="Objects" class="panel left-panel" hidden="" id="objects-panel">
+<div class="panel-head"><h2>Objects <span class="pill" id="layer-count"></span></h2><button aria-label="Close objects" class="icon ghost" data-action="toggle-left" data-icon="close"></button></div>
+<div class="object-search"><input aria-label="Find an object" id="layer-search" placeholder="Find an object…"/></div><div class="layer-list panel-scroll" id="layer-list"></div>
+</aside>
+<main aria-label="Diagram workspace" data-tool="select" id="stage">
+<svg aria-label="Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. Escape returns to Edit. Shift drag selects. Two-finger scroll pans; pinch zooms. Question mark opens shortcuts." id="canvas" role="application" tabindex="0"><defs><pattern height="24" id="dots" patternunits="userSpaceOnUse" width="24"><circle cx="1" cy="1" fill="var(--dot)" r=".7"></circle></pattern></defs><rect fill="url(#dots)" height="100%" id="grid-bg" width="100%"></rect><g id="world"><g id="group-layer"></g><g id="edge-layer"></g><g id="node-layer"></g><g id="overlay-layer"></g></g></svg>
+<div class="empty-canvas" hidden="" id="empty-canvas"><h2>Draw something.</h2><p><kbd>N</kbd> adds a box. Type a title, then <kbd>Tab</kbd> to keep going.</p><button class="primary" data-action="quick-build">Build from a list <kbd>B</kbd></button></div>
+<div class="zoom-controls"><button aria-label="Fit diagram" class="icon ghost" data-action="fit" data-icon="fit" title="Fit diagram · 1"></button><span class="sep"></span><button aria-label="Zoom out" class="icon ghost" data-action="zoom-out" data-icon="minus"></button><button class="ghost" data-action="reset-camera" id="zoom-label" title="100% · 0">100%</button><button aria-label="Zoom in" class="icon ghost" data-action="zoom-in" data-icon="plus"></button></div>
+<section id="journey-deck" class="journey-deck" aria-label="Layout timeline" hidden></section><section id="brush-dock" class="brush-dock" aria-label="Layout brush controls" hidden></section><div class="image-drop" hidden="" id="drop-overlay">Drop an image or a saved diagram</div>
+</main>
+</div>
+<aside aria-label="Inspector" class="panel right-panel" hidden="" id="inspector-panel"><div class="panel-head"><h2>Inspector</h2><button aria-label="Close inspector" class="icon ghost" data-action="toggle-right" data-icon="close"></button></div><div class="panel-scroll" id="inspector"></div><div class="inspector-bottom"><span>Toggle panels</span><kbd>\</kbd></div></aside>
+<footer class="statusbar"><span id="item-status"></span><span class="status-hint" id="mode-status"></span><span class="status-right" id="engine-status"></span><button class="ghost" data-action="help" title="Keyboard shortcuts">?</button></footer>
+</div>
+<aside aria-label="Layout lab" class="layout-lab" hidden="" id="layout-lab"></aside>
+<div class="layout-preview" hidden="" id="layout-preview"><div><strong id="preview-name">Layout preview</strong><span>Not saved yet</span></div><button aria-label="Hold to see previous layout" id="preview-before" title="Hold to compare">Hold before</button><button data-action="layout-discard">Discard <kbd>Esc</kbd></button><button class="primary" data-action="layout-accept">Keep layout</button></div>
+<dialog aria-labelledby="ex-title" id="explorer-dialog">
+ <header class="ex-header">
+  <button class="ghost icon" data-ex-action="toggle-controls" aria-label="Toggle comparison controls" title="Show or hide controls">☰</button>
+  <div class="ex-heading"><h2 id="ex-title">Compare layouts</h2><p id="ex-source"></p></div>
+  <div class="ex-presentation" role="group" aria-label="Comparison display"><button data-ex-view="grid" aria-pressed="true">Grid</button><button data-ex-view="overlay" aria-pressed="false">Overlay</button></div>
+  <span class="grow"></span><span class="ex-readonly">Preview only · Apply to keep</span>
+  <button aria-label="Close comparison" class="ghost ex-close" data-ex-action="close">Close <kbd>Esc</kbd></button>
+ </header>
+ <aside id="ex-sidebar" class="ex-sidebar" aria-label="Comparison settings">
+  <div class="ex-sidebar-scroll">
+   <nav aria-label="Comparison type" class="ex-tabs" id="ex-tabs"></nav>
+   <div class="ex-config" id="ex-config"></div>
+   <div id="ex-intent"></div>
+   <section class="ex-control-section"><h3>Inspect</h3><div class="ex-camera-controls" id="ex-camera-controls"></div><p class="ex-camera-note" id="ex-camera-note"></p></section>
+   <div id="ex-layer-controls"></div>
+   <details class="ex-control-section"><summary>Export comparison</summary><div class="ex-export-actions"><button data-ex-action="export-svg">Save visible format as SVG</button><button data-ex-action="export-json">Save experiment JSON</button></div><p class="note">The experiment includes the baseline and full candidate documents.</p></details>
+  </div>
+ </aside>
+ <main class="ex-main" aria-label="Candidate diagrams">
+  <div class="ex-main-bar"><span id="ex-anchor-label">Click any shape to choose a visual anchor.</span><span class="grow"></span><button class="ghost small" data-ex-action="fit">Fit all <kbd>Home</kbd></button></div>
+  <div aria-label="Comparison contact sheet" class="ex-grid" id="ex-grid"></div>
+  <div id="ex-overlay-stage" hidden><svg class="ex-canvas ex-overlay-canvas" data-ex-canvas="-1" tabindex="0" role="application" aria-label="Anchored overlay. Click a shape to align every layer on it. Drag to pan. Pinch to zoom."><g data-ex-world></g></svg><span class="ex-scale" data-ex-scale="-1"></span><div class="ex-overlay-empty">Generate layouts to compare their geometry.</div></div>
+  <div aria-live="polite" class="ex-progress" id="ex-progress" role="status"></div>
+ </main>
+</dialog>
+<div aria-live="polite" id="toast" role="status"></div><div class="popover" hidden="" id="popover"></div>
+<dialog aria-labelledby="dialog-title" id="main-dialog"><div class="dialog-head"><h2 id="dialog-title"></h2><button aria-label="Close dialog" class="icon ghost" data-action="close-dialog" data-icon="close"></button></div><div class="dialog-body" id="dialog-body"></div><div class="dialog-foot" id="dialog-foot"></div></dialog>
+<input accept=".json,.svg,image/png,image/jpeg,image/webp,image/gif" hidden="" id="file-input" type="file"/><input accept="image/png,image/jpeg,image/webp,image/gif" hidden="" id="image-input" multiple="" type="file"/>
+{{layout-engine}}
+{{routing-engine}}
+{{explorer-engine}}
+{{sculpt-engine}}
+{{studio-app}}
+{{explorer-ui}}
+{{sculpt-ui}}
+</body></html>

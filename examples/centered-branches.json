@@ -1,0 +1,417 @@
+{
+  "schemaVersion": 2,
+  "id": "Centered branches",
+  "title": "Centered branches",
+  "graph": {
+    "nodes": [
+      {
+        "id": "hub",
+        "title": "Diagram Studio"
+      },
+      {
+        "id": "branch-0",
+        "title": "Create"
+      },
+      {
+        "id": "branch-0-0",
+        "title": "Boxes & labels"
+      },
+      {
+        "id": "branch-0-1",
+        "title": "Quick connections"
+      },
+      {
+        "id": "branch-1",
+        "title": "Arrange"
+      },
+      {
+        "id": "branch-1-0",
+        "title": "Small passes"
+      },
+      {
+        "id": "branch-1-1",
+        "title": "Nested containers"
+      },
+      {
+        "id": "branch-2",
+        "title": "Compare"
+      },
+      {
+        "id": "branch-2-0",
+        "title": "Layout grids"
+      },
+      {
+        "id": "branch-2-1",
+        "title": "Anchored overlays"
+      },
+      {
+        "id": "branch-3",
+        "title": "Deliver"
+      },
+      {
+        "id": "branch-3-0",
+        "title": "Editable exports"
+      },
+      {
+        "id": "branch-3-1",
+        "title": "Offline files"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge-0",
+        "from": "hub",
+        "to": "branch-0",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-1",
+        "from": "branch-0",
+        "to": "branch-0-0",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-2",
+        "from": "branch-0",
+        "to": "branch-0-1",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-3",
+        "from": "hub",
+        "to": "branch-1",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-4",
+        "from": "branch-1",
+        "to": "branch-1-0",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-5",
+        "from": "branch-1",
+        "to": "branch-1-1",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-6",
+        "from": "hub",
+        "to": "branch-2",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-7",
+        "from": "branch-2",
+        "to": "branch-2-0",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-8",
+        "from": "branch-2",
+        "to": "branch-2-1",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-9",
+        "from": "hub",
+        "to": "branch-3",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-10",
+        "from": "branch-3",
+        "to": "branch-3-0",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "edge-11",
+        "from": "branch-3",
+        "to": "branch-3-1",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "hub": {
+        "x": 496,
+        "y": 184,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-0": {
+        "x": 712,
+        "y": 104,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-0-0": {
+        "x": 928,
+        "y": 64,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-0-1": {
+        "x": 928,
+        "y": 144,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-1": {
+        "x": 280,
+        "y": 104,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-1-0": {
+        "x": 64,
+        "y": 64,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-1-1": {
+        "x": 64,
+        "y": 144,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-2": {
+        "x": 712,
+        "y": 264,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-2-0": {
+        "x": 928,
+        "y": 224,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-2-1": {
+        "x": 928,
+        "y": 304,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-3": {
+        "x": 280,
+        "y": 264,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-3-0": {
+        "x": 64,
+        "y": 224,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "branch-3-1": {
+        "x": 64,
+        "y": 304,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "edge-0": {},
+      "edge-1": {},
+      "edge-2": {},
+      "edge-3": {},
+      "edge-4": {},
+      "edge-5": {},
+      "edge-6": {},
+      "edge-7": {},
+      "edge-8": {},
+      "edge-9": {},
+      "edge-10": {},
+      "edge-11": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {
+      "start": {
+        "id": "hub",
+        "placement": "center"
+      }
+    }
+  },
+  "styles": {
+    "hub": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-0": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-0-0": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-0-1": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-1": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-1-0": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-1-1": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-2": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-2-0": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-2-1": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-3": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-3-0": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "branch-3-1": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tree",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "auto",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "hub",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6
+    }
+  },
+  "camera": {
+    "x": 26.40000000000005,
+    "y": 147.10000000000002,
+    "k": 1.2
+  },
+  "theme": "light"
+}

@@ -1,0 +1,462 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Layout and routing parameters · Diagram Studio v7</title><style>
+:root{color-scheme:light;--ink:#23283a;--muted:#667084;--line:#dfe3ed;--accent:#5c4bce;--paper:#fff;--soft:#f6f7fb}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;background:var(--soft);color:var(--ink);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}.mast{border-bottom:1px solid var(--line);padding:15px 30px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;font-size:13px}.brand{font-weight:750;letter-spacing:.03em;color:var(--ink);text-decoration:none}.mast nav{display:flex;gap:20px;flex-wrap:wrap}.layout{max-width:1370px;margin:auto;display:grid;grid-template-columns:250px minmax(0,950px);gap:38px;padding:38px 32px 80px;justify-content:center}.contents{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;font-size:12.5px;line-height:1.45}.contents strong{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--muted);padding:4px 10px 15px}.contents a{display:block;padding:6px 10px;color:var(--muted);text-decoration:none;border-radius:5px}.contents a:hover{background:#e9e8f5;color:var(--accent)}.contents .level3{padding-left:22px;font-size:12px}.paper{min-width:0;background:var(--paper);padding:48px 58px 64px;border:1px solid var(--line);border-radius:12px;box-shadow:0 7px 25px #23305204}h1{font-size:38px;line-height:1.12;letter-spacing:-.04em;margin:0 0 18px}h2{font-size:25px;line-height:1.25;letter-spacing:-.018em;margin:42px 0 16px}h1+h2{font-size:17px;font-weight:500;margin-top:0;color:var(--muted);letter-spacing:0}h3{font-size:18px;line-height:1.4;margin:32px 0 12px}p{margin:0 0 18px}li{margin-bottom:7px}ul,ol{padding-left:22px;margin:12px 0 22px}blockquote{border-left:3px solid var(--accent);padding:4px 20px;margin:24px 0;color:var(--muted)}code{font:0.87em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;background:#f1f2f7;border-radius:4px;padding:2px 4px}pre{background:#f5f6fa;border:1px solid var(--line);border-radius:8px;padding:18px;overflow-x:auto;line-height:1.6;margin:24px 0}pre code{padding:0;background:none;font-size:12px;overflow-wrap:normal}.table-wrap{overflow-x:auto;margin:22px 0}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.55}th{text-align:left;background:#f3f4f9;color:#40485b}td,th{border-bottom:1px solid var(--line);padding:12px 13px;vertical-align:top}tr:last-child td{border-bottom:none}img{display:block;max-width:100%;height:auto;margin:26px auto;border:1px solid var(--line);border-radius:8px}hr{border:0;border-top:1px solid var(--line);margin:34px 0}.footer{border-top:1px solid var(--line);padding-top:24px;margin-top:44px;font-size:12px;color:var(--muted)}:focus-visible{outline:3px solid #b3a8f0;outline-offset:3px}
+@media(max-width:1000px){.layout{grid-template-columns:190px minmax(0,1fr);gap:20px;padding:25px 18px}.paper{padding:34px 30px}.contents{font-size:12px}}
+@media(max-width:700px){.layout{display:block;padding:15px}.contents{display:none}.paper{padding:28px 22px}.mast{padding:15px 18px;align-items:flex-start}.mast nav{gap:8px;justify-content:flex-end}h1{font-size:30px}h2{font-size:22px}}
+@media print{body{background:white;font-size:11pt}.mast,.contents{display:none}.layout{display:block;padding:0}.paper{padding:0;border:0;box-shadow:none}h2,h3{break-after:avoid}img,table,pre{break-inside:avoid}a{color:inherit}.footer{font-size:9pt}}
+</style></head><body><header class="mast"><a class="brand" href="../diagram-studio.html">DIAGRAM STUDIO / 07</a><nav aria-label="Documentation"><a href="CHANGES-v7.html">Release guide</a><a href="INTENT-DUMP.html">Intent</a><a href="PARAMETERS.html">Parameters</a><a href="CODE-MAP.html">Code</a></nav></header><div class="layout"><aside class="contents" aria-label="On this page"><strong>On this page</strong><a class="level2" href="#diagram-studio-v7-current-implementation-reference">Diagram Studio v7 · current implementation reference</a><a class="level2" href="#1-run-intentions">1. Run intentions</a><a class="level2" href="#2-layout-controls">2. Layout controls</a><a class="level3" href="#algorithm">algorithm</a><a class="level3" href="#direction">direction</a><a class="level3" href="#mode">mode</a><a class="level3" href="#maxmove">maxMove</a><a class="level3" href="#stability">stability</a><a class="level3" href="#iterations">iterations</a><a class="level3" href="#nodegap">nodeGap</a><a class="level3" href="#rankgap">rankGap</a><a class="level3" href="#edgelength">edgeLength</a><a class="level3" href="#repulsion">repulsion</a><a class="level3" href="#flowstrength">flowStrength</a><a class="level3" href="#alignment">alignment</a><a class="level3" href="#compactness">compactness</a><a class="level3" href="#gridstrength">gridStrength</a><a class="level3" href="#aspect">aspect</a><a class="level3" href="#fold">fold</a><a class="level3" href="#respectdirection">respectDirection</a><a class="level3" href="#ordering">ordering</a><a class="level3" href="#rootid">rootId</a><a class="level3" href="#respectmanual">respectManual</a><a class="level3" href="#growcontainers">growContainers</a><a class="level3" href="#boundarypull">boundaryPull</a><a class="level3" href="#hierarchysweeps">hierarchySweeps</a><a class="level3" href="#groupgap">groupGap</a><a class="level2" href="#3-active-approaches-and-useful-controls">3. Active approaches and useful controls</a><a class="level3" href="#compound-flow-compound-flow">Compound flow · compound-flow</a><a class="level3" href="#boundary-alignment-boundary-align">Boundary alignment · boundary-align</a><a class="level3" href="#compound-spring-compound-spring">Compound spring · compound-spring</a><a class="level3" href="#local-tidy-tidy">Local tidy · tidy</a><a class="level3" href="#stress-descent-stress">Stress descent · stress</a><a class="level3" href="#spring-network-force">Spring network · force</a><a class="level3" href="#directional-flow-flow">Directional flow · flow</a><a class="level3" href="#layered-fold-layered">Layered + fold · layered</a><a class="level3" href="#subtree-tree-tree">Subtree tree · tree</a><a class="level3" href="#soft-grid-grid">Soft grid · grid</a><a class="level3" href="#separate-overlaps-separate">Separate overlaps · separate</a><a class="level2" href="#4-route-controls">4. Route controls</a><a class="level3" href="#clearance">clearance</a><a class="level3" href="#portgap">portGap</a><a class="level3" href="#edgegap">edgeGap</a><a class="level3" href="#bendpenalty">bendPenalty</a><a class="level3" href="#crossingpenalty">crossingPenalty</a><a class="level3" href="#sharedpenalty">sharedPenalty</a><a class="level3" href="#parallelpenalty">parallelPenalty</a><a class="level3" href="#portstability">portStability</a><a class="level3" href="#fanoutpenalty">fanoutPenalty</a><a class="level3" href="#passes">passes</a><a class="level3" href="#cornerradius">cornerRadius</a><a class="level2" href="#5-useful-experiments">5. Useful experiments</a><a class="level2" href="#6-comparison-limits-and-exports">6. Comparison limits and exports</a><a class="level2" href="#7-agent-example">7. Agent example</a><a class="level2" href="#8-diagnostics-and-interpretation">8. Diagnostics and interpretation</a><a class="level2" href="#9-authored-start-end-and-broad-placement">9. Authored start/end and broad placement</a><a class="level2" href="#10-comparison-presentation-controls">10. Comparison presentation controls</a><a class="level2" href="#v7-recorded-layout-journeys">v7. Recorded layout journeys</a><a class="level3" href="#timeline-json">Timeline JSON</a><a class="level2" href="#v7-local-brush-parameters">v7. Local brush parameters</a></aside><main class="paper"><h1 id="layout-and-routing-parameters">Layout and routing parameters</h1>
+<h2 id="diagram-studio-v7-current-implementation-reference">Diagram Studio v7 · current implementation reference</h2>
+<p>These are the defaults and ranges in the supplied source, not an ELK or libavoid configuration. A loaded example or imported document may override the defaults. Layout/routing dimensions are <strong>world pixels</strong>, except for the v7 brush radius and lookahead threshold, which are screen pixels and are explicitly converted to world space.</p>
+<p>Use <strong>Compare</strong> (Alt+E) to see alternatives. Choose <strong>Parameter grid</strong>, an approach, column parameter/values, and optionally row parameter/values. Generate recomputes from the frozen baseline, not from the previously displayed cell. Ports &amp; routes uses the same idea without changing node positions.</p>
+<h2 id="1-run-intentions">1. Run intentions</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Start</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Rebuild &amp; settle</td>
+  <td>Deterministic seed, protected geometry retained, iterate to stability/plateau/effort limit.</td>
+</tr>
+<tr>
+  <td>Current positions → settle</td>
+  <td>No canonical reseed; continue from the current drawing without the small-pass displacement cap.</td>
+</tr>
+<tr>
+  <td>One bounded pass</td>
+  <td>Use movement limit and stability from the starting document. This is not terminal settling.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Settled comparison effort offers 320, 640, or 1,200 iterations <strong>per solve</strong>. The engine also has minimum stability observation and objective-plateau windows. Read the stop label and warnings; “settled” does not mean globally optimal or guaranteed crossing-free. Pins, parent frames, inherited direction, and scope can prevent preferred placement.</p>
+<h2 id="2-layout-controls">2. Layout controls</h2>
+<h3 id="algorithm"><code>algorithm</code></h3>
+<p><strong>Default:</strong> <code>tidy</code>. <strong>Range/choices:</strong> 11 IDs below.</p>
+<p>One of eleven active families. Old radial imports map to tree without rearranging existing positions.</p>
+<h3 id="direction"><code>direction</code></h3>
+<p><strong>Default:</strong> <code>RIGHT</code>. <strong>Range/choices:</strong> RIGHT / DOWN.</p>
+<p>RIGHT is left-to-right; DOWN is top-to-bottom. Containers may override it for their contents.</p>
+<h3 id="mode"><code>mode</code></h3>
+<p><strong>Default:</strong> <code>pass</code>. <strong>Range/choices:</strong> pass / rebuild invocation.</p>
+<p>The saved editor preference normalizes to pass. Rebuild is an explicit invocation, not a new permanent mode.</p>
+<h3 id="maxmove"><code>maxMove</code></h3>
+<p><strong>Default:</strong> <code>48</code>. <strong>Range/choices:</strong> 4–300.</p>
+<p>Maximum world displacement during one bounded action, including inherited parent translation. Not used as a small cap in settled runs.</p>
+<h3 id="stability"><code>stability</code></h3>
+<p><strong>Default:</strong> <code>65</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Strength of attachment to the pre-pass geometry. Higher values resist unnecessary movement; only offered for pass comparisons.</p>
+<h3 id="iterations"><code>iterations</code></h3>
+<p><strong>Default:</strong> <code>32</code>. <strong>Range/choices:</strong> 4–160.</p>
+<p>Iteration budget for one bounded solve. Rounded to an integer. Settled comparisons use the separate maximum effort instead.</p>
+<h3 id="nodegap"><code>nodeGap</code></h3>
+<p><strong>Default:</strong> <code>24</code>. <strong>Range/choices:</strong> 4–160.</p>
+<p>Preferred gap between sibling shape rectangles, in world pixels. Infeasible spacing remains subject to pins and frame size.</p>
+<h3 id="rankgap"><code>rankGap</code></h3>
+<p><strong>Default:</strong> <code>52</code>. <strong>Range/choices:</strong> 12–220.</p>
+<p>Desired separation between forward ranks, including node extents. Does not mean center-to-center distance.</p>
+<h3 id="edgelength"><code>edgeLength</code></h3>
+<p><strong>Default:</strong> <code>88</code>. <strong>Range/choices:</strong> 20–260.</p>
+<p>Preferred link-length component for spring/stress-style arrangements; shape dimensions also contribute to the internal ideal.</p>
+<h3 id="repulsion"><code>repulsion</code></h3>
+<p><strong>Default:</strong> <code>45</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Force-family repulsion control. Higher is not always better; compare actual bounding size and labels at fit scale.</p>
+<h3 id="flowstrength"><code>flowStrength</code></h3>
+<p><strong>Default:</strong> <code>65</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Strength of soft forward pressure. Respect arrows also enables a separate forward projection; zero alone is not the off switch.</p>
+<h3 id="alignment"><code>alignment</code></h3>
+<p><strong>Default:</strong> <code>55</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Attraction toward shared neighbor/target alignments. It is not a permanent snap constraint.</p>
+<h3 id="compactness"><code>compactness</code></h3>
+<p><strong>Default:</strong> <code>35</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Packing/centering pressure. Does not authorize overlap or pin movement.</p>
+<h3 id="gridstrength"><code>gridStrength</code></h3>
+<p><strong>Default:</strong> <code>45</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Soft attraction toward target cells. Manual movement remains possible.</p>
+<h3 id="aspect"><code>aspect</code></h3>
+<p><strong>Default:</strong> <code>1.6</code>. <strong>Range/choices:</strong> canvas / 0.75 / 1 / 1.333 / 1.6 / 2.</p>
+<p>Packing/folding hint, not a guaranteed final aspect ratio. canvas uses the captured viewport ratio.</p>
+<h3 id="fold"><code>fold</code></h3>
+<p><strong>Default:</strong> <code>never</code>. <strong>Range/choices:</strong> never / auto.</p>
+<p>Optional wrapping for eligible rank layouts. Respect arrows suppresses folding; use false for that preference to compare folding deliberately.</p>
+<h3 id="respectdirection"><code>respectDirection</code></h3>
+<p><strong>Default:</strong> <code>true</code>. <strong>Range/choices:</strong> true / false.</p>
+<p>Shared directed-edge objective/projection for connective methods. Undirected edges do not impose rank. Separate overlaps deliberately ignores this structural objective.</p>
+<h3 id="ordering"><code>ordering</code></h3>
+<p><strong>Default:</strong> <code>stable</code>. <strong>Range/choices:</strong> stable / crossings.</p>
+<p>Stable ordering versus crossing-oriented rank ordering. Crossings is a heuristic, not a crossing-free guarantee.</p>
+<h3 id="rootid"><code>rootId</code></h3>
+<p>An authored start in <code>layout.intent</code> takes precedence for that solve. The original rootId preference is retained in the resulting document; clearing start does not leave an invisible replacement root.</p>
+<p><strong>Default:</strong> <code>(empty)</code>. <strong>Range/choices:</strong> existing ID or empty.</p>
+<p>Stable node ID used by rooted tree interpretation; empty chooses deterministically. It is not the camera focus selector.</p>
+<h3 id="respectmanual"><code>respectManual</code></h3>
+<p><strong>Default:</strong> <code>false</code>. <strong>Range/choices:</strong> true / false.</p>
+<p>Treat manual flags as layout protections in addition to explicit pins.</p>
+<h3 id="growcontainers"><code>growContainers</code></h3>
+<p><strong>Default:</strong> <code>false</code>. <strong>Range/choices:</strong> true / false.</p>
+<p>Permit right/down growth of frames. Does not shrink-wrap every result or move children during resize.</p>
+<h3 id="boundarypull"><code>boundaryPull</code></h3>
+<p><strong>Default:</strong> <code>65</code>. <strong>Range/choices:</strong> 0–100.</p>
+<p>Strength of actual endpoint alignment/attraction across hierarchy boundaries.</p>
+<h3 id="hierarchysweeps"><code>hierarchySweeps</code></h3>
+<p><strong>Default:</strong> <code>2</code>. <strong>Range/choices:</strong> 1–4.</p>
+<p>Number of compound hierarchy passes, rounded to integer. Total work can include multiple sibling solves per pass.</p>
+<h3 id="groupgap"><code>groupGap</code></h3>
+<p><strong>Default:</strong> <code>48</code>. <strong>Range/choices:</strong> 12–180.</p>
+<p>Preferred sibling container separation for compound approaches.</p>
+<h2 id="3-active-approaches-and-useful-controls">3. Active approaches and useful controls</h2>
+<h3 id="compound-flow-compound-flow">Compound flow · <code>compound-flow</code></h3>
+<p><strong>Family:</strong> Cross-hierarchy layered. Order nested blocks by all their connections; bring inputs and outputs toward the relevant boundary.</p>
+<p>Bottom-up projected sibling graphs plus global terminal ranks and exact-endpoint boundary forces. Alternating hierarchy sweeps let inner and outer levels inform each other. An original heuristic, not ELK.</p>
+<p><strong>Approach-specific controls:</strong> <code>rankGap</code>, <code>groupGap</code>, <code>boundaryPull</code>, <code>hierarchySweeps</code>, <code>ordering</code>, <code>fold</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="boundary-alignment-boundary-align">Boundary alignment · <code>boundary-align</code></h3>
+<p><strong>Family:</strong> Cross-hierarchy local repair. Line up connected endpoints across containers without rebuilding the whole structure.</p>
+<p>Warm-start transverse endpoint alignment and mild link-length relaxation, applied to leaves and translated subtrees. No hard rank assignment during improvement passes. Scope, pins and total displacement caps remain in force.</p>
+<p><strong>Approach-specific controls:</strong> <code>boundaryPull</code>, <code>hierarchySweeps</code>, <code>alignment</code>, <code>groupGap</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="compound-spring-compound-spring">Compound spring · <code>compound-spring</code></h3>
+<p><strong>Family:</strong> Hierarchical force-directed. Relax nested systems using the actual connected children, rather than container centres.</p>
+<p>Size-aware springs at actual leaf endpoints transfer force to their direct sibling owners. External neighbours act as temporary boundary anchors. Rectangular separation and alternating hierarchy sweeps constrain the result. Not CoSE or fCoSE.</p>
+<p><strong>Approach-specific controls:</strong> <code>edgeLength</code>, <code>boundaryPull</code>, <code>hierarchySweeps</code>, <code>groupGap</code>, <code>compactness</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="local-tidy-tidy">Local tidy · <code>tidy</code></h3>
+<p><strong>Family:</strong> Local optimisation. Shorten stretched links and align nearby neighbours. Keep the overall arrangement.</p>
+<p>A warm-start spring / alignment hybrid with a displacement anchor and rectangular separation. Designed for small repairs, not global crossing optimisation.</p>
+<p><strong>Approach-specific controls:</strong> <code>edgeLength</code>, <code>alignment</code>, <code>compactness</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="stress-descent-stress">Stress descent · <code>stress</code></h3>
+<p><strong>Family:</strong> Distance optimisation. Balance the whole network using graph distances, without restarting it.</p>
+<p>Weighted all-pairs shortest-path stress, solved with diagonal-preconditioned gradient steps. Anchored and projected; not an implementation of the full stress-majorisation algorithm.</p>
+<p><strong>Approach-specific controls:</strong> <code>edgeLength</code>, <code>compactness</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="spring-network-force">Spring network · <code>force</code></h3>
+<p><strong>Family:</strong> Force-directed. Let connected clusters find an organic, compact arrangement.</p>
+<p>Fruchterman–Reingold-style attraction and repulsion with cooling and rectangular collision projection. Quadratic pair evaluation, not Barnes–Hut.</p>
+<p><strong>Approach-specific controls:</strong> <code>edgeLength</code>, <code>repulsion</code>, <code>compactness</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="directional-flow-flow">Directional flow · <code>flow</code></h3>
+<p><strong>Family:</strong> Constraint relaxation. Encourage a reading direction without forcing rows or columns.</p>
+<p>Soft directed separation constraints on a cycle-broken graph, plus edge springs and neighbour alignment. Feedback edges remain rendered; they do not impose contradictory directional constraints.</p>
+<p><strong>Approach-specific controls:</strong> <code>edgeLength</code>, <code>flowStrength</code>, <code>alignment</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="layered-fold-layered">Layered + fold · <code>layered</code></h3>
+<p><strong>Family:</strong> Hierarchical. Ranks and crossing sweeps, with optional aspect-aware folding.</p>
+<p>A local Sugiyama-style pipeline: deterministic feedback-edge handling, longest-path ranks, barycentric sweeps, dimension-aware coordinates and optional row folding. Not ELK or Graphviz.</p>
+<p><strong>Approach-specific controls:</strong> <code>rankGap</code>, <code>ordering</code>, <code>fold</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="subtree-tree-tree">Subtree tree · <code>tree</code></h3>
+<p><strong>Family:</strong> Tree drawing. Centre parents above their children and give each subtree its own space.</p>
+<p>Builds a deterministic breadth-first spanning forest, reserves subtree spans, and centres parents over their children. Non-tree edges are kept. This is a span-based implementation, not Buchheim’s linear-time tidy-tree algorithm.</p>
+<p><strong>Approach-specific controls:</strong> <code>rankGap</code>, <code>rootId</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="soft-grid-grid">Soft grid · <code>grid</code></h3>
+<p><strong>Family:</strong> Assignment + relaxation. Attract boxes toward nearby free cells, without a permanently rigid grid.</p>
+<p>Stable greedy nearest-free-cell assignment around the current centre, followed by soft attraction and rectangular separation. Manual movement remains unrestricted. Not globally optimal matching.</p>
+<p><strong>Approach-specific controls:</strong> <code>gridStrength</code>, <code>compactness</code>. Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<h3 id="separate-overlaps-separate">Separate overlaps · <code>separate</code></h3>
+<p><strong>Family:</strong> Geometric repair. Move only colliding neighbours. Leave clean regions alone.</p>
+<p>Pairwise minimum-axis translations of padded rectangles, with hard pins, boundary constraints and a per-action movement limit. Does not optimise connectivity or promise a globally minimum displacement.</p>
+<p><strong>Approach-specific controls:</strong> . Shared constraints and arrow preference also apply, except structural direction is not a goal for Separate overlaps.</p>
+<p>The retired <code>radial</code> setting is not an active algorithm. Existing imported geometry is retained and the next chosen layout uses <code>tree</code>. Historical v4 guide pages are not duplicated in this release; their inventory is not the current selector.</p>
+<h2 id="4-route-controls">4. Route controls</h2>
+<p>Automatic ports, route search, simplification, and lane nudging use the same geometry. Explicit endpoint sides and waypoints remain constraints unless you deliberately release them. The renderer rounds corners only after route geometry has been chosen.</p>
+<h3 id="clearance"><code>clearance</code></h3>
+<p><strong>Default:</strong> <code>10</code>. <strong>Range:</strong> 4–30.</p>
+<p>World-space obstacle buffer. Independent of the preferred gap between routes.</p>
+<h3 id="portgap"><code>portGap</code></h3>
+<p><strong>Default:</strong> <code>16</code>. <strong>Range:</strong> 6–28.</p>
+<p>Preferred endpoint spacing along a shape side. Capacity can limit achievable spacing.</p>
+<h3 id="edgegap"><code>edgeGap</code></h3>
+<p><strong>Default:</strong> <code>16</code>. <strong>Range:</strong> 4–48.</p>
+<p>Preferred buffer between overlapping parallel route runs. A soft geometric objective with visible residual reporting, not an unconditional guarantee.</p>
+<h3 id="bendpenalty"><code>bendPenalty</code></h3>
+<p><strong>Default:</strong> <code>32</code>. <strong>Range:</strong> 0–100.</p>
+<p>Cost per bend. Higher favors simpler, possibly longer routes.</p>
+<h3 id="crossingpenalty"><code>crossingPenalty</code></h3>
+<p><strong>Default:</strong> <code>360</code>. <strong>Range:</strong> 0–1200.</p>
+<p>Cost of route intersections. Higher may choose an outer detour.</p>
+<h3 id="sharedpenalty"><code>sharedPenalty</code></h3>
+<p><strong>Default:</strong> <code>8</code>. <strong>Range:</strong> 0–20.</p>
+<p>Penalty for reused coincident segments. Different from near-parallel spacing.</p>
+<h3 id="parallelpenalty"><code>parallelPenalty</code></h3>
+<p><strong>Default:</strong> <code>18</code>. <strong>Range:</strong> 0–60.</p>
+<p>Cost scale for lane-gap deficit. Zero disables the cost, not the report.</p>
+<h3 id="portstability"><code>portStability</code></h3>
+<p><strong>Default:</strong> <code>20</code>. <strong>Range:</strong> 0–150.</p>
+<p>Preference for previous automatic sides. Candidates share one previous-side snapshot, so comparisons are not order-dependent.</p>
+<h3 id="fanoutpenalty"><code>fanoutPenalty</code></h3>
+<p><strong>Default:</strong> <code>50</code>. <strong>Range:</strong> 0–160.</p>
+<p>Preference for distinct useful source sides among independent branches.</p>
+<h3 id="passes"><code>passes</code></h3>
+<p><strong>Default:</strong> <code>3</code>. <strong>Range:</strong> 1–5.</p>
+<p>Initial route pass plus up to four conflict-repair passes. Rounded to integer. Nudging also has its own bounded sweeps.</p>
+<h3 id="cornerradius"><code>cornerRadius</code></h3>
+<p><strong>Default:</strong> <code>6</code>. <strong>Range:</strong> 0–16.</p>
+<p>World-space SVG turn radius. Zero renders square orthogonal corners; this never substitutes for geometry simplification.</p>
+<h2 id="5-useful-experiments">5. Useful experiments</h2>
+<p><strong>Choose an overall approach.</strong> Start with six approaches and Rebuild &amp; settle. Use Synced to compare absolute dimensions at one scale. Use On their own, then Fit all, to make a very wide and a very tall drawing readable side by side. Enlarge a cell before judging a small route detail.</p>
+<p><strong>Test flow orientation.</strong> Choose Layered + fold or Directional flow. Use columns <code>nodeGap = 12,24,44</code> and rows <code>direction = RIGHT,DOWN</code>. Keep Respect arrows on. The family name still contains “fold,” but folding is deliberately suppressed in this configuration.</p>
+<p><strong>Test iterative improvement.</strong> Use One bounded pass, <code>maxMove = 24,48,96</code>, and <code>stability = 25,80</code>. Each of the six cells starts from exactly the same existing drawing. This is not a sequence of six cumulative edits.</p>
+<p><strong>Test nested behavior.</strong> Use Compound flow, Boundary alignment, and Compound spring on the Nested services example. Then compare <code>boundaryPull = 25,65,100</code> and <code>hierarchySweeps = 1,3</code>. Keep an eye on frames and direction notes. A fixed frame does not expand merely because another layout would like more room.</p>
+<p><strong>Test lane spacing.</strong> Open Ports &amp; routes, columns <code>edgeGap = 10,18,28</code> and rows <code>bendPenalty = 16,64</code>. Focus on the same node in every tile. Try <code>parallelPenalty = 6,18,40</code> next to distinguish the requested distance from the strength of the spacing preference.</p>
+<p><strong>Test automatic sides versus constraints.</strong> First generate with the fixed-side release checkbox off. Then explicitly enable it and generate again. Node positions stay unchanged in both experiments. Waypoints remain constraints; use the normal editor's Reset bends when the intended experiment needs to remove them.</p>
+<p><strong>Test curvature separately.</strong> Use <code>cornerRadius = 0,6,12</code>. Path polylines should remain the same when only radius changes. A visible tiny detour is a routing concern, not something to hide by increasing radius.</p>
+<h2 id="6-comparison-limits-and-exports">6. Comparison limits and exports</h2>
+<p>A parameter axis accepts one to six comma-separated values. A two-axis product may contain at most twelve candidates. Invalid values become explicit errors, and oversized products are rejected before silent truncation. The visible control list excludes parameters not used by the chosen approach/start mode.</p>
+<p>The comparison guard is 160 shapes / 360 edges. A candidate worker has a 30-second timeout. These are safety limits, not throughput guarantees. Normal document import permits 500 shapes / 1,200 edges and should still be benchmarked with representative real diagrams before production use.</p>
+<p>The full-viewport grid has no diagram scrolling; only the left control rail scrolls. In Grid, synced cameras share center and scale. Focus cameras share an offset around the corresponding object and a common scale. Independent cameras each have their own transform. In Overlay, one shared camera follows translation-only alignment on the clicked shape. None of these camera changes alter candidate geometry or the live diagram.</p>
+<p>In Grid, Save sheet SVG exports completed drawings independently fitted, with scale labels—not the accidental crops left by current panel panning. In Overlay, it exports the visible, aligned layers at one common scale with their current opacity and a legend. Neither static sheet is the editable single-diagram SVG export. Save experiment retains the configuration that generated the visible cells even when the form has since been edited. The experiment JSON is not directly opened by the ordinary diagram File menu; its candidate documents are ordinary diagram objects.</p>
+<h2 id="7-agent-example">7. Agent example</h2>
+<p>Use the browser console or a connected automation context. This operates on the current editor, not on a remote service. Opening Compare begins a default run; generateComparison cancels that run before creating the requested experiment.</p>
+<pre><code class="language-javascript">// Freeze the current diagram and open the real comparison workspace.
+diagramStudio.compare('layout');
+
+// Six independent candidates: three gaps × two directions.
+const run = await diagramStudio.generateComparison({
+  mode: 'layout', kind: 'parameters', algorithm: 'layered',
+  run: 'rebuild', maxIterations: 640,
+  axisA: 'nodeGap', valuesA: '12,24,44',
+  axisB: 'direction', valuesB: 'RIGHT,DOWN'
+});
+console.log('[compare] generation', run);
+console.log('[compare] reports', diagramStudio.explorerState());
+
+// Read a complete clone; keep source/version with it for reproducibility.
+const experiment = diagramStudio.getExperiment();
+console.log('[compare] captured candidates', experiment?.candidates.length);
+
+// Commit only after inspection. Index 0 is the first shown candidate.
+// diagramStudio.applyCandidate(0);
+// Or leave the live diagram untouched:
+// diagramStudio.closeComparison();
+</code></pre>
+<h2 id="8-diagnostics-and-interpretation">8. Diagnostics and interpretation</h2>
+<p><code>backwardEdges</code> counts remaining non-feedback directed order conflicts against the effective lowest-common-container direction. It does not count every intentional cycle return as a failed forward edge. <code>feedbackEdges</code> records the deterministic cycle-breaking heuristic's exclusions.</p>
+<p><code>lanePairs</code> counts parallel <strong>segment</strong> pairs too close together, not unique edge pairs. <code>minimumConflictingGap</code> is null when no conflict is found. <code>laneDeficit</code> weights shortfall by overlapping run length. <code>crossings</code>, <code>shared</code>, <code>blocked</code>, <code>bends</code>, and total route length provide other evidence. No single metric is a visual-quality verdict.</p>
+<p>Inputs are never mutated by the pure engines. Route computation never moves nodes. Parameter normalization clamps numeric controls to supported ranges for ordinary import; comparison generation explicitly rejects a requested candidate value that would be clamped, so the label cannot falsely promise the original number.</p>
+<h2 id="9-authored-start-end-and-broad-placement">9. Authored start/end and broad placement</h2>
+<p><code>layout.intent</code> is an optional object. It normalizes to <code>{}</code> when absent. Its fields are independent of <code>layout.nodes[id].pinned</code> and comparison <code>focusId</code>.</p>
+<pre><code class="language-json">{
+  &quot;start&quot;: { &quot;id&quot;: &quot;z-input&quot;, &quot;placement&quot;: &quot;top-left&quot; },
+  &quot;end&quot;: { &quot;id&quot;: &quot;done&quot;, &quot;placement&quot;: &quot;bottom-right&quot; }
+}
+</code></pre>
+<p>This is the value of <code>layout.intent</code>, not a complete diagram document. The IDs above exist in <code>examples/guided-process.json</code>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Field</th>
+  <th>Accepted meaning</th>
+  <th>Default when its role exists</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>start.id</code></td>
+  <td>Existing shape; layout origin/root preference.</td>
+  <td>No role without an ID.</td>
+</tr>
+<tr>
+  <td><code>end.id</code></td>
+  <td>Different existing shape; last-rank/endpoint preference.</td>
+  <td>No role without an ID.</td>
+</tr>
+<tr>
+  <td><code>placement</code></td>
+  <td>A finite diagram-relative compass area.</td>
+  <td>Start top-left; end bottom-right.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The finite area names are <code>top-left</code>, <code>left-center</code>, <code>center</code>, <code>top-center</code>, <code>top-right</code>, <code>right-center</code>, <code>bottom-left</code>, <code>bottom-center</code>, and <code>bottom-right</code>. The end UI omits Center because the dedicated bilateral-branch behavior belongs to a center <strong>start</strong>. The low-level normalizer recognizes Center as an area but does not turn an end into a branch root.</p>
+<p>Invalid shape references, unknown area values, malformed objects, or the same shape used for both roles fail normalization. The UI maintains at most one role per shape. Containers/edges are not directly eligible, although container owners participate when a hinted descendant is laid out hierarchically.</p>
+<p>These are soft target areas based on sibling rectangle bounds. The target for an axis is its lower bound plus half the hinted shape's extent, plus the area's 0, 0.5, or 1 fraction of the remaining extent. This keeps “top left” a relative preference rather than an absolute coordinate.</p>
+<p>Pins and pinned ancestors, fixed frames, feasible collision avoidance, scope, and whole-action displacement limits precede the preference. All connective families share the hint machinery; Separate overlaps ignores structural placement. The ordinary RIGHT/DOWN direction remains an independent choice. A contradictory area and direction may remain approximate.</p>
+<p><code>report.intent</code> gives <code>role</code>, <code>id</code>, <code>placement</code>, <code>error</code>, <code>satisfied</code>, and <code>pinned</code>. Error is distance from the final sibling-relative target, in world pixels. Satisfied means error is no greater than <code>max(12, nodeGap)</code>, not exact positioning. Reports warn when a preference remains approximate.</p>
+<p>A center start chooses a two-sided tree target with subtree-size balancing, not the retired radial-shell method. There is no radius parameter. Node/rank gap and the normal algorithm controls remain relevant. Crosslinks, scope restrictions, and relaxation can keep a complex graph from being perfectly symmetrical.</p>
+<h2 id="10-comparison-presentation-controls">10. Comparison presentation controls</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Control</th>
+  <th>Values / behavior</th>
+  <th>Does it recompute geometry?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td>Presentation</td>
+  <td>Grid / Overlay</td>
+  <td>No.</td>
+</tr>
+<tr>
+  <td>Visual anchor</td>
+  <td>Click a visible shape; Enter/Space on a focused preview shape.</td>
+  <td>No; translation-only alignment.</td>
+</tr>
+<tr>
+  <td>Grid navigation</td>
+  <td>Synced / Focus / Independent</td>
+  <td>No.</td>
+</tr>
+<tr>
+  <td>Layer opacity</td>
+  <td>5–100%, in 5% slider steps.</td>
+  <td>No.</td>
+</tr>
+<tr>
+  <td>Layer emphasis</td>
+  <td>Click a layer name; it is drawn on top with labels.</td>
+  <td>No.</td>
+</tr>
+<tr>
+  <td>Layer visibility</td>
+  <td>Show or hide each candidate.</td>
+  <td>No.</td>
+</tr>
+<tr>
+  <td>All labels</td>
+  <td>Show labels in every layer rather than only the emphasized one.</td>
+  <td>No.</td>
+</tr>
+<tr>
+  <td>Drawing intent</td>
+  <td>One start/end and preferred areas, copied into the next candidate computation.</td>
+  <td>Only after Generate.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Initial emphasis is 85% opacity; other layers start at 30%. Manually adjusted opacity is kept when emphasis changes. The comparison workspace is session state, not a second editable document or set of saved views.</p>
+<p>In Overlay, the camera selector is disabled because there is one composite view, not separate cameras per layer. Returning to Grid preserves the grid camera mode. Fit shows the complete visible composite. Choosing a new anchor centers that correspondence while keeping scale; use Fit after re-anchoring when the remaining geometry extends outside the viewport.</p>
+<pre><code class="language-javascript">// Optional editable preference: one ordinary undoable change, no layout yet.
+diagramStudio.setIntent('start', 'z-input', 'top-left');
+console.log('[intent]', diagramStudio.get().layout.intent);
+
+// Build three alternatives using the existing document's intent.
+diagramStudio.compare('layout');
+await diagramStudio.generateComparison({
+  kind: 'algorithms', algorithms: ['tree', 'layered', 'flow'],
+  run: 'rebuild', maxIterations: 640
+});
+diagramStudio.comparisonView('overlay');
+diagramStudio.anchorComparison('z-input');
+console.log('[comparison]', diagramStudio.explorerState());
+
+// Closing keeps the working diagram; applying is an explicit alternative.
+// diagramStudio.applyCandidate(1);
+diagramStudio.closeComparison();
+</code></pre>
+<p>The visual anchor API never assigns a start or end. To clear an authored start use <code>diagramStudio.setIntent('start', null)</code>. To experiment without editing the baseline, set the <code>intent</code> object in <code>generateComparison</code> or use Drawing intent in the comparison rail, then Generate and explicitly Apply a candidate.</p>
+<h2 id="v7-recorded-layout-journeys">v7. Recorded layout journeys</h2>
+<p>A timeline uses the current algorithm, direction, spacing, start/end hints and scope. It warm-starts from current geometry with <code>mode: &quot;rebuild&quot;</code>, <code>warmStart: true</code>, <code>settle: true</code>, and <code>trace: true</code>. This is a run mode, not a replacement saved diagram mode. The public timeline API can request <code>rebuild: true</code> to use the deterministic reseed path; the existing Shift+L rebuild control remains unchanged.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Parameter</th>
+  <th>Default / range</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>maxIterations</code></td>
+  <td>640; engine clamps 80–1,200 per solve</td>
+  <td>Iteration ceiling, not a guarantee of terminal convergence. Nested scopes may involve multiple solves.</td>
+</tr>
+<tr>
+  <td>Recorded frames</td>
+  <td>At most 96</td>
+  <td>The collector samples progress and thins earlier intermediate frames when full. First and final geometry are retained.</td>
+</tr>
+<tr>
+  <td>Slider index</td>
+  <td>0…frames−1</td>
+  <td>Discrete recorded checkpoint. No invented positions between checkpoints.</td>
+</tr>
+<tr>
+  <td>Ghost</td>
+  <td><code>next</code>; next / final / off</td>
+  <td>Nearby-change outline, computed endpoint outline, or no ghost.</td>
+</tr>
+<tr>
+  <td>Near-change threshold</td>
+  <td>48 screen pixels</td>
+  <td>Choose a later checkpoint with at least this much movement for an object when possible. At the tail a smaller change can remain.</td>
+</tr>
+<tr>
+  <td>Playback interval</td>
+  <td>420 ms; 750 ms with reduced motion</td>
+  <td>User-started checkpoint advancement. No autoplay on opening.</td>
+</tr>
+<tr>
+  <td><code>fixedIds</code></td>
+  <td>Session local holds</td>
+  <td>Extra immutable IDs for the computation; not persisted pin metadata.</td>
+</tr>
+<tr>
+  <td>History-storage cap</td>
+  <td>3,500,000 serialized characters</td>
+  <td>Above this threshold, keep the latest recording in memory and export it explicitly rather than filling local storage.</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>report.termination</code> can be settled, objective plateau, or iteration limit. The final frame is exactly the <code>LayoutLab.compute</code> result. Intermediate metrics describe their own geometries. A checkpoint can be earlier than the final best state of an internal solve, so the sequence must not be labeled monotonically improving.</p>
+<h3 id="timeline-json">Timeline JSON</h3>
+<p><code>kind</code> is <code>diagram-studio-journey</code> and <code>schemaVersion</code> is 1. Fields are <code>baseline</code>, <code>settings</code>, <code>report</code>, <code>frames</code>, <code>bookmarks</code>, <code>createdAt</code>, <code>finalDocument</code>, and optional <code>routePrior</code>. Each frame contains <code>nodes</code>, <code>iteration</code>, <code>phase</code>, <code>metrics</code>, and calculated motion summaries. All frames have the baseline object IDs. Bookmarks store index and title, not a second graph.</p>
+<p>The source diagram schema remains version 2. The history envelope is separate. Open performs validation before replacing the editor. A remembered path is only reopened against compatible objects, hierarchy, connections, pins, and frame dimensions. Position-only edits do not automatically invalidate it.</p>
+<h2 id="v7-local-brush-parameters">v7. Local brush parameters</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Parameter</th>
+  <th>Default / range</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>mode</code></td>
+  <td><code>tidy</code>; tidy / flow / space / restore / protect</td>
+  <td>The local policy. These are not new entries in the global layout algorithm list.</td>
+</tr>
+<tr>
+  <td><code>radius</code></td>
+  <td>190; 40–600 screen pixels</td>
+  <td>Radius of the influence field. Runtime <code>worldRadius = radius / camera.k</code>. Brackets adjust by 20 screen pixels.</td>
+</tr>
+<tr>
+  <td><code>strength</code></td>
+  <td>35%; 1–100%</td>
+  <td>Scales the proposed change and maximum motion.</td>
+</tr>
+<tr>
+  <td><code>softness</code></td>
+  <td>75%; 0–100%</td>
+  <td>Fraction of the radius occupied by the smooth falloff band. Zero gives a hard-edged footprint.</td>
+</tr>
+<tr>
+  <td><code>step</code></td>
+  <td>18; 1–64 world pixels</td>
+  <td>Maximum full-strength, full-influence displacement per dab. Engine/API parameter; not another default toolbar slider.</td>
+</tr>
+<tr>
+  <td><code>holdRestored</code></td>
+  <td>true</td>
+  <td>Add moved restore targets to temporary local protection for subsequent automatic runs.</td>
+</tr>
+<tr>
+  <td><code>reference</code></td>
+  <td>Last bookmark / pre-brush geometry</td>
+  <td>Matching coordinate source used by restoration. Missing IDs are ignored. No nodes are created or reparented.</td>
+</tr>
+<tr>
+  <td>Hold threshold</td>
+  <td>Influence ≥0.25</td>
+  <td>Hold mode turns the soft field into an explicit node-level protection set. It is not a continuously weighted pin.</td>
+</tr>
+<tr>
+  <td>Held-pointer cadence</td>
+  <td>Requests every ~90 ms</td>
+  <td>Repeated bounded dabs while pressed. It stops on pointer-up, cancellation, lost capture, Escape or blur. Rendering cost can reduce actual cadence.</td>
+</tr>
+</tbody>
+</table></div>
+<p>For rectangle distance <code>d</code>, radius <code>r</code> and softness fraction <code>s</code>, the core radius is <code>r(1−s)</code>. The weight is 1 within the core, 0 at or outside r, and <code>1−t²(3−2t)</code> in the band, where <code>t=(d−r(1−s))/(rs)</code>. Distance to the rectangle is zero for a cursor inside it. This deliberately differs from a center-only hit test.</p>
+<p>The per-dab cap is <code>step × strengthFraction × weight</code>. Small unconstrained moves are also softened by strength and field weight. A stroke may contain many dabs: its total travel is not the one-dab cap. A proposal is clipped to the existing parent interior without moving the frame. A line search reduces motion if it would add or worsen a non-ancestor rectangle intersection. Local goals can make global spring energy or total edge length worse; that is permitted.</p>
+<p>The influence support is exact for geometry: nodes outside the field do not move, hidden nodes do not become targets, and containers do not move or resize. Fixed ports and waypoints are not erased by brush movement. Connections are rerouted from the resulting geometry using the existing routing parameters.</p>
+<footer class="footer">Diagram Studio v7 · Offline documentation · <a href="PARAMETERS.md">Markdown source</a> · <a href="../diagram-studio.html">Open the editor</a></footer></main></div></body></html>

@@ -1,0 +1,321 @@
+{
+  "schemaVersion": 2,
+  "id": "Feedback and islands",
+  "title": "Feedback and islands",
+  "graph": {
+    "nodes": [
+      {
+        "id": "n00",
+        "title": "Client"
+      },
+      {
+        "id": "n01",
+        "title": "API"
+      },
+      {
+        "id": "n02",
+        "title": "Session"
+      },
+      {
+        "id": "n03",
+        "title": "Worker"
+      },
+      {
+        "id": "n04",
+        "title": "Queue"
+      },
+      {
+        "id": "n05",
+        "title": "Retry"
+      },
+      {
+        "id": "n06",
+        "title": "Audit"
+      },
+      {
+        "id": "n07",
+        "title": "Archive"
+      },
+      {
+        "id": "n08",
+        "title": "Notes"
+      },
+      {
+        "id": "n09",
+        "title": "Standalone"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e0",
+        "from": "n00",
+        "to": "n01",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e1",
+        "from": "n01",
+        "to": "n02",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e2",
+        "from": "n02",
+        "to": "n00",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e3",
+        "from": "n02",
+        "to": "n03",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e4",
+        "from": "n03",
+        "to": "n04",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e5",
+        "from": "n04",
+        "to": "n05",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e6",
+        "from": "n05",
+        "to": "n03",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e7",
+        "from": "n06",
+        "to": "n07",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "n00": {
+        "x": 70,
+        "y": 80,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n01": {
+        "x": 295,
+        "y": 80,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n02": {
+        "x": 520,
+        "y": 80,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n03": {
+        "x": 745,
+        "y": 80,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n04": {
+        "x": 70,
+        "y": 233,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n05": {
+        "x": 295,
+        "y": 233,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n06": {
+        "x": 520,
+        "y": 233,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n07": {
+        "x": 745,
+        "y": 233,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n08": {
+        "x": 70,
+        "y": 386,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n09": {
+        "x": 295,
+        "y": 386,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "e0": {},
+      "e1": {},
+      "e2": {},
+      "e3": {},
+      "e4": {},
+      "e5": {},
+      "e6": {},
+      "e7": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "n00": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n01": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n02": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n03": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n04": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n05": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n06": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n07": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n08": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n09": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "auto",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6
+    }
+  },
+  "camera": {
+    "x": 129.60000000000002,
+    "y": 87.1,
+    "k": 1.2
+  },
+  "theme": "light"
+}

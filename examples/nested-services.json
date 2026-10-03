@@ -1,0 +1,485 @@
+{
+  "schemaVersion": 2,
+  "id": "nested-services-\u2014-cross-boundary-links",
+  "title": "Nested services \u2014 cross-boundary links",
+  "graph": {
+    "nodes": [
+      {
+        "id": "user",
+        "title": "Browser"
+      },
+      {
+        "id": "gateway",
+        "title": "API gateway",
+        "parentId": "app"
+      },
+      {
+        "id": "session",
+        "title": "Session",
+        "parentId": "identity"
+      },
+      {
+        "id": "policy",
+        "title": "Policy",
+        "parentId": "identity"
+      },
+      {
+        "id": "queue",
+        "title": "Queue",
+        "parentId": "jobs"
+      },
+      {
+        "id": "worker",
+        "title": "Worker",
+        "parentId": "jobs"
+      },
+      {
+        "id": "audit",
+        "title": "Audit log",
+        "parentId": "app"
+      },
+      {
+        "id": "db",
+        "title": "Database",
+        "parentId": "data"
+      },
+      {
+        "id": "cache",
+        "title": "Cache",
+        "parentId": "data"
+      },
+      {
+        "id": "archive",
+        "title": "Archive",
+        "parentId": "data"
+      }
+    ],
+    "edges": [
+      {
+        "id": "u-api",
+        "from": "user",
+        "to": "gateway",
+        "label": "HTTPS",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "a-s",
+        "from": "gateway",
+        "to": "session",
+        "label": "Token",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "s-p",
+        "from": "session",
+        "to": "policy",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "p-q",
+        "from": "policy",
+        "to": "queue",
+        "label": "Allowed",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "q-w",
+        "from": "queue",
+        "to": "worker",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "w-db",
+        "from": "worker",
+        "to": "db",
+        "label": "Write",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "s-db",
+        "from": "session",
+        "to": "db",
+        "label": "Read",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "p-cache",
+        "from": "policy",
+        "to": "cache",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "w-archive",
+        "from": "worker",
+        "to": "archive",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "w-audit",
+        "from": "worker",
+        "to": "audit",
+        "label": "Result",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "a-archive",
+        "from": "audit",
+        "to": "archive",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": [
+      {
+        "id": "app",
+        "title": "Application"
+      },
+      {
+        "id": "identity",
+        "title": "Identity",
+        "parentId": "app"
+      },
+      {
+        "id": "jobs",
+        "title": "Processing",
+        "parentId": "app"
+      },
+      {
+        "id": "data",
+        "title": "Data services"
+      }
+    ]
+  },
+  "layout": {
+    "nodes": {
+      "user": {
+        "x": 40,
+        "y": 260,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "gateway": {
+        "x": 308,
+        "y": 152,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "session": {
+        "x": 546,
+        "y": 180,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "policy": {
+        "x": 546,
+        "y": 256,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "queue": {
+        "x": 546,
+        "y": 424,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "worker": {
+        "x": 698,
+        "y": 512,
+        "w": 174,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "audit": {
+        "x": 308,
+        "y": 538,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "db": {
+        "x": 1044,
+        "y": 196,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "cache": {
+        "x": 1044,
+        "y": 350,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "archive": {
+        "x": 1044,
+        "y": 524,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "app": {
+        "x": 280,
+        "y": 70,
+        "w": 654,
+        "h": 564,
+        "manual": false,
+        "pinned": false
+      },
+      "identity": {
+        "x": 516,
+        "y": 122,
+        "w": 386,
+        "h": 220,
+        "manual": false,
+        "pinned": false
+      },
+      "jobs": {
+        "x": 516,
+        "y": 360,
+        "w": 386,
+        "h": 242,
+        "manual": false,
+        "pinned": false
+      },
+      "data": {
+        "x": 1014,
+        "y": 140,
+        "w": 238,
+        "h": 470,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "u-api": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "a-s": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "s-p": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "p-q": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "q-w": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "w-db": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "s-db": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "p-cache": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "w-archive": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "w-audit": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "a-archive": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      }
+    },
+    "labels": {},
+    "containers": {
+      "app": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      },
+      "identity": {
+        "direction": "DOWN",
+        "padding": 24,
+        "manualSize": true
+      },
+      "jobs": {
+        "direction": "DOWN",
+        "padding": 24,
+        "manualSize": true
+      },
+      "data": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      }
+    },
+    "intent": {}
+  },
+  "styles": {
+    "user": {
+      "shape": "pill",
+      "color": "slate",
+      "icon": "browser"
+    },
+    "gateway": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "server"
+    },
+    "session": {
+      "shape": "box",
+      "color": "amber",
+      "icon": "key"
+    },
+    "policy": {
+      "shape": "box",
+      "color": "amber",
+      "icon": ""
+    },
+    "queue": {
+      "shape": "box",
+      "color": "mint",
+      "icon": "layers"
+    },
+    "worker": {
+      "shape": "box",
+      "color": "mint",
+      "icon": "bolt"
+    },
+    "audit": {
+      "shape": "box",
+      "color": "slate",
+      "icon": "file"
+    },
+    "db": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "database"
+    },
+    "cache": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "cube"
+    },
+    "archive": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "folder"
+    },
+    "app": {
+      "shape": "box",
+      "color": "violet",
+      "icon": ""
+    },
+    "identity": {
+      "shape": "box",
+      "color": "amber",
+      "icon": ""
+    },
+    "jobs": {
+      "shape": "box",
+      "color": "mint",
+      "icon": ""
+    },
+    "data": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "compound-flow",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6
+    }
+  },
+  "camera": {
+    "x": -4.884488448844884,
+    "y": 6.5165016501650115,
+    "k": 1.1221122112211221
+  },
+  "theme": "light"
+}

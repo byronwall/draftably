@@ -1,0 +1,7 @@
+{
+  "browser": "144.0.7559.96",
+  "file": "diagram-studio.html",
+  "note": "This probe does not substitute for editor interaction tests.",
+  "nativeFileStartup": "blocked by environment",
+  "error": "Page.goto: net::ERR_BLOCKED_BY_ADMINISTRATOR at file:///mnt/data/diagram-studio-v7/diagram-studio.html\nCall log:\n  - navigating to \"file:///mnt/data/diagram-studio-v7/diagram-studio.html\", waiting until \"load\"\n"
+}

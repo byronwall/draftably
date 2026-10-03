@@ -1,0 +1,236 @@
+{
+  "passed": 51,
+  "browserErrors": [],
+  "navigation": "HTML injected after separately verified native file policy block",
+  "storage": "explicit test adapter, not native file-origin persistence",
+  "results": [
+    {
+      "name": "v7 boots in Edit with the new tools visible",
+      "status": "passed"
+    },
+    {
+      "name": "Alt T records more than two real solver checkpoints",
+      "status": "passed",
+      "detail": {
+        "frames": 42
+      }
+    },
+    {
+      "name": "Opening the timeline does not alter committed geometry or history",
+      "status": "passed"
+    },
+    {
+      "name": "Title and layout controls are disabled while geometry is only a preview",
+      "status": "passed"
+    },
+    {
+      "name": "Native keyboard End previews the computed finish",
+      "status": "passed"
+    },
+    {
+      "name": "Native Home and arrows scrub one recorded checkpoint at a time",
+      "status": "passed"
+    },
+    {
+      "name": "Hover peeks without changing the chosen slider stop",
+      "status": "passed"
+    },
+    {
+      "name": "Leaving hover restores the chosen stop",
+      "status": "passed"
+    },
+    {
+      "name": "Scrubbing never writes candidate geometry to document or storage",
+      "status": "passed"
+    },
+    {
+      "name": "Diagram export cannot accidentally save an uncommitted timeline preview",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit Fit path provides one unchanged camera across slider stops",
+      "status": "passed"
+    },
+    {
+      "name": "Computed-finish ghost is drawn without modifying live data",
+      "status": "passed"
+    },
+    {
+      "name": "Ghost can be disabled",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit playback advances recorded states and pauses",
+      "status": "passed"
+    },
+    {
+      "name": "Bookmark captures an exact restore source",
+      "status": "passed"
+    },
+    {
+      "name": "Timeline controls fit without horizontal scrolling at 1024\u00d7768",
+      "status": "passed",
+      "detail": {
+        "fits": true,
+        "overflow": false,
+        "height": 168
+      }
+    },
+    {
+      "name": "Timeline controls fit without horizontal scrolling at 1440\u00d7900",
+      "status": "passed",
+      "detail": {
+        "fits": true,
+        "overflow": false,
+        "height": 172
+      }
+    },
+    {
+      "name": "Keep & brush commits exactly the shown coordinates as one undo entry",
+      "status": "passed"
+    },
+    {
+      "name": "Kept route polylines match the chosen preview",
+      "status": "passed"
+    },
+    {
+      "name": "Timeline application never persists local holds or invocation scope in diagram settings",
+      "status": "passed"
+    },
+    {
+      "name": "Keep & brush begins restoration from the bookmarked step",
+      "status": "passed"
+    },
+    {
+      "name": "Leaving the timeline restores disabled editor controls",
+      "status": "passed"
+    },
+    {
+      "name": "Brush hover shows eligibility without mutating geometry",
+      "status": "passed"
+    },
+    {
+      "name": "Holding a stroke previews local motion without committing during the gesture",
+      "status": "passed"
+    },
+    {
+      "name": "A held local-restore stroke changes a subset, with exactly one undo entry",
+      "status": "passed",
+      "detail": {
+        "changed": [
+          "n07",
+          "n08"
+        ]
+      }
+    },
+    {
+      "name": "Restored nodes get temporary local holds, not pins",
+      "status": "passed"
+    },
+    {
+      "name": "Undo restores the entire stroke and its local holds",
+      "status": "passed"
+    },
+    {
+      "name": "Redo restores both stroke geometry and local holds",
+      "status": "passed"
+    },
+    {
+      "name": "Comparison generation receives the current local holds",
+      "status": "passed"
+    },
+    {
+      "name": "Further restoration can reach already-held nodes",
+      "status": "passed"
+    },
+    {
+      "name": "Escape cancels an in-flight brush stroke with no undo entry or leaked edit",
+      "status": "passed"
+    },
+    {
+      "name": "Bracket keys resize the active brush rather than toggling side panels",
+      "status": "passed"
+    },
+    {
+      "name": "Space-drag in brush mode pans without altering objects",
+      "status": "passed"
+    },
+    {
+      "name": "The next global timeline protects locally restored nodes at every checkpoint",
+      "status": "passed"
+    },
+    {
+      "name": "Cancel timeline preserves the working document and history",
+      "status": "passed"
+    },
+    {
+      "name": "A finished path can be reopened without rerunning the solver",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid timeline metrics are rejected before changing the working document",
+      "status": "passed"
+    },
+    {
+      "name": "A recorded path cannot smuggle movement of a pinned object through import",
+      "status": "passed"
+    },
+    {
+      "name": "A saved timeline round-trips through import, retaining checkpoints",
+      "status": "passed"
+    },
+    {
+      "name": "Hold brush changes protection without moving or pinning nodes",
+      "status": "passed"
+    },
+    {
+      "name": "Protection-only stroke is undoable",
+      "status": "passed"
+    },
+    {
+      "name": "Protection-only stroke is redoable",
+      "status": "passed"
+    },
+    {
+      "name": "Repeated Escape returns to Edit after brush and timeline modes",
+      "status": "passed"
+    },
+    {
+      "name": "SVG export contains committed graph metadata but no brush UI or local-hold adornments",
+      "status": "passed"
+    },
+    {
+      "name": "PNG export still produces an actual PNG blob",
+      "status": "passed",
+      "detail": {
+        "type": "image/png",
+        "size": 154899
+      }
+    },
+    {
+      "name": "Changing documents clears local holds and stale restore sources",
+      "status": "passed"
+    },
+    {
+      "name": "Escape cancels an in-progress timeline worker without late adoption",
+      "status": "passed"
+    },
+    {
+      "name": "Stale candidate guard preserves a concurrent semantic edit",
+      "status": "passed"
+    },
+    {
+      "name": "Worker denial falls back to a usable local timeline",
+      "status": "passed"
+    },
+    {
+      "name": "Committed geometry restores on a fresh boot with the explicit storage adapter",
+      "status": "passed"
+    },
+    {
+      "name": "No uncaught browser errors in new timeline and brush scenarios",
+      "status": "passed",
+      "detail": []
+    }
+  ]
+}

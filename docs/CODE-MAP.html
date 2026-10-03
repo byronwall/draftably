@@ -1,0 +1,125 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Code map · Diagram Studio v7</title><style>
+:root{color-scheme:light;--ink:#23283a;--muted:#667084;--line:#dfe3ed;--accent:#5c4bce;--paper:#fff;--soft:#f6f7fb}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:28px}body{margin:0;background:var(--soft);color:var(--ink);font:16px/1.68 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+a{color:var(--accent);text-underline-offset:3px}a:hover{text-decoration-thickness:2px}.mast{border-bottom:1px solid var(--line);padding:15px 30px;background:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;font-size:13px}.brand{font-weight:750;letter-spacing:.03em;color:var(--ink);text-decoration:none}.mast nav{display:flex;gap:20px;flex-wrap:wrap}.layout{max-width:1370px;margin:auto;display:grid;grid-template-columns:250px minmax(0,950px);gap:38px;padding:38px 32px 80px;justify-content:center}.contents{position:sticky;top:24px;align-self:start;max-height:calc(100vh - 48px);overflow:auto;font-size:12.5px;line-height:1.45}.contents strong{display:block;text-transform:uppercase;letter-spacing:.12em;font-size:10px;color:var(--muted);padding:4px 10px 15px}.contents a{display:block;padding:6px 10px;color:var(--muted);text-decoration:none;border-radius:5px}.contents a:hover{background:#e9e8f5;color:var(--accent)}.contents .level3{padding-left:22px;font-size:12px}.paper{min-width:0;background:var(--paper);padding:48px 58px 64px;border:1px solid var(--line);border-radius:12px;box-shadow:0 7px 25px #23305204}h1{font-size:38px;line-height:1.12;letter-spacing:-.04em;margin:0 0 18px}h2{font-size:25px;line-height:1.25;letter-spacing:-.018em;margin:42px 0 16px}h1+h2{font-size:17px;font-weight:500;margin-top:0;color:var(--muted);letter-spacing:0}h3{font-size:18px;line-height:1.4;margin:32px 0 12px}p{margin:0 0 18px}li{margin-bottom:7px}ul,ol{padding-left:22px;margin:12px 0 22px}blockquote{border-left:3px solid var(--accent);padding:4px 20px;margin:24px 0;color:var(--muted)}code{font:0.87em ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;background:#f1f2f7;border-radius:4px;padding:2px 4px}pre{background:#f5f6fa;border:1px solid var(--line);border-radius:8px;padding:18px;overflow-x:auto;line-height:1.6;margin:24px 0}pre code{padding:0;background:none;font-size:12px;overflow-wrap:normal}.table-wrap{overflow-x:auto;margin:22px 0}table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.55}th{text-align:left;background:#f3f4f9;color:#40485b}td,th{border-bottom:1px solid var(--line);padding:12px 13px;vertical-align:top}tr:last-child td{border-bottom:none}img{display:block;max-width:100%;height:auto;margin:26px auto;border:1px solid var(--line);border-radius:8px}hr{border:0;border-top:1px solid var(--line);margin:34px 0}.footer{border-top:1px solid var(--line);padding-top:24px;margin-top:44px;font-size:12px;color:var(--muted)}:focus-visible{outline:3px solid #b3a8f0;outline-offset:3px}
+@media(max-width:1000px){.layout{grid-template-columns:190px minmax(0,1fr);gap:20px;padding:25px 18px}.paper{padding:34px 30px}.contents{font-size:12px}}
+@media(max-width:700px){.layout{display:block;padding:15px}.contents{display:none}.paper{padding:28px 22px}.mast{padding:15px 18px;align-items:flex-start}.mast nav{gap:8px;justify-content:flex-end}h1{font-size:30px}h2{font-size:22px}}
+@media print{body{background:white;font-size:11pt}.mast,.contents{display:none}.layout{display:block;padding:0}.paper{padding:0;border:0;box-shadow:none}h2,h3{break-after:avoid}img,table,pre{break-inside:avoid}a{color:inherit}.footer{font-size:9pt}}
+</style></head><body><header class="mast"><a class="brand" href="../diagram-studio.html">DIAGRAM STUDIO / 07</a><nav aria-label="Documentation"><a href="CHANGES-v7.html">Release guide</a><a href="INTENT-DUMP.html">Intent</a><a href="PARAMETERS.html">Parameters</a><a href="CODE-MAP.html">Code</a></nav></header><div class="layout"><aside class="contents" aria-label="On this page"><strong>On this page</strong><a class="level2" href="#diagram-studio-v7-maintainable-sources-and-interaction-boundaries">Diagram Studio v7 · maintainable sources and interaction boundaries</a><a class="level2" href="#1-runtime-load-order">1. Runtime load order</a><a class="level2" href="#2-committed-document-and-render-state">2. Committed document and render state</a><a class="level2" href="#3-layout-path-recording">3. Layout path recording</a><a class="level2" href="#4-brush-computation">4. Brush computation</a><a class="level2" href="#5-brush-gesture-transaction">5. Brush gesture transaction</a><a class="level2" href="#6-durability-and-import-export">6. Durability and import/export</a><a class="level2" href="#7-public-api-additions">7. Public API additions</a><a class="level2" href="#8-migration-boundaries">8. Migration boundaries</a><a class="level2" href="#9-verification-entry-points">9. Verification entry points</a><a class="level2" href="#recorded-history-validation">Recorded history validation</a></aside><main class="paper"><h1 id="code-map">Code map</h1>
+<h2 id="diagram-studio-v7-maintainable-sources-and-interaction-boundaries">Diagram Studio v7 · maintainable sources and interaction boundaries</h2>
+<p><code>diagram-studio.html</code> is the executable release. Its source files are under <code>source/</code>. <code>python source/build.py</code> inserts the CSS and JavaScript into <code>shell.html</code>, producing the standalone file without a JavaScript build tool or network call. The build checks for unsafe inline script terminators.</p>
+<p>This is still a plain-JavaScript prototype with shared global controller state, not a framework migration. The source split makes the modules inspectable and testable; it does not make their browser controllers independent. No repository changes or commits were made.</p>
+<h2 id="1-runtime-load-order">1. Runtime load order</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+  <th>Source</th>
+  <th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>shell.html</code> and <code>styles.css</code></td>
+  <td>Application structure, SVG layers, inspector panels, full-viewport comparison dialog, timeline deck, and brush controls.</td>
+</tr>
+<tr>
+  <td><code>layout-engine.js</code></td>
+  <td>DOM-free global layout, compound hierarchy, constraints, direction, start/end intent, metrics, and optional checkpoint recording. Exposes <code>LayoutLab</code>.</td>
+</tr>
+<tr>
+  <td><code>routing-engine.js</code></td>
+  <td>DOM-free automatic port/route search and diagnostics. Exposes <code>RouteLab</code>.</td>
+</tr>
+<tr>
+  <td><code>explorer-engine.js</code></td>
+  <td>Candidate configurations, parameter axes, scene projection, independent layout/routing candidates. Exposes <code>ExplorerLab</code>.</td>
+</tr>
+<tr>
+  <td><code>sculpt-engine.js</code></td>
+  <td>DOM-free timeline construction, checkpoint summaries, lookahead, local influence fields, and brush dabs. Exposes <code>SculptLab</code>.</td>
+</tr>
+<tr>
+  <td><code>studio-app.js</code></td>
+  <td>Document normalization, committed graph state, editing commands, renderer, camera, persistence, normal layout controls, exports, undo/redo, and public API.</td>
+</tr>
+<tr>
+  <td><code>explorer-ui.js</code></td>
+  <td>Grid/Overlay comparison, click correspondence, camera modes, candidate workers, applying a candidate, experiment export.</td>
+</tr>
+<tr>
+  <td><code>sculpt-ui.js</code></td>
+  <td>Timeline/brush transactions, pointer gestures, hover and ghost previews, local holds, bookmarking, replay, and temporal-history import/export.</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are classic scripts, not ES module imports. The DOM-free engines also expose CommonJS exports for Node tests. The browser controllers deliberately reuse editor functions rather than introducing a second diagram renderer.</p>
+<h2 id="2-committed-document-and-render-state">2. Committed document and render state</h2>
+<p><code>D</code> in <code>studio-app.js</code> is the committed schema-2 document. <code>graph</code> contains nodes, edges and groups. <code>layout.nodes</code> contains geometry, manual markers and pins. <code>layout.edges</code> stores port constraints, route waypoints and label offsets. <code>layout.labels</code>, <code>layout.containers</code>, <code>layout.intent</code>, <code>styles</code>, <code>collapsed</code>, <code>settings</code>, <code>camera</code> and <code>theme</code> remain separate concerns.</p>
+<p><code>normalize</code> validates imports, stable IDs, references, hierarchy, geometry and finite settings. <code>migrateLegacy</code> extracts the old active graph from an obsolete saved-view document rather than resurrecting that user interface.</p>
+<p><code>S</code> holds selection, tool state, active drags, undo/redo, route caches and layout state. <code>S.animationNodes</code> is the old short animation buffer. <strong><code>S.sculptNodes</code> is the new render-only geometry override.</strong> <code>geometryNode</code> reads it before ordinary geometry, while <code>snapshot()</code> and <code>diagramStudio.get()</code> still read D. This is the primary safety boundary for timelines and in-progress brush strokes.</p>
+<p><code>renderScene</code>, <code>renderNode</code>, <code>renderGroup</code>, <code>makeRoutes</code>, <code>renderEdges</code> and <code>renderOverlay</code> are reused by the new interactions. <code>sculptOverlay</code> appends non-interactive ghosts, motion guides, influence rings, and hold markers. Export removes the entire editor overlay layer. Rendered preview routes use <code>S.sculptRoutePrior</code> for a consistent prior-side context, and <code>S.pendingRouteResult</code> adopts the exact chosen routing on Keep.</p>
+<h2 id="3-layout-path-recording">3. Layout path recording</h2>
+<p><code>LayoutLab.compute(input, opts)</code> still clones its input. New <code>opts.fixedIds</code> supplements ordinary pins and manual-position protection in the existing <code>direct</code>, <code>branch</code> and <code>fixed</code> tests. This protects held descendants against an ancestor translation without writing temporary pins into the document.</p>
+<p>With <code>opts.trace</code>, the internal <code>captureTrace</code> records positions, iteration counter, phase and geometry metrics. It samples at an increasing stride and thins old samples near the 96-frame bound. Start and finish are forced captures. Intermediate samples avoid new overlap counts relative to the initial metric and avoid worsening frame spill. They are not guaranteed to monotonically improve every metric or preserve topology during motion between stops.</p>
+<p><code>SculptLab.journey</code> invokes the selected method in warm-settle mode by default. It removes duplicate consecutive coordinate snapshots, ensures the first geometry equals the source and the last equals the actual returned document, computes checkpoint movement summaries, and creates the separate <code>diagram-studio-journey</code> envelope. <code>lookahead</code> finds the first later checkpoint with a meaningful screen-space displacement, or the final checkpoint if less remains.</p>
+<p><code>openJourney</code> freezes the baseline, options, local holds, route prior and document signature. <code>journeyCompute</code> runs the exact same engines in a Blob worker. A worker creation/startup failure falls back to the yielding main-thread engine. The generation counter and signature guard prevent stale completion from being adopted. Cancelling a worker terminates it; cancelling a fallback invalidates its result even if the asynchronous solver continues to finish.</p>
+<p><code>journeyScrub</code> changes the render buffer and selected index. A hover uses a separate <code>peek</code> index. <code>journeyBookmark</code> captures a restoration source without committing it. <code>journeyKeep</code> captures the displayed routes, clears preview state, adopts the chosen geometry, and calls <code>remember</code> once. The camera is preserved. <code>closeJourney</code> discards the override and leaves the committed graph unchanged.</p>
+<p><code>journeyFitPath</code> explicitly computes a union of the recorded rectangles and fits it above the timeline deck. Repeated scrubbing does not call Fit automatically.</p>
+<h2 id="4-brush-computation">4. Brush computation</h2>
+<p><code>SculptLab.field</code> finds visible leaf shapes and computes smooth falloff by point-to-rectangle distance. Actual pins, pinned ancestors, selected manual protection and local holds are excluded. Expanded and collapsed containers are not brush movement targets.</p>
+<p><code>SculptLab.dab</code> always returns a cloned document. It chooses one local policy: spring/alignment tidy, stronger directed movement, rectangle separation, coordinate restoration, or protection-only hit testing. Exterior neighbors may contribute forces, but nodes outside the influence support are never moved. Directed pressure uses the lowest common container's direction; feedback edges are identified by the existing topology routine.</p>
+<p>Movement is capped per shape by field weight, strength and step. <code>constrainedTarget</code> clips against the current parent interior without resizing it. New/worsened rectangle intersections are checked only for changed-versus-visible pairs; ancestry and starting areas are cached per dab. A bounded line search attenuates the proposal. The brush does not compare proposals against the whole graph's spring/stress energy.</p>
+<p>The returned object includes <code>document</code>, <code>weights</code>, <code>locked</code>, <code>moved</code>, <code>maxDisplacement</code>, <code>blocked</code>, <code>attenuation</code> and <code>mode</code> when applicable. These diagnostics distinguish an empty field, protected target, geometric blockage and an accepted local change.</p>
+<h2 id="5-brush-gesture-transaction">5. Brush gesture transaction</h2>
+<p><code>SCULPT</code> owns tool preferences, the pointer, hover result, active stroke, restore source, local hold set and timers. <code>brushActivate</code> enters W mode. Hovering calls <code>sculptHoverAt</code>, which computes a prospective dab and displays its outline without writing D.</p>
+<p><code>brushStart</code> captures the committed baseline and signature. The stroke has its own <code>working</code> document. <code>sculptStrokeDab</code> advances that document; the renderer sees its geometry through <code>S.sculptNodes</code>. Pointer movement and an approximately 90-ms held-pointer timer request more dabs. Pointer-up adopts the entire working geometry once. <code>sculptCancelStroke</code> drops it on Escape, pointer cancellation, lost capture or blur.</p>
+<p><code>sculptRememberHolds</code> attaches the before/after local hold sets to the corresponding history entry. Protection-only changes receive their own entry even though the document snapshot is identical. <code>sculptHistory</code> restores the appropriate set on undo/redo. Local holds are deliberately not serialized into the graph. <code>sculptCheckDocument</code> prevents a hold/reference from leaking into a different diagram with coincidentally reused node IDs.</p>
+<p><code>sculptFixedIds</code> feeds the hold set into normal <code>runLayout</code>, the timeline, and <code>exConfig</code> → <code>ExplorerLab.candidate</code>. Protecting an area should not depend on which layout entry point the user chooses.</p>
+<h2 id="6-durability-and-import-export">6. Durability and import/export</h2>
+<p>Ordinary committed diagram persistence retains the existing <code>diagram-studio-v5</code> key for continuity. UI preferences use their existing separate key. The new latest-history key is <code>diagram-studio-v7-last-journey</code>.</p>
+<p><code>sculptArchive</code> retains the recording in memory and writes it to the separate history key only below the serialization cap and when storage is available. <code>reopenJourney</code> checks compatibility before rendering an old recording against the current source. <code>sculptImportJourney</code> validates the history envelope, normalizes its baseline, checks IDs, finite coordinates, metrics, pins and bookmark indices, then opens it through an undoable document replacement.</p>
+<p>Normal exports are handled by <code>exportDocument</code> → <code>exportSVG</code> / <code>exportPNG</code>. An active timeline or uncommitted stroke blocks normal diagram export. Brush controls and ghosts are never exported as diagram content. Timeline export is explicit and can contain the full source diagram, image data and all recorded coordinates.</p>
+<p>No download destination is verified merely because a Blob was constructed. The browser suite checks serialization and PNG Blob production separately from native download behavior.</p>
+<h2 id="7-public-api-additions">7. Public API additions</h2>
+<p>The existing <code>window.diagramStudio</code> API remains. New methods are:</p>
+<pre><code class="language-javascript">// Record the selected layout from committed positions; wait until it is ready.
+await diagramStudio.timeline({ algorithm: 'flow', maxIterations: 640 });
+const history = diagramStudio.getJourney();
+console.info('[timeline]', history.frames.length, history.report.termination);
+
+// Select an exact recorded checkpoint. This is preview, not a document write.
+diagramStudio.scrub(Math.floor((history.frames.length - 1) / 2));
+diagramStudio.bookmarkFrame();
+
+// Keep the endpoint, then restore only an area from the bookmark.
+diagramStudio.scrub(history.frames.length - 1);
+diagramStudio.keepFrame({ brush: true });
+
+// Brush tool configuration, or one programmatic local dab.
+diagramStudio.brush({ mode: 'restore', radius: 140, strength: 45 });
+const result = diagramStudio.brushDab({
+  mode: 'tidy',
+  point: { x: 640, y: 320 }, // World coordinates.
+  worldRadius: 180,
+  strength: 35,
+});
+console.info('[brush]', result.moved, result.maxDisplacement, result.blocked);
+
+// Ordinary undo/redo work for the accepted frame and the complete stroke.
+diagramStudio.undo();
+diagramStudio.redo();
+diagramStudio.clearLocalHolds();
+</code></pre>
+<p><code>timelineState()</code> reports preview indices, stop reports, bookmarks, brush settings, eligible/protected IDs and local holds. <code>cancelTimeline()</code> discards the preview. <code>get()</code> continues to return committed state while the timeline is open. Normal <code>set()</code> / import invalidates an open preview instead of allowing later completion to overwrite the replacement.</p>
+<h2 id="8-migration-boundaries">8. Migration boundaries</h2>
+<p>The most important extraction is a <strong>transaction coordinator</strong>, not another algorithm registry. Preserve the distinction between committed data, temporal recording, render-only geometry, restoration source and session protection. Those states have different lifetimes and different undo behavior.</p>
+<p>Move the pure engines into typed modules first. Model timeline and stroke controllers as explicit states such as idle, computing, inspecting, painting and committing. Keep worker cancellation/generation checks at every asynchronous boundary. Avoid tying data persistence to a reactive render buffer; a store update caused by scrubbing must not be mistaken for a source edit.</p>
+<p>Replace the current global hooks with explicit interfaces for geometry projection, route computation, history commands, document identity, view camera and diagnostics. Keep keyboard/tool routing centralized so a key cannot both paint and activate a second global command. Preserve Escape priority: cancel active stroke, cancel preview, exit transient tool, clear selection.</p>
+<p>Local holds are not a replacement for a general constraint system. A production version might persist them as editing-session intent, but should distinguish them from pins and semantic graph data. A richer history model could retain multiple branches and selective undo; the current release deliberately retains one latest recording plus ordinary command history.</p>
+<h2 id="9-verification-entry-points">9. Verification entry points</h2>
+<p><code>verification/geometry.cjs</code> exercises the inherited layout/routing constraints and broad sample cases. <code>verification/sculpt-geometry.cjs</code> exercises path endpoints, recording determinism, bounded sample memory, influence continuity, source immutability, outside-field identity, pins, held descendants, repeated dabs and collision safety.</p>
+<p><code>verification/browser_checks.py</code> covers existing editor/comparison interactions. <code>verification/sculpt-browser.py</code> covers native range keyboard handling, hover peeking, preview isolation, exact Keep, temporal restore, held strokes, cancellation, undo/redo of holds, history replay/import, ordinary exports and adapter-based boot restoration.</p>
+<p>The tests operate on the actual rebuilt artifact. Read the current ledger for counts, browser policy restrictions and unverified environments. Geometry tests do not establish continuous animation safety, attractive output for every graph, physical-device behavior, or production performance.</p>
+<h2 id="recorded-history-validation">Recorded history validation</h2>
+<p><code>sculptValidateJourney</code> is shared by explicit history import and the separate last-path storage loader. It validates frames, finite metrics, and pin invariants before adoption. Invocation-only constraints (<code>fixedIds</code>, selection, scope, solver effort) are recorded under the history artifact's <code>execution</code> field, never copied into ordinary diagram settings. Importing a recording does not reactivate its session-owned local holds.</p>
+<footer class="footer">Diagram Studio v7 · Offline documentation · <a href="CODE-MAP.md">Markdown source</a> · <a href="../diagram-studio.html">Open the editor</a></footer></main></div></body></html>

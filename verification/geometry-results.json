@@ -1,0 +1,2885 @@
+{
+  "assertions": 195,
+  "status": "passed",
+  "results": [
+    {
+      "algorithm": "compound-flow",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "compound-flow",
+        "name": "Compound flow",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 7.8,
+        "rmsDisplacement": 4.11,
+        "movementLimit": null,
+        "iterations": 82,
+        "batches": 2,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1024,
+          "height": 136,
+          "aspect": 7.52,
+          "area": 139431,
+          "linkLength": 1514
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 25,
+        "deterministic": true,
+        "termination": "settled",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          },
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "compound-flow",
+        "name": "Compound flow",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 160,
+        "batches": 2,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 38,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          },
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 166.7,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 2,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "compound-flow",
+        "name": "Compound flow",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 7,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 21.03,
+        "movementLimit": 24,
+        "iterations": 240,
+        "batches": 10,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1206,
+          "height": 564,
+          "aspect": 2.14,
+          "area": 680391,
+          "linkLength": 3865
+        },
+        "warnings": [
+          "2 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 83,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "boundary-align",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "boundary-align",
+        "name": "Boundary alignment",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 24.99,
+        "rmsDisplacement": 10.84,
+        "movementLimit": null,
+        "iterations": 108,
+        "batches": 2,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 137,
+          "aspect": 7.49,
+          "area": 140874,
+          "linkLength": 1520
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 25,
+        "deterministic": true,
+        "termination": "settled",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 67,
+            "reason": "settled"
+          },
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "boundary-align",
+        "name": "Boundary alignment",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 160,
+        "batches": 2,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 93,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          },
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 166,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "boundary-align",
+        "name": "Boundary alignment",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 10,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 21.57,
+        "movementLimit": 24,
+        "iterations": 240,
+        "batches": 10,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683408,
+          "linkLength": 3831
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 55,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "compound-spring",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "compound-spring",
+        "name": "Compound spring",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 142.12,
+        "rmsDisplacement": 139.03,
+        "movementLimit": null,
+        "iterations": 400,
+        "batches": 2,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1020,
+          "height": 163,
+          "aspect": 6.25,
+          "area": 166488,
+          "linkLength": 1513
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 69,
+        "deterministic": true,
+        "termination": "iteration limit",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 320,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "compound-spring",
+        "name": "Compound spring",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 160,
+        "batches": 2,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 55,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          },
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 166.8,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 2,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "compound-spring",
+        "name": "Compound spring",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 10,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 20.33,
+        "movementLimit": 24,
+        "iterations": 240,
+        "batches": 10,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1206,
+          "height": 564,
+          "aspect": 2.14,
+          "area": 680128,
+          "linkLength": 3846
+        },
+        "warnings": [
+          "2 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 52,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "tidy",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 40.91,
+        "rmsDisplacement": 34.24,
+        "movementLimit": null,
+        "iterations": 105,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1001,
+          "height": 136,
+          "aspect": 7.35,
+          "area": 136224,
+          "linkLength": 1477
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 12,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 105,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 80,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 26,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 168.3,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 11,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 20.69,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1178,
+          "height": 564,
+          "aspect": 2.09,
+          "area": 664241,
+          "linkLength": 3717
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 24,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "stress",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0.2,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "stress",
+        "name": "Stress descent",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 50,
+        "rmsDisplacement": 35.05,
+        "movementLimit": null,
+        "iterations": 102,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 967,
+          "height": 189,
+          "aspect": 5.13,
+          "area": 182458,
+          "linkLength": 1450
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 16,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 102,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "stress",
+        "name": "Stress descent",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 80,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 39,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 178.4,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "stress",
+        "name": "Stress descent",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 11,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 20.83,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1167,
+          "height": 564,
+          "aspect": 2.07,
+          "area": 658202,
+          "linkLength": 3705
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 17,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "force",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "force",
+        "name": "Spring network",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 142.31,
+        "rmsDisplacement": 129.68,
+        "movementLimit": null,
+        "iterations": 234,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1003,
+          "height": 221,
+          "aspect": 4.54,
+          "area": 221550,
+          "linkLength": 1496
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 53,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 234,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "force",
+        "name": "Spring network",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 13,
+        "maxDisplacement": 117.91,
+        "rmsDisplacement": 72.32,
+        "movementLimit": null,
+        "iterations": 320,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1027,
+          "height": 511,
+          "aspect": 2.01,
+          "area": 525023,
+          "linkLength": 2769
+        },
+        "warnings": [],
+        "milliseconds": 166,
+        "deterministic": true,
+        "termination": "iteration limit",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 320,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 168.8,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "force",
+        "name": "Spring network",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 11,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 20.27,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1178,
+          "height": 564,
+          "aspect": 2.09,
+          "area": 664483,
+          "linkLength": 3722
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 31,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "flow",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "flow",
+        "name": "Directional flow",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 126.95,
+        "rmsDisplacement": 122.09,
+        "movementLimit": null,
+        "iterations": 258,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1018,
+          "height": 137,
+          "aspect": 7.41,
+          "area": 139745,
+          "linkLength": 1497
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 59,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 258,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "flow",
+        "name": "Directional flow",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 80,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 19,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 167.6,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "flow",
+        "name": "Directional flow",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 11,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 20.1,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1180,
+          "height": 564,
+          "aspect": 2.09,
+          "area": 665407,
+          "linkLength": 3718
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 27,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "layered",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0.3,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0.3,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "layered",
+        "name": "Layered + fold",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 1,
+        "maxDisplacement": 0.28,
+        "rmsDisplacement": 0.28,
+        "movementLimit": null,
+        "iterations": 41,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 5,
+        "deterministic": true,
+        "termination": "settled",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "layered",
+        "name": "Layered + fold",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 80,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 22,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 166.4,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "layered",
+        "name": "Layered + fold",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 11,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 17.72,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1205,
+          "height": 564,
+          "aspect": 2.14,
+          "area": 679767,
+          "linkLength": 3802
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 22,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "tree",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0.3,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "tree",
+        "name": "Subtree tree",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 41,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 22,
+        "deterministic": true,
+        "termination": "settled",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "tree",
+        "name": "Subtree tree",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 80,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 12,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 80,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 166.4,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "tree",
+        "name": "Subtree tree",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 10,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 20.26,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1208,
+          "height": 564,
+          "aspect": 2.14,
+          "area": 681200,
+          "linkLength": 3817
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 19,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "grid",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0.7,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0.7,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "grid",
+        "name": "Soft grid",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 6,
+        "maxDisplacement": 414.85,
+        "rmsDisplacement": 384.31,
+        "movementLimit": null,
+        "iterations": 106,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 958,
+          "height": 218,
+          "aspect": 4.39,
+          "area": 209358,
+          "linkLength": 1533
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 26,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 106,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 2.1,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "grid",
+        "name": "Soft grid",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 13,
+        "maxDisplacement": 578.7,
+        "rmsDisplacement": 547.25,
+        "movementLimit": null,
+        "iterations": 180,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1065,
+          "height": 383,
+          "aspect": 2.78,
+          "area": 408335,
+          "linkLength": 2753
+        },
+        "warnings": [],
+        "milliseconds": 34,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 180,
+            "reason": "objective plateau"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 183.4,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 1,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "grid",
+        "name": "Soft grid",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 9,
+        "maxDisplacement": 24,
+        "rmsDisplacement": 19.79,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1189,
+          "height": 564,
+          "aspect": 2.11,
+          "area": 670561,
+          "linkLength": 3815
+        },
+        "warnings": [
+          "1 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 19,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "algorithm": "separate",
+      "status": "passed",
+      "guided": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "z-input",
+            "placement": "top-left",
+            "error": 0.3,
+            "satisfied": true,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "done",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 5,
+        "feedbackEdges": 1,
+        "algorithm": "separate",
+        "name": "Separate overlaps",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 41,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 136,
+          "aspect": 7.56,
+          "area": 139808,
+          "linkLength": 1525
+        },
+        "warnings": [
+          "1 feedback edge(s) remain visible; cyclic edges cannot all follow one direction."
+        ],
+        "milliseconds": 10,
+        "deterministic": false,
+        "termination": "settled",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          }
+        ]
+      },
+      "center": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "hub",
+            "placement": "center",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 0,
+        "directedEdges": 12,
+        "feedbackEdges": 0,
+        "algorithm": "separate",
+        "name": "Separate overlaps",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 0,
+        "maxDisplacement": 0,
+        "rmsDisplacement": 0,
+        "movementLimit": null,
+        "iterations": 41,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1028,
+          "height": 296,
+          "aspect": 3.47,
+          "area": 304288,
+          "linkLength": 2679
+        },
+        "warnings": [],
+        "milliseconds": 5,
+        "deterministic": false,
+        "termination": "settled",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 41,
+            "reason": "settled"
+          }
+        ]
+      },
+      "nestedPass": {
+        "intent": [
+          {
+            "role": "start",
+            "id": "user",
+            "placement": "top-left",
+            "error": 190,
+            "satisfied": false,
+            "pinned": false
+          },
+          {
+            "role": "end",
+            "id": "archive",
+            "placement": "bottom-right",
+            "error": 0,
+            "satisfied": true,
+            "pinned": false
+          }
+        ],
+        "backwardEdges": 2,
+        "directedEdges": 11,
+        "feedbackEdges": 0,
+        "algorithm": "separate",
+        "name": "Separate overlaps",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 4,
+        "maxDisplacement": 6.15,
+        "rmsDisplacement": 5.72,
+        "movementLimit": 24,
+        "iterations": 120,
+        "batches": 5,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3896
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1212,
+          "height": 564,
+          "aspect": 2.15,
+          "area": 683568,
+          "linkLength": 3905
+        },
+        "warnings": [
+          "2 forward-order conflict(s) remain; pins, frames, hierarchy directions or the movement budget can constrain placement.",
+          "Some placement preferences remain approximate. They never override pins, fixed frames, collision safety, scope, or a pass movement limit."
+        ],
+        "milliseconds": 18,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": "identity",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "jobs",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "app",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": "data",
+            "iterations": 24,
+            "reason": "iteration limit"
+          },
+          {
+            "parentId": null,
+            "iterations": 24,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    }
+  ],
+  "quality": [
+    {
+      "sample": "branches",
+      "algorithm": "compound-flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "boundary-align",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "compound-spring",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "tidy",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "stress",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "force",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "layered",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "tree",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "grid",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 4,
+      "lanePairs": 0
+    },
+    {
+      "sample": "branches",
+      "algorithm": "separate",
+      "overlaps": 0,
+      "backward": 9,
+      "blocked": 0,
+      "crossings": 6,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "compound-flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "boundary-align",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "compound-spring",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "tidy",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "stress",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "force",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "layered",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "tree",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "grid",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "cycle",
+      "algorithm": "separate",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "compound-flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "boundary-align",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "compound-spring",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "tidy",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "stress",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "force",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "layered",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "tree",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "grid",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "automatic-ports",
+      "algorithm": "separate",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "compound-flow",
+      "overlaps": 0,
+      "backward": 2,
+      "blocked": 0,
+      "crossings": 3,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "boundary-align",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 3,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "compound-spring",
+      "overlaps": 0,
+      "backward": 2,
+      "blocked": 0,
+      "crossings": 3,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "tidy",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 1,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "stress",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 1,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "force",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 1,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "flow",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 1,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "layered",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 2,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "tree",
+      "overlaps": 0,
+      "backward": 1,
+      "blocked": 0,
+      "crossings": 2,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "grid",
+      "overlaps": 0,
+      "backward": 2,
+      "blocked": 0,
+      "crossings": 1,
+      "lanePairs": 0
+    },
+    {
+      "sample": "nested-services",
+      "algorithm": "separate",
+      "overlaps": 0,
+      "backward": 2,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "compound-flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "boundary-align",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "compound-spring",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "tidy",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "stress",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "force",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "flow",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "layered",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "tree",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "grid",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    },
+    {
+      "sample": "boundary-terminals",
+      "algorithm": "separate",
+      "overlaps": 0,
+      "backward": 0,
+      "blocked": 0,
+      "crossings": 0,
+      "lanePairs": 0
+    }
+  ]
+}

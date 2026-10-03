@@ -1,0 +1,200 @@
+{
+  "browser": "144.0.7559.96",
+  "mode": "exact HTML injected",
+  "results": [
+    {
+      "name": "Boots in Edit, not Pan",
+      "status": "passed"
+    },
+    {
+      "name": "N \u2192 title \u2192 Tab builds three connected nodes",
+      "status": "passed"
+    },
+    {
+      "name": "Repeated Escape returns to Edit",
+      "status": "passed"
+    },
+    {
+      "name": "Start preference controls do not move or pin the shape",
+      "status": "passed"
+    },
+    {
+      "name": "One start and one end persist as layout intent",
+      "status": "passed"
+    },
+    {
+      "name": "Intent edit is undoable",
+      "status": "passed"
+    },
+    {
+      "name": "Intent edit is redoable",
+      "status": "passed"
+    },
+    {
+      "name": "Deleting an endpoint clears its preference",
+      "status": "passed"
+    },
+    {
+      "name": "Undo deletion restores its preference",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid preference references reject without data loss",
+      "status": "passed"
+    },
+    {
+      "name": "Multi-selection moves both shapes, not the camera",
+      "status": "passed"
+    },
+    {
+      "name": "Space-drag pans without moving shapes",
+      "status": "passed"
+    },
+    {
+      "name": "Container frame resizes independently of children",
+      "status": "passed"
+    },
+    {
+      "name": "Six candidates compute successfully",
+      "status": "passed"
+    },
+    {
+      "name": "All six charts visible, no diagram scroll at 1440\u00d7900",
+      "status": "passed",
+      "detail": {
+        "scroll": false,
+        "cards": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "name": "All six charts visible, no diagram scroll at 1024\u00d7768",
+      "status": "passed",
+      "detail": {
+        "scroll": false,
+        "cards": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "name": "All six charts visible, no diagram scroll at 1920\u00d71080",
+      "status": "passed",
+      "detail": {
+        "scroll": false,
+        "cards": [
+          true,
+          true,
+          true,
+          true,
+          true,
+          true
+        ]
+      }
+    },
+    {
+      "name": "Grid synchronized pan updates all cameras equally",
+      "status": "passed"
+    },
+    {
+      "name": "Independent pan changes only the operated chart",
+      "status": "passed"
+    },
+    {
+      "name": "Focus navigation centers corresponding objects",
+      "status": "passed"
+    },
+    {
+      "name": "Overlay switches without recomputing or mutating candidates",
+      "status": "passed"
+    },
+    {
+      "name": "Clicking an overlay shape changes the common anchor",
+      "status": "passed"
+    },
+    {
+      "name": "Every overlay anchor coincides within a pixel",
+      "status": "passed"
+    },
+    {
+      "name": "Layer emphasis switches labels and default opacity",
+      "status": "passed"
+    },
+    {
+      "name": "Opacity control changes only rendering",
+      "status": "passed"
+    },
+    {
+      "name": "Layer visibility toggle removes that overlay layer",
+      "status": "passed"
+    },
+    {
+      "name": "Keyboard Enter chooses an overlay anchor and preserves focus",
+      "status": "passed"
+    },
+    {
+      "name": "Overlay SVG serializes without XML errors",
+      "status": "passed"
+    },
+    {
+      "name": "All comparison navigation leaves the editor untouched",
+      "status": "passed"
+    },
+    {
+      "name": "Intent travels to every regenerated candidate",
+      "status": "passed"
+    },
+    {
+      "name": "Apply keeps exact candidate geometry and authored intent",
+      "status": "passed"
+    },
+    {
+      "name": "Apply keeps the routes displayed in the candidate",
+      "status": "passed"
+    },
+    {
+      "name": "Apply is one undo transaction",
+      "status": "passed"
+    },
+    {
+      "name": "One undo restores the comparison baseline",
+      "status": "passed"
+    },
+    {
+      "name": "Routing candidates keep node geometry identical",
+      "status": "passed"
+    },
+    {
+      "name": "Stale candidate refuses to overwrite newer work",
+      "status": "passed"
+    },
+    {
+      "name": "Close keeps newer work and returns to Edit",
+      "status": "passed"
+    },
+    {
+      "name": "Two-axis parameter grid generates six ready candidates",
+      "status": "passed"
+    },
+    {
+      "name": "Parameter grid uses three columns and two rows without scrolling",
+      "status": "passed"
+    },
+    {
+      "name": "No uncaught browser errors",
+      "status": "passed"
+    }
+  ],
+  "pageErrors": []
+}
