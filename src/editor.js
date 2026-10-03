@@ -874,16 +874,17 @@ function onPointerDown(e){
  if(e.button>1)return;if(S.inline){finishInlineEdit(true);return;}
  closePopover();const t=e.target,pos=screenToWorld(e.clientX,e.clientY);S.pointer=pos;
  const n=t.closest('[data-node]'),g=t.closest('[data-group]'),edgeEl=t.closest('[data-edge]'),port=t.closest('[data-port]');
+ const qa=t.closest('[data-quick-add]'),special=t.closest('[data-resize],[data-collapse],[data-waypoint]'),collapse=t.closest('[data-collapse]'),resize=t.closest('[data-resize]'),waypoint=t.closest('[data-waypoint]'),edgeLabel=t.closest('[data-edge-label]');
+ if(document.activeElement===$('document-title')){commitDocumentTitle();$('canvas').focus({preventScroll:true});}
  if(e.button===1||S.space){e.preventDefault();startDrag('pan',e);$('stage').classList.add('is-dragging');return;}
- const qa=t.closest('[data-quick-add]');if(qa){e.preventDefault();S.selected=new Set([qa.dataset.quickOwner]);quickExtend({side:qa.dataset.quickAdd});return;}
- const special=t.closest('[data-resize],[data-collapse],[data-waypoint]');
+ if(qa){e.preventDefault();S.selected=new Set([qa.dataset.quickOwner]);quickExtend({side:qa.dataset.quickAdd});return;}
  if(S.tool==='pan'&&!e.shiftKey&&!special){e.preventDefault();startDrag('pan',e,{clickId:n?.dataset.node||g?.dataset.group||edgeEl?.dataset.edge});$('stage').classList.add('is-dragging');return;}
  if(S.preview)acceptLayoutPreview();
- const collapse=t.closest('[data-collapse]');if(collapse){e.preventDefault();toggleCollapse(collapse.dataset.collapse);return;}
- const resize=t.closest('[data-resize]');if(resize){e.preventDefault();const id=resize.dataset.resize;startDrag('resize',e,{id,handle:resize.dataset.handle||'se',rect:clone(D.layout.nodes[id])});return;}
+ if(collapse){e.preventDefault();toggleCollapse(collapse.dataset.collapse);return;}
+ if(resize){e.preventDefault();const id=resize.dataset.resize;startDrag('resize',e,{id,handle:resize.dataset.handle||'se',rect:clone(D.layout.nodes[id])});return;}
  if(['box','circle','diamond','text','container'].includes(S.tool)){e.preventDefault();startDrag('draw',e,{shape:S.tool});return;}
- const waypoint=t.closest('[data-waypoint]');if(waypoint){e.preventDefault();const id=waypoint.dataset.waypoint,index=Number(waypoint.dataset.index);startDrag('waypoint',e,{id,index,point:clone(D.layout.edges[id].waypoints[index]),doubleCandidate:S.lastClick?.id===id&&S.lastClick.index===index&&performance.now()-S.lastClick.time<350});return;}
- const edgeLabel=t.closest('[data-edge-label]');if(edgeLabel&&e.altKey){e.preventDefault();const id=edgeLabel.dataset.edgeLabel;startDrag('edge-label',e,{id,offset:clone(D.layout.edges[id]||{})});return;}
+ if(waypoint){e.preventDefault();const id=waypoint.dataset.waypoint,index=Number(waypoint.dataset.index);startDrag('waypoint',e,{id,index,point:clone(D.layout.edges[id].waypoints[index]),doubleCandidate:S.lastClick?.id===id&&S.lastClick.index===index&&performance.now()-S.lastClick.time<350});return;}
+ if(edgeLabel&&e.altKey){e.preventDefault();const id=edgeLabel.dataset.edgeLabel;startDrag('edge-label',e,{id,offset:clone(D.layout.edges[id]||{})});return;}
  if(n&&(S.tool==='connect'||S.connectFrom)){
   e.preventDefault();const id=n.dataset.node;
   if(S.connectFrom){completeConnection(id,e.altKey?(port?.dataset.port||'auto'):'auto');return;}
