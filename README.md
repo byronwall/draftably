@@ -55,11 +55,13 @@ To repair one area, bookmark an early timeline step. Keep a later step with
 
 ```sh
 pnpm typecheck
+pnpm test:app
 pnpm test:engines
 pnpm build
 ```
 
-The engine suites include the original layout and brush assertions. They also
+The application check protects comparison fitting. The engine suites include
+the original layout and brush assertions. They also
 compare migrated results with the original engines across all 13 examples.
 Generated reports and browser captures belong in the ignored `tmp/` folder.
 
