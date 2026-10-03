@@ -1,5 +1,5 @@
-import { controllers, registerDispose } from './controller-context';
-import { clone, esc, clamp, icon, normalize, D, S, group, edge, geometryNode, rectUnion, center, snapshot, remember, change, persist, toast, undo, redo, dist, routingFingerprint, layoutScope, renderLayoutLab, cancelLayout, renderScene, renderOverlay, applyCamera, screenToWorld, checkbox, renderAll, closePopover, setTool, canvasCenter, finishInlineEdit, startDrag, finishDrag, downloadBlob, filename, setDocument, editableTarget } from './editor.js';
+import { controllers, registerDispose, listen, later, every, clearTimer } from './controller-context';
+import { $, hideLayoutLab, clone, esc, clamp, icon, normalize, D, S, group, edge, geometryNode, rectUnion, center, snapshot, remember, change, persist, toast, undo, redo, dist, routingFingerprint, layoutScope, renderLayoutLab, cancelLayout, renderScene, renderOverlay, applyCamera, screenToWorld, checkbox, renderAll, closePopover, setTool, canvasCenter, finishInlineEdit, startDrag, finishDrag, downloadBlob, filename, setDocument, editableTarget } from './editor.js';
 import { documentIdentity } from './explorer.js';
 import { LayoutLab } from './engines/layout-engine.js';
 import { RouteLab } from './engines/routing-engine.js';
@@ -19,7 +19,7 @@ function sculptSignature(doc){return documentIdentity(doc);}
 function sculptRender(){S.routeCache=null;renderScene();}
 function sculptQueueRender(){if(SCULPT.raf)return;SCULPT.raf=requestAnimationFrame(()=>{SCULPT.raf=0;sculptRender();});}
 function sculptSetGeometry(nodes){S.sculptNodes=nodes||null;sculptQueueRender();}
-function sculptStopPlayback(){clearInterval(SCULPT.playTimer);SCULPT.playTimer=0;const b=$('journey-play');if(b){b.textContent='Play';b.setAttribute('aria-pressed','false');}}
+function sculptStopPlayback(){clearTimer(SCULPT.playTimer);SCULPT.playTimer=0;const b=$('journey-play');if(b){b.textContent='Play';b.setAttribute('aria-pressed','false');}}
 function sculptDiagnostics(){
  return{journey:JOURNEY?{busy:JOURNEY.busy,index:JOURNEY.index,peek:JOURNEY.peek,frames:JOURNEY.data?.frames.length||0,ghost:JOURNEY.ghost,report:JOURNEY.data?.report||null,bookmarks:clone(JOURNEY.data?.bookmarks||[]),signature:JOURNEY.signature}:null,brush:{active:SCULPT.active,settings:clone(SCULPT.settings),stroke:!!SCULPT.stroke,eligible:Object.keys(SCULPT.hover?.weights||{}),locked:SCULPT.hover?.locked||[],referenceLabel:SCULPT.referenceLabel,hasReference:!!SCULPT.reference,holds:sculptFixedIds()},archiveFrames:JOURNEY_ARCHIVE?.frames.length||0};
 }
@@ -46,9 +46,9 @@ async function journeyCompute(doc,opts){
 }
 async function openJourney(options={}){
  if(S.preview){toast('Keep or discard the existing layout preview first.');return;}
- if($('explorer-dialog').open)closeExplorer();
+ if($('explorer-dialog').open)controllers.explorer.closeExplorer?.();
  finishInlineEdit(true);if(S.drag)finishDrag();if(S.layoutBusy)cancelLayout();
- if(SCULPT.stroke)sculptCancelStroke();brushDeactivate();closePopover();labOpen=false;renderLayoutLab();setTool('select');
+ if(SCULPT.stroke)sculptCancelStroke();brushDeactivate();closePopover();hideLayoutLab();setTool('select');
  if(JOURNEY)closeJourney();
  const baseline=clone(D),job=++journeyJob;
  S.sculptRoutePrior=clone(S.lastRoutes);
@@ -120,19 +120,19 @@ function journeyPlay(){
  if(j.index===j.data.frames.length-1)journeyScrub(0);
  $('journey-play').textContent='Pause';$('journey-play').setAttribute('aria-pressed','true');
  // No automatic animation on entry; playback is always explicitly requested.
- SCULPT.playTimer=setInterval(()=>{if(!JOURNEY?.data){sculptStopPlayback();return;}journeyScrub(JOURNEY.index+1);if(JOURNEY.index>=JOURNEY.data.frames.length-1)sculptStopPlayback();},S.reduced?750:420);
+ SCULPT.playTimer=every(()=>{if(!JOURNEY?.data){sculptStopPlayback();return;}journeyScrub(JOURNEY.index+1);if(JOURNEY.index>=JOURNEY.data.frames.length-1)sculptStopPlayback();},S.reduced?750:420);
 }
 function brushActivate(options={}){
  if(JOURNEY){toast('Keep a timeline step before brushing. Use Keep & brush.');return;}
  if(S.preview){toast('Keep or discard the layout preview first.');return;}
- if($('explorer-dialog').open)closeExplorer();if(S.layoutBusy)cancelLayout();finishInlineEdit(true);if(S.drag)finishDrag();
+ if($('explorer-dialog').open)controllers.explorer.closeExplorer?.();if(S.layoutBusy)cancelLayout();finishInlineEdit(true);if(S.drag)finishDrag();
  SCULPT.settings=SculptLab.settings({...SCULPT.settings,...options});
  if(!SCULPT.reference){SCULPT.reference=clone(D.layout.nodes);SCULPT.referenceLabel='Before brush';}
  SCULPT.active=true;SCULPT.point=null;SCULPT.hover=null;S.selected.clear();S.tool='brush';S.connectFrom=null;
  $('stage').dataset.tool='brush';$('stage').classList.add('has-brush');$('brush-btn').setAttribute('aria-pressed','true');renderBrushDock();renderAll();$('canvas').focus({preventScroll:true});
 }
 function brushDeactivate(){
- if(!SCULPT.active)return;sculptCancelStroke();SCULPT.active=false;SCULPT.hover=null;SCULPT.point=null;SCULPT.client=null;clearTimeout(SCULPT.hoverTimer);
+ if(!SCULPT.active)return;sculptCancelStroke();SCULPT.active=false;SCULPT.hover=null;SCULPT.point=null;SCULPT.client=null;clearTimer(SCULPT.hoverTimer);
  $('brush-dock').hidden=true;$('stage').classList.remove('has-brush');$('brush-btn').setAttribute('aria-pressed','false');if(S.tool==='brush'){S.tool='select';$('stage').dataset.tool='select';}renderOverlay();
 }
 function renderBrushDock(){
@@ -151,7 +151,7 @@ function sculptHoverAt(point){
 function brushStart(e){
  const point=screenToWorld(e.clientX,e.clientY);SCULPT.point=point;SCULPT.client={x:e.clientX,y:e.clientY};SCULPT.restoreKey=e.altKey;
  SCULPT.stroke={before:snapshot(),working:clone(D),signature:sculptSignature(D),holdsBefore:[...SCULPT.holds],pointerId:e.pointerId,points:0,moved:new Set(),last:point,alt:e.altKey};
- try{$('canvas').setPointerCapture(e.pointerId);}catch{}sculptStrokeDab(point);clearInterval(SCULPT.strokeTimer);SCULPT.strokeTimer=setInterval(()=>{if(SCULPT.stroke&&SCULPT.point&&performance.now()-SCULPT.lastDabAt>=85)sculptStrokeDab(SCULPT.point);},90);$('canvas').focus({preventScroll:true});
+ try{$('canvas').setPointerCapture(e.pointerId);}catch{}sculptStrokeDab(point);clearTimer(SCULPT.strokeTimer);SCULPT.strokeTimer=every(()=>{if(SCULPT.stroke&&SCULPT.point&&performance.now()-SCULPT.lastDabAt>=85)sculptStrokeDab(SCULPT.point);},90);$('canvas').focus({preventScroll:true});
 }
 function sculptStrokeDab(point){
  const st=SCULPT.stroke;if(!st)return;
@@ -178,12 +178,12 @@ function sculptPointerMove(e){
   if(performance.now()-SCULPT.lastDabAt>38||dist>SCULPT.settings.radius*.15)sculptStrokeDab(SCULPT.point);
   renderOverlay();return true;
  }
- clearTimeout(SCULPT.hoverTimer);SCULPT.hoverTimer=setTimeout(()=>sculptHoverAt(SCULPT.point),55);renderOverlay();return true;
+ clearTimer(SCULPT.hoverTimer);SCULPT.hoverTimer=later(()=>sculptHoverAt(SCULPT.point),55);renderOverlay();return true;
 }
 function sculptPointerUp(e){
  const st=SCULPT.stroke;if(!st)return false;
  if(e&&e.pointerId!==st.pointerId)return false;
- clearInterval(SCULPT.strokeTimer);SCULPT.strokeTimer=0;SCULPT.stroke=null;S.sculptNodes=null;
+ clearTimer(SCULPT.strokeTimer);SCULPT.strokeTimer=0;SCULPT.stroke=null;S.sculptNodes=null;
  if(sculptSignature(D)!==st.signature){SCULPT.holds=new Set(st.holdsBefore);sculptRender();toast('Diagram changed during the stroke; the stroke was discarded.');return true;}
  const camera=clone(D.camera);D.layout.nodes=clone(st.working.layout.nodes);D.camera=camera;
  const changed=remember(st.before,'Local layout brush');
@@ -193,7 +193,7 @@ function sculptPointerUp(e){
  console.info('[brush] stroke',{samples:st.points,moved:st.moved.size,undo:changed,holds:SCULPT.holds.size});return true;
 }
 function sculptCancelStroke(){
- const st=SCULPT.stroke;if(!st)return false;clearInterval(SCULPT.strokeTimer);SCULPT.strokeTimer=0;SCULPT.stroke=null;SCULPT.holds=new Set(st.holdsBefore);S.sculptNodes=null;SCULPT.hover=null;sculptRender();return true;
+ const st=SCULPT.stroke;if(!st)return false;clearTimer(SCULPT.strokeTimer);SCULPT.strokeTimer=0;SCULPT.stroke=null;SCULPT.holds=new Set(st.holdsBefore);S.sculptNodes=null;SCULPT.hover=null;sculptRender();return true;
 }
 function brushApplyAt(options={}){
  if(JOURNEY)throw Error('Keep or cancel the timeline before brushing.');
@@ -270,22 +270,22 @@ function sculptKey(e){
  }
  return false;
 }
-$('journey-deck').addEventListener('input',e=>{if(e.target.id==='journey-slider'){sculptStopPlayback();journeyScrub(+e.target.value);}});
-$('journey-deck').addEventListener('change',e=>{if(e.target.id==='journey-ghost'){JOURNEY.ghost=e.target.value;renderOverlay();}if(e.target.id==='journey-bookmarks'&&e.target.value!==''){sculptStopPlayback();journeyScrub(+e.target.value);}});
-$('journey-deck').addEventListener('pointermove',e=>{
+listen($('journey-deck'), 'input',e=>{if(e.target.id==='journey-slider'){sculptStopPlayback();journeyScrub(+e.target.value);}});
+listen($('journey-deck'), 'change',e=>{if(e.target.id==='journey-ghost'){JOURNEY.ghost=e.target.value;renderOverlay();}if(e.target.id==='journey-bookmarks'&&e.target.value!==''){sculptStopPlayback();journeyScrub(+e.target.value);}});
+listen($('journey-deck'), 'pointermove',e=>{
  if(e.target.id!=='journey-slider'||e.buttons||!JOURNEY?.data||SCULPT.playTimer)return;
  const r=e.target.getBoundingClientRect(),ratio=clamp((e.clientX-r.left-7)/(r.width-14),0,1);journeyScrub(Math.round(ratio*(JOURNEY.data.frames.length-1)),{peek:true});
 });
-$('journey-deck').addEventListener('pointerout',e=>{if(e.target.id==='journey-slider'&&JOURNEY?.data){JOURNEY.peek=null;journeyScrub(JOURNEY.index);}});
-$('brush-dock').addEventListener('input',e=>{
+listen($('journey-deck'), 'pointerout',e=>{if(e.target.id==='journey-slider'&&JOURNEY?.data){JOURNEY.peek=null;journeyScrub(JOURNEY.index);}});
+listen($('brush-dock'), 'input',e=>{
  const key={'brush-radius':'radius','brush-strength':'strength','brush-softness':'softness'}[e.target.id];if(!key)return;
  SCULPT.settings[key]=Number(e.target.value);if($('brush-'+key+'-out'))$('brush-'+key+'-out').textContent=e.target.value+(key==='radius'?' px':'%');
  if(SCULPT.point)sculptHoverAt(SCULPT.point);
 });
-$('brush-dock').addEventListener('change',e=>{if(e.target.id==='brush-mode')SCULPT.settings.mode=e.target.value;if(e.target.id==='brush-hold-restored')SCULPT.settings.holdRestored=e.target.checked;if(SCULPT.point)sculptHoverAt(SCULPT.point);});
-$('canvas').addEventListener('pointerleave',()=>{if(!SCULPT.stroke){clearTimeout(SCULPT.hoverTimer);SCULPT.point=null;SCULPT.hover=null;renderOverlay();}});
-$('canvas').addEventListener('lostpointercapture',()=>{if(SCULPT.stroke)sculptCancelStroke();});
-document.addEventListener('click',e=>{
+listen($('brush-dock'), 'change',e=>{if(e.target.id==='brush-mode')SCULPT.settings.mode=e.target.value;if(e.target.id==='brush-hold-restored')SCULPT.settings.holdRestored=e.target.checked;if(SCULPT.point)sculptHoverAt(SCULPT.point);});
+listen($('canvas'), 'pointerleave',()=>{if(!SCULPT.stroke){clearTimer(SCULPT.hoverTimer);SCULPT.point=null;SCULPT.hover=null;renderOverlay();}});
+listen($('canvas'), 'lostpointercapture',()=>{if(SCULPT.stroke)sculptCancelStroke();});
+listen(document, 'click',e=>{
  const frame=e.target.closest('[data-sculpt-frame]');if(frame){sculptStopPlayback();journeyScrub(+frame.dataset.sculptFrame);return;}
  const b=e.target.closest('[data-sculpt]');if(!b)return;
  const k=b.dataset.sculpt;
@@ -295,7 +295,7 @@ document.addEventListener('click',e=>{
  if(k==='play')journeyPlay();if(k==='bookmark')journeyBookmark();if(k==='keep')journeyKeep();if(k==='keep-brush')journeyKeep({brush:true});
  if(k==='timeline-from-here'){brushDeactivate();void openJourney();}if(k==='reopen-last')reopenJourney();if(k==='clear-holds')sculptClearHolds();if(k==='reference-now'){SCULPT.reference=clone(D.layout.nodes);SCULPT.referenceLabel='Current arrangement';renderBrushDock();}
 });
-window.addEventListener('resize',()=>{if(SCULPT.active&&SCULPT.client){SCULPT.point=screenToWorld(SCULPT.client.x,SCULPT.client.y);renderOverlay();}});
+listen(window, 'resize',()=>{if(SCULPT.active&&SCULPT.client){SCULPT.point=screenToWorld(SCULPT.client.x,SCULPT.client.y);renderOverlay();}});
 sculptRestoreArchive();
 
 function journeyFitPath(){
@@ -351,5 +351,6 @@ function sculptLockControls(locked){
 Object.assign(controllers.sculpt, { sculptCheckDocument, sculptFixedIds, sculptInteracting, sculptSignature, sculptRender, sculptQueueRender, sculptSetGeometry, sculptStopPlayback, sculptDiagnostics, sculptArchive, sculptExportJourney, sculptRestoreArchive, journeyCompute, openJourney, closeJourney, renderJourneyDeck, journeyUpdateChrome, journeyScrub, journeyBookmark, journeyKeep, journeyPlay, brushActivate, brushDeactivate, renderBrushDock, sculptDabOptions, sculptHoverAt, brushStart, sculptStrokeDab, sculptPointerDown, sculptPointerMove, sculptPointerUp, sculptCancelStroke, brushApplyAt, sculptClearHolds, sculptBeforeEdit, sculptUndo, sculptToolChange, sculptBlur, sculptBeforeUnload, sculptOverlay, sculptAction, sculptKey, journeyFitPath, reopenJourney, sculptValidateJourney, sculptImportJourney, sculptRememberHolds, sculptHistory, sculptLockControls });
 
 controllers.sculpt.isJourneyOpen = () => !!JOURNEY;
+controllers.sculpt.hasActiveStroke = () => !!SCULPT.stroke;
 
-registerDispose(() => { sculptStopPlayback(); sculptCancelStroke(); if (JOURNEY) closeJourney(); brushDeactivate(); });
+registerDispose(() => { sculptStopPlayback(); sculptCancelStroke(); clearTimer(SCULPT.hoverTimer); if (SCULPT.raf) cancelAnimationFrame(SCULPT.raf); if (JOURNEY) closeJourney(); brushDeactivate(); });

@@ -1,5 +1,5 @@
-import { controllers, registerDispose } from './controller-context';
-import { setCommittedDocument, setTransientState, clone, esc, clamp, icon, normalize, D, S, node, group, edge, ancestors, geometryNode, rectUnion, center, groupRect, visibleGraph, snapshot, change, toast, undo, routePath, labelPosition, routingFingerprint, layoutScope, renderLayoutLab, cancelLayout, visualNodeBounds, renderNode, renderGroup, fitView, renderEdges, field, checkbox, closePopover, setTool, reroute, finishInlineEdit, finishDrag, downloadBlob, action } from './editor.js';
+import { controllers, registerDispose, listen, later, every, clearTimer } from './controller-context';
+import { $, hideLayoutLab, setCommittedDocument, setTransientState, clone, esc, clamp, icon, normalize, D, S, node, group, edge, ancestors, geometryNode, rectUnion, center, groupRect, visibleGraph, snapshot, change, toast, undo, routePath, labelPosition, routingFingerprint, layoutScope, renderLayoutLab, cancelLayout, visualNodeBounds, renderNode, renderGroup, fitView, renderEdges, field, checkbox, closePopover, setTool, reroute, finishInlineEdit, finishDrag, downloadBlob, action } from './editor.js';
 import { LayoutLab } from './engines/layout-engine.js';
 import { RouteLab } from './engines/routing-engine.js';
 import { ExplorerLab } from './engines/explorer-engine.js';
@@ -13,14 +13,14 @@ let EX=null,exSerial=0;
 const exDialog=$('explorer-dialog');
 const exDefaultAlgorithms=['compound-flow','layered','flow','tree','stress','force'];
 function exConfig(mode='layout'){
- return{fixedIds:typeof sculptFixedIds==='function'?sculptFixedIds():[],intent:clone(D.layout.intent||{}),mode,kind:mode==='routing'?'parameters':'algorithms',algorithm:D.settings.algorithm,algorithms:[...exDefaultAlgorithms],axisA:mode==='routing'?'edgeGap':'nodeGap',valuesA:mode==='routing'?'10,18,28':'12,24,44',axisB:mode==='routing'?'bendPenalty':'direction',valuesB:mode==='routing'?'16,64':'RIGHT,DOWN',run:'rebuild',maxIterations:640,scope:'all',autoPorts:false,selected:[...S.selected],...((layoutScope().scope==='container')?{containerId:layoutScope().containerId}:{}),viewport:{w:$('stage').clientWidth,h:$('stage').clientHeight},priorRoutes:S.lastRoutes.map(r=>({id:r.id,fromSide:r.fromSide,toSide:r.toSide}))};
+ return{fixedIds:controllers.sculpt.sculptFixedIds?.() || [],intent:clone(D.layout.intent||{}),mode,kind:mode==='routing'?'parameters':'algorithms',algorithm:D.settings.algorithm,algorithms:[...exDefaultAlgorithms],axisA:mode==='routing'?'edgeGap':'nodeGap',valuesA:mode==='routing'?'10,18,28':'12,24,44',axisB:mode==='routing'?'bendPenalty':'direction',valuesB:mode==='routing'?'16,64':'RIGHT,DOWN',run:'rebuild',maxIterations:640,scope:'all',autoPorts:false,selected:[...S.selected],...((layoutScope().scope==='container')?{containerId:layoutScope().containerId}:{}),viewport:{w:$('stage').clientWidth,h:$('stage').clientHeight},priorRoutes:S.lastRoutes.map(r=>({id:r.id,fromSide:r.fromSide,toSide:r.toSide}))};
 }
 function documentIdentity(doc){const {camera,...meaning}=doc;return JSON.stringify(meaning);}
 function openExplorer(mode='layout'){
- if(typeof sculptBeforeEdit==='function')sculptBeforeEdit();
+ controllers.sculpt.sculptBeforeEdit?.();
  if(S.preview){toast('Keep or discard the current layout preview before comparing.');return;}
  finishInlineEdit(true);if(S.drag)finishDrag();if(S.layoutBusy)cancelLayout();closePopover();
- labOpen=false;renderLayoutLab();
+ hideLayoutLab();
  if(EX&&exDialog.open){EX.config={...exConfig(mode),priorRoutes:EX.config.priorRoutes};renderExplorerControls();return;}
  EX={baseline:clone(D),signature:documentIdentity(D),config:exConfig(mode),cells:[],presentation:'grid',controlsHidden:false,overlay:{camera:{cx:0,cy:0,k:1},active:0,allLabels:false},cameraMode:'sync',focusId:[...S.selected].find(id=>node(id)||group(id))||D.layout.intent?.start?.id||D.graph.nodes[0]?.id||'',shared:{cx:0,cy:0,k:1},busy:false,job:0,worker:null,reject:null,expanded:null,userCameraMoved:false,returnFocus:document.activeElement,controllers:[]};
  exDialog.showModal();exDialog.classList.toggle('controls-hidden',innerWidth<721);renderExplorerControls();exSetPresentation('grid',false);$('ex-grid').innerHTML='<div class="ex-empty"><strong>One diagram. Several possibilities.</strong><p>Generate six candidates from this exact starting point. Nothing changes in your diagram until you choose Apply.</p><button class="primary" data-ex-action="generate">Generate comparison</button></div>';
@@ -83,8 +83,8 @@ function exWorkerCandidate(baseline,spec,config,owner){
  owner.worker=worker;
  return new Promise((resolve,reject)=>{
   owner.reject=reject;
-  const timer=setTimeout(()=>{cleanup();reject(Error('Candidate exceeded 30 seconds. Try a smaller diagram or lower effort.'));},30000);
-  const cleanup=()=>{clearTimeout(timer);worker.terminate();if(owner.worker===worker)owner.worker=null;if(owner.reject===reject)owner.reject=null;};
+  const timer=later(()=>{cleanup();reject(Error('Candidate exceeded 30 seconds. Try a smaller diagram or lower effort.'));},30000);
+  const cleanup=()=>{clearTimer(timer);worker.terminate();if(owner.worker===worker)owner.worker=null;if(owner.reject===reject)owner.reject=null;};
   worker.onmessage=e=>{cleanup();if(e.data.ok)resolve(e.data.result);else reject(Error(e.data.message));};
   worker.onerror=e=>{e.preventDefault();cleanup();console.warn('[compare] Worker blocked; local fallback',e.message);ExplorerLab.candidate(baseline,spec,config).then(resolve,reject);};
   worker.postMessage({baseline,spec,config});
@@ -203,11 +203,11 @@ function exBindCanvas(svg,i){
  const controller=new AbortController();if(i===-1){EX.overlayController?.abort();EX.overlayController=controller;}else EX.controllers.push(controller);const signal=controller.signal,pointers=new Map();let drag=null,pinch=null,modifier=null;
  const rect=()=>svg.getBoundingClientRect();
  const setupPinch=()=>{const [a,b]=[...pointers.values()];const r=rect(),c=exEffectiveCamera(i),mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2};pinch={distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)),camera:{...c},world:{x:c.cx+(mid.x-r.left-r.width/2)/c.k,y:c.cy+(mid.y-r.top-r.height/2)/c.k}};drag=null;};
- svg.addEventListener('pointerdown',e=>{
+ listen(svg, 'pointerdown',e=>{
   if(!EX)return;e.preventDefault();svg.focus({preventScroll:true});try{svg.setPointerCapture(e.pointerId);}catch{}pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(pointers.size===2){setupPinch();return;}drag={x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,moved:false,target:e.target.closest('[data-node],[data-group]')?.dataset,zoom:e.metaKey||e.ctrlKey};
  },{signal});
- svg.addEventListener('pointermove',e=>{
+ listen(svg, 'pointermove',e=>{
   if(!EX)return;
   if(pointers.has(e.pointerId))pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(pinch&&pointers.size>=2){const [a,b]=[...pointers.values()],r=rect(),mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2},k=clamp(pinch.camera.k*Math.hypot(a.x-b.x,a.y-b.y)/pinch.distance,.015,6);exSetCamera(i,{cx:pinch.world.x-(mid.x-r.left-r.width/2)/k,cy:pinch.world.y-(mid.y-r.top-r.height/2)/k,k});return;}
@@ -215,9 +215,9 @@ function exBindCanvas(svg,i){
   if(e.metaKey&&!e.buttons){if(modifier)exZoom(i,Math.exp((modifier.y-e.clientY)*.008),modifier.x,modifier.startY);modifier={x:modifier?.x??e.clientX,startY:modifier?.startY??e.clientY,y:e.clientY};}else modifier=null;
  },{signal});
  const end=e=>{pointers.delete(e.pointerId);if(pinch){if(pointers.size<2)pinch=null;drag=null;return;}if(drag&&!drag.moved&&EX&&drag.target)exChooseAnchor(drag.target.node||drag.target.group);drag=null;};
- svg.addEventListener('pointerup',end,{signal});svg.addEventListener('pointercancel',()=>{pointers.clear();drag=null;pinch=null;},{signal});
- svg.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();if(!EX)return;const unit=e.deltaMode===1?16:e.deltaMode===2?rect().height:1;if(e.ctrlKey||e.metaKey)exZoom(i,Math.exp(-clamp(e.deltaY*unit,-300,300)*.007),e.clientX,e.clientY);else exPan(i,-e.deltaX*unit,-e.deltaY*unit);},{signal,passive:false});
- svg.addEventListener('keydown',e=>{
+ listen(svg, 'pointerup',end,{signal});listen(svg, 'pointercancel',()=>{pointers.clear();drag=null;pinch=null;},{signal});
+ listen(svg, 'wheel',e=>{e.preventDefault();e.stopPropagation();if(!EX)return;const unit=e.deltaMode===1?16:e.deltaMode===2?rect().height:1;if(e.ctrlKey||e.metaKey)exZoom(i,Math.exp(-clamp(e.deltaY*unit,-300,300)*.007),e.clientX,e.clientY);else exPan(i,-e.deltaX*unit,-e.deltaY*unit);},{signal,passive:false});
+ listen(svg, 'keydown',e=>{
   if(!EX)return;const key=e.key,r=rect();
   const chosen=e.target.closest('[data-node],[data-group]');if(chosen&&['Enter',' '].includes(key)){e.preventDefault();e.stopPropagation();exChooseAnchor(chosen.dataset.node||chosen.dataset.group);return;}
   if(key.startsWith('Arrow')){e.preventDefault();e.stopPropagation();const d=e.shiftKey?100:30;exPan(i,key==='ArrowLeft'?d:key==='ArrowRight'?-d:0,key==='ArrowUp'?d:key==='ArrowDown'?-d:0);}
@@ -352,12 +352,12 @@ function exportExplorerOverlay(download=true){
  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="${D.theme==='dark'?'#191c27':'#fbfbfd'}"/><text x="36" y="38" font-family="Arial" font-size="24" fill="${D.theme==='dark'?'#e8eaf3':'#222738'}">${esc(EX.baseline.title)} · overlay</text><text x="36" y="66" font-family="Arial" font-size="14" fill="#697185">Aligned on ${esc(label)} · translation only · common scale ${Math.round(k*100)}%</text><g transform="translate(${pad-b.x*k},${head-b.y*k}) scale(${k})">${content}</g>${legend}</svg>`;
  if(download)downloadBlob(new Blob([svg],{type:'image/svg+xml'}),'diagram-overlay.svg');return svg;
 }
-exDialog.addEventListener('input',e=>{
+listen(exDialog, 'input',e=>{
  if(!EX||e.target.dataset.exOpacity===undefined)return;const i=Number(e.target.dataset.exOpacity),opacity=clamp(Number(e.target.value)/100,.05,1);EX.cells[i].layer.opacity=opacity;EX.cells[i].layer.adjusted=true;$('ex-alpha-'+i).value=Math.round(opacity*100)+'%';
  const layer=exDialog.querySelector(`[data-overlay-layer="${i}"]`);if(layer)layer.style.opacity=opacity;
 });
-exDialog.addEventListener('cancel',e=>{e.preventDefault();closeExplorer();});
-exDialog.addEventListener('click',e=>{
+listen(exDialog, 'cancel',e=>{e.preventDefault();closeExplorer();});
+listen(exDialog, 'click',e=>{
  if(!EX)return;e.stopPropagation();
  const view=e.target.closest('[data-ex-view]');if(view){exSetPresentation(view.dataset.exView);return;}
  const layer=e.target.closest('[data-ex-layer-active]');if(layer){const previous=EX.cells[EX.overlay.active];if(previous&&!previous.layer.adjusted)previous.layer.opacity=.30;EX.overlay.active=Number(layer.dataset.exLayerActive);EX.cells[EX.overlay.active].layer.visible=true;if(!EX.cells[EX.overlay.active].layer.adjusted)EX.cells[EX.overlay.active].layer.opacity=.85;exRenderOverlay();exRenderLayerControls();return;}
@@ -370,7 +370,7 @@ exDialog.addEventListener('click',e=>{
   EX.expanded=EX.expanded===i?null:i;$('ex-grid').classList.toggle('expanded',EX.expanded!==null);exDialog.querySelectorAll('.ex-card').forEach((c,j)=>{c.hidden=EX.expanded!==null&&i!==j;c.querySelector('[data-ex-action=expand]').textContent=EX.expanded===j?'Back to grid':'Enlarge';});requestAnimationFrame(()=>{exArrangeGrid();exFitAll();});
  }
 });
-exDialog.addEventListener('change',e=>{
+listen(exDialog, 'change',e=>{
  if(!EX)return;const id=e.target.id;if(e.target.dataset.exOpacity!==undefined)return;
  if(e.target.dataset.exLayerVisible!==undefined){const i=Number(e.target.dataset.exLayerVisible);EX.cells[i].layer.visible=e.target.checked;exRenderOverlay();return;}
  if(id==='ex-all-labels'){EX.overlay.allLabels=e.target.checked;exRenderOverlay();return;}
@@ -388,12 +388,13 @@ exDialog.addEventListener('change',e=>{
  if(['ex-kind','ex-algorithm','ex-run','ex-axis-a','ex-axis-b'].includes(id))renderExplorerControls();
  if(EX.cells.length)exSetProgress('Settings changed. Generate to replace this sheet; the editor remains untouched.');
 });
-exDialog.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();e.stopPropagation();void generateExplorer();}});
-new ResizeObserver(()=>{if(EX&&exDialog.open){exArrangeGrid();exApplyCameras();}}).observe(exDialog.querySelector('.ex-main'));
+listen(exDialog, 'keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();e.stopPropagation();void generateExplorer();}});
+const exResizeObserver = new ResizeObserver(()=>{if(EX&&exDialog.open){exArrangeGrid();exApplyCameras();}});
+exResizeObserver.observe(exDialog.querySelector('.ex-main'));
 
 
 Object.assign(controllers.explorer, { exConfig, documentIdentity, openExplorer, cancelExplorer, closeExplorer, exOption, exField, renderExplorerControls, exReadConfig, exSetProgress, exWorkerCandidate, generateExplorer, exCardShell, captureCandidateScene, exUniqueIds, renderExplorerCell, exViewRect, exNodeCenter, exEffectiveCamera, exApplyCameras, exFitCell, exFitAll, exSetCamera, exPan, exZoom, exUpdateFocusNote, exBindCanvas, applyExplorerCandidate, explorerDiagnostics, exMaterializeSvgGroup, exportExplorerSheet, getExplorerExperiment, exportExplorerExperiment, exArrangeGrid, exSetPresentation, exChooseAnchor, exRenderIntent, exSetIntent, exRenderLayerControls, exRenderOverlay, exApplyOverlayCamera, exFitOverlay, exportExplorerOverlay });
 
 export { documentIdentity };
 
-registerDispose(() => { cancelExplorer(); if (exDialog.open) closeExplorer(); });
+registerDispose(() => { cancelExplorer(); exResizeObserver.disconnect(); if (exDialog.open) closeExplorer(); });

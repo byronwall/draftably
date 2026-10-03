@@ -1,4 +1,4 @@
-import { onCleanup } from 'solid-js';
+import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { disposeControllers } from './controller-context';
 
 const tools = [
@@ -66,8 +66,22 @@ function ComparisonDialog() {
 }
 
 export default function App() {
+  const [bootError, setBootError] = createSignal('');
+  async function startControllers() {
+    try {
+      await import('./editor.js');
+      await import('./explorer.js');
+      await import('./sculpt.js');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      console.error('[diagram-studio] startup failed', error);
+      setBootError(`Diagram Studio could not start: ${message}`);
+    }
+  }
+  onMount(() => { void startControllers(); });
   onCleanup(disposeControllers);
   return <>
+    <Show when={bootError()}>{message => <div class="boot-error" role="alert">{message()}</div>}</Show>
     <div class="right-closed" id="app">
       <Toolbar />
       <div class="workspace left-closed" id="workspace">

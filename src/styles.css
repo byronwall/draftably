@@ -160,3 +160,5 @@
 @media(max-width:760px){.journey-outcome{display:none}.journey-head{gap:6px}.journey-heading{flex:1}.journey-ghost-label{font-size:0}.journey-foot select{display:none}.journey-deck{padding:9px}.journey-foot{gap:5px}#journey-motion{min-width:55px}.topbar .compare-label{display:none}.brush-dock{width:225px}}
 
 .brush-next{display:flex;gap:5px;border-top:1px solid var(--line);margin-top:8px;padding-top:10px}.brush-next button{font-size:11px;min-height:29px}.journey-head>button[data-sculpt=fit-path]{font-size:11px;white-space:nowrap;min-height:27px}
+
+.boot-error{position:fixed;z-index:1000;inset:12px 12px auto;padding:12px 16px;border:1px solid #b44;border-radius:8px;background:#fff1f1;color:#711;font:14px/1.4 system-ui,sans-serif;box-shadow:0 4px 18px #0003}
