@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "build": "tsc -b && node scripts/check-bindings.ts && vite build",
     "typecheck": "tsc -b --pretty false && node scripts/check-bindings.ts",
+    "test:app": "node tests/explorer-fit.ts",
     "test:engines": "node tests/engine-layout.mjs && node tests/engine-sculpt.mjs && node tests/engine-parity.ts"
   },
   "dependencies": {

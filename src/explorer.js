@@ -4,6 +4,7 @@ import { LayoutLab } from './engines/layout-engine.js';
 import { RouteLab } from './engines/routing-engine.js';
 import { ExplorerLab } from './engines/explorer-engine.js';
 import { SculptLab } from './engines/sculpt-engine.js';
+import { fitCamera, visibleReadyCells } from './explorer-fit.ts';
 
 /* Diagram Studio 7 — comparison workspace, retaining local layout holds.
  * Does not create saved views or write browser storage. Candidates are read-only
@@ -170,17 +171,20 @@ function exApplyCameras(){
  exApplyOverlayCamera();
 }
 function exFitCell(i){
- const cell=EX.cells[i];if(cell.status!=='ready')return;const r=exViewRect(i),b=cell.scene.bounds,c=center(b);if(!r?.width||!r?.height)return;
- cell.camera={cx:c.x,cy:c.y,k:clamp(Math.min((r.width-36)/Math.max(1,b.w),(r.height-36)/Math.max(1,b.h)),.015,2)};
+ const cell=EX.cells[i];if(cell.status!=='ready')return;const r=exViewRect(i),b=cell.scene.bounds;if(!r?.width||!r?.height)return;
+ cell.camera=fitCamera(b,r);
  if(EX.cameraMode==='independent')exApplyCameras();else if(EX.cells.filter(c=>c.status==='ready').length===1)exFitAll();else exApplyCameras();
 }
 function exFitAll(){
- if(!EX)return;if(EX.presentation==='overlay'){exFitOverlay();return;}const ready=EX.cells.map((c,i)=>({c,i})).filter(({c})=>c.status==='ready');if(!ready.length)return;
- ready.forEach(({i})=>{const cell=EX.cells[i],r=exViewRect(i),b=cell.scene.bounds,c=center(b);cell.camera={cx:c.x,cy:c.y,k:clamp(Math.min((r.width-36)/Math.max(1,b.w),(r.height-36)/Math.max(1,b.h)),.015,2)};});
+ if(!EX)return;if(EX.presentation==='overlay'){exFitOverlay();return;}const ready=visibleReadyCells(EX.cells,EX.expanded);if(!ready.length)return;
+ ready.forEach(({i,cell})=>{const r=exViewRect(i),camera=fitCamera(cell.scene.bounds,r);if(camera)cell.camera=camera;});
  if(EX.cameraMode==='sync'){
-  const bounds=rectUnion(ready.map(({c})=>c.scene.bounds)),c=center(bounds);let k=2;
-  ready.forEach(({i})=>{const r=exViewRect(i);k=Math.min(k,(r.width-36)/Math.max(1,bounds.w),(r.height-36)/Math.max(1,bounds.h));});EX.shared={cx:c.x,cy:c.y,k:clamp(k,.015,2)};
- }else if(EX.cameraMode==='focus'){EX.shared={cx:0,cy:0,k:Math.min(...ready.map(({c})=>c.camera.k))*1.8};}
+  const bounds=rectUnion(ready.map(({cell})=>cell.scene.bounds)),c=center(bounds);let k=2;
+  ready.forEach(({i})=>{const r=exViewRect(i);if(r?.width&&r?.height)k=Math.min(k,(r.width-36)/Math.max(1,bounds.w),(r.height-36)/Math.max(1,bounds.h));});EX.shared={cx:c.x,cy:c.y,k:clamp(k,.015,2)};
+ }else if(EX.cameraMode==='focus'){
+  if(EX.expanded!==null){const {i,cell}=ready[0],c=center(cell.scene.bounds),f=exNodeCenter(i);EX.shared={cx:c.x-f.x,cy:c.y-f.y,k:cell.camera.k};}
+  else EX.shared={cx:0,cy:0,k:Math.min(...ready.map(({cell})=>cell.camera.k))*1.8};
+ }
  exApplyCameras();
 }
 function exSetCamera(i,next){
