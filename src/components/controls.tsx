@@ -8,13 +8,14 @@ export function IconButton(
     label: string;
     keys?: string;
     pressed?: boolean;
+    variant?: 'ghost' | 'primary';
   } & Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'>,
 ) {
-  const [own, rest] = splitProps(props, ['icon', 'label', 'keys', 'pressed', 'class']);
+  const [own, rest] = splitProps(props, ['icon', 'label', 'keys', 'pressed', 'class', 'variant']);
   return (
     <button
       type="button"
-      class={`button ghost icon-only ${own.class ?? ''}`}
+      class={`button icon-only ${own.variant ?? 'ghost'} ${own.class ?? ''}`}
       aria-label={own.label}
       title={own.keys ? `${own.label} · ${own.keys}` : own.label}
       aria-pressed={own.pressed}

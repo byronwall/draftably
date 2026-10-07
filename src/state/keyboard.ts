@@ -28,6 +28,7 @@ import { cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layou
 import { cancelGesture } from './pointer';
 import { visibleScene } from './scene';
 import { sculptKey } from './sculpt';
+import { shortcutKey } from './keys';
 import { toast } from './toast';
 import { closeMenu, dialog, menu, openQuickBuild } from './ui';
 
@@ -78,7 +79,7 @@ export function handleKeyDown(e: KeyboardEvent) {
   if (e.isComposing || modalOpen()) return;
   if (sculptKey(e)) return;
   const mod = e.ctrlKey || e.metaKey,
-    key = e.key.toLowerCase(),
+    key = shortcutKey(e),
     target = e.target as Element;
 
   if (e.key === 'Escape') {

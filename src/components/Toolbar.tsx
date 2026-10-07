@@ -139,7 +139,7 @@ export function Toolbar() {
               </button>
             </Show>
             <IconButton
-              class="primary"
+              variant="primary"
               icon="chevron"
               label="Layout options"
               keys="⌥L"

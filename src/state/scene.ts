@@ -50,7 +50,11 @@ const state = createRoot(() => {
   let cache: { signature: string; value: { routes: DrawnRoute[]; result: RoutingResult } } | null =
     null;
 
+  /** Bumped to force routes to be recomputed from scratch. */
+  const [epoch, setEpoch] = createSignal(0);
+
   const routing = createMemo(() => {
+    epoch();
     const vg = visible(),
       map = rects(),
       quick = quickRouting(),
@@ -105,6 +109,7 @@ const state = createRoot(() => {
     resetRoutes() {
       cache = null;
       lastRoutes = [];
+      setEpoch(n => n + 1);
     },
     routeInputFor: () => routeInput(doc, visible(), rects()),
   };

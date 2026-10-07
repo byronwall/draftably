@@ -52,6 +52,7 @@ import {
   setLayoutReport,
 } from './layout';
 import { routing, resetRoutes, setAdoptedRoutes, setRoutePrior, setSculptGeometry } from './scene';
+import { shortcutKey } from './keys';
 import { toast } from './toast';
 import { closeMenu, setLayoutLabOpen } from './ui';
 
@@ -834,7 +835,7 @@ export function sculptUndo(): boolean {
 
 /** Keyboard handling for the brush and timeline. Returns true when the key was handled. */
 export function sculptKey(e: KeyboardEvent): boolean {
-  const key = e.key.toLowerCase(),
+  const key = shortcutKey(e),
     mod = e.metaKey || e.ctrlKey,
     target = e.target as HTMLElement,
     onSlider = target.id === 'timeline-slider';

@@ -32,6 +32,7 @@ import {
   commit,
   doc,
   isSelected,
+  onBeforeEdit,
   persist,
   restoreDocument,
   selectItems,
@@ -160,10 +161,11 @@ export function cancelGesture() {
   restoreDocument(normalize(JSON.parse(before)), { keepCamera: false });
 }
 
-/** Commit an in-progress object drag before another edit. */
-export function finishGesture() {
-  if (gesture) onPointerUp(null);
-}
+// A keyboard edit during a drag first commits the drag as its own undo step.
+onBeforeEdit(() => {
+  if (gesture && ['objects', 'resize', 'waypoint', 'edge-label'].includes(gesture.kind))
+    onPointerUp(null);
+});
 
 // --- Touch and modifier zoom -----------------------------------------------------------------
 

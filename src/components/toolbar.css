@@ -1,6 +1,7 @@
 .toolbar {
   display: flex;
   align-items: center;
+  min-height: var(--toolbar-height);
   gap: var(--space-2);
   min-width: 0;
   padding: 0 8px;
@@ -118,6 +119,25 @@
 @media (max-width: 1500px) {
   .algorithm-select {
     display: none;
+  }
+}
+
+/* On narrow windows the tools move to a second row instead of being cut off. */
+@media (max-width: 1100px) {
+  .toolbar {
+    flex-wrap: wrap;
+    row-gap: 0;
+    padding-bottom: 4px;
+  }
+
+  .toolbar-scroll {
+    order: 3;
+    flex-basis: 100%;
+    height: 40px;
+  }
+
+  .toolbar > .toolbar-group:last-child {
+    margin-left: auto;
   }
 }
 

@@ -172,7 +172,8 @@ function step(direction: 'undo' | 'redo') {
       state.setUndoStack(s => [...s, inverse]);
     }
     for (const handler of historyHandlers) handler(entry, direction);
-    restoreDocument(normalize(JSON.parse(entry.data)));
+    // Undo restores the view along with the diagram, so the restored change is on screen.
+    restoreDocument(normalize(JSON.parse(entry.data)), { keepCamera: false });
     clearSelection();
   });
   persist();
