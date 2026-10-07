@@ -78,7 +78,7 @@ export const {
   setInlineEditId,
   spaceHeld,
   setSpaceHeld,
-  stageSize,
+  stageSize: measuredStageSize,
   setStageSize,
   reducedMotion,
   setReducedMotion,
@@ -92,6 +92,17 @@ export const canvasElement = () => canvas;
 export const focusCanvas = () => canvas?.focus({ preventScroll: true });
 
 const canvasRect = () => canvas?.getBoundingClientRect() ?? new DOMRect(0, 0, 1, 1);
+
+/**
+ * Size of the canvas in pixels. Tracks resizes reactively, but reads the element directly so
+ * code running before the first resize notification (or in a hidden tab) gets the real size.
+ */
+export function stageSize() {
+  const measured = measuredStageSize();
+  return canvas?.clientWidth
+    ? { width: canvas.clientWidth, height: canvas.clientHeight }
+    : measured;
+}
 
 export function screenToWorld(clientX: number, clientY: number): Point {
   const r = canvasRect(),

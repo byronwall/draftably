@@ -4,7 +4,9 @@ import solid from 'vite-plugin-solid';
 export default defineConfig({
   // Relative asset paths let the static build run from any subdirectory.
   base: './',
-  plugins: [solid()],
+  // App state lives in module-level stores. Hot-swapping components would split them from that
+  // state, so source edits reload the page instead; the diagram restores from browser storage.
+  plugins: [solid({ hot: false })],
   test: {
     include: ['tests/**/*.test.ts'],
   },
