@@ -1,0 +1,97 @@
+.popover {
+  position: fixed;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 268px;
+  max-height: calc(100dvh - 16px);
+  padding: 6px;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.popover.wide {
+  width: 320px;
+}
+
+.popover hr {
+  width: 100%;
+  margin: 5px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 30px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--hover);
+  outline: none;
+}
+
+.menu-icon {
+  display: grid;
+  flex: none;
+  width: 16px;
+  place-items: center;
+  color: var(--muted);
+}
+
+.menu-label {
+  flex: 1;
+}
+
+.menu-heading {
+  padding: 6px 8px 2px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.menu-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.menu-note {
+  padding: 6px 8px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.routing-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 4px 6px;
+}
+
+.routing-menu .menu-heading,
+.routing-menu .menu-note {
+  padding: 0;
+}
+
+.routing-menu .button-row .button {
+  flex: 1;
+}

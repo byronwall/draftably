@@ -7,6 +7,7 @@ import { LayoutLab } from '../src/engines/layout-engine.js';
 import { RouteLab } from '../src/engines/routing-engine.js';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { SculptLab } from '../src/engines/sculpt-engine.js';
+import type { NodeGeometry } from '../src/model/types';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
@@ -30,14 +31,14 @@ const engines = {
   sculpt: baseline.SculptLab,
 };
 const fixtureNames = fs
-  .readdirSync(path.join(here, 'fixtures'))
+  .readdirSync(path.join(here, '../src/samples'))
   .filter(x => x.endsWith('.json'))
   .sort()
   .map(x => x.slice(0, -5));
 const fixtures = new Map(
   fixtureNames.map(name => [
     name,
-    JSON.parse(fs.readFileSync(path.join(here, 'fixtures', `${name}.json`), 'utf8')),
+    JSON.parse(fs.readFileSync(path.join(here, '../src/samples', `${name}.json`), 'utf8')),
   ]),
 );
 const copy = <T>(value: T): T => JSON.parse(JSON.stringify(value));
@@ -71,11 +72,16 @@ function parity(name: string, before: unknown, after: unknown) {
   }
 }
 
-assert.equal(fixtureNames.length, 13, 'copy all 13 baseline examples into tests/fixtures');
+assert.equal(fixtureNames.length, 13, 'copy all 13 baseline examples into src/samples');
 for (const name of fixtureNames) {
   const fixture = fixtures.get(name);
   for (const algorithm of current.layout.algorithms) {
-    const options = { algorithm: algorithm.id, mode: 'rebuild', settle: true, maxIterations: 160 };
+    const options = {
+      algorithm: algorithm.id,
+      mode: 'rebuild' as const,
+      settle: true,
+      maxIterations: 160,
+    };
     const oldLayout = await engines.layout.compute(copy(fixture), options);
     const newLayout = await current.layout.compute(copy(fixture), options);
     parity(`${name}/${algorithm.id}: layout result`, oldLayout, newLayout);
@@ -109,8 +115,8 @@ for (const name of ['branches', 'nested-services']) {
     const p = doc.layout.nodes[doc.graph.nodes[0].id];
     return { x: p.x + p.w / 2, y: p.y + p.h / 2 };
   })();
-  for (const mode of ['tidy', 'flow', 'space', 'restore', 'protect']) {
-    const reference = copy(doc.layout.nodes);
+  for (const mode of ['tidy', 'flow', 'space', 'restore', 'protect'] as const) {
+    const reference: NodeGeometry = copy(doc.layout.nodes);
     for (const p of Object.values(reference)) {
       p.x += 40;
       p.y += 60;

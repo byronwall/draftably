@@ -16,7 +16,8 @@ function check(name, value, detail) {
   results.push({ name, status: 'passed', ...(detail ? { detail } : {}) });
   console.log('[sculpt geometry] PASS', name);
 }
-const sample = id => JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', id + '.json'))),
+const sample = id =>
+    JSON.parse(fs.readFileSync(path.join(__dirname, '../src/samples', id + '.json'))),
   copy = x => JSON.parse(JSON.stringify(x)),
   coords = d => JSON.stringify(d.layout.nodes),
   dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);

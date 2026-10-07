@@ -12,7 +12,7 @@ const ROOT = path.resolve(__dirname, '..');
 const OUT = path.resolve(ROOT, 'tmp/verification-current');
 fs.mkdirSync(OUT, { recursive: true });
 const copy = x => JSON.parse(JSON.stringify(x)),
-  load = n => JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', n + '.json')));
+  load = n => JSON.parse(fs.readFileSync(path.join(__dirname, '../src/samples', n + '.json')));
 let assertions = 0;
 const results = [],
   quality = [];

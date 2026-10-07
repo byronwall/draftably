@@ -1,0 +1,66 @@
+import type { Point, Rect } from './types';
+
+export const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
+export const finite = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n);
+/** Document coordinates are stored with one decimal place. */
+export const rounded = (n: number) => Math.round(n * 10) / 10;
+
+export const center = (r: Rect): Point => ({ x: r.x + r.w / 2, y: r.y + r.h / 2 });
+
+export const manhattan = (a: Point, b: Point) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+
+export const inside = (p: Point, r: Rect, pad = 0) =>
+  p.x >= r.x - pad && p.x <= r.x + r.w + pad && p.y >= r.y - pad && p.y <= r.y + r.h + pad;
+
+export const contains = (outer: Rect, inner: Rect) =>
+  inside({ x: inner.x, y: inner.y }, outer) &&
+  inside({ x: inner.x + inner.w, y: inner.y + inner.h }, outer);
+
+export const overlaps = (a: Rect, b: Rect, pad = 0) =>
+  a.x < b.x + b.w + pad && a.x + a.w + pad > b.x && a.y < b.y + b.h + pad && a.y + a.h + pad > b.y;
+
+/** Bounding box of the given rectangles, or a placeholder area when there are none. */
+export function rectUnion(rects: readonly Rect[], pad = 0): Rect {
+  if (!rects.length) return { x: 70, y: 160, w: 240, h: 160 };
+  let left = Infinity,
+    top = Infinity,
+    right = -Infinity,
+    bottom = -Infinity;
+  for (const r of rects) {
+    left = Math.min(left, r.x);
+    top = Math.min(top, r.y);
+    right = Math.max(right, r.x + r.w);
+    bottom = Math.max(bottom, r.y + r.h);
+  }
+  return { x: left - pad, y: top - pad, w: right - left + pad * 2, h: bottom - top + pad * 2 };
+}
+
+/** Rectangle spanned by two corner points. */
+export const rectFromPoints = (a: Point, b: Point): Rect => ({
+  x: Math.min(a.x, b.x),
+  y: Math.min(a.y, b.y),
+  w: Math.abs(b.x - a.x),
+  h: Math.abs(b.y - a.y),
+});
+
+/** SVG path for an orthogonal polyline with rounded corners. */
+export function roundedPath(points: readonly Point[], radius: number): string {
+  if (!points.length) return '';
+  let path = `M${points[0].x},${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1],
+      p = points[i],
+      b = points[i + 1];
+    const r = b ? Math.min(radius, manhattan(a, p) / 2, manhattan(p, b) / 2) : 0;
+    if (!b || r === 0) {
+      path += `L${p.x},${p.y}`;
+      continue;
+    }
+    const before = { x: p.x + Math.sign(a.x - p.x) * r, y: p.y + Math.sign(a.y - p.y) * r };
+    const after = { x: p.x + Math.sign(b.x - p.x) * r, y: p.y + Math.sign(b.y - p.y) * r };
+    path += `L${before.x},${before.y}Q${p.x},${p.y} ${after.x},${after.y}`;
+  }
+  return path;
+}
+
+export const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));

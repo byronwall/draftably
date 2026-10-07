@@ -1,0 +1,611 @@
+/* Canvas stage, the drawn diagram, overlays, and the floating controls on top of the canvas. */
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--canvas);
+  touch-action: none;
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  user-select: none;
+  touch-action: none;
+}
+
+.stage[data-tool='pan'],
+.stage.space-held {
+  cursor: grab;
+}
+
+.stage.is-dragging,
+.stage.is-dragging * {
+  cursor: grabbing !important;
+}
+
+.stage:is(
+    [data-tool='connect'],
+    [data-tool='container'],
+    [data-tool='box'],
+    [data-tool='diamond'],
+    [data-tool='circle'],
+    [data-tool='text'],
+    [data-tool='brush']
+  )
+  .canvas,
+.stage[data-tool='brush'] .canvas * {
+  cursor: crosshair;
+}
+
+/* --- Shapes ----------------------------------------------------------------------------------- */
+
+.node {
+  cursor: grab;
+  outline: none;
+}
+
+.node-shape {
+  filter: drop-shadow(var(--node-shadow));
+}
+
+.node-title {
+  fill: var(--text);
+  letter-spacing: -0.1px;
+  pointer-events: none;
+}
+
+.selection-ring {
+  opacity: 0;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.node:hover .selection-ring {
+  opacity: 0.45;
+}
+
+.node.selected .selection-ring,
+.node:focus-visible .selection-ring {
+  opacity: 1;
+}
+
+.port {
+  opacity: 0;
+  r: 5;
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  cursor: crosshair;
+}
+
+.node:hover .port,
+.node.selected .port,
+.connecting .port {
+  opacity: 1;
+}
+
+.port:hover {
+  r: 7;
+  fill: var(--accent);
+}
+
+.leader {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.resize-handle {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.position-badge {
+  pointer-events: none;
+}
+
+.position-badge rect {
+  fill: var(--surface);
+  stroke: var(--line);
+}
+
+.position-badge text {
+  fill: var(--muted);
+  font: 600 9px var(--font);
+}
+
+.position-badge.pinned text {
+  fill: var(--accent);
+}
+
+.group .position-badge rect {
+  stroke: none;
+}
+
+/* --- Containers ------------------------------------------------------------------------------- */
+
+.group {
+  outline: none;
+}
+
+.group-bg {
+  cursor: grab;
+  fill-opacity: 0.32;
+}
+
+.group.selected .group-bg,
+.group:focus-visible .group-bg {
+  stroke: var(--accent);
+  stroke-width: 1.8;
+}
+
+.group.drop-target .group-bg {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  fill-opacity: 0.7;
+}
+
+.group-header {
+  cursor: grab;
+}
+
+.group-title {
+  font: 600 11px var(--font);
+}
+
+.group-collapse {
+  cursor: pointer;
+}
+
+/* --- Connections ------------------------------------------------------------------------------ */
+
+.edge {
+  cursor: pointer;
+  outline: none;
+}
+
+.edge-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.edge-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 14;
+  pointer-events: stroke;
+}
+
+.edge.selected .edge-line,
+.edge:focus-visible .edge-line {
+  stroke: var(--accent);
+  stroke-width: 2.6;
+}
+
+.edge-label-bg {
+  fill: var(--canvas);
+  stroke: none;
+}
+
+.edge-label {
+  font: 10px var(--font);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+.waypoint {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  cursor: move;
+}
+
+/* --- Gesture feedback ------------------------------------------------------------------------- */
+
+.marquee {
+  fill: color-mix(in srgb, var(--accent) 10%, transparent);
+  stroke: var(--accent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.drawing-preview {
+  fill: var(--accent-soft);
+  fill-opacity: 0.4;
+  stroke: var(--accent);
+  stroke-width: 1.2;
+  stroke-dasharray: 5 3;
+  pointer-events: none;
+}
+
+.guide {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+  opacity: 0.6;
+}
+
+.connection-preview {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 6 5;
+  pointer-events: none;
+}
+
+.quick-add {
+  cursor: pointer;
+  outline: none;
+}
+
+.quick-add circle {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.quick-add path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
+.quick-add:hover circle,
+.quick-add:focus circle {
+  fill: var(--accent-soft);
+  stroke-width: 2;
+}
+
+/* Timeline previews and the brush hide editing affordances. */
+.has-timeline .quick-add,
+.has-timeline .resize-handle,
+.has-timeline .port,
+.has-brush .quick-add,
+.has-brush .port {
+  display: none;
+}
+
+/* --- Brush and timeline overlays -------------------------------------------------------------- */
+
+.sculpt-ghost,
+.sculpt-travel,
+.sculpt-held,
+.sculpt-held-dot,
+.sculpt-brush-ring * {
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.sculpt-ghost {
+  fill: none;
+  stroke-width: 1.4;
+}
+
+.sculpt-travel {
+  fill: none;
+  stroke: var(--accent);
+  stroke-opacity: 0.25;
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+
+.sculpt-held {
+  fill: none;
+  stroke: var(--sculpt-hold);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
+
+.sculpt-held-dot {
+  fill: var(--sculpt-hold);
+  stroke: var(--surface);
+  stroke-width: 1.5;
+}
+
+.sculpt-brush-ring {
+  pointer-events: none;
+}
+
+.brush-outer {
+  fill: currentColor;
+  fill-opacity: 0.035;
+  stroke: currentColor;
+  stroke-opacity: 0.7;
+  stroke-width: 1;
+  stroke-dasharray: 5 4;
+}
+
+.brush-core {
+  fill: currentColor;
+  fill-opacity: 0.03;
+  stroke: currentColor;
+  stroke-opacity: 0.3;
+  stroke-width: 1;
+}
+
+.sculpt-brush-ring path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+}
+
+/* --- Canvas chrome ---------------------------------------------------------------------------- */
+
+.empty-canvas {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--muted);
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.empty-canvas h2 {
+  color: var(--text);
+  font-size: 20px;
+}
+
+.empty-canvas .button {
+  margin-top: var(--space-2);
+}
+
+.inline-edit {
+  position: absolute;
+  z-index: 30;
+  min-height: 40px;
+  padding: 8px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  resize: none;
+}
+
+.zoom-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 20;
+}
+
+.zoom-level {
+  min-width: 52px;
+  font-variant-numeric: tabular-nums;
+}
+
+.has-timeline .zoom-controls {
+  bottom: 178px;
+}
+
+.drop-overlay {
+  position: absolute;
+  inset: 12px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 2px dashed var(--accent);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--accent-soft) 85%, transparent);
+  color: var(--accent);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.drop-overlay .icon {
+  width: 28px;
+  height: 28px;
+}
+
+/* Layout preview: keep or discard */
+
+.layout-preview {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  z-index: 25;
+  gap: var(--space-2);
+  padding: 6px 6px 6px 14px;
+  transform: translateX(-50%);
+}
+
+.layout-preview-text {
+  display: flex;
+  flex-direction: column;
+  margin-right: var(--space-2);
+  line-height: 1.25;
+}
+
+.layout-preview-text span {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+/* Timeline deck */
+
+.timeline-deck {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 24;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-4);
+}
+
+.timeline-head,
+.timeline-track-row,
+.timeline-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.timeline-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.timeline-outcome {
+  flex: 1;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.inline-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.inline-label select {
+  width: 170px;
+}
+
+.timeline-track {
+  position: relative;
+  flex: 1;
+}
+
+.timeline-marks {
+  position: absolute;
+  top: -6px;
+  right: 7px;
+  left: 7px;
+  height: 0;
+}
+
+.timeline-marks button {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--sculpt-restore);
+  transform: translateX(-50%);
+  cursor: pointer;
+}
+
+.timeline-track-labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-motion {
+  display: flex;
+  flex-direction: column;
+  min-width: 84px;
+  font-size: var(--text-xs);
+  line-height: 1.3;
+}
+
+.timeline-motion b {
+  font-size: var(--text-lg);
+}
+
+.timeline-motion span {
+  color: var(--muted);
+}
+
+.timeline-foot select {
+  width: 180px;
+}
+
+.timeline-note {
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.timeline-loading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--muted);
+}
+
+.timeline-loading p {
+  flex: 1;
+}
+
+/* Brush dock */
+
+.brush-dock {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 24;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 272px;
+  padding: 12px 14px;
+  cursor: auto;
+}
+
+.brush-dock * {
+  cursor: auto;
+}
+
+.brush-dock button,
+.brush-dock select,
+.brush-dock input {
+  cursor: pointer;
+}
+
+.brush-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+}
+
+@media (max-width: 900px) {
+  .timeline-note {
+    display: none;
+  }
+
+  .timeline-head .inline-label {
+    display: none;
+  }
+}
