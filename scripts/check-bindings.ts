@@ -20,11 +20,13 @@ const bindingCodes = new Set([2304, 2552, 2305, 2724, 2632, 2451]);
 const errors = ts.getPreEmitDiagnostics(program).filter(error => bindingCodes.has(error.code));
 
 if (errors.length) {
-  console.error(ts.formatDiagnosticsWithColorAndContext(errors, {
-    getCurrentDirectory: () => process.cwd(),
-    getCanonicalFileName: file => file,
-    getNewLine: () => '\n',
-  }));
+  console.error(
+    ts.formatDiagnosticsWithColorAndContext(errors, {
+      getCurrentDirectory: () => process.cwd(),
+      getCanonicalFileName: file => file,
+      getNewLine: () => '\n',
+    }),
+  );
   process.exitCode = 1;
 } else {
   console.log('Module bindings passed.');

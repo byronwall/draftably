@@ -69,7 +69,11 @@ export function listen(
     if (localSignal.aborted) remove();
     else {
       localSignal.addEventListener('abort', remove, { once: true });
-      events.signal.addEventListener('abort', () => localSignal.removeEventListener('abort', remove), { once: true });
+      events.signal.addEventListener(
+        'abort',
+        () => localSignal.removeEventListener('abort', remove),
+        { once: true },
+      );
     }
   }
   return remove;
