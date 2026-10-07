@@ -1,99 +1,46 @@
-# Current verification
+# Checks
 
-Date: October 3, 2026. Environment: macOS, Node 22.21.1, pnpm 11.9.0.
-
-## Automated checks
-
-| Check | Result |
-| --- | --- |
-| TypeScript and JavaScript module bindings | Passed. |
-| Production static build | Passed; includes three separate worker assets. |
-| Comparison fit regression | Passed for enlarged candidates, hidden cards, and grid restore. |
-| Layout and routing regression | 195 assertions and 55 broad cases passed. |
-| Timeline and brush engine regression | 54 assertions passed. |
-| Original-versus-migrated engine comparison | 320 comparisons passed across 13 fixtures and 11 algorithms. |
-| Archived release integrity | All 63 original file checksums passed. |
-
-Run the maintained checks with:
+## Automated
 
 ```sh
 pnpm typecheck
-pnpm test:app
-pnpm test:engines
+pnpm test
 pnpm build
 ```
 
-The parity check covers layout geometry, routing, timeline recordings, and
-brush calculations. It excludes execution time and recording creation time.
-Reports are written to `tmp/verification-current/`.
+| Suite                          | What it covers                                                                                                                                                                                                                                                                      |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tsc` (strict, no unused code) | All application code, tests and config.                                                                                                                                                                                                                                             |
+| `tests/model.test.ts` (Vitest) | Examples load and round-trip through `normalize`; validation and v1 migration; connected shapes, inserted steps, wrap/ungroup, delete with and without contents, collapse, container resize limits, align, build from a list, copy/paste, layout intent; comparison camera fitting. |
+| `tests/engine-layout.mjs`      | Layout and routing regressions: 195 assertions and 55 broad cases.                                                                                                                                                                                                                  |
+| `tests/engine-sculpt.mjs`      | Timeline and brush regressions: 55 checks.                                                                                                                                                                                                                                          |
+| `tests/engine-parity.ts`       | 320 comparisons of the engines against the original release in `reference/v7/` across 13 examples and 11 algorithms. Timing fields are excluded.                                                                                                                                    |
 
-## Browser checks
+Engine reports are written to the ignored `tmp/verification-current/` folder.
 
-Independent browser passes used fixed production builds on separate local
-origins. The reviewers used visible controls and rendered geometry. They did not
-read application source or call its internal API.
+## Browser
 
-The completed comparison and local layout pass covers:
+The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at 1440 × 900 and
+820 × 700, in light and dark themes, through real pointer and keyboard input plus
+`window.diagramStudio` for state inspection:
 
-- Six layout candidates in Grid and Overlay, including anchor, visibility, and opacity controls.
-- The three comparison camera modes and normal grid fitting.
-- Six routing candidates from two parameter lists, followed by Apply and Undo.
-- Timeline computation, keyboard scrubbing, hover preview, ghost choices, bookmarks, restore, keep, cancel, and reopen.
-- All five brush modes, radius changes, local holds, stroke undo, and temporary overlap repair.
-- Visible comparison cards and timeline controls at 1440 × 900 and 1024 × 768.
+- Startup, restore from browser storage, and examples loaded through the File menu with confirmation.
+- Shape drag with snapping, dropping into and out of containers, undo and redo.
+- **N**, typing, **Tab** to extend, **Enter** to commit; quick-add buttons; Connect tool with preview.
+- Drawing and naming a container, moving it with its contents, collapsing it.
+- Inspector edits: label, color, shape, position, pin; edge bends by double-click.
+- Copy, paste, paste-a-list into Build from a list, object search.
+- Layout pass, previewed rebuild with discard, layout lab (**Alt+L**), routing menu, Reroute.
+- Compare: six candidates, grid fitting, overlay with layers, Apply and Undo.
+- Timeline: record, scrub, Keep & brush; brush hover preview and a committed stroke.
+- Editable SVG export and re-import, PNG conversion.
 
-Candidate enlargement exposed a fitting defect. Hidden cards affected its zoom
-calculation. The repair uses the visible candidate's viewport and bounds.
+## Not covered
 
-The comparison repair passed a focused retest from `/studio/`. At both tested sizes,
-Enlarge showed the full diagram. Fit all, Home, and Back to grid worked in all
-three camera modes. Routing comparisons and timeline computation also completed
-from this subdirectory. The radius status and slider both updated from 190 to
-200. The final browser error and warning list was empty.
+- Native file pickers and drag-and-drop of files (the import code paths are shared with paste and
+  were exercised that way).
+- Safari, Firefox, touch input and trackpad gestures.
+- A full accessibility audit.
 
-The editing and file pass covers:
-
-- Add a shape, add a connected sibling, delete, undo, and redo.
-- Objects search, inspector fields, parent membership, container collapse, and container size changes.
-- Shape choices, pins, start/end preferences, connection styles, and automatic ports.
-- File and example menus, keyboard help, zoom controls, and canvas pan.
-- A new shape and dark theme surviving a normal page reload.
-- JSON, editable SVG, and PNG downloads through the Export menu.
-
-The download event observer timed out, but the files reached the Downloads
-folder. Direct inspection confirmed eight shapes and eight connections in JSON.
-SVG metadata contained the same document. The PNG measured 2368 × 768 pixels
-and passed a visual check. Browser export messages alone were not treated as
-proof of a downloaded file.
-
-Pasting the saved JSON through the browser clipboard reopened the diagram.
-The app showed eight shapes, eight connections, and the saved test shape.
-It reported `Opened diagram`, with no console errors or warnings.
-
-The native file chooser test did not finish. Its browser tool call stalled and
-was stopped. File-picker import remains unverified; clipboard import passed.
-
-The title checks exposed a separate focus and commit defect. The repair commits
-on Enter or focus loss. Clicking the canvas also commits before handling the
-selected shape.
-
-The final repair passed at `/app/`. Enter and canvas-click commits persisted
-through later edits and reload. A canvas click moved focus out of the title and
-enabled Undo immediately. One Undo restored the old title; one Redo restored
-the new title. Shape selection, keyboard creation, and dragging still worked.
-The final browser error and warning list was empty.
-
-## Scope
-
-These are current migration results. The reports in `reference/v7/verification/`
-belong to the original ChatGPT release and are retained as historical evidence.
-
-Engine parity does not prove browser interactions or all graph layouts. The
-algorithms can retain crossings and ordering conflicts. They do not guarantee a
-globally optimal drawing.
-
-The browser checks cover Chrome and the built-in browser on macOS. Safari,
-Firefox, mobile touch, and physical trackpad gestures remain untested. These
-checks are not a complete accessibility audit. Small comparison cards can shorten metric lines with
-ellipses. Overlaid diagrams also have repeated shape controls; one automated
-first-match selection was ambiguous. Selecting the visible shape control worked.
+The layout engines are heuristics: they can leave crossings or ordering conflicts and do not
+promise a globally optimal drawing.

@@ -1,81 +1,66 @@
 # Diagram Studio
 
-A static diagram editor built with SolidJS and Vite. Draw a diagram, compare
-layout candidates, inspect a layout timeline, and adjust small areas with a
-layout brush. Apply changes as single undoable edits.
+A diagram editor that runs entirely in the browser. Draw a diagram, improve its layout in small
+undoable passes, compare layout and routing candidates side by side, scrub through recorded layout
+steps, and repair small areas with a layout brush.
 
-The app preserves the final Diagram Studio v7 workflows. It runs in the browser
-and saves the current diagram on the same browser origin. Export JSON to keep
-a portable copy. No account or application server is required.
+Built with SolidJS, TypeScript and Vite. The current diagram saves to the browser; export JSON or
+editable SVG to keep a portable copy. There is no server.
 
-## Run
+## Develop
 
-Use Node 22.21 or later and pnpm 11.9.0.
+Use Node 22.21 or later and pnpm 11.
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-## Build a static site
+| Script              | Purpose                                              |
+| ------------------- | ---------------------------------------------------- |
+| `pnpm dev`          | Start the dev server.                                |
+| `pnpm build`        | Typecheck and build the static site into `dist/`.    |
+| `pnpm preview`      | Serve the production build.                          |
+| `pnpm typecheck`    | Run TypeScript.                                      |
+| `pnpm test`         | Run the unit tests and the engine regression suites. |
+| `pnpm test:unit`    | Run the Vitest unit tests only.                      |
+| `pnpm test:engines` | Run the layout, brush and engine parity suites.      |
+| `pnpm format`       | Format with Prettier.                                |
 
-```sh
-pnpm build
-pnpm preview
-```
-
-Publish the contents of `dist/` to a static host. Keep the `assets/` folder beside
-`index.html`; it includes the computation workers. The app has no server routes.
-Serve the build over HTTP or HTTPS.
-
-Browser saves belong to the site's origin. Export a diagram before moving to a
-different host. JSON, editable SVG, and PNG exports remain available in the editor.
+`pnpm build` writes a static site. Publish `dist/` as is; the computation worker sits in
+`dist/assets/`. Browser saves belong to the site's origin, so export a diagram before moving hosts.
 
 ## Use the editor
 
-| Action | Control |
-| --- | --- |
-| Create connected steps | Press **N**, type a title, then press **Tab**. |
-| Improve the current arrangement | Press **L**. |
-| Preview a full rebuild | Press **Shift+L**. |
-| Compare layouts and routing | Select **Compare**, or press **Alt+E**. |
-| Inspect recorded layout steps | Select **Timeline**, or press **Alt+T**. |
-| Adjust a local area | Press **W** for the layout brush. |
-| Return to Edit | Press **Escape** until previews and temporary tools close. |
-| Open help | Press **?**. |
+| Action                          | Control                                          |
+| ------------------------------- | ------------------------------------------------ |
+| Create connected steps          | Press **N**, type a title, then press **Tab**.   |
+| Improve the current arrangement | Press **L**.                                     |
+| Preview a full rebuild          | Press **Shift+L**.                               |
+| Compare layouts and routing     | Select **Compare**, or press **Alt+E**.          |
+| Inspect recorded layout steps   | Select **Timeline**, or press **Alt+T**.         |
+| Adjust a local area             | Press **W** for the layout brush.                |
+| Return to Edit                  | Press **Escape** until previews and tools close. |
+| Open help                       | Press **?**.                                     |
 
-Comparison candidates use the same starting diagram. Switch between Grid and
-Overlay, inspect a candidate, and select Apply to keep it. Undo restores the
-starting diagram.
+Comparison candidates all start from the same diagram. Apply one to keep it; Undo restores the
+starting diagram. To repair one area, bookmark an early timeline step, keep a later step with
+**Keep & brush**, then brush the area back toward the bookmark.
 
-To repair one area, bookmark an early timeline step. Keep a later step with
-**Keep & brush**, then restore the area toward the bookmark.
+## Project layout
 
-## Check
-
-```sh
-pnpm typecheck
-pnpm test:app
-pnpm test:engines
-pnpm build
+```
+src/
+  model/       Typed document, graph queries, geometry, labels, routing and edit operations
+  state/       Solid stores: document + history, editor, layout, timeline/brush, comparison
+  components/  Toolbar, panels, menus, dialogs, canvas scene and comparison views
+  engines/     Layout, routing, comparison and brush engines (plain JS with type declarations)
+  workers/     The worker that runs engine computations off the main thread
+  samples/     Example diagrams shown in the File menu
+tests/         Vitest unit tests and the engine regression scripts
+reference/v7/  The original release, used by the engine parity test
 ```
 
-The application check protects comparison fitting. The engine suites include
-the original layout and brush assertions. They also
-compare migrated results with the original engines across all 13 examples.
-Generated reports and browser captures belong in the ignored `tmp/` folder.
-
-See [current verification](docs/CHECKS.md) for browser coverage and limits.
-
-## Source and product history
-
-- `src/` contains the current application, components, controllers, engines, and workers.
-- `tests/` contains the engine checks and example fixtures.
-- [Application structure](docs/ARCHITECTURE.md) describes the current modules and state rules.
-- [Source record](docs/IMPORT.md) identifies the final ChatGPT release and its checksum.
-- [v7 intent and research](reference/v7/docs/INTENT-DUMP.md) records the product decisions and research references.
-- [v7 parameters](reference/v7/docs/PARAMETERS.md) describes the layout, routing, comparison, and brush controls.
-- [v7 release guide](reference/v7/docs/CHANGES-v7.md) explains the timeline and local restore workflow.
-
-`reference/v7/` preserves the complete final release. Its code map and test reports
-describe that release. The production build includes only the current app.
+See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
+[Checks](docs/CHECKS.md) for what is tested. [Source record](docs/IMPORT.md) describes where the
+original release came from; its product notes live in [reference/v7/docs](reference/v7/docs).

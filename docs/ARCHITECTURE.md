@@ -1,71 +1,87 @@
-# Application structure
+# Architecture
 
-The current app uses SolidJS, TypeScript, Vite, and native JavaScript modules.
-It builds to a static `dist/` folder. It has no application server.
+Diagram Studio is a SolidJS single-page app. All state lives in the browser; computation-heavy work
+runs in a Web Worker. The code is split into three layers, each depending only on the ones below it.
 
-## Interface and controllers
+```
+components/  →  state/  →  model/  →  engines/
+```
 
-| File | Responsibility |
-| --- | --- |
-| `src/App.tsx` | Solid toolbar, canvas, panels, comparison dialog, and application lifecycle. |
-| `src/controller-context.ts` | Controller interfaces, listener ownership, timers, and disposal. |
-| `src/editor.js` | Committed document, selection, history, editing, SVG rendering, files, and layout actions. |
-| `src/explorer.js` | Comparison candidates, grid and overlay presentation, cameras, and Apply. |
-| `src/sculpt.js` | Timeline, bookmarks, brush strokes, restore sources, and local holds. |
-| `src/document-model.js` | Document creation, validation, normalization, and existing file migration. |
-| `src/editor-static.js` | Icons, colors, and shape definitions. |
-| `src/sample-catalog.js` | Built-in example data and labels. |
-| `src/styles.css` | The retained v7 appearance and responsive rules. |
+## model/ — pure data and operations
 
-Solid owns the shell and its lifetime. The existing JavaScript controllers
-update the SVG scene and dynamic controls. This keeps the original interaction
-rules while separating the application from the standalone HTML build.
+Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directly.
 
-The Solid mount loads the editor before the comparison and brush controllers.
-Startup errors appear in an alert. Cleanup removes listeners, stops timers and
-workers, disconnects the comparison observer, and saves committed data.
+| File              | Responsibility                                                                                                    |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `types.ts`        | The `Diagram` document and everything in it.                                                                      |
+| `document.ts`     | `normalize` validates any input (files, storage, clipboard) and migrates v1 files.                                |
+| `graph.ts`        | Lookups and hierarchy: children, ancestors, collapsed containers, selection roots.                                |
+| `edits.ts`        | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given. |
+| `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                        |
+| `labels.ts`       | Text measurement, wrapping and label placement.                                                                   |
+| `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                 |
+| `static-scene.ts` | A read-only scene for comparison candidates.                                                                      |
+| `samples.ts`      | The example catalog backed by `src/samples/*.json`.                                                               |
 
-The editor exposes `window.diagramStudio` for the existing programmatic API.
-Internal feature calls use module imports and the controller context.
+## state/ — reactive application state
 
-## Computation
+Each module owns one concern and exposes signals plus the actions that change them.
 
-`src/engines/` contains four independent engine modules:
+| File                        | Responsibility                                                              |
+| --------------------------- | --------------------------------------------------------------------------- |
+| `document.ts`               | The committed diagram store, selection, undo/redo and browser persistence.  |
+| `editor.ts`                 | Tool, drag feedback, inline editing and camera helpers. Never saved.        |
+| `scene.ts`                  | Derived drawing data: visible graph, rectangles and memoized routes.        |
+| `actions.ts`                | Editor operations used by the UI; each wraps a model edit in one undo step. |
+| `commands.ts`               | Named commands shared by toolbar, menus and shortcuts.                      |
+| `keyboard.ts`, `pointer.ts` | Global shortcuts, clipboard and canvas gestures.                            |
+| `layout.ts`                 | Layout passes, previews, the layout lab's settings and checkpoints.         |
+| `sculpt.ts`                 | The layout timeline and the layout brush.                                   |
+| `comparison.ts`             | Compare: candidates, cameras, overlay layers and Apply.                     |
+| `files.ts`                  | Import, image embedding and JSON / SVG / PNG export.                        |
+| `ui.ts`, `toast.ts`         | Panels, menus, dialogs and status messages.                                 |
 
-- Layout: the 11 placement algorithms and their constraints.
-- Routing: ports, obstacles, route search, and route diagnostics.
-- Explorer: comparison specifications and candidate computation.
-- Sculpt: recorded solver states and local brush calculations.
+### Rules
 
-`src/workers/` contains TypeScript entry points for layout, comparison, and
-timeline jobs. Vite emits separate worker files. The existing cancellation,
-stale-result checks, and local computation fallback remain in the controllers.
+- **Every saved change is one undo step.** `transact(label, fn)` snapshots the document, applies
+  `fn` through Solid's `produce`, and records the step only if something changed.
+- **Previews never touch the document.** Layout animation, timeline scrubbing and brush strokes
+  draw from temporary geometry in `scene.ts`. Keeping a step or finishing a stroke commits it.
+- **Finish pending work before an edit.** Modules register `onBeforeEdit` handlers to commit an
+  inline label, accept a layout preview, close a timeline or finish a drag.
+- **Camera movement is not an edit.** It saves with the document but never creates undo steps.
 
-## State rules
+## components/ — the interface
 
-`D` is the committed diagram. `S` holds editor state and derived rendering data.
-Timeline and brush previews use separate geometry. They must not become saved
-diagram data until the user keeps a checkpoint or finishes a stroke.
+Components read state and call actions; they hold only local UI state. The canvas renders the
+diagram declaratively with `scene/NodeView`, `GroupView` and `EdgeView`. The same components draw
+comparison candidates through `scene/StaticScene`, so the editor and Compare always match.
 
-A comparison applies its candidate as one undo entry. A timeline keeps one
-checkpoint as one entry. A brush stroke keeps its local movement and holds in
-one entry. Camera movement stays separate from node coordinates.
+Styles are plain CSS. Design tokens and shared controls are in `styles/app.css`; each larger
+component imports its own stylesheet. Light and dark themes switch through `data-theme` on the
+document element.
 
-The browser stores the current diagram, interface preferences, and latest
-bounded timeline separately. Local holds last for the session. JSON exports
-provide portable diagram files; editable SVG also contains diagram metadata.
+## engines/ and workers/
 
-## Development and checks
+The layout, routing, comparison and brush engines are self-contained, deterministic JavaScript
+from the original release, with `.d.ts` files describing their public APIs. `pnpm test:engines`
+compares their output with the original release in `reference/v7/` across all examples.
 
-Solid component hot replacement is disabled. Source changes reload the page so
-controllers bind to a fresh DOM tree. The browser save restores committed work.
+`lib/engine-tasks.ts` runs layout, comparison candidates and timelines in a single module worker
+(`workers/engine.worker.ts`). Tasks can be cancelled; if the browser blocks workers they run on
+the main thread instead.
 
-TypeScript checks the TS and TSX files. A separate binding check detects missing
-names, missing exports, and writes to imported bindings in the retained
-JavaScript. It does not fully check JavaScript value types.
+## Storage
 
-Engine tests run against the maintained modules. The parity test loads the
-original engines from `reference/v7/` and compares their results. Timing values
-and recording creation times are excluded from those comparisons.
+| Key                              | Contents                                        |
+| -------------------------------- | ----------------------------------------------- |
+| `diagram-studio-v5`              | The current diagram (older keys are read once). |
+| `diagram-studio-v5-ui`           | Which side panels are open.                     |
+| `diagram-studio-v7-last-journey` | The most recent layout timeline.                |
 
-See [verification](CHECKS.md) for current results and the scope of browser checks.
+Brush holds and the clipboard last for the session only.
+
+## Scripting
+
+`window.diagramStudio` exposes a small API (get/set, layout, compare, timeline, brush, export,
+diagnostics) for automated browser checks and the console. The app does not use it.
