@@ -9,6 +9,8 @@ export function Icon(props: { name: string; class?: string; size?: number }) {
       width={props.size}
       height={props.size}
       aria-hidden="true"
+      // Icon markup comes from the fixed ICONS table, never from user input.
+      // eslint-disable-next-line solid/no-innerhtml
       innerHTML={ICONS[props.name] ?? ICONS.cube}
     />
   );
@@ -35,6 +37,8 @@ export function SceneGlyph(props: {
       stroke-linecap="round"
       stroke-linejoin="round"
       pointer-events="none"
+      // Icon markup comes from the fixed ICONS table, never from user input.
+      // eslint-disable-next-line solid/no-innerhtml
       innerHTML={ICONS[props.name] ?? ICONS.cube}
     />
   );

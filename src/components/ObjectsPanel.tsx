@@ -1,4 +1,4 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createMemo, createSignal, For, Show } from 'solid-js';
 import { ancestors, childrenOf, isGroup, styleOf } from '../model/graph';
 import { doc, selectItems, selection } from '../state/document';
 import { centerSelection } from '../state/editor';
@@ -13,27 +13,27 @@ interface Row {
   container: boolean;
 }
 
+/** Rows of the object tree, depth first. A search shows matches at any depth. */
+function treeRows(query: string, closed: ReadonlySet<string>): Row[] {
+  const rows: Row[] = [];
+  const walk = (parent: string | null, depth: number) => {
+    for (const n of childrenOf(doc, parent)) {
+      const container = isGroup(doc, n.id);
+      if (!query && ancestors(doc, n.id).some(id => closed.has(id))) continue;
+      if (!query || n.title.toLowerCase().includes(query))
+        rows.push({ id: n.id, title: n.title, depth, container });
+      if (container) walk(n.id, depth + 1);
+    }
+  };
+  walk(null, 0);
+  return rows;
+}
+
 /** Searchable tree of shapes and containers. */
 export function ObjectsPanel() {
   const [query, setQuery] = createSignal('');
   const [closed, setClosed] = createSignal<ReadonlySet<string>>(new Set());
-
-  const rows = () => {
-    const q = query().trim().toLowerCase(),
-      out: Row[] = [];
-    const walk = (parent: string | null, depth: number) => {
-      for (const n of childrenOf(doc, parent)) {
-        const container = isGroup(doc, n.id),
-          hidden = ancestors(doc, n.id).some(id => closed().has(id));
-        if (hidden && !q) continue;
-        if (!q || n.title.toLowerCase().includes(q))
-          out.push({ id: n.id, title: n.title, depth, container });
-        if (container) walk(n.id, depth + 1);
-      }
-    };
-    walk(null, 0);
-    return out;
-  };
+  const rows = createMemo(() => treeRows(query().trim().toLowerCase(), closed()));
 
   const toggle = (id: string) =>
     setClosed(current => {

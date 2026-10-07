@@ -4,7 +4,6 @@ import path from 'node:path';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { LayoutLab } from '../src/engines/layout-engine.js';
-import { RouteLab } from '../src/engines/routing-engine.js';
 import { SculptLab as Lab } from '../src/engines/sculpt-engine.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..'),

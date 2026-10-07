@@ -47,6 +47,7 @@ export function emptyDiagram(title = 'Untitled diagram'): Diagram {
 }
 
 // Untrusted JSON from files, storage and the clipboard. `normalize` validates every field it keeps.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Raw = any;
 
 /**

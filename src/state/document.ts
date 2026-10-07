@@ -236,7 +236,7 @@ export function persistNow() {
 
 /** Load the saved diagram. Returns whether one was restored and any notice for the user. */
 export function restoreSavedDocument(): { restored: boolean; notice?: string } {
-  let stored: string | null = null;
+  let stored: string | null;
   try {
     stored =
       [STORAGE_KEY, ...LEGACY_KEYS].map(key => localStorage.getItem(key)).find(Boolean) ?? null;

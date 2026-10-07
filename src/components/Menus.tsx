@@ -23,6 +23,8 @@ export function Menus() {
 
 function Popover(props: { state: MenuState }) {
   let el!: HTMLDivElement;
+  // The popover is keyed on its state, so the anchor never changes while it is open.
+  // eslint-disable-next-line solid/reactivity
   const anchor = props.state.anchor;
   const returnFocus = anchor instanceof HTMLElement ? anchor : null;
 

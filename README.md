@@ -25,6 +25,7 @@ pnpm dev
 | `pnpm test`         | Run the unit tests and the engine regression suites. |
 | `pnpm test:unit`    | Run the Vitest unit tests only.                      |
 | `pnpm test:engines` | Run the layout, brush and engine parity suites.      |
+| `pnpm lint`         | Lint with ESLint, including Solid reactivity rules.  |
 | `pnpm format`       | Format with Prettier.                                |
 
 `pnpm build` writes a static site. Publish `dist/` as is; the computation worker sits in

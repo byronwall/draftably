@@ -36,10 +36,7 @@ export function wrapText(text: string, width: number, size = LABEL_SIZE): string
     for (const word of paragraph.split(/\s+/)) {
       if (!word) continue;
       if (textWidth(word, size) > width) {
-        if (line) {
-          lines.push(line);
-          line = '';
-        }
+        if (line) lines.push(line);
         let part = '';
         for (const char of word) {
           if (part && textWidth(part + char, size) > width) {
