@@ -118,9 +118,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "request"
-        ],
+        "sources": ["request"],
         "confidence": "high",
         "notes": ""
       },
@@ -132,9 +130,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "request"
-        ],
+        "sources": ["request"],
         "confidence": "high",
         "notes": ""
       },
@@ -146,9 +142,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "request"
-        ],
+        "sources": ["request"],
         "confidence": "high",
         "notes": ""
       },
@@ -160,9 +154,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "request"
-        ],
+        "sources": ["request"],
         "confidence": "high",
         "notes": ""
       },
@@ -174,9 +166,7 @@
         "importance": "supporting",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "styles"
-        ],
+        "sources": ["styles"],
         "confidence": "medium",
         "notes": ""
       },
@@ -188,9 +178,7 @@
         "importance": "supporting",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "sizing"
-        ],
+        "sources": ["sizing"],
         "confidence": "medium",
         "notes": ""
       },
@@ -202,9 +190,7 @@
         "importance": "supporting",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "proposal"
-        ],
+        "sources": ["proposal"],
         "confidence": "medium",
         "notes": "Agent proposal, not user approval."
       },
@@ -216,9 +202,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "typography-request"
-        ],
+        "sources": ["typography-request"],
         "confidence": "high"
       },
       {
@@ -229,9 +213,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "dsl-style-request"
-        ],
+        "sources": ["dsl-style-request"],
         "confidence": "high"
       },
       {
@@ -242,9 +224,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "color-shades-request"
-        ],
+        "sources": ["color-shades-request"],
         "confidence": "high"
       },
       {
@@ -255,9 +235,7 @@
         "importance": "core",
         "status": "active",
         "time_horizon": "first release",
-        "sources": [
-          "numeric-shades-request"
-        ],
+        "sources": ["numeric-shades-request"],
         "confidence": "high",
         "notes": "User explicitly selected numeric shades and suggested 500; complete stop list is the agent proposal. Lower numbers mean lighter colors; higher numbers mean darker colors."
       }
@@ -495,21 +473,9 @@
         "Shared design-system changes"
       ],
       "scores": {
-        "recolor_existing": [
-          3,
-          1,
-          4
-        ],
-        "independent_bundles": [
-          9,
-          9,
-          3
-        ],
-        "shared_tokens": [
-          9,
-          9,
-          9
-        ]
+        "recolor_existing": [3, 1, 4],
+        "independent_bundles": [9, 9, 3],
+        "shared_tokens": [9, 9, 9]
       },
       "basis": "Agent design judgment; no rendered product proof yet."
     },
@@ -572,19 +538,7 @@
     "color_model": {
       "status": "proposed",
       "built_in_families": "Extend beyond current six; select additional families while reviewing complete palettes.",
-      "variants": [
-        50,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        950
-      ],
+      "variants": [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
       "default_variant": 500,
       "custom_families": "Named in DSL; define fill, stroke, and ink for each referenced numeric shade. Custom families can define only the stops they use. Missing shade means 500.",
       "inheritance": "Auto color inherits family. Shade uses explicit object value or diagram default, independently.",

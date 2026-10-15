@@ -74,6 +74,12 @@
   overflow: auto;
 }
 
+@media (max-width: 720px) {
+  .popover .menu-item {
+    min-height: 44px;
+  }
+}
+
 .menu-note {
   padding: 6px 8px;
   color: var(--muted);

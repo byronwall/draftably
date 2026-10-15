@@ -1,6 +1,4 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
-import { LayoutLab } from '../engines/layout-engine.js';
-import type { LayoutAlgorithmId } from '../model/types';
 import { setTool } from '../state/actions';
 import { commandEnabled, runCommand, type CommandId } from '../state/commands';
 import { doc, saveStatus, transact } from '../state/document';
@@ -12,7 +10,7 @@ import {
   fileStatusText,
 } from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
-import { layoutBusy, cancelLayout, updateLayoutSettings } from '../state/layout';
+import { layoutBusy, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
 import { inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
 import { IconButton } from './controls';
@@ -31,9 +29,6 @@ const DRAW_TOOLS: [Tool, string, string, string][] = [
   ['container', 'group', 'Container', 'G'],
   ['connect', 'connect', 'Connect', 'C'],
 ];
-
-/** Layout approaches grouped as in the layout lab. */
-const NESTED = ['compound-flow', 'boundary-align', 'compound-spring'];
 
 export function Toolbar() {
   const locked = () => timelineOpen();
@@ -99,31 +94,6 @@ export function Toolbar() {
         <span class="grow" />
 
         <div class="toolbar-group layout-group">
-          <select
-            class="algorithm-select"
-            aria-label="Layout approach"
-            disabled={locked()}
-            onChange={e =>
-              updateLayoutSettings({ algorithm: e.currentTarget.value as LayoutAlgorithmId })
-            }
-          >
-            <optgroup label="Nested systems">
-              <For each={LayoutLab.algorithms.filter(a => NESTED.includes(a.id))}>
-                {a => (
-                  <option value={a.id} selected={a.id === doc.settings.algorithm}>
-                    {a.name}
-                  </option>
-                )}
-              </For>
-            </optgroup>
-            <For each={LayoutLab.algorithms.filter(a => !NESTED.includes(a.id))}>
-              {a => (
-                <option value={a.id} selected={a.id === doc.settings.algorithm}>
-                  {a.name}
-                </option>
-              )}
-            </For>
-          </select>
           <div class="split-button">
             <Show
               when={!layoutBusy()}
@@ -136,12 +106,12 @@ export function Toolbar() {
               <button
                 type="button"
                 class="button primary"
-                title="Improve layout · L"
+                title="Tidy current positions · L"
                 disabled={locked() || !commandEnabled('layout')}
                 onClick={run('layout')}
               >
                 <Icon name="layout" />
-                <span class="label keep">Improve</span>
+                <span class="label keep">Tidy positions</span>
                 <kbd>L</kbd>
               </button>
             </Show>
@@ -154,6 +124,15 @@ export function Toolbar() {
               onClick={run('layout-menu')}
             />
           </div>
+          <button
+            type="button"
+            class="button"
+            title="Set automatic layout"
+            aria-expanded={layoutLabOpen()}
+            onClick={run('layout-menu')}
+          >
+            Automatic layout…
+          </button>
           <button
             type="button"
             class="button ghost"
@@ -198,7 +177,7 @@ export function Toolbar() {
         </div>
       </div>
 
-      <div class="toolbar-group">
+      <div class="toolbar-group toolbar-panels">
         <IconButton
           icon="palette"
           label="Appearance"
@@ -224,12 +203,52 @@ export function Toolbar() {
         <button
           type="button"
           class="button ghost"
+          aria-label="Save and export"
           aria-haspopup="menu"
           aria-expanded={menuOpen('export')}
           onClick={menuButton('export')}
         >
           <Icon name="export" />
           <span class="label">Export</span>
+        </button>
+      </div>
+      <div class="mobile-tools" role="toolbar" aria-label="Common tools">
+        <button type="button" class="button ghost" onClick={run('add-node')} disabled={locked()}>
+          <Icon name="plus" />
+          Add
+        </button>
+        <button
+          type="button"
+          class="button ghost"
+          aria-pressed={tool() === 'connect'}
+          disabled={locked()}
+          onClick={() => setTool(tool() === 'connect' ? 'select' : 'connect')}
+        >
+          <Icon name="connect" />
+          Connect
+        </button>
+        <button
+          type="button"
+          class="button ghost"
+          aria-pressed={inspectorOpen()}
+          onClick={run('toggle-inspector')}
+        >
+          <Icon name="panel-right" />
+          Properties
+        </button>
+        <button type="button" class="button ghost" onClick={run('fit')}>
+          <Icon name="fit" />
+          Fit
+        </button>
+        <button
+          type="button"
+          class="button ghost"
+          aria-haspopup="menu"
+          aria-expanded={menuOpen('tools')}
+          onClick={menuButton('tools')}
+        >
+          <Icon name="menu" />
+          More
         </button>
       </div>
     </header>

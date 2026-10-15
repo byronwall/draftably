@@ -80,6 +80,11 @@ function exportCommand(format: 'json' | 'svg' | 'png') {
   );
 }
 
+function openStart() {
+  if (workspace()) location.assign(startUrl());
+  else setStartOpen(true);
+}
+
 export const commands = {
   undo: {
     label: 'Undo',
@@ -166,20 +171,20 @@ export const commands = {
   'mark-end': { label: 'End here', run: () => actions.markSelectedAs('end') },
 
   layout: {
-    label: 'Improve layout',
+    label: 'Tidy positions',
     keys: 'L',
     icon: 'layout',
     run: () => runLabLayout(),
     endsBrush: true,
   },
   'layout-rebuild': {
-    label: 'Preview a deterministic rebuild',
+    label: 'Preview automatic layout',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
     endsBrush: true,
   },
   'layout-preview': {
-    label: 'Preview pass',
+    label: 'Preview tidy',
     run: () => runLabLayout('pass', true),
     endsBrush: true,
   },
@@ -286,10 +291,14 @@ export const commands = {
     label: 'New, open or example…',
     icon: 'folder',
     // With a served folder the start page lists its files; otherwise it opens over the editor.
-    run: () => (workspace() ? location.assign(startUrl()) : setStartOpen(true)),
+    run: openStart,
     duringTimeline: true,
   },
-  'new-diagram': { label: 'New diagram', icon: 'plus', run: actions.newDocument },
+  'new-diagram': {
+    label: 'New diagram',
+    icon: 'plus',
+    run: () => (fileMode() ? openStart() : actions.newDocument()),
+  },
   open: {
     label: 'Open diagram…',
     keys: '⌘O',
@@ -328,7 +337,6 @@ const FILE_UNSUPPORTED = new Set<string>([
   'fit-container',
   'insert-image',
   'replace-image',
-  'new-diagram',
   'open',
 ]);
 const unavailableInFile = (id: string) => fileMode() && FILE_UNSUPPORTED.has(id);

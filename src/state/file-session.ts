@@ -39,6 +39,7 @@ import {
   clearSelection,
   disableBrowserStorage,
   doc,
+  mapSourceIds,
   restoreDocument,
   selectedIds,
   setCommitHandler,
@@ -160,7 +161,11 @@ function compileCached(source: string): Promise<Scene> {
  * Compile `source` and show it. Resolves to the scene, or null when the source is invalid or a
  * newer call superseded this one.
  */
-export async function showSource(source: string, selection = selectedIds()): Promise<Scene | null> {
+export async function showSource(
+  source: string,
+  selection: string[] | (() => string[]) = selectedIds(),
+  mapId: (id: string) => string = id => id,
+): Promise<Scene | null> {
   const ticket = ++showing;
   state.setCompiling(true);
   let scene: Scene;
@@ -178,8 +183,9 @@ export async function showSource(source: string, selection = selectedIds()): Pro
   }
   if (ticket !== showing) return null;
   batch(() => {
+    mapSourceIds(mapId);
     restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
-    setSelection(selection);
+    setSelection(typeof selection === 'function' ? selection() : selection);
     state.setScene(scene);
     state.setSourceError(null);
     state.setCompiling(false);
@@ -369,10 +375,8 @@ function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boo
     state.setRedoStack([]);
   });
   localSource = next;
-  void showSource(
-    next,
-    selectedIds().map(id => result.ids.get(id) ?? id),
-  );
+  const mapId = (id: string) => result.ids.get(id) ?? id;
+  void showSource(next, () => selectedIds().map(mapId), mapId);
   savedMessage = `${keptLabel()} · ${result.notes.length ? result.notes.join(' · ') : label}`;
   void save();
   return true;

@@ -8,6 +8,10 @@ The release flow follows explorEDA and Product Grid:
 4. Review the version and changelog. Merge that pull request.
 5. Actions checks, builds, tests, and packs the CLI. Changesets publishes it and creates a GitHub release.
 
+A pull request that changes shipped files (`src/`, `index.html`, `examples/`, `docs/DSL.md`,
+`packages/cli/`) must add a changeset; CI runs `pnpm changeset:check` to enforce it. Use
+`pnpm changeset add --empty` for a change that needs no release.
+
 The workflow runs when `.changeset/` changes on `main`, or through **Run workflow**.
 Ordinary commits do not start a release. Manual runs on other branches skip publishing.
 The version command updates the pnpm lockfile with the package version.

@@ -8,10 +8,10 @@ Choose how the initial collection will vary color, typography, and node spacing 
 
 Scores are design judgments, not measured results. Zero means the approach fails the stated outcome; ten means it strongly serves it.
 
-| Approach | Distinct color identities | Useful padding variation | Shared design-system changes |
-| --- | --- | --- | --- |
-| Recolor the current six pastels | 3 — retains the same pale treatment | 1 — retains current spacing | 4 — central colors help, but spacing remains scattered |
-| Five independent style bundles | 9 — each can have its own visual rules | 9 — each can set its own geometry | 3 — unrelated rules make shared brand changes harder |
+| Approach                                | Distinct color identities                               | Useful padding variation                  | Shared design-system changes                               |
+| --------------------------------------- | ------------------------------------------------------- | ----------------------------------------- | ---------------------------------------------------------- |
+| Recolor the current six pastels         | 3 — retains the same pale treatment                     | 1 — retains current spacing               | 4 — central colors help, but spacing remains scattered     |
+| Five independent style bundles          | 9 — each can have its own visual rules                  | 9 — each can set its own geometry         | 3 — unrelated rules make shared brand changes harder       |
 | Five presets over shared diagram tokens | 9 — supports neutral, filled, warm, and dark treatments | 9 — each supplies explicit content insets | 9 — one color and spacing vocabulary supports every preset |
 
 **Choice:** Five presets over shared diagram tokens.
@@ -28,13 +28,13 @@ All padding values below are horizontal / vertical in diagram units. Radius valu
 
 Each palette includes canvas, neutral node, text, primary fill/text, and secondary fill/text. Primary and secondary indicate visual emphasis, not success or failure. Warning and error colors must remain separate.
 
-| Theme | Character and best use | Canvas / neutral / text | Primary fill / text | Secondary fill / text | Padding / radius |
-| --- | --- | --- | --- | --- | --- |
-| **Graphite** | Compact, precise, mostly neutral. Architecture and dense system maps. | `#F5F5F2` / `#FFFFFF` / `#24292B` | `#334C49` / `#FFFFFF` | `#E8C879` / `#352B17` | **12 / 8**, radius 4 |
-| **Fieldnotes** | Editorial serif titles, warm paper, forest and clay. Process explanations and operating flows. | `#F7F2E8` / `#FFFCF5` / `#302E28` | `#405D48` / `#FFFFFF` | `#AC543A` / `#FFFFFF` | **18 / 12**, radius 3 |
-| **Signal** | White ground with strong cobalt and restrained orange. Product and service diagrams. | `#FFFFFF` / `#F1F4F8` / `#172B4D` | `#234BCD` / `#FFFFFF` | `#F1BC75` / `#452C12` | **16 / 10**, radius 6 |
-| **Mulberry** | Pale mauve ground, deep berry, and dusty lilac. Presentation diagrams with fewer, larger steps. | `#F7F3F6` / `#FFFCFE` / `#352A35` | `#713E61` / `#FFFFFF` | `#D6C5DF` / `#3B2947` | **22 / 14**, radius 8 |
-| **Midnight** | Dark ink with teal and coral. Dark reports and technical presentations. | `#172428` / `#24363B` / `#EDF3EF` | `#8BC5B7` / `#152F2A` | `#DF9C82` / `#38251F` | **16 / 12**, radius 5 |
+| Theme          | Character and best use                                                                          | Canvas / neutral / text           | Primary fill / text   | Secondary fill / text | Padding / radius      |
+| -------------- | ----------------------------------------------------------------------------------------------- | --------------------------------- | --------------------- | --------------------- | --------------------- |
+| **Graphite**   | Compact, precise, mostly neutral. Architecture and dense system maps.                           | `#F5F5F2` / `#FFFFFF` / `#24292B` | `#334C49` / `#FFFFFF` | `#E8C879` / `#352B17` | **12 / 8**, radius 4  |
+| **Fieldnotes** | Editorial serif titles, warm paper, forest and clay. Process explanations and operating flows.  | `#F7F2E8` / `#FFFCF5` / `#302E28` | `#405D48` / `#FFFFFF` | `#AC543A` / `#FFFFFF` | **18 / 12**, radius 3 |
+| **Signal**     | White ground with strong cobalt and restrained orange. Product and service diagrams.            | `#FFFFFF` / `#F1F4F8` / `#172B4D` | `#234BCD` / `#FFFFFF` | `#F1BC75` / `#452C12` | **16 / 10**, radius 6 |
+| **Mulberry**   | Pale mauve ground, deep berry, and dusty lilac. Presentation diagrams with fewer, larger steps. | `#F7F3F6` / `#FFFCFE` / `#352A35` | `#713E61` / `#FFFFFF` | `#D6C5DF` / `#3B2947` | **22 / 14**, radius 8 |
+| **Midnight**   | Dark ink with teal and coral. Dark reports and technical presentations.                         | `#172428` / `#24363B` / `#EDF3EF` | `#8BC5B7` / `#152F2A` | `#DF9C82` / `#38251F` | **16 / 12**, radius 5 |
 
 ### Graphite — proposed default
 
@@ -60,13 +60,13 @@ Use dark neutral nodes, brighter text and connections, and restrained teal and c
 
 These font stacks are proposals. Use available system fonts for the concept; settle font packaging during shaping.
 
-| Theme | Diagram, group, and node titles | Connection labels and annotations |
-| --- | --- | --- |
-| Graphite | Neutral sans-serif: Arial | Arial |
-| Fieldnotes | Editorial serif: Georgia | Arial |
-| Signal | Crisp sans-serif: Arial | Monospace: Courier New |
-| Mulberry | Humanist sans-serif: Trebuchet MS | Trebuchet MS |
-| Midnight | Monospace: Courier New | Arial |
+| Theme      | Diagram, group, and node titles   | Connection labels and annotations |
+| ---------- | --------------------------------- | --------------------------------- |
+| Graphite   | Neutral sans-serif: Arial         | Arial                             |
+| Fieldnotes | Editorial serif: Georgia          | Arial                             |
+| Signal     | Crisp sans-serif: Arial           | Monospace: Courier New            |
+| Mulberry   | Humanist sans-serif: Trebuchet MS | Trebuchet MS                      |
+| Midnight   | Monospace: Courier New            | Arial                             |
 
 Keep titles readable at diagram scale. Do not use serif only for the theme picker name. The drawing itself must express the editorial direction. Exact families remain provisional; serif titles in the editorial theme are required.
 

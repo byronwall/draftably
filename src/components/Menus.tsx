@@ -11,13 +11,15 @@ import {
   THEME_IDS,
   type ThemeId,
 } from '../model/appearance';
-import { chooseTheme, openSample, setAppearanceOverrides } from '../state/actions';
-import { commands, runCommand, type CommandId } from '../state/commands';
+import { chooseTheme, openSample, setAppearanceOverrides, setTool } from '../state/actions';
+import type { Tool } from '../state/editor';
+import { timelineOpen } from '../state/sculpt';
+import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
 import { commit, doc, setDoc, snapshot } from '../state/document';
 import { commitSource, fileBlocked, fileMode, sourceWithRouting } from '../state/file-session';
 import { resetRoutes, routingReport } from '../state/scene';
 import { toast } from '../state/toast';
-import { closeMenu, menu, type MenuState } from '../state/ui';
+import { closeMenu, menu, openMenu, type MenuState } from '../state/ui';
 import { RangeField } from './controls';
 import { Icon } from './Icon';
 import './menus.css';
@@ -104,8 +106,70 @@ function Popover(props: { state: MenuState }) {
         <Match when={props.state.id === 'appearance'}>
           <AppearanceMenu />
         </Match>
+        <Match when={props.state.id === 'tools'}>
+          <ToolsMenu anchor={props.state.anchor} />
+        </Match>
       </Switch>
     </div>
+  );
+}
+
+const MORE_TOOLS: [Tool, string, string][] = [
+  ['select', 'cursor', 'Select'],
+  ['pan', 'hand', 'Navigate'],
+  ['box', 'box', 'Rectangle'],
+  ['diamond', 'diamond', 'Diamond'],
+  ['circle', 'circle', 'Ellipse'],
+  ['text', 'text', 'Text'],
+  ['container', 'group', 'Container'],
+];
+
+function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
+  const submenu = (id: MenuState['id']) => () => openMenu(id, props.anchor);
+  return (
+    <>
+      <div class="menu-scroll">
+        <MenuItem command="undo" />
+        <MenuItem command="redo" />
+        <button type="button" class="menu-item" role="menuitem" onClick={submenu('edit')}>
+          Edit selection…
+        </button>
+        <hr />
+        <For each={MORE_TOOLS}>
+          {([tool, icon, label]) => (
+            <button
+              type="button"
+              class="menu-item"
+              role="menuitem"
+              disabled={timelineOpen()}
+              onClick={() => {
+                closeMenu();
+                setTool(tool);
+              }}
+            >
+              <span class="menu-icon">
+                <Icon name={icon} />
+              </span>
+              <span class="menu-label">{label}</span>
+            </button>
+          )}
+        </For>
+        <MenuItem command="add-connected" />
+        <MenuItem command="quick-build" />
+        <hr />
+        <MenuItem command="layout" label="Tidy positions" />
+        <MenuItem command="layout-menu" label="Automatic layout…" />
+        <MenuItem command="timeline-toggle" />
+        <MenuItem command="brush-toggle" />
+        <MenuItem command="compare-layouts" />
+        <MenuItem command="reroute" />
+        <button type="button" class="menu-item" role="menuitem" onClick={submenu('routing')}>
+          Routing options…
+        </button>
+        <MenuItem command="toggle-objects" />
+        <MenuItem command="help" />
+      </div>
+    </>
   );
 }
 
@@ -116,6 +180,7 @@ function MenuItem(props: { command: CommandId; label?: string }) {
       type="button"
       class="menu-item"
       role="menuitem"
+      disabled={!commandEnabled(props.command)}
       onClick={() => {
         closeMenu();
         runCommand(props.command);

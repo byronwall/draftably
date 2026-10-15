@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* global window, document -- page.evaluate callbacks run in the browser. */
 /**
  * End-to-end proof for file-backed editing (docs/intent/diagram-dsl, first proof).
  *
@@ -10,28 +9,22 @@
  *
  * Run `pnpm build` first. Usage: pnpm prove:file
  */
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import { createProof, same, sleep, startViewer, stopViewer, waitFor } from './lib/proof.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const entry = process.env.DRAFTABLY_BIN ?? path.join(root, 'scripts/draftably.mjs');
 const example = process.env.DRAFTABLY_EXAMPLE ?? path.join(root, 'examples/checkout.draft');
-const port = Number(process.env.PROOF_PORT ?? 5199);
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draft-proof-'));
 const file = path.join(dir, 'architecture.draft');
-const out = path.join(root, 'tmp/proof');
-fs.mkdirSync(out, { recursive: true });
+const proof = createProof(path.join(root, 'tmp/proof'));
+const { check } = proof;
 fs.copyFileSync(example, file);
-
-const results = [];
-function check(name, ok, detail = '') {
-  results.push({ name, ok });
-  console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${detail ? ` — ${detail}` : ''}`);
-}
 
 const cli = (...args) =>
   execFileSync(process.execPath, [entry, ...args], {
@@ -40,33 +33,8 @@ const cli = (...args) =>
   });
 const inspect = () => JSON.parse(cli('inspect', file, '--json'));
 const read = () => fs.readFileSync(file, 'utf8');
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-function start() {
-  const child = spawn(
-    process.execPath,
-    [entry, 'open', file, '--port', String(port), '--no-open'],
-    { cwd: dir, stdio: ['ignore', 'pipe', 'inherit'] },
-  );
-  return new Promise((resolve, reject) => {
-    child.stdout.on('data', chunk => String(chunk).includes('Viewer:') && resolve(child));
-    child.once('exit', code => reject(Error(`draftably open exited with ${code}`)));
-  });
-}
-const stop = child =>
-  new Promise(resolve => {
-    child.once('exit', resolve);
-    child.kill('SIGTERM');
-  });
-
-async function waitFor(page, test, label, timeout = 4000) {
-  const until = Date.now() + timeout;
-  for (;;) {
-    if (await page.evaluate(test).catch(() => false)) return true;
-    if (Date.now() > until) throw Error(`Timed out waiting for ${label}`);
-    await sleep(50);
-  }
-}
+const start = (port = 0) => startViewer({ entry, file, cwd: dir, port });
 /** Wait until the viewer reports the file saved and the file holds what the viewer shows. */
 async function settled(page) {
   await waitFor(
@@ -83,17 +51,12 @@ async function settled(page) {
   return read() === shown;
 }
 const browserGeometry = page => page.evaluate(() => window.diagramStudio.fileGeometry());
-const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const rect = (geometry, id) => geometry.nodes.find(n => n.id === id);
 const center = box => [box.x + box.width / 2, box.y + box.height / 2];
 const box = (page, id) => page.locator(`[data-id="${id}"]`).first().boundingBox();
 
 /** Fit the view (camera only; the file does not change) and save a screenshot. */
-async function shot(page, name) {
-  await page.keyboard.press('1');
-  await sleep(250);
-  await page.screenshot({ path: path.join(out, name) });
-}
+const shot = (_page, name) => proof.shot(name);
 
 async function drag(page, from, to) {
   await page.mouse.move(...from);
@@ -112,8 +75,9 @@ const page = await browser.newPage({
   viewport: { width: 1280, height: 800 },
   deviceScaleFactor: 2,
 });
+proof.watch(page);
 try {
-  await page.goto(`http://127.0.0.1:${port}/?file=${path.basename(file)}`);
+  await page.goto(server.url);
   await waitFor(page, () => !!window.diagramStudio?.fileState, 'viewer');
   check('opened file matches draftably inspect', same(await browserGeometry(page), inspect()));
 
@@ -215,12 +179,12 @@ try {
   );
   await shot(page, 'proof-2-external-add.png');
   await page.locator('.file-notes button').click();
-  await page.screenshot({ path: path.join(out, 'proof-2-notes.png') });
+  await page.screenshot({ path: path.join(proof.out, 'proof-2-notes.png') });
   await page.locator('.file-notes button').click();
 
   // 7. Restart: a fresh process and a fresh page draw the same thing.
-  await stop(server);
-  server = await start();
+  await stopViewer(server);
+  server = await start(server.port);
   await page.reload();
   await waitFor(page, () => window.diagramStudio?.fileState().status === 'saved', 'reload');
   check(
@@ -265,13 +229,9 @@ try {
 } catch (error) {
   check('proof ran to completion', false, error.message);
 } finally {
+  await proof.capture();
   await browser.close();
-  await stop(server);
+  await stopViewer(server);
 }
 
-const failed = results.filter(r => !r.ok).length;
-console.log(
-  `\n${results.length - failed}/${results.length} checks passed. Screenshots: tmp/proof/`,
-);
-console.log(`Final file: ${file}`);
-process.exitCode = failed ? 1 : 0;
+proof.finish(file);

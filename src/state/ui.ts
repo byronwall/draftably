@@ -3,7 +3,7 @@ import { createEffect, createRoot, createSignal } from 'solid-js';
 
 const UI_STORAGE = 'diagram-studio-v5-ui';
 
-export type MenuId = 'file' | 'edit' | 'export' | 'routing' | 'context' | 'appearance';
+export type MenuId = 'file' | 'edit' | 'export' | 'routing' | 'context' | 'appearance' | 'tools';
 export type DialogId = 'help' | 'quick-build' | 'confirm' | 'error';
 
 export interface MenuState {
@@ -19,10 +19,13 @@ export interface ConfirmRequest {
   onConfirm: () => void;
 }
 
+const compactPanels = matchMedia('(max-width: 1100px)');
+
 function readPanels() {
   try {
     const saved = JSON.parse(localStorage.getItem(UI_STORAGE) || 'null');
-    return { left: saved?.leftClosed === false, right: saved?.rightClosed === false };
+    const right = saved?.rightClosed === false;
+    return { left: saved?.leftClosed === false && !(compactPanels.matches && right), right };
   } catch {
     return { left: false, right: false };
   }
@@ -70,9 +73,7 @@ const state = createRoot(() => {
 
 export const {
   objectsOpen,
-  setObjectsOpen,
   inspectorOpen,
-  setInspectorOpen,
   menu,
   dialog,
   confirmRequest,
@@ -81,6 +82,30 @@ export const {
   layoutLabOpen,
   setLayoutLabOpen,
 } = state;
+
+export function setObjectsOpen(open: boolean) {
+  if (open && compactPanels.matches) {
+    state.setInspectorOpen(false);
+    state.setLayoutLabOpen(false);
+  }
+  state.setObjectsOpen(open);
+}
+
+export function setInspectorOpen(open: boolean) {
+  if (open) {
+    state.setLayoutLabOpen(false);
+    if (compactPanels.matches) state.setObjectsOpen(false);
+  }
+  state.setInspectorOpen(open);
+}
+
+compactPanels.addEventListener('change', () => {
+  if (!compactPanels.matches) return;
+  if (state.layoutLabOpen()) {
+    state.setInspectorOpen(false);
+    state.setObjectsOpen(false);
+  } else if (state.inspectorOpen()) state.setObjectsOpen(false);
+});
 
 let hiddenPanels: { left: boolean; right: boolean } | null = null;
 
@@ -91,8 +116,8 @@ export function togglePanels() {
     state.setObjectsOpen(false);
     state.setInspectorOpen(false);
   } else {
-    state.setObjectsOpen(hiddenPanels?.left ?? true);
-    state.setInspectorOpen(hiddenPanels?.right ?? true);
+    setObjectsOpen(hiddenPanels?.left ?? true);
+    setInspectorOpen(hiddenPanels?.right ?? true);
   }
 }
 
@@ -131,5 +156,10 @@ export function openQuickBuild(text = '') {
 
 export const toggleLayoutLab = () => {
   state.setMenu(null);
-  state.setLayoutLabOpen(open => !open);
+  const open = !state.layoutLabOpen();
+  if (open) {
+    state.setInspectorOpen(false);
+    if (compactPanels.matches) state.setObjectsOpen(false);
+  }
+  state.setLayoutLabOpen(open);
 };
