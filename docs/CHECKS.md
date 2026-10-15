@@ -23,6 +23,15 @@ Engine reports are written to the ignored `tmp/verification-current/` folder.
 
 ## File-backed editing
 
+`pnpm cli:build && pnpm prove:installed` packs Draftably, installs the archive in a fresh temporary
+project, and runs its executable outside the repository. It checks help, validation, formatting,
+repeatable JSON, SVG, bundled viewer assets, API saves, and conflicts. It then runs the browser proof
+below against the installed CLI. Only the proof harness uses the repository's Playwright dependency.
+The installed product has no runtime package dependencies or install scripts.
+
+GitHub's Check workflow and the release gate run `pnpm release:check`, including the clean-install
+CLI and HTTP proof. The full browser proof runs locally with an installed Playwright Chromium.
+
 `pnpm build && pnpm prove:file` drives the real editor in Chromium (`playwright-core` with an
 installed Playwright Chromium) against a temporary copy of `examples/checkout.draft` served by
 `pnpm draftably open`. It resizes a group, drags a sibling, pins an object, moves the camera, undoes and
