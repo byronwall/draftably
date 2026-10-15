@@ -42,7 +42,8 @@ run('format', file, '--write');
 const formatted = fs.readFileSync(file, 'utf8');
 run('format', file, '--write');
 assert.equal(fs.readFileSync(file, 'utf8'), formatted);
-assert.equal(spawnSync(bin, ['open'], { cwd: dir, timeout: 10000 }).status, 1);
+// Without a file, `open` serves the folder's start page; a missing file is still an error.
+assert.equal(spawnSync(bin, ['open', 'missing.meld'], { cwd: dir, timeout: 10000 }).status, 1);
 assert.equal(
   spawnSync(bin, ['open', file, '--port', '-1'], { cwd: dir, timeout: 10000 }).status,
   1,
