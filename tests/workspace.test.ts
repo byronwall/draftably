@@ -85,4 +85,22 @@ describe('workspace server', () => {
     expect((await create({ path: 'bad.draft', source: 'node' })).status).toBe(422);
     expect((await fetch(`${base}/api/session?file=../escape.draft`)).status).toBe(404);
   });
+
+  it('draws thumbnails without fonts, revalidates them, and refuses broken files', async () => {
+    const url = `${base}/api/workspace/thumbnail?file=docs/flow.draft`;
+    const res = await fetch(url);
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toBe('image/svg+xml');
+    const svg = await res.text();
+    expect(svg).toContain('<svg');
+    expect(svg).not.toContain('@font-face');
+    const etag = res.headers.get('etag')!;
+    expect((await fetch(url, { headers: { 'if-none-match': etag } })).status).toBe(304);
+
+    fs.writeFileSync(path.join(root, 'docs/broken.draft'), 'diagram "Broken" version=1\nnode\n');
+    expect((await fetch(`${base}/api/workspace/thumbnail?file=docs/broken.draft`)).status).toBe(
+      422,
+    );
+    expect((await fetch(`${base}/api/workspace/thumbnail?file=../escape.draft`)).status).toBe(404);
+  });
 });

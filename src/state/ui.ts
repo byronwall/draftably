@@ -1,5 +1,6 @@
 /** Panels, menus and dialogs. Panel visibility is remembered per browser. */
 import { createEffect, createRoot, createSignal } from 'solid-js';
+import { workspace } from './launch';
 
 const UI_STORAGE = 'diagram-studio-v5-ui';
 
@@ -25,15 +26,22 @@ function readPanels() {
   try {
     const saved = JSON.parse(localStorage.getItem(UI_STORAGE) || 'null');
     const right = saved?.rightClosed === false;
-    return { left: saved?.leftClosed === false && !(compactPanels.matches && right), right };
+    const files = saved?.filesClosed !== true && !(compactPanels.matches && right);
+    return {
+      left: saved?.leftClosed === false && !(compactPanels.matches && (right || files)),
+      right,
+      files,
+    };
   } catch {
-    return { left: false, right: false };
+    return { left: false, right: false, files: true };
   }
 }
 
 const state = createRoot(() => {
   const initial = readPanels();
   const [objectsOpen, setObjectsOpen] = createSignal(initial.left);
+  // The served folder's diagrams. Open unless closed, and only shown when a folder is served.
+  const [filesOpen, setFilesOpen] = createSignal(initial.files);
   const [inspectorOpen, setInspectorOpen] = createSignal(initial.right);
   const [menu, setMenu] = createSignal<MenuState | null>(null);
   const [dialog, setDialog] = createSignal<DialogId | null>(null);
@@ -45,7 +53,11 @@ const state = createRoot(() => {
     try {
       localStorage.setItem(
         UI_STORAGE,
-        JSON.stringify({ leftClosed: !objectsOpen(), rightClosed: !inspectorOpen() }),
+        JSON.stringify({
+          leftClosed: !objectsOpen(),
+          rightClosed: !inspectorOpen(),
+          filesClosed: !filesOpen(),
+        }),
       );
     } catch {
       // Panel state is a convenience only.
@@ -54,6 +66,8 @@ const state = createRoot(() => {
   return {
     objectsOpen,
     setObjectsOpen,
+    filesOpen,
+    setFilesOpen,
     inspectorOpen,
     setInspectorOpen,
     menu,
@@ -73,6 +87,7 @@ const state = createRoot(() => {
 
 export const {
   objectsOpen,
+  filesOpen,
   inspectorOpen,
   menu,
   dialog,
@@ -87,14 +102,30 @@ export function setObjectsOpen(open: boolean) {
   if (open && compactPanels.matches) {
     state.setInspectorOpen(false);
     state.setLayoutLabOpen(false);
+    state.setFilesOpen(false);
   }
   state.setObjectsOpen(open);
+}
+
+/** The files panel is on screen: open, with a served folder to list. */
+export const filesShown = () => state.filesOpen() && !!workspace();
+
+export function setFilesOpen(open: boolean) {
+  if (open && compactPanels.matches) {
+    state.setInspectorOpen(false);
+    state.setLayoutLabOpen(false);
+    state.setObjectsOpen(false);
+  }
+  state.setFilesOpen(open);
 }
 
 export function setInspectorOpen(open: boolean) {
   if (open) {
     state.setLayoutLabOpen(false);
-    if (compactPanels.matches) state.setObjectsOpen(false);
+    if (compactPanels.matches) {
+      state.setObjectsOpen(false);
+      state.setFilesOpen(false);
+    }
   }
   state.setInspectorOpen(open);
 }
@@ -104,18 +135,27 @@ compactPanels.addEventListener('change', () => {
   if (state.layoutLabOpen()) {
     state.setInspectorOpen(false);
     state.setObjectsOpen(false);
-  } else if (state.inspectorOpen()) state.setObjectsOpen(false);
+  } else if (state.inspectorOpen()) {
+    state.setObjectsOpen(false);
+    state.setFilesOpen(false);
+  } else if (state.filesOpen()) state.setObjectsOpen(false);
 });
 
-let hiddenPanels: { left: boolean; right: boolean } | null = null;
+let hiddenPanels: { left: boolean; right: boolean; files: boolean } | null = null;
 
-/** Hide both panels, or bring back the ones that were open. */
+/** Hide the side panels, or bring back the ones that were open. */
 export function togglePanels() {
-  if (state.objectsOpen() || state.inspectorOpen()) {
-    hiddenPanels = { left: state.objectsOpen(), right: state.inspectorOpen() };
+  if (state.objectsOpen() || state.inspectorOpen() || filesShown()) {
+    hiddenPanels = {
+      left: state.objectsOpen(),
+      right: state.inspectorOpen(),
+      files: filesShown(),
+    };
     state.setObjectsOpen(false);
     state.setInspectorOpen(false);
+    state.setFilesOpen(false);
   } else {
+    if (workspace()) setFilesOpen(hiddenPanels?.files ?? true);
     setObjectsOpen(hiddenPanels?.left ?? true);
     setInspectorOpen(hiddenPanels?.right ?? true);
   }

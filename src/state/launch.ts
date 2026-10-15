@@ -3,12 +3,12 @@
  *
  * - `?file=path.draft` with `draftably open`: that file, saved back to disk.
  * - `?example=id`: a scratch copy of a bundled example. Never written to disk.
- * - `draftably open` without a file: the start page, listing the folder's diagrams.
+ * - `draftably open` without a file: the start page, showing the folder's diagrams.
  * - The static site: the diagram kept in browser storage, as before.
  */
 import { createRoot, createSignal } from 'solid-js';
 import { findExample } from '../model/examples';
-import type { WorkspaceInfo } from '../server/workspace';
+import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
 import { openExampleSession, openFileSession } from './file-session';
 
 export type LaunchMode = 'static' | 'start' | 'file' | 'example';
@@ -45,8 +45,37 @@ async function fetchWorkspace(): Promise<WorkspaceInfo | null> {
 /** List the folder's diagrams again. */
 export async function refreshWorkspace() {
   const info = await fetchWorkspace();
-  if (info) state.setWorkspace(info);
+  const current = state.workspace();
+  if (!info) return;
+  if (current && JSON.stringify(info) === JSON.stringify(current)) return;
+  // Unchanged files keep their objects, so their rows and thumbnails are not drawn again.
+  const known = new Map(current?.files.map(f => [f.path, f]));
+  const files = info.files.map(f => {
+    const old = known.get(f.path);
+    return old && old.title === f.title && old.modified === f.modified ? old : f;
+  });
+  state.setWorkspace({ ...info, files });
 }
+
+/**
+ * Keep the folder's list current while the page is visible, so diagrams an agent or the command
+ * line writes appear without a reload. Returns a function that stops watching.
+ */
+export function watchWorkspace(intervalMs = 4000) {
+  const refresh = () => document.visibilityState === 'visible' && void refreshWorkspace();
+  const timer = setInterval(refresh, intervalMs);
+  document.addEventListener('visibilitychange', refresh);
+  window.addEventListener('focus', refresh);
+  return () => {
+    clearInterval(timer);
+    document.removeEventListener('visibilitychange', refresh);
+    window.removeEventListener('focus', refresh);
+  };
+}
+
+/** The served file drawn as SVG. The modified time makes a changed file a new image. */
+export const thumbnailUrl = (file: WorkspaceFile) =>
+  `./api/workspace/thumbnail?file=${encodeURIComponent(file.path)}&v=${Math.round(file.modified)}`;
 
 export async function launch(): Promise<LaunchMode> {
   const params = new URLSearchParams(location.search);

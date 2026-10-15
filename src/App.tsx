@@ -6,6 +6,7 @@ import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
 import { ExampleBar } from './components/ExampleBar';
 import { FileBanner } from './components/FileBanner';
+import { FilesPanel } from './components/FilesPanel';
 import { Inspector } from './components/Inspector';
 import { LayoutLab } from './components/LayoutLab';
 import { Menus } from './components/Menus';
@@ -28,7 +29,7 @@ import { cancelLayout } from './state/layout';
 import { releaseModifierZoom, resetModifiers } from './state/pointer';
 import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
-import { inspectorOpen, layoutLabOpen, objectsOpen, showError } from './state/ui';
+import { filesShown, inspectorOpen, layoutLabOpen, objectsOpen, showError } from './state/ui';
 import './styles/app.css';
 
 /** Add an event listener and return a function that removes it. */
@@ -147,6 +148,9 @@ export default function App() {
         </Show>
       </div>
       <div class="workspace">
+        <Show when={filesShown()}>
+          <FilesPanel />
+        </Show>
         <Show when={objectsOpen()}>
           <ObjectsPanel />
         </Show>

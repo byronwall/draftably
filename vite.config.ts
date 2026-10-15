@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { defineConfig, type Plugin } from 'vitest/config';
 import solid from 'vite-plugin-solid';
-import { createWorkspace } from './src/server/workspace';
+import type { Workspace } from './src/server/workspace';
 
 /**
  * `DIAGRAM_ROOT=folder pnpm dev` serves that folder's diagrams next to the dev server, as
@@ -12,15 +12,25 @@ function workspace(root: string | undefined, file: string | undefined): Plugin |
   return {
     name: 'draft-workspace',
     configureServer(server) {
-      const ws = createWorkspace(path.resolve(root ?? '.'));
+      // Loaded through Vite rather than imported here, so the server code can use asset imports
+      // (the thumbnails draw with the bundled fonts' module).
+      const ready = server
+        .ssrLoadModule('/src/server/workspace.ts')
+        .then(module =>
+          (module as typeof import('./src/server/workspace')).createWorkspace(
+            path.resolve(root ?? '.'),
+          ),
+        );
       server.middlewares.use((req, res, next) => {
-        if (!ws.handle(req, res)) next();
+        ready.then(ws => ws.handle(req, res) || next(), next);
       });
-      server.httpServer?.once('close', () => ws.close());
-      const open = file
-        ? `?file=${encodeURIComponent(path.relative(ws.root, path.resolve(file)))}`
-        : '';
-      console.log(`Diagrams in ${ws.root}${open ? ` · open /${open}` : ''}`);
+      void ready.then((ws: Workspace) => {
+        server.httpServer?.once('close', () => ws.close());
+        const open = file
+          ? `?file=${encodeURIComponent(path.relative(ws.root, path.resolve(file)))}`
+          : '';
+        console.log(`Diagrams in ${ws.root}${open ? ` · open /${open}` : ''}`);
+      });
     },
   };
 }

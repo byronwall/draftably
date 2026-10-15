@@ -4,7 +4,7 @@ import { findEdge, findNode } from '../model/graph';
 import { isClipboardFragment } from '../model/edits';
 import type { Side } from '../model/types';
 import * as actions from './actions';
-import { runCommand, type CommandId } from './commands';
+import { commandEnabled, runCommand, type CommandId } from './commands';
 import { comparison } from './comparison';
 import {
   clearSelection,
@@ -51,6 +51,7 @@ const KEY_COMMANDS: Record<string, CommandId> = {
   '1': 'fit',
   '0': 'reset-camera',
   '?': 'help',
+  f: 'toggle-files',
   '[': 'toggle-objects',
   ']': 'toggle-inspector',
   '\\': 'toggle-panels',
@@ -118,6 +119,8 @@ export function handleKeyDown(e: KeyboardEvent) {
       s: () => runCommand('export-json'),
       o: () => runCommand('open'),
     };
+    // ⌘P goes to a diagram in the served folder; without one the browser prints as usual.
+    if (key === 'p' && commandEnabled('find-file')) shortcuts.p = () => runCommand('find-file');
     if (shortcuts[key]) {
       e.preventDefault();
       shortcuts[key]();

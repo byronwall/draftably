@@ -128,6 +128,8 @@ const SHORTCUTS: [string, string][] = [
   ['Undo / redo', 'Ctrl/⌘ Z / Shift Z'],
   ['Delete / with children', 'Delete / Shift Delete'],
   ['Fit / 100%', '1 / 0'],
+  ['Diagrams in this folder', 'F'],
+  ['Go to diagram', 'Ctrl/⌘ P'],
   ['Objects / inspector', '[ / ]'],
   ['Hide / restore panels', '\\'],
   ['Keep container while dragging', 'Alt + drag'],

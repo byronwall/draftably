@@ -1,14 +1,17 @@
 /**
  * A folder of `.draft` files served to the viewer by `draftably open`.
  *
- * The workspace lists the diagrams under its root, creates new ones, and hands each file's
+ * The workspace lists the diagrams under its root, creates new ones, draws thumbnails of them, and
+ * hands each file's
  * `/api/session`, `/api/source` and `/api/events` requests (selected with `?file=`) to that file's
  * own session. Paths are always relative to the root and never leave it.
  */
 import fs from 'node:fs';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
-import { checkSource } from '../dsl/compile';
+import { renderSvg } from '../cli/svg';
+import { checkSource, compile } from '../dsl/compile';
+import { projectScene } from '../dsl/project';
 import { DslError } from '../dsl/syntax';
 import { createFileSession, type FileSession } from './file-session';
 
@@ -77,7 +80,6 @@ export function createWorkspace(root: string): Workspace {
   if (!fs.statSync(root, { throwIfNoEntry: false })?.isDirectory())
     throw Error(`No such folder: ${root}`);
   const sessions = new Map<string, FileSession>();
-
   /** Resolve a relative `.draft` path inside the root, or null when it is not one. */
   const resolve = (relative: unknown) => {
     if (typeof relative !== 'string' || !relative.endsWith('.draft')) return null;
@@ -88,6 +90,36 @@ export function createWorkspace(root: string): Workspace {
   const json = (res: ServerResponse, status: number, body: unknown) => {
     res.writeHead(status, { 'content-type': 'application/json', 'cache-control': 'no-store' });
     res.end(JSON.stringify(body));
+  };
+
+  /** Thumbnails by file, kept until the file changes. */
+  const thumbnails = new Map<string, { modified: number; svg: Promise<string | null> }>();
+
+  /**
+   * The file drawn as SVG without its embedded fonts, which a thumbnail does not need. Null when
+   * the source does not compile.
+   */
+  const thumbnail = (full: string, modified: number) => {
+    const cached = thumbnails.get(full);
+    if (cached?.modified === modified) return cached.svg;
+    const svg = compile(fs.readFileSync(full, 'utf8'))
+      .then(scene => renderSvg(projectScene(scene)).replace(/<style>[\s\S]*?<\/style>/, ''))
+      .catch(() => null);
+    thumbnails.set(full, { modified, svg });
+    return svg;
+  };
+
+  const sendThumbnail = async (req: IncomingMessage, res: ServerResponse, full: string) => {
+    const modified = fs.statSync(full).mtimeMs;
+    const etag = `"${modified}"`;
+    if (req.headers['if-none-match'] === etag) {
+      res.writeHead(304, { etag });
+      return res.end();
+    }
+    const svg = await thumbnail(full, modified);
+    if (!svg) return json(res, 422, { error: 'The diagram does not compile.' });
+    res.writeHead(200, { 'content-type': 'image/svg+xml', 'cache-control': 'no-cache', etag });
+    res.end(svg);
   };
 
   const create = (body: string, res: ServerResponse) => {
@@ -136,11 +168,16 @@ export function createWorkspace(root: string): Workspace {
         req.on('end', () => create(body, res));
         return true;
       }
-      if (!['/api/session', '/api/source', '/api/events'].includes(url)) return false;
+      const perFile = ['/api/session', '/api/source', '/api/events', '/api/workspace/thumbnail'];
+      if (!perFile.includes(url)) return false;
       const relative = new URLSearchParams(query).get('file');
       const full = resolve(relative);
       if (!full || !fs.existsSync(full)) {
         json(res, 404, { error: `No diagram at ${relative ?? '(no file given)'}.` });
+        return true;
+      }
+      if (url === '/api/workspace/thumbnail') {
+        void sendThumbnail(req, res, full);
         return true;
       }
       let session = sessions.get(full);
@@ -153,6 +190,7 @@ export function createWorkspace(root: string): Workspace {
     close() {
       for (const session of sessions.values()) session.close();
       sessions.clear();
+      thumbnails.clear();
     },
   };
 }

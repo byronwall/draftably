@@ -12,7 +12,8 @@ import {
 import { tool, type Tool } from '../state/editor';
 import { layoutBusy, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
-import { inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
+import { filesShown, inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
+import { workspace } from '../state/launch';
 import { IconButton } from './controls';
 import { Icon } from './Icon';
 import './toolbar.css';
@@ -185,6 +186,15 @@ export function Toolbar() {
           aria-expanded={menuOpen('appearance')}
           onClick={menuButton('appearance')}
         />
+        <Show when={workspace()}>
+          <IconButton
+            icon="folder"
+            label="Diagrams in this folder"
+            keys="F"
+            pressed={filesShown()}
+            onClick={run('toggle-files')}
+          />
+        </Show>
         <IconButton
           icon="panel-left"
           label="Objects"
