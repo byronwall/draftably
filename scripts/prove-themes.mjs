@@ -10,6 +10,7 @@
  *   2. A shade change saves to the file without moving anything; a restart reopens the same file.
  *   3. Invalid theme source keeps the last drawing; padding changes keep pins and explicit sizes.
  *   4. All five themes from source, each matching `draftably inspect`, with titles that fit.
+ *   5. The appearance menu: choosing a theme and padding saves to the file; undo and redo.
  * Screenshots and exports go to tmp/proof-themes/.
  *
  * Run `pnpm build` first. Usage: pnpm prove:themes
@@ -345,6 +346,33 @@ try {
   write(good);
   await caughtUp(page);
 
+  // 5. The appearance menu writes the file.
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: 'Appearance' }).click();
+  await sleep(150);
+  await page.screenshot({ path: path.join(out, 'm3-appearance-menu.png') });
+  await page.getByRole('menuitemradio', { name: /Signal/ }).click();
+  check('choosing a theme saved', await settled(page));
+  check('file names the theme', /^theme signal$/m.test(read()));
+  const padX = page.getByLabel('Horizontal padding');
+  check('the menu stays open after choosing a theme', await padX.isVisible());
+  if (!(await padX.isVisible())) await page.getByRole('button', { name: 'Appearance' }).click();
+  await padX.fill('20');
+  await padX.press('Enter');
+  check('padding saved', await settled(page));
+  check('file holds the padding', /^theme signal padding-x=20$/m.test(read()));
+  check('menu edit matches draftably inspect', same(await browserGeometry(page), inspect()));
+  await page.keyboard.press('Escape');
+  await page.keyboard.press('Meta+z');
+  await settled(page);
+  const undone = /^theme signal$/m.test(read());
+  await page.keyboard.press('Meta+z');
+  await settled(page);
+  const undoneTwice = /^theme fieldnotes$/m.test(read());
+  await page.keyboard.press('Meta+Shift+z');
+  await settled(page);
+  check('undo and redo walk theme edits', undone && undoneTwice && /^theme signal$/m.test(read()));
+  await shot(page, 'm3-signal-after-menu.png');
   check('no page errors', errors.length === 0, errors.join(' | '));
 } finally {
   await browser.close();

@@ -5,10 +5,13 @@
 import { batch, createRoot, createSignal } from 'solid-js';
 import {
   groupShadeFor,
+  isBuiltInFamily,
   NODE_SHADE,
   resolveAppearance,
   shadesOf,
+  type AppearanceOverrides,
   type Shade,
+  type ThemeId,
 } from '../model/appearance';
 import { normalize } from '../model/document';
 import * as edits from '../model/edits';
@@ -306,6 +309,33 @@ export function setColor(color: Diagram['styles'][string]['color']) {
           Math.abs(b - shade) < Math.abs(a - shade) ? b : a,
         );
     }
+  });
+}
+
+/**
+ * Switch the diagram to a preset theme in one undoable step. Overrides of the old preset are
+ * cleared; the file's own color families stay, so objects that use them keep their colors.
+ */
+export function chooseTheme(theme: ThemeId) {
+  transact('Change theme', d => {
+    d.appearance = {
+      theme,
+      overrides: {},
+      colors: d.appearance.colors.filter(c => !isBuiltInFamily(c.family)),
+    };
+  });
+}
+
+/** Change diagram-wide appearance values; `undefined` returns a value to the theme's default. */
+export function setAppearanceOverrides(
+  patch: Partial<AppearanceOverrides>,
+  label = 'Change padding',
+) {
+  transact(label, d => {
+    const next = { ...d.appearance.overrides, ...patch };
+    for (const key of Object.keys(next) as Array<keyof AppearanceOverrides>)
+      if (next[key] === undefined) delete next[key];
+    d.appearance.overrides = next;
   });
 }
 

@@ -3,7 +3,15 @@ import { RouteLab } from '../engines/routing-engine.js';
 import { clamp } from '../model/geometry';
 import { SAMPLES } from '../model/samples';
 import type { RoutingSettings } from '../model/types';
-import { openSample } from '../state/actions';
+import {
+  OVERRIDE_LIMITS,
+  PRESETS,
+  resolveAppearance,
+  swatchFor,
+  THEME_IDS,
+  type ThemeId,
+} from '../model/appearance';
+import { chooseTheme, openSample, setAppearanceOverrides } from '../state/actions';
 import { commands, runCommand, type CommandId } from '../state/commands';
 import { commit, doc, setDoc, snapshot } from '../state/document';
 import { commitSource, fileBlocked, fileMode, sourceWithRouting } from '../state/file-session';
@@ -76,7 +84,7 @@ function Popover(props: { state: MenuState }) {
     <div
       ref={el}
       class="popover"
-      classList={{ wide: props.state.id === 'routing' }}
+      classList={{ wide: props.state.id === 'routing' || props.state.id === 'appearance' }}
       role="menu"
       onKeyDown={onKeyDown}
     >
@@ -92,6 +100,9 @@ function Popover(props: { state: MenuState }) {
         </Match>
         <Match when={props.state.id === 'routing'}>
           <RoutingMenu />
+        </Match>
+        <Match when={props.state.id === 'appearance'}>
+          <AppearanceMenu />
         </Match>
       </Switch>
     </div>
@@ -342,5 +353,128 @@ function RoutingMenu() {
         bends · {report().milliseconds} ms
       </p>
     </div>
+  );
+}
+
+/**
+ * Diagram theme and diagram-wide padding. Saved with the diagram (in a file, as its `theme`
+ * line); the editor's own light or dark mode is separate.
+ */
+function AppearanceMenu() {
+  const look = () => resolveAppearance(doc.appearance);
+  const padding = (key: 'paddingX' | 'paddingY', label: string) => (
+    <label class="field appearance-padding">
+      <span class="field-label">{label}</span>
+      <input
+        type="number"
+        aria-label={label}
+        min={OVERRIDE_LIMITS[key].min}
+        max={OVERRIDE_LIMITS[key].max}
+        value={look()[key]}
+        onChange={e => {
+          const value = Number(e.currentTarget.value),
+            { min, max } = OVERRIDE_LIMITS[key];
+          if (!Number.isFinite(value)) return;
+          const next = clamp(Math.round(value), min, max);
+          setAppearanceOverrides({
+            [key]: next === PRESETS[doc.appearance.theme][key] ? undefined : next,
+          });
+        }}
+      />
+    </label>
+  );
+  return (
+    <div class="appearance-menu">
+      <Heading>Diagram theme</Heading>
+      <div role="group" aria-label="Diagram theme">
+        <For each={THEME_IDS}>{id => <ThemeOption id={id} />}</For>
+      </div>
+      <hr />
+      <Heading>Node padding</Heading>
+      <div class="fields-2">
+        {padding('paddingX', 'Horizontal padding')}
+        {padding('paddingY', 'Vertical padding')}
+      </div>
+      <Show when={Object.keys(doc.appearance.overrides).length}>
+        <button
+          type="button"
+          class="button ghost full"
+          onClick={() => chooseTheme(doc.appearance.theme)}
+        >
+          Reset to {PRESETS[doc.appearance.theme].label} defaults
+        </button>
+      </Show>
+      <p class="menu-note">
+        {fileMode()
+          ? 'Saved to the file’s theme line. Choosing a theme clears its overrides and keeps your own theme colors.'
+          : 'Saved with the diagram. Choosing a theme clears its overrides and keeps your own colors.'}{' '}
+        Light and dark editor mode is separate.
+      </p>
+    </div>
+  );
+}
+
+/** One preset with a small drawing in its own colors and title type. */
+function ThemeOption(props: { id: ThemeId }) {
+  const preset = () => PRESETS[props.id];
+  const look = () => resolveAppearance({ theme: props.id, overrides: {}, colors: [] });
+  const selected = () => doc.appearance.theme === props.id;
+  return (
+    <button
+      type="button"
+      class="menu-item theme-option"
+      role="menuitemradio"
+      aria-checked={selected()}
+      classList={{ selected: selected() }}
+      onClick={() => {
+        if (!selected() || Object.keys(doc.appearance.overrides).length) chooseTheme(props.id);
+      }}
+    >
+      <svg class="theme-preview" viewBox="0 0 72 36" width="72" height="36" aria-hidden="true">
+        <rect width="72" height="36" fill={look().canvas} />
+        <rect
+          x="4.5"
+          y="8.5"
+          width="28"
+          height="19"
+          rx={Math.min(look().radius, 6)}
+          fill={look().node.fill}
+          stroke={look().node.stroke}
+        />
+        <text
+          x="18.5"
+          y="18"
+          text-anchor="middle"
+          dominant-baseline="central"
+          font-family={look().title.family}
+          font-weight={String(look().title.weight)}
+          font-size="10"
+          fill={look().node.ink}
+        >
+          Aa
+        </text>
+        <path d="M33 18h6" stroke={look().connection} stroke-width="1.2" />
+        <rect
+          x="39.5"
+          y="8.5"
+          width="28"
+          height="19"
+          rx={Math.min(look().radius, 6)}
+          fill={swatchFor(look(), 'primary', 700).fill}
+        />
+        <rect
+          x="46"
+          y="16"
+          width="15"
+          height="4"
+          rx="2"
+          fill={swatchFor(look(), 'secondary', 300).fill}
+        />
+      </svg>
+      <span class="theme-text">
+        <strong>{preset().label}</strong>
+        <span>{preset().description}</span>
+      </span>
+    </button>
   );
 }

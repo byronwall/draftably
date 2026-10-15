@@ -48,7 +48,8 @@ port and drives the editor in Chromium. With Fieldnotes it checks serif node and
 real text bounds inside every shape, group titles clear of their content, geometry equal to
 `draftably inspect`, and that the browser SVG, CLI SVG and PNG exports render the embedded fonts
 on their own. It then saves a shade change (nothing moves), restarts the server, writes an invalid
-theme and a padding change from outside, renders all five themes from source. Screenshots and exports go to
+theme and a padding change from outside, renders all five themes from source, and uses the
+**Appearance** menu to change theme and padding with undo and redo. Screenshots and exports go to
 `tmp/proof-themes/`.
 
 ## Layout tools in file mode

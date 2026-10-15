@@ -13,6 +13,8 @@ import {
   openSample,
   quickExtend,
   reroute,
+  chooseTheme,
+  setAppearanceOverrides,
   setColor,
   setShade,
 } from './actions';
@@ -93,6 +95,8 @@ export function installDebugApi() {
     },
     setColor,
     setShade,
+    chooseTheme,
+    setAppearanceOverrides,
     compare: openComparison,
     generateComparison: generate,
     applyCandidate,

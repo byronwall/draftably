@@ -93,7 +93,8 @@ such as `brand`, defines each shade it uses with all three. Referencing a family
 not defined is an error on the referencing line. Each family and shade may be declared once.
 
 Padding and title type change node sizes and so the layout; colors and shades never move
-anything.
+anything. Choosing a theme in the viewer's **Appearance** menu rewrites the `theme` line, clears
+the old preset's overrides and keeps your own `theme-color` families.
 
 Titles wrap using width tables for the bundled fonts (Inter, Source Serif 4 and JetBrains Mono,
 under the SIL Open Font License), so the compiler, the viewer and `inspect --svg` break every
@@ -203,18 +204,19 @@ viewer. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 Edits made in the viewer are written back to the file as readable statements:
 
-| In the viewer                         | In the file                                                        |
-| ------------------------------------- | ------------------------------------------------------------------ |
-| Drag an object                        | `near` the closest sibling it does not overlap; `nudge` if none.   |
-| Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.             |
-| Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.   |
-| Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label.  |
-| Color family or shade in Inspector    | `color=` and `shade=` on the declaration.                          |
-| Wrap in a container or ungroup        | A `group` and the members' `in=`.                                  |
-| Clear manual markers                  | Removes the object's soft position refinements.                    |
-| Rebuild, or Apply in Compare          | `layout scope engine=…` for the diagram or the selected container. |
-| Improve, a timeline step, the brush   | `stay` for each object that moved, plus anchors around them.       |
-| Routing options, or a routing Compare | The `routing` line.                                                |
+| In the viewer                         | In the file                                                         |
+| ------------------------------------- | ------------------------------------------------------------------- |
+| Drag an object                        | `near` the closest sibling it does not overlap; `nudge` if none.    |
+| Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.              |
+| Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.    |
+| Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label.   |
+| Color family or shade in Inspector    | `color=` and `shade=` on the declaration.                           |
+| Theme or padding in **Appearance**    | The `theme` line; preset changes drop built-in `theme-color` lines. |
+| Wrap in a container or ungroup        | A `group` and the members' `in=`.                                   |
+| Clear manual markers                  | Removes the object's soft position refinements.                     |
+| Rebuild, or Apply in Compare          | `layout scope engine=…` for the diagram or the selected container.  |
+| Improve, a timeline step, the brush   | `stay` for each object that moved, plus anchors around them.        |
+| Routing options, or a routing Compare | The `routing` line.                                                 |
 
 An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
 top-level object, and the siblings of the edited object and of its containers. When an agent later
