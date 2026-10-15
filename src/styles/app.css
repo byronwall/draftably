@@ -844,20 +844,16 @@ details.inspector-section[open] > summary {
 /* Layout lab */
 
 .layout-lab {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  bottom: 12px;
-  z-index: 40;
   display: flex;
+  flex: 0 0 340px;
   flex-direction: column;
   width: 340px;
-  max-width: calc(100% - 24px);
+  min-height: 0;
   overflow: hidden;
-}
-
-.inspector-open .layout-lab {
-  right: calc(var(--panel-width) + 12px);
+  border: 0;
+  border-left: 1px solid var(--line);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .layout-lab .panel-header h2 {
@@ -986,31 +982,49 @@ details.inspector-section[open] > summary {
   transform: translate(-50%, 0);
 }
 
-/* --- Narrow screens: panels float over the canvas --------------------------------------------- */
+/* Side panels share the workspace so camera fitting uses the visible canvas size. */
 
 @media (max-width: 900px) {
-  .panel {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: 35;
-    box-shadow: var(--shadow-lg);
-  }
-
-  .objects-panel {
-    left: 0;
-  }
-
-  .inspector-panel {
-    right: 0;
-  }
-
-  .inspector-open .layout-lab {
-    right: 12px;
-  }
-
   .statusbar .status-hint {
     display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .workspace {
+    flex-direction: column;
+  }
+
+  .workspace > :is(.panel, .layout-lab) {
+    order: 2;
+    flex: 0 0 48%;
+    width: 100%;
+    max-height: 48%;
+    border: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .example-bar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 36px;
+    padding-block: 4px;
+  }
+
+  .example-note {
+    display: none;
+  }
+
+  .layout-preview {
+    max-width: calc(100% - 16px);
+    flex-wrap: wrap;
+    justify-content: center;
+    bottom: 54px;
+  }
+
+  .layout-preview .button {
+    padding-inline: 6px;
+    font-size: 11px;
   }
 }
 

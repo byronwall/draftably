@@ -62,6 +62,10 @@ export function placeEdgeLabel(
 ): EdgeLabelBox {
   const { w, h } = edgeLabelSize(label),
     candidates: EdgeLabelBox[] = [];
+  const blocked = (p: Point) => {
+    const r = { x: p.x - w / 2, y: p.y - h / 2, w, h };
+    return obstacles.some(o => overlaps(r, o, 4)) || existing.some(o => overlaps(r, o, 6));
+  };
   for (let i = 1; i < points.length; i++) {
     const a = points[i - 1],
       b = points[i],
@@ -69,14 +73,55 @@ export function placeEdgeLabel(
     if (len < 20) continue;
     for (const t of [0.5, 0.35, 0.65]) {
       const p = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
-      const r = { x: p.x - w / 2, y: p.y - h / 2, w, h };
-      const blocked =
-        obstacles.some(o => overlaps(r, o, 4)) || existing.some(o => overlaps(r, o, 6));
-      candidates.push({ ...p, w, h, score: len + (a.y === b.y ? 50 : 0) - (blocked ? 10000 : 0) });
+      candidates.push({ ...p, w, h, score: len + (a.y === b.y ? 50 : 0) });
     }
   }
   candidates.sort((a, b) => b.score! - a.score!);
-  return candidates[0] || { x: points[0]?.x || 0, y: points[0]?.y || 0, w, h };
+  const clear = candidates.find(p => !blocked(p));
+  if (clear) return clear;
+
+  // Keep the label close to its route when every on-line segment is obstructed.
+  const shifted: EdgeLabelBox[] = [];
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1],
+      b = points[i],
+      len = manhattan(a, b);
+    if (!len) continue;
+    const nx = a.y === b.y ? 0 : a.x === b.x ? 1 : -(b.y - a.y) / len,
+      ny = a.y === b.y ? 1 : a.x === b.x ? 0 : (b.x - a.x) / len,
+      radius = (w * Math.abs(nx) + h * Math.abs(ny)) / 2,
+      pScore = len + (a.y === b.y ? 50 : 0);
+    for (const t of [0.5, 0.35, 0.65]) {
+      const p = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t },
+        along = p.x * nx + p.y * ny,
+        offsets = new Set<number>();
+      for (const [rects, pad] of [
+        [obstacles, 5],
+        [existing, 7],
+      ] as const) {
+        for (const o of rects) {
+          const cx = o.x + o.w / 2,
+            cy = o.y + o.h / 2,
+            center = cx * nx + cy * ny,
+            extent = (o.w * Math.abs(nx) + o.h * Math.abs(ny)) / 2 + radius + pad + 1;
+          offsets.add(center - extent - along);
+          offsets.add(center + extent - along);
+        }
+      }
+      for (const offset of offsets) {
+        if (!offset || blocked({ x: p.x + nx * offset, y: p.y + ny * offset })) continue;
+        shifted.push({
+          x: p.x + nx * offset,
+          y: p.y + ny * offset,
+          w,
+          h,
+          score: pScore - Math.abs(offset) * 2,
+        });
+      }
+    }
+  }
+  shifted.sort((a, b) => b.score! - a.score!);
+  return shifted[0] || candidates[0] || { x: points[0]?.x || 0, y: points[0]?.y || 0, w, h };
 }
 
 export interface DrawnRoute extends Route {

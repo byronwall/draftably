@@ -122,7 +122,7 @@ export function visualBounds(doc: Diagram, id: string, title: string, r: Rect): 
   ]);
 }
 
-/** Approximate box for a connection label; text is short so a width estimate is enough. */
+/** Bounds for a connection label, measured at the edge text's rendered size. */
 export function edgeLabelSize(label: string) {
-  return { w: Math.min(280, Math.max(36, label.length * 5.9 + 16)), h: 21 };
+  return { w: Math.max(36, textWidth(label, 10, 400) + 16), h: 21 };
 }

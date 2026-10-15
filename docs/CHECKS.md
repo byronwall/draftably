@@ -24,6 +24,10 @@ Engine reports are written to the ignored `tmp/verification-current/` folder.
 
 ## File-backed editing
 
+`tests/file-session.test.ts` checks the first title entered after a new shape receives its source
+ID. It also checks selection and the active title editor after projection. `tests/edge-labels.test.ts`
+checks labels across short gaps, group headers, existing labels, and long text.
+
 `pnpm cli:build && pnpm prove:installed` packs Draftably, installs the archive in a fresh temporary
 project, and runs its executable outside the repository. It checks help, validation, formatting,
 repeatable JSON, SVG, bundled viewer assets, API saves, and conflicts. It then runs the browser proof
