@@ -1,6 +1,50 @@
 # CLI naming shortlist
 
-## Current shortlist: second pass
+## Current shortlist: third pass
+
+Byron clarified the name must imply diagrams, organization, user control, and easy guided automation.
+Train rails and autopilot are useful metaphors. Boxdraft is acceptable but does not meet the full goal.
+GPT-6.1 Sol at Medium reasoning ran three more `consider-contrast` rounds.
+
+Round 1 compared the product word. Diagram scored 10 for immediate diagram recognition.
+Graph scored 8 because it also suggests databases. Flow scored 7 because it also suggests workflow software.
+Box scored 6 because it also suggests storage and packaging. Advance Diagram compounds.
+
+The pool included DiagramRails, DiagramRail, DiagramPilot, DiagramGuide, DiagramLane, DiagramRoute,
+DiagramTrack, DiagramPath, DiagramHelm, DiagramDrive, DiagramSteer, DiagramCoach, and DiagramCruise.
+The worker also explored Graph, Chart, Flow, and Box variants with rail, pilot, guide, route, and helm.
+
+Round 2 compared the metaphors. Scores range from 0 (no cue) to 10 (immediate cue).
+
+| Name | Diagram recognition | Guided layout | User steering | Tradeoff |
+| --- | ---: | ---: | ---: | --- |
+| DiagramRails | 10 | 10 | 7 | User sets the rails; layout follows them. Can suggest Ruby on Rails. |
+| DiagramPilot | 10 | 8 | 9 | Strong meaning, but an existing diagram CLI uses it. |
+| DiagramHelm | 10 | 6 | 10 | Strong user control cue; weaker automation cue. Can suggest Kubernetes Helm. |
+| DiagramLane | 10 | 9 | 7 | Clear organization, but may imply only swimlane diagrams. |
+
+Round 3 added collision evidence and compared against Boxdraft.
+DiagramRails best meets the whole brief. DiagramHelm gives more weight to user control.
+Boxdraft has a weaker diagram cue (6), guided layout cue (5), and a reasonable user editing cue (8).
+
+| Rank | Name and command | npm registry | Existing use and search findings |
+| --- | --- | --- | --- |
+| 1 | **DiagramRails**, `diagramrails` | [404](https://registry.npmjs.org/diagramrails) | Worker found zero public GitHub repository-name matches and no distinct exact-name software product. Spaced searches find Ruby Rails diagram tools. |
+| 2 | **DiagramHelm**, `diagramhelm` | [404](https://registry.npmjs.org/diagramhelm) | Worker found zero public GitHub repository-name matches and no distinct exact-name software product. Spaced searches find Kubernetes Helm diagram tools. |
+| 3 | DiagramLane, `diagramlane` | [404](https://registry.npmjs.org/diagramlane) | Worker found zero public GitHub repository-name matches. An existing [Syncfusion diagram API class](https://help.syncfusion.com/cr/aspnetcore-js2/Syncfusion.EJ2.Diagrams.DiagramLane.html) uses the name. |
+
+Keep DiagramRails and DiagramHelm as the serious options. DiagramLane has a weaker distinctness result.
+The parent repeated exact-name web searches and npm checks. GitHub API rate limits prevented a parent repeat of repository-name checks.
+
+Reject DiagramPilot: an existing [diagram compiler and CLI](https://github.com/StiensWout/DiagramPilot) uses it, including an [npm package](https://registry.npmjs.org/diagrampilot).
+Reject [GraphPilot](https://github.com/graphpilot-oss/graphpilot), [FlowRail](https://registry.npmjs.org/flowrail),
+and [ChartPilot](https://chartpilot.live/) because software already uses them.
+DiagramGuide is generic and also appears as a chart-wizard label in [LibreOffice](https://help.libreoffice.org/latest/da/text/schart/01/choose_chart_type.html).
+
+Checks ran on October 14, 2026, Indianapolis time. No name is selected or reserved.
+An npm 404 does not guarantee npm acceptance. Web and public repository searches do not establish worldwide uniqueness.
+
+## Earlier shortlist: second pass
 
 Byron rejected the first shortlist. Weft was unfamiliar, and knot suggested tangles.
 This pass favors familiar words and clear, ordered diagrams.
