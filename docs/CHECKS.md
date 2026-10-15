@@ -76,3 +76,11 @@ The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at
 
 The layout engines are heuristics: they can leave crossings or ordering conflicts and do not
 promise a globally optimal drawing.
+
+## Screenshots
+
+`pnpm shoot <target> tmp/out.png` captures a URL, a `.draft` file (drawn through
+`draftably inspect --svg`), or an SVG, PNG or HTML file. `pnpm shoot --sheet tmp/sheet.png
+Label::a.draft b.draft …` lays several targets out as a labeled contact sheet. Use it for PR
+screenshots and visual checks instead of writing a one-off Playwright script. Keep the output in the
+ignored `tmp/` folder.

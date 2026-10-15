@@ -27,7 +27,8 @@
     "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs",
     "prove:installed": "node scripts/prove-package.ts --browser",
-    "prove:layout": "node scripts/prove-layout-tools.mjs"
+    "prove:layout": "node scripts/prove-layout-tools.mjs",
+    "shoot": "node scripts/shoot.mjs"
   },
   "dependencies": {
     "solid-js": "^1.9.9"
