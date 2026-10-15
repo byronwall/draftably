@@ -78,6 +78,20 @@
   color: var(--danger);
 }
 
+.save-status .icon {
+  margin-right: 3px;
+  vertical-align: -1px;
+}
+
+.save-status.on-disk {
+  color: var(--success);
+}
+
+.save-status.in-example {
+  color: var(--warning);
+  font-weight: 600;
+}
+
 .algorithm-select {
   width: 160px;
 }
@@ -152,4 +166,8 @@
   .save-status {
     display: none;
   }
+}
+
+.save-status.on-disk.warning {
+  color: var(--danger);
 }

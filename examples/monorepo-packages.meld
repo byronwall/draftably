@@ -1,0 +1,40 @@
+diagram "Monorepo packages" version=1
+
+# A dependency graph grouped by workspace folder, with a nested group for shared UI.
+group apps "apps/" color=blue
+node web "web" in=apps
+node admin "admin" in=apps
+node docs "docs" in=apps
+
+group packages "packages/" color=violet
+group ui "ui/" in=packages color=mint
+node tokens "design-tokens" in=ui
+node components "components" in=ui
+node icons "icons" in=ui
+node api_client "api-client" in=packages
+node auth "auth" in=packages
+node utils "utils" in=packages
+
+group tooling "tooling/" color=slate
+node tsconfig "tsconfig" in=tooling
+node eslint "eslint-config" in=tooling
+
+edge d1 web -> components
+edge d2 web -> api_client
+edge d3 web -> auth
+edge d4 admin -> components
+edge d5 admin -> api_client
+edge d6 docs -> components
+edge d7 components -> tokens
+edge d8 components -> icons
+edge d9 api_client -> utils
+edge d10 auth -> utils
+edge d11 auth -> api_client
+edge t1 utils -> tsconfig kind=async
+edge t2 utils -> eslint kind=async
+
+layout root row gap=72
+layout apps column gap=24
+layout packages flow gap=32 direction=right
+layout ui column gap=20
+layout tooling column gap=24

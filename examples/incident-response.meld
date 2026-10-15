@@ -1,0 +1,40 @@
+diagram "Incident response" version=1
+
+# Swimlanes: one container per role, with hand-offs crossing between lanes.
+group oncall "On-call engineer" color=blue
+node alert "Alert fires" in=oncall shape=pill
+node ack "Acknowledge" in=oncall
+node assess "Assess impact" in=oncall shape=diamond
+node mitigate "Mitigate" in=oncall
+
+group commander "Incident commander" color=amber
+node declare "Declare incident" in=commander
+node room "Open war room" in=commander
+node resolve "Declare resolved" in=commander
+
+group comms "Communications" color=violet
+node status "Post status page" in=comms
+node update "Customer updates" in=comms
+
+group followup "Follow-up" color=slate
+node review "Blameless review" in=followup
+node actions "Action items" in=followup shape=pill
+
+edge e1 alert -> ack
+edge e2 ack -> assess
+edge e3 assess -> mitigate "minor"
+edge e4 assess -> declare "major"
+edge e5 declare -> room
+edge e6 room -> status
+edge e7 status -> update kind=async
+edge e8 room -> mitigate
+edge e9 mitigate -> resolve
+edge e10 resolve -> update
+edge e11 resolve -> review
+edge e12 review -> actions
+
+layout root column gap=28
+layout oncall row gap=32
+layout commander row gap=32
+layout comms row gap=32
+layout followup row gap=32

@@ -71,11 +71,27 @@ pnpm meld format examples/checkout.meld     # print formatted source (--write to
 pnpm meld inspect examples/checkout.meld    # canonical node and route geometry as JSON
 pnpm meld inspect examples/checkout.meld --svg > checkout.svg
 pnpm meld open examples/checkout.meld       # serve the viewer for this file (after pnpm build)
+pnpm meld open                              # start page for the current folder's diagrams
 ```
 
-`open` watches the file. Edits made in another program appear in the viewer at once. If the
+`open` serves a folder: the current folder, the folder you name, or the current folder around
+the file you name. Without a file, the viewer starts on a page that lists every `.meld` file in
+the folder (skipping dot folders and `node_modules`), creates a new one, or opens an example. Each
+file opens at `?file=path/in/folder.meld`, so links and reloads keep it.
+
+`open` watches the open file. Edits made in another program appear in the viewer at once. If the
 source becomes invalid, the viewer keeps the last valid drawing and shows the error line. During
-development, `DIAGRAM_FILE=path/to/file.meld pnpm dev` serves the same session from Vite.
+development, `DIAGRAM_ROOT=folder pnpm dev` serves the same folder from Vite;
+`DIAGRAM_FILE=path/to/file.meld` serves the current folder and prints the file's address.
+
+## Examples
+
+`examples/` holds 15 diagrams, from flat flows to five levels of containers. They are bundled
+into the viewer, so they open without a server at `?example=id`. An example is a scratch copy:
+an amber **Example** bar stays across the top, the toolbar reads _Example · not on disk_, and
+nothing is written anywhere. Edits behave exactly as in a file. **Save as file…** writes the
+current source to a new file in the served folder and opens it; on the static site the bar offers
+**Download .meld** instead. Leaving an edited example asks first.
 
 The file is the source of truth while it is open: browser storage is not read or written, and
 moving the camera never changes the file.

@@ -1,6 +1,13 @@
 import { render } from 'solid-js/web';
 import App from './App';
-import { detectFileSession } from './state/file-session';
+import { StartScreen } from './components/StartScreen';
+import { launch } from './state/launch';
+import './styles/app.css';
 
-// Opened through `pnpm meld open`, the diagram comes from a file instead of browser storage.
-void detectFileSession().then(() => render(() => <App />, document.getElementById('root')!));
+// `meld open` serves a folder: the viewer opens a file, an example, or the start page.
+void launch().then(mode =>
+  render(
+    () => (mode === 'start' ? <StartScreen variant="page" /> : <App />),
+    document.getElementById('root')!,
+  ),
+);

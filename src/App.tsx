@@ -2,11 +2,13 @@ import { createEffect, onCleanup, onMount, Show } from 'solid-js';
 import { Canvas } from './components/canvas/Canvas';
 import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
+import { ExampleBar } from './components/ExampleBar';
 import { FileBanner } from './components/FileBanner';
 import { Inspector } from './components/Inspector';
 import { LayoutLab } from './components/LayoutLab';
 import { Menus } from './components/Menus';
 import { ObjectsPanel } from './components/ObjectsPanel';
+import { StartScreen } from './components/StartScreen';
 import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
 import { Toolbar } from './components/Toolbar';
@@ -16,7 +18,9 @@ import { cancelGeneration } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
+import { exampleEdited, exampleMode, fileMode } from './state/file-session';
 import { openFile } from './state/files';
+import { setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
 import { cancelLayout } from './state/layout';
 import { releaseModifierZoom, resetModifiers } from './state/pointer';
@@ -66,6 +70,8 @@ export default function App() {
     installDebugApi();
     const { restored, notice } = restoreSavedDocument();
     restoreArchive();
+    // A first visit to the static site starts on the start screen instead of a blank canvas.
+    if (!restored && !fileMode()) setStartOpen(true);
     requestAnimationFrame(() => {
       if (!restored) fitView();
       if (notice) toast(notice);
@@ -86,6 +92,10 @@ export default function App() {
       if (e.key === 'Meta' || e.key === 'Control') releaseModifierZoom();
       handleKeyUp(e);
     };
+    // Leaving an edited example would lose its edits; the browser asks first.
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (exampleEdited()) e.preventDefault();
+    };
     const onUnload = () => {
       sculptBeforeUnload();
       finishInlineEdit(true);
@@ -97,6 +107,7 @@ export default function App() {
       listen(document, 'copy', handleCopy),
       listen(document, 'paste', handlePaste),
       listen(window, 'blur', onBlur),
+      listen(window, 'beforeunload', onBeforeUnload),
       listen(window, 'beforeunload', onUnload),
       listen(motion, 'change', onMotion),
     ];
@@ -113,9 +124,18 @@ export default function App() {
   return (
     <div
       class="app"
-      classList={{ 'objects-open': objectsOpen(), 'inspector-open': inspectorOpen() }}
+      classList={{
+        'objects-open': objectsOpen(),
+        'inspector-open': inspectorOpen(),
+        'example-mode': exampleMode(),
+      }}
     >
       <Toolbar />
+      <div class="mode-bar-slot">
+        <Show when={exampleMode()}>
+          <ExampleBar />
+        </Show>
+      </div>
       <div class="workspace">
         <Show when={objectsOpen()}>
           <ObjectsPanel />
@@ -134,6 +154,9 @@ export default function App() {
       <Dialogs />
       <ComparisonDialog />
       <Toast />
+      <Show when={startOpen()}>
+        <StartScreen variant="dialog" />
+      </Show>
       <input
         ref={diagramInput}
         type="file"
