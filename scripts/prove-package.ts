@@ -92,16 +92,23 @@ try {
   // The CLI must not expose sibling directories or crash on a malformed URL.
   assert.equal((await fetch(`${base}/..%2fexamples/checkout.meld`)).status, 404);
   assert.equal((await fetch(`${base}/%ZZ`)).status, 400);
-  const session = await (await fetch(`${base}/api/session`)).json();
+  // The served folder lists the file, and each file's session is selected with ?file=.
+  const listing = await (await fetch(`${base}/api/workspace`)).json();
+  assert.deepEqual(
+    listing.files.map((f: { path: string }) => f.path),
+    ['checkout.meld'],
+  );
+  const api = (route: string) => `${base}/api/${route}?file=checkout.meld`;
+  const session = await (await fetch(api('session'))).json();
   assert.equal(session.source, formatted);
   const updated = formatted + '\nnode audit "Audit log"\n';
-  const saved = await fetch(`${base}/api/source`, {
+  const saved = await fetch(api('source'), {
     method: 'PUT',
     body: JSON.stringify({ source: updated, base: session.revision }),
   });
   assert.equal(saved.status, 200);
   assert.equal(fs.readFileSync(file, 'utf8'), updated);
-  const stale = await fetch(`${base}/api/source`, {
+  const stale = await fetch(api('source'), {
     method: 'PUT',
     body: JSON.stringify({ source: formatted, base: session.revision }),
   });
