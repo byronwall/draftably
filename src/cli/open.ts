@@ -26,7 +26,9 @@ export async function openSession(target: string, options: { port: number; launc
     project = path.dirname(project);
   const root = path.join(project, 'dist');
   if (!fs.existsSync(path.join(root, 'index.html')))
-    throw Error('The viewer is not built. Run `pnpm build` first.');
+    throw Error(
+      'The viewer assets are missing. Reinstall draftably, or run `pnpm build` in a source checkout.',
+    );
   const stat = fs.statSync(target, { throwIfNoEntry: false });
   if (!stat) throw Error(`No such file or folder: ${target}`);
   if (stat.isFile() && !target.endsWith('.meld')) throw Error('Open a .meld file or a folder.');
@@ -41,9 +43,19 @@ export async function openSession(target: string, options: { port: number; launc
   const file = stat.isFile() ? path.relative(rootDir, target).split(path.sep).join('/') : '';
   const server = http.createServer((req, res) => {
     if (workspace.handle(req, res)) return;
-    const url = decodeURIComponent((req.url ?? '/').split('?')[0]);
+    let url: string;
+    try {
+      url = decodeURIComponent((req.url ?? '/').split('?')[0]);
+    } catch {
+      res.writeHead(400).end('Invalid URL');
+      return;
+    }
     const target = path.join(root, url === '/' ? 'index.html' : url);
-    if (!target.startsWith(root) || !fs.existsSync(target) || fs.statSync(target).isDirectory()) {
+    if (
+      !target.startsWith(root + path.sep) ||
+      !fs.existsSync(target) ||
+      fs.statSync(target).isDirectory()
+    ) {
       res.writeHead(404).end('Not found');
       return;
     }
@@ -52,10 +64,15 @@ export async function openSession(target: string, options: { port: number; launc
     });
     fs.createReadStream(target).pipe(res);
   });
-  await new Promise<void>((resolve, reject) => {
-    server.once('error', reject);
-    server.listen(options.port, '127.0.0.1', resolve);
-  });
+  try {
+    await new Promise<void>((resolve, reject) => {
+      server.once('error', reject);
+      server.listen(options.port, '127.0.0.1', resolve);
+    });
+  } catch (error) {
+    workspace.close();
+    throw error;
+  }
   const url = `http://127.0.0.1:${options.port}/${file ? `?file=${encodeURIComponent(file)}` : ''}`;
   console.log(
     `${file ? `Editing ${file}` : 'Diagrams'} in ${workspace.root}\nViewer: ${url}\nPress Ctrl+C to stop.`,

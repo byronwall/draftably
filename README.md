@@ -4,8 +4,9 @@ A diagram editor that runs entirely in the browser. Draw a diagram, improve its 
 undoable passes, compare layout and routing candidates side by side, scrub through recorded layout
 steps, and repair small areas with a layout brush.
 
-Built with SolidJS, TypeScript and Vite. The current diagram saves to the browser; export JSON or
-editable SVG to keep a portable copy. There is no server.
+Built with SolidJS, TypeScript and Vite. The standalone editor saves to the browser; export JSON or
+editable SVG to keep a portable copy. The Draftably CLI serves the same editor locally and saves
+file-backed edits to `.meld` source.
 
 ## Develop
 
@@ -83,8 +84,9 @@ See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
 [Checks](docs/CHECKS.md) for what is tested. [Source record](docs/IMPORT.md) describes where the
 original release came from; its product notes live in [reference/v7/docs](reference/v7/docs).
 
-The planned CLI uses Changesets and GitHub Actions for npm releases. See
-[release setup](docs/RELEASING.md) for package activation and npm configuration.
+The `draftably` npm package includes the compiled CLI and viewer. Use `pnpm cli:build` to build it,
+`pnpm cli:pack-check` to test a clean tarball install, and `pnpm prove:installed` for the browser proof.
+See [release setup](docs/RELEASING.md) for Changesets and npm publishing.
 
 The [Diagram DSL initiative](docs/intent/diagram-dsl/shape-brief.md) records the goals and plan
 for shared file editing.

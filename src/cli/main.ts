@@ -1,5 +1,5 @@
 /**
- * `meld` command line: check, format and inspect `.meld` diagram files without the viewer.
+ * Draftably command line: check, format and inspect `.meld` files, or edit them in the viewer.
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm meld`.
  */
 import fs from 'node:fs';
@@ -9,7 +9,7 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { renderSvg } from './svg';
 
-const USAGE = `Usage: pnpm meld <command> <file.meld> [options]
+const USAGE = `Usage: draftably <command> <file.meld> [options]
 
 Commands:
   check <file>              Report source errors and layout diagnostics. Exits 1 on errors.
@@ -64,9 +64,12 @@ export async function main(argv: string[]): Promise<number> {
         const { openSession } = await import('./open');
         const args = [file, ...rest].filter((a): a is string => !!a);
         const at = args.indexOf('--port');
+        const port = at >= 0 ? Number(args[at + 1]) : 5180;
+        if (!Number.isInteger(port) || port < 1 || port > 65535)
+          throw new UsageError('--port must be an integer from 1 to 65535.');
         const target = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--port');
         await openSession(path.resolve(target ?? '.'), {
-          port: at >= 0 ? Number(args[at + 1]) : 5180,
+          port,
           launch: !args.includes('--no-open'),
         });
         return -1;
