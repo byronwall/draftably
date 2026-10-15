@@ -100,7 +100,7 @@ const page = await browser.newPage({
   deviceScaleFactor: 2,
 });
 try {
-  await page.goto(`http://127.0.0.1:${port}/`);
+  await page.goto(`http://127.0.0.1:${port}/?file=${path.basename(file)}`);
   await waitFor(page, () => !!window.diagramStudio?.fileState, 'viewer');
   await matches(page, 'opened file');
 
