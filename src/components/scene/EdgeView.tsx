@@ -1,7 +1,7 @@
 import { For, Show } from 'solid-js';
 import { findEdge, findNode } from '../../model/graph';
 import type { DrawnRoute } from '../../model/routes';
-import { colorTokens } from '../../model/styles';
+import { resolveAppearance, swatchFor } from '../../model/appearance';
 import type { Diagram } from '../../model/types';
 
 export interface EdgeViewProps {
@@ -15,11 +15,13 @@ export interface EdgeViewProps {
 
 export function EdgeView(props: EdgeViewProps) {
   const edge = () => findEdge(props.doc, props.route.id)!;
+  const look = () => resolveAppearance(props.doc.appearance);
   const stroke = () =>
-    colorTokens(
-      props.route.blocked ? 'rose' : edge().emphasis && !edge().dashed ? 'violet' : 'slate',
-      props.doc.theme,
-    ).ink;
+    props.route.blocked
+      ? swatchFor(look(), 'red', 600).fill
+      : edge().emphasis && !edge().dashed
+        ? swatchFor(look(), 'primary', 700).fill
+        : look().connection;
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
   const waypoints = () =>
     props.interactive && props.selected
@@ -72,7 +74,6 @@ export function EdgeView(props: EdgeViewProps) {
         d={props.route.path}
         stroke={stroke()}
         stroke-width={edge().emphasis ? 2 : 1.4}
-        opacity={edge().emphasis ? 1 : 0.72}
         stroke-dasharray={edge().dashed || props.route.blocked ? '5 5' : undefined}
         marker-end={edge().directed ? `url(#${markerId()})` : undefined}
       />
@@ -85,9 +86,18 @@ export function EdgeView(props: EdgeViewProps) {
               y={label().y - label().h / 2}
               width={label().w}
               height={label().h}
-              rx={6}
+              rx={4}
+              fill={look().canvas}
             />
-            <text class="edge-label" x={label().x} y={label().y} fill={stroke()}>
+            <text
+              class="edge-label"
+              x={label().x}
+              y={label().y}
+              fill={stroke()}
+              font-family={look().annotation.family}
+              font-size={String(look().annotation.size)}
+              font-weight={String(look().annotation.weight)}
+            >
               {edge().label}
             </text>
           </g>

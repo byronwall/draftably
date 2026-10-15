@@ -1,14 +1,35 @@
-/** A plain, dependency-free SVG of a projected diagram for terminal and agent inspection. */
-import { colorTokens } from '../model/styles';
-import { CONTAINER_HEADER } from '../model/graph';
+/**
+ * A standalone SVG of a projected diagram for terminal and agent inspection. It draws with the
+ * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
+ */
+import { resolveAppearance, swatchFor } from '../model/appearance';
+import { truncateText } from '../model/fonts';
+import { styleOf } from '../model/graph';
+import { ICONS } from '../model/icons';
+import { nodeLabel } from '../model/labels';
 import { computeRoutes } from '../model/routes';
-import type { Diagram } from '../model/types';
+import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
+import { fontFaceCss } from '../lib/font-data';
 
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+const font = (p: { family: string; size: number; weight: number }) =>
+  `font-family="${esc(p.family)}" font-size="${p.size}" font-weight="${p.weight}"`;
+
+function outline(shape: string, r: Rect, radius: number, paint: string) {
+  if (shape === 'diamond')
+    return `<path d="M${r.x + r.w / 2},${r.y} L${r.x + r.w},${r.y + r.h / 2} L${r.x + r.w / 2},${r.y + r.h} L${r.x},${r.y + r.h / 2} Z" ${paint}/>`;
+  if (shape === 'circle')
+    return `<ellipse cx="${r.x + r.w / 2}" cy="${r.y + r.h / 2}" rx="${r.w / 2}" ry="${r.h / 2}" ${paint}/>`;
+  if (shape === 'text') return '';
+  const rx = shape === 'pill' ? r.h / 2 : radius;
+  return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
+}
+
 export function renderSvg(doc: Diagram): string {
+  const look = resolveAppearance(doc.appearance);
   const { vg, rects } = visibleRects(doc);
   const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
   const all = [...rects.values()];
@@ -17,32 +38,57 @@ export function renderSvg(doc: Diagram): string {
     w = Math.max(...all.map(r => r.x + r.w)) - x0 + 40,
     h = Math.max(...all.map(r => r.y + r.h)) - y0 + 40;
   const out = [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${h}" width="${w}" height="${h}" font-family="Inter, Segoe UI, Arial, sans-serif">`,
-    `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="#f7f8fa"/>`,
-    `<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#5b6472"/></marker></defs>`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
+    `<title>${esc(doc.title)}</title>`,
+    `<defs><style>${fontFaceCss(look)}</style>` +
+      `<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${look.connection}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>`,
+    `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
   ];
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,
-      c = colorTokens(doc.styles[g.id]?.color, 'light');
+      style = styleOf(doc, g.id),
+      c = swatchFor(look, style.color, style.shade, 'group'),
+      band = look.groupHeader / 2 - 7;
     out.push(
-      `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="10" fill="${c.fill}" fill-opacity="0.35" stroke="${c.stroke}"/>`,
-      `<text x="${r.x + 12}" y="${r.y + CONTAINER_HEADER / 2 + 5}" font-size="13" font-weight="600" fill="${c.ink}">${esc(g.title)}</text>`,
+      `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.2"/>`,
+      `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
+      `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}">${esc(truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle))}</text>`,
     );
   }
   for (const route of routes) {
     const edge = doc.graph.edges.find(e => e.id === route.id)!;
     out.push(
-      `<polyline points="${route.points.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="#5b6472" stroke-width="1.5"${edge.dashed ? ' stroke-dasharray="6 4"' : ''} marker-end="url(#arrow)"/>`,
+      `<path d="${route.path}" fill="none" stroke="${look.connection}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"${edge.dashed ? ' stroke-dasharray="5 5"' : ''} marker-end="url(#arrow)"/>`,
     );
+    const l = route.label;
+    if (l)
+      out.push(
+        `<rect x="${l.x - l.w / 2}" y="${l.y - l.h / 2}" width="${l.w}" height="${l.h}" rx="4" fill="${look.canvas}"/>`,
+        `<text x="${l.x}" y="${l.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.connection}">${esc(edge.label)}</text>`,
+      );
   }
   for (const n of vg.nodes) {
     const r = rects.get(n.id)!,
-      style = doc.styles[n.id],
-      c = colorTokens(style?.color, 'light'),
-      radius = style?.shape === 'pill' || style?.shape === 'circle' ? r.h / 2 : 8;
+      style = styleOf(doc, n.id),
+      c = swatchFor(look, style.color, style.shade, 'node'),
+      label = nodeLabel(doc, n.id, n.title, r),
+      first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
+      ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text;
     out.push(
-      `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${radius}" fill="${c.fill}" stroke="${c.stroke}"/>`,
-      `<text x="${r.x + r.w / 2}" y="${r.y + r.h / 2 + 5}" text-anchor="middle" font-size="13" font-weight="550" fill="${c.ink}">${esc(n.title)}</text>`,
+      outline(
+        style.shape,
+        r,
+        look.radius,
+        `fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.2"`,
+      ),
+      `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}">` +
+        label.lines
+          .map(
+            (line, i) =>
+              `<tspan x="${r.x + label.x}" dy="${i ? label.lineHeight : 0}">${esc(line)}</tspan>`,
+          )
+          .join('') +
+        '</text>',
     );
   }
   out.push('</svg>\n');

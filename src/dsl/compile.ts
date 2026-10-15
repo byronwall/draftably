@@ -10,6 +10,8 @@
  * top of the engine's arrangement exactly as they do on top of `flow`.
  */
 import { LayoutLab } from '../engines/layout-engine.js';
+import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
+import { titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction } from '../model/types';
 import { GROUP_HEADER, GROUP_INSET, contentOrigin } from './frame';
@@ -61,6 +63,8 @@ export interface Scene {
   byId: Map<string, SceneObject>;
   edges: ModelEdge[];
   diagnostics: Diagnostic[];
+  /** The file's resolved appearance: the spacing and type every size above was computed with. */
+  look: ResolvedAppearance;
 }
 
 type Item = ModelObject & { w: number; h: number };
@@ -162,30 +166,32 @@ export function layoutFor(m: Model, scope: string): ModelLayout {
   );
 }
 
-/** Wrap by character count; deterministic everywhere, unlike measured text. */
-function lineCount(text: string, limit: number) {
-  let lines = 0;
-  for (const part of text.split('\n')) {
-    let line = 0;
-    for (const w of part.split(/\s+/).filter(Boolean)) {
-      const len = Math.min(w.length, limit);
-      if (line && line + 1 + len > limit) {
-        lines++;
-        line = len;
-      } else line += (line ? 1 : 0) + len;
-      lines += Math.floor(w.length / (limit + 1));
-    }
-    lines++;
-  }
-  return Math.max(1, lines);
-}
-
-export function leafSize(o: ModelObject, size?: { width: number; height: number }) {
+/**
+ * Size of a node: its requested size, or the default width with a height that fits the title in
+ * the theme's type and padding. A requested size is kept exactly; `overflow` reports a title that
+ * no longer fits in it.
+ */
+export function leafSize(
+  o: ModelObject,
+  size: { width: number; height: number } | undefined,
+  look: ResolvedAppearance,
+) {
   const base = defaultShapeSize(o.shape);
   const w = size?.width ?? base.w;
-  if (o.shape === 'circle' || o.shape === 'diamond') return { w, h: size?.height ?? base.h };
-  const lines = lineCount(o.label, Math.max(4, Math.floor((w - 24) / 7.4)));
-  return { w, h: Math.max(size?.height ?? base.h, base.h + 16 * (lines - 1)) };
+  const area = titleArea(o.shape, w, size?.height ?? base.h, look),
+    lines = wrapTitle(o.label, area.width, look).length;
+  if (size)
+    return { w, h: size.height, overflow: lines * look.title.lineHeight > area.maxHeight + 0.5 };
+  return {
+    w,
+    h: titleHeight(
+      o.shape,
+      lines,
+      o.shape === 'circle' || o.shape === 'diamond' ? base.h : 0,
+      look,
+    ),
+    overflow: false,
+  };
 }
 
 /** Longest-path ranks over strongly connected components, in declaration order. */
@@ -581,6 +587,8 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
     if (!children.has(o.parent)) children.set(o.parent, []);
     children.get(o.parent)!.push(o);
   }
+  const look = resolveAppearance(m.appearance),
+    header = look.groupHeader;
   const items = new Map<string, Item>(),
     local = new Map<string, Pos>(),
     bases = new Map<string, Pos>();
@@ -606,11 +614,20 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
           own = layoutFor(m, o.id);
         size = {
           w: Math.max(MIN_GROUP.w, sub.w + 2 * GROUP_INSET, own.minWidth),
-          h: Math.max(MIN_GROUP.h, sub.h + GROUP_HEADER + GROUP_INSET, own.minHeight),
+          h: Math.max(MIN_GROUP.h, sub.h + header + GROUP_INSET, own.minHeight),
         };
       } else {
         const hint = m.hints.find(h => h.type === 'size' && h.id === o.id);
-        size = leafSize(o, hint?.type === 'size' ? hint : undefined);
+        const leaf = leafSize(o, hint?.type === 'size' ? hint : undefined, look);
+        size = leaf;
+        if (leaf.overflow)
+          diagnostics.push({
+            level: 'warning',
+            code: 'text-overflow',
+            message: `${o.id}'s title does not fit in its requested size. Make it larger or remove the size line.`,
+            line: hint?.line,
+            ids: [o.id],
+          });
       }
       const item = { ...o, w: round(size.w), h: round(size.h) };
       items.set(o.id, item);
@@ -655,7 +672,7 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
         depth,
       };
       objects.push(box);
-      if (o.type === 'group') place(o.id, contentOrigin(box), depth + 1);
+      if (o.type === 'group') place(o.id, contentOrigin(box, header), depth + 1);
     }
   };
   place('root', { x: 0, y: 0 }, 0);
@@ -682,5 +699,6 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
     byId: new Map(objects.map(o => [o.id, o])),
     edges: m.edges,
     diagnostics,
+    look,
   };
 }

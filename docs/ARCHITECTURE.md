@@ -20,7 +20,9 @@ Plain TypeScript with no DOM or Solid dependencies, so it is unit tested directl
 | `graph.ts`        | Lookups and hierarchy: children, ancestors, collapsed containers, selection roots.                                |
 | `edits.ts`        | Every document change: add, connect, wrap, delete, align, paste, intent, … Each mutates the document it is given. |
 | `geometry.ts`     | Rectangles, rounding and SVG path helpers.                                                                        |
-| `labels.ts`       | Text measurement, wrapping and label placement.                                                                   |
+| `labels.ts`       | Title area, wrapping and label placement for every shape, shared by the compiler and the canvas.                  |
+| `appearance.ts`   | Five preset themes, color families with numeric shades, and `resolveAppearance` (preset, then file overrides).    |
+| `fonts.ts`        | The bundled faces and deterministic text measurement from `font-metrics.json` (see `pnpm font-metrics`).          |
 | `routes.ts`       | Ports, edge-label placement and the call into the routing engine.                                                 |
 | `static-scene.ts` | A read-only scene for comparison candidates.                                                                      |
 | `samples.ts`      | The example catalog backed by `src/samples/*.json`.                                                               |
@@ -90,8 +92,15 @@ diagram declaratively with `scene/NodeView`, `GroupView` and `EdgeView`. The sam
 comparison candidates through `scene/StaticScene`, so the editor and Compare always match.
 
 Styles are plain CSS. Design tokens and shared controls are in `styles/app.css`; each larger
-component imports its own stylesheet. Light and dark themes switch through `data-theme` on the
-document element.
+component imports its own stylesheet. The editor's light and dark modes switch through
+`data-theme` on the document element.
+
+The drawing itself is styled by the diagram's appearance (`doc.appearance`), not by CSS: scene
+components, `cli/svg.ts` and the exports all read colors, padding and type from
+`resolveAppearance`. Its canvas color reaches the stage as `--diagram-canvas`. Fonts are bundled
+in `src/assets/fonts`, registered at startup and embedded in exported SVG by `lib/font-data.ts`.
+Text is wrapped from stored advance widths, never DOM measurement, so geometry never depends on
+which fonts have loaded.
 
 ## engines/ and workers/
 

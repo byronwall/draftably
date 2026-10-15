@@ -1,3 +1,5 @@
+import { resolveAppearance } from './model/appearance';
+import { registerFonts } from './lib/font-data';
 import { createEffect, onCleanup, onMount, Show } from 'solid-js';
 import { Canvas } from './components/canvas/Canvas';
 import { ComparisonDialog } from './components/comparison/ComparisonDialog';
@@ -65,6 +67,14 @@ export default function App() {
   createEffect(() => {
     document.documentElement.dataset.theme = doc.theme;
   });
+  // The diagram's canvas follows its appearance; editor chrome follows the editor's mode.
+  createEffect(() => {
+    document.documentElement.style.setProperty(
+      '--diagram-canvas',
+      resolveAppearance(doc.appearance).canvas,
+    );
+  });
+  registerFonts();
 
   onMount(() => {
     installDebugApi();

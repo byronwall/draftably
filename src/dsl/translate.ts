@@ -7,6 +7,7 @@
  * write snaps back when the source is reprojected, so nothing unsaved looks saved. Changes the
  * file cannot express are rejected outright.
  */
+import type { ColorDefinition, DiagramAppearance } from '../model/appearance';
 import { selectionRoots } from '../model/graph';
 import type { ColorKey, Diagram, DiagramEdge, PortSide, Rect } from '../model/types';
 import { contentOrigin, type Scene } from './compile';
@@ -30,6 +31,7 @@ import {
 import {
   DSL_SHAPES,
   POSITION_HINTS,
+  THEME_ATTRS,
   type NearSide,
   type SourceDoc,
   type Statement,
@@ -114,22 +116,17 @@ export function translateEdit(input: EditInput): EditResult {
   // Explicit colors decide what `color=auto` resolves to.
   const explicit = new Map<string, ColorKey>();
   for (const o of scene.model.objects) if (o.color !== 'auto') explicit.set(o.id, o.color);
-  const autoColor = (editorParent: string | null, type: 'node' | 'group'): ColorKey => {
+  const autoColor = (editorParent: string | null): ColorKey => {
     for (let p = editorParent; p; p = parentOf(after, p)) {
       const c = explicit.get(sid(p));
       if (c) return c;
     }
-    return type === 'group' ? 'slate' : 'blue';
+    return 'auto';
   };
-  const writeColor = (
-    s: Statement,
-    id: string,
-    editorParent: string | null,
-    type: 'node' | 'group',
-  ) => {
+  const writeColor = (s: Statement, id: string, editorParent: string | null) => {
     const color = after.styles[id]?.color;
     if (!color) return;
-    if (color === autoColor(editorParent, type)) {
+    if (color === 'auto' || color === autoColor(editorParent)) {
       setAttr(s, 'color', undefined);
       explicit.delete(sid(id));
     } else {
@@ -137,6 +134,8 @@ export function translateEdit(input: EditInput): EditResult {
       explicit.set(sid(id), color);
     }
   };
+
+  if (!same(before.appearance, after.appearance)) writeAppearance(source, after.appearance);
 
   // Title.
   if (after.title !== before.title) {
@@ -180,9 +179,8 @@ export function translateEdit(input: EditInput): EditResult {
     if (o.parentId) setAttr(s, 'in', bare(sid(o.parentId)));
     const shape = after.styles[o.id]?.shape;
     if (type === 'node' && shape && shape !== 'box') setAttr(s, 'shape', bare(shape));
-    // New objects take the editor's default color; leave those to `auto` so they match their group.
-    if (after.styles[o.id]?.color !== (type === 'group' ? 'violet' : 'blue'))
-      writeColor(s, o.id, o.parentId ?? null, type);
+    writeColor(s, o.id, o.parentId ?? null);
+    writeShade(s, after.styles[o.id]?.shade);
     insertAfter(source, s, isDeclaration);
   }
 
@@ -207,8 +205,8 @@ export function translateEdit(input: EditInput): EditResult {
     }
     const a = before.styles[o.id],
       b = after.styles[o.id];
-    if (a?.color !== b?.color)
-      writeColor(s, o.id, o.parentId ?? null, s.command as 'node' | 'group');
+    if (a?.color !== b?.color) writeColor(s, o.id, o.parentId ?? null);
+    if (a?.shade !== b?.shade) writeShade(s, b?.shade);
     if (s.command === 'node' && a?.shape !== b?.shape)
       setAttr(s, 'shape', b.shape === 'box' ? undefined : bare(b.shape));
   }
@@ -247,12 +245,61 @@ export function translateEdit(input: EditInput): EditResult {
   return { source, ids, notes };
 }
 
+function writeShade(s: Statement, shade: number | undefined) {
+  setAttr(s, 'shade', shade === undefined ? undefined : bare(shade));
+}
+
+const colorKey = (s: Statement) => `${s.args[0]?.value}:${getAttr(s, 'shade')?.value ?? 500}`;
+
+/**
+ * Write a diagram appearance as the file's `theme` line and `theme-color` statements. Statements
+ * for colors that are no longer defined are removed; the rest are updated in place, so comments
+ * next to them stay.
+ */
+export function writeAppearance(source: SourceDoc, appearance: DiagramAppearance) {
+  let theme = statements(source).find(s => s.command === 'theme');
+  if (!theme) {
+    theme = statement('theme', [bare(appearance.theme)]);
+    const diagram = statements(source).find(s => s.command === 'diagram');
+    const at = diagram ? source.lines.indexOf(diagram) + 1 : 0;
+    source.lines.splice(at, 0, theme, ...(diagram ? [] : [{ kind: 'blank' as const }]));
+  }
+  theme.args = [bare(appearance.theme)];
+  for (const [attr, key] of Object.entries(THEME_ATTRS)) {
+    const value = appearance.overrides[key];
+    setAttr(
+      theme,
+      attr,
+      value === undefined
+        ? undefined
+        : typeof value === 'number'
+          ? bare(value)
+          : key === 'titleFont' || key === 'annotationFont'
+            ? bare(value)
+            : quoted(value),
+    );
+  }
+  const wanted = new Map<string, ColorDefinition>(
+    appearance.colors.map(c => [`${c.family}:${c.shade}`, c]),
+  );
+  removeWhere(source, s => s.command === 'theme-color' && !wanted.has(colorKey(s)));
+  for (const [key, c] of wanted) {
+    let s = statements(source).find(x => x.command === 'theme-color' && colorKey(x) === key);
+    if (!s) {
+      s = statement('theme-color', [bare(c.family)], [['shade', bare(c.shade)]]);
+      insertAfter(source, s, x => x.command === 'theme' || x.command === 'theme-color');
+    }
+    for (const field of ['fill', 'stroke', 'ink'] as const)
+      setAttr(s, field, c[field] ? quoted(c[field]) : undefined);
+  }
+}
+
 /** Local rectangle of an object relative to its parent's content origin in the compiled scene. */
 function localRect(scene: Scene, parent: string, r: Rect): Rect | null {
   if (parent === 'root') return { ...r };
   const p = scene.byId.get(parent);
   if (!p) return null;
-  const o = contentOrigin(p);
+  const o = contentOrigin(p, scene.look.groupHeader);
   return { x: r.x - o.x, y: r.y - o.y, w: r.w, h: r.h };
 }
 

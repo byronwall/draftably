@@ -5,6 +5,7 @@ import {
   type RoutingResult,
 } from '../engines/routing-engine.js';
 import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
+import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { edgeLabelSize } from './labels';
 import { isCollapsed, styleOf, type VisibleGraph } from './graph';
 import type { Diagram, Point, Rect, ShapeKind, Side } from './types';
@@ -59,8 +60,9 @@ export function placeEdgeLabel(
   points: Point[],
   obstacles: Rect[],
   existing: Rect[] = [],
+  look: ResolvedAppearance = resolveAppearance(),
 ): EdgeLabelBox {
-  const { w, h } = edgeLabelSize(label),
+  const { w, h } = edgeLabelSize(label, look),
     candidates: EdgeLabelBox[] = [];
   for (let i = 1; i < points.length; i++) {
     const a = points[i - 1],
@@ -110,7 +112,8 @@ export function drawRoutes(
     const r = rects.get(g.id)!;
     obstacles.push(isCollapsed(doc, g.id) ? r : { x: r.x, y: r.y, w: r.w, h: 32 });
   }
-  const placed: Rect[] = [],
+  const look = resolveAppearance(doc.appearance),
+    placed: Rect[] = [],
     byEdge = new Map(vg.edges.map(e => [e.id, e])),
     radius = doc.settings.routing?.cornerRadius ?? 6;
   return result.routes.map(route => {
@@ -118,7 +121,7 @@ export function drawRoutes(
       cfg = doc.layout.edges[route.id] || {};
     let label: EdgeLabelBox | null = null;
     if (edge.label) {
-      label = placeEdgeLabel(edge.label, route.points, obstacles, placed);
+      label = placeEdgeLabel(edge.label, route.points, obstacles, placed, look);
       label.x += cfg.labelDx || 0;
       label.y += cfg.labelDy || 0;
       placed.push({ x: label.x - label.w / 2, y: label.y - label.h / 2, w: label.w, h: label.h });

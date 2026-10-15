@@ -14,15 +14,17 @@ import { GROUP_INSET } from './frame';
 /** Editor state that is not part of the source and survives a reprojection. */
 export type ViewState = Partial<Pick<Diagram, 'settings' | 'camera' | 'theme' | 'collapsed'>>;
 
+/** An object's color family: its own, or the nearest colored group's; `auto` when none is. */
 function resolveColor(scene: Scene, o: SceneObject): ColorKey {
   for (let x: SceneObject | undefined = o; x; x = scene.byId.get(x.parent))
     if (x.color !== 'auto') return x.color;
-  return o.type === 'group' ? 'slate' : 'blue';
+  return 'auto';
 }
 
 export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const doc = emptyDiagram(scene.title);
   doc.id = 'draft-file';
+  doc.appearance = clone(scene.model.appearance);
   const hinted = (type: string, id: string) =>
     scene.model.hints.some(h => h.type === type && 'id' in h && h.id === id);
   for (const o of scene.objects) {
@@ -47,7 +49,12 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       manual: hinted('near', o.id) || hinted('nudge', o.id),
       pinned: hinted('pin', o.id),
     };
-    doc.styles[o.id] = { shape: o.shape, color: resolveColor(scene, o), icon: '' };
+    doc.styles[o.id] = {
+      shape: o.shape,
+      color: resolveColor(scene, o),
+      ...(o.shade !== undefined ? { shade: o.shade } : {}),
+      icon: '',
+    };
   }
   for (const e of scene.edges) {
     doc.graph.edges.push({

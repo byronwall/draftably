@@ -128,6 +128,7 @@ export function Canvas() {
         <rect width="100%" height="100%" fill="url(#canvas-dots)" />
         <g
           ref={world}
+          class="scene"
           classList={{ connecting: tool() === 'connect' }}
           transform={`translate(${camera().x},${camera().y}) scale(${camera().k})`}
         >

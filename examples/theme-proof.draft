@@ -1,0 +1,36 @@
+diagram "Field service intake" version=1
+theme fieldnotes
+
+# Editorial theme proof: serif titles, wrapped and long-word labels, a diamond, nested groups,
+# connection labels, an explicit size and a pin. Change `theme` to compare the other presets.
+
+node request "Customer request"
+node triage "Triage the request and check the service contract" color=primary
+node eligible "Covered by contract?" shape=diamond
+
+group field "Field operations" color=secondary
+node dispatch "Dispatch technician" in=field
+group visit "On-site visit" in=field
+node diagnose "Diagnose" in=visit
+node repair "Repair or replace parts" in=visit shape=pill
+node report "Maintenanceverificationreport" in=field
+
+node quote "Send a paid quote" color=secondary shade=700
+node close "Close request" color=primary shade=100
+
+edge intake request -> triage "portal"
+edge check triage -> eligible
+edge covered eligible -> dispatch "covered"
+edge paid eligible -> quote "not covered"
+edge onsite dispatch -> diagnose
+edge fix diagnose -> repair
+edge document repair -> report "parts used"
+edge done report -> close
+edge declined quote -> close "declined" kind=async
+
+layout root flow gap=64
+layout field column gap=24
+
+# Layout refinements
+size triage width=200 height=104
+pin close x=1320 y=40

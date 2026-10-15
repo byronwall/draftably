@@ -38,11 +38,6 @@ describe('syntax', () => {
     expect(formatSource(formatSource(checkout))).toBe(formatSource(checkout));
     expect(formatSource(checkout)).toContain('# Customer-facing entry points.');
   });
-
-  it('maps Meld 0.1 colors onto the editor palette', () => {
-    const m = parseModel('node a "A" color=teal\nnode b "B" color=orange');
-    expect(m.objects.map(o => o.color)).toEqual(['mint', 'amber']);
-  });
 });
 
 describe('compile', () => {

@@ -13,6 +13,8 @@ import {
   openSample,
   quickExtend,
   reroute,
+  setColor,
+  setShade,
 } from './actions';
 import {
   applyCandidate,
@@ -34,6 +36,7 @@ import {
 } from './document';
 import { tool } from './editor';
 import { exportSvg, importText } from './files';
+import { svgToPng } from '../lib/svg-export';
 import {
   acceptPreview,
   discardPreview,
@@ -79,6 +82,17 @@ export function installDebugApi() {
     loadSample: openSample,
     import: importText,
     exportSvg,
+    /** The PNG export as a data URL. */
+    exportPng: async () => {
+      const blob = await svgToPng(exportSvg());
+      return await new Promise<string>(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.readAsDataURL(blob);
+      });
+    },
+    setColor,
+    setShade,
     compare: openComparison,
     generateComparison: generate,
     applyCandidate,

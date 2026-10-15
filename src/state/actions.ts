@@ -3,6 +3,13 @@
  * Each one is a single undoable step.
  */
 import { batch, createRoot, createSignal } from 'solid-js';
+import {
+  groupShadeFor,
+  NODE_SHADE,
+  resolveAppearance,
+  shadesOf,
+  type Shade,
+} from '../model/appearance';
 import { normalize } from '../model/document';
 import * as edits from '../model/edits';
 import { findEdge, findGroup, findNode, isEdge, isGroup, selectionRoots } from '../model/graph';
@@ -286,8 +293,31 @@ export function nudgeSelection(dx: number, dy: number) {
 
 export function setColor(color: Diagram['styles'][string]['color']) {
   const ids = selectedIds().filter(id => findNode(doc, id) || findGroup(doc, id));
+  const look = resolveAppearance(doc.appearance);
   transact('Change color', d => {
-    for (const id of ids) edits.setStyle(d, id, { color });
+    for (const id of ids) {
+      edits.setStyle(d, id, { color });
+      // A file-defined family may not have the current shade; use its closest one.
+      const style = d.styles[id],
+        shade = style.shade ?? (findGroup(d, id) ? groupShadeFor(look.theme) : NODE_SHADE),
+        available = color === 'auto' ? [] : shadesOf(look, color);
+      if (available.length && !available.includes(shade))
+        style.shade = available.reduce((a, b) =>
+          Math.abs(b - shade) < Math.abs(a - shade) ? b : a,
+        );
+    }
+  });
+}
+
+/** Set the shade of the selection; `undefined` returns to the default shade. */
+export function setShade(shade: Shade | undefined) {
+  const ids = selectedIds().filter(id => findNode(doc, id) || findGroup(doc, id));
+  transact('Change shade', d => {
+    for (const id of ids) {
+      const style = (d.styles[id] ||= { shape: 'box', color: 'auto', icon: '' });
+      if (shade === undefined) delete style.shade;
+      else style.shade = shade;
+    }
   });
 }
 

@@ -2,7 +2,18 @@ import { LayoutLab } from '../engines/layout-engine.js';
 import { RouteLab } from '../engines/routing-engine.js';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
-import { LEGACY_TYPE_STYLE, PALETTE, SHAPES } from './styles';
+import {
+  defaultAppearance,
+  HEX_COLOR,
+  isBuiltInFamily,
+  isShade,
+  OVERRIDE_LIMITS,
+  THEME_IDS,
+  type AppearanceOverrides,
+  type DiagramAppearance,
+} from './appearance';
+import { FONT_ROLES } from './fonts';
+import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {
   ContainerLayout,
   Diagram,
@@ -43,6 +54,7 @@ export function emptyDiagram(title = 'Untitled diagram'): Diagram {
     settings: clone(DEFAULT_SETTINGS),
     camera: { x: 0, y: 0, k: 1 },
     theme: 'light',
+    appearance: defaultAppearance(),
   };
 }
 
@@ -124,6 +136,8 @@ export function normalize(input: unknown): Diagram {
   if (data.graph.nodes.length > MAX_NODES || data.graph.edges.length > MAX_EDGES)
     throw Error('Use a diagram with at most 500 shapes and 1,200 connections.');
 
+  out.appearance = normalizeAppearance(data.appearance);
+  const families = new Set(out.appearance.colors.map(c => c.family));
   const ids = new Set<string>();
   function check(n: Raw, kind: 'Shape' | 'Container' | 'Connection') {
     if (!n || !validId(n.id)) throw Error(kind + ' requires a nonempty, safe ID.');
@@ -208,11 +222,18 @@ export function normalize(input: unknown): Diagram {
     const style = data.styles?.[n.id] || {};
     if (style.shape !== undefined && !SHAPES.includes(style.shape))
       throw Error(n.id + ': unknown shape.');
-    if (style.color !== undefined && !(style.color in PALETTE))
+    if (
+      style.color !== undefined &&
+      style.color !== 'auto' &&
+      !isBuiltInFamily(style.color) &&
+      !families.has(style.color)
+    )
       throw Error(n.id + ': unknown color.');
+    if (style.shade !== undefined && !isShade(style.shade)) throw Error(n.id + ': unknown shade.');
     out.styles[n.id] = {
       shape: (style.shape as ShapeKind) || 'box',
-      color: style.color || 'blue',
+      color: style.color || 'auto',
+      ...(style.shade !== undefined ? { shade: style.shade } : {}),
       icon: ICONS[style.icon] ? style.icon : '',
     };
     const label = data.layout?.labels?.[n.id];
@@ -305,6 +326,58 @@ export function normalize(input: unknown): Diagram {
     out.camera = { x: c.x, y: c.y, k: clamp(c.k, 0.08, 4) };
   }
   out.theme = data.theme === 'dark' ? 'dark' : 'light';
+  return out;
+}
+
+/** Validate a saved appearance. A missing appearance is the default theme. */
+export function normalizeAppearance(input: Raw): DiagramAppearance {
+  const out = defaultAppearance();
+  if (input === undefined || input === null) return out;
+  if (typeof input !== 'object') throw Error('Invalid appearance.');
+  if (input.theme !== undefined) {
+    if (!THEME_IDS.includes(input.theme)) throw Error('Unknown theme: ' + input.theme);
+    out.theme = input.theme;
+  }
+  const o = input.overrides ?? {},
+    next: AppearanceOverrides = {};
+  for (const key of ['paddingX', 'paddingY', 'radius'] as const)
+    if (o[key] !== undefined) {
+      const { min, max } = OVERRIDE_LIMITS[key];
+      if (!finite(o[key]) || o[key] < min || o[key] > max)
+        throw Error(`Appearance ${key} must be from ${min} to ${max}.`);
+      next[key] = o[key];
+    }
+  for (const key of ['titleFont', 'annotationFont'] as const)
+    if (o[key] !== undefined) {
+      if (!FONT_ROLES.includes(o[key]))
+        throw Error(`Appearance ${key} must be sans, serif or mono.`);
+      next[key] = o[key];
+    }
+  for (const key of ['canvas', 'text', 'connection'] as const)
+    if (o[key] !== undefined) {
+      if (typeof o[key] !== 'string' || !HEX_COLOR.test(o[key]))
+        throw Error(`Appearance ${key} must be a hex color.`);
+      next[key] = o[key];
+    }
+  out.overrides = next;
+  const seen = new Set<string>();
+  for (const c of Array.isArray(input.colors) ? input.colors : []) {
+    if (!c || typeof c.family !== 'string' || !/^[A-Za-z_][A-Za-z0-9_-]*$/.test(c.family))
+      throw Error('Color definitions need a family name.');
+    if (!isShade(c.shade)) throw Error(`${c.family}: unknown shade ${c.shade}.`);
+    if (seen.has(c.family + ':' + c.shade)) throw Error(`Duplicate color ${c.family} ${c.shade}.`);
+    seen.add(c.family + ':' + c.shade);
+    const def: DiagramAppearance['colors'][number] = { family: c.family, shade: c.shade };
+    for (const key of ['fill', 'stroke', 'ink'] as const)
+      if (c[key] !== undefined) {
+        if (typeof c[key] !== 'string' || !HEX_COLOR.test(c[key]))
+          throw Error(`${c.family} ${c.shade}: ${key} must be a hex color.`);
+        def[key] = c[key];
+      }
+    if (!isBuiltInFamily(c.family) && !(def.fill && def.stroke && def.ink))
+      throw Error(`${c.family} ${c.shade}: a new color needs fill, stroke and ink.`);
+    out.colors.push(def);
+  }
   return out;
 }
 

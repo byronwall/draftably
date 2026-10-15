@@ -1,13 +1,17 @@
 /** SVG contact sheets and JSON experiments exported from Compare. */
+import { resolveAppearance } from '../model/appearance';
 import { rectUnion } from '../model/geometry';
+import { fontFaceCss } from '../lib/font-data';
 import { downloadText, escapeXml, materializeSvg, serializeSvg } from '../lib/svg-export';
 import { anchorFor, comparison, experiment, LAYER_COLORS } from './comparison';
 
 const text = (value: string, x: number, y: number, size = 14, weight = 400, fill = '#626a7e') =>
   `<text x="${x}" y="${y}" font-family="Arial,Helvetica,sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}">${escapeXml(value)}</text>`;
 
-const canvasColor = () =>
-  getComputedStyle(document.documentElement).getPropertyValue('--canvas').trim() || '#fbfbfd';
+/** The diagram's own canvas color and fonts, so tiles look as they do on the canvas. */
+const look = () => resolveAppearance(comparison.baseline?.appearance);
+const canvasColor = () => look().canvas;
+const fonts = () => `<defs><style>${fontFaceCss(look())}</style></defs>`;
 
 /** Every ready candidate, each fitted independently in a grid of tiles. */
 function gridSheet(): string | null {
@@ -25,6 +29,7 @@ function gridSheet(): string | null {
     h = header + Math.ceil(ready.length / cols) * (tileH + gap) + margin;
   const routing = comparison.generatedConfig?.mode === 'routing';
   let body =
+    fonts() +
     `<rect width="${w}" height="${h}" fill="#f4f5f9"/>` +
     text(comparison.baseline!.title, margin, 40, 24, 700, '#222738') +
     text(
@@ -104,7 +109,7 @@ function overlaySheet(): string | null {
     )
     .join('');
   const dark = document.documentElement.dataset.theme === 'dark';
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="${dark ? '#191c27' : '#fbfbfd'}"/><text x="36" y="38" font-family="Arial" font-size="24" fill="${dark ? '#e8eaf3' : '#222738'}">${escapeXml(comparison.baseline!.title)} · overlay</text><text x="36" y="66" font-family="Arial" font-size="14" fill="#697185">Aligned on ${escapeXml(anchor)} · translation only · common scale ${Math.round(k * 100)}%</text><g transform="translate(${pad - b.x * k},${head - b.y * k}) scale(${k})">${content}</g>${legend}</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">${fonts()}<rect width="${w}" height="${h}" fill="${dark ? '#191c27' : '#fbfbfd'}"/><text x="36" y="38" font-family="Arial" font-size="24" fill="${dark ? '#e8eaf3' : '#222738'}">${escapeXml(comparison.baseline!.title)} · overlay</text><text x="36" y="66" font-family="Arial" font-size="14" fill="#697185">Aligned on ${escapeXml(anchor)} · translation only · common scale ${Math.round(k * 100)}%</text><g transform="translate(${pad - b.x * k},${head - b.y * k}) scale(${k})">${content}</g>${legend}</svg>`;
 }
 
 /** Save the visible presentation as SVG. Returns false when there is nothing to save. */

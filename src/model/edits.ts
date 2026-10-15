@@ -205,7 +205,7 @@ export function addNode(doc: Diagram, partial: NewNode, at: Point): string {
     manual: false,
     pinned: false,
   };
-  doc.styles[id] = { shape, color: 'blue', icon: '', ...partial.style };
+  doc.styles[id] = { shape, color: 'auto', icon: '', ...partial.style };
   if (partial.parentId) ensureParentsFit(doc, id);
   return id;
 }
@@ -315,7 +315,7 @@ export function addConnectedNode(doc: Diagram, options: ConnectedNode, fallback:
   doc.layout.nodes[id] = { ...pos, manual: false, pinned: false };
   doc.styles[id] = {
     shape: 'box',
-    color: reference ? styleOf(doc, reference.id).color : 'blue',
+    color: reference ? styleOf(doc, reference.id).color : 'auto',
     icon: '',
     ...style,
   };
@@ -482,7 +482,7 @@ export function createContainer(
   doc.graph.groups.push({ id, title, ...(parentId ? { parentId } : {}) });
   doc.layout.nodes[id] = { ...rect, manual: false, pinned: false };
   doc.layout.containers[id] = { direction: 'inherit', padding: 24, manualSize: true };
-  doc.styles[id] = { shape: 'box', color: 'violet', icon: '' };
+  doc.styles[id] = { shape: 'box', color: 'auto', icon: '' };
   for (const root of roots) {
     const n = findObject(doc, root);
     if (n) n.parentId = id;
@@ -606,7 +606,7 @@ export function setGeometry(doc: Diagram, id: string, key: 'x' | 'y' | 'w' | 'h'
 }
 
 export function setStyle(doc: Diagram, id: string, patch: Partial<NodeStyle>) {
-  const style = (doc.styles[id] ||= { shape: 'box', color: 'blue', icon: '' });
+  const style = (doc.styles[id] ||= { shape: 'box', color: 'auto', icon: '' });
   Object.assign(style, patch);
   const p = doc.layout.nodes[id];
   if (patch.shape === 'icon') {

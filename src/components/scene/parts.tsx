@@ -1,13 +1,15 @@
 import { For, Show } from 'solid-js';
-import { LABEL_FONT } from '../../model/labels';
+import type { TypeProfile } from '../../model/fonts';
 import type { Rect } from '../../model/types';
 
-/** Multi-line, vertically centered text. */
+/** Multi-line, vertically centered text in one of the diagram's type profiles. */
 export function SceneText(props: {
   lines: string[];
   x: number;
   y: number;
   lineHeight: number;
+  type: TypeProfile;
+  fill: string;
   class?: string;
 }) {
   const first = () => props.y - ((props.lines.length - 1) * props.lineHeight) / 2;
@@ -16,9 +18,10 @@ export function SceneText(props: {
       class={props.class}
       x={props.x}
       y={first()}
-      font-size="13"
-      font-weight="550"
-      font-family={LABEL_FONT}
+      font-size={String(props.type.size)}
+      font-weight={String(props.type.weight)}
+      font-family={props.type.family}
+      fill={props.fill}
       text-anchor="middle"
       dominant-baseline="central"
     >

@@ -20,7 +20,7 @@ import { chromium } from 'playwright-core';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const entry = process.env.DRAFTABLY_BIN ?? path.join(root, 'scripts/draftably.mjs');
 const example = process.env.DRAFTABLY_EXAMPLE ?? path.join(root, 'examples/checkout.draft');
-const port = 5199;
+const port = Number(process.env.PROOF_PORT ?? 5199);
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draft-proof-'));
 const file = path.join(dir, 'architecture.draft');
 const out = path.join(root, 'tmp/proof');

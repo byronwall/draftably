@@ -5,9 +5,11 @@ export type Side = 'left' | 'right' | 'top' | 'bottom';
 export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
+import type { DiagramAppearance, Shade } from './appearance';
 
 export type ShapeKind = 'box' | 'pill' | 'circle' | 'diamond' | 'text' | 'icon' | 'image';
-export type ColorKey = 'violet' | 'blue' | 'mint' | 'amber' | 'rose' | 'slate';
+/** A color family: a built-in one, one the file defines, or `auto` for the theme's surface. */
+export type ColorKey = string;
 export type LabelMode = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'detached';
 
 export interface DiagramNode {
@@ -76,6 +78,8 @@ export type LayoutIntent = Partial<Record<IntentRole, { id: string; placement: I
 export interface NodeStyle {
   shape: ShapeKind;
   color: ColorKey;
+  /** Numeric shade; omitted means the default for the object (500 for nodes, 100 for groups). */
+  shade?: Shade;
   icon: string;
 }
 
@@ -163,7 +167,10 @@ export interface Diagram {
   collapsed: string[];
   settings: DiagramSettings;
   camera: Camera;
+  /** Editor light or dark mode; independent of the diagram's appearance. */
   theme: Theme;
+  /** Diagram theme, overrides and color definitions. Saved with the diagram. */
+  appearance: DiagramAppearance;
 }
 
 export type NodeGeometry = Record<string, NodeLayout>;

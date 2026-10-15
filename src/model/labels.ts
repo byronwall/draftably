@@ -1,62 +1,49 @@
+import { resolveAppearance, type ResolvedAppearance } from './appearance';
+import { measureText, wrapLines } from './fonts';
 import { rectUnion } from './geometry';
-import type { Diagram, LabelMode, Rect } from './types';
+import type { Diagram, LabelMode, Rect, ShapeKind } from './types';
 import { styleOf } from './graph';
 
-export const LABEL_FONT = 'Inter, Segoe UI, Arial, sans-serif';
-export const LABEL_SIZE = 13;
-export const LABEL_WEIGHT = 550;
-export const LINE_HEIGHT = 16;
-
-let context: CanvasRenderingContext2D | null | undefined;
-const widths = new Map<string, number>();
-
-/** Rendered width of a label, with a rough fallback outside the browser. */
-export function textWidth(text: string, size = LABEL_SIZE, weight = LABEL_WEIGHT) {
-  const key = `${size}|${weight}|${text}`;
-  let width = widths.get(key);
-  if (width === undefined) {
-    if (context === undefined)
-      context =
-        typeof document === 'undefined' ? null : document.createElement('canvas').getContext('2d');
-    if (context) {
-      context.font = `${weight} ${size}px ${LABEL_FONT}`;
-      width = context.measureText(text).width;
-    } else width = text.length * size * 0.55;
-    if (widths.size > 5000) widths.clear();
-    widths.set(key, width);
-  }
-  return width;
+/**
+ * Room for a shape's title. Every size, wrap and overflow decision goes through these functions,
+ * in the compiler, the canvas and the CLI alike.
+ */
+export interface TitleArea {
+  /** Line width available to the title. */
+  width: number;
+  /** Tallest text block that fits inside the shape at its current height. */
+  maxHeight: number;
 }
 
-/** Break text into lines no wider than `width`, splitting long words by character. */
-export function wrapText(text: string, width: number, size = LABEL_SIZE): string[] {
-  const lines: string[] = [];
-  for (const paragraph of String(text).split('\n')) {
-    let line = '';
-    for (const word of paragraph.split(/\s+/)) {
-      if (!word) continue;
-      if (textWidth(word, size) > width) {
-        if (line) lines.push(line);
-        let part = '';
-        for (const char of word) {
-          if (part && textWidth(part + char, size) > width) {
-            lines.push(part);
-            part = '';
-          }
-          part += char;
-        }
-        line = part;
-        continue;
-      }
-      if (line && textWidth(line + ' ' + word, size) > width) {
-        lines.push(line);
-        line = word;
-      } else line += (line ? ' ' : '') + word;
-    }
-    lines.push(line);
-  }
-  return lines.length ? lines : [''];
+export function titleArea(
+  shape: ShapeKind,
+  w: number,
+  h: number,
+  r: ResolvedAppearance,
+  icon = false,
+): TitleArea {
+  // A diamond's text block sits in its middle: at 45% of its height the outline is 55% wide.
+  if (shape === 'diamond') return { width: Math.max(40, w * 0.55), maxHeight: h * 0.45 };
+  // An ellipse is 71% wide at 70% of its height.
+  if (shape === 'circle') return { width: Math.max(40, w * 0.7), maxHeight: h * 0.7 };
+  const padY = shape === 'text' ? Math.min(r.paddingY, 11) : r.paddingY;
+  return {
+    width: Math.max(40, w - 2 * r.paddingX - (icon ? 30 : 0) - (shape === 'pill' ? 8 : 0)),
+    maxHeight: h - 2 * padY,
+  };
 }
+
+/** Height a shape needs for `lines` title lines; never less than `base`. */
+export function titleHeight(shape: ShapeKind, lines: number, base: number, r: ResolvedAppearance) {
+  const text = lines * r.title.lineHeight;
+  if (shape === 'diamond') return Math.max(base, Math.ceil(text / 0.45));
+  if (shape === 'circle') return Math.max(base, Math.ceil(text / 0.7));
+  if (shape === 'text') return text + 2 * Math.min(r.paddingY, 11);
+  return text + 2 * r.paddingY;
+}
+
+export const wrapTitle = (text: string, width: number, r: ResolvedAppearance) =>
+  wrapLines(text, width, r.title);
 
 export interface NodeLabel {
   /** Center of the label, relative to the shape's top-left corner. */
@@ -79,17 +66,15 @@ export function nodeLabel(doc: Diagram, id: string, title: string, r: Rect): Nod
     (style.shape === 'icon' || style.shape === 'image' || (style.shape === 'circle' && style.icon)
       ? 'bottom'
       : 'center');
-  let x = r.w / 2,
+  const look = resolveAppearance(doc.appearance),
+    lineHeight = look.title.lineHeight;
+  const iconInside = mode === 'center' && !!style.icon && ['box', 'pill'].includes(style.shape);
+  let x = r.w / 2 + (iconInside ? 15 : 0),
     y = r.h / 2,
-    width = cfg.width || Math.max(60, r.w - 24);
-  if (mode === 'center' && style.icon && ['box', 'pill'].includes(style.shape)) {
-    x += 14;
-    width = Math.max(55, r.w - 65);
-  }
-  if (style.shape === 'diamond' && mode === 'center') width = Math.max(50, r.w * 0.64);
+    width = cfg.width || titleArea(style.shape, r.w, r.h, look, iconInside).width;
   if (mode !== 'center') width = cfg.width || Math.max(142, r.w);
-  const lines = wrapText(title, width),
-    height = lines.length * LINE_HEIGHT;
+  const lines = wrapTitle(title, width, look),
+    height = lines.length * lineHeight;
   if (mode === 'top') y = -16 - height / 2;
   if (mode === 'bottom') y = r.h + 15 + height / 2;
   if (mode === 'left') x = -20 - width / 2;
@@ -108,7 +93,7 @@ export function nodeLabel(doc: Diagram, id: string, title: string, r: Rect): Nod
     height,
     lines,
     mode,
-    lineHeight: LINE_HEIGHT,
+    lineHeight,
     leader: cfg.leader ?? mode === 'detached',
   };
 }
@@ -122,7 +107,11 @@ export function visualBounds(doc: Diagram, id: string, title: string, r: Rect): 
   ]);
 }
 
-/** Approximate box for a connection label; text is short so a width estimate is enough. */
-export function edgeLabelSize(label: string) {
-  return { w: Math.min(280, Math.max(36, label.length * 5.9 + 16)), h: 21 };
+/** Box for a connection label in the diagram's annotation type. */
+export function edgeLabelSize(label: string, r: ResolvedAppearance = resolveAppearance()) {
+  const w = measureText(label, r.annotation) + 16;
+  return {
+    w: Math.round(Math.min(280, Math.max(36, w))),
+    h: Math.round(r.annotation.lineHeight + 6),
+  };
 }

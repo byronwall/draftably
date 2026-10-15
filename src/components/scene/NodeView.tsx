@@ -2,7 +2,7 @@ import { createMemo, For, Match, Show, Switch } from 'solid-js';
 import { findNode, styleOf } from '../../model/graph';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
-import { colorTokens } from '../../model/styles';
+import { resolveAppearance, swatchFor } from '../../model/appearance';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
@@ -27,7 +27,8 @@ export interface NodeViewProps {
 export function NodeView(props: NodeViewProps) {
   const node = () => findNode(props.doc, props.id)!;
   const style = () => styleOf(props.doc, props.id);
-  const color = () => colorTokens(style().color, props.doc.theme);
+  const look = () => resolveAppearance(props.doc.appearance);
+  const color = () => swatchFor(look(), style().color, style().shade, 'node');
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   const ringRadius = () => {
     const { shape } = style(),
@@ -40,7 +41,7 @@ export function NodeView(props: NodeViewProps) {
     fill: color().fill,
     stroke: color().stroke,
     'stroke-width': 1.2,
-    class: 'node-shape',
+    class: look().shadow ? 'node-shape shadowed' : 'node-shape',
   });
 
   const glyph = () => {
@@ -91,7 +92,12 @@ export function NodeView(props: NodeViewProps) {
           rx={ringRadius()}
         />
       </Show>
-      <ShapeOutline shape={style().shape} rect={props.rect} attrs={shapeAttrs()} />
+      <ShapeOutline
+        shape={style().shape}
+        rect={props.rect}
+        radius={look().radius}
+        attrs={shapeAttrs()}
+      />
       <Show when={style().shape === 'image'}>
         <Show
           when={node().image}
@@ -130,6 +136,8 @@ export function NodeView(props: NodeViewProps) {
         x={label().x}
         y={label().y}
         lineHeight={label().lineHeight}
+        type={look().title}
+        fill={label().mode === 'center' && style().shape !== 'text' ? color().ink : look().text}
       />
       <Show when={props.interactive}>
         <PositionBadge
@@ -160,6 +168,7 @@ export function NodeView(props: NodeViewProps) {
 function ShapeOutline(props: {
   shape: string;
   rect: NodeLayout;
+  radius: number;
   attrs: Record<string, string | number>;
 }) {
   const w = () => props.rect.w,
@@ -170,7 +179,7 @@ function ShapeOutline(props: {
         <rect
           width={w()}
           height={h()}
-          rx={props.shape === 'pill' ? h() / 2 : 11}
+          rx={props.shape === 'pill' ? h() / 2 : props.radius}
           {...props.attrs}
         />
       }

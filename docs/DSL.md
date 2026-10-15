@@ -36,17 +36,68 @@ and groups. References may point to later lines.
 | Statement                          | Meaning                                                                                                                           |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
 | `diagram "title" version=1`        | Optional title. At most one.                                                                                                      |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shape=box\|pill\|circle\|diamond\|text`.                                                          |
-| `group id "label"`                 | A container. `in=group`, `color=`.                                                                                                |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                      |
+| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                      |
+| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                         |
 | `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                         |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`. |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
 
-Colors are `auto`, `violet`, `blue`, `mint`, `amber`, `rose` and `slate`; Meld's `teal` and
-`orange` are read as `mint` and `amber`. An `auto` color inherits from the nearest colored group.
-Without a `layout` line, `root` uses `flow gap=48` and groups use `column gap=24`.
+Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
+family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
+use `column gap=24`.
+
+## Themes and colors
+
+The file owns the diagram's appearance. A `theme` line picks a preset and may override its
+diagram-wide values; `theme-color` lines change or add colors. Every value is optional: anything
+not written comes from the preset, and a file with no `theme` line uses Graphite.
+
+```text
+theme fieldnotes padding-x=18 padding-y=12 radius=3 title-font=serif annotation-font=sans
+theme-color blue shade=500 fill="#405D48"
+theme-color brand shade=100 fill="#EAF1ED" stroke="#9AB4A4" ink="#244431"
+theme-color brand shade=800 fill="#244431" stroke="#244431" ink="#FFFFFF"
+node context "Context" color=brand shade=100
+node focus "Main step" color=brand shade=800
+```
+
+| Theme        | Character                                               | Titles     | Padding x / y |
+| ------------ | ------------------------------------------------------- | ---------- | ------------- |
+| `graphite`   | Compact and neutral, deep green and ochre. The default. | sans-serif | 12 / 20       |
+| `fieldnotes` | Editorial: serif node and group titles on warm paper.   | serif      | 18 / 22       |
+| `signal`     | Cobalt on white, monospace connection labels.           | sans-serif | 16 / 20       |
+| `mulberry`   | Berry and lilac, generous padding for presentations.    | sans-serif | 22 / 26       |
+| `midnight`   | Dark ink with teal and coral, monospace titles.         | monospace  | 16 / 20       |
+
+`theme` attributes: `padding-x` and `padding-y` (4–48, the space between a node's edge and its
+title), `radius` (0–24, rectangle corners), `title-font` and `annotation-font` (`sans`, `serif` or
+`mono`), and `canvas`, `text` and `connection` colors. Colors are hex values in double quotes:
+`#` outside quotes starts a comment.
+
+**Families and shades.** Built-in families: `primary` and `secondary` (the theme's own accents),
+`slate`, `stone`, `blue`, `sky`, `teal`, `mint`, `green`, `amber`, `orange`, `red`, `rose` and
+`violet`. Each has shades `50 100 200 300 400 500 600 700 800 900 950`; lower numbers are lighter
+and higher numbers darker in every theme, dark ones included. Shades 50–300 are pale fills with
+dark text and 400–950 are fills with white text, each held to WCAG contrast targets (7:1 and
+4.5:1). A node that names a color without a shade uses 500; a group uses a quiet surface shade
+(100, or 900 in Midnight). Shade is chosen per object: `color=auto` inherits a group's family,
+never its shade. A node with neither color nor shade uses the theme's neutral surface.
+
+`theme-color family shade=N fill= stroke= ink=` sets one shade (`shade` defaults to 500). For a
+built-in family any of the three may be given and the rest come from the theme. A new family,
+such as `brand`, defines each shade it uses with all three. Referencing a family or shade that is
+not defined is an error on the referencing line. Each family and shade may be declared once.
+
+Padding and title type change node sizes and so the layout; colors and shades never move
+anything.
+
+Titles wrap using width tables for the bundled fonts (Inter, Source Serif 4 and JetBrains Mono,
+under the SIL Open Font License), so the compiler, the viewer and `inspect --svg` break every
+title at the same place. Exported SVG files embed the fonts they use.
 
 ## Layout engines
 
@@ -105,7 +156,7 @@ content area, not the whole canvas, so moving a group moves everything inside it
 | `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                    |
 | `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these. |
 | `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                |
-| `size id width= height=`                 | —        | Requested node size. Long labels can make it taller.                                   |
+| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown.                     |
 | `order scope id...`                      | soft     | Preferred order of a scope's children.                                                 |
 | `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                             |
 
@@ -145,8 +196,8 @@ current source to a new file in the served folder and opens it; on the static si
 The file is the source of truth while it is open: browser storage is not read or written, and
 moving the camera never changes the file.
 
-`inspect` uses the editor's own router, so its geometry matches the viewer. Edge label positions
-are left out because the browser measures label text with real fonts.
+`inspect` uses the editor's own router and the same font tables, so its geometry matches the
+viewer. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ## Editing in the viewer
 
@@ -158,6 +209,7 @@ Edits made in the viewer are written back to the file as readable statements:
 | Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.             |
 | Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.   |
 | Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label.  |
+| Color family or shade in Inspector    | `color=` and `shade=` on the declaration.                          |
 | Wrap in a container or ungroup        | A `group` and the members' `in=`.                                  |
 | Clear manual markers                  | Removes the object's soft position refinements.                    |
 | Rebuild, or Apply in Compare          | `layout scope engine=…` for the diagram or the selected container. |
