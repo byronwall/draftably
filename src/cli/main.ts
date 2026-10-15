@@ -19,6 +19,8 @@ Commands:
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
        [--port N]           Without a file, start on a picker for the folder's diagrams,
                             a new diagram, or an example. --no-open skips the browser.
+                            Uses the first free port from 5180 unless --port is given;
+                            --port 0 picks any free port. The Viewer line has the URL.
 `;
 
 const describe = (d: Diagnostic) =>
@@ -65,11 +67,12 @@ export async function main(argv: string[]): Promise<number> {
         const args = [file, ...rest].filter((a): a is string => !!a);
         const at = args.indexOf('--port');
         const port = at >= 0 ? Number(args[at + 1]) : 5180;
-        if (!Number.isInteger(port) || port < 1 || port > 65535)
-          throw new UsageError('--port must be an integer from 1 to 65535.');
+        if (!Number.isInteger(port) || port < 0 || port > 65535)
+          throw new UsageError('--port must be an integer from 0 to 65535.');
         const target = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--port');
         await openSession(path.resolve(target ?? '.'), {
           port,
+          portGiven: at >= 0,
           launch: !args.includes('--no-open'),
         });
         return -1;
