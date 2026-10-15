@@ -14,9 +14,39 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The changeset check compares the branch with its base.
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - run: pnpm install --frozen-lockfile
+      - name: Require a changeset for shipped changes
+        if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'changeset-release/')
+        run: pnpm changeset:check origin/${{ github.base_ref }}
       - run: pnpm release:check
+
+  proofs:
+    # Drives the real editor in Chromium against `draftably open`. Failure screenshots and
+    # failure.json are uploaded as an artifact.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright-core install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm prove:file
+      - run: pnpm prove:layout
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: proof-screenshots
+          path: |
+            tmp/proof/
+            tmp/proof-layout/

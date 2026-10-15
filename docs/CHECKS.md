@@ -3,11 +3,12 @@
 ## Automated
 
 ```sh
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
+pnpm check:fast   # typecheck, lint, format check, Vitest: about 10 seconds
+pnpm check        # check:fast, the engine suites (about 80 seconds) and the build
 ```
+
+Run `check:fast` while iterating and `check` before pushing. CI runs `pnpm release:check`, which
+is `check:fast`, the engine suites and the packaged-CLI proof.
 
 | Suite                                   | What it covers                                                                                                                                                                                                                                                                                               |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -35,7 +36,14 @@ below against the installed CLI. Only the proof harness uses the repository's Pl
 The installed product has no runtime package dependencies or install scripts.
 
 GitHub's Check workflow and the release gate run `pnpm release:check`, including the clean-install
-CLI and HTTP proof. The full browser proof runs locally with an installed Playwright Chromium.
+CLI and HTTP proof. The workflow's `proofs` job runs `prove:file` and `prove:layout` in Chromium
+and uploads their screenshots when they fail.
+
+Both browser proofs share `scripts/lib/proof.mjs`. It starts `draftably open --port 0`, so a proof
+never collides with another worktree's viewer. When a check fails, the summary names it and the
+output folder gets `failure.png` (the page at the end of the run) and `failure.json` (failed checks,
+the viewer's file state and the last 50 console lines). One failed run is enough to start
+diagnosing; don't rerun until it passes.
 
 `pnpm build && pnpm prove:file` drives the real editor in Chromium (`playwright-core` with an
 installed Playwright Chromium) against a temporary copy of `examples/checkout.draft` served by
@@ -79,3 +87,11 @@ The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at
 
 The layout engines are heuristics: they can leave crossings or ordering conflicts and do not
 promise a globally optimal drawing.
+
+## Screenshots
+
+`pnpm shoot <target> tmp/out.png` captures a URL, a `.draft` file (drawn through
+`draftably inspect --svg`), or an SVG, PNG or HTML file. `pnpm shoot --sheet tmp/sheet.png
+Label::a.draft b.draft …` lays several targets out as a labeled contact sheet. Use it for PR
+screenshots and visual checks instead of writing a one-off Playwright script. Keep the output in the
+ignored `tmp/` folder.
