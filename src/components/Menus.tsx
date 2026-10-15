@@ -23,6 +23,7 @@ import { closeMenu, menu, openMenu, type MenuState } from '../state/ui';
 import { RangeField } from './controls';
 import { Icon } from './Icon';
 import './menus.css';
+import { workspace } from '../state/launch';
 
 /** The open popover menu, positioned under its anchor. */
 export function Menus() {
@@ -205,6 +206,9 @@ function FileMenu() {
   return (
     <>
       <MenuItem command="start" />
+      <Show when={workspace()}>
+        <MenuItem command="find-file" />
+      </Show>
       <MenuItem command="new-diagram" />
       <MenuItem command="quick-build" />
       <MenuItem command="open" />

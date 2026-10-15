@@ -31,10 +31,12 @@ import { fileMode, reflowSelectedGroup } from './file-session';
 import { setStartOpen, startUrl, workspace } from './launch';
 import { toast } from './toast';
 import {
+  filesShown,
   inspectorOpen,
   objectsOpen,
   openDialog,
   openQuickBuild,
+  setFilesOpen,
   setInspectorOpen,
   setObjectsOpen,
   toggleLayoutLab,
@@ -77,6 +79,14 @@ function exportCommand(format: 'json' | 'svg' | 'png') {
   }
   return exportDocument(format).catch(error =>
     toast(error instanceof Error ? error.message : String(error)),
+  );
+}
+
+/** Show the files panel and put the cursor in its filter. */
+function findFile() {
+  setFilesOpen(true);
+  requestAnimationFrame(() =>
+    document.querySelector<HTMLInputElement>('.files-panel .panel-search input')?.select(),
   );
 }
 
@@ -264,6 +274,22 @@ export const commands = {
     keys: '[',
     icon: 'panel-left',
     run: () => setObjectsOpen(!objectsOpen()),
+    duringTimeline: true,
+  },
+  'toggle-files': {
+    label: 'Diagrams in this folder',
+    keys: 'F',
+    icon: 'folder',
+    run: () => setFilesOpen(!filesShown()),
+    enabled: () => !!workspace(),
+    duringTimeline: true,
+  },
+  'find-file': {
+    label: 'Go to diagram…',
+    keys: '⌘P',
+    icon: 'search',
+    run: findFile,
+    enabled: () => !!workspace(),
     duringTimeline: true,
   },
   'toggle-inspector': {

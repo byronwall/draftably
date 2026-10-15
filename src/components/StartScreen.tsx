@@ -1,4 +1,4 @@
-import { createResource, createSignal, For, onMount, Show } from 'solid-js';
+import { createMemo, createResource, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { renderSvg } from '../cli/svg';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
@@ -13,19 +13,35 @@ import {
   newDiagramSource,
   refreshWorkspace,
   setStartOpen,
+  thumbnailUrl,
+  watchWorkspace,
   workspace,
 } from '../state/launch';
+import type { WorkspaceFile } from '../server/workspace';
 import { IconButton } from './controls';
+import { FileTime } from './FilesPanel';
 import { Icon } from './Icon';
 import './start.css';
+import {
+  ago,
+  baseName,
+  fileOrder,
+  folderOf,
+  matchFiles,
+  setFileOrder,
+  sortFiles,
+} from './workspace-files';
 
 /**
- * Where a session starts: make a new diagram, open one from the served folder, or try an example.
- * As a page it is the whole screen of `draftably open` without a file; as a dialog it sits over the
- * editor and can be closed.
+ * Where a session starts. A served folder with diagrams shows those diagrams and little else; an
+ * empty folder or the static site offers a new diagram and the examples. As a page it is the whole
+ * screen of `draftably open` without a file; as a dialog it sits over the editor and can be closed.
  */
 export function StartScreen(props: { variant: 'page' | 'dialog' }) {
-  onMount(() => void refreshWorkspace());
+  onMount(() => {
+    void refreshWorkspace();
+    onCleanup(watchWorkspace());
+  });
   return (
     <div
       class="start"
@@ -56,13 +72,20 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
         <Show when={launchNotice()}>
           <p class="start-notice">{launchNotice()}</p>
         </Show>
-        <div class="start-body">
-          <div class="start-side">
-            <NewDiagram />
-            <FolderFiles />
-          </div>
-          <Examples />
-        </div>
+        <Show
+          when={workspace()?.files.length}
+          fallback={
+            <div class="start-body">
+              <div class="start-side">
+                <NewDiagram />
+                <FolderFiles />
+              </div>
+              <Examples />
+            </div>
+          }
+        >
+          <FolderHome />
+        </Show>
       </div>
     </div>
   );
@@ -145,15 +168,6 @@ function NewDiagram() {
   );
 }
 
-const ago = (ms: number) => {
-  const minutes = Math.round((Date.now() - ms) / 60000);
-  if (minutes < 1) return 'just now';
-  if (minutes < 60) return `${minutes} min ago`;
-  const hours = Math.round(minutes / 60);
-  if (hours < 24) return `${hours} h ago`;
-  return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-};
-
 function FolderFiles() {
   const [filter, setFilter] = createSignal('');
   const files = () => {
@@ -212,6 +226,117 @@ function FolderFiles() {
   );
 }
 
+/**
+ * The served folder's diagrams, newest first, as large thumbnails. Typing filters; Enter opens the
+ * first match. Examples stay out of the way behind a closed section at the end.
+ */
+function FolderHome() {
+  const [query, setQuery] = createSignal('');
+  const [creating, setCreating] = createSignal(false);
+  const files = createMemo(() =>
+    sortFiles(matchFiles(workspace()?.files ?? [], query()), fileOrder()),
+  );
+  return (
+    <div class="start-home">
+      <div class="start-toolbar">
+        <h2>
+          Diagrams <span class="count">{workspace()?.files.length}</span>
+        </h2>
+        <input
+          class="start-search"
+          type="search"
+          placeholder="Find a diagram…"
+          aria-label="Find a diagram"
+          value={query()}
+          ref={el => requestAnimationFrame(() => el.focus())}
+          onInput={e => setQuery(e.currentTarget.value)}
+          onKeyDown={e => {
+            const first = files()[0];
+            if (e.key === 'Enter' && first) location.assign(fileUrl(first.path));
+            if (e.key === 'Escape') setQuery('');
+          }}
+        />
+        <div class="segmented" role="group" aria-label="Order">
+          <button
+            type="button"
+            aria-pressed={fileOrder() === 'recent'}
+            onClick={() => setFileOrder('recent')}
+          >
+            Recent
+          </button>
+          <button
+            type="button"
+            aria-pressed={fileOrder() === 'name'}
+            onClick={() => setFileOrder('name')}
+          >
+            A–Z
+          </button>
+        </div>
+        <span class="grow" />
+        <button
+          type="button"
+          class="button primary"
+          aria-expanded={creating()}
+          onClick={() => setCreating(!creating())}
+        >
+          <Icon name="plus" />
+          New diagram
+        </button>
+      </div>
+      <Show when={creating()}>
+        <div class="start-new-panel">
+          <NewDiagram />
+        </div>
+      </Show>
+      <Show
+        when={files().length}
+        fallback={<p class="start-hint start-none">No diagram matches “{query()}”.</p>}
+      >
+        <ul class="start-gallery start-file-grid">
+          <For each={files()}>{file => <FileCard file={file} />}</For>
+        </ul>
+      </Show>
+      <details class="start-more-examples">
+        <summary>
+          Examples <span class="start-hint">Scratch copies for learning the language</span>
+        </summary>
+        <ExampleGallery />
+      </details>
+    </div>
+  );
+}
+
+function FileCard(props: { file: WorkspaceFile }) {
+  const [failed, setFailed] = createSignal(false);
+  return (
+    <li>
+      <a class="start-example start-file-card" href={fileUrl(props.file.path)}>
+        <span class="start-thumb">
+          <Show
+            when={!failed()}
+            fallback={<span class="start-thumb-note">Not drawn: the file has an error</span>}
+          >
+            <img
+              src={thumbnailUrl(props.file)}
+              alt=""
+              loading="lazy"
+              onError={() => setFailed(true)}
+            />
+          </Show>
+        </span>
+        <span class="start-example-title">{props.file.title || baseName(props.file.path)}</span>
+        <span class="start-example-meta start-file-meta">
+          <span class="start-file-path">
+            <Show when={folderOf(props.file.path)}>{folderOf(props.file.path)}/</Show>
+            {baseName(props.file.path)}
+          </span>
+          <FileTime modified={props.file.modified} />
+        </span>
+      </a>
+    </li>
+  );
+}
+
 function Examples() {
   return (
     <section class="start-section start-examples">
@@ -221,12 +346,16 @@ function Examples() {
           Opens a scratch copy. Nothing is written to disk unless you save it as a file.
         </span>
       </div>
-      <ul class="start-gallery">
-        <For each={EXAMPLES}>{example => <ExampleCard example={example} />}</For>
-      </ul>
+      <ExampleGallery />
     </section>
   );
 }
+
+const ExampleGallery = () => (
+  <ul class="start-gallery">
+    <For each={EXAMPLES}>{example => <ExampleCard example={example} />}</For>
+  </ul>
+);
 
 const nesting = (depth: number) =>
   depth === 0 ? 'Flat' : `${depth} level${depth === 1 ? '' : 's'} deep`;

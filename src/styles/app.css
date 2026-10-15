@@ -660,6 +660,155 @@ input[type='range'] {
   font-size: var(--text-xs);
 }
 
+/* Files panel: the served folder's diagrams */
+
+.files-panel {
+  width: 240px;
+  border-right: 1px solid var(--line);
+}
+
+.files-header-actions {
+  display: flex;
+  gap: 2px;
+}
+
+.files-search {
+  display: flex;
+  gap: 6px;
+}
+
+.files-search input {
+  flex: 1;
+  min-width: 0;
+}
+
+.files-order {
+  flex: none;
+}
+
+.files-order button {
+  padding: 0 7px;
+  font-size: var(--text-xs);
+}
+
+.files-new {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 0;
+}
+
+.files-new-path {
+  overflow: hidden;
+  color: var(--muted);
+  font: var(--text-xs) var(--mono);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.files-new-path.error {
+  color: var(--danger);
+  font-family: var(--font);
+  white-space: normal;
+}
+
+.files-list {
+  padding: 0 8px 12px;
+}
+
+.files-list .empty {
+  padding: 8px;
+}
+
+.file-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.file-row:hover,
+.file-row.active {
+  background: var(--hover);
+}
+
+.file-row.current {
+  background: var(--accent-soft);
+}
+
+.file-row-title {
+  overflow: hidden;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.file-row.current .file-row-title {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.file-row-meta {
+  display: flex;
+  gap: 8px;
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+
+.file-row-path {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--mono);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.file-row-folder {
+  opacity: 0.75;
+}
+
+.file-time {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+
+.file-time.changed {
+  color: var(--success);
+  font-weight: 600;
+}
+
+.files-footer {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.files-footer:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.files-footer .icon {
+  flex: none;
+  width: 14px;
+  height: 14px;
+}
+
+.files-footer-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* Objects tree */
 
 .object-tree {

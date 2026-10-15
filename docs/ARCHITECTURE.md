@@ -77,10 +77,12 @@ open, `commit` in `state/document.ts` hands every edit to the session, which tra
 the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
 
 `server/workspace.ts` serves a folder: it lists its `.draft` files, creates new ones (never
-overwriting, never outside the folder), and routes `?file=` requests to one file session per
-path. `state/launch.ts` decides what the viewer opens from the URL and the server: a file, an
+overwriting, never outside the folder), draws SVG thumbnails cached until a file changes, and routes
+`?file=` requests to one file session per path. The dev server loads it through Vite
+(`ssrLoadModule`) so it can use asset imports. `state/launch.ts` decides what the viewer opens from the URL and the server: a file, an
 example (`model/examples.ts` bundles `examples/*.draft`), the start page, or the static app's
-browser copy. An example runs through the same session code with saving switched off.
+browser copy. With files in the folder, the start page and the editor's `FilesPanel` list them and
+poll the folder while visible (`watchWorkspace`); examples show only when the folder is empty. An example runs through the same session code with saving switched off.
 
 `cli/` is the `pnpm draftably` command. `scripts/draftably.mjs` rebuilds it with `vite build --ssr` when a
 source file is newer than `dist-cli/`.
