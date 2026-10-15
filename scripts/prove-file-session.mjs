@@ -70,7 +70,11 @@ async function drag(page, from, to) {
 }
 
 let server = await start();
-const browser = await chromium.launch();
+// Playwright disables this by default, hiding retained live streams during ordinary navigation.
+const browser = await chromium.launch({
+  channel: 'chromium',
+  ignoreDefaultArgs: ['--disable-back-forward-cache'],
+});
 const page = await browser.newPage({
   viewport: { width: 1280, height: 800 },
   deviceScaleFactor: 2,
@@ -226,6 +230,46 @@ try {
   );
   await shot(page, 'proof-5-conflict.png');
   if (conflict) await page.getByRole('button', { name: 'Keep file' }).click();
+
+  // 10. Cached file pages must release their streams so navigation can exceed HTTP/1's six slots.
+  const switchFiles = Array.from({ length: 9 }, (_, i) => `switch-${i}.draft`);
+  for (const [i, name] of switchFiles.entries())
+    fs.writeFileSync(path.join(dir, name), `diagram "Switch ${i}" version=1\nnode a "A"\n`);
+  for (let i = 0; i < 12; i++) {
+    const name = switchFiles[i % switchFiles.length];
+    await page.goto(`${new URL(server.url).origin}/?file=${name}`, {
+      waitUntil: 'commit',
+      timeout: 5000,
+    });
+    await waitFor(page, () => window.diagramStudio?.fileState().status === 'saved', `switch ${i}`);
+    await page.evaluate(() => {
+      window.addEventListener('pageshow', event => {
+        document.documentElement.dataset.proofCachedRestore = String(event.persisted);
+      });
+    });
+  }
+  check('file switching exceeds the browser connection limit without stalling', true);
+
+  // A cached page misses disk changes while away; restoring it must reconnect and catch up.
+  fs.writeFileSync(path.join(dir, switchFiles[1]), 'node restored "Changed while away"\n');
+  await page.goBack({ waitUntil: 'commit' });
+  check(
+    'back navigation actually restores a cached page',
+    await page.evaluate(() => document.documentElement.dataset.proofCachedRestore === 'true'),
+  );
+  await waitFor(
+    page,
+    () => window.diagramStudio?.fileState().source.includes('Changed while away'),
+    'restored file catches up',
+  );
+  check('back navigation reconnects the cached file and catches up', true);
+  await page.goForward({ waitUntil: 'commit' });
+  await waitFor(
+    page,
+    () => window.diagramStudio?.fileState().source.includes('Switch 2'),
+    'forward navigation',
+  );
+  check('forward navigation restores the next file', true);
 } catch (error) {
   check('proof ran to completion', false, error.message);
 } finally {

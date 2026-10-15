@@ -1,5 +1,11 @@
 # draftably
 
+## Unreleased
+
+### Patch Changes
+
+- Close live file-update streams when leaving a diagram and reconnect on cached-page restoration, preventing rapid switching from exhausting browser HTTP connections.
+
 ## 0.3.0
 
 ### Minor Changes
