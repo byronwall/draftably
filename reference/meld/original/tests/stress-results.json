@@ -1,0 +1,44 @@
+{
+  "runtime": "v22.16.0",
+  "platform": "linux",
+  "engine": "meld-0.1",
+  "note": "Synthetic measurements of the original prototype only. No competitor benchmark. Parsing, layout and routing included; DOM paint excluded.",
+  "results": [
+    {
+      "nodes": 25,
+      "groups": 3,
+      "edges": 24,
+      "layout": "10 nodes per group, grid=2, root=row, chain edges",
+      "warmMedianMs": 13.57,
+      "maxMs": 15.45,
+      "runs": 5,
+      "warnings": 0,
+      "fitScale": 0.915985107421875,
+      "geometryKey": "afbabbf0"
+    },
+    {
+      "nodes": 50,
+      "groups": 5,
+      "edges": 49,
+      "layout": "10 nodes per group, grid=2, root=row, chain edges",
+      "warmMedianMs": 15.33,
+      "maxMs": 32.31,
+      "runs": 5,
+      "warnings": 0,
+      "fitScale": 0.540802001953125,
+      "geometryKey": "e9c61a75"
+    },
+    {
+      "nodes": 100,
+      "groups": 10,
+      "edges": 99,
+      "layout": "10 nodes per group, grid=2, root=row, chain edges",
+      "warmMedianMs": 80.65,
+      "maxMs": 85.16,
+      "runs": 5,
+      "warnings": 0,
+      "fitScale": 0.2671966552734375,
+      "geometryKey": "87605f5b"
+    }
+  ]
+}

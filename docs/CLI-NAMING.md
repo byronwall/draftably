@@ -32,13 +32,13 @@ Glide gave a stronger automation cue. BoxLane also suggested packaging and swiml
 
 Round 3 combined these meanings with collision checks. Scores range from 0 (no cue) to 10 (immediate cue).
 
-| Name | Implied diagrams | Guided layout | User control | Evidence and tradeoff |
-| --- | ---: | ---: | ---: | --- |
-| **GraphSteer** | 9 | 7 | 10 | [npm 404](https://registry.npmjs.org/graphsteer). Only an [empty exact-name repository](https://github.com/CallieSardina/GraphSteer) surfaced. Strong control cue; automation is less clear. |
-| **BoxNudge** | 8 | 7 | 9 | [npm 404](https://registry.npmjs.org/boxnudge). Worker found no public repository-name or distinct product matches. Small manual adjustments fit the workflow. |
-| **BoxGlide** | 8 | 9 | 6 | [npm 404](https://registry.npmjs.org/boxglide). An [old Megatouch puzzle game](https://www.meritgames.com/Support_Center/manuals/PM0378-07.pdf) used the name. Strong ease cue; weaker control cue. |
-| ChartGlide | 8 | 9 | 6 | [npm 404](https://registry.npmjs.org/chartglide). Worker found zero repository-name matches and no distinct product. May suggest data charts. |
-| LineGlide | 7 | 9 | 6 | [npm 404](https://registry.npmjs.org/lineglide). Partial repository-name matches and a synthesizer parameter surfaced. Weaker diagram cue. |
+| Name           | Implied diagrams | Guided layout | User control | Evidence and tradeoff                                                                                                                                                                               |
+| -------------- | ---------------: | ------------: | -----------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **GraphSteer** |                9 |             7 |           10 | [npm 404](https://registry.npmjs.org/graphsteer). Only an [empty exact-name repository](https://github.com/CallieSardina/GraphSteer) surfaced. Strong control cue; automation is less clear.        |
+| **BoxNudge**   |                8 |             7 |            9 | [npm 404](https://registry.npmjs.org/boxnudge). Worker found no public repository-name or distinct product matches. Small manual adjustments fit the workflow.                                      |
+| **BoxGlide**   |                8 |             9 |            6 | [npm 404](https://registry.npmjs.org/boxglide). An [old Megatouch puzzle game](https://www.meritgames.com/Support_Center/manuals/PM0378-07.pdf) used the name. Strong ease cue; weaker control cue. |
+| ChartGlide     |                8 |             9 |            6 | [npm 404](https://registry.npmjs.org/chartglide). Worker found zero repository-name matches and no distinct product. May suggest data charts.                                                       |
+| LineGlide      |                7 |             9 |            6 | [npm 404](https://registry.npmjs.org/lineglide). Partial repository-name matches and a synthesizer parameter surfaced. Weaker diagram cue.                                                          |
 
 The pool also included BoxGuide, BoxAlign, BoxSteer, BoxRoute, BoxTrain, BoxTrack, LinePilot,
 LineGuide, LineBound, LinePath, LinkDraft, LinkGuide, LinkRoute, GraphDraft, GraphGuide,
@@ -69,22 +69,22 @@ The worker also explored Graph, Chart, Flow, and Box variants with rail, pilot, 
 
 Round 2 compared the metaphors. Scores range from 0 (no cue) to 10 (immediate cue).
 
-| Name | Diagram recognition | Guided layout | User steering | Tradeoff |
-| --- | ---: | ---: | ---: | --- |
-| DiagramRails | 10 | 10 | 7 | User sets the rails; layout follows them. Can suggest Ruby on Rails. |
-| DiagramPilot | 10 | 8 | 9 | Strong meaning, but an existing diagram CLI uses it. |
-| DiagramHelm | 10 | 6 | 10 | Strong user control cue; weaker automation cue. Can suggest Kubernetes Helm. |
-| DiagramLane | 10 | 9 | 7 | Clear organization, but may imply only swimlane diagrams. |
+| Name         | Diagram recognition | Guided layout | User steering | Tradeoff                                                                     |
+| ------------ | ------------------: | ------------: | ------------: | ---------------------------------------------------------------------------- |
+| DiagramRails |                  10 |            10 |             7 | User sets the rails; layout follows them. Can suggest Ruby on Rails.         |
+| DiagramPilot |                  10 |             8 |             9 | Strong meaning, but an existing diagram CLI uses it.                         |
+| DiagramHelm  |                  10 |             6 |            10 | Strong user control cue; weaker automation cue. Can suggest Kubernetes Helm. |
+| DiagramLane  |                  10 |             9 |             7 | Clear organization, but may imply only swimlane diagrams.                    |
 
 Round 3 added collision evidence and compared against Boxdraft.
 DiagramRails best meets the whole brief. DiagramHelm gives more weight to user control.
 Boxdraft has a weaker diagram cue (6), guided layout cue (5), and a reasonable user editing cue (8).
 
-| Rank | Name and command | npm registry | Existing use and search findings |
-| --- | --- | --- | --- |
-| 1 | **DiagramRails**, `diagramrails` | [404](https://registry.npmjs.org/diagramrails) | Worker found zero public GitHub repository-name matches and no distinct exact-name software product. Spaced searches find Ruby Rails diagram tools. |
-| 2 | **DiagramHelm**, `diagramhelm` | [404](https://registry.npmjs.org/diagramhelm) | Worker found zero public GitHub repository-name matches and no distinct exact-name software product. Spaced searches find Kubernetes Helm diagram tools. |
-| 3 | DiagramLane, `diagramlane` | [404](https://registry.npmjs.org/diagramlane) | Worker found zero public GitHub repository-name matches. An existing [Syncfusion diagram API class](https://help.syncfusion.com/cr/aspnetcore-js2/Syncfusion.EJ2.Diagrams.DiagramLane.html) uses the name. |
+| Rank | Name and command                 | npm registry                                   | Existing use and search findings                                                                                                                                                                           |
+| ---- | -------------------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | **DiagramRails**, `diagramrails` | [404](https://registry.npmjs.org/diagramrails) | Worker found zero public GitHub repository-name matches and no distinct exact-name software product. Spaced searches find Ruby Rails diagram tools.                                                        |
+| 2    | **DiagramHelm**, `diagramhelm`   | [404](https://registry.npmjs.org/diagramhelm)  | Worker found zero public GitHub repository-name matches and no distinct exact-name software product. Spaced searches find Kubernetes Helm diagram tools.                                                   |
+| 3    | DiagramLane, `diagramlane`       | [404](https://registry.npmjs.org/diagramlane)  | Worker found zero public GitHub repository-name matches. An existing [Syncfusion diagram API class](https://help.syncfusion.com/cr/aspnetcore-js2/Syncfusion.EJ2.Diagrams.DiagramLane.html) uses the name. |
 
 Keep DiagramRails and DiagramHelm as the serious options. DiagramLane has a weaker distinctness result.
 The parent repeated exact-name web searches and npm checks. GitHub API rate limits prevented a parent repeat of repository-name checks.
@@ -107,12 +107,12 @@ Scores range from 0 (poor fit) to 10 (strong fit).
 
 ### Round 1: directions
 
-| Direction | Clear, ordered diagram cue | Familiar spoken spelling | Fits a general diagram tool | Reason |
-| --- | ---: | ---: | ---: | --- |
-| Natural phrases: Well Drawn, On Paper, In Order | 8 | 10 | 9 | Familiar phrases state an outcome. |
-| Drafting: Boxdraft, Draftboard, Draftshape | 9 | 9 | 8 | Direct words state the drawing activity. |
-| Clear structure: Plainplot, Neatline, Clearframe | 9 | 9 | 8 | Strong clarity cues, but many names already exist. |
-| Workspaces: Lineyard, Plotdesk, Frameyard | 5 | 8 | 7 | These metaphors add little diagram meaning. |
+| Direction                                        | Clear, ordered diagram cue | Familiar spoken spelling | Fits a general diagram tool | Reason                                             |
+| ------------------------------------------------ | -------------------------: | -----------------------: | --------------------------: | -------------------------------------------------- |
+| Natural phrases: Well Drawn, On Paper, In Order  |                          8 |                       10 |                           9 | Familiar phrases state an outcome.                 |
+| Drafting: Boxdraft, Draftboard, Draftshape       |                          9 |                        9 |                           8 | Direct words state the drawing activity.           |
+| Clear structure: Plainplot, Neatline, Clearframe |                          9 |                        9 |                           8 | Strong clarity cues, but many names already exist. |
+| Workspaces: Lineyard, Plotdesk, Frameyard        |                          5 |                        8 |                           7 | These metaphors add little diagram meaning.        |
 
 Carry natural phrases and direct drafting names forward.
 
@@ -125,24 +125,24 @@ Generated names are not availability claims.
 
 ### Round 2: meaning before availability
 
-| Name | Clear diagram cue | Familiar spoken spelling | Reason |
-| --- | ---: | ---: | --- |
-| Well Drawn | 9 | 10 | Natural phrase describing a good drawing. |
-| Boxdraft | 9 | 9 | Direct cue for boxes and connections. |
-| Neatline | 9 | 9 | Strong meaning; check existing visual software. |
-| Draftshape | 8 | 9 | Familiar words, but a less natural compound. |
-| Plainplot | 7 | 9 | Clear visual output, but suggests charts. |
-| On Paper | 7 | 10 | Familiar phrase; check existing software. |
-| Lineyard | 5 | 8 | Weak diagram meaning; drop it. |
+| Name       | Clear diagram cue | Familiar spoken spelling | Reason                                          |
+| ---------- | ----------------: | -----------------------: | ----------------------------------------------- |
+| Well Drawn |                 9 |                       10 | Natural phrase describing a good drawing.       |
+| Boxdraft   |                 9 |                        9 | Direct cue for boxes and connections.           |
+| Neatline   |                 9 |                        9 | Strong meaning; check existing visual software. |
+| Draftshape |                 8 |                        9 | Familiar words, but a less natural compound.    |
+| Plainplot  |                 7 |                        9 | Clear visual output, but suggests charts.       |
+| On Paper   |                 7 |                       10 | Familiar phrase; check existing software.       |
+| Lineyard   |                 5 |                        8 | Weak diagram meaning; drop it.                  |
 
 ### Round 3: collision screening
 
 The final shortlist has two names. We did not add weaker names to fill the list.
 
-| Rank | Name and command | Evidence | Tradeoff |
-| --- | --- | --- | --- |
-| 1 | **Well Drawn**, `welldrawn` | [npm](https://registry.npmjs.org/welldrawn): 404. [GitHub repository-name query](https://api.github.com/search/repositories?q=welldrawn+in%3Aname): 0. | Natural and broad. A [greeting-card business](https://www.welldrawn.com.au/products/bah-humpug) uses the name outside software. |
-| 2 | **Boxdraft**, `boxdraft` | [npm](https://registry.npmjs.org/boxdraft): 404. GitHub found one [empty repository](https://github.com/tls00020/boxDraft). | More specific to box diagrams; less broad than Well Drawn. |
+| Rank | Name and command            | Evidence                                                                                                                                               | Tradeoff                                                                                                                        |
+| ---- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | **Well Drawn**, `welldrawn` | [npm](https://registry.npmjs.org/welldrawn): 404. [GitHub repository-name query](https://api.github.com/search/repositories?q=welldrawn+in%3Aname): 0. | Natural and broad. A [greeting-card business](https://www.welldrawn.com.au/products/bah-humpug) uses the name outside software. |
+| 2    | **Boxdraft**, `boxdraft`    | [npm](https://registry.npmjs.org/boxdraft): 404. GitHub found one [empty repository](https://github.com/tls00020/boxDraft).                            | More specific to box diagrams; less broad than Well Drawn.                                                                      |
 
 Well Drawn is the strongest natural name. Boxdraft is the strongest direct CLI name.
 Neither name is selected or reserved. Both executable spellings are proposals.
@@ -178,12 +178,12 @@ The shortlist does not select or reserve a package name.
 
 Scores range from 0 (poor fit) to 10 (strong fit).
 
-| Direction and examples | Graph relationships | Saved placement | Human and agent editing | Reason |
-| --- | ---: | ---: | ---: | --- |
-| Merge: Meld, Intermeld, Comeld | 5 | 3 | 9 | Shared editing fits; layout meaning is weak. |
-| Placement: Pindraft, Pinquill, Pinloom | 6 | 10 | 6 | Pins fit, but relative rules matter too. |
-| Weaving: Relweft, Nodebraid, Edgeweft | 9 | 7 | 8 | Connected structure fits the diagram model. |
-| Drafting: Knotdraft, Linkdraft, Frameweft | 8 | 8 | 9 | Editable source and diagram work both fit. |
+| Direction and examples                    | Graph relationships | Saved placement | Human and agent editing | Reason                                       |
+| ----------------------------------------- | ------------------: | --------------: | ----------------------: | -------------------------------------------- |
+| Merge: Meld, Intermeld, Comeld            |                   5 |               3 |                       9 | Shared editing fits; layout meaning is weak. |
+| Placement: Pindraft, Pinquill, Pinloom    |                   6 |              10 |                       6 | Pins fit, but relative rules matter too.     |
+| Weaving: Relweft, Nodebraid, Edgeweft     |                   9 |               7 |                       8 | Connected structure fits the diagram model.  |
+| Drafting: Knotdraft, Linkdraft, Frameweft |                   8 |               8 |                       9 | Editable source and diagram work both fit.   |
 
 Carry weaving and drafting names into the next round.
 Other generated names: Linkstitch, Pinbraid, Knotframe, Graphstitch, Draftweft, Knotfolio,
@@ -192,12 +192,12 @@ These are generated options, not availability claims.
 
 ## Round 2: candidate names
 
-| Name | Diagram meaning | Relative placement and pin cue | Spoken CLI spelling | Reason |
-| --- | ---: | ---: | ---: | --- |
-| Knotdraft | 9 | 7 | 8 | Connected nodes and editable work; silent K can cause spelling errors. |
-| Nodebraid | 10 | 6 | 9 | Clear graph meaning; Node can suggest Node.js. |
-| Relweft | 8 | 8 | 6 | Relations and structure fit; weft needs explanation. |
-| Frameweft | 7 | 8 | 7 | Spatial structure fits; graph meaning is less clear. |
+| Name      | Diagram meaning | Relative placement and pin cue | Spoken CLI spelling | Reason                                                                 |
+| --------- | --------------: | -----------------------------: | ------------------: | ---------------------------------------------------------------------- |
+| Knotdraft |               9 |                              7 |                   8 | Connected nodes and editable work; silent K can cause spelling errors. |
+| Nodebraid |              10 |                              6 |                   9 | Clear graph meaning; Node can suggest Node.js.                         |
+| Relweft   |               8 |                              8 |                   6 | Relations and structure fit; weft needs explanation.                   |
+| Frameweft |               7 |                              8 |                   7 | Spatial structure fits; graph meaning is less clear.                   |
 
 Screen these names against existing software. Add similar candidates only if they survive that check.
 
@@ -216,21 +216,21 @@ Existing uses removed these options:
 Software distinctness scores reflect the checks below. A 10 means no conflicting software use surfaced.
 These scores do not prove worldwide uniqueness.
 
-| Rank | Name | Diagram meaning | Saved layout cue | CLI spelling | Observed software distinctness |
-| --- | --- | ---: | ---: | ---: | ---: |
-| 1 | **Knotdraft** | 9 | 7 | 8 | 10 |
-| 2 | **Relweft** | 8 | 8 | 6 | 10 |
-| 3 | **Frameweft** | 7 | 8 | 7 | 10 |
+| Rank | Name          | Diagram meaning | Saved layout cue | CLI spelling | Observed software distinctness |
+| ---- | ------------- | --------------: | ---------------: | -----------: | -----------------------------: |
+| 1    | **Knotdraft** |               9 |                7 |            8 |                             10 |
+| 2    | **Relweft**   |               8 |                8 |            6 |                             10 |
+| 3    | **Frameweft** |               7 |                8 |            7 |                             10 |
 
 The first pass recommended Knotdraft. Byron rejected it because knots suggest tangles.
 Relweft gives a stronger cue about relations, but is harder to spell from speech.
 Frameweft suggests spatial structure, but has less diagram meaning.
 
-| Proposed package and command | npm registry check | GitHub public repository-name check | Wider web search |
-| --- | --- | --- | --- |
-| `knotdraft` | [Registry](https://registry.npmjs.org/knotdraft): 404 | [Query](https://api.github.com/search/repositories?q=knotdraft%20in%3Aname): 0 | Only joined words in a [boat specification](https://www.flickr.com/photos/hkkbs/4883053346/) surfaced. |
-| `relweft` | [Registry](https://registry.npmjs.org/relweft): 404 | [Query](https://api.github.com/search/repositories?q=relweft%20in%3Aname): 0 | No exact-name result surfaced. |
-| `frameweft` | [Registry](https://registry.npmjs.org/frameweft): 404 | [Query](https://api.github.com/search/repositories?q=frameweft%20in%3Aname): 0 | Only an apparent OCR error for framework in a [university paper](https://research.tue.nl/files/129036408/610230.pdf) surfaced. |
+| Proposed package and command | npm registry check                                    | GitHub public repository-name check                                            | Wider web search                                                                                                               |
+| ---------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `knotdraft`                  | [Registry](https://registry.npmjs.org/knotdraft): 404 | [Query](https://api.github.com/search/repositories?q=knotdraft%20in%3Aname): 0 | Only joined words in a [boat specification](https://www.flickr.com/photos/hkkbs/4883053346/) surfaced.                         |
+| `relweft`                    | [Registry](https://registry.npmjs.org/relweft): 404   | [Query](https://api.github.com/search/repositories?q=relweft%20in%3Aname): 0   | No exact-name result surfaced.                                                                                                 |
+| `frameweft`                  | [Registry](https://registry.npmjs.org/frameweft): 404 | [Query](https://api.github.com/search/repositories?q=frameweft%20in%3Aname): 0 | Only an apparent OCR error for framework in a [university paper](https://research.tue.nl/files/129036408/610230.pdf) surfaced. |
 
 The worker also found zero npm full-text search results for each name.
 The parent review repeated the exact web searches and the registry and GitHub checks.

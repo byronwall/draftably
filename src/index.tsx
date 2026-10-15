@@ -1,5 +1,6 @@
 import { render } from 'solid-js/web';
 import App from './App';
-import './styles.css';
+import { detectFileSession } from './state/file-session';
 
-render(() => <App />, document.getElementById('root')!);
+// Opened through `pnpm meld open`, the diagram comes from a file instead of browser storage.
+void detectFileSession().then(() => render(() => <App />, document.getElementById('root')!));

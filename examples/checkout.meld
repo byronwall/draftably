@@ -1,0 +1,24 @@
+diagram "Checkout architecture" version=1
+
+# Customer-facing entry points.
+group clients "Customer channels" color=blue
+node web "Web app" in=clients
+node mobile "Mobile app" in=clients
+
+group platform "Commerce platform" color=mint
+node api "API gateway" in=platform
+group services "Domain services" in=platform
+node orders "Orders" in=services
+node payments "Payments" in=services shape=pill # charges cards
+
+node db "Postgres" color=violet
+
+edge checkout web -> api "HTTPS"
+edge native mobile -> api "HTTPS"
+edge dispatch api -> orders "create order"
+edge charge orders -> payments "authorize"
+edge persist orders -> db "persist" kind=async
+
+layout root flow gap=48
+layout platform column gap=28
+layout services row gap=56

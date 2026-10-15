@@ -1,0 +1,155 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  min-height: var(--toolbar-height);
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.toolbar-group {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+}
+
+/* The middle of the toolbar scrolls sideways instead of hiding controls on narrow windows. */
+.toolbar-scroll {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  height: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.toolbar-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.toolbar .button .icon {
+  width: 17px;
+  height: 17px;
+}
+
+.title-block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: clamp(120px, 13vw, 220px);
+  margin-left: 2px;
+}
+
+.title-input {
+  height: 22px;
+  padding: 0 4px;
+  border-color: transparent;
+  background: transparent;
+  font-size: var(--text-md);
+  font-weight: 650;
+  text-overflow: ellipsis;
+}
+
+.title-input:hover {
+  background: var(--hover);
+}
+
+.title-input:focus {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.save-status {
+  overflow: hidden;
+  padding: 0 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.save-status.warning {
+  color: var(--danger);
+}
+
+.algorithm-select {
+  width: 160px;
+}
+
+.split-button {
+  display: flex;
+}
+
+.split-button > .button:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.split-button > .button:last-child {
+  width: 24px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.split-button > .button.primary:last-child {
+  border-left-color: #fff4;
+}
+
+.split-button > .button.ghost:last-child .icon {
+  width: 14px;
+}
+
+.layout-group {
+  gap: 4px;
+}
+
+@media (max-width: 1560px) {
+  .toolbar .label:not(.keep) {
+    display: none;
+  }
+
+  .toolbar .button kbd {
+    display: none;
+  }
+}
+
+@media (max-width: 1500px) {
+  .algorithm-select {
+    display: none;
+  }
+}
+
+/* On narrow windows the tools move to a second row instead of being cut off. */
+@media (max-width: 1100px) {
+  .toolbar {
+    flex-wrap: wrap;
+    row-gap: 0;
+    padding-bottom: 4px;
+  }
+
+  .toolbar-scroll {
+    order: 3;
+    flex-basis: 100%;
+    height: 40px;
+  }
+
+  .toolbar > .toolbar-group:last-child {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .title-block {
+    width: 110px;
+  }
+
+  .save-status {
+    display: none;
+  }
+}

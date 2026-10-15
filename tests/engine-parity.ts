@@ -7,6 +7,7 @@ import { LayoutLab } from '../src/engines/layout-engine.js';
 import { RouteLab } from '../src/engines/routing-engine.js';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { SculptLab } from '../src/engines/sculpt-engine.js';
+import type { NodeGeometry } from '../src/model/types';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
@@ -29,15 +30,28 @@ const engines = {
   explorer: baseline.ExplorerLab,
   sculpt: baseline.SculptLab,
 };
-const fixtureNames = fs.readdirSync(path.join(here, 'fixtures')).filter(x => x.endsWith('.json')).sort().map(x => x.slice(0, -5));
-const fixtures = new Map(fixtureNames.map(name => [name, JSON.parse(fs.readFileSync(path.join(here, 'fixtures', `${name}.json`), 'utf8'))]));
+const fixtureNames = fs
+  .readdirSync(path.join(here, '../src/samples'))
+  .filter(x => x.endsWith('.json'))
+  .sort()
+  .map(x => x.slice(0, -5));
+const fixtures = new Map(
+  fixtureNames.map(name => [
+    name,
+    JSON.parse(fs.readFileSync(path.join(here, '../src/samples', `${name}.json`), 'utf8')),
+  ]),
+);
 const copy = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 const clean = (value: unknown) => {
   const plain = JSON.parse(JSON.stringify(value));
   const visit = (item: unknown): unknown => {
     if (Array.isArray(item)) return item.map(visit);
     if (!item || typeof item !== 'object') return item;
-    return Object.fromEntries(Object.entries(item).filter(([key]) => key !== 'milliseconds' && key !== 'createdAt').map(([key, child]) => [key, visit(child)]));
+    return Object.fromEntries(
+      Object.entries(item)
+        .filter(([key]) => key !== 'milliseconds' && key !== 'createdAt')
+        .map(([key, child]) => [key, visit(child)]),
+    );
   };
   return visit(plain);
 };
@@ -49,26 +63,43 @@ function parity(name: string, before: unknown, after: unknown) {
     checks++;
     results.push({ name, status: 'passed' });
   } catch (error) {
-    results.push({ name, status: 'failed', message: error instanceof Error ? error.message : String(error) });
+    results.push({
+      name,
+      status: 'failed',
+      message: error instanceof Error ? error.message : String(error),
+    });
     throw error;
   }
 }
 
-assert.equal(fixtureNames.length, 13, 'copy all 13 baseline examples into tests/fixtures');
+assert.equal(fixtureNames.length, 13, 'copy all 13 baseline examples into src/samples');
 for (const name of fixtureNames) {
   const fixture = fixtures.get(name);
   for (const algorithm of current.layout.algorithms) {
-    const options = { algorithm: algorithm.id, mode: 'rebuild', settle: true, maxIterations: 160 };
+    const options = {
+      algorithm: algorithm.id,
+      mode: 'rebuild' as const,
+      settle: true,
+      maxIterations: 160,
+    };
     const oldLayout = await engines.layout.compute(copy(fixture), options);
     const newLayout = await current.layout.compute(copy(fixture), options);
     parity(`${name}/${algorithm.id}: layout result`, oldLayout, newLayout);
-    const oldRoutes = engines.routing.compute(engines.explorer.sceneInput(oldLayout.document), oldLayout.document.settings.routing);
-    const newRoutes = current.routing.compute(current.explorer.sceneInput(newLayout.document), newLayout.document.settings.routing);
+    const oldRoutes = engines.routing.compute(
+      engines.explorer.sceneInput(oldLayout.document),
+      oldLayout.document.settings.routing,
+    );
+    const newRoutes = current.routing.compute(
+      current.explorer.sceneInput(newLayout.document),
+      newLayout.document.settings.routing,
+    );
     parity(`${name}/${algorithm.id}: routed layout result`, oldRoutes, newRoutes);
   }
-  parity(`${name}: route authored fixture`,
+  parity(
+    `${name}: route authored fixture`,
     engines.routing.compute(engines.explorer.sceneInput(fixture), fixture.settings.routing),
-    current.routing.compute(current.explorer.sceneInput(fixture), fixture.settings.routing));
+    current.routing.compute(current.explorer.sceneInput(fixture), fixture.settings.routing),
+  );
 }
 
 const journeySource = fixtures.get('branches');
@@ -80,15 +111,32 @@ for (const algorithm of current.layout.algorithms) {
 }
 for (const name of ['branches', 'nested-services']) {
   const doc = fixtures.get(name);
-  const point = (() => { const p = doc.layout.nodes[doc.graph.nodes[0].id]; return { x: p.x + p.w / 2, y: p.y + p.h / 2 }; })();
-  for (const mode of ['tidy', 'flow', 'space', 'restore', 'protect']) {
-    const reference = copy(doc.layout.nodes);
-    for (const p of Object.values(reference)) { p.x += 40; p.y += 60; }
+  const point = (() => {
+    const p = doc.layout.nodes[doc.graph.nodes[0].id];
+    return { x: p.x + p.w / 2, y: p.y + p.h / 2 };
+  })();
+  for (const mode of ['tidy', 'flow', 'space', 'restore', 'protect'] as const) {
+    const reference: NodeGeometry = copy(doc.layout.nodes);
+    for (const p of Object.values(reference)) {
+      p.x += 40;
+      p.y += 60;
+    }
     const options = { mode, point, worldRadius: 230, strength: 65, reference };
-    parity(`${name}/${mode}: brush dab`, engines.sculpt.dab(copy(doc), options), current.sculpt.dab(copy(doc), options));
+    parity(
+      `${name}/${mode}: brush dab`,
+      engines.sculpt.dab(copy(doc), options),
+      current.sculpt.dab(copy(doc), options),
+    );
   }
 }
 
-const report = { fixtureCount: fixtureNames.length, layoutAlgorithms: current.layout.algorithms.length, checks, results };
+const report = {
+  fixtureCount: fixtureNames.length,
+  layoutAlgorithms: current.layout.algorithms.length,
+  checks,
+  results,
+};
 fs.writeFileSync(path.join(outDir, 'engine-parity-results.json'), JSON.stringify(report, null, 2));
-console.log(`[engine parity] PASS ${checks} parity comparisons across ${fixtureNames.length} fixtures and ${current.layout.algorithms.length} algorithms`);
+console.log(
+  `[engine parity] PASS ${checks} parity comparisons across ${fixtureNames.length} fixtures and ${current.layout.algorithms.length} algorithms`,
+);

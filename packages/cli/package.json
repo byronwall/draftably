@@ -9,7 +9,10 @@
     "url": "git+https://github.com/byronwall/draftably.git",
     "directory": "packages/cli"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "engines": {
     "node": ">=22.21.0"
   },

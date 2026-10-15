@@ -5,3 +5,5 @@ tmp/
 *.tsbuildinfo
 __pycache__/
 .DS_Store
+.claude/
+dist-cli/

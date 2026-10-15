@@ -1,0 +1,182 @@
+[
+  {
+    "id": 1,
+    "title": "Mermaid: layout engines",
+    "url": "https://mermaid.js.org/config/layouts.html",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 2,
+    "title": "Mermaid: flowchart syntax, subgraphs and collapse",
+    "url": "https://mermaid.js.org/syntax/flowchart.html",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 3,
+    "title": "D2: layout engine comparison",
+    "url": "https://d2lang.com/tour/layouts/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 4,
+    "title": "D2: positions",
+    "url": "https://d2lang.com/tour/positions/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 5,
+    "title": "D2: grid diagrams",
+    "url": "https://d2lang.com/tour/grid-diagrams/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 6,
+    "title": "D2: Oracle / API",
+    "url": "https://d2lang.com/tour/api/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 7,
+    "title": "D2 author announcement: TALA is open-source, September 7, 2026",
+    "url": "https://d2lang.com/blog/tala-is-open-source/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 8,
+    "title": "D2 blog: nonprofit transition, September 5, 2026",
+    "url": "https://d2lang.com/blog/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 9,
+    "title": "Reladraw repository and README",
+    "url": "https://github.com/reladraw/reladraw",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 10,
+    "title": "Reladraw syntax reference",
+    "url": "https://raw.githubusercontent.com/reladraw/reladraw/main/SYNTAX.md",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 11,
+    "title": "Reladraw: Hacker News discussion",
+    "url": "https://news.ycombinator.com/item?id=49858513",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 12,
+    "title": "Structurizr: DSL and compiled JSON file types",
+    "url": "https://docs.structurizr.com/workspaces/file-types",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 13,
+    "title": "LikeC4: model-based views",
+    "url": "https://likec4.dev/dsl/views/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 14,
+    "title": "LikeC4: Draw.io round-trip integration",
+    "url": "https://likec4.dev/tooling/drawio/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 15,
+    "title": "LikeC4: CLI and layout-drift validation",
+    "url": "https://likec4.dev/tooling/cli/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 16,
+    "title": "ELK: layered layout reference",
+    "url": "https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 17,
+    "title": "elkjs: JavaScript layout library, limitations and Worker integration",
+    "url": "https://github.com/kieler/elkjs",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 18,
+    "title": "ELK: randomSeed option",
+    "url": "https://eclipse.dev/elk/reference/options/org-eclipse-elk-randomSeed.html",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 19,
+    "title": "WebCoLa: constraint-based graph layout",
+    "url": "https://ialab.it.monash.edu/webcola/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 20,
+    "title": "yFiles: Partial Layout demonstration and description",
+    "url": "https://www.yfiles.com/demos/layout/partial/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 21,
+    "title": "Graphviz: dot layout and controls",
+    "url": "https://graphviz.org/docs/layouts/dot/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 22,
+    "title": "Graphviz: engine-specific pin attribute",
+    "url": "https://graphviz.org/docs/attrs/pin/",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 23,
+    "title": "PlantUML: layout engines and controls",
+    "url": "https://plantuml.com/layout-engines",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 24,
+    "title": "Pikchr: documentation and purpose",
+    "url": "https://pikchr.org/home/doc/trunk/homepage.md",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 25,
+    "title": "Bluefish: relations and partial layout specification",
+    "url": "https://bluefishjs.org/learn/what-is-bluefish.html",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 26,
+    "title": "Penrose: Style language and separation of concerns",
+    "url": "https://penrose.cs.cmu.edu/docs/ref/style/overview",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 27,
+    "title": "Penrose: constraints and objectives",
+    "url": "https://penrose.cs.cmu.edu/docs/ref/constraints",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 28,
+    "title": "Badros, Borning and Stuckey: Cassowary constraint solving (paper)",
+    "url": "https://constraints.cs.washington.edu/solvers/cassowary-tochi.pdf",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 29,
+    "title": "Adaptagrams: libavoid routing overview",
+    "url": "https://www.adaptagrams.org/documentation/libavoid.html",
+    "accessed": "2026-09-28"
+  },
+  {
+    "id": 30,
+    "title": "Penrose: experimental interactivity",
+    "url": "https://penrose.cs.cmu.edu/docs/ref/Interactivity",
+    "accessed": "2026-09-28"
+  }
+]

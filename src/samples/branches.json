@@ -1,0 +1,479 @@
+{
+  "schemaVersion": 2,
+  "id": "Branching build pipeline",
+  "title": "Branching build pipeline",
+  "graph": {
+    "nodes": [
+      {
+        "id": "n00",
+        "title": "Collect source"
+      },
+      {
+        "id": "n01",
+        "title": "Parse records"
+      },
+      {
+        "id": "n02",
+        "title": "Validate schema"
+      },
+      {
+        "id": "n03",
+        "title": "Normalize names"
+      },
+      {
+        "id": "n04",
+        "title": "Merge fields"
+      },
+      {
+        "id": "n05",
+        "title": "Check permissions"
+      },
+      {
+        "id": "n06",
+        "title": "Build index"
+      },
+      {
+        "id": "n07",
+        "title": "Enrich records"
+      },
+      {
+        "id": "n08",
+        "title": "Flag exceptions"
+      },
+      {
+        "id": "n09",
+        "title": "Assemble result"
+      },
+      {
+        "id": "n10",
+        "title": "Review flags"
+      },
+      {
+        "id": "n11",
+        "title": "Publish dataset"
+      },
+      {
+        "id": "n12",
+        "title": "Notify clients"
+      },
+      {
+        "id": "n13",
+        "title": "Archive run"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e0",
+        "from": "n00",
+        "to": "n01",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e1",
+        "from": "n00",
+        "to": "n02",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e2",
+        "from": "n01",
+        "to": "n03",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e3",
+        "from": "n01",
+        "to": "n04",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e4",
+        "from": "n02",
+        "to": "n04",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e5",
+        "from": "n02",
+        "to": "n05",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e6",
+        "from": "n03",
+        "to": "n06",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e7",
+        "from": "n04",
+        "to": "n06",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e8",
+        "from": "n04",
+        "to": "n07",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e9",
+        "from": "n05",
+        "to": "n08",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e10",
+        "from": "n06",
+        "to": "n09",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e11",
+        "from": "n07",
+        "to": "n09",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e12",
+        "from": "n08",
+        "to": "n10",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e13",
+        "from": "n09",
+        "to": "n11",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e14",
+        "from": "n10",
+        "to": "n11",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e15",
+        "from": "n11",
+        "to": "n12",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e16",
+        "from": "n11",
+        "to": "n13",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "n00": {
+        "x": 80,
+        "y": 80,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n01": {
+        "x": 321,
+        "y": 104,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n02": {
+        "x": 562,
+        "y": 80,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n03": {
+        "x": 752,
+        "y": 104,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n04": {
+        "x": 97,
+        "y": 228,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n05": {
+        "x": 338,
+        "y": 252,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n06": {
+        "x": 528,
+        "y": 228,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n07": {
+        "x": 769,
+        "y": 252,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n08": {
+        "x": 114,
+        "y": 376,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n09": {
+        "x": 304,
+        "y": 400,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n10": {
+        "x": 545,
+        "y": 376,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n11": {
+        "x": 786,
+        "y": 400,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n12": {
+        "x": 80,
+        "y": 524,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      },
+      "n13": {
+        "x": 321,
+        "y": 548,
+        "w": 156,
+        "h": 58,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "e0": {},
+      "e1": {},
+      "e2": {},
+      "e3": {},
+      "e4": {},
+      "e5": {},
+      "e6": {},
+      "e7": {},
+      "e8": {},
+      "e9": {},
+      "e10": {},
+      "e11": {},
+      "e12": {},
+      "e13": {},
+      "e14": {},
+      "e15": {},
+      "e16": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "n00": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n01": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n02": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n03": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n04": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n05": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n06": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n07": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n08": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n09": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n10": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n11": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n12": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "n13": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "auto",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6
+    }
+  },
+  "camera": {
+    "x": 112.80000000000007,
+    "y": 15.099999999999987,
+    "k": 1.2
+  },
+  "theme": "light"
+}

@@ -7,27 +7,41 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "build": "tsc -b && node scripts/check-bindings.ts && vite build",
-    "typecheck": "tsc -b --pretty false && node scripts/check-bindings.ts",
-    "test:app": "node tests/explorer-fit.ts",
+    "build": "tsc --noEmit && vite build",
+    "typecheck": "tsc --noEmit",
     "test:engines": "node tests/engine-layout.mjs && node tests/engine-sculpt.mjs && node tests/engine-parity.ts",
-    "check": "pnpm typecheck && pnpm test:app && pnpm test:engines && pnpm build",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run && pnpm test:engines",
+    "test:unit": "vitest run",
+    "lint": "eslint .",
+    "check": "pnpm typecheck && pnpm lint && pnpm test && pnpm build",
     "changeset:add": "node scripts/add-changeset.ts",
     "changeset:status": "changeset status",
     "changeset:version": "changeset version && pnpm install --lockfile-only",
     "cli:pack-check": "node scripts/check-cli-package.ts && pnpm --dir packages/cli pack --pack-destination ../../tmp/cli-dist",
     "release:check": "pnpm check && pnpm --dir packages/cli --if-present run build && pnpm --dir packages/cli --if-present run test && pnpm cli:pack-check",
-    "release": "pnpm release:check && changeset publish"
+    "release": "pnpm release:check && changeset publish",
+    "meld": "node scripts/meld.mjs",
+    "prove:file": "node scripts/prove-file-session.mjs"
   },
   "dependencies": {
     "solid-js": "^1.9.9"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.1",
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.15.30",
+    "eslint": "^10.12.0",
+    "eslint-plugin-solid": "^0.18.1",
+    "globals": "^17.13.0",
+    "playwright-core": "^1.64.0",
+    "prettier": "^3.9.9",
     "typescript": "~5.8.3",
+    "typescript-eslint": "^8.71.1",
     "vite": "^6.3.5",
-    "vite-plugin-solid": "^2.11.6"
+    "vite-plugin-solid": "^2.11.6",
+    "vitest": "^5.0.3"
   },
   "engines": {
     "node": ">=22.21.0"

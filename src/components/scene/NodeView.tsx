@@ -1,0 +1,195 @@
+import { createMemo, For, Match, Show, Switch } from 'solid-js';
+import { findNode, styleOf } from '../../model/graph';
+import { nodeLabel } from '../../model/labels';
+import { portPoint } from '../../model/routes';
+import { colorTokens } from '../../model/styles';
+import type { Diagram, NodeLayout, Side } from '../../model/types';
+import { SceneGlyph } from '../Icon';
+import { PositionBadge, ResizeHandles, SceneText } from './parts';
+
+const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
+
+export interface NodeViewProps {
+  doc: Diagram;
+  id: string;
+  rect: NodeLayout;
+  selected?: boolean;
+  /** Editor canvas: ports, resize handles and position badges. */
+  interactive?: boolean;
+  zoom?: number;
+  /** Highlight used by comparisons for the visual anchor. */
+  focused?: boolean;
+  /** Comparison candidates: focusable so a keyboard user can choose the anchor. */
+  focusable?: boolean;
+  idPrefix?: string;
+}
+
+export function NodeView(props: NodeViewProps) {
+  const node = () => findNode(props.doc, props.id)!;
+  const style = () => styleOf(props.doc, props.id);
+  const color = () => colorTokens(style().color, props.doc.theme);
+  const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
+  const ringRadius = () => {
+    const { shape } = style(),
+      r = props.rect;
+    return shape === 'icon' || shape === 'circle' ? (r.h + 8) / 2 : shape === 'pill' ? r.h / 2 : 14;
+  };
+  const clipId = () => `${props.idPrefix ?? ''}image-clip-${props.id}`;
+
+  const shapeAttrs = () => ({
+    fill: color().fill,
+    stroke: color().stroke,
+    'stroke-width': 1.2,
+    class: 'node-shape',
+  });
+
+  const glyph = () => {
+    const { shape, icon } = style();
+    if (!icon || shape === 'image' || shape === 'text' || shape === 'diamond') return null;
+    const large = shape === 'icon',
+      size = large ? 30 : 20,
+      r = props.rect;
+    return {
+      size,
+      x: large || shape === 'circle' ? r.w / 2 - size / 2 : 17,
+      y: r.h / 2 - size / 2,
+    };
+  };
+
+  return (
+    <g
+      class="node"
+      classList={{ selected: props.selected, focused: props.focused }}
+      data-kind="node"
+      data-id={props.id}
+      transform={`translate(${props.rect.x},${props.rect.y})`}
+      tabindex={props.interactive || props.focusable ? 0 : undefined}
+      role={props.interactive || props.focusable ? 'button' : undefined}
+      aria-label={
+        props.interactive
+          ? `${node().title}, ${style().shape}${props.rect.pinned ? ', pinned' : ''}`
+          : props.focusable
+            ? `Use ${node().title} as visual anchor`
+            : undefined
+      }
+      aria-pressed={props.interactive ? !!props.selected : undefined}
+    >
+      <title>{node().title}</title>
+      <Show when={label().leader && label().mode !== 'center'}>
+        <path
+          class="leader"
+          d={`M${props.rect.w / 2},${props.rect.h / 2} L${label().x},${label().y}`}
+        />
+      </Show>
+      <Show when={props.interactive}>
+        <rect
+          class="selection-ring"
+          x={-4}
+          y={-4}
+          width={props.rect.w + 8}
+          height={props.rect.h + 8}
+          rx={ringRadius()}
+        />
+      </Show>
+      <ShapeOutline shape={style().shape} rect={props.rect} attrs={shapeAttrs()} />
+      <Show when={style().shape === 'image'}>
+        <Show
+          when={node().image}
+          fallback={
+            <SceneGlyph
+              name="image"
+              x={props.rect.w / 2 - 20}
+              y={props.rect.h / 2 - 20}
+              size={40}
+              color={color().ink}
+            />
+          }
+        >
+          <clipPath id={clipId()}>
+            <rect x={1} y={1} width={props.rect.w - 2} height={props.rect.h - 2} rx={9} />
+          </clipPath>
+          <image
+            href={node().image}
+            x={1}
+            y={1}
+            width={props.rect.w - 2}
+            height={props.rect.h - 2}
+            preserveAspectRatio="xMidYMid meet"
+            clip-path={`url(#${clipId()})`}
+          />
+        </Show>
+      </Show>
+      <Show when={glyph()}>
+        {g => (
+          <SceneGlyph name={style().icon} x={g().x} y={g().y} size={g().size} color={color().ink} />
+        )}
+      </Show>
+      <SceneText
+        class="node-title"
+        lines={label().lines}
+        x={label().x}
+        y={label().y}
+        lineHeight={label().lineHeight}
+      />
+      <Show when={props.interactive}>
+        <PositionBadge
+          pinned={!!props.rect.pinned}
+          manual={!!props.rect.manual && props.doc.settings.showManual}
+          x={props.rect.w}
+          y={-18}
+        />
+        <For each={SIDES}>
+          {side => {
+            const p = () =>
+              portPoint(style().shape, { x: 0, y: 0, w: props.rect.w, h: props.rect.h }, side);
+            return (
+              <circle class="port" data-port={side} cx={p().x} cy={p().y} r={4.5}>
+                <title>Connect from {side}</title>
+              </circle>
+            );
+          }}
+        </For>
+        <Show when={props.selected}>
+          <ResizeHandles rect={props.rect} zoom={props.zoom ?? 1} corners />
+        </Show>
+      </Show>
+    </g>
+  );
+}
+
+function ShapeOutline(props: {
+  shape: string;
+  rect: NodeLayout;
+  attrs: Record<string, string | number>;
+}) {
+  const w = () => props.rect.w,
+    h = () => props.rect.h;
+  return (
+    <Switch
+      fallback={
+        <rect
+          width={w()}
+          height={h()}
+          rx={props.shape === 'pill' ? h() / 2 : 11}
+          {...props.attrs}
+        />
+      }
+    >
+      <Match when={props.shape === 'diamond'}>
+        <path
+          d={`M${w() / 2},0 L${w()},${h() / 2} L${w() / 2},${h()} L0,${h() / 2} Z`}
+          {...props.attrs}
+        />
+      </Match>
+      <Match when={props.shape === 'circle' || props.shape === 'icon'}>
+        <ellipse cx={w() / 2} cy={h() / 2} rx={w() / 2} ry={h() / 2} {...props.attrs} />
+      </Match>
+      <Match when={props.shape === 'text'}>
+        <rect width={w()} height={h()} rx={6} fill="transparent" stroke="none" />
+      </Match>
+      <Match when={props.shape === 'image'}>
+        <rect width={w()} height={h()} rx={10} {...props.attrs} />
+      </Match>
+    </Switch>
+  );
+}

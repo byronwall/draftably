@@ -1,0 +1,245 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Diagrams as intent — research and prototype</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f4ef;color:#29342a;font:16px/1.75 ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}a{color:#9d4b2e;text-decoration:none}a:hover{text-decoration:underline}header{background:#233026;color:#f9f8ef;padding:50px max(30px,calc((100vw - 1280px)/2));border-bottom:5px solid #b65a37}header .kicker{font-size:12px;text-transform:uppercase;letter-spacing:3px;color:#b9c7af}header h1{font-size:clamp(30px,4vw,52px);line-height:1.12;letter-spacing:-1.8px;font-weight:550;max-width:900px;margin:18px 0}header p{color:#b9c7af;max-width:800px;margin:0}header .links{display:flex;gap:18px;margin-top:22px;font-size:13px}header a{color:#f3d7b4}.layout{max-width:1280px;margin:0 auto;padding:44px 25px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:55px}nav{position:sticky;top:24px;align-self:start;max-height:90vh;overflow:auto}nav .label{font-size:10px;letter-spacing:2px;color:#84917e;font-weight:700;margin-bottom:15px}nav a{display:block;color:#6e7a66;font-size:12px;line-height:1.55;padding:7px 0;border-bottom:1px solid #e2e6db}article{min-width:0}article>h1:first-child{display:none}article>h2:first-of-type{margin-top:0;font-size:21px;color:#6e7a66}h2{font-size:29px;line-height:1.25;font-weight:570;letter-spacing:-.6px;margin:55px 0 20px;padding-top:15px;border-top:1px solid #daddd1;scroll-margin-top:20px}h3{font-size:19px;line-height:1.4;font-weight:630;margin:30px 0 12px;scroll-margin-top:20px}p{margin:0 0 19px}strong{font-weight:650}code{font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;background:#e9ece2;padding:2px 5px;border-radius:3px}pre{background:#243127;color:#dbe8d2;border-radius:9px;padding:24px;overflow:auto;margin:25px 0;font-size:12px}pre code{background:none;color:inherit;padding:0;font-size:12px}table{border-collapse:collapse;width:100%;font-size:12.5px;line-height:1.6;margin:25px 0;display:table}th{text-align:left;background:#dfe6d7;padding:12px;border:1px solid #d4dccb;color:#35452e;font-size:11px;text-transform:uppercase;letter-spacing:.8px}td{padding:13px 12px;border:1px solid #dce1d4;vertical-align:top}tr:nth-child(even){background:#edf0e7}table code{font-size:11px;white-space:normal}td:first-child{min-width:130px}.cite{font:10px ui-monospace,monospace;vertical-align:super;padding-left:1px;white-space:nowrap}.ref-number{color:#8e9b83;font:12px ui-monospace,monospace}p[id^=ref-]{font-size:13px;line-height:1.6;margin:0;padding:9px 0;border-bottom:1px solid #e2e6d9;scroll-margin-top:20px}footer{border-top:1px solid #dce2d2;padding:24px;text-align:center;color:#8a967f;font-size:11px}@media(max-width:950px){.layout{display:block;padding:25px 20px}nav{position:static;display:none}table{font-size:11px}td,th{padding:8px}h2{font-size:24px}header{padding:35px 22px}body{font-size:15px}}@media print{body{background:#fff;color:#000;font-size:10pt}header{background:#fff;color:#000;padding:20px;border-bottom:1px solid #000}header p,header .kicker{color:#555}header .links,nav{display:none}.layout{display:block;max-width:none;padding:10px}h2{page-break-after:avoid;font-size:19pt}h3{page-break-after:avoid}pre,table{page-break-inside:avoid}a{color:inherit}pre{background:#f1f1f1;color:#000}td,th{font-size:9pt}footer{font-size:8pt}}</style></head><body><header><div class="kicker">Meld / research dossier / September 28, 2026</div><h1>Diagrams as intent,<br>not just coordinates.</h1><p>A source-backed authoring model for responsive views, iterative layout, nested groups, and repeatable output.</p><div class="links"><a href="meld-diagram-lab.html">Open the prototype ↗</a><a href="README.md">Prototype notes</a><a href="DSL.md">Language reference</a></div></header><div class="layout"><nav><div class="label">IN THIS REPORT</div><a href="#research-and-a-working-prototype">Research and a working prototype</a><a href="#1-the-recommendation">1. The recommendation</a><a href="#2-what-the-existing-approaches-offer">2. What the existing approaches offer</a><a href="#3-the-representation-should-have-four-layers">3. The representation should have four layers</a><a href="#4-viewport-awareness-means-choosing-a-representation">4. Viewport awareness means choosing a representation</a><a href="#5-iterative-layout-preserve-intent-not-every-pixel">5. Iterative layout: preserve intent, not every pixel</a><a href="#6-where-an-append-only-log-belongs">6. Where an append-only log belongs</a><a href="#7-determinism-is-a-separate-acceptance-criterion">7. Determinism is a separate acceptance criterion</a><a href="#8-what-is-in-the-downloadable-experiment">8. What is in the downloadable experiment</a><a href="#9-the-next-implementation-step-i-would-choose">9. The next implementation step I would choose</a><a href="#sources">Sources</a></nav><article><h2 id="research-and-a-working-prototype">Research and a working prototype</h2>
+<p><strong>Research checked: September 28, 2026.</strong> This report distinguishes documented capabilities of existing projects, my design recommendations, and what the accompanying original prototype actually implements. The comparison is a documentation/source review, not an executed comparative benchmark of the competing products.</p>
+<h2 id="1-the-recommendation">1. The recommendation</h2>
+<p>Build a small, declarative <strong>view-and-layout-intent language over a typed diagram model</strong>, with replaceable layout backends. Do not make an automatic layout engine the authoring contract. Do not make an edit log the diagram's primary source. And do not interpret a user's drag as a decision to abandon automatic layout forever.</p>
+<p>The useful middle ground is a constraint hierarchy: strong defaults; a few stable ordering/relative/alignment preferences; explicit soft preservation anchors when content changes; occasional hard pins; and a generated exact-layout checkpoint when an approved result must be replayed. Keep these layers distinct enough that a user or agent can remove one refinement without resetting the diagram.</p>
+<p>For a production implementation, my first backend candidates would be <strong>ELK/elkjs for directed compound graphs</strong> and <strong>D2/TALA for architecture-oriented orthogonal compositions</strong>. These are candidates for a controlled evaluation, not interchangeable solvers. ELK documents compound graphs, cross-hierarchy edges, ports, and multiple routing styles. TALA now explicitly supports mixtures of positioned and automatically arranged nodes. <a class="cite" href="#ref-16">[16]</a><a class="cite" href="#ref-17">[17]</a><a class="cite" href="#ref-7">[7]</a></p>
+<p>The closest language inspiration in the requested list is <strong>Reladraw</strong>, the project referred to as “Rella Draw.” Its authoring vocabulary puts relative relationships and nested objects ahead of a choice between global automation and exact coordinates. Its current documentation calls the project early-stage and the syntax unstable, so I would borrow and test the ideas rather than assume the whole required editor workflow already exists. <a class="cite" href="#ref-9">[9]</a><a class="cite" href="#ref-10">[10]</a><a class="cite" href="#ref-11">[11]</a></p>
+<p>There is an important qualification: before committing to a new public language, run the desired workflow against <strong>D2 + TALA + an intent/view layer</strong> and <strong>LikeC4 + a refinement layer</strong>. Both already solve meaningful parts of this problem. Owning the view/intent semantics does not require owning every model syntax, router, or graph-layout algorithm.</p>
+<h2 id="2-what-the-existing-approaches-offer">2. What the existing approaches offer</h2>
+<p>The table's final column is an engineering assessment: what I would borrow, and what still needs a requirement-specific test. It is not a claim that an undocumented feature is impossible.</p>
+<table>
+<thead>
+<tr>
+  <th>Approach</th>
+  <th>Documented strengths relevant here</th>
+  <th>What I would borrow or test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Mermaid</strong></td>
+  <td>Compact notation; subgraphs, direction and link-length hints; several layouts; collapsible subgraphs in current flowchart docs. <a class="cite" href="#ref-1">[1]</a><a class="cite" href="#ref-2">[2]</a></td>
+  <td>Good source ergonomics and embedding. Test durable layout editing separately from rendering/interaction features.</td>
+</tr>
+<tr>
+  <td><strong>D2 + TALA/ELK/Dagre</strong></td>
+  <td>Nested containers, several engines, grid compositions, engine-specific relative positioning/locks; an AST manipulation API. <a class="cite" href="#ref-3">[3]</a><a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a><a class="cite" href="#ref-6">[6]</a></td>
+  <td>The strongest near-term reuse candidate. Verify intent portability, input-version pinning, and stability after edits.</td>
+</tr>
+<tr>
+  <td><strong>Reladraw</strong></td>
+  <td>Relative node placement, hierarchical identities/containers, explicit edges, text-to-SVG workflow. <a class="cite" href="#ref-9">[9]</a><a class="cite" href="#ref-10">[10]</a></td>
+  <td>A close match for readable spatial intent. Test incremental changes, constraint cycles, viewport policy, and edit round-tripping.</td>
+</tr>
+<tr>
+  <td><strong>Structurizr</strong></td>
+  <td>Architecture model and multiple views; compiled JSON carries editor layout in addition to the authored DSL. <a class="cite" href="#ref-12">[12]</a></td>
+  <td>Separate semantic source from generated geometry without treating the geometry as the whole model.</td>
+</tr>
+<tr>
+  <td><strong>LikeC4</strong></td>
+  <td>Model-based views; manual-layout drift validation; Draw.io round-trip layout/waypoint data in source comment blocks. <a class="cite" href="#ref-13">[13]</a><a class="cite" href="#ref-14">[14]</a><a class="cite" href="#ref-15">[15]</a></td>
+  <td>A serious model/view and persistence baseline, not “auto-layout only.” Test whether hints survive edits as relationships rather than final coordinates.</td>
+</tr>
+<tr>
+  <td><strong>Graphviz/DOT</strong></td>
+  <td>Directed ranks, clusters, ordering and routing controls; <code>pin</code>/<code>pos</code> are engine-specific. <a class="cite" href="#ref-21">[21]</a><a class="cite" href="#ref-22">[22]</a></td>
+  <td>Rich layout vocabulary and a clear warning that a common syntax does not imply common backend capabilities.</td>
+</tr>
+<tr>
+  <td><strong>PlantUML</strong></td>
+  <td>Multiple layout engines and domain-specific diagram notations, with grouping and hidden-link/layout controls. <a class="cite" href="#ref-23">[23]</a></td>
+  <td>Specialized notations deserve specialized algorithms; avoid forcing every diagram into one graph grammar.</td>
+</tr>
+<tr>
+  <td><strong>Pikchr</strong></td>
+  <td>Compact PIC-like relative drawing markup producing diagrams for technical documentation. <a class="cite" href="#ref-24">[24]</a></td>
+  <td>A good example of concise authored geometry, but not by itself the proposed semantic editor architecture.</td>
+</tr>
+<tr>
+  <td><strong>Bluefish</strong></td>
+  <td>Composable relations that can share children and only partially constrain layout. <a class="cite" href="#ref-25">[25]</a></td>
+  <td>The best conceptual antidote to treating a layout as one tree of rigid coordinates.</td>
+</tr>
+<tr>
+  <td><strong>Penrose</strong></td>
+  <td>Domain/content/style separation, geometric constraints/objectives, and experimental interactivity. <a class="cite" href="#ref-26">[26]</a><a class="cite" href="#ref-27">[27]</a><a class="cite" href="#ref-30">[30]</a></td>
+  <td>A useful conceptual model for intent versus optimization. Evaluate complexity before adopting it for routine architecture diagrams.</td>
+</tr>
+<tr>
+  <td><strong>WebCoLa</strong></td>
+  <td>Constraint-based layout, grouping, alignment/separation, and staged layout iteration. <a class="cite" href="#ref-19">[19]</a></td>
+  <td>A reference for soft/hard relationships and interactive constraint refinement.</td>
+</tr>
+<tr>
+  <td><strong>yFiles PartialLayout</strong></td>
+  <td>Moving selected/new elements while leaving designated fixed elements unchanged. <a class="cite" href="#ref-20">[20]</a></td>
+  <td>A concrete behavioral benchmark for partial layout, independent of the source format chosen.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mermaid-update-the-baseline-but-keep-the-actual-requirement">Mermaid: update the baseline, but keep the actual requirement</h3>
+<p>The current Mermaid layout documentation says ELK is bundled and is the default from <strong>Mermaid 12</strong>, replacing Dagre for several graph-like diagram types. Flowchart documentation also describes <strong>collapsible subgraphs from 11.17.0</strong>. It still documents a caveat where a subgraph's internal direction is ignored when its nodes connect outside that subgraph. A comparison that simply says “Mermaid has no interactivity or hints” would now be misleading. <a class="cite" href="#ref-1">[1]</a><a class="cite" href="#ref-2">[2]</a></p>
+<p>The requirement in this brief is different: an editor should translate visual refinement into persistent, intelligible intent, then combine that intent with later automatic/local layout. Changing a default engine or adding collapse does not, on its own, establish that complete authoring contract. That is the distinction to evaluate rather than comparing only the attractiveness of one initial screenshot.</p>
+<h3 id="d2-the-most-consequential-recent-development">D2: the most consequential recent development</h3>
+<p>D2's positioning documentation distinguishes general placement controls from engine-specific capabilities. TALA supports positioning relative to another object and fixed top/left coordinates, while the engine comparison and grid documentation describe additional differences in container sizing, direction, and routing. These restrictions belong to the D2 integration/capability matrix; they should not be generalized into claims about what ELK can do outside D2. <a class="cite" href="#ref-3">[3]</a><a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a></p>
+<p>The <strong>September 7, 2026 TALA announcement</strong> matters particularly here. TALA is now open source under MPL-2.0 and bundled with D2 0.9.0. The announcement explicitly demonstrates hybrid positioned/automatic diagrams. It also states that TALA evaluates multiple seeds, is reproducible with the same seeds and input, and can nevertheless produce a substantially different diagram after a node is added. This is almost an exact illustration of the brief's distinction between repeatability and stability under edits. <a class="cite" href="#ref-7">[7]</a></p>
+<p>D2's Oracle API is also relevant: manipulating an AST is a better source-round-trip foundation than treating a diagram as an SVG that must be reverse-engineered after each drag. The project announced a nonprofit transition in September, together with reduced maintainer time, which is a dependency-maintenance consideration for a new production commitment. <a class="cite" href="#ref-6">[6]</a><a class="cite" href="#ref-8">[8]</a></p>
+<p>My assessment is not that D2 lacks manual control. It has meaningful control already. The open question is whether the required view policy, local refinement semantics, stable incremental behavior, and editing interface should be implemented as an extension around it or as a separate intent compiler with D2 as one import/backend option.</p>
+<h3 id="reladraw-likec4-and-the-difference-between-persisted-coordinates-and-persisted-intent">Reladraw, LikeC4, and the difference between persisted coordinates and persisted intent</h3>
+<p>Reladraw's relative vocabulary gives an agent a way to say that one object belongs beside or below another without choosing every coordinate. Its documented syntax includes nested/hierarchical structure and edge endpoint controls. I did not find a documented end-to-end guarantee covering adaptive static views, local editor refinement, and cross-runtime exact replay in the reviewed material. That is a remaining evaluation task, not a negative benchmark result. <a class="cite" href="#ref-9">[9]</a><a class="cite" href="#ref-10">[10]</a></p>
+<p>LikeC4 already has more relevant persistence machinery than a casual comparison would suggest: its CLI validates outdated manual layout, and Draw.io export can use source comment blocks containing layout and edge waypoints. The Draw.io documentation is explicit about which information is exported and which higher-level view rules are not carried into the interchange representation. <a class="cite" href="#ref-14">[14]</a><a class="cite" href="#ref-15">[15]</a></p>
+<p>My design inference is that <strong>round-tripping a final position is necessary but not sufficient</strong> for the desired experience. “This box is at x=430” and “this box stays beside the payments service” represent different future-edit behavior. A system can support both without making the second a disguised hard coordinate.</p>
+<h2 id="3-the-representation-should-have-four-layers">3. The representation should have four layers</h2>
+<h3 id="layer-a-the-semantic-model">Layer A: the semantic model</h3>
+<p>Store stable identities, labels, object kinds, semantic relationships, and containment. Renaming a label must not break an edge or recreate a node. Give relationships explicit identities too: aggregate edges need provenance, and a label/router tweak must not accidentally target a different parallel edge.</p>
+<p>Distinguish <strong>semantic containment</strong> from <strong>visual grouping</strong> in a full design. A service belongs to one subsystem, but it can appear in an overview, a deployment slice, and an inset explanation. Those view instances should point back to the same semantic ID. This matters for the notes about combining several diagrams and showing multiple levels at once.</p>
+<p>The prototype deliberately uses one containment tree and multiple named views, not a general multi-instance canvas. That keeps the experiment inspectable while leaving a clear route to more sophisticated composition.</p>
+<h3 id="layer-b-the-view-contract">Layer B: the view contract</h3>
+<p>A view answers a communication question, selects content, and declares the output conditions. It should know the target dimensions, whether pan/zoom or disclosure are available, a readability floor, a connection budget, and which details are allowed to be summarized.</p>
+<p>The minimum useful prototype is a named view with <code>mode</code>, <code>width</code>, <code>height</code>, <code>detail</code>, <code>edges</code>, <code>focus</code>, and <code>collapse</code>. A production format should replace the coarse mode flag with explicit capabilities such as pan, zoom, disclosure, hover, keyboard navigation, animation, and links. A browser embedded in a tiny noninteractive card is not equivalent to a full browser canvas.</p>
+<p>Do not conflate the world extent, viewport, and editor preview scale. A 480 × 320 render can be previewed at 90% on one screen and 140% on another without changing its layout contract. Conversely, changing its actual viewport can justify a different composition or level of detail.</p>
+<h3 id="layer-c-layout-intent">Layer C: layout intent</h3>
+<p>Each scope owns a base recipe: flow, row, column, grid, radial, or later a specialized notation. The parent arranges the completed child groups; each child controls its internal arrangement. Preferences refine the recipe rather than replace the semantic model.</p>
+<p>The useful primitives are ordering, center/edge alignment, relative side and minimum gap, preferred local position, fresh-base offset, hard pin, size preference, and reserved container space. In a production system, include ports, label docking, and routing waypoints as distinct constraints—not fake semantic edges inserted merely to force layout.</p>
+<p>A hint also needs a scope, strength, and provenance. “Agent inferred this from a drag” should be distinguishable from “the user explicitly required this separation.” An editor should make both easy to inspect and remove. A backend that cannot honor a required hint must report that fact rather than silently treating it as a weak suggestion.</p>
+<h3 id="layer-d-generated-layout-checkpoints">Layer D: generated layout checkpoints</h3>
+<p>An approved scene can be captured exactly. This is generated data keyed by the effective model, view, intent, engine build, and measurement policy. It can live in a generated DSL section or a versioned sidecar included in the project manifest. It must not become an undisclosed dependency.</p>
+<p>The checkpoint is an exact-replay mechanism, not the default answer to future edits. On an incompatible input change, either invalidate it or explicitly promote selected positions to weak preservation anchors. Reinterpreting an old absolute layout as suitable for a changed graph without telling the author is precisely the failure mode to avoid.</p>
+<p>Structurizr's source/compiled-layout split is a useful precedent for separating these responsibilities, even though the proposed constraint semantics go further. <a class="cite" href="#ref-12">[12]</a></p>
+<h2 id="4-viewport-awareness-means-choosing-a-representation">4. Viewport awareness means choosing a representation</h2>
+<p>Shrinking a complete graph is not the same as making it communicate at a smaller size. A static renderer should first decide which representation is appropriate, then lay it out, then check the result.</p>
+<p>My recommended sequence is: select the relevant semantic scope; choose group detail levels; collapse or summarize eligible structures; aggregate boundary connections with provenance; choose a suitable root/internal recipe; measure and solve; then verify actual text sizes and bounds. When the result still violates the contract, report the conflict or produce another named view rather than quietly making essential labels microscopic.</p>
+<p>The user should control which information is optional. A low-priority diagnostic connection may be omitted in a briefing; an edge needed to explain the main transaction may not. All omissions should remain inspectable, and an exported artifact should disclose summarized counts or include a companion textual outline.</p>
+<p>For a 480 × 320 static card, the prototype uses a two-column root grid and collapses the architecture to summarized groups. It is not merely the desktop SVG scaled down. The interactive version retains the internal objects and supports group disclosure, drag, pan, and zoom. Adaptive decisions are visible in the source/view configuration and scene metadata.</p>
+<p>There is no reason to demand that the same topology be shown identically in every medium. Several purposeful views can be more truthful than one overloaded figure. For composite/inset diagrams, a future view-instance layer should define which copies of semantic objects are connected and where connections cross panel boundaries. That composition feature is not implemented in this prototype.</p>
+<p>A subtle determinism issue arises with zoom-triggered disclosure: hysteresis depends on the prior zoom state. Keep it as an editor presentation policy, or serialize the active disclosure state as an explicit view input. Do not let an undocumented history-dependent state change the exported static result.</p>
+<h2 id="5-iterative-layout-preserve-intent-not-every-pixel">5. Iterative layout: preserve intent, not every pixel</h2>
+<h3 id="a-drag-should-become-the-weakest-useful-constraint">A drag should become the weakest useful constraint</h3>
+<p>When a user drops Payments beside Orders, possible interpretations include a preferred right-of relationship, a matching row alignment, an updated sibling order, a soft offset from automatic placement, or a hard coordinate. These should be explicit alternatives in the editor, not an all-or-nothing conversion to manual mode.</p>
+<p>The prototype exposes three drag modes. <strong>Relative</strong> infers a sibling relationship, gap, and cross-axis offset. <strong>Soft offset</strong> stores a delta against the newly computed base. <strong>Pin</strong> stores exact parent-content-local coordinates. Users can inspect the resulting statement immediately.</p>
+<p>Intent inference cannot be perfect. A dragged box might be intended to align with a remote object rather than its nearest sibling. A production editor should preview the interpretation and offer a small correction menu. The important invariant is that the committed interpretation is readable, editable source.</p>
+<h3 id="soft-stays-make-preservation-explicit">Soft stays make preservation explicit</h3>
+<p>A previous position can be a preference without becoming a permanent lock. Conceptually, add a displacement cost for selected existing objects to the layout objective:</p>
+<pre><code class="language-text">minimize:
+    layout-quality cost
+  + edge/label-routing cost
+  + Σ weight(i) × distance(position(i), explicit-anchor(i))²
+  + soft-constraint penalties
+
+subject to:
+    required containment, pins, separations, and alignments
+</code></pre>
+<p>This is a proposed architecture, not the exact objective optimized by the prototype. The prototype uses a bounded deterministic projection heuristic with explicit weighted stays. A general production system needs a more carefully integrated discrete/continuous strategy.</p>
+<p>Cassowary is relevant for incremental linear equalities/inequalities and strength hierarchies; WebCoLa is relevant for constrained graph layout and grouping. Neither fact means a linear solver alone will choose the correct graph ranks, decide which side of an overlap to use, or route complex edges. Those remain separate decisions. <a class="cite" href="#ref-28">[28]</a><a class="cite" href="#ref-19">[19]</a></p>
+<h3 id="local-layout-needs-a-boundary-contract">Local layout needs a boundary contract</h3>
+<p>“Reflow this group” should first preserve its externally relevant interface: group identity, boundary connections, relevant port sides, and chosen outside anchors. Recompute the internal region, update the group's bounds, and propagate only necessary changes to ancestors. Finally reroute affected boundary edges.</p>
+<p>There is an unavoidable tradeoff. You cannot always simultaneously preserve every old coordinate, insert arbitrary new content, prevent all overlap, keep all content visible, and remain inside a fixed small viewport. A useful editor makes the conflict and permitted relaxation order explicit: consume reserved space; rearrange the local region; grow its container; relax nearby stays; then change the view representation or request more room.</p>
+<p>The yFiles partial-layout example provides a concrete comparison point: it identifies movable versus fixed elements and lays out new/partial components relative to the existing scene. That demonstrates the desired interaction class, although it does not choose a DSL or solve this brief's complete viewport/source contract. <a class="cite" href="#ref-20">[20]</a></p>
+<p>The prototype's scoped reflow is intentionally more modest: it edits the local constraint set, adds outside stays, and recompiles the whole graph. It is behaviorally scoped, not a performance-optimized incremental dependency engine.</p>
+<h2 id="6-where-an-append-only-log-belongs">6. Where an append-only log belongs</h2>
+<p>An edit log is valuable for undo, provenance, collaboration, and explaining how a layout was refined. It is a poor sole interchange format for the current diagram.</p>
+<p>Compare a history of “move right 20,” “move left 8,” “rerun layout,” and “move down 12” with the final statement that an object should be right of its sibling with a 32-pixel gap. The first requires a replay environment and all earlier state; the second describes current intent directly.</p>
+<p>My recommendation is a hybrid: maintain a materialized declarative document as the rendering authority, plus a separate operation log for authoring. Compact the log against snapshots. Store semantic operations with stable operation IDs and preconditions, such as add node, set label, replace hint, change view budget, or checkpoint layout. Avoid replaying raw pointer events or repeated imperative movement deltas as the semantic truth.</p>
+<p>A log does not automatically solve concurrent edits. Two agents can still assign incompatible parents, create conflicting pins, or refer to a deleted object. Collaboration needs conflict policies and validation at the model/constraint level in addition to any text CRDT or event ordering scheme.</p>
+<p>The prototype includes bounded local source-state history and undo/redo. It does not pretend to implement a durable append-only audit log or distributed collaboration. A fresh renderer uses the exported DSL alone; the history is unnecessary for reproducing geometry.</p>
+<h2 id="7-determinism-is-a-separate-acceptance-criterion">7. Determinism is a separate acceptance criterion</h2>
+<p>There are four distinct properties:</p>
+<table>
+<thead>
+<tr>
+  <th>Property</th>
+  <th>What it actually promises</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>Repeatability</strong></td>
+  <td>The same complete input produces the same geometry.</td>
+</tr>
+<tr>
+  <td><strong>Edit stability</strong></td>
+  <td>A small model change causes acceptably local movement.</td>
+</tr>
+<tr>
+  <td><strong>Responsiveness</strong></td>
+  <td>Different viewport/capability inputs yield an appropriate representation.</td>
+</tr>
+<tr>
+  <td><strong>Pixel identity</strong></td>
+  <td>Font shaping, rasterization, antialiasing, and rendering environment match.</td>
+</tr>
+</tbody>
+</table>
+<p>The TALA announcement directly illustrates why the first two are different: fixed input/seeds can be reproducible while adding a node changes the winning layout substantially. <a class="cite" href="#ref-7">[7]</a></p>
+<p>A reproducible production build should pin the engine/version, source ordering rules, random seeds, option defaults, font/measurement policy, viewport/capabilities, and any anchor state used for stabilization. Fix iteration budgets rather than stopping at a wall-clock deadline, make tie-breaking explicit, and normalize output geometry. Cache and test the full effective input, not just the semantic nodes and edges.</p>
+<p>A small but important ELK detail: its documented random-seed value <strong>0</strong> invokes time-based initialization. “Set the seed to zero” is therefore not a valid generic determinism recipe for that option. A pinned nonzero seed and explicit model ordering belong in the backend-specific policy. A seed alone still does not establish cross-version or cross-platform pixel identity. <a class="cite" href="#ref-18">[18]</a></p>
+<p>The prototype uses no random numbers, clocks, DOM text measurement, or previous-frame state in the geometry computation. It rounds coordinates to 1/16 pixel. Checkpoints use SHA-256 input keys. Its verification command compares complete canonical geometry strings, not merely matching eight-character debug fingerprints. Tests also compare Node and Chromium outputs for every included example/view.</p>
+<p>This is evidence of repeatability for the tested implementation and inputs, not a proof that any future engine, arbitrary Unicode font, or operating system will paint identical pixels. The source uses system fonts, and measurement is a fixed character-budget approximation.</p>
+<h2 id="8-what-is-in-the-downloadable-experiment">8. What is in the downloadable experiment</h2>
+<p>The standalone <code>meld-diagram-lab.html</code> is approximately 103 KB before compression and includes its CSS, parser, original layout code, renderer, editor, and examples. It is vanilla JavaScript with no runtime dependencies or network requests. It is not a wrapper around a competing engine and should not be mistaken for a mature graph-drawing package.</p>
+<p>The three examples are a checkout architecture, the proposed compiler pipeline, and a constraint playground. The live editor supports nested groups, five layouts, source-backed dragging, ordering/alignment hints, scoped reflow, incremental insertion with stays, focus/collapse, fixed-size static views, SVG export, source/project import/export, checkpoints, diagnostics, and geometry verification.</p>
+<p>The DSL makes ordinary diagrams small while keeping generated preservation data explicit. For example:</p>
+<pre><code class="language-text">diagram &quot;A small system&quot; version=1
+
+group workers &quot;Services&quot;
+node orders &quot;Orders&quot; in=workers
+node payments &quot;Payments&quot; in=workers
+node store &quot;Database&quot; kind=database
+edge charge orders -&gt; payments &quot;authorize&quot;
+edge save orders -&gt; store &quot;persist&quot;
+
+layout root flow direction=auto gap=48
+layout workers row gap=32
+near payments orders side=right gap=32 view=explore
+
+view explore &quot;Explore&quot; mode=interactive width=1000 height=640
+view card &quot;Summary&quot; mode=static width=480 height=320 detail=auto
+</code></pre>
+<p>The prototype's source mutations preserve node declaration order when renaming. This matters because stable identifiers alone would not prevent accidental layout churn if a “rename” implementation removed a declaration and re-appended it elsewhere in an order-sensitive model.</p>
+<h3 id="verified-versus-intentionally-incomplete">Verified versus intentionally incomplete</h3>
+<p>The delivered run passes <strong>45 core tests and 26 browser integration tests</strong>. These include real pointer dragging, fresh-process repeatability, cross-runtime geometry equality for all samples, nested bounds, hard-pin conflicts, collapse/edge provenance, view changes, exact-checkpoint idempotence/invalidation, source/export round-trips, invalid-input recovery, escaping, and a narrow-screen application layout. Full reports and test sources are included.</p>
+<p>The managed Chromium in this environment blocks <code>file://</code> navigation, so browser tests injected the self-contained document with <code>set_content</code>. Native file opening in an unmanaged browser and other browsers were not verified. This is a test-environment limitation, not a hidden server dependency in the artifact.</p>
+<p>Warm Node compile measurements for the small examples were on the order of a few milliseconds. A separate synthetic grouped-chain test measured medians of about <strong>13.6 ms for 25 nodes</strong>, <strong>15.3 ms for 50</strong>, and <strong>80.7 ms for 100</strong>, with 24/49/99 edges respectively. These are this prototype's local measurements, not competitor comparisons or performance guarantees; DOM painting is excluded. Adaptive static rendering can cost more because it evaluates multiple candidate summaries.</p>
+<p>The significant missing pieces are a production layout/router backend, true incremental invalidation and Worker scheduling, arbitrary cross-container constraints, custom shapes and notation-specific algorithms, manual edge/label geometry, multi-panel view instances, robust font shaping/measurement, a structured collaborative patch service, and comprehensive accessibility interaction design. The current solver and router are bounded heuristics. Diagnostics do not prove that a better solution is impossible.</p>
+<h2 id="9-the-next-implementation-step-i-would-choose">9. The next implementation step I would choose</h2>
+<p>Keep the prototype's separation of model, view, intent, and checkpoints. Replace its weakest algorithms before expanding the grammar substantially.</p>
+<p>First, define a backend capability contract: compound groups, ports, hard locks, input ordering, partial layout, deterministic seed policy, and routing support. Try ELK and TALA on the same small corpus. Elkjs is a layout library rather than a ready-made editor and documents Worker integration; the application still owns source persistence, projections, and edit semantics. A separate router such as libavoid is worth evaluating when layout post-processing changes positions or group boundaries. <a class="cite" href="#ref-17">[17]</a><a class="cite" href="#ref-16">[16]</a><a class="cite" href="#ref-7">[7]</a><a class="cite" href="#ref-29">[29]</a></p>
+<p>Second, introduce a measured scene IR with explicit ports, group boundary interfaces, text metrics, and versioned style/measurement policy. Cache by scope and propagate invalidation through ancestors and cross-boundary edges. A post-layout constraint pass must trigger rerouting; otherwise the supposedly improved node positions can invalidate the original engine's edge geometry.</p>
+<p>Third, evaluate the authoring loop, not just a gallery of initial images. For every backend, test adding a sibling, inserting a rank, renaming to a longer label, nesting a group, dragging then adding content, collapsing a group with many external edges, resizing to a small static viewport, local reflow next to pinned neighbors, contradictory constraints, and reopening the source in a clean process. Score movement, overlap, crossings, readable text, source-diff size, and compile/interaction latency separately.</p>
+<p>Only then stabilize a public syntax or choose to expose the intent layer as an extension to an existing DSL. The durable product advantage is not inventing another spelling of “node A points to node B.” It is making <strong>layout refinement understandable, portable, repeatable, and resilient to the next edit</strong>.</p>
+<h2 id="sources">Sources</h2>
+<p>The linked references are primary project documentation, repositories, author announcements, or research papers. Access date: September 28, 2026. Tool capabilities change; the findings above are intentionally time-stamped.</p>
+<p id="ref-1"><span class="ref-number">[1]</span> <a href="https://mermaid.js.org/config/layouts.html" target="_blank" rel="noopener noreferrer">Mermaid: layout engines</a></p>
+<p id="ref-2"><span class="ref-number">[2]</span> <a href="https://mermaid.js.org/syntax/flowchart.html" target="_blank" rel="noopener noreferrer">Mermaid: flowchart syntax, subgraphs and collapse</a></p>
+<p id="ref-3"><span class="ref-number">[3]</span> <a href="https://d2lang.com/tour/layouts/" target="_blank" rel="noopener noreferrer">D2: layout engine comparison</a></p>
+<p id="ref-4"><span class="ref-number">[4]</span> <a href="https://d2lang.com/tour/positions/" target="_blank" rel="noopener noreferrer">D2: positions</a></p>
+<p id="ref-5"><span class="ref-number">[5]</span> <a href="https://d2lang.com/tour/grid-diagrams/" target="_blank" rel="noopener noreferrer">D2: grid diagrams</a></p>
+<p id="ref-6"><span class="ref-number">[6]</span> <a href="https://d2lang.com/tour/api/" target="_blank" rel="noopener noreferrer">D2: Oracle / API</a></p>
+<p id="ref-7"><span class="ref-number">[7]</span> <a href="https://d2lang.com/blog/tala-is-open-source/" target="_blank" rel="noopener noreferrer">D2 author announcement: TALA is open-source, September 7, 2026</a></p>
+<p id="ref-8"><span class="ref-number">[8]</span> <a href="https://d2lang.com/blog/" target="_blank" rel="noopener noreferrer">D2 blog: nonprofit transition, September 5, 2026</a></p>
+<p id="ref-9"><span class="ref-number">[9]</span> <a href="https://github.com/reladraw/reladraw" target="_blank" rel="noopener noreferrer">Reladraw repository and README</a></p>
+<p id="ref-10"><span class="ref-number">[10]</span> <a href="https://raw.githubusercontent.com/reladraw/reladraw/main/SYNTAX.md" target="_blank" rel="noopener noreferrer">Reladraw syntax reference</a></p>
+<p id="ref-11"><span class="ref-number">[11]</span> <a href="https://news.ycombinator.com/item?id=49858513" target="_blank" rel="noopener noreferrer">Reladraw: Hacker News discussion</a></p>
+<p id="ref-12"><span class="ref-number">[12]</span> <a href="https://docs.structurizr.com/workspaces/file-types" target="_blank" rel="noopener noreferrer">Structurizr: DSL and compiled JSON file types</a></p>
+<p id="ref-13"><span class="ref-number">[13]</span> <a href="https://likec4.dev/dsl/views/" target="_blank" rel="noopener noreferrer">LikeC4: model-based views</a></p>
+<p id="ref-14"><span class="ref-number">[14]</span> <a href="https://likec4.dev/tooling/drawio/" target="_blank" rel="noopener noreferrer">LikeC4: Draw.io round-trip integration</a></p>
+<p id="ref-15"><span class="ref-number">[15]</span> <a href="https://likec4.dev/tooling/cli/" target="_blank" rel="noopener noreferrer">LikeC4: CLI and layout-drift validation</a></p>
+<p id="ref-16"><span class="ref-number">[16]</span> <a href="https://eclipse.dev/elk/reference/algorithms/org-eclipse-elk-layered.html" target="_blank" rel="noopener noreferrer">ELK: layered layout reference</a></p>
+<p id="ref-17"><span class="ref-number">[17]</span> <a href="https://github.com/kieler/elkjs" target="_blank" rel="noopener noreferrer">elkjs: JavaScript layout library, limitations and Worker integration</a></p>
+<p id="ref-18"><span class="ref-number">[18]</span> <a href="https://eclipse.dev/elk/reference/options/org-eclipse-elk-randomSeed.html" target="_blank" rel="noopener noreferrer">ELK: randomSeed option</a></p>
+<p id="ref-19"><span class="ref-number">[19]</span> <a href="https://ialab.it.monash.edu/webcola/" target="_blank" rel="noopener noreferrer">WebCoLa: constraint-based graph layout</a></p>
+<p id="ref-20"><span class="ref-number">[20]</span> <a href="https://www.yfiles.com/demos/layout/partial/" target="_blank" rel="noopener noreferrer">yFiles: Partial Layout demonstration and description</a></p>
+<p id="ref-21"><span class="ref-number">[21]</span> <a href="https://graphviz.org/docs/layouts/dot/" target="_blank" rel="noopener noreferrer">Graphviz: dot layout and controls</a></p>
+<p id="ref-22"><span class="ref-number">[22]</span> <a href="https://graphviz.org/docs/attrs/pin/" target="_blank" rel="noopener noreferrer">Graphviz: engine-specific pin attribute</a></p>
+<p id="ref-23"><span class="ref-number">[23]</span> <a href="https://plantuml.com/layout-engines" target="_blank" rel="noopener noreferrer">PlantUML: layout engines and controls</a></p>
+<p id="ref-24"><span class="ref-number">[24]</span> <a href="https://pikchr.org/home/doc/trunk/homepage.md" target="_blank" rel="noopener noreferrer">Pikchr: documentation and purpose</a></p>
+<p id="ref-25"><span class="ref-number">[25]</span> <a href="https://bluefishjs.org/learn/what-is-bluefish.html" target="_blank" rel="noopener noreferrer">Bluefish: relations and partial layout specification</a></p>
+<p id="ref-26"><span class="ref-number">[26]</span> <a href="https://penrose.cs.cmu.edu/docs/ref/style/overview" target="_blank" rel="noopener noreferrer">Penrose: Style language and separation of concerns</a></p>
+<p id="ref-27"><span class="ref-number">[27]</span> <a href="https://penrose.cs.cmu.edu/docs/ref/constraints" target="_blank" rel="noopener noreferrer">Penrose: constraints and objectives</a></p>
+<p id="ref-28"><span class="ref-number">[28]</span> <a href="https://constraints.cs.washington.edu/solvers/cassowary-tochi.pdf" target="_blank" rel="noopener noreferrer">Badros, Borning and Stuckey: Cassowary constraint solving (paper)</a></p>
+<p id="ref-29"><span class="ref-number">[29]</span> <a href="https://www.adaptagrams.org/documentation/libavoid.html" target="_blank" rel="noopener noreferrer">Adaptagrams: libavoid routing overview</a></p>
+<p id="ref-30"><span class="ref-number">[30]</span> <a href="https://penrose.cs.cmu.edu/docs/ref/Interactivity" target="_blank" rel="noopener noreferrer">Penrose: experimental interactivity</a></p>
+
+</article></div><footer>Original analysis and prototype. Primary sources are linked inline. No third-party layout engine is bundled.</footer></body></html>

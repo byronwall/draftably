@@ -47,14 +47,14 @@ In GitHub **Settings → Actions → General**, allow Actions to create and appr
 
 Configure an npm trusted publisher for `draftably`:
 
-| Field | Value |
-| --- | --- |
-| Provider | GitHub Actions |
-| Organization or user | `byronwall` |
-| Repository | `draftably` |
-| Workflow filename | `release.yml` |
-| Environment | Leave empty; this workflow does not use one |
-| Allowed action | Direct publishing with `npm publish` |
+| Field                | Value                                       |
+| -------------------- | ------------------------------------------- |
+| Provider             | GitHub Actions                              |
+| Organization or user | `byronwall`                                 |
+| Repository           | `draftably`                                 |
+| Workflow filename    | `release.yml`                               |
+| Environment          | Leave empty; this workflow does not use one |
+| Allowed action       | Direct publishing with `npm publish`        |
 
 The npm package must exist before trusted publishing can be configured.
 Publish the first checked archive from your authenticated local session once the CLI is ready.
