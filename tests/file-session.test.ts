@@ -3,7 +3,7 @@ import { afterAll, expect, it, vi } from 'vitest';
 afterAll(() => vi.unstubAllGlobals());
 
 it('keeps the first title edit on a new file-mode shape and selects its source id', async () => {
-  vi.stubGlobal('matchMedia', () => ({ matches: false }));
+  vi.stubGlobal('matchMedia', () => ({ matches: false, addEventListener() {} }));
   vi.stubGlobal('window', {
     setTimeout,
     clearTimeout,

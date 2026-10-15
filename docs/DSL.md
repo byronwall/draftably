@@ -152,17 +152,17 @@ are left out because the browser measures label text with real fonts.
 
 Edits made in the viewer are written back to the file as readable statements:
 
-| In the viewer                         | In the file                                                        |
-| ------------------------------------- | ------------------------------------------------------------------ |
-| Drag an object                        | `near` the closest sibling it does not overlap; `nudge` if none.   |
-| Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.             |
-| Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.   |
-| Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label.  |
-| Wrap in a container or ungroup        | A `group` and the members' `in=`.                                  |
-| Clear manual markers                  | Removes the object's soft position refinements.                    |
-| Rebuild, or Apply in Compare          | `layout scope engine=…` for the diagram or the selected container. |
-| Improve, a timeline step, the brush   | `stay` for each object that moved, plus anchors around them.       |
-| Routing options, or a routing Compare | The `routing` line.                                                |
+| In the viewer                              | In the file                                                        |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| Drag an object                             | `near` the closest sibling it does not overlap; `nudge` if none.   |
+| Pin or unpin (**P**)                       | `pin` at its position; unpinning leaves a soft `stay`.             |
+| Resize a shape or container                | `size`, or `min-width`/`min-height` on the container's `layout`.   |
+| Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.  |
+| Wrap in a container or ungroup             | A `group` and the members' `in=`.                                  |
+| Clear manual markers                       | Removes the object's soft position refinements.                    |
+| Rebuild, or Apply in Compare               | `layout scope engine=…` for the diagram or the selected container. |
+| Tidy positions, a timeline step, the brush | `stay` for each object that moved, plus anchors around them.       |
+| Routing options, or a routing Compare      | The `routing` line.                                                |
 
 An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
 top-level object, and the siblings of the edited object and of its containers. When an agent later
@@ -178,7 +178,7 @@ outside the viewer clears them, so undo never erases someone else's work.
 
 ## Layout tools
 
-A rebuild arranges a scope from scratch, so it is saved as a recipe. **Preview as file recipe**
+A rebuild arranges a scope from scratch, so it is saved as a recipe. **Preview automatic layout**
 in Layout options, and every rebuild candidate in **Compare**, compile the file with the new
 `layout` line. What you see is exactly what the file will draw, and **Keep** or **Apply** saves
 that line. Soft position refinements inside the scope are removed so the engine's arrangement
@@ -186,7 +186,7 @@ shows; pins, sizes and the nested groups' own `layout` lines stay. Layout option
 scope's current line and the one a rebuild would write. The routing menu and routing comparisons
 write the `routing` line.
 
-**Improve**, **Preview pass**, a kept **timeline** step, a **brush** stroke, and warm-start or
+**Tidy positions**, **Preview tidy**, a kept **timeline** step, a **brush** stroke, and warm-start or
 pass candidates in Compare all start from the current drawing, so a recipe could not reproduce
 them. They are saved as an arrangement instead: each object that moved gets a soft `stay` at its
 new position relative to its parent (an existing `stay` is updated in place), and the objects

@@ -22,6 +22,14 @@ type NumericKey = {
   [K in keyof Diagram['settings']]: Diagram['settings'][K] extends number ? K : never;
 }[keyof Diagram['settings']];
 
+type DiagramType = 'flow' | 'nested' | 'grid' | 'custom';
+
+const DIAGRAM_APPROACHES: Record<Exclude<DiagramType, 'custom'>, LayoutAlgorithmId> = {
+  flow: 'compound-flow',
+  nested: 'boundary-align',
+  grid: 'grid',
+};
+
 function Slider(props: {
   label: string;
   key: NumericKey;
@@ -128,34 +136,42 @@ const APPROACH_CONTROLS: Record<LayoutSettingKey, () => JSX.Element> = {
   ),
 };
 
-/** Layout options: approach, scope, pass limits and the last run's report. */
+/** Layout options: diagram type, scope, advanced settings and the last run's report. */
 export function LayoutLab() {
   const algorithm = createMemo(() => Engine.algorithms.find(a => a.id === doc.settings.algorithm)!);
+  const diagramType = createMemo<DiagramType>(() => {
+    const entry = Object.entries(DIAGRAM_APPROACHES).find(
+      ([, id]) => id === doc.settings.algorithm,
+    );
+    return (entry?.[0] as DiagramType | undefined) ?? 'custom';
+  });
   return (
     <aside class="layout-lab floating-panel" aria-label="Layout lab">
       <header class="panel-header">
         <div>
-          <span class="eyebrow">Layout lab</span>
-          <h2>Improve, don’t restart.</h2>
+          <h2>Automatic layout</h2>
         </div>
         <IconButton icon="close" label="Close layout lab" keys="⌥L" onClick={toggleLayoutLab} />
       </header>
       <div class="panel-scroll stack">
-        <SelectField<LayoutAlgorithmId>
-          label="Approach"
-          hint={`${Engine.algorithms.length} local implementations`}
-          value={doc.settings.algorithm}
-          options={Engine.algorithms.map(a => [a.id, a.name] as const)}
-          onChange={value => updateLayoutSettings({ algorithm: value })}
+        <SelectField<DiagramType>
+          label="Diagram type"
+          value={diagramType()}
+          options={[
+            ['flow', 'Flow'],
+            ['nested', 'Nested architecture'],
+            ['grid', 'Compact grid'],
+            ...(diagramType() === 'custom' ? [['custom', 'Custom approach'] as const] : []),
+          ]}
+          onChange={value => {
+            if (value !== 'custom') updateLayoutSettings({ algorithm: DIAGRAM_APPROACHES[value] });
+          }}
         />
-        <p class="hint">{algorithm().short}</p>
-        <details class="disclosure">
-          <summary>{algorithm().family} · how it works</summary>
-          <p class="hint">{algorithm().detail}</p>
-        </details>
-        <Show when={fileMode()} fallback={<IntentSummary />}>
-          <FileRecipe />
-        </Show>
+        <p class="hint">
+          {fileMode()
+            ? 'Automatic layout saves a rule. Tidy positions saves the current placement.'
+            : 'Automatic layout starts a new arrangement. Tidy positions makes small adjustments.'}
+        </p>
         <SelectField<LabScope>
           label="Scope"
           hint={
@@ -195,78 +211,101 @@ export function LayoutLab() {
             onChange={aspect => updateLayoutSettings({ aspect })}
           />
         </div>
-        <Checkbox
-          label="Respect arrow direction"
-          checked={doc.settings.respectDirection}
-          onChange={respectDirection => updateLayoutSettings({ respectDirection })}
-        />
-        <p class="hint">
-          Forward order is shared across connective approaches. Pins and frames win. Cycles retain
-          feedback edges. Turn this off to permit folded ranks.
-        </p>
-
-        <section class="lab-section">
-          <div class="row between">
-            <h3>Small passes</h3>
-            <span class="pill">Default</span>
-          </div>
-          <Slider
-            label="Maximum move / action"
-            key="maxMove"
-            min={8}
-            max={192}
-            step={8}
-            hint="World pixels, across all nested levels. No automatic camera fit."
-          />
-          <Slider
-            label="Stay near this arrangement"
-            key="stability"
-            min={0}
-            max={100}
-            step={5}
-            hint="A soft anchor, not a pin. Lower values allow more change."
-          />
-          <Slider
-            label="Solver effort"
-            key="iterations"
-            min={8}
-            max={96}
-            step={8}
-            hint="More internal steps; the same total movement limit."
-          />
-          <Slider label="Minimum shape gap" key="nodeGap" min={8} max={96} step={4} />
-        </section>
-
-        <details class="lab-section" open>
-          <summary>Approach controls</summary>
-          <For
-            each={algorithm().controls}
-            fallback={
-              <p class="hint">
-                Only padded collisions are repaired. Link direction and aspect are not objectives.
-              </p>
-            }
-          >
-            {key => APPROACH_CONTROLS[key]?.()}
-          </For>
-        </details>
-
         <details class="lab-section">
-          <summary>Protection & interaction</summary>
-          <Checkbox
-            label="Treat Manual markers as fixed"
-            checked={doc.settings.respectManual}
-            onChange={respectManual => updateLayoutSettings({ respectManual })}
-          />
-          <Checkbox
-            label="Allow containers to grow right / down"
-            checked={doc.settings.growContainers}
-            onChange={growContainers => updateLayoutSettings({ growContainers })}
-          />
-          <p class="hint">
-            Pins always stay fixed. A pinned descendant anchors its container. Frame growth is off
-            by default.
-          </p>
+          <summary>Advanced layout settings</summary>
+          <div class="stack">
+            <SelectField<LayoutAlgorithmId>
+              label="Approach"
+              value={doc.settings.algorithm}
+              options={Engine.algorithms.map(a => [a.id, a.name] as const)}
+              onChange={value => updateLayoutSettings({ algorithm: value })}
+            />
+            <p class="hint">{algorithm().short}</p>
+            <details class="disclosure">
+              <summary>{algorithm().family} · how it works</summary>
+              <p class="hint">{algorithm().detail}</p>
+            </details>
+            <Show when={fileMode()} fallback={<IntentSummary />}>
+              <FileRecipe />
+            </Show>
+
+            <section class="lab-section">
+              <Checkbox
+                label="Respect arrow direction"
+                checked={doc.settings.respectDirection}
+                onChange={respectDirection => updateLayoutSettings({ respectDirection })}
+              />
+              <p class="hint">
+                Forward order is shared across connective approaches. Pins and frames win. Cycles
+                retain feedback edges. Turn this off to permit folded ranks.
+              </p>
+            </section>
+
+            <section class="lab-section">
+              <div class="row between">
+                <h3>Small passes</h3>
+                <span class="pill">Default</span>
+              </div>
+              <Slider
+                label="Maximum move / action"
+                key="maxMove"
+                min={8}
+                max={192}
+                step={8}
+                hint="World pixels, across all nested levels. No automatic camera fit."
+              />
+              <Slider
+                label="Stay near this arrangement"
+                key="stability"
+                min={0}
+                max={100}
+                step={5}
+                hint="A soft anchor, not a pin. Lower values allow more change."
+              />
+              <Slider
+                label="Solver effort"
+                key="iterations"
+                min={8}
+                max={96}
+                step={8}
+                hint="More internal steps; the same total movement limit."
+              />
+              <Slider label="Minimum shape gap" key="nodeGap" min={8} max={96} step={4} />
+            </section>
+
+            <details class="lab-section">
+              <summary>Approach controls</summary>
+              <For
+                each={algorithm().controls}
+                fallback={
+                  <p class="hint">
+                    Only padded collisions are repaired. Link direction and aspect are not
+                    objectives.
+                  </p>
+                }
+              >
+                {key => APPROACH_CONTROLS[key]?.()}
+              </For>
+            </details>
+
+            <details class="lab-section">
+              <summary>Protection & interaction</summary>
+              <Checkbox
+                label="Treat Manual markers as fixed"
+                checked={doc.settings.respectManual}
+                onChange={respectManual => updateLayoutSettings({ respectManual })}
+              />
+              <Checkbox
+                label="Allow containers to grow right / down"
+                checked={doc.settings.growContainers}
+                onChange={growContainers => updateLayoutSettings({ growContainers })}
+              />
+              <p class="hint">
+                Pins always stay fixed. A pinned descendant anchors its container. Frame growth is
+                off by default.
+              </p>
+            </details>
+          </div>
         </details>
 
         <LayoutReportCard />
@@ -309,25 +348,20 @@ export function LayoutLab() {
       </div>
       <footer class="lab-footer">
         <div class="fields-2">
-          <button type="button" class="button primary" onClick={() => runCommand('layout')}>
-            Improve <kbd>L</kbd>
+          <button type="button" class="button" onClick={() => runCommand('layout')}>
+            Tidy positions <kbd>L</kbd>
           </button>
           <button type="button" class="button" onClick={() => runCommand('layout-preview')}>
-            Preview pass
+            Preview tidy
           </button>
         </div>
         <button
           type="button"
-          class="button ghost full"
+          class="button primary full"
           onClick={() => runCommand('layout-rebuild')}
         >
-          {fileMode() ? 'Preview as file recipe…' : 'Deterministic rebuild…'} <kbd>⇧L</kbd>
+          Preview automatic layout <kbd>⇧L</kbd>
         </button>
-        <p class="hint">
-          {fileMode()
-            ? 'Rebuild writes this approach into the file and arranges it from scratch. Improve keeps the current drawing as positions.'
-            : 'Rebuild ignores unpinned positions and opens a preview.'}
-        </p>
       </footer>
     </aside>
   );
@@ -349,8 +383,8 @@ function FileRecipe() {
         when={scope()}
         fallback={
           <p class="hint">
-            A recipe arranges the whole diagram or one container. Improve saves the selection as
-            positions instead.
+            A recipe arranges the whole diagram or one container. Tidy positions saves the selection
+            as positions instead.
           </p>
         }
       >

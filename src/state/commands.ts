@@ -171,20 +171,20 @@ export const commands = {
   'mark-end': { label: 'End here', run: () => actions.markSelectedAs('end') },
 
   layout: {
-    label: 'Improve layout',
+    label: 'Tidy positions',
     keys: 'L',
     icon: 'layout',
     run: () => runLabLayout(),
     endsBrush: true,
   },
   'layout-rebuild': {
-    label: 'Preview a deterministic rebuild',
+    label: 'Preview automatic layout',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
     endsBrush: true,
   },
   'layout-preview': {
-    label: 'Preview pass',
+    label: 'Preview tidy',
     run: () => runLabLayout('pass', true),
     endsBrush: true,
   },
