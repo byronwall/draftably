@@ -534,6 +534,7 @@ export function resetExample() {
 export const markExampleSaved = () => resetHistory();
 
 function begin(info: FileSessionInfo): Promise<void> {
+  stopListening();
   exampleOriginal = info.example ? info.source : '';
   disableBrowserStorage();
   setCommitHandler(handleEdit);
@@ -554,22 +555,43 @@ function onExternalChange(source: string, revision: string) {
   else void acceptDisk(source, revision, { announce: true });
 }
 
+let fileEvents: EventSource | null = null;
+
+function stopListening() {
+  fileEvents?.close();
+  fileEvents = null;
+}
+
+function resumeListening(event: PageTransitionEvent) {
+  if (event.persisted && state.info()?.file) listen();
+}
+
 function listen() {
-  const events = new EventSource(`./api/events${fileQuery}`);
+  stopListening();
+  const query = fileQuery;
+  const events = new EventSource(`./api/events${query}`);
+  fileEvents = events;
+  // Cached pages otherwise keep their HTTP/1 streams and exhaust the browser's connection pool.
+  window.addEventListener('pagehide', stopListening);
+  window.addEventListener('pageshow', resumeListening);
   events.addEventListener('source', event => {
+    if (fileEvents !== events) return;
     const { source, revision } = JSON.parse((event as MessageEvent).data);
     onExternalChange(source, revision);
   });
-  events.addEventListener('error', () => state.setStatus('offline'));
+  events.addEventListener('error', () => {
+    if (fileEvents === events) state.setStatus('offline');
+  });
   events.addEventListener('open', async () => {
     // Catch up on anything missed while disconnected.
     try {
-      const info: FileSessionInfo = await (await fetch(`./api/session${fileQuery}`)).json();
+      const info: FileSessionInfo = await (await fetch(`./api/session${query}`)).json();
+      if (fileEvents !== events) return;
       if (info.revision !== diskRevision) onExternalChange(info.source, info.revision);
       else if (state.status() === 'offline')
         state.setStatus(state.sourceError() ? 'invalid' : 'saved');
     } catch {
-      state.setStatus('offline');
+      if (fileEvents === events) state.setStatus('offline');
     }
   });
 }

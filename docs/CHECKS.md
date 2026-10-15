@@ -53,6 +53,8 @@ redoes, appends a connected node from outside, restarts the server, writes inval
 races an outside write against a viewer save. At each step it compares the browser's geometry
 with `pnpm draftably inspect --json`. Screenshots go to `tmp/proof/`.
 
+The file proof also switches between more than six diagrams with Chrome’s back/forward cache enabled, then restores a cached page after an external file change. This catches retained EventSource connections that can exhaust the browser’s HTTP/1 pool; Playwright disables that cache by default.
+
 ## Themes in file mode
 
 `pnpm build && pnpm prove:themes` serves a temporary copy of `examples/theme-proof.draft` on a free

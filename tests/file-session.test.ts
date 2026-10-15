@@ -53,3 +53,43 @@ it('keeps the first title edit on a new file-mode shape and selects its source i
   expect(fileSession.currentSource()).toContain('node next-step "Approve request"');
   expect(documentState.selectedIds()).toEqual(['next-step']);
 });
+
+it('releases cached-page streams and catches up when the file page returns', async () => {
+  const page = Object.assign(new EventTarget(), { setTimeout, clearTimeout });
+  vi.stubGlobal('window', page);
+  const streams: FakeEventSource[] = [];
+  class FakeEventSource extends EventTarget {
+    close = vi.fn();
+    constructor(readonly url: string) {
+      super();
+      streams.push(this);
+    }
+  }
+  vi.stubGlobal('EventSource', FakeEventSource);
+  let source = 'diagram "File" version=1\nnode a "Before leaving"\n';
+  vi.stubGlobal('fetch', async () =>
+    Response.json({ name: 'file.draft', path: '/file.draft', source, revision: source }),
+  );
+  const session = await import('../src/state/file-session');
+  await session.openFileSession('one.draft');
+  await session.openFileSession('two.draft');
+  expect(streams[0].close).toHaveBeenCalledOnce();
+  expect(streams[1].url).toBe('./api/events?file=two.draft');
+
+  page.dispatchEvent(new Event('pagehide'));
+  expect(streams[1].close).toHaveBeenCalledOnce();
+  streams[1].dispatchEvent(new Event('error'));
+  expect(session.fileStatus()).toBe('saved');
+
+  source = 'diagram "File" version=1\nnode a "Changed while away"\n';
+  const restored = Object.assign(new Event('pageshow'), { persisted: true });
+  page.dispatchEvent(restored);
+  expect(streams).toHaveLength(3);
+  streams[2].dispatchEvent(new Event('open'));
+  await vi.waitFor(() => expect(session.currentSource()).toContain('Changed while away'));
+
+  await session.openExampleSession('scratch', 'Scratch', 'node a "Scratch"\n');
+  expect(streams[2].close).toHaveBeenCalledOnce();
+  page.dispatchEvent(restored);
+  expect(streams).toHaveLength(3);
+});
