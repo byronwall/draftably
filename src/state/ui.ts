@@ -3,7 +3,7 @@ import { createEffect, createRoot, createSignal } from 'solid-js';
 
 const UI_STORAGE = 'diagram-studio-v5-ui';
 
-export type MenuId = 'file' | 'edit' | 'export' | 'routing' | 'context' | 'tools';
+export type MenuId = 'file' | 'edit' | 'export' | 'routing' | 'context' | 'appearance' | 'tools';
 export type DialogId = 'help' | 'quick-build' | 'confirm' | 'error';
 
 export interface MenuState {

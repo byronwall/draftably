@@ -64,16 +64,25 @@ layout services row gap=56
 | Statement                          | Options                                                                                              |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `diagram "title" version=1`        | Optional, at most one.                                                                               |
-| `node id "label"`                  | `in=group`, `color=`, `shape=box\|pill\|circle\|diamond\|text`                                       |
-| `group id "label"`                 | `in=group` (groups nest), `color=`                                                                   |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`                             |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                         |
+| `theme name`                       | Preset look (see below); optional, at most one                                                       |
+| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family          |
 | `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`                             |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12`                         |
 
-`scope` is `root` or a group ID. Colors: `auto` (inherit from the nearest colored group),
-`violet`, `blue`, `mint`, `amber`, `rose`, `slate`. Without `layout` lines, `root` uses
-`flow gap=48` and groups use `column gap=24`.
+`scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
+group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
+`mint`, `green`, `amber`, `orange`, `red`, `rose`, `violet`. `shade=` picks `50` (palest) to `950`
+(darkest); a colored node defaults to `500`. Without `layout` lines, `root` uses `flow gap=48`
+and groups use `column gap=24`.
+
+Themes: `graphite` (the default), `fieldnotes`, `signal`, `mulberry`, `midnight`. A `theme` line
+may also set `padding-x=`, `padding-y=`, `radius=`, `title-font=sans|serif|mono` and
+`annotation-font=`. Padding and fonts change node sizes and so the layout; colors never move
+anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a comment.
 
 ### Layout engines
 

@@ -29,5 +29,13 @@ writeFileSync(
   'Meld prototype\n\n' +
     readFileSync(path.join(root, 'reference/meld/original/LICENSE'), 'utf8') +
     '\n\nSolidJS\n\n' +
-    readFileSync(path.join(root, 'node_modules/solid-js/LICENSE'), 'utf8'),
+    readFileSync(path.join(root, 'node_modules/solid-js/LICENSE'), 'utf8') +
+    // Diagram fonts, embedded in the viewer and in exported SVG files.
+    ['Inter', 'SourceSerif4', 'JetBrainsMono']
+      .map(
+        name =>
+          `\n\n${name} font\n\n` +
+          readFileSync(path.join(root, `src/assets/fonts/LICENSE-${name}.txt`), 'utf8'),
+      )
+      .join(''),
 );

@@ -3,6 +3,16 @@
  * Each one is a single undoable step.
  */
 import { batch, createRoot, createSignal } from 'solid-js';
+import {
+  groupShadeFor,
+  isBuiltInFamily,
+  NODE_SHADE,
+  resolveAppearance,
+  shadesOf,
+  type AppearanceOverrides,
+  type Shade,
+  type ThemeId,
+} from '../model/appearance';
 import { normalize } from '../model/document';
 import * as edits from '../model/edits';
 import { findEdge, findGroup, findNode, isEdge, isGroup, selectionRoots } from '../model/graph';
@@ -292,8 +302,58 @@ export function nudgeSelection(dx: number, dy: number) {
 
 export function setColor(color: Diagram['styles'][string]['color']) {
   const ids = selectedIds().filter(id => findNode(doc, id) || findGroup(doc, id));
+  const look = resolveAppearance(doc.appearance);
   transact('Change color', d => {
-    for (const id of ids) edits.setStyle(d, id, { color });
+    for (const id of ids) {
+      edits.setStyle(d, id, { color });
+      // A file-defined family may not have the current shade; use its closest one.
+      const style = d.styles[id],
+        shade = style.shade ?? (findGroup(d, id) ? groupShadeFor(look.theme) : NODE_SHADE),
+        available = color === 'auto' ? [] : shadesOf(look, color);
+      if (available.length && !available.includes(shade))
+        style.shade = available.reduce((a, b) =>
+          Math.abs(b - shade) < Math.abs(a - shade) ? b : a,
+        );
+    }
+  });
+}
+
+/**
+ * Switch the diagram to a preset theme in one undoable step. Overrides of the old preset are
+ * cleared; the file's own color families stay, so objects that use them keep their colors.
+ */
+export function chooseTheme(theme: ThemeId) {
+  transact('Change theme', d => {
+    d.appearance = {
+      theme,
+      overrides: {},
+      colors: d.appearance.colors.filter(c => !isBuiltInFamily(c.family)),
+    };
+  });
+}
+
+/** Change diagram-wide appearance values; `undefined` returns a value to the theme's default. */
+export function setAppearanceOverrides(
+  patch: Partial<AppearanceOverrides>,
+  label = 'Change padding',
+) {
+  transact(label, d => {
+    const next = { ...d.appearance.overrides, ...patch };
+    for (const key of Object.keys(next) as Array<keyof AppearanceOverrides>)
+      if (next[key] === undefined) delete next[key];
+    d.appearance.overrides = next;
+  });
+}
+
+/** Set the shade of the selection; `undefined` returns to the default shade. */
+export function setShade(shade: Shade | undefined) {
+  const ids = selectedIds().filter(id => findNode(doc, id) || findGroup(doc, id));
+  transact('Change shade', d => {
+    for (const id of ids) {
+      const style = (d.styles[id] ||= { shape: 'box', color: 'auto', icon: '' });
+      if (shade === undefined) delete style.shade;
+      else style.shade = shade;
+    }
   });
 }
 

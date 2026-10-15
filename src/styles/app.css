@@ -806,9 +806,16 @@ details.inspector-section[open] > summary {
   font-size: var(--text-xs);
 }
 
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .swatches {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .swatches button {
@@ -823,6 +830,32 @@ details.inspector-section[open] > summary {
 
 .swatches button.selected {
   box-shadow: 0 0 0 2px var(--accent);
+}
+
+.swatches button.auto {
+  border-style: dashed;
+}
+
+.shades {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+  gap: 3px;
+}
+
+.shades button {
+  height: 22px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font: 600 10px var(--font);
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.shades button.selected {
+  box-shadow:
+    0 0 0 1.5px var(--surface),
+    0 0 0 3px var(--accent);
 }
 
 .intent-role {

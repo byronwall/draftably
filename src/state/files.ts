@@ -2,7 +2,9 @@
 import { batch } from 'solid-js';
 import { isLegacyDiagram } from '../model/document';
 import { clamp } from '../model/geometry';
+import { resolveAppearance } from '../model/appearance';
 import { findNode } from '../model/graph';
+import { fontFaceCss } from '../lib/font-data';
 import {
   createSvgElement,
   downloadBlob,
@@ -144,11 +146,17 @@ export function exportSvg(): string {
     title.textContent = doc.title;
     const meta = createSvgElement('metadata', { id: 'diagram-studio-data' });
     meta.textContent = snapshot();
-    const background = getComputedStyle(world.ownerSVGElement!).getPropertyValue('--canvas').trim();
+    // The drawing's own canvas and fonts, so the file renders the same without the app.
+    const look = resolveAppearance(doc.appearance),
+      defs = createSvgElement('defs'),
+      style = createSvgElement('style');
+    style.textContent = fontFaceCss(look);
+    defs.append(style);
     svg.append(
       title,
       meta,
-      createSvgElement('rect', { x, y, width: w, height: h, fill: background || '#fbfbfd' }),
+      defs,
+      createSvgElement('rect', { x, y, width: w, height: h, fill: look.canvas }),
     );
     svg.appendChild(materializeSvg(world));
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + serializeSvg(svg);

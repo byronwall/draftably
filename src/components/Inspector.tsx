@@ -10,9 +10,17 @@ import {
   styleOf,
 } from '../model/graph';
 import { nodeLabel } from '../model/labels';
-import { COLOR_KEYS, colorTokens, NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
+import {
+  groupShadeFor,
+  NODE_SHADE,
+  resolveAppearance,
+  shadesOf,
+  swatchFor,
+  type Shade,
+} from '../model/appearance';
+import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
-import { setColor, setLayoutIntent } from '../state/actions';
+import { setColor, setLayoutIntent, setShade } from '../state/actions';
 import { runCommand, type CommandId } from '../state/commands';
 import { doc, selectedIds, selectItems, transact } from '../state/document';
 import { fileMode } from '../state/file-session';
@@ -92,21 +100,69 @@ function CommandButton(props: { command: CommandId; children: JSX.Element; class
   );
 }
 
-function Swatches(props: { selected?: ColorKey }) {
+/** Color families in the diagram's theme, plus `auto` for the theme's default surface. */
+function Swatches(props: { selected?: ColorKey; shade?: Shade; group?: boolean }) {
+  const look = () => resolveAppearance(doc.appearance);
+  const families = () =>
+    ['auto', ...look().families.keys()].filter(f => f === 'auto' || shadesOf(look(), f).length);
+  const preview = (family: string) =>
+    family === 'auto'
+      ? swatchFor(look(), 'auto', undefined, props.group ? 'group' : 'node')
+      : swatchFor(
+          look(),
+          family,
+          shadesOf(look(), family).includes(NODE_SHADE)
+            ? NODE_SHADE
+            : shadesOf(look(), family).at(-1),
+        );
   return (
-    <div class="swatches" role="group" aria-label="Object color">
-      <For each={COLOR_KEYS}>
-        {key => (
-          <button
-            type="button"
-            classList={{ selected: props.selected === key }}
-            aria-label={key}
-            aria-pressed={props.selected === key}
-            title={key}
-            style={{ background: colorTokens(key, doc.theme).ink }}
-            onClick={() => setColor(key)}
-          />
-        )}
+    <div class="color-picker">
+      <div class="swatches" role="group" aria-label="Color family">
+        <For each={families()}>
+          {key => (
+            <button
+              type="button"
+              classList={{ selected: props.selected === key, auto: key === 'auto' }}
+              aria-label={key === 'auto' ? 'Theme default' : key}
+              aria-pressed={props.selected === key}
+              title={key === 'auto' ? 'Theme default' : key}
+              style={{ background: preview(key).fill, 'border-color': preview(key).stroke }}
+              onClick={() => setColor(key)}
+            />
+          )}
+        </For>
+      </div>
+      <Show when={props.selected && props.selected !== 'auto'}>
+        <ShadePicker family={props.selected!} shade={props.shade} group={props.group} />
+      </Show>
+    </div>
+  );
+}
+
+/** Numeric shades of a family, light to dark; the object's default shade is marked. */
+function ShadePicker(props: { family: string; shade?: Shade; group?: boolean }) {
+  const look = () => resolveAppearance(doc.appearance);
+  const fallback = () => (props.group ? groupShadeFor(look().theme) : NODE_SHADE);
+  const current = () => props.shade ?? fallback();
+  return (
+    <div class="shades" role="radiogroup" aria-label={`${props.family} shade`}>
+      <For each={shadesOf(look(), props.family)}>
+        {shade => {
+          const swatch = () => swatchFor(look(), props.family, shade);
+          return (
+            <button
+              type="button"
+              role="radio"
+              aria-checked={current() === shade}
+              classList={{ selected: current() === shade }}
+              title={`${props.family} ${shade}${shade === fallback() ? ' (default)' : ''}`}
+              style={{ background: swatch().fill, color: swatch().ink }}
+              onClick={() => setShade(shade === fallback() ? undefined : shade)}
+            >
+              {shade}
+            </button>
+          );
+        }}
       </For>
     </div>
   );
@@ -175,7 +231,10 @@ function MultipleSelected(props: { count: number }) {
         </div>
       </Section>
       <Section title="Color">
-        <Swatches selected={styleOf(doc, selectedIds()[0]).color} />
+        <Swatches
+          selected={styleOf(doc, selectedIds()[0]).color}
+          shade={styleOf(doc, selectedIds()[0]).shade}
+        />
       </Section>
       <CommandButton command="delete" class="danger ghost full">
         Delete selection
@@ -275,7 +334,7 @@ function ObjectInspector(props: { id: string }) {
           onCommit={v => edit('Edit title', d => edits.setTitle(d, props.id, v))}
         />
         <Field label="Color">
-          <Swatches selected={style().color} />
+          <Swatches selected={style().color} shade={style().shade} group={container()} />
         </Field>
         <Show when={!container()}>
           <SelectField<ShapeKind>

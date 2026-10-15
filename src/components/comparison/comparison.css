@@ -208,7 +208,7 @@ details.sidebar-section[open] > summary,
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: var(--canvas);
+  background: var(--diagram-canvas, var(--canvas));
 }
 
 .candidate-pending {
@@ -319,7 +319,7 @@ details.sidebar-section[open] > summary,
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: var(--canvas);
+  background: var(--diagram-canvas, var(--canvas));
 }
 
 .overlay-empty {

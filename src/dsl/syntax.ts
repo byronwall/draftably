@@ -5,6 +5,21 @@
  * Source is kept as a list of lines so that edits can change single statements and formatting
  * keeps every comment and unrelated statement.
  */
+import {
+  BUILT_IN_FAMILIES,
+  defaultAppearance,
+  groupShadeFor,
+  NODE_SHADE,
+  HEX_COLOR,
+  isBuiltInFamily,
+  OVERRIDE_LIMITS,
+  SHADES,
+  THEME_IDS,
+  type DiagramAppearance,
+  type Shade,
+  type ThemeId,
+} from '../model/appearance';
+import { FONT_ROLES, type FontRole } from '../model/fonts';
 import type {
   ColorKey,
   LayoutAlgorithmId,
@@ -167,6 +182,8 @@ export interface ModelObject {
   label: string;
   parent: string;
   color: DslColor;
+  /** Explicit shade; omitted means the default for the object type. */
+  shade?: Shade;
   shape: DslShape;
   line: number;
 }
@@ -231,7 +248,24 @@ export interface Model {
   hints: Hint[];
   /** Router settings from a `routing` statement. */
   routing: Partial<RoutingSettings>;
+  /** Theme, overrides and color definitions from `theme` and `theme-color` statements. */
+  appearance: DiagramAppearance;
+  /** Source line of the `theme` statement, and of each `theme-color` by `family:shade`. */
+  themeLine: number;
+  colorLines: Map<string, number>;
 }
+
+/** Theme attributes in the file and the override each sets. */
+export const THEME_ATTRS = {
+  'padding-x': 'paddingX',
+  'padding-y': 'paddingY',
+  radius: 'radius',
+  'title-font': 'titleFont',
+  'annotation-font': 'annotationFont',
+  canvas: 'canvas',
+  text: 'text',
+  connection: 'connection',
+} as const;
 
 // --- Engine and routing parameters ------------------------------------------------------------
 
@@ -296,9 +330,8 @@ export const paramAttr = (table: Record<string, Param<string>>, key: string) =>
 const ID = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
 export const isIdentifier = (s: string) => ID.test(s);
 
-export const COLORS: DslColor[] = ['auto', 'violet', 'blue', 'mint', 'amber', 'rose', 'slate'];
-/** Meld 0.1 palette names that map onto the editor palette. */
-const COLOR_ALIASES: Record<string, ColorKey> = { teal: 'mint', orange: 'amber' };
+export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
+const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text'];
 const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
@@ -313,6 +346,9 @@ export function parseModel(source: string | SourceDoc): Model {
     layouts: [],
     hints: [],
     routing: {},
+    appearance: defaultAppearance(),
+    themeLine: 0,
+    colorLines: new Map(),
   };
   const objectIds = new Set<string>(),
     edgeIds = new Set<string>(),
@@ -359,6 +395,22 @@ export function parseModel(source: string | SourceDoc): Model {
       assert(choices.includes(value), `Expected ${key}=${choices.join('|')}; got ${value}.`);
       return value;
     };
+    const shadeOf = (w: Word) => {
+      const n = Number(w.value);
+      assert(
+        !w.quoted && SHADES.includes(n as Shade),
+        `Expected shade=${SHADES.join('|')}; got ${w.value}.`,
+      );
+      return n as Shade;
+    };
+    const hex = (key: string) => {
+      const w = attrs.get(key)!;
+      assert(
+        w.quoted && HEX_COLOR.test(w.value),
+        `Expected ${key}="#rrggbb" in double quotes; got ${w.value || 'nothing'}.`,
+      );
+      return w.value.toUpperCase();
+    };
     const once = (key: string) => {
       assert(!unique.has(key), `Duplicate declaration: ${key}. Edit the existing line instead.`);
       unique.add(key);
@@ -388,16 +440,19 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? ['in', 'color', 'shape', 'kind', 'detail', 'priority']
-            : ['in', 'color', 'kind', 'detail', 'priority'],
+            ? ['in', 'color', 'shade', 'shape', 'kind', 'detail', 'priority']
+            : ['in', 'color', 'shade', 'kind', 'detail', 'priority'],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
         assert(!objectIds.has(oid), `Duplicate node/group id ${oid}.`);
         objectIds.add(oid);
-        const rawColor = attrs.get('color')?.value ?? 'auto';
-        const color = (COLOR_ALIASES[rawColor] ?? rawColor) as DslColor;
-        assert(COLORS.includes(color), `Expected color=${COLORS.join('|')}; got ${rawColor}.`);
+        const color = attrs.get('color')?.value ?? 'auto';
+        assert(
+          !attrs.get('color')?.quoted && FAMILY.test(color),
+          `Expected color=auto, a built-in color (${BUILT_IN_FAMILIES.join(', ')}) or a theme-color name; got ${color}.`,
+        );
+        const shade = attrs.has('shade') ? shadeOf(attrs.get('shade')!) : undefined;
         if (attrs.has('kind')) choice('kind', 'service', KINDS);
         num('priority', 5, 1, 10);
         m.objects.push({
@@ -406,6 +461,7 @@ export function parseModel(source: string | SourceDoc): Model {
           label: text(args[1]),
           parent: attrs.has('in') ? id(attrs.get('in')) : 'root',
           color,
+          ...(shade !== undefined ? { shade } : {}),
           shape: command === 'node' ? choice('shape', 'box', DSL_SHAPES) : 'box',
           line,
         });
@@ -467,6 +523,47 @@ export function parseModel(source: string | SourceDoc): Model {
           minHeight: num('min-height', 0, 0, 10_000),
           line,
         });
+        break;
+      }
+      case 'theme': {
+        count(1);
+        allow(Object.keys(THEME_ATTRS));
+        once('theme');
+        const name = args[0].value as ThemeId;
+        assert(THEME_IDS.includes(name), `Unknown theme ${name}; use ${THEME_IDS.join(', ')}.`);
+        m.appearance.theme = name;
+        m.themeLine = line;
+        const o = m.appearance.overrides;
+        for (const [attr, key] of Object.entries(THEME_ATTRS)) {
+          if (!attrs.has(attr)) continue;
+          if (key === 'paddingX' || key === 'paddingY' || key === 'radius')
+            o[key] = num(attr, 0, OVERRIDE_LIMITS[key].min, OVERRIDE_LIMITS[key].max);
+          else if (key === 'titleFont' || key === 'annotationFont')
+            o[key] = choice<FontRole>(attr, 'sans', FONT_ROLES);
+          else o[key] = hex(attr);
+        }
+        break;
+      }
+      case 'theme-color': {
+        count(1);
+        allow(['shade', 'fill', 'stroke', 'ink']);
+        const family = args[0].value;
+        assert(
+          !args[0].quoted && FAMILY.test(family) && family !== 'auto',
+          'Expected a color family name (letters, digits, _ or -).',
+        );
+        const shade = attrs.has('shade') ? shadeOf(attrs.get('shade')!) : 500;
+        once(`theme-color:${family}:${shade}`);
+        const def = { family, shade } as DiagramAppearance['colors'][number];
+        for (const key of ['fill', 'stroke', 'ink'] as const)
+          if (attrs.has(key)) def[key] = hex(key);
+        assert(
+          isBuiltInFamily(family) || (def.fill && def.stroke && def.ink),
+          `${family} is not a built-in color, so shade ${shade} needs fill, stroke and ink.`,
+        );
+        assert(def.fill || def.stroke || def.ink, 'Set at least one of fill, stroke and ink.');
+        m.appearance.colors.push(def);
+        m.colorLines.set(`${family}:${shade}`, line);
         break;
       }
       case 'routing':
@@ -573,7 +670,26 @@ function validateReferences(m: Model) {
     assert(by.has(id), `Unknown node/group ${id}.`, line);
   const scope = (id: string, line: number) =>
     assert(id === 'root' || by.get(id)?.type === 'group', `Unknown container ${id}.`, line);
+  const defined = new Map<string, Set<number>>();
+  for (const c of m.appearance.colors) {
+    if (!defined.has(c.family)) defined.set(c.family, new Set());
+    defined.get(c.family)!.add(c.shade);
+  }
   for (const o of m.objects) {
+    if (o.color !== 'auto' && !isBuiltInFamily(o.color)) {
+      const shades = defined.get(o.color),
+        shade = o.shade ?? (o.type === 'group' ? groupShadeFor(m.appearance.theme) : NODE_SHADE);
+      assert(
+        shades,
+        `Unknown color ${o.color}. Define it with theme-color ${o.color} shade=… fill= stroke= ink=.`,
+        o.line,
+      );
+      assert(
+        shades!.has(shade),
+        `${o.color} has no shade ${shade}${o.shade === undefined ? ' (the default)' : ''}; it defines ${[...shades!].sort((a, b) => a - b).join(', ')}.`,
+        o.line,
+      );
+    }
     scope(o.parent, o.line);
     const seen = new Set<string>();
     for (let x: ModelObject | undefined = o; x; x = by.get(x.parent)) {

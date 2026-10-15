@@ -179,6 +179,13 @@ export function Toolbar() {
 
       <div class="toolbar-group toolbar-panels">
         <IconButton
+          icon="palette"
+          label="Appearance"
+          aria-haspopup="menu"
+          aria-expanded={menuOpen('appearance')}
+          onClick={menuButton('appearance')}
+        />
+        <IconButton
           icon="panel-left"
           label="Objects"
           keys="["

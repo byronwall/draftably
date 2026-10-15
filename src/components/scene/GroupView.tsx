@@ -1,6 +1,7 @@
 import { createMemo, Show } from 'solid-js';
 import { descendants, findGroup, findNode, isCollapsed, styleOf } from '../../model/graph';
-import { colorTokens } from '../../model/styles';
+import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { truncateText } from '../../model/fonts';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles } from './parts';
@@ -18,14 +19,21 @@ export interface GroupViewProps {
 
 export function GroupView(props: GroupViewProps) {
   const group = () => findGroup(props.doc, props.id)!;
-  const color = () => colorTokens(styleOf(props.doc, props.id).color, props.doc.theme);
+  const look = () => resolveAppearance(props.doc.appearance);
+  const color = () => {
+    const style = styleOf(props.doc, props.id);
+    return swatchFor(look(), style.color, style.shade, 'group');
+  };
   const collapsed = () => isCollapsed(props.doc, props.id);
   const shapeCount = createMemo(
     () => descendants(props.doc, props.id).filter(id => findNode(props.doc, id)).length,
   );
-  // Titles are clipped to the frame width rather than wrapped.
-  const title = () => group().title.slice(0, Math.max(8, Math.floor((props.rect.w - 125) / 6)));
+  // Titles are shortened to the frame width rather than wrapped, leaving room for the controls.
+  const title = () =>
+    truncateText(group().title, Math.max(40, props.rect.w - 33 - 64), look().groupTitle);
   const w = () => props.rect.w;
+  /** Middle of the title band at the top of the frame. */
+  const band = () => Math.min(look().groupHeader, collapsed() ? 32 : Infinity) / 2 - 7;
 
   return (
     <g
@@ -49,7 +57,7 @@ export function GroupView(props: GroupViewProps) {
         class="group-bg"
         width={w()}
         height={props.rect.h}
-        rx={10}
+        rx={Math.min(10, look().radius + 4)}
         fill={color().fill}
         stroke={color().stroke}
         stroke-width={1.2}
@@ -58,11 +66,21 @@ export function GroupView(props: GroupViewProps) {
         class="group-header"
         data-group-header
         width={Math.max(0, w() - 30)}
-        height={32}
+        height={band() * 2}
         fill="transparent"
       />
-      <SceneGlyph name="group" x={12} y={10} size={13} color={color().ink} />
-      <text class="group-title" x={33} y={21} fill={color().ink} pointer-events="none">
+      <SceneGlyph name="group" x={12} y={band() - 6.5} size={13} color={color().ink} />
+      <text
+        class="group-title"
+        x={33}
+        y={band()}
+        dominant-baseline="central"
+        font-family={look().groupTitle.family}
+        font-size={String(look().groupTitle.size)}
+        font-weight={String(look().groupTitle.weight)}
+        fill={color().ink}
+        pointer-events="none"
+      >
         {title()}
       </text>
       <Show when={props.interactive}>
@@ -84,7 +102,13 @@ export function GroupView(props: GroupViewProps) {
         />
       </Show>
       <Show when={collapsed()}>
-        <text x={14} y={43} font-size="10" fill={color().ink}>
+        <text
+          x={14}
+          y={43}
+          font-family={look().annotation.family}
+          font-size="10"
+          fill={color().ink}
+        >
           {shapeCount()} shapes
         </text>
       </Show>
