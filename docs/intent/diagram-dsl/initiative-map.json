@@ -8,7 +8,7 @@
     "last_updated": "2026-10-14",
     "summary": "Make one local DSL file the shared source for agent edits, viewer edits, and reproducible layout refinements.",
     "status": "active",
-    "next_action": "Review the stacked PRs (dsl/1-core → dsl/4-stability) and merge them in order; then retire this initiative on approval."
+    "next_action": "Review and merge byronwall/draftably#3 (base), then #4–#7 in order; retire this initiative on approval."
   },
   "artifacts": {
     "intent_brief": {
@@ -510,7 +510,8 @@
         "status": "completed",
         "branch": "dsl/1-core",
         "evidence": [
-          "Branch dsl/1-core: tests/dsl.test.ts (10 tests); pnpm meld inspect --json identical across runs (sha f7e454cc); typecheck, lint, engine parity pass"
+          "Branch dsl/1-core: tests/dsl.test.ts (10 tests); pnpm meld inspect --json identical across runs (sha f7e454cc); typecheck, lint, engine parity pass",
+          "PR byronwall/draftably#4"
         ]
       },
       {
@@ -524,7 +525,8 @@
         "status": "completed",
         "branch": "dsl/2-viewer",
         "evidence": [
-          "Branch dsl/2-viewer: pnpm meld open on a real temp file; external append updates viewer; invalid edit shows banner and keeps last drawing; rename-based repair picked up by directory watcher; curl PUT returns 409 for stale base, 422 for invalid source, 200 with atomic write and no temp file left"
+          "Branch dsl/2-viewer: pnpm meld open on a real temp file; external append updates viewer; invalid edit shows banner and keeps last drawing; rename-based repair picked up by directory watcher; curl PUT returns 409 for stale base, 422 for invalid source, 200 with atomic write and no temp file left",
+          "PR byronwall/draftably#5"
         ]
       },
       {
@@ -538,7 +540,8 @@
         "status": "completed",
         "branch": "dsl/3-editing",
         "evidence": [
-          "Branch dsl/3-editing: tests/translate.test.ts (9 tests). Browser: drag wrote 'near db platform side=right gap=48' and node stayed at drop point; undo restored the file byte-for-byte; redo, P pin and container resize wrote pin/min-width/min-height; external write racing a viewer save returned 409, banner offered Keep file / Save my edit, disk kept the agent's lines"
+          "Branch dsl/3-editing: tests/translate.test.ts (9 tests). Browser: drag wrote 'near db platform side=right gap=48' and node stayed at drop point; undo restored the file byte-for-byte; redo, P pin and container resize wrote pin/min-width/min-height; external write racing a viewer save returned 409, banner offered Keep file / Save my edit, disk kept the agent's lines",
+          "PR byronwall/draftably#6"
         ]
       },
       {
@@ -552,7 +555,8 @@
         "status": "completed",
         "branch": "dsl/4-stability",
         "evidence": [
-          "Branch dsl/4-stability: pnpm prove:file 19/19 — drag wrote near payments orders side=below; pin api held parent-local coordinates after external addition; distant clients/web/mobile unchanged; platform and db gave way 34 px and were reported as relaxed + moved; comments survived; restart and inspect --json matched browser geometry exactly; invalid source kept last drawing without writes; stale save refused with agent lines kept. tests/translate.test.ts covers anchors, movement report, reflow."
+          "Branch dsl/4-stability: pnpm prove:file 19/19 — drag wrote near payments orders side=below; pin api held parent-local coordinates after external addition; distant clients/web/mobile unchanged; platform and db gave way 34 px and were reported as relaxed + moved; comments survived; restart and inspect --json matched browser geometry exactly; invalid source kept last drawing without writes; stale save refused with agent lines kept. tests/translate.test.ts covers anchors, movement report, reflow.",
+          "PR byronwall/draftably#7"
         ]
       }
     ],
@@ -591,6 +595,10 @@
     {
       "date": "2026-10-14",
       "change": "Implemented all four milestones as stacked branches. First-proof evaluation passed: Meld compiler adapted into the existing editor without replacing it; Node/browser geometry equal at every step of pnpm prove:file (19/19). Changes from the shape: root scope no longer clamps to nonnegative coordinates (it pushed anchors aside); new objects default to color=auto; resizes never write move preferences. Arrow-key nudges need canvas focus (existing behaviour), so the proof uses P for its save race."
+    },
+    {
+      "date": "2026-10-14",
+      "change": "Pushed to byronwall/draftably. Merged remote main (release setup) into cleanup/normal-app and carried it up the stack; opened #3 (base rebuild) and stacked #4–#7. pnpm prove:file still 19/19 after the merge."
     }
   ],
   "closure": null,
