@@ -11,6 +11,11 @@ Pointers only. Read the linked doc when the task touches it.
   changeset ([docs/RELEASING.md](docs/RELEASING.md)).
 - **File language:** [docs/DSL.md](docs/DSL.md). Code map: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
   Plans for in-flight work: `docs/intent/<initiative>/`.
+- **Agent skill:** [skills/draftably/SKILL.md](skills/draftably/SKILL.md) teaches agents the
+  language. Any change to the DSL (`src/dsl/syntax.ts` or `docs/DSL.md`) must update it in the same
+  PR. `tests/skill.test.ts` fails on parser words the skill omits or examples that don't compile;
+  CI's `pnpm skill:check` fails a language change without a skill edit unless a commit carries
+  `Skill-unchanged: <reason>`.
 - **Viewer:** `pnpm draftably open <file>` serves a file at `?file=<path>` and prints the real URL on
   its `Viewer:` line; use that URL. In the page, `window.diagramStudio`
   ([src/state/debug-api.ts](src/state/debug-api.ts)) reads file state and geometry.

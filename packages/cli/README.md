@@ -48,6 +48,19 @@ draftably open architecture.draft
 draftably open                              # start page for the current folder
 ```
 
+## Agent skill
+
+The package bundles a skill that teaches coding agents to write, check and render `.draft` files.
+
+```sh
+draftably skill install                       # ./.claude/skills/draftably
+draftably skill install --global              # ~/.claude/skills/draftably
+draftably skill install --dir .agents/skills  # any other skills folder
+draftably skill print                         # print SKILL.md
+```
+
+Or install it from the repository with `npx skills add byronwall/draftably`.
+
 `open` without a file lists the folder's `.draft` files, creates new ones, and opens examples.
 Examples are scratch copies marked by an amber bar; nothing is written until you save one as a
 file.

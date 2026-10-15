@@ -25,6 +25,9 @@ jobs:
       - name: Require a changeset for shipped changes
         if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'changeset-release/')
         run: pnpm changeset:check origin/${{ github.base_ref }}
+      - name: Require a skill update for language changes
+        if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'changeset-release/')
+        run: pnpm skill:check origin/${{ github.base_ref }}
       - run: pnpm release:check
 
   proofs:
