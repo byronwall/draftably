@@ -1,6 +1,41 @@
 # CLI naming shortlist
 
-## Current shortlist: third pass
+## Current shortlist: fourth pass
+
+Byron wants diagrams implied, without the word diagram. Exclude Helm and Rails because of Kubernetes and Ruby on Rails.
+Keep guided organization, automation, and user control. The same naming worker ran three more comparison rounds.
+
+Round 1 compared GraphSteer, BoxNudge, ChartCourse, and Guided Lines.
+GraphSteer and BoxNudge had stronger diagram and user-control cues.
+ChartCourse competed with navigation and an existing agent skill. Guided Lines suggested drawing lessons.
+
+Round 2 compared BoxGlide, ChartGlide, BoxLane, and LineGlide for easy arrangement.
+Glide gave a stronger automation cue. BoxLane also suggested packaging and swimlanes.
+
+Round 3 combined these meanings with collision checks. Scores range from 0 (no cue) to 10 (immediate cue).
+
+| Name | Implied diagrams | Guided layout | User control | Evidence and tradeoff |
+| --- | ---: | ---: | ---: | --- |
+| **GraphSteer** | 9 | 7 | 10 | [npm 404](https://registry.npmjs.org/graphsteer). Only an [empty exact-name repository](https://github.com/CallieSardina/GraphSteer) surfaced. Strong control cue; automation is less clear. |
+| **BoxNudge** | 8 | 7 | 9 | [npm 404](https://registry.npmjs.org/boxnudge). Worker found no public repository-name or distinct product matches. Small manual adjustments fit the workflow. |
+| **BoxGlide** | 8 | 9 | 6 | [npm 404](https://registry.npmjs.org/boxglide). An [old Megatouch puzzle game](https://www.meritgames.com/Support_Center/manuals/PM0378-07.pdf) used the name. Strong ease cue; weaker control cue. |
+| ChartGlide | 8 | 9 | 6 | [npm 404](https://registry.npmjs.org/chartglide). Worker found zero repository-name matches and no distinct product. May suggest data charts. |
+| LineGlide | 7 | 9 | 6 | [npm 404](https://registry.npmjs.org/lineglide). Partial repository-name matches and a synthesizer parameter surfaced. Weaker diagram cue. |
+
+The pool also included BoxGuide, BoxAlign, BoxSteer, BoxRoute, BoxTrain, BoxTrack, LinePilot,
+LineGuide, LineBound, LinePath, LinkDraft, LinkGuide, LinkRoute, GraphDraft, GraphGuide,
+GraphTrack, FlowGuide, FlowGlide, FlowDraft, FlowNudge, FlowSteer, FlowRoute, FlowTrack,
+FlowShape, ChartSteer, ChartPath, ChartRoute, Clear Path, In Line, Shape Up, and On Course.
+
+Reject [GraphGlide](https://github.com/Automeltic/graphglide): an existing CLI watches interactive dependency diagrams.
+Reject [FlowDraft](https://github.com/tu10ng/flowdraft): an existing diagram DSL uses it.
+Other collisions included BoxGuide (research model), FlowGlide, FlowNudge, GraphLane, LinePilot, and LineCraft.
+
+The parent repeated the main three npm checks and wider web searches.
+The worker used authenticated GitHub API searches after anonymous searches reached their rate limit.
+No name is selected or reserved. Registry 404s do not guarantee publication rights or npm acceptance.
+
+## Earlier shortlist: third pass
 
 Byron clarified the name must imply diagrams, organization, user control, and easy guided automation.
 Train rails and autopilot are useful metaphors. Boxdraft is acceptable but does not meet the full goal.
