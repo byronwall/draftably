@@ -42,5 +42,8 @@ jobs:
           commit: Version Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Match Product Grid: works for private source repositories too.
-          NPM_CONFIG_PROVENANCE: false
+          GIT_AUTHOR_NAME: Byron Wall
+          GIT_AUTHOR_EMAIL: byron@byroni.us
+          GIT_COMMITTER_NAME: Byron Wall
+          GIT_COMMITTER_EMAIL: byron@byroni.us
+          NPM_CONFIG_PROVENANCE: true

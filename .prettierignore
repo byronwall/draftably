@@ -3,3 +3,7 @@ tmp/
 dist/
 pnpm-lock.yaml
 dist-cli/
+packages/cli/dist/
+packages/cli/examples/
+packages/cli/DSL.md
+packages/cli/THIRD_PARTY_NOTICES
