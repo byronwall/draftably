@@ -18,12 +18,14 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const entry = process.env.DRAFTABLY_BIN ?? path.join(root, 'scripts/meld.mjs');
+const example = process.env.DRAFTABLY_EXAMPLE ?? path.join(root, 'examples/checkout.meld');
 const port = 5199;
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'meld-proof-'));
 const file = path.join(dir, 'architecture.meld');
 const out = path.join(root, 'tmp/proof');
 fs.mkdirSync(out, { recursive: true });
-fs.copyFileSync(path.join(root, 'examples/checkout.meld'), file);
+fs.copyFileSync(example, file);
 
 const results = [];
 function check(name, ok, detail = '') {
@@ -32,8 +34,8 @@ function check(name, ok, detail = '') {
 }
 
 const meld = (...args) =>
-  execFileSync(process.execPath, [path.join(root, 'scripts/meld.mjs'), ...args], {
-    cwd: root,
+  execFileSync(process.execPath, [entry, ...args], {
+    cwd: dir,
     encoding: 'utf8',
   });
 const inspect = () => JSON.parse(meld('inspect', file, '--json'));
@@ -43,8 +45,8 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 function start() {
   const child = spawn(
     process.execPath,
-    [path.join(root, 'scripts/meld.mjs'), 'open', file, '--port', String(port), '--no-open'],
-    { cwd: root, stdio: ['ignore', 'pipe', 'inherit'] },
+    [entry, 'open', file, '--port', String(port), '--no-open'],
+    { cwd: dir, stdio: ['ignore', 'pipe', 'inherit'] },
   );
   return new Promise((resolve, reject) => {
     child.stdout.on('data', chunk => String(chunk).includes('Viewer:') && resolve(child));
