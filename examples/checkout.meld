@@ -21,4 +21,4 @@ edge persist orders -> db "persist" kind=async
 
 layout root flow gap=48
 layout platform column gap=28
-layout services row gap=24
+layout services row gap=56

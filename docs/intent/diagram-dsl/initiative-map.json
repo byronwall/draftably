@@ -8,7 +8,7 @@
     "last_updated": "2026-10-14",
     "summary": "Make one local DSL file the shared source for agent edits, viewer edits, and reproducible layout refinements.",
     "status": "active",
-    "next_action": "Build the file session server and live viewer (dsl/2-viewer)."
+    "next_action": "Translate committed editor edits into source (dsl/3-editing)."
   },
   "artifacts": {
     "intent_brief": {
@@ -521,9 +521,11 @@
         "proof": "Real temp file edited and renamed externally; viewer updates; invalid source keeps last drawing",
         "valid_intermediate_state": "Read-only file viewer; static build unaffected",
         "rollback": "File mode only activates when /api/session answers",
-        "status": "active",
+        "status": "completed",
         "branch": "dsl/2-viewer",
-        "evidence": []
+        "evidence": [
+          "Branch dsl/2-viewer: pnpm meld open on a real temp file; external append updates viewer; invalid edit shows banner and keeps last drawing; rename-based repair picked up by directory watcher; curl PUT returns 409 for stale base, 422 for invalid source, 200 with atomic write and no temp file left"
+        ]
       },
       {
         "id": "m3",
@@ -533,7 +535,7 @@
         "proof": "Translator unit tests; browser drag writes near; stale save returns 409 and keeps proposal",
         "valid_intermediate_state": "Unsupported tools disabled and rejected edits reverted",
         "rollback": "Commit interceptor is installed only in file mode",
-        "status": "planned",
+        "status": "active",
         "branch": "dsl/3-editing",
         "evidence": []
       },

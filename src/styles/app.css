@@ -925,3 +925,33 @@ details.inspector-section[open] > summary {
     animation-duration: 0s !important;
   }
 }
+
+/* File-backed sessions ----------------------------------------------------------------------- */
+
+.file-banner {
+  position: absolute;
+  top: var(--space-3);
+  left: 50%;
+  z-index: 30;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px var(--space-2);
+  max-width: min(720px, calc(100vw - 32px));
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  border-radius: var(--radius);
+  background: var(--danger-soft);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  transform: translateX(-50%);
+}
+
+.file-banner strong {
+  color: var(--danger);
+}
+
+.file-banner-note {
+  flex-basis: 100%;
+  color: var(--muted);
+}

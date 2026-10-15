@@ -65,7 +65,10 @@
 }
 
 .save-status {
+  overflow: hidden;
   padding: 0 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: var(--muted);
   font-size: 10px;
   line-height: 14px;

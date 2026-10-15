@@ -16,6 +16,8 @@ Commands:
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
+  open <file> [--port N]    Edit the file in the viewer; saves go back to the file.
+                            Add --no-open to skip launching a browser.
 `;
 
 const describe = (d: Diagnostic) =>
@@ -56,6 +58,15 @@ export async function main(argv: string[]): Promise<number> {
         if (flag('--svg')) process.stdout.write(renderSvg(doc));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;
+      }
+      case 'open': {
+        const { openSession } = await import('./open');
+        const at = rest.indexOf('--port');
+        await openSession(path.resolve(file ?? ''), {
+          port: at >= 0 ? Number(rest[at + 1]) : 5180,
+          launch: !flag('--no-open'),
+        });
+        return -1;
       }
       default:
         console.log(USAGE);

@@ -2,6 +2,7 @@ import { createEffect, onCleanup, onMount, Show } from 'solid-js';
 import { Canvas } from './components/canvas/Canvas';
 import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
+import { FileBanner } from './components/FileBanner';
 import { Inspector } from './components/Inspector';
 import { LayoutLab } from './components/LayoutLab';
 import { Menus } from './components/Menus';
@@ -120,6 +121,7 @@ export default function App() {
           <ObjectsPanel />
         </Show>
         <Canvas />
+        <FileBanner />
         <Show when={inspectorOpen()}>
           <Inspector />
         </Show>

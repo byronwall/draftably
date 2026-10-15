@@ -4,6 +4,7 @@ import type { LayoutAlgorithmId } from '../model/types';
 import { setTool } from '../state/actions';
 import { commandEnabled, runCommand, type CommandId } from '../state/commands';
 import { doc, saveStatus, transact } from '../state/document';
+import { fileMode, fileStatus, fileStatusText } from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
 import { layoutBusy, cancelLayout, updateLayoutSettings } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
@@ -257,12 +258,14 @@ function DocumentTitle() {
       });
   };
   const status = () =>
-    ({
-      saved: 'Saved',
-      saving: 'Saving…',
-      preview: 'Preview · not saved',
-      failed: 'Not saved · export a backup',
-    })[saveStatus()];
+    fileMode()
+      ? fileStatusText()
+      : {
+          saved: 'Saved',
+          saving: 'Saving…',
+          preview: 'Preview · not saved',
+          failed: 'Not saved · export a backup',
+        }[saveStatus()];
   return (
     <div class="title-block">
       <input
@@ -284,7 +287,11 @@ function DocumentTitle() {
       />
       <span
         class="save-status"
-        classList={{ warning: saveStatus() === 'failed' }}
+        classList={{
+          warning: fileMode()
+            ? fileStatus() !== 'saved' && fileStatus() !== 'saving'
+            : saveStatus() === 'failed',
+        }}
         aria-live="polite"
       >
         {status()}

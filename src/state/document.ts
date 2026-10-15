@@ -103,9 +103,18 @@ export function prepareForEdit() {
   for (const handler of beforeEditHandlers) handler();
 }
 
+/**
+ * Handles every committed edit instead of the browser history while a diagram file is open, so
+ * the edit can be written to the file. Returns whether the edit was kept.
+ */
+type CommitHandler = (before: string, label: string) => boolean;
+let commitHandler: CommitHandler | null = null;
+export const setCommitHandler = (handler: CommitHandler | null) => (commitHandler = handler);
+
 /** Push an undo step if the document changed since `before`. Returns whether it did. */
 export function commit(before: string, label = 'Edit'): boolean {
   if (before === snapshot()) return false;
+  if (commitHandler) return commitHandler(before, label);
   pushUndo({ data: before, label });
   return true;
 }
@@ -196,6 +205,9 @@ export function setCamera(camera: Camera) {
 
 let saveTimer: number | undefined;
 let persistenceBlocked = false;
+/** A diagram file is the source of truth; browser storage must never replace it. */
+let storageDisabled = false;
+export const disableBrowserStorage = () => (storageDisabled = true);
 
 /** Pause saving while a layout preview is showing unaccepted geometry. */
 export function setPersistenceBlocked(blocked: boolean) {
@@ -205,7 +217,7 @@ export function setPersistenceBlocked(blocked: boolean) {
 }
 
 export function persist() {
-  if (persistenceBlocked) return;
+  if (persistenceBlocked || storageDisabled) return;
   state.setSaveStatus('saving');
   window.clearTimeout(saveTimer);
   saveTimer = window.setTimeout(() => {
@@ -229,13 +241,14 @@ function writeStorage() {
 }
 
 export function persistNow() {
-  if (persistenceBlocked) return;
+  if (persistenceBlocked || storageDisabled) return;
   window.clearTimeout(saveTimer);
   writeStorage();
 }
 
 /** Load the saved diagram. Returns whether one was restored and any notice for the user. */
 export function restoreSavedDocument(): { restored: boolean; notice?: string } {
+  if (storageDisabled) return { restored: false };
   let stored: string | null;
   try {
     stored =
@@ -266,6 +279,7 @@ export function restoreSavedDocument(): { restored: boolean; notice?: string } {
 
 /** Warn when another tab saves the same storage key. */
 export function watchOtherTabs() {
+  if (storageDisabled) return () => {};
   const onStorage = (e: StorageEvent) => {
     if (e.key === STORAGE_KEY && e.newValue && e.newValue !== snapshot())
       toast('Another tab saved this diagram. Save a copy before reloading.');

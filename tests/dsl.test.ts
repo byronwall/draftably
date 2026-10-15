@@ -81,11 +81,11 @@ describe('compile', () => {
 
   it('honors a requested group size and reports a size the contents override', () => {
     const big = compile(
-      checkout.replace('layout services row gap=24', 'layout services row gap=24 min-width=700'),
+      checkout.replace('layout services row gap=56', 'layout services row gap=56 min-width=800'),
     );
-    expect(big.byId.get('services')!.w).toBe(700);
+    expect(big.byId.get('services')!.w).toBe(800);
     const small = compile(
-      checkout.replace('layout services row gap=24', 'layout services row gap=24 min-width=100'),
+      checkout.replace('layout services row gap=56', 'layout services row gap=56 min-width=100'),
     );
     expect(small.diagnostics.some(d => d.code === 'group-grew')).toBe(true);
   });

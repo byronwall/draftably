@@ -22,7 +22,7 @@ export const GROUP_INSET = 24;
 /** Space between a group's top edge and its content; the title sits in it. */
 export const GROUP_HEADER = 48;
 const MIN_GAP = 12;
-const MIN_GROUP = { w: 220, h: 110 };
+const MIN_GROUP = { w: 260, h: 110 };
 
 export interface SceneObject extends ModelObject {
   /** World (diagram) coordinates. */

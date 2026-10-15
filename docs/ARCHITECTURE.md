@@ -64,6 +64,12 @@ TypeScript shared by the browser and the command line.
 | `compile.ts` | Layout recipes and refinements for one fixed render context; diagnostics with lines. |
 | `project.ts` | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.  |
 
+`server/file-session.ts` owns one open file: it serves the source with a content revision,
+watches its folder (so rename-based saves are seen), streams changes as server-sent events, and
+writes saves atomically. A save based on an older revision is refused with 409, and invalid
+source with 422. `state/file-session.ts` is the browser side: it detects a session at startup,
+switches browser storage off, and projects each valid revision into the document.
+
 `cli/` is the `pnpm meld` command. `scripts/meld.mjs` rebuilds it with `vite build --ssr` when a
 source file is newer than `dist-cli/`.
 

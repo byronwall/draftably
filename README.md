@@ -60,6 +60,7 @@ src/
   samples/     Example diagrams shown in the File menu
   dsl/         The .meld language: parser, formatter, compiler and editor projection
   cli/         The `pnpm meld` command
+  server/      The local file session behind `pnpm meld open`
 examples/      Example .meld diagram files
 tests/         Vitest unit tests and the engine regression scripts
 reference/v7/  The original release, used by the engine parity test
@@ -74,6 +75,7 @@ reference/meld/ The recovered Meld DSL prototype the .meld language is adapted f
 ```bash
 pnpm meld check examples/checkout.meld
 pnpm meld inspect examples/checkout.meld --svg > checkout.svg
+pnpm build && pnpm meld open examples/checkout.meld
 ```
 
 See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
