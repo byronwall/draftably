@@ -1,9 +1,16 @@
 {
   "name": "draftably",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.1.0",
   "description": "Local diagram DSL viewer and CLI.",
   "type": "module",
+  "bin": {
+    "draftably": "dist/cli/main.js"
+  },
+  "scripts": {
+    "build": "pnpm --dir ../.. build && node ../../scripts/build-cli.ts",
+    "test": "node ../../scripts/check-cli-package.ts"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/byronwall/draftably.git",
@@ -11,6 +18,10 @@
   },
   "files": [
     "dist",
+    "examples",
+    "DSL.md",
+    "CHANGELOG.md",
+    "THIRD_PARTY_NOTICES",
     "README.md"
   ],
   "engines": {
