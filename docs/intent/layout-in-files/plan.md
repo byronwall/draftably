@@ -9,7 +9,7 @@ last_updated: '2026-10-14'
 # Automatic layout in diagram files
 
 > Implemented in four stacked PRs: byronwall/draftably#10 (`.draft` rename), #11 (engine
-> recipes and `routing`), #12 (Rebuild, Compare and routing write recipes) and #13 (Improve,
+> recipes and `routing`), #12 (Rebuild, Compare and routing write recipes) and #14 (Improve,
 > timeline and brush write arrangements). Two choices differ from the draft below: Compare
 > candidates in file mode are compiled source variants, so previews are exact; and arrangements
 > carry no provenance comment, because `stay` lines are updated in place.
