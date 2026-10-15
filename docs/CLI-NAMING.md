@@ -1,6 +1,24 @@
-# CLI naming shortlist
+# CLI naming decision and research
 
-## Current shortlist: fourth pass
+## Selected name: draftably
+
+Byron selected `draftably` for the npm package and CLI command.
+The name uses a familiar drafting root with a suffix, rather than a compound name.
+It suggests editable visual work and keeps the user in control.
+
+The final pass favored suffix and prefix forms, especially names ending in `ly`.
+Draftably, Graphably, Shapeably, and Sketchably each returned npm 404 and zero GitHub repository-name matches.
+The parent repeated those registry and repository checks.
+Wider searches found no exact-name Draftably software product.
+[Draftably.com](https://www.atom.com/name/Draftably) was listed for resale.
+
+Draftably closely resembles the existing [Draftable document-comparison product](https://www.draftable.com/compare).
+That similarity remains the main naming tradeoff. The npm name is not reserved by these checks.
+The package stays private until the CLI is ready. See [release setup](RELEASING.md).
+
+The sections below preserve the earlier naming rounds; their recommendations are no longer current.
+
+## Earlier shortlist: fourth pass
 
 Byron wants diagrams implied, without the word diagram. Exclude Helm and Rails because of Kubernetes and Ruby on Rails.
 Keep guided organization, automation, and user control. The same naming worker ran three more comparison rounds.

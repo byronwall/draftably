@@ -1,4 +1,4 @@
-# CLI releases
+# Draftably releases
 
 The release flow follows explorEDA and Product Grid:
 
@@ -15,17 +15,18 @@ The version command updates the pnpm lockfile with the package version.
 ## Current boundary
 
 This checkout contains the static viewer. It does not contain the planned DSL CLI.
-`packages/cli` reserves its release location. Its name is temporary and `private` is `true`.
+`packages/cli` reserves its release location. Its npm name is `draftably` and `private` is `true`.
+The CLI command will also be `draftably`.
 The root viewer package remains private. No initial changeset exists yet.
 Release checks fail until the CLI implementation and package metadata are ready.
 
 ## Activate the CLI package
 
-1. Choose the npm package name and executable name from the naming shortlist.
-2. Set `name` in `packages/cli/package.json`. Set `private` to `false`.
+1. Keep `draftably` as the npm package and executable name.
+2. Set `private` to `false` in `packages/cli/package.json` when the CLI is ready.
 3. Add the actual GitHub `repository.url` and `repository.directory` (`packages/cli`).
 4. Add the CLI implementation, a `build` script, and a `test` script.
-5. Add `bin` with the executable name and compiled JavaScript path under `dist/`.
+5. Add `bin` with `draftably` as the executable name and its compiled JavaScript path under `dist/`.
 6. Build the viewer into the CLI's `dist/` tree. Include its workers and assets.
 7. Start the compiled CLI with `#!/usr/bin/env node`. Support `--help` without starting the server.
 8. Replace the package README with install, file format, and command instructions. Set the intended license.
@@ -43,7 +44,7 @@ Add the viewer build to the CLI build script so every release includes matching 
 The checkout has no Git remote configured. Add the actual repository remote before using Changesets with GitHub.
 In GitHub **Settings → Actions → General**, allow Actions to create and approve pull requests.
 
-Configure an npm trusted publisher for the selected package:
+Configure an npm trusted publisher for `draftably`:
 
 | Field | Value |
 | --- | --- |
