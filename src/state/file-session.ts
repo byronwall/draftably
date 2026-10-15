@@ -15,7 +15,7 @@ import { unwrap } from 'solid-js/store';
 import { compile, type Diagnostic, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
-import { translateEdit, UnsupportedEdit } from '../dsl/translate';
+import { movedOutsideEdit, reflowGroup, translateEdit, UnsupportedEdit } from '../dsl/translate';
 import { normalize } from '../model/document';
 import { clone } from '../model/geometry';
 import {
@@ -56,7 +56,11 @@ const state = createRoot(() => {
   const [proposal, setProposal] = createSignal<string | null>(null);
   const [undoStack, setUndoStack] = createSignal<SourceStep[]>([]);
   const [redoStack, setRedoStack] = createSignal<SourceStep[]>([]);
+  /** Objects outside the last external change that moved anyway. */
+  const [movedByChange, setMovedByChange] = createSignal<string[]>([]);
   return {
+    movedByChange,
+    setMovedByChange,
     info,
     setInfo,
     status,
@@ -82,6 +86,7 @@ export const sourceError = state.sourceError;
 export const fileScene = state.scene;
 export const fileDiagnostics = (): Diagnostic[] => state.scene()?.diagnostics ?? [];
 export const conflictProposal = state.proposal;
+export const movedByChange = state.movedByChange;
 
 /** The last source confirmed on disk and its revision. */
 let diskSource = '',
@@ -130,13 +135,25 @@ function resetHistory() {
 
 /** Show a newer file from disk. Local history cannot undo past someone else's change. */
 function acceptDisk(source: string, revision: string, { announce = false } = {}) {
+  const previous = state.scene(),
+    previousSource = localSource;
   diskSource = localSource = source;
   diskRevision = revision;
   resetHistory();
-  if (showSource(source)) {
-    state.setStatus('saved');
-    if (announce) toast(`${state.info()!.name} changed on disk.`);
-  }
+  const scene = showSource(source);
+  if (!scene) return;
+  state.setStatus('saved');
+  if (!announce) return;
+  const moved = previous
+    ? movedOutsideEdit(previous, scene, readSource(previousSource), readSource(source))
+    : [];
+  state.setMovedByChange(moved);
+  const name = state.info()!.name;
+  toast(
+    moved.length
+      ? `${name} changed on disk · also moved: ${moved.slice(0, 4).join(', ')}${moved.length > 4 ? '…' : ''}`
+      : `${name} changed on disk.`,
+  );
 }
 
 // --- Saving -----------------------------------------------------------------------------------
@@ -278,6 +295,38 @@ function handleEdit(before: string, label: string): boolean {
   savedMessage = result.notes.length ? `Saved · ${result.notes.join(' · ')}` : `Saved · ${label}`;
   void save();
   return true;
+}
+
+/** Record and save a change made directly to the source, such as a reflow. */
+function commitSource(next: string, label: string, message: string) {
+  if (next === localSource) return toast('Nothing to change.');
+  try {
+    compile(next);
+  } catch (error) {
+    if (error instanceof DslError) return toast(`That change cannot be saved. ${error.message}`);
+    throw error;
+  }
+  batch(() => {
+    state.setUndoStack(stack => [...stack, { before: localSource, after: next, label }].slice(-80));
+    state.setRedoStack([]);
+  });
+  localSource = next;
+  showSource(next);
+  savedMessage = message;
+  void save();
+}
+
+/**
+ * Let the automatic recipe arrange a group's contents again. Its soft refinements are removed,
+ * pins stay, and the objects around it are anchored.
+ */
+export function reflowSelectedGroup(id: string) {
+  const scene = state.scene();
+  if (!scene || state.sourceError() || state.proposal())
+    return toast('The file cannot be changed right now.');
+  const source = readSource(localSource),
+    count = reflowGroup(source, scene, id);
+  commitSource(printSource(source), 'Reflow group', `Saved · reflowed ${count} objects in ${id}`);
 }
 
 function historyStep(direction: 'undo' | 'redo') {

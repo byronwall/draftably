@@ -1,4 +1,7 @@
+import { Show } from 'solid-js';
 import { findNode } from '../model/graph';
+import { fileMode } from '../state/file-session';
+import { FileNotes } from './FileNotes';
 import { runCommand } from '../state/commands';
 import { doc, selection } from '../state/document';
 import { connectFrom, drag, tool, type Tool } from '../state/editor';
@@ -50,9 +53,16 @@ export function StatusBar() {
     <footer class="statusbar">
       <span>{counts()}</span>
       <span class="status-hint">{hint()}</span>
-      <span class="status-engine" classList={{ warning: blockedRouteIds().length > 0 }}>
-        {engine()}
-      </span>
+      <Show
+        when={fileMode()}
+        fallback={
+          <span class="status-engine" classList={{ warning: blockedRouteIds().length > 0 }}>
+            {engine()}
+          </span>
+        }
+      >
+        <FileNotes />
+      </Show>
       <button
         type="button"
         class="button ghost small"

@@ -8,7 +8,7 @@
     "last_updated": "2026-10-14",
     "summary": "Make one local DSL file the shared source for agent edits, viewer edits, and reproducible layout refinements.",
     "status": "active",
-    "next_action": "Add stability anchors, diagnostics, reflow and the end-to-end proof (dsl/4-stability)."
+    "next_action": "Review the stacked PRs (dsl/1-core → dsl/4-stability) and merge them in order; then retire this initiative on approval."
   },
   "artifacts": {
     "intent_brief": {
@@ -423,7 +423,7 @@
     ]
   },
   "implementation": {
-    "status": "in-progress",
+    "status": "completed",
     "repository_snapshot": {
       "root": "/Users/byronwall/Projects/diagram-studio",
       "revision": "b48a5cb",
@@ -549,9 +549,11 @@
         "proof": "scripts/prove-file-session.mjs drives the real browser and compares to inspect --json",
         "valid_intermediate_state": "Full shaped loop",
         "rollback": "Anchors are ordinary stay statements that can be deleted",
-        "status": "active",
+        "status": "completed",
         "branch": "dsl/4-stability",
-        "evidence": []
+        "evidence": [
+          "Branch dsl/4-stability: pnpm prove:file 19/19 — drag wrote near payments orders side=below; pin api held parent-local coordinates after external addition; distant clients/web/mobile unchanged; platform and db gave way 34 px and were reported as relaxed + moved; comments survived; restart and inspect --json matched browser geometry exactly; invalid source kept last drawing without writes; stale save refused with agent lines kept. tests/translate.test.ts covers anchors, movement report, reflow."
+        ]
       }
     ],
     "cut_line": [
@@ -585,6 +587,10 @@
     {
       "date": "2026-10-14",
       "change": "User asked to execute the shape as stacked PRs. Moved docs and Meld reference into the main checkout and rebased the plan onto the typed SolidJS app (cleanup/normal-app); the commit/restoreDocument seam replaces the older editor.js remember/change seam. Created the implementation plan with four milestones and set the initiative active."
+    },
+    {
+      "date": "2026-10-14",
+      "change": "Implemented all four milestones as stacked branches. First-proof evaluation passed: Meld compiler adapted into the existing editor without replacing it; Node/browser geometry equal at every step of pnpm prove:file (19/19). Changes from the shape: root scope no longer clamps to nonnegative coordinates (it pushed anchors aside); new objects default to color=auto; resizes never write move preferences. Arrow-key nudges need canvas focus (existing behaviour), so the proof uses P for its save race."
     }
   ],
   "closure": null,

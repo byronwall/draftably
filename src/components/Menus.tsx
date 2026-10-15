@@ -172,6 +172,7 @@ function EditMenu() {
       <MenuItem command="duplicate" />
       <MenuItem command="group" />
       <MenuItem command="ungroup" />
+      <MenuItem command="reflow-group" />
       <MenuItem command="pin" />
       <MenuItem command="release-manual" />
       <MenuItem command="delete" />

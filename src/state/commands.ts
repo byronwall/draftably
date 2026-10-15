@@ -27,7 +27,7 @@ import {
   timelineOpen,
   toggleBrush,
 } from './sculpt';
-import { fileMode } from './file-session';
+import { fileMode, reflowSelectedGroup } from './file-session';
 import { toast } from './toast';
 import {
   inspectorOpen,
@@ -39,7 +39,7 @@ import {
   toggleLayoutLab,
   togglePanels,
 } from './ui';
-import { findNode } from '../model/graph';
+import { findNode, isGroup } from '../model/graph';
 
 export interface Command {
   label: string;
@@ -150,6 +150,14 @@ export const commands = {
     run: () => actions.alignSelection('distribute-y'),
   },
   'fit-container': { label: 'Fit contents', run: actions.fitSelectedContainer },
+  'reflow-group': {
+    label: 'Reflow group',
+    run: () => {
+      const id = selectedIds().find(id => isGroup(doc, id));
+      if (id) reflowSelectedGroup(id);
+    },
+    enabled: () => fileMode() && selectedIds().some(id => isGroup(doc, id)),
+  },
   'collapse-selected': { label: 'Collapse or expand', run: () => actions.toggleCollapse() },
   'reverse-edge': { label: 'Reverse', run: actions.reverseSelectedEdge },
   'reset-route': { label: 'Reset bends', run: actions.resetSelectedBends },

@@ -96,6 +96,13 @@ Edits made in the viewer are written back to the file as readable statements:
 | Wrap in a container or ungroup        | A `group` and the members' `in=`.                                 |
 | Clear manual markers                  | Removes the object's soft position refinements.                   |
 
+An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
+top-level object, and the siblings of the edited object and of its containers. When an agent later
+adds content, nearby objects make room while anchored regions hold. If growth forces an anchor to
+give way, the status bar's **layout notes** name it with its line, and the change notice lists the
+objects outside the edit that moved. **Reflow group** (Edit menu or inspector) removes the soft
+refinements inside a group so its recipe arranges it again, and anchors what is around it.
+
 Each save is checked against the file's revision. If the file changed on disk first, the viewer
 shows the file and keeps your edit aside: **Keep file** discards the edit, and **Save my edit over
 it** replaces the newer file. Undo and redo step through the file's versions; a change from

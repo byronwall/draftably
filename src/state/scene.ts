@@ -11,6 +11,7 @@ import { visualBounds } from '../model/labels';
 import { computeRoutes, drawRoutes, routeInput, type DrawnRoute } from '../model/routes';
 import type { NodeGeometry, NodeLayout, Rect } from '../model/types';
 import { doc } from './document';
+import { fileMode } from './file-session';
 
 const sameIds = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && a.every((id, i) => id === b[i]);
@@ -77,7 +78,8 @@ const state = createRoot(() => {
       value = { result, routes: drawRoutes(doc, vg, map, result) };
     } else {
       value = computeRoutes(doc, vg, map, {
-        previous: routePrior() ?? lastRoutes,
+        // A diagram file must draw the same routes as `meld inspect`, so no earlier routes.
+        previous: fileMode() ? [] : (routePrior() ?? lastRoutes),
         quick: quick || !!animationGeometry(),
       });
     }

@@ -4,7 +4,12 @@ import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { printSource, readSource } from '../src/dsl/syntax';
-import { translateEdit, UnsupportedEdit } from '../src/dsl/translate';
+import {
+  movedOutsideEdit,
+  reflowGroup,
+  translateEdit,
+  UnsupportedEdit,
+} from '../src/dsl/translate';
 import * as edits from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
@@ -133,5 +138,68 @@ describe('translating editor edits', () => {
       d.layout.nodes.web.x += 50; // a side effect, not the selection
     });
     expect(text).toBe(printSource(readSource(checkout)));
+  });
+});
+
+describe('stability after a refinement', () => {
+  const drag = () =>
+    edit(checkout, 'Move objects', ['payments'], d => {
+      const orders = d.layout.nodes.orders;
+      d.layout.nodes.payments.x = orders.x;
+      d.layout.nodes.payments.y = orders.y + orders.h + 40;
+    });
+
+  it('anchors top-level objects and siblings around the edit', () => {
+    const { text, result } = drag();
+    expect(text).toMatch(/^near payments orders side=below gap=40$/m);
+    for (const id of ['clients', 'platform', 'db', 'api', 'orders'])
+      expect(text).toMatch(new RegExp(`^stay ${id} x=\\d+ y=\\d+$`, 'm'));
+    expect(text).not.toMatch(/^stay (web|mobile)/m);
+    expect(result.notes.at(-1)).toBe('anchored 6 nearby');
+  });
+
+  it('keeps distant regions steady and reports movement the growth forces', () => {
+    const { text } = drag();
+    const before = compile(text);
+    const added =
+      text +
+      'node fraud "Fraud check" in=services\nedge score payments -> fraud "score"\nnode cache "Cache"\nedge lookup api -> cache\n';
+    const after = compile(added);
+    for (const id of ['clients', 'web', 'mobile'])
+      expect([after.byId.get(id)!.x, after.byId.get(id)!.y]).toEqual([
+        before.byId.get(id)!.x,
+        before.byId.get(id)!.y,
+      ]);
+    // The refinement still holds inside the edited group.
+    const orders = after.byId.get('orders')!,
+      payments = after.byId.get('payments')!;
+    expect(payments.y).toBe(orders.y + orders.h + 40);
+    // The wider platform now overlaps db; both anchors give way, and that is reported.
+    const relaxed = after.diagnostics.filter(d => d.code === 'relaxed').map(d => d.ids[0]);
+    expect(relaxed.sort()).toEqual(['db', 'platform']);
+    expect(movedOutsideEdit(before, after, readSource(text), readSource(added)).sort()).toEqual([
+      'db',
+      'platform',
+    ]);
+  });
+
+  it('reports objects that moved although the edit did not mention them', () => {
+    const before = compile(checkout),
+      added = checkout + 'node cdn "CDN"\nedge serve cdn -> web\n',
+      after = compile(added);
+    const moved = movedOutsideEdit(before, after, readSource(checkout), readSource(added));
+    expect(moved).toContain('clients');
+    expect(moved).not.toContain('web');
+    expect(moved).not.toContain('cdn');
+  });
+
+  it('reflows a group without disturbing what is around it', () => {
+    const { text } = drag();
+    const doc = readSource(text);
+    expect(reflowGroup(doc, compile(text), 'services')).toBe(2);
+    const reflowed = printSource(doc);
+    expect(reflowed).not.toMatch(/^near payments/m);
+    expect(reflowed).not.toMatch(/^stay orders/m);
+    expect(reflowed).toMatch(/^stay platform/m);
   });
 });

@@ -409,15 +409,17 @@ function refine(
           (ax === 'x' ? a.w + b.w : a.h + b.h) / 2 + MIN_GAP,
         );
       }
-    // Content stays at nonnegative local coordinates; pins are never adjusted.
-    for (const a of ['x', 'y'] as const)
-      for (const v of vars[a].values()) {
-        const min = Math.max(...v.members.map(id => half(a, id)));
-        if (v.value < min && v.fixed === null) {
-          movement += min - v.value;
-          v.value = min;
+    // Group content stays at nonnegative local coordinates so it fits inside the frame; the root
+    // has no frame, and clamping there would push anchored objects aside. Pins never move.
+    if (scope !== 'root')
+      for (const a of ['x', 'y'] as const)
+        for (const v of vars[a].values()) {
+          const min = Math.max(...v.members.map(id => half(a, id)));
+          if (v.value < min && v.fixed === null) {
+            movement += min - v.value;
+            v.value = min;
+          }
         }
-      }
     if (movement < 0.01) break;
   }
 

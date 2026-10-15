@@ -15,6 +15,7 @@ import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../mo
 import { setColor, setLayoutIntent } from '../state/actions';
 import { runCommand, type CommandId } from '../state/commands';
 import { doc, selectedIds, selectItems, transact } from '../state/document';
+import { fileMode } from '../state/file-session';
 import { geometry, routesById } from '../state/scene';
 import { timelineOpen } from '../state/sculpt';
 import { setInspectorOpen } from '../state/ui';
@@ -436,10 +437,17 @@ function ContainerSections(props: { id: string }) {
             edit('Edit padding', d => edits.setContainer(d, props.id, { padding }))
           }
         />
-        <div class="fields-2">
-          <CommandButton command="layout">Layout inside</CommandButton>
-          <CommandButton command="fit-container">Fit contents</CommandButton>
-        </div>
+        <Show
+          when={fileMode()}
+          fallback={
+            <div class="fields-2">
+              <CommandButton command="layout">Layout inside</CommandButton>
+              <CommandButton command="fit-container">Fit contents</CommandButton>
+            </div>
+          }
+        >
+          <CommandButton command="reflow-group">Reflow group</CommandButton>
+        </Show>
         <p class="hint">
           Drag any edge or corner to resize the frame. Its contents stay put. Drag inside the empty
           frame to move the whole container.

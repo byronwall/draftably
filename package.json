@@ -15,7 +15,8 @@
     "test": "vitest run && pnpm test:engines",
     "test:unit": "vitest run",
     "lint": "eslint .",
-    "meld": "node scripts/meld.mjs"
+    "meld": "node scripts/meld.mjs",
+    "prove:file": "node scripts/prove-file-session.mjs"
   },
   "dependencies": {
     "solid-js": "^1.9.9"

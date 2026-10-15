@@ -27,7 +27,14 @@ import {
   statement,
   statements,
 } from './source-edits';
-import { DSL_SHAPES, type NearSide, type SourceDoc, type Statement, type Word } from './syntax';
+import {
+  DSL_SHAPES,
+  POSITION_HINTS,
+  type NearSide,
+  type SourceDoc,
+  type Statement,
+  type Word,
+} from './syntax';
 
 export class UnsupportedEdit extends Error {}
 
@@ -159,7 +166,6 @@ export function translateEdit(input: EditInput): EditResult {
     for (let p = parentOf(after, id); p; p = parentOf(after, p)) n++;
     return n;
   };
-  const isDeclaration = (s: Statement) => s.command === 'node' || s.command === 'group';
   const added = [
     ...after.graph.groups
       .filter(g => !beforeIds.has(g.id))
@@ -314,7 +320,9 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
         .map(s => [s.args[0].value, s.args[1].value]),
     );
 
+  const placed: string[] = [];
   for (const id of roots) {
+    const noted = notes.length;
     const sourceId = sid(id),
       compiled = scene.byId.get(id),
       now = local.get(id),
@@ -460,5 +468,106 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
       }
       notes.push(`resized ${sourceId} to ${Math.round(is.w)}×${Math.round(is.h)}`);
     }
+    if (notes.length > noted) placed.push(sourceId);
   }
+  const anchored = anchorSurroundings(source, scene, placed);
+  if (anchored.length) notes.push(`anchored ${anchored.length} nearby`);
+}
+
+/**
+ * Write soft `stay` anchors at their current positions for objects around an accepted refinement:
+ * every top-level object, and the siblings of each edited object and of its containers. Later
+ * additions then move nearby objects instead of rearranging distant ones. Objects that already
+ * have a position refinement keep it. Returns the anchored ids.
+ */
+export function anchorSurroundings(source: SourceDoc, scene: Scene, edited: string[]): string[] {
+  if (!edited.length) return [];
+  const hinted = new Set(
+    statements(source)
+      .filter(s => POSITION_HINTS.includes(s.command as never))
+      .map(s => s.args[0]?.value),
+  );
+  const scopes = new Set(['root']);
+  for (const id of edited)
+    for (let o = scene.byId.get(id); o; o = scene.byId.get(o.parent)) scopes.add(o.parent);
+  const editedSet = new Set(edited),
+    exists = new Set(statements(source).flatMap(s => (isDeclaration(s) ? [s.args[0].value] : [])));
+  const anchored: string[] = [];
+  for (const o of scene.objects) {
+    if (!scopes.has(o.parent) || editedSet.has(o.id) || hinted.has(o.id) || !exists.has(o.id))
+      continue;
+    addRefinement(
+      source,
+      statement(
+        'stay',
+        [bare(o.id)],
+        [
+          ['x', num(Math.max(0, o.localX))],
+          ['y', num(Math.max(0, o.localY))],
+        ],
+      ),
+    );
+    anchored.push(o.id);
+  }
+  return anchored;
+}
+
+const isDeclaration = (s: Statement) => s.command === 'node' || s.command === 'group';
+
+/**
+ * Let the automatic recipe rearrange a group again: remove soft refinements for everything inside
+ * it (pins and sizes stay), and anchor what is around it so the rest of the drawing holds.
+ */
+export function reflowGroup(source: SourceDoc, scene: Scene, groupId: string) {
+  const inside = new Set(
+    scene.objects
+      .filter(o => {
+        for (let p = scene.byId.get(o.parent); p; p = scene.byId.get(p.parent))
+          if (p.id === groupId) return true;
+        return false;
+      })
+      .map(o => o.id),
+  );
+  removeWhere(source, s => {
+    if (['near', 'nudge', 'stay'].includes(s.command)) return inside.has(s.args[0]?.value);
+    if (s.command === 'align')
+      return getAttr(s, 'strength')?.value !== 'required' && inside.has(s.args[1]?.value);
+    if (s.command === 'order') return inside.has(s.args[1]?.value);
+    return false;
+  });
+  anchorSurroundings(source, scene, [groupId]);
+  return inside.size;
+}
+
+/**
+ * Objects that moved between two compiled versions although no changed statement mentions them
+ * (or a container of theirs). Only the outermost moved object of a subtree is listed.
+ */
+export function movedOutsideEdit(
+  previous: Scene,
+  next: Scene,
+  previousSource: SourceDoc,
+  nextSource: SourceDoc,
+): string[] {
+  const print = (doc: SourceDoc) =>
+    new Set(statements(doc).map(s => JSON.stringify([s.command, s.args, s.attrs])));
+  const a = print(previousSource),
+    b = print(nextSource),
+    mentioned = new Set<string>();
+  for (const line of [...a].filter(x => !b.has(x)).concat([...b].filter(x => !a.has(x)))) {
+    const [, args, attrs] = JSON.parse(line) as [
+      string,
+      Array<{ value: string }>,
+      Array<[string, { value: string }]>,
+    ];
+    for (const w of [...args, ...attrs.map(([, v]) => v)]) mentioned.add(w.value);
+  }
+  // Every object whose world position changed, mentioned or not.
+  const moved = new Set<string>();
+  for (const o of next.objects) {
+    const p = previous.byId.get(o.id);
+    if (p && (Math.abs(p.x - o.x) > 1 || Math.abs(p.y - o.y) > 1)) moved.add(o.id);
+  }
+  // Report unmentioned objects that moved on their own, not because a container carried them.
+  return [...moved].filter(id => !mentioned.has(id) && !moved.has(next.byId.get(id)!.parent));
 }

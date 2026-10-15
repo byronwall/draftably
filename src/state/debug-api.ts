@@ -42,7 +42,9 @@ import {
   layoutReport,
   runLayout,
 } from './layout';
-import { routes, routingReport, visibleScene } from './scene';
+import { measured } from '../dsl/project';
+import { currentSource, fileDiagnostics, fileStatus } from './file-session';
+import { routes, routingReport, sceneRects, visibleScene } from './scene';
 import {
   activateBrush,
   brushDab,
@@ -87,6 +89,13 @@ export function installDebugApi() {
     cancelTimeline: closeTimeline,
     brush: activateBrush,
     brushDab,
+    /** Geometry in the same form as `pnpm meld inspect`, for comparing browser and CLI. */
+    fileGeometry: () => measured(doc, sceneRects(), routes()),
+    fileState: () => ({
+      status: fileStatus(),
+      source: currentSource(),
+      diagnostics: clone(fileDiagnostics()),
+    }),
     diagnostics: () => ({
       tool: tool(),
       selected: selectedIds(),
