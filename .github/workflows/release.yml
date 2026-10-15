@@ -28,8 +28,13 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+      - name: Check whether the CLI is ready for releases
+        id: cli
+        run: echo "ready=$(node -p 'require("./packages/cli/package.json").private === false')" >> "$GITHUB_OUTPUT"
       - run: pnpm install --frozen-lockfile
+        if: steps.cli.outputs.ready == 'true'
       - name: Open the Version Packages PR or publish to npm
+        if: steps.cli.outputs.ready == 'true'
         uses: changesets/action@v1
         with:
           version: pnpm changeset:version

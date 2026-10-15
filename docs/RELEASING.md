@@ -19,6 +19,7 @@ This checkout contains the static viewer. It does not contain the planned DSL CL
 The CLI command will also be `draftably`.
 The root viewer package remains private. No initial changeset exists yet.
 Release checks fail until the CLI implementation and package metadata are ready.
+The GitHub workflow skips the release action while the CLI package is private.
 
 ## Activate the CLI package
 
