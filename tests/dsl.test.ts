@@ -6,7 +6,7 @@ import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
 
-const checkout = readFileSync(path.join(__dirname, '../examples/checkout.meld'), 'utf8');
+const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 
 const errorLine = (source: string) => {
   try {

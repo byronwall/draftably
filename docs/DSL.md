@@ -1,6 +1,6 @@
-# Diagram files (`.meld`)
+# Diagram files (`.draft`)
 
-A `.meld` file is a readable diagram source that a person and an agent can both edit. It holds the
+A `.draft` file is a readable diagram source that a person and an agent can both edit. It holds the
 model (objects, groups, connections), the automatic layout recipe, and layout refinements. It
 never holds a picture of the final layout: the same file always compiles to the same geometry.
 
@@ -66,16 +66,16 @@ line. Pins never move; conflicting pins are reported as errors.
 ## Command line
 
 ```bash
-pnpm meld check examples/checkout.meld      # errors and diagnostics; exit 1 on errors
-pnpm meld format examples/checkout.meld     # print formatted source (--write to save)
-pnpm meld inspect examples/checkout.meld    # canonical node and route geometry as JSON
-pnpm meld inspect examples/checkout.meld --svg > checkout.svg
-pnpm meld open examples/checkout.meld       # serve the viewer for this file (after pnpm build)
+pnpm draftably check examples/checkout.draft      # errors and diagnostics; exit 1 on errors
+pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
+pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
+pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
+pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 ```
 
 `open` watches the file. Edits made in another program appear in the viewer at once. If the
 source becomes invalid, the viewer keeps the last valid drawing and shows the error line. During
-development, `DIAGRAM_FILE=path/to/file.meld pnpm dev` serves the same session from Vite.
+development, `DIAGRAM_FILE=path/to/file.draft pnpm dev` serves the same session from Vite.
 
 The file is the source of truth while it is open: browser storage is not read or written, and
 moving the camera never changes the file.

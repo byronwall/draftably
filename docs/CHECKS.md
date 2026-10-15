@@ -13,7 +13,7 @@ pnpm build
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `tsc` (strict, no unused code)     | All application code, tests and config.                                                                                                                                                                                                                                                                      |
 | `tests/model.test.ts` (Vitest)     | Examples load and round-trip through `normalize`; validation and v1 migration; connected shapes, inserted steps, wrap/ungroup, delete with and without contents, collapse, container resize limits, align, build from a list, copy/paste, layout intent; comparison camera fitting.                          |
-| `tests/dsl.test.ts` (Vitest)       | `.meld` parsing errors with line numbers, formatting that keeps comments, nested layout, pins across content additions, relative placement, relaxed-preference and group-size diagnostics, projection into a valid editor document, and repeatable canonical geometry.                                       |
+| `tests/dsl.test.ts` (Vitest)       | `.draft` parsing errors with line numbers, formatting that keeps comments, nested layout, pins across content additions, relative placement, relaxed-preference and group-size diagnostics, projection into a valid editor document, and repeatable canonical geometry.                                       |
 | `tests/translate.test.ts` (Vitest) | Editor edits as source: drag to `near`, pin/unpin, shape and group sizes (ignoring grid snaps), add/rename/connect/style/delete with readable IDs, wrap/ungroup, connection edits, rejection of bends, anchors around a refinement, distant regions after an agent's addition, movement reports, and reflow. |
 | `tests/engine-layout.mjs`          | Layout and routing regressions: 195 assertions and 55 broad cases.                                                                                                                                                                                                                                           |
 | `tests/engine-sculpt.mjs`          | Timeline and brush regressions: 55 checks.                                                                                                                                                                                                                                                                   |
@@ -24,11 +24,11 @@ Engine reports are written to the ignored `tmp/verification-current/` folder.
 ## File-backed editing
 
 `pnpm build && pnpm prove:file` drives the real editor in Chromium (`playwright-core` with an
-installed Playwright Chromium) against a temporary copy of `examples/checkout.meld` served by
-`pnpm meld open`. It resizes a group, drags a sibling, pins an object, moves the camera, undoes and
+installed Playwright Chromium) against a temporary copy of `examples/checkout.draft` served by
+`pnpm draftably open`. It resizes a group, drags a sibling, pins an object, moves the camera, undoes and
 redoes, appends a connected node from outside, restarts the server, writes invalid source, and
 races an outside write against a viewer save. At each step it compares the browser's geometry
-with `pnpm meld inspect --json`. Screenshots go to `tmp/proof/`.
+with `pnpm draftably inspect --json`. Screenshots go to `tmp/proof/`.
 
 ## Browser
 

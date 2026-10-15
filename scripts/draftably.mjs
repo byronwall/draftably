@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Run the `meld` CLI, rebuilding it first when any source file is newer than the build.
+// Run the `draftably` CLI, rebuilding it first when any source file is newer than the build.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,7 +37,7 @@ if (built < newest(path.join(root, 'src'))) {
       { cwd: root, stdio: ['ignore', 'ignore', 'inherit'] },
     );
   } catch {
-    console.error('The meld CLI failed to build.');
+    console.error('The draftably CLI failed to build.');
     process.exit(1);
   }
 }

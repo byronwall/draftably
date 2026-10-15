@@ -1,5 +1,5 @@
 /**
- * The `.meld` diagram language: a line-based source format that keeps comments, plus a model
+ * The `.draft` diagram language: a line-based source format that keeps comments, plus a model
  * parser and a formatter. Adapted from the Meld 0.1 prototype in `reference/meld/original`.
  *
  * Source is kept as a list of lines so that edits can change single statements and formatting

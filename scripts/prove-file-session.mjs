@@ -3,9 +3,9 @@
 /**
  * End-to-end proof for file-backed editing (docs/intent/diagram-dsl, first proof).
  *
- * Opens a copy of examples/checkout.meld through `pnpm meld open`, drives the real editor in
+ * Opens a copy of examples/checkout.draft through `pnpm draftably open`, drives the real editor in
  * Chromium (drag, pin, resize, undo/redo, camera), adds content to the file from outside,
- * restarts the server, and checks that the browser's geometry matches `meld inspect` throughout.
+ * restarts the server, and checks that the browser's geometry matches `draftably inspect` throughout.
  * Also checks invalid source and a stale save. Screenshots go to tmp/proof/.
  *
  * Run `pnpm build` first. Usage: pnpm prove:file
@@ -19,11 +19,11 @@ import { chromium } from 'playwright-core';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const port = 5199;
-const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'meld-proof-'));
-const file = path.join(dir, 'architecture.meld');
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draft-proof-'));
+const file = path.join(dir, 'architecture.draft');
 const out = path.join(root, 'tmp/proof');
 fs.mkdirSync(out, { recursive: true });
-fs.copyFileSync(path.join(root, 'examples/checkout.meld'), file);
+fs.copyFileSync(path.join(root, 'examples/checkout.draft'), file);
 
 const results = [];
 function check(name, ok, detail = '') {
@@ -31,24 +31,24 @@ function check(name, ok, detail = '') {
   console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${detail ? ` — ${detail}` : ''}`);
 }
 
-const meld = (...args) =>
-  execFileSync(process.execPath, [path.join(root, 'scripts/meld.mjs'), ...args], {
+const cli = (...args) =>
+  execFileSync(process.execPath, [path.join(root, 'scripts/draftably.mjs'), ...args], {
     cwd: root,
     encoding: 'utf8',
   });
-const inspect = () => JSON.parse(meld('inspect', file, '--json'));
+const inspect = () => JSON.parse(cli('inspect', file, '--json'));
 const read = () => fs.readFileSync(file, 'utf8');
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 function start() {
   const child = spawn(
     process.execPath,
-    [path.join(root, 'scripts/meld.mjs'), 'open', file, '--port', String(port), '--no-open'],
+    [path.join(root, 'scripts/draftably.mjs'), 'open', file, '--port', String(port), '--no-open'],
     { cwd: root, stdio: ['ignore', 'pipe', 'inherit'] },
   );
   return new Promise((resolve, reject) => {
     child.stdout.on('data', chunk => String(chunk).includes('Viewer:') && resolve(child));
-    child.once('exit', code => reject(Error(`meld open exited with ${code}`)));
+    child.once('exit', code => reject(Error(`draftably open exited with ${code}`)));
   });
 }
 const stop = child =>
@@ -106,7 +106,7 @@ const page = await browser.newPage({
 try {
   await page.goto(`http://127.0.0.1:${port}/`);
   await waitFor(page, () => !!window.diagramStudio?.fileState, 'viewer');
-  check('opened file matches meld inspect', same(await browserGeometry(page), inspect()));
+  check('opened file matches draftably inspect', same(await browserGeometry(page), inspect()));
 
   // 1. Resize a group from its corner, making room below its row.
   const services = await box(page, 'services');
@@ -155,7 +155,7 @@ try {
   check('undo and redo rewrite the file', undone && read() === bytes);
 
   const refined = inspect();
-  check('refined file matches meld inspect', same(await browserGeometry(page), refined));
+  check('refined file matches draftably inspect', same(await browserGeometry(page), refined));
   await shot(page, 'proof-1-refined.png');
 
   // 6. An agent adds a connected node to the same group.

@@ -89,7 +89,7 @@ export function installDebugApi() {
     cancelTimeline: closeTimeline,
     brush: activateBrush,
     brushDab,
-    /** Geometry in the same form as `pnpm meld inspect`, for comparing browser and CLI. */
+    /** Geometry in the same form as `pnpm draftably inspect`, for comparing browser and CLI. */
     fileGeometry: () => measured(doc, sceneRects(), routes()),
     fileState: () => ({
       status: fileStatus(),

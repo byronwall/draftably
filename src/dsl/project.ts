@@ -21,7 +21,7 @@ function resolveColor(scene: Scene, o: SceneObject): ColorKey {
 
 export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const doc = emptyDiagram(scene.title);
-  doc.id = 'meld-file';
+  doc.id = 'draft-file';
   const hinted = (type: string, id: string) =>
     scene.model.hints.some(h => h.type === type && 'id' in h && h.id === id);
   for (const o of scene.objects) {

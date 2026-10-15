@@ -1,5 +1,5 @@
 /**
- * A `.meld` file opened through `pnpm meld open` (or `DIAGRAM_FILE=… pnpm dev`).
+ * A `.draft` file opened through `pnpm draftably open` (or `DIAGRAM_FILE=… pnpm dev`).
  *
  * The file on disk is the source of truth. Each valid revision is compiled and projected into the
  * editor document; browser storage is switched off. An invalid revision keeps the last valid

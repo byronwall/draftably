@@ -14,7 +14,7 @@ import * as edits from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
 
-const checkout = readFileSync(path.join(__dirname, '../examples/checkout.meld'), 'utf8');
+const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 
 /** Apply an editor edit to the projected file and return the new source and its scene. */
 function edit(source: string, label: string, selection: string[], fn: (d: Diagram) => void) {

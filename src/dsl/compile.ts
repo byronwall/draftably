@@ -1,5 +1,5 @@
 /**
- * Compile a `.meld` model into geometry. Adapted from Meld 0.1's layout and refinement pass.
+ * Compile a `.draft` model into geometry. Adapted from Meld 0.1's layout and refinement pass.
  *
  * Geometry is a pure function of the source and one fixed render context: no DOM measurement,
  * randomness, clocks or previous output. The browser and the CLI therefore agree exactly.

@@ -1,5 +1,5 @@
 /**
- * Targeted changes to `.meld` source lines. Each helper changes, adds or removes whole statements
+ * Targeted changes to `.draft` source lines. Each helper changes, adds or removes whole statements
  * so comments and unrelated statements are kept.
  */
 import {

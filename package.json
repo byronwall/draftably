@@ -22,7 +22,7 @@
     "cli:pack-check": "node scripts/check-cli-package.ts && pnpm --dir packages/cli pack --pack-destination ../../tmp/cli-dist",
     "release:check": "pnpm check && pnpm --dir packages/cli --if-present run build && pnpm --dir packages/cli --if-present run test && pnpm cli:pack-check",
     "release": "pnpm release:check && changeset publish",
-    "meld": "node scripts/meld.mjs",
+    "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs"
   },
   "dependencies": {

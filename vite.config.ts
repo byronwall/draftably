@@ -3,11 +3,11 @@ import { defineConfig, type Plugin } from 'vitest/config';
 import solid from 'vite-plugin-solid';
 import { createFileSession } from './src/server/file-session';
 
-/** `DIAGRAM_FILE=x.meld pnpm dev` serves that file's session next to the dev server. */
+/** `DIAGRAM_FILE=x.draft pnpm dev` serves that file's session next to the dev server. */
 function fileSession(file: string | undefined): Plugin | null {
   if (!file) return null;
   return {
-    name: 'meld-file-session',
+    name: 'draft-file-session',
     configureServer(server) {
       const session = createFileSession(path.resolve(file));
       server.middlewares.use((req, res, next) => {

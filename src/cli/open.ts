@@ -1,4 +1,4 @@
-/** `meld open`: serve the built editor plus one file session on localhost. */
+/** `draftably open`: serve the built editor plus one file session on localhost. */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import http from 'node:http';

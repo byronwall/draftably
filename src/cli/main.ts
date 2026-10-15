@@ -1,6 +1,6 @@
 /**
- * `meld` command line: check, format and inspect `.meld` diagram files without the viewer.
- * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm meld`.
+ * `draftably` command line: check, format and inspect `.draft` diagram files without the viewer.
+ * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { renderSvg } from './svg';
 
-const USAGE = `Usage: pnpm meld <command> <file.meld> [options]
+const USAGE = `Usage: pnpm draftably <command> <file.draft> [options]
 
 Commands:
   check <file>              Report source errors and layout diagnostics. Exits 1 on errors.
@@ -24,7 +24,7 @@ const describe = (d: Diagnostic) =>
   `${d.level.padEnd(7)} ${d.line ? `line ${d.line}: ` : ''}${d.message}`;
 
 function read(file: string | undefined) {
-  if (!file) throw new UsageError('A .meld file is required.');
+  if (!file) throw new UsageError('A .draft file is required.');
   return fs.readFileSync(path.resolve(file), 'utf8');
 }
 

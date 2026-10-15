@@ -78,7 +78,7 @@ const state = createRoot(() => {
       value = { result, routes: drawRoutes(doc, vg, map, result) };
     } else {
       value = computeRoutes(doc, vg, map, {
-        // A diagram file must draw the same routes as `meld inspect`, so no earlier routes.
+        // A diagram file must draw the same routes as `draftably inspect`, so no earlier routes.
         previous: fileMode() ? [] : (routePrior() ?? lastRoutes),
         quick: quick || !!animationGeometry(),
       });

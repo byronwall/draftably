@@ -1,5 +1,5 @@
 /**
- * One local `.meld` file shared by the viewer and anyone editing it on disk.
+ * One local `.draft` file shared by the viewer and anyone editing it on disk.
  *
  * The session owns the path: it serves the source with a content revision, watches the folder
  * (so editors that save by renaming a temporary file are seen), pushes changes to the viewer over
