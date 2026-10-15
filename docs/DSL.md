@@ -121,7 +121,13 @@ pnpm draftably inspect examples/checkout.draft    # canonical node and route geo
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
+pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
 ```
+
+`skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
+teaches coding agents to write and check `.draft` files. `--global` installs it under
+`~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.
+`npx skills add byronwall/draftably` installs the same skill from the repository.
 
 `open` serves a folder: the current folder, the folder you name, or the current folder around
 the file you name. Without a file, the viewer starts on a page that lists every `.draft` file in

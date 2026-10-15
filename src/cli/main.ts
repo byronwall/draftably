@@ -21,6 +21,11 @@ Commands:
                             a new diagram, or an example. --no-open skips the browser.
                             Uses the first free port from 5180 unless --port is given;
                             --port 0 picks any free port. The Viewer line has the URL.
+  skill install             Install the agent skill for writing .draft files into
+       [--global]           ./.claude/skills/draftably, or ~/.claude/skills with --global.
+       [--dir <folder>]     --dir picks another skills folder (e.g. .agents/skills);
+       [--force]            --force replaces an existing copy.
+  skill print               Print the skill's SKILL.md.
 `;
 
 const describe = (d: Diagnostic) =>
@@ -76,6 +81,26 @@ export async function main(argv: string[]): Promise<number> {
           launch: !args.includes('--no-open'),
         });
         return -1;
+      }
+      case 'skill': {
+        const { installSkill, skillSource } = await import('./skill');
+        if (file === 'print') {
+          process.stdout.write(fs.readFileSync(path.join(skillSource(), 'SKILL.md'), 'utf8'));
+          return 0;
+        }
+        if (file !== 'install') throw new UsageError('Use skill install or skill print.');
+        const at = rest.indexOf('--dir');
+        const dir = at >= 0 ? rest[at + 1] : undefined;
+        if (at >= 0 && (!dir || dir.startsWith('--')))
+          throw new UsageError('--dir needs a folder.');
+        const target = installSkill({
+          cwd: process.cwd(),
+          dir,
+          global: flag('--global'),
+          force: flag('--force'),
+        });
+        console.log(`Installed the draftably skill to ${target}.`);
+        return 0;
       }
       default:
         console.log(USAGE);

@@ -19,6 +19,7 @@
   "files": [
     "dist",
     "examples",
+    "skills",
     "DSL.md",
     "CHANGELOG.md",
     "THIRD_PARTY_NOTICES",
