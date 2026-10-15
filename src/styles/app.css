@@ -22,6 +22,9 @@
   --dot: #d9dce7;
   --sculpt-restore: #b46e24;
   --sculpt-hold: #258775;
+  --example: #c7861f;
+  --example-soft: #fdf4e3;
+  --example-ink: #ffffff;
 
   --shadow-sm: 0 1px 2px #1d1b3010;
   --shadow: 0 6px 24px #25213b14;
@@ -71,6 +74,9 @@
   --dot: #323747;
   --sculpt-restore: #e5b474;
   --sculpt-hold: #83cdb8;
+  --example: #e8b673;
+  --example-soft: #3a2f1e;
+  --example-ink: #15171f;
   --shadow-sm: 0 1px 2px #0004;
   --shadow: 0 6px 24px #0005;
   --shadow-lg: 0 16px 56px #0008;
@@ -173,6 +179,10 @@ details > summary {
     background-color 0.12s,
     border-color 0.12s,
     color 0.12s;
+}
+
+a.button {
+  text-decoration: none;
 }
 
 .button:hover:not(:disabled) {
@@ -485,8 +495,79 @@ input[type='range'] {
 
 .app {
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   height: 100dvh;
+}
+
+/* --- Example mode ---------------------------------------------------------------------------- */
+
+/* An open example is framed in amber from the toolbar down, so it never reads as a saved file. */
+.app.example-mode .workspace {
+  box-shadow: inset 0 0 0 2px var(--example);
+}
+
+.example-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 36px;
+  padding: 0 var(--space-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--example) 40%, transparent);
+  background: var(--example-soft);
+  font-size: var(--text-sm);
+}
+
+.example-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 4px;
+  background: var(--example);
+  color: var(--example-ink);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.example-text {
+  display: flex;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.example-note {
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.example-actions {
+  display: flex;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.example-save {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.example-save input {
+  width: 280px;
+  height: 24px;
+}
+
+.example-error {
+  color: var(--danger);
+  white-space: nowrap;
 }
 
 .workspace {

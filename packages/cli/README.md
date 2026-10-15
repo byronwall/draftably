@@ -10,6 +10,7 @@ It does not compile code or download a browser during installation.
 
 ```sh
 pnpm dlx draftably --help
+pnpm dlx draftably open                    # start page: this folder's diagrams, new, examples
 pnpm dlx draftably open architecture.draft
 ```
 
@@ -44,10 +45,15 @@ draftably format architecture.draft --write
 draftably inspect architecture.draft --json
 draftably inspect architecture.draft --svg > architecture.svg
 draftably open architecture.draft
+draftably open                              # start page for the current folder
 ```
 
+`open` without a file lists the folder's `.draft` files, creates new ones, and opens examples.
+Examples are scratch copies marked by an amber bar; nothing is written until you save one as a
+file.
+
 `check` exits with code 1 for source errors or unsatisfied hard constraints.
-The bundled [language guide](DSL.md) describes the syntax. An example is included in `examples/checkout.draft`.
+The bundled [language guide](DSL.md) describes the syntax. Fifteen examples are included in `examples/`.
 
 Drag nodes to save relative placement preferences. Pins retain exact positions. Labels, connections,
 groups, sizes, and basic styles also save to source. Formatting preserves comments and unrelated content.

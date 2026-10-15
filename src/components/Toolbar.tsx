@@ -4,7 +4,13 @@ import type { LayoutAlgorithmId } from '../model/types';
 import { setTool } from '../state/actions';
 import { commandEnabled, runCommand, type CommandId } from '../state/commands';
 import { doc, saveStatus, transact } from '../state/document';
-import { fileMode, fileStatus, fileStatusText } from '../state/file-session';
+import {
+  exampleMode,
+  fileMode,
+  fileSession,
+  fileStatus,
+  fileStatusText,
+} from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
 import { layoutBusy, cancelLayout, updateLayoutSettings } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
@@ -290,13 +296,19 @@ function DocumentTitle() {
       />
       <span
         class="save-status"
+        title={fileSession()?.path || undefined}
         classList={{
+          'on-disk': fileMode() && !exampleMode(),
+          'in-example': exampleMode(),
           warning: fileMode()
             ? fileStatus() !== 'saved' && fileStatus() !== 'saving'
             : saveStatus() === 'failed',
         }}
         aria-live="polite"
       >
+        <Show when={fileMode()}>
+          <Icon name={exampleMode() ? 'spark' : 'file'} size={10} />
+        </Show>
         {status()}
       </span>
     </div>

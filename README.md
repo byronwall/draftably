@@ -61,8 +61,8 @@ src/
   samples/     Example diagrams shown in the File menu
   dsl/         The .draft language: parser, formatter, compiler and editor projection
   cli/         The `pnpm draftably` command
-  server/      The local file session behind `pnpm draftably open`
-examples/      Example .draft diagram files
+  server/      The folder and file sessions behind `pnpm draftably open`
+examples/      Example .draft diagrams, bundled into the viewer's start page
 tests/         Vitest unit tests and the engine regression scripts
 reference/v7/  The original release, used by the engine parity test
 reference/meld/ The recovered Meld DSL prototype the .draft language is adapted from
@@ -76,7 +76,8 @@ reference/meld/ The recovered Meld DSL prototype the .draft language is adapted 
 ```bash
 pnpm draftably check examples/checkout.draft
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
-pnpm build && pnpm draftably open examples/checkout.draft
+pnpm build && pnpm draftably open                  # pick, create, or try an example
+pnpm draftably open examples/checkout.draft         # open one file directly
 ```
 
 See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
