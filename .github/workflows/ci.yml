@@ -14,11 +14,17 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The changeset check compares the branch with its base.
+          fetch-depth: 0
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
       - run: pnpm install --frozen-lockfile
+      - name: Require a changeset for shipped changes
+        if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'changeset-release/')
+        run: pnpm changeset:check origin/${{ github.base_ref }}
       - run: pnpm release:check
 
   proofs:

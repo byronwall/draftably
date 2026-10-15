@@ -19,6 +19,7 @@
     "check": "pnpm check:fast && pnpm test:engines && pnpm build",
     "changeset:add": "node scripts/add-changeset.ts",
     "changeset:status": "changeset status",
+    "changeset:check": "node scripts/check-changeset.ts",
     "changeset:version": "changeset version && pnpm install --lockfile-only",
     "cli:build": "pnpm --dir packages/cli build",
     "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
