@@ -90,6 +90,7 @@ export const clearSelection = () => state.setSelectionSignal(new Set<string>());
 // --- Edits and history -----------------------------------------------------------------------
 
 const beforeEditHandlers: Array<() => void> = [];
+const sourceIdHandlers: Array<(mapId: (id: string) => string) => void> = [];
 
 /**
  * Register work that must finish before any edit: close a timeline, accept a layout
@@ -101,6 +102,15 @@ export function onBeforeEdit(handler: () => void) {
 
 export function prepareForEdit() {
   for (const handler of beforeEditHandlers) handler();
+}
+
+/** Keep active editor state aligned when a file edit assigns source ids to new objects. */
+export function onSourceIdMap(handler: (mapId: (id: string) => string) => void) {
+  sourceIdHandlers.push(handler);
+}
+
+export function mapSourceIds(mapId: (id: string) => string) {
+  for (const handler of sourceIdHandlers) handler(mapId);
 }
 
 /**

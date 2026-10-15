@@ -80,6 +80,11 @@ function exportCommand(format: 'json' | 'svg' | 'png') {
   );
 }
 
+function openStart() {
+  if (workspace()) location.assign(startUrl());
+  else setStartOpen(true);
+}
+
 export const commands = {
   undo: {
     label: 'Undo',
@@ -286,10 +291,14 @@ export const commands = {
     label: 'New, open or example…',
     icon: 'folder',
     // With a served folder the start page lists its files; otherwise it opens over the editor.
-    run: () => (workspace() ? location.assign(startUrl()) : setStartOpen(true)),
+    run: openStart,
     duringTimeline: true,
   },
-  'new-diagram': { label: 'New diagram', icon: 'plus', run: actions.newDocument },
+  'new-diagram': {
+    label: 'New diagram',
+    icon: 'plus',
+    run: () => (fileMode() ? openStart() : actions.newDocument()),
+  },
   open: {
     label: 'Open diagram…',
     keys: '⌘O',
@@ -328,7 +337,6 @@ const FILE_UNSUPPORTED = new Set<string>([
   'fit-container',
   'insert-image',
   'replace-image',
-  'new-diagram',
   'open',
 ]);
 const unavailableInFile = (id: string) => fileMode() && FILE_UNSUPPORTED.has(id);

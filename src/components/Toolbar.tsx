@@ -217,6 +217,7 @@ export function Toolbar() {
         <button
           type="button"
           class="button ghost"
+          aria-label="Save and export"
           aria-haspopup="menu"
           aria-expanded={menuOpen('export')}
           onClick={menuButton('export')}
