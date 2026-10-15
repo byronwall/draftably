@@ -19,11 +19,13 @@
     "changeset:add": "node scripts/add-changeset.ts",
     "changeset:status": "changeset status",
     "changeset:version": "changeset version && pnpm install --lockfile-only",
-    "cli:pack-check": "node scripts/check-cli-package.ts && pnpm --dir packages/cli pack --pack-destination ../../tmp/cli-dist",
-    "release:check": "pnpm check && pnpm --dir packages/cli --if-present run build && pnpm --dir packages/cli --if-present run test && pnpm cli:pack-check",
+    "cli:build": "pnpm --dir packages/cli build",
+    "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
+    "release:check": "pnpm typecheck && pnpm lint && pnpm test && pnpm cli:build && pnpm cli:pack-check",
     "release": "pnpm release:check && changeset publish",
     "meld": "node scripts/meld.mjs",
-    "prove:file": "node scripts/prove-file-session.mjs"
+    "prove:file": "node scripts/prove-file-session.mjs",
+    "prove:installed": "node scripts/prove-package.ts --browser"
   },
   "dependencies": {
     "solid-js": "^1.9.9"
