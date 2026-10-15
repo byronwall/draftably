@@ -1,4 +1,5 @@
 /** Global keyboard shortcuts and clipboard handling for the editor. */
+import { setStartOpen, startOpen } from './launch';
 import { findEdge, findNode } from '../model/graph';
 import { isClipboardFragment } from '../model/edits';
 import type { Side } from '../model/types';
@@ -77,6 +78,10 @@ function focusedObject(target: Element) {
 
 export function handleKeyDown(e: KeyboardEvent) {
   if (e.isComposing || modalOpen()) return;
+  if (startOpen()) {
+    if (e.key === 'Escape') setStartOpen(false);
+    return;
+  }
   if (sculptKey(e)) return;
   const mod = e.ctrlKey || e.metaKey,
     key = shortcutKey(e),

@@ -1,0 +1,32 @@
+diagram "Order saga" version=1
+
+# Event-driven services around a broker. Dashed lines are asynchronous events.
+node client "Storefront" shape=pill color=slate
+
+group orders "Order service" color=blue
+node create "Create order" in=orders
+node complete "Mark complete" in=orders
+node compensate "Cancel order" in=orders color=rose
+
+node broker "Event bus" shape=circle color=amber
+
+group payments "Payment service" color=violet
+node charge "Charge card" in=payments
+node void "Void charge" in=payments color=rose
+
+group inventory "Inventory service" color=mint
+node reserve "Reserve stock" in=inventory
+node release "Release stock" in=inventory color=rose
+
+edge place client -> create "POST /orders"
+edge created create -> broker "OrderCreated" kind=async
+edge pay broker -> charge kind=async
+edge paid charge -> broker "PaymentSucceeded" kind=async
+edge hold broker -> reserve kind=async
+edge reserved reserve -> broker "StockReserved" kind=async
+edge done broker -> complete kind=async
+edge failed broker -> compensate "StockFailed" kind=async
+edge undo1 compensate -> void kind=async
+edge undo2 compensate -> release kind=async
+
+layout root flow gap=56 direction=right

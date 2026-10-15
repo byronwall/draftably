@@ -1,10 +1,10 @@
-/** `draftably open`: serve the built editor plus one file session on localhost. */
+/** `draftably open`: serve the built editor plus a folder of diagram files on localhost. */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createFileSession } from '../server/file-session';
+import { createWorkspace } from '../server/workspace';
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -16,7 +16,11 @@ const TYPES: Record<string, string> = {
   '.woff2': 'font/woff2',
 };
 
-export async function openSession(file: string, options: { port: number; launch: boolean }) {
+/**
+ * Serve the folder `target` (or the folder around the file `target`). Without a file, the viewer
+ * starts on the diagram picker; with one, it opens that file directly.
+ */
+export async function openSession(target: string, options: { port: number; launch: boolean }) {
   let project = path.dirname(fileURLToPath(import.meta.url));
   while (!fs.existsSync(path.join(project, 'package.json')) && path.dirname(project) !== project)
     project = path.dirname(project);
@@ -25,9 +29,20 @@ export async function openSession(file: string, options: { port: number; launch:
     throw Error(
       'The viewer assets are missing. Reinstall draftably, or run `pnpm build` in a source checkout.',
     );
-  const session = createFileSession(file);
+  const stat = fs.statSync(target, { throwIfNoEntry: false });
+  if (!stat) throw Error(`No such file or folder: ${target}`);
+  if (stat.isFile() && !target.endsWith('.draft')) throw Error('Open a .draft file or a folder.');
+  const cwd = process.cwd();
+  // A file inside the current folder keeps that folder as the workspace, so its neighbors show.
+  const rootDir = stat.isDirectory()
+    ? target
+    : target.startsWith(cwd + path.sep)
+      ? cwd
+      : path.dirname(target);
+  const workspace = createWorkspace(rootDir);
+  const file = stat.isFile() ? path.relative(rootDir, target).split(path.sep).join('/') : '';
   const server = http.createServer((req, res) => {
-    if (session.handle(req, res)) return;
+    if (workspace.handle(req, res)) return;
     let url: string;
     try {
       url = decodeURIComponent((req.url ?? '/').split('?')[0]);
@@ -55,14 +70,16 @@ export async function openSession(file: string, options: { port: number; launch:
       server.listen(options.port, '127.0.0.1', resolve);
     });
   } catch (error) {
-    session.close();
+    workspace.close();
     throw error;
   }
-  const url = `http://127.0.0.1:${options.port}/`;
-  console.log(`Editing ${session.file}\nViewer: ${url}\nPress Ctrl+C to stop.`);
+  const url = `http://127.0.0.1:${options.port}/${file ? `?file=${encodeURIComponent(file)}` : ''}`;
+  console.log(
+    `${file ? `Editing ${file}` : 'Diagrams'} in ${workspace.root}\nViewer: ${url}\nPress Ctrl+C to stop.`,
+  );
   if (options.launch && process.platform === 'darwin') spawn('open', [url], { stdio: 'ignore' });
   const stop = () => {
-    session.close();
+    workspace.close();
     server.close();
     process.exit(0);
   };

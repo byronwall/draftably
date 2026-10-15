@@ -33,14 +33,14 @@ A `.draft` file never stores a picture of the final layout. The same source alwa
 the same geometry. Whether a layout result can be saved as a recipe depends on whether it can be
 recomputed from the source alone:
 
-| Tool                                             | Engine mode                       | Recomputable from source? |
-| ------------------------------------------------ | --------------------------------- | ------------------------- |
-| Layout options + **Rebuild**                     | `rebuild`, cold start             | Yes. The engine reports `deterministic: true`. |
-| **Compare** layout/algorithm grid (rebuild run)  | `rebuild`, cold start per cell    | Yes.                      |
-| Compare routing parameters                       | Router settings                   | Yes, if the router settings are stored. |
-| **Improve** (pass)                               | Warm start from current geometry  | No. It depends on where things were. |
-| **Timeline** step                                | `rebuild` with `warmStart` + trace | No. Step 42 means something else once a node is added. |
-| **Brush** stroke                                 | Local, path dependent             | No.                       |
+| Tool                                            | Engine mode                        | Recomputable from source?                              |
+| ----------------------------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| Layout options + **Rebuild**                    | `rebuild`, cold start              | Yes. The engine reports `deterministic: true`.         |
+| **Compare** layout/algorithm grid (rebuild run) | `rebuild`, cold start per cell     | Yes.                                                   |
+| Compare routing parameters                      | Router settings                    | Yes, if the router settings are stored.                |
+| **Improve** (pass)                              | Warm start from current geometry   | No. It depends on where things were.                   |
+| **Timeline** step                               | `rebuild` with `warmStart` + trace | No. Step 42 means something else once a node is added. |
+| **Brush** stroke                                | Local, path dependent              | No.                                                    |
 
 The engine is safe to run in the compiler: its header says it is Browser, Worker and Node
 compatible, it uses no random start, and its `await`s only yield to the event loop.
