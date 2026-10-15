@@ -65,3 +65,6 @@ reference/v7/  The original release, used by the engine parity test
 See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
 [Checks](docs/CHECKS.md) for what is tested. [Source record](docs/IMPORT.md) describes where the
 original release came from; its product notes live in [reference/v7/docs](reference/v7/docs).
+
+The planned CLI uses Changesets and GitHub Actions for npm releases. See
+[release setup](docs/RELEASING.md) for package activation and npm configuration.
