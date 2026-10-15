@@ -8,7 +8,8 @@ import { clone } from '../model/geometry';
 import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
 import type { ColorKey, Diagram, Rect } from '../model/types';
-import { GROUP_INSET, type Scene, type SceneObject } from './compile';
+import type { Scene, SceneObject } from './compile';
+import { GROUP_INSET } from './frame';
 
 /** Editor state that is not part of the source and survives a reprojection. */
 export type ViewState = Partial<Pick<Diagram, 'settings' | 'camera' | 'theme' | 'collapsed'>>;
@@ -21,7 +22,7 @@ function resolveColor(scene: Scene, o: SceneObject): ColorKey {
 
 export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const doc = emptyDiagram(scene.title);
-  doc.id = 'meld-file';
+  doc.id = 'draft-file';
   const hinted = (type: string, id: string) =>
     scene.model.hints.some(h => h.type === type && 'id' in h && h.id === id);
   for (const o of scene.objects) {
@@ -66,6 +67,16 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const groups = new Set(doc.graph.groups.map(g => g.id));
   doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id));
   doc.settings = clone(view.settings ?? DEFAULT_SETTINGS);
+  // The file decides routing, and its root engine recipe is what layout tools start from.
+  doc.settings.routing = { ...DEFAULT_SETTINGS.routing, ...scene.model.routing };
+  const root = scene.model.layouts.find(l => l.scope === 'root');
+  if (root?.engine)
+    Object.assign(
+      doc.settings,
+      // `auto` reads left to right in the compiler's landscape render context.
+      { algorithm: root.engine.algorithm, direction: root.direction === 'down' ? 'DOWN' : 'RIGHT' },
+      root.engine.params,
+    );
   if (view.camera) doc.camera = { ...view.camera };
   if (view.theme) doc.theme = view.theme;
   return doc;

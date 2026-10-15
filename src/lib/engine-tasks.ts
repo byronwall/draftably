@@ -6,16 +6,21 @@ import {
 } from '../engines/explorer-engine.js';
 import { LayoutLab, type LayoutOptions, type LayoutResult } from '../engines/layout-engine.js';
 import { SculptLab, type Timeline } from '../engines/sculpt-engine.js';
+import { RouteLab } from '../engines/routing-engine.js';
+import { compile } from '../dsl/compile';
+import { projectScene } from '../dsl/project';
 import type { Diagram } from '../model/types';
 
 export type EngineTask =
   | { kind: 'layout'; doc: Diagram; options: LayoutOptions }
   | { kind: 'candidate'; baseline: Diagram; spec: CandidateSpec; config: ComparisonConfig }
-  | { kind: 'timeline'; doc: Diagram; options: LayoutOptions };
+  | { kind: 'timeline'; doc: Diagram; options: LayoutOptions }
+  /** A diagram file variant, compiled exactly as the file would be. */
+  | { kind: 'source'; source: string; spec: CandidateSpec };
 
 export type EngineResult<T extends EngineTask> = T extends { kind: 'layout' }
   ? LayoutResult
-  : T extends { kind: 'candidate' }
+  : T extends { kind: 'candidate' | 'source' }
     ? CandidateResult
     : Timeline;
 
@@ -25,7 +30,18 @@ export function runEngineTask(
   if (task.kind === 'layout') return LayoutLab.compute(task.doc, task.options);
   if (task.kind === 'candidate')
     return ExplorerLab.candidate(task.baseline, task.spec, task.config);
+  if (task.kind === 'source') return compileCandidate(task.source, task.spec);
   return SculptLab.journey(task.doc, task.options);
+}
+
+/** Compile a source variant and route it with no prior routes, as the viewer and CLI do. */
+async function compileCandidate(source: string, spec: CandidateSpec): Promise<CandidateResult> {
+  const document = projectScene(await compile(source));
+  const routing = RouteLab.compute(ExplorerLab.sceneInput(document), {
+    ...document.settings.routing,
+    previous: [],
+  });
+  return { spec, document, report: null, routing };
 }
 
 export class CancelledError extends Error {

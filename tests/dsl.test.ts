@@ -1,12 +1,12 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { compile, contentOrigin } from '../src/dsl/compile';
+import { checkSource, contentOrigin } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
 
-const checkout = readFileSync(path.join(__dirname, '../examples/checkout.meld'), 'utf8');
+const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 
 const errorLine = (source: string) => {
   try {
@@ -47,7 +47,7 @@ describe('syntax', () => {
 
 describe('compile', () => {
   it('places nested children inside their group content area', () => {
-    const scene = compile(checkout);
+    const scene = checkSource(checkout);
     for (const o of scene.objects) {
       if (o.parent === 'root') continue;
       const g = scene.byId.get(o.parent)!,
@@ -61,50 +61,52 @@ describe('compile', () => {
 
   it('keeps pins at their parent-local coordinates when content is added', () => {
     const pinned = checkout + 'pin db x=900 y=40\n';
-    const before = compile(pinned).byId.get('db')!;
-    const after = compile(pinned + 'node cache "Cache"\nedge read api -> cache\n').byId.get('db')!;
+    const before = checkSource(pinned).byId.get('db')!;
+    const after = checkSource(pinned + 'node cache "Cache"\nedge read api -> cache\n').byId.get(
+      'db',
+    )!;
     expect([before.localX, before.localY]).toEqual([900, 40]);
     expect([after.localX, after.localY]).toEqual([900, 40]);
   });
 
   it('places an object relative to a sibling', () => {
-    const scene = compile(checkout + 'near payments orders side=below gap=40\n');
+    const scene = checkSource(checkout + 'near payments orders side=below gap=40\n');
     const orders = scene.byId.get('orders')!,
       payments = scene.byId.get('payments')!;
     expect(payments.y).toBe(orders.y + orders.h + 40);
   });
 
   it('reports a relaxed preference instead of overlapping', () => {
-    const scene = compile(checkout + 'nudge payments dx=-120\n');
+    const scene = checkSource(checkout + 'nudge payments dx=-120\n');
     expect(scene.diagnostics.some(d => d.code === 'relaxed' && d.ids[0] === 'payments')).toBe(true);
   });
 
   it('honors a requested group size and reports a size the contents override', () => {
-    const big = compile(
+    const big = checkSource(
       checkout.replace('layout services row gap=56', 'layout services row gap=56 min-width=800'),
     );
     expect(big.byId.get('services')!.w).toBe(800);
-    const small = compile(
+    const small = checkSource(
       checkout.replace('layout services row gap=56', 'layout services row gap=56 min-width=100'),
     );
     expect(small.diagnostics.some(d => d.code === 'group-grew')).toBe(true);
   });
 
   it('rejects relative placement cycles with a line', () => {
-    expect(() => compile('node a "A"\nnode b "B"\nnear a b\nnear b a\n')).toThrow(/Line [34]/);
+    expect(() => checkSource('node a "A"\nnode b "B"\nnear a b\nnear b a\n')).toThrow(/Line [34]/);
   });
 });
 
 describe('projection', () => {
   it('produces a valid editor document and reproducible geometry', () => {
-    const doc = projectScene(compile(checkout));
+    const doc = projectScene(checkSource(checkout));
     expect(normalize(doc)).toEqual(doc);
     expect(doc.layout.containers.platform.manualSize).toBe(true);
     expect(doc.styles.payments.shape).toBe('pill');
     expect(doc.styles.orders.color).toBe('mint');
     expect(doc.graph.edges.find(e => e.id === 'persist')!.dashed).toBe(true);
     const a = JSON.stringify(canonicalGeometry(doc)),
-      b = JSON.stringify(canonicalGeometry(projectScene(compile(checkout))));
+      b = JSON.stringify(canonicalGeometry(projectScene(checkSource(checkout))));
     expect(a).toBe(b);
     expect(canonicalGeometry(doc).routes).toHaveLength(5);
   });

@@ -55,7 +55,7 @@ Each module owns one concern and exposes signals plus the actions that change th
 
 ## dsl/ and cli/ — diagram files
 
-`dsl/` reads, formats and compiles `.meld` files (see [Diagram files](DSL.md)). It is pure
+`dsl/` reads, formats and compiles `.draft` files (see [Diagram files](DSL.md)). It is pure
 TypeScript shared by the browser and the command line.
 
 | File              | Responsibility                                                                              |
@@ -74,13 +74,13 @@ switches browser storage off, and projects each valid revision into the document
 open, `commit` in `state/document.ts` hands every edit to the session, which translates it, shows
 the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
 
-`server/workspace.ts` serves a folder: it lists its `.meld` files, creates new ones (never
+`server/workspace.ts` serves a folder: it lists its `.draft` files, creates new ones (never
 overwriting, never outside the folder), and routes `?file=` requests to one file session per
 path. `state/launch.ts` decides what the viewer opens from the URL and the server: a file, an
-example (`model/examples.ts` bundles `examples/*.meld`), the start page, or the static app's
+example (`model/examples.ts` bundles `examples/*.draft`), the start page, or the static app's
 browser copy. An example runs through the same session code with saving switched off.
 
-`cli/` is the `pnpm meld` command. `scripts/meld.mjs` rebuilds it with `vite build --ssr` when a
+`cli/` is the `pnpm draftably` command. `scripts/draftably.mjs` rebuilds it with `vite build --ssr` when a
 source file is newer than `dist-cli/`.
 
 ## components/ — the interface

@@ -1,11 +1,11 @@
 /**
- * Example `.meld` diagrams from the repository's `examples/` folder, bundled into the viewer so
+ * Example `.draft` diagrams from the repository's `examples/` folder, bundled into the viewer so
  * they open without a server. An example opens as a scratch copy; it is never written to disk
  * unless the user saves it as a new file.
  */
 import { parseModel } from '../dsl/syntax';
 
-const files = import.meta.glob<string>('../../examples/*.meld', {
+const files = import.meta.glob<string>('../../examples/*.draft', {
   eager: true,
   query: '?raw',
   import: 'default',
@@ -47,7 +47,7 @@ function describe(id: string, source: string): ExampleInfo {
 
 /** All examples, flattest first, so the list reads as a ladder of nesting depth. */
 export const EXAMPLES: ExampleInfo[] = Object.entries(files)
-  .map(([file, source]) => describe(file.replace(/^.*\/|\.meld$/g, ''), source))
+  .map(([file, source]) => describe(file.replace(/^.*\/|\.draft$/g, ''), source))
   .sort((a, b) => a.depth - b.depth || a.groups - b.groups || a.title.localeCompare(b.title));
 
 export const findExample = (id: string) => EXAMPLES.find(e => e.id === id);

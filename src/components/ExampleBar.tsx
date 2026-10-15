@@ -21,7 +21,7 @@ export function ExampleBar() {
   const id = () => fileSession()?.example ?? 'example';
 
   const startSave = () => {
-    setPath(`${id()}.meld`);
+    setPath(`${id()}.draft`);
     setError('');
     setSaving(true);
   };
@@ -63,10 +63,10 @@ export function ExampleBar() {
                   <button
                     type="button"
                     class="button small"
-                    onClick={() => downloadText(currentSource(), `${id()}.meld`, 'text/plain')}
+                    onClick={() => downloadText(currentSource(), `${id()}.draft`, 'text/plain')}
                   >
                     <Icon name="download" />
-                    Download .meld
+                    Download .draft
                   </button>
                 }
               >

@@ -1,4 +1,4 @@
-/** `meld open`: serve the built editor plus a folder of diagram files on localhost. */
+/** `draftably open`: serve the built editor plus a folder of diagram files on localhost. */
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import http from 'node:http';
@@ -31,7 +31,7 @@ export async function openSession(target: string, options: { port: number; launc
     );
   const stat = fs.statSync(target, { throwIfNoEntry: false });
   if (!stat) throw Error(`No such file or folder: ${target}`);
-  if (stat.isFile() && !target.endsWith('.meld')) throw Error('Open a .meld file or a folder.');
+  if (stat.isFile() && !target.endsWith('.draft')) throw Error('Open a .draft file or a folder.');
   const cwd = process.cwd();
   // A file inside the current folder keeps that folder as the workspace, so its neighbors show.
   const rootDir = stat.isDirectory()

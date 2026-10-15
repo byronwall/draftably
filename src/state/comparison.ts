@@ -33,6 +33,18 @@ import { resetRoutes, routes, setAdoptedRoutes } from './scene';
 import { setComparisonCloser } from './sculpt';
 import { toast } from './toast';
 import { closeMenu, setLayoutLabOpen } from './ui';
+import {
+  commitSource,
+  currentSource,
+  fileBlocked,
+  fileMode,
+  sourceScope,
+  sourceWithRecipe,
+  sourceWithRouting,
+} from './file-session';
+import { LayoutLab } from '../engines/layout-engine.js';
+import { RouteLab } from '../engines/routing-engine.js';
+import type { CandidateSpec } from '../engines/explorer-engine.js';
 
 export type Presentation = 'grid' | 'overlay';
 export type CameraMode = 'sync' | 'focus' | 'independent';
@@ -44,6 +56,8 @@ export interface Candidate {
   status: 'pending' | 'ready' | 'error';
   error?: string;
   result?: CandidateResult;
+  /** In a diagram file: the source this candidate compiles from, which Apply saves. */
+  source?: string;
   scene?: StaticScene;
   camera: ViewCamera;
   layer: { visible: boolean; opacity: number; adjusted: boolean };
@@ -137,8 +151,30 @@ function defaultConfig(mode: ComparisonMode): ComparisonConfig {
 
 const setProgress = (text: string, error = false) => setCmp('progress', { text, error });
 
+/**
+ * In a diagram file, rebuild and routing candidates are source variants: the file with a
+ * different layout recipe or routing line, compiled exactly as the file would be.
+ * Returns null for runs that start from the current drawing (warm starts and passes).
+ */
+function candidateSource(baseline: Diagram, spec: CandidateSpec, config: ComparisonConfig) {
+  if (!fileMode()) return null;
+  if (config.mode === 'routing')
+    return sourceWithRouting(RouteLab.settings({ ...baseline.settings.routing, ...spec.patch }));
+  if (config.run !== 'rebuild') return null;
+  const scope = sourceScope(config);
+  if (!scope)
+    throw Error('A layout recipe arranges the whole diagram or one container, not a selection.');
+  const settings = LayoutLab.settings({ ...baseline.settings, ...spec.patch, mode: 'rebuild' });
+  return sourceWithRecipe(scope, settings).source;
+}
+
 export function openComparison(mode: ComparisonMode = 'layout') {
   prepareForEdit();
+  const blocked = fileMode() && fileBlocked();
+  if (blocked) {
+    toast(blocked);
+    return;
+  }
   if (layoutPreview()) {
     toast('Keep or discard the current layout preview before comparing.');
     return;
@@ -260,14 +296,17 @@ export async function generate(override?: Partial<ComparisonConfig>) {
     if (thisJob !== job) return { status: 'cancelled' };
     setProgress(`Computing ${i + 1} of ${specs.length} · ${specs[i].title}`);
     try {
-      running = startEngineTask(
-        { kind: 'candidate', baseline: clone(baseline), spec: specs[i], config },
-        { timeout: 30000 },
-      );
+      const source = candidateSource(baseline, specs[i], config);
+      running = source
+        ? startEngineTask({ kind: 'source', source, spec: specs[i] }, { timeout: 30000 })
+        : startEngineTask(
+            { kind: 'candidate', baseline: clone(baseline), spec: specs[i], config },
+            { timeout: 30000 },
+          );
       const result = await running.promise;
       if (thisJob !== job) return { status: 'cancelled' };
       const scene = buildStaticScene(result.document, result.routing);
-      setCmp('cells', i, { status: 'ready', result, scene });
+      setCmp('cells', i, { status: 'ready', result, scene, ...(source ? { source } : {}) });
       if (cmp.presentation === 'grid') fitCell(i);
     } catch (error) {
       if (error instanceof CancelledError || thisJob !== job) return { status: 'cancelled' };
@@ -297,16 +336,27 @@ export function applyCandidate(i: number) {
     );
     return false;
   }
+  // Rebuild and routing candidates save a recipe line; warm-start and pass candidates depend on
+  // the current drawing and are saved as positions, like any other arrangement.
+  if (fileMode() && cell.source) return applyToFile({ ...cell, source: cell.source });
+  if (fileMode() && fileBlocked()) {
+    setProgress(fileBlocked()!, true);
+    return false;
+  }
   const winner = normalize(clone(cell.result.document)),
     routing = clone(cell.result.routing),
     report = cell.result.report && clone(cell.result.report),
     label = cell.title,
     camera = { ...doc.camera };
   closeComparison();
-  transact('Apply comparison: ' + label, d => {
-    Object.assign(d, winner);
-    d.camera = camera;
-  });
+  transact(
+    'Apply comparison: ' + label,
+    d => {
+      Object.assign(d, winner);
+      d.camera = camera;
+    },
+    'arrangement',
+  );
   batch(() => {
     setSelection([]);
     setConnectFrom(null);
@@ -316,6 +366,33 @@ export function applyCandidate(i: number) {
   });
   requestAnimationFrame(() => fitView());
   toast('Applied ' + label + ' · one undo restores your starting diagram');
+  return true;
+}
+
+/** The `layout` or `routing` line a file candidate writes, as Apply would save it. */
+export function candidateChange(source: string): string {
+  const now = new Set(currentSource().split('\n'));
+  return (
+    source.split('\n').find(l => /^(layout|routing)\b/.test(l) && !now.has(l)) ?? 'Same as the file'
+  );
+}
+
+/** Save a file candidate's source: its layout recipe or routing line. */
+function applyToFile(cell: Candidate & { source: string }) {
+  const label =
+    cell.title +
+    (cell.subtitle && cell.subtitle !== 'One-parameter sweep' ? ` · ${cell.subtitle}` : '');
+  const blocked = fileBlocked();
+  if (blocked) {
+    setProgress(blocked, true);
+    return false;
+  }
+  const source = cell.source;
+  closeComparison();
+  setSelection([]);
+  void commitSource(source, 'Apply comparison: ' + label, label).then(
+    saved => saved && requestAnimationFrame(() => fitView()),
+  );
   return true;
 }
 

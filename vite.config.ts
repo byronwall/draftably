@@ -5,12 +5,12 @@ import { createWorkspace } from './src/server/workspace';
 
 /**
  * `DIAGRAM_ROOT=folder pnpm dev` serves that folder's diagrams next to the dev server, as
- * `meld open` does. `DIAGRAM_FILE=x.meld` serves the current folder and names the file to open.
+ * `draftably open` does. `DIAGRAM_FILE=x.draft` serves the current folder and names the file to open.
  */
 function workspace(root: string | undefined, file: string | undefined): Plugin | null {
   if (!root && !file) return null;
   return {
-    name: 'meld-workspace',
+    name: 'draft-workspace',
     configureServer(server) {
       const ws = createWorkspace(path.resolve(root ?? '.'));
       server.middlewares.use((req, res, next) => {

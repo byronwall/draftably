@@ -1,5 +1,5 @@
 /**
- * A folder of `.meld` files served to the viewer by `meld open`.
+ * A folder of `.draft` files served to the viewer by `draftably open`.
  *
  * The workspace lists the diagrams under its root, creates new ones, and hands each file's
  * `/api/session`, `/api/source` and `/api/events` requests (selected with `?file=`) to that file's
@@ -8,7 +8,7 @@
 import fs from 'node:fs';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
-import { compile } from '../dsl/compile';
+import { checkSource } from '../dsl/compile';
 import { DslError } from '../dsl/syntax';
 import { createFileSession, type FileSession } from './file-session';
 
@@ -46,7 +46,7 @@ function listFiles(root: string): WorkspaceFile[] {
       const full = path.join(dir, entry.name);
       if (entry.isDirectory()) {
         if (depth < 8 && !SKIP.has(entry.name)) walk(full, depth + 1);
-      } else if (entry.name.endsWith('.meld')) {
+      } else if (entry.name.endsWith('.draft')) {
         try {
           const stat = fs.statSync(full);
           const head = fs.readFileSync(full, 'utf8').slice(0, 4000);
@@ -78,9 +78,9 @@ export function createWorkspace(root: string): Workspace {
     throw Error(`No such folder: ${root}`);
   const sessions = new Map<string, FileSession>();
 
-  /** Resolve a relative `.meld` path inside the root, or null when it is not one. */
+  /** Resolve a relative `.draft` path inside the root, or null when it is not one. */
   const resolve = (relative: unknown) => {
-    if (typeof relative !== 'string' || !relative.endsWith('.meld')) return null;
+    if (typeof relative !== 'string' || !relative.endsWith('.draft')) return null;
     const full = path.resolve(root, relative);
     return full.startsWith(root + path.sep) ? full : null;
   };
@@ -98,12 +98,12 @@ export function createWorkspace(root: string): Workspace {
       return json(res, 400, { error: 'Expected JSON.' });
     }
     const full = resolve(request.path);
-    if (!full) return json(res, 400, { error: 'Use a .meld path inside this folder.' });
+    if (!full) return json(res, 400, { error: 'Use a .draft path inside this folder.' });
     if (typeof request.source !== 'string') return json(res, 400, { error: 'Expected source.' });
     if (fs.existsSync(full))
       return json(res, 409, { error: `${request.path} already exists. Choose another name.` });
     try {
-      compile(request.source);
+      checkSource(request.source);
     } catch (error) {
       if (error instanceof DslError) return json(res, 422, { error: error.message });
       throw error;

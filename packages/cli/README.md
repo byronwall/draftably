@@ -1,6 +1,6 @@
 # Draftably
 
-Draftably is a local diagram DSL and viewer. Write a readable `.meld` file, open it in the browser,
+Draftably is a local diagram DSL and viewer. Write a readable `.draft` file, open it in the browser,
 and refine its automatic layout. Viewer edits save to the file; external edits update the viewer.
 
 Requires Node 22.21 or later. The package includes the compiled CLI, viewer, and computation workers.
@@ -11,17 +11,17 @@ It does not compile code or download a browser during installation.
 ```sh
 pnpm dlx draftably --help
 pnpm dlx draftably open                    # start page: this folder's diagrams, new, examples
-pnpm dlx draftably open architecture.meld
+pnpm dlx draftably open architecture.draft
 ```
 
 Or install once:
 
 ```sh
 pnpm add --global draftably
-draftably open architecture.meld
+draftably open architecture.draft
 ```
 
-Create `architecture.meld` with:
+Create `architecture.draft` with:
 
 ```text
 diagram "Architecture" version=1
@@ -40,20 +40,20 @@ On other systems, open the printed URL. Use `--port 5190` to choose another port
 ## Commands
 
 ```sh
-draftably check architecture.meld
-draftably format architecture.meld --write
-draftably inspect architecture.meld --json
-draftably inspect architecture.meld --svg > architecture.svg
-draftably open architecture.meld
+draftably check architecture.draft
+draftably format architecture.draft --write
+draftably inspect architecture.draft --json
+draftably inspect architecture.draft --svg > architecture.svg
+draftably open architecture.draft
 draftably open                              # start page for the current folder
 ```
 
-`open` without a file lists the folder's `.meld` files, creates new ones, and opens examples.
+`open` without a file lists the folder's `.draft` files, creates new ones, and opens examples.
 Examples are scratch copies marked by an amber bar; nothing is written until you save one as a
 file.
 
 `check` exits with code 1 for source errors or unsatisfied hard constraints.
-The bundled [language guide](DSL.md) describes the syntax. Fifteen examples are included in `examples/`.
+The bundled [language guide](DSL.md) describes the syntax. Sixteen examples are included in `examples/`.
 
 Drag nodes to save relative placement preferences. Pins retain exact positions. Labels, connections,
 groups, sizes, and basic styles also save to source. Formatting preserves comments and unrelated content.

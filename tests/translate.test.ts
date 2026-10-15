@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { compile } from '../src/dsl/compile';
+import { checkSource } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { printSource, readSource } from '../src/dsl/syntax';
 import {
@@ -14,11 +14,11 @@ import * as edits from '../src/model/edits';
 import { clone } from '../src/model/geometry';
 import type { Diagram } from '../src/model/types';
 
-const checkout = readFileSync(path.join(__dirname, '../examples/checkout.meld'), 'utf8');
+const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 
 /** Apply an editor edit to the projected file and return the new source and its scene. */
 function edit(source: string, label: string, selection: string[], fn: (d: Diagram) => void) {
-  const scene = compile(source),
+  const scene = checkSource(source),
     before = projectScene(scene),
     after = clone(before);
   fn(after);
@@ -31,7 +31,7 @@ function edit(source: string, label: string, selection: string[], fn: (d: Diagra
     selection,
   });
   const text = printSource(result.source);
-  return { text, scene: compile(text), result };
+  return { text, scene: checkSource(text), result };
 }
 
 describe('translating editor edits', () => {
@@ -61,7 +61,7 @@ describe('translating editor edits', () => {
     const pinned = edit(checkout, 'Pin objects', ['orders'], d => {
       d.layout.nodes.orders.pinned = true;
     });
-    const orders = compile(checkout).byId.get('orders')!;
+    const orders = checkSource(checkout).byId.get('orders')!;
     expect(pinned.text).toContain(`pin orders x=${orders.localX} y=${orders.localY}`);
     const released = edit(pinned.text, 'Unpin objects', ['orders'], d => {
       d.layout.nodes.orders.pinned = false;
@@ -80,7 +80,7 @@ describe('translating editor edits', () => {
       d.layout.nodes.services.w += 100;
       d.layout.nodes.services.h += 60;
     });
-    const before = compile(checkout).byId.get('services')!;
+    const before = checkSource(checkout).byId.get('services')!;
     expect(group.text).toContain(
       `layout services row gap=56 min-width=${before.w + 100} min-height=${before.h + 60}`,
     );
@@ -160,11 +160,11 @@ describe('stability after a refinement', () => {
 
   it('keeps distant regions steady and reports movement the growth forces', () => {
     const { text } = drag();
-    const before = compile(text);
+    const before = checkSource(text);
     const added =
       text +
       'node fraud "Fraud check" in=services\nedge score payments -> fraud "score"\nnode cache "Cache"\nedge lookup api -> cache\n';
-    const after = compile(added);
+    const after = checkSource(added);
     for (const id of ['clients', 'web', 'mobile'])
       expect([after.byId.get(id)!.x, after.byId.get(id)!.y]).toEqual([
         before.byId.get(id)!.x,
@@ -184,9 +184,9 @@ describe('stability after a refinement', () => {
   });
 
   it('reports objects that moved although the edit did not mention them', () => {
-    const before = compile(checkout),
+    const before = checkSource(checkout),
       added = checkout + 'node cdn "CDN"\nedge serve cdn -> web\n',
-      after = compile(added);
+      after = checkSource(added);
     const moved = movedOutsideEdit(before, after, readSource(checkout), readSource(added));
     expect(moved).toContain('clients');
     expect(moved).not.toContain('web');
@@ -196,7 +196,7 @@ describe('stability after a refinement', () => {
   it('reflows a group without disturbing what is around it', () => {
     const { text } = drag();
     const doc = readSource(text);
-    expect(reflowGroup(doc, compile(text), 'services')).toBe(2);
+    expect(reflowGroup(doc, checkSource(text), 'services')).toBe(2);
     const reflowed = printSource(doc);
     expect(reflowed).not.toMatch(/^near payments/m);
     expect(reflowed).not.toMatch(/^stay orders/m);

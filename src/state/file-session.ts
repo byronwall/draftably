@@ -1,5 +1,5 @@
 /**
- * A `.meld` file opened through `pnpm meld open` (or `DIAGRAM_ROOT=… pnpm dev`), or an example
+ * A `.draft` file opened through `pnpm draftably open` (or `DIAGRAM_ROOT=… pnpm dev`), or an example
  * opened as a scratch copy.
  *
  * The file on disk is the source of truth. Each valid revision is compiled and projected into the
@@ -16,11 +16,24 @@
  */
 import { batch, createRoot, createSignal } from 'solid-js';
 import { unwrap } from 'solid-js/store';
-import { compile, type Diagnostic, type Scene } from '../dsl/compile';
+import { checkSource, compile, type Diagnostic, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
-import { movedOutsideEdit, reflowGroup, translateEdit, UnsupportedEdit } from '../dsl/translate';
+import {
+  anchorSurroundings,
+  movedOutsideEdit,
+  reflowGroup,
+  translateEdit,
+  UnsupportedEdit,
+} from '../dsl/translate';
+import {
+  setLayoutRecipe,
+  setRouting,
+  UnstorableLayout,
+  writeArrangement,
+} from '../dsl/layout-edits';
 import { normalize } from '../model/document';
+import type { Diagram, LayoutSettings, RoutingSettings } from '../model/types';
 import { clone } from '../model/geometry';
 import {
   clearSelection,
@@ -31,6 +44,7 @@ import {
   setCommitHandler,
   setHistoryHandler,
   setSelection,
+  type EditKind,
 } from './document';
 import { toast } from './toast';
 
@@ -66,7 +80,11 @@ const state = createRoot(() => {
   const [redoStack, setRedoStack] = createSignal<SourceStep[]>([]);
   /** Objects outside the last external change that moved anyway. */
   const [movedByChange, setMovedByChange] = createSignal<string[]>([]);
+  /** A revision is being laid out; layout engines run asynchronously. */
+  const [compiling, setCompiling] = createSignal(false);
   return {
+    compiling,
+    setCompiling,
     movedByChange,
     setMovedByChange,
     info,
@@ -99,6 +117,7 @@ export const fileScene = state.scene;
 export const fileDiagnostics = (): Diagnostic[] => state.scene()?.diagnostics ?? [];
 export const conflictProposal = state.proposal;
 export const movedByChange = state.movedByChange;
+export const fileCompiling = state.compiling;
 
 /** The last source confirmed on disk and its revision. */
 let diskSource = '',
@@ -122,12 +141,34 @@ const viewState = () => {
   };
 };
 
-/** Compile `source` and show it. Returns the scene, or null when the source is invalid. */
-export function showSource(source: string, selection = selectedIds()): Scene | null {
+let showing = 0;
+
+/** Recently compiled sources. A preview and the commit that follows compile the same source. */
+const compiled = new Map<string, Promise<Scene>>();
+function compileCached(source: string): Promise<Scene> {
+  let scene = compiled.get(source);
+  if (!scene) {
+    scene = compile(source);
+    compiled.set(source, scene);
+    scene.catch(() => compiled.delete(source));
+    while (compiled.size > 16) compiled.delete(compiled.keys().next().value!);
+  }
+  return scene;
+}
+
+/**
+ * Compile `source` and show it. Resolves to the scene, or null when the source is invalid or a
+ * newer call superseded this one.
+ */
+export async function showSource(source: string, selection = selectedIds()): Promise<Scene | null> {
+  const ticket = ++showing;
+  state.setCompiling(true);
   let scene: Scene;
   try {
-    scene = compile(source);
+    scene = await compileCached(source);
   } catch (error) {
+    if (ticket !== showing) return null;
+    state.setCompiling(false);
     if (!(error instanceof DslError)) throw error;
     batch(() => {
       state.setSourceError({ message: error.message, line: error.line });
@@ -135,11 +176,13 @@ export function showSource(source: string, selection = selectedIds()): Scene | n
     });
     return null;
   }
+  if (ticket !== showing) return null;
   batch(() => {
     restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
     setSelection(selection);
     state.setScene(scene);
     state.setSourceError(null);
+    state.setCompiling(false);
   });
   return scene;
 }
@@ -150,13 +193,13 @@ function resetHistory() {
 }
 
 /** Show a newer file from disk. Local history cannot undo past someone else's change. */
-function acceptDisk(source: string, revision: string, { announce = false } = {}) {
+async function acceptDisk(source: string, revision: string, { announce = false } = {}) {
   const previous = state.scene(),
     previousSource = localSource;
   diskSource = localSource = source;
   diskRevision = revision;
   resetHistory();
-  const scene = showSource(source);
+  const scene = await showSource(source);
   if (!scene) return;
   state.setStatus('saved');
   if (!announce) return;
@@ -229,7 +272,7 @@ async function save() {
     externalDuringSave = null;
     // The file was replaced after this save landed; show the newer version.
     if (external && external.revision !== diskRevision && state.status() === 'saved')
-      acceptDisk(external.source, external.revision, { announce: true });
+      void acceptDisk(external.source, external.revision, { announce: true });
   }
 }
 
@@ -242,7 +285,7 @@ function enterConflict(source: string, revision: string) {
   resetHistory();
   batch(() => {
     state.setProposal(unsaved);
-    showSource(source);
+    void showSource(source);
     state.setStatus('conflict');
   });
 }
@@ -261,7 +304,7 @@ export function saveProposalOverDisk() {
   if (!proposal) return;
   state.setProposal(null);
   localSource = proposal;
-  showSource(proposal);
+  void showSource(proposal);
   void save();
 }
 
@@ -272,26 +315,42 @@ export const retrySave = () => void save();
 
 /** Undo an edit the file cannot take by showing the source again, with a reason. */
 function snapBack(message: string) {
-  showSource(localSource);
+  void showSource(localSource);
   toast(message);
   return false;
 }
 
-function handleEdit(before: string, label: string): boolean {
+/** A drawing from a layout pass, timeline step or brush stroke, as positions in the source. */
+function arrangementEdit(scene: Scene, label: string) {
+  const source = readSource(localSource),
+    after = normalize(JSON.parse(JSON.stringify(unwrap(doc))));
+  const placed = writeArrangement(source, scene, after),
+    anchored = anchorSurroundings(source, scene, placed);
+  const notes = placed.length
+    ? [`${placed.length} positions` + (anchored.length ? ` · anchored ${anchored.length}` : '')]
+    : [];
+  return { source, ids: new Map<string, string>(), notes: [label, ...notes] };
+}
+
+function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boolean {
   if (state.sourceError()) return snapBack('Fix the error in the file before editing here.');
   if (state.proposal()) return snapBack('Keep the file or save your edit before editing again.');
+  if (state.compiling()) return snapBack('Still laying out the file. Try again in a moment.');
   const scene = state.scene();
   if (!scene) return snapBack('The file has no valid drawing yet.');
   let result;
   try {
-    result = translateEdit({
-      source: readSource(localSource),
-      scene,
-      before: normalize(JSON.parse(before)),
-      after: normalize(JSON.parse(JSON.stringify(unwrap(doc)))),
-      label,
-      selection: selectedIds(),
-    });
+    result =
+      kind === 'arrangement'
+        ? arrangementEdit(scene, label)
+        : translateEdit({
+            source: readSource(localSource),
+            scene,
+            before: normalize(JSON.parse(before)),
+            after: normalize(JSON.parse(JSON.stringify(unwrap(doc)))),
+            label,
+            selection: selectedIds(),
+          });
   } catch (error) {
     if (error instanceof UnsupportedEdit) return snapBack(error.message);
     throw error;
@@ -300,7 +359,7 @@ function handleEdit(before: string, label: string): boolean {
   // Nothing the file stores changed (for example a move of an object that was not selected).
   if (next === localSource) return snapBack('That change is not saved to diagram files.');
   try {
-    compile(next);
+    checkSource(next);
   } catch (error) {
     if (error instanceof DslError) return snapBack(`That edit cannot be saved. ${error.message}`);
     throw error;
@@ -310,7 +369,7 @@ function handleEdit(before: string, label: string): boolean {
     state.setRedoStack([]);
   });
   localSource = next;
-  showSource(
+  void showSource(
     next,
     selectedIds().map(id => result.ids.get(id) ?? id),
   );
@@ -319,13 +378,23 @@ function handleEdit(before: string, label: string): boolean {
   return true;
 }
 
-/** Record and save a change made directly to the source, such as a reflow. */
-function commitSource(next: string, label: string, message: string) {
-  if (next === localSource) return toast('Nothing to change.');
+/**
+ * Record and save a change made directly to the source, such as a reflow or a layout recipe.
+ * `message` describes it after "Saved ·" (or "Example only ·"). Resolves once the new revision
+ * is on screen; false when the source was refused.
+ */
+export async function commitSource(next: string, label: string, message: string) {
+  if (next === localSource) {
+    toast('Nothing to change.');
+    return false;
+  }
   try {
-    compile(next);
+    checkSource(next);
   } catch (error) {
-    if (error instanceof DslError) return toast(`That change cannot be saved. ${error.message}`);
+    if (error instanceof DslError) {
+      toast(`That change cannot be saved. ${error.message}`);
+      return false;
+    }
     throw error;
   }
   batch(() => {
@@ -333,10 +402,53 @@ function commitSource(next: string, label: string, message: string) {
     state.setRedoStack([]);
   });
   localSource = next;
-  showSource(next);
-  savedMessage = message;
+  savedMessage = `${keptLabel()} · ${message}`;
   void save();
+  await showSource(next);
+  return true;
 }
+
+// --- Layout tools ------------------------------------------------------------------------------
+
+/** Why the file cannot take a layout change right now, or null when it can. */
+export function fileBlocked(): string | null {
+  if (state.sourceError()) return 'Fix the error in the file first.';
+  if (state.proposal()) return 'Keep the file or save your edit first.';
+  if (state.compiling()) return 'Still laying out the file. Try again in a moment.';
+  if (!state.scene()) return 'The file has no valid drawing yet.';
+  return null;
+}
+
+/** The source scope a layout scope maps to: `root`, a group, or null for a loose selection. */
+export function sourceScope(scope: { scope: string; containerId?: string }): string | null {
+  if (scope.scope === 'all') return 'root';
+  if (scope.scope === 'container' && scope.containerId) return scope.containerId;
+  return null;
+}
+
+/**
+ * The current source with `scope` arranged by the engine in `settings`. Throws
+ * `UnstorableLayout` for an engine a file cannot name.
+ */
+export function sourceWithRecipe(scope: string, settings: LayoutSettings) {
+  const source = readSource(localSource),
+    removed = setLayoutRecipe(source, state.scene()!, scope, settings);
+  return { source: printSource(source), removed };
+}
+
+/** The current source with these router settings. */
+export function sourceWithRouting(routing: RoutingSettings) {
+  const source = readSource(localSource);
+  setRouting(source, routing);
+  return printSource(source);
+}
+
+/** Compile a source variant into an editor document, keeping the current view state. */
+export async function projectSource(source: string): Promise<Diagram> {
+  return projectScene(await compileCached(source), viewState());
+}
+
+export { UnstorableLayout };
 
 /**
  * Let the automatic recipe arrange a group's contents again. Its soft refinements are removed,
@@ -348,11 +460,7 @@ export function reflowSelectedGroup(id: string) {
     return toast('The file cannot be changed right now.');
   const source = readSource(localSource),
     count = reflowGroup(source, scene, id);
-  commitSource(
-    printSource(source),
-    'Reflow group',
-    `${keptLabel()} · reflowed ${count} objects in ${id}`,
-  );
+  void commitSource(printSource(source), 'Reflow group', `reflowed ${count} objects in ${id}`);
 }
 
 function historyStep(direction: 'undo' | 'redo') {
@@ -370,7 +478,7 @@ function historyStep(direction: 'undo' | 'redo') {
     }
   });
   localSource = direction === 'undo' ? entry.before : entry.after;
-  showSource(localSource);
+  void showSource(localSource);
   clearSelection();
   toast((direction === 'undo' ? 'Undid ' : 'Redid ') + entry.label.toLowerCase());
   void save();
@@ -394,16 +502,16 @@ export async function openFileSession(file: string): Promise<boolean> {
   } catch {
     return false;
   }
-  begin(info);
   document.title = `${file} · Diagram Studio`;
+  await begin(info);
   listen();
   return true;
 }
 
 /** Open an example as a scratch copy. Nothing is read from or written to disk. */
 export function openExampleSession(id: string, title: string, source: string) {
-  begin({ name: title, path: '', source, revision: 'example', example: id });
   document.title = `Example: ${title} · Diagram Studio`;
+  return begin({ name: title, path: '', source, revision: 'example', example: id });
 }
 
 /** The source of the example as it was opened, for Reset. */
@@ -414,14 +522,14 @@ export function resetExample() {
   if (!exampleMode()) return;
   localSource = exampleOriginal;
   resetHistory();
-  showSource(localSource);
+  void showSource(localSource);
   clearSelection();
 }
 
 /** The example's edits now live in a file; leaving the page no longer loses them. */
 export const markExampleSaved = () => resetHistory();
 
-function begin(info: FileSessionInfo) {
+function begin(info: FileSessionInfo): Promise<void> {
   exampleOriginal = info.example ? info.source : '';
   disableBrowserStorage();
   setCommitHandler(handleEdit);
@@ -432,14 +540,14 @@ function begin(info: FileSessionInfo) {
     canRedo: () => state.redoStack().length > 0,
   });
   state.setInfo(info);
-  acceptDisk(info.source, info.revision);
+  return acceptDisk(info.source, info.revision);
 }
 
 function onExternalChange(source: string, revision: string) {
   if (revision === diskRevision) return;
   if (saving) externalDuringSave = { source, revision };
   else if (localSource !== diskSource) enterConflict(source, revision);
-  else acceptDisk(source, revision, { announce: true });
+  else void acceptDisk(source, revision, { announce: true });
 }
 
 function listen() {

@@ -1,9 +1,9 @@
 /**
  * What the viewer opens on, chosen from the URL and the server it runs on:
  *
- * - `?file=path.meld` with `meld open`: that file, saved back to disk.
+ * - `?file=path.draft` with `draftably open`: that file, saved back to disk.
  * - `?example=id`: a scratch copy of a bundled example. Never written to disk.
- * - `meld open` without a file: the start page, listing the folder's diagrams.
+ * - `draftably open` without a file: the start page, listing the folder's diagrams.
  * - The static site: the diagram kept in browser storage, as before.
  */
 import { createRoot, createSignal } from 'solid-js';
@@ -57,11 +57,11 @@ export async function launch(): Promise<LaunchMode> {
   if (file && info) {
     if (await openFileSession(file)) return 'file';
     state.setLaunchNotice(`There is no diagram at ${file}.`);
-  } else if (file) state.setLaunchNotice('Files open only through `meld open`.');
+  } else if (file) state.setLaunchNotice('Files open only through `draftably open`.');
   if (exampleId) {
     const example = findExample(exampleId);
     if (example) {
-      openExampleSession(example.id, example.title, example.source);
+      await openExampleSession(example.id, example.title, example.source);
       return 'example';
     }
     state.setLaunchNotice(`There is no example named ${exampleId}.`);
@@ -81,12 +81,12 @@ export async function createDiagramFile(path: string, source: string): Promise<s
   return body.path;
 }
 
-/** A file name for a title: "Billing flow" → "billing-flow.meld". */
+/** A file name for a title: "Billing flow" → "billing-flow.draft". */
 export const fileNameFor = (title: string) =>
   (title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '') || 'untitled') + '.meld';
+    .replace(/^-|-$/g, '') || 'untitled') + '.draft';
 
 /** Source for a new, nearly empty diagram. */
 export const newDiagramSource = (title: string) =>

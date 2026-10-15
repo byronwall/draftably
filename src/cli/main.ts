@@ -1,6 +1,6 @@
 /**
- * Draftably command line: check, format and inspect `.meld` files, or edit them in the viewer.
- * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm meld`.
+ * Draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
+ * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,7 +9,7 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { renderSvg } from './svg';
 
-const USAGE = `Usage: draftably <command> <file.meld> [options]
+const USAGE = `Usage: draftably <command> <file.draft> [options]
 
 Commands:
   check <file>              Report source errors and layout diagnostics. Exits 1 on errors.
@@ -25,7 +25,7 @@ const describe = (d: Diagnostic) =>
   `${d.level.padEnd(7)} ${d.line ? `line ${d.line}: ` : ''}${d.message}`;
 
 function read(file: string | undefined) {
-  if (!file) throw new UsageError('A .meld file is required.');
+  if (!file) throw new UsageError('A .draft file is required.');
   return fs.readFileSync(path.resolve(file), 'utf8');
 }
 
@@ -37,7 +37,7 @@ export async function main(argv: string[]): Promise<number> {
   try {
     switch (command) {
       case 'check': {
-        const scene = compile(read(file));
+        const scene = await compile(read(file));
         const errors = scene.diagnostics.filter(d => d.level === 'error');
         for (const d of scene.diagnostics) console.log(describe(d));
         const nodes = scene.objects.filter(o => o.type === 'node').length;
@@ -55,7 +55,7 @@ export async function main(argv: string[]): Promise<number> {
         return 0;
       }
       case 'inspect': {
-        const doc = projectScene(compile(read(file)));
+        const doc = projectScene(await compile(read(file)));
         if (flag('--svg')) process.stdout.write(renderSvg(doc));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;

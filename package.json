@@ -23,9 +23,10 @@
     "cli:pack-check": "pnpm --dir packages/cli test && node scripts/prove-package.ts",
     "release:check": "pnpm typecheck && pnpm lint && pnpm test && pnpm cli:build && pnpm cli:pack-check",
     "release": "pnpm release:check && changeset publish",
-    "meld": "node scripts/meld.mjs",
+    "draftably": "node scripts/draftably.mjs",
     "prove:file": "node scripts/prove-file-session.mjs",
-    "prove:installed": "node scripts/prove-package.ts --browser"
+    "prove:installed": "node scripts/prove-package.ts --browser",
+    "prove:layout": "node scripts/prove-layout-tools.mjs"
   },
   "dependencies": {
     "solid-js": "^1.9.9"

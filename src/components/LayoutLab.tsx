@@ -13,6 +13,8 @@ import {
   type LabScope,
 } from '../state/layout';
 import { toggleLayoutLab } from '../state/ui';
+import { currentSource, fileMode, fileScene, sourceScope } from '../state/file-session';
+import { currentRecipe, recipeText } from '../dsl/layout-edits';
 import { Checkbox, IconButton, RangeField, SelectField } from './controls';
 import { IntentSummary } from './Inspector';
 
@@ -151,7 +153,9 @@ export function LayoutLab() {
           <summary>{algorithm().family} · how it works</summary>
           <p class="hint">{algorithm().detail}</p>
         </details>
-        <IntentSummary />
+        <Show when={fileMode()} fallback={<IntentSummary />}>
+          <FileRecipe />
+        </Show>
         <SelectField<LabScope>
           label="Scope"
           hint={
@@ -270,7 +274,7 @@ export function LayoutLab() {
         <section class="lab-section">
           <div class="row between">
             <h3>Compare alternatives</h3>
-            <span class="hint">Session only</span>
+            <span class="hint">{fileMode() ? 'Apply saves a recipe' : 'Session only'}</span>
           </div>
           <button
             type="button"
@@ -282,23 +286,25 @@ export function LayoutLab() {
           <p class="hint">
             Six settled candidates from the same starting document. Apply only the one you choose.
           </p>
-          <div class="fields-2">
-            <button type="button" class="button" onClick={() => runCommand('layout-checkpoint')}>
-              Capture checkpoint
-            </button>
-            <button
-              type="button"
-              class="button"
-              disabled={!layoutCheckpoint()}
-              onClick={() => runCommand('layout-restore')}
-            >
-              Restore checkpoint
-            </button>
-          </div>
-          <p class="hint">
-            Restore the same starting layout before comparing another approach. This is not a saved
-            view.
-          </p>
+          <Show when={!fileMode()}>
+            <div class="fields-2">
+              <button type="button" class="button" onClick={() => runCommand('layout-checkpoint')}>
+                Capture checkpoint
+              </button>
+              <button
+                type="button"
+                class="button"
+                disabled={!layoutCheckpoint()}
+                onClick={() => runCommand('layout-restore')}
+              >
+                Restore checkpoint
+              </button>
+            </div>
+            <p class="hint">
+              Restore the same starting layout before comparing another approach. This is not a
+              saved view.
+            </p>
+          </Show>
         </section>
       </div>
       <footer class="lab-footer">
@@ -315,11 +321,52 @@ export function LayoutLab() {
           class="button ghost full"
           onClick={() => runCommand('layout-rebuild')}
         >
-          Deterministic rebuild… <kbd>⇧L</kbd>
+          {fileMode() ? 'Preview as file recipe…' : 'Deterministic rebuild…'} <kbd>⇧L</kbd>
         </button>
-        <p class="hint">Rebuild ignores unpinned positions and opens a preview.</p>
+        <p class="hint">
+          {fileMode()
+            ? 'Rebuild writes this approach into the file and arranges it from scratch. Improve keeps the current drawing as positions.'
+            : 'Rebuild ignores unpinned positions and opens a preview.'}
+        </p>
       </footer>
     </aside>
+  );
+}
+
+/** In a diagram file: the scope's layout line now, and the one a rebuild would write. */
+function FileRecipe() {
+  const scope = () => {
+    const s = labScope();
+    return sourceScope(s === 'auto' ? currentScope() : { ...currentScope(), scope: s });
+  };
+  return (
+    <section class="lab-section file-recipe" aria-label="Layout recipe in the file">
+      <div class="row between">
+        <h3>In the file</h3>
+        <span class="hint">{scope() ?? 'Selection'}</span>
+      </div>
+      <Show
+        when={scope()}
+        fallback={
+          <p class="hint">
+            A recipe arranges the whole diagram or one container. Improve saves the selection as
+            positions instead.
+          </p>
+        }
+      >
+        {id => (
+          <>
+            <code class="recipe-line">
+              {/* The scene changes with every saved revision; read it so this line follows. */}
+              {(fileScene(), currentRecipe(currentSource(), id())) ??
+                `# ${id()} uses the built-in recipe`}
+            </code>
+            <p class="hint">Rebuild writes:</p>
+            <code class="recipe-line next">{recipeText(id(), doc.settings)}</code>
+          </>
+        )}
+      </Show>
+    </section>
   );
 }
 

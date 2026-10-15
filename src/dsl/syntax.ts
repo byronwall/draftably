@@ -1,11 +1,18 @@
 /**
- * The `.meld` diagram language: a line-based source format that keeps comments, plus a model
+ * The `.draft` diagram language: a line-based source format that keeps comments, plus a model
  * parser and a formatter. Adapted from the Meld 0.1 prototype in `reference/meld/original`.
  *
  * Source is kept as a list of lines so that edits can change single statements and formatting
  * keeps every comment and unrelated statement.
  */
-import type { ColorKey, PortSide, ShapeKind } from '../model/types';
+import type {
+  ColorKey,
+  LayoutAlgorithmId,
+  LayoutSettings,
+  PortSide,
+  RoutingSettings,
+  ShapeKind,
+} from '../model/types';
 
 export class DslError extends Error {
   constructor(
@@ -175,9 +182,17 @@ export interface ModelEdge {
   line: number;
 }
 
+/** A layout engine run cold over a scope's subtree; see `src/engines/layout-engine.js`. */
+export interface EngineRecipe {
+  algorithm: LayoutAlgorithmId;
+  params: Partial<LayoutSettings>;
+}
+
 export interface ModelLayout {
   scope: string;
   algorithm: Algorithm;
+  /** Set when the scope is arranged by a layout engine instead of a built-in recipe. */
+  engine?: EngineRecipe;
   direction: 'auto' | 'right' | 'down';
   gap: number;
   minWidth: number;
@@ -214,7 +229,69 @@ export interface Model {
   edges: ModelEdge[];
   layouts: ModelLayout[];
   hints: Hint[];
+  /** Router settings from a `routing` statement. */
+  routing: Partial<RoutingSettings>;
 }
+
+// --- Engine and routing parameters ------------------------------------------------------------
+
+type Param<K extends string> =
+  { key: K; min: number; max: number } | { key: K; choices: readonly string[] };
+
+/**
+ * Layout engines a file can name. `separate` is left out: it only repairs overlaps in the current
+ * drawing, so it cannot be recomputed from the source.
+ */
+export const ENGINES: readonly LayoutAlgorithmId[] = [
+  'compound-flow',
+  'boundary-align',
+  'compound-spring',
+  'tidy',
+  'stress',
+  'force',
+  'flow',
+  'layered',
+  'tree',
+  'grid',
+];
+
+/** Engine settings by source attribute. Ranges match the engine's own limits. */
+export const ENGINE_PARAMS: Record<string, Param<keyof LayoutSettings>> = {
+  'rank-gap': { key: 'rankGap', min: 12, max: 220 },
+  'group-gap': { key: 'groupGap', min: 12, max: 180 },
+  'node-gap': { key: 'nodeGap', min: 4, max: 160 },
+  'boundary-pull': { key: 'boundaryPull', min: 0, max: 100 },
+  'hierarchy-sweeps': { key: 'hierarchySweeps', min: 1, max: 4 },
+  'edge-length': { key: 'edgeLength', min: 20, max: 260 },
+  repulsion: { key: 'repulsion', min: 0, max: 100 },
+  'flow-strength': { key: 'flowStrength', min: 0, max: 100 },
+  alignment: { key: 'alignment', min: 0, max: 100 },
+  compactness: { key: 'compactness', min: 0, max: 100 },
+  'grid-strength': { key: 'gridStrength', min: 0, max: 100 },
+  ordering: { key: 'ordering', choices: ['stable', 'crossings'] },
+  fold: { key: 'fold', choices: ['auto', 'never'] },
+  aspect: { key: 'aspect', choices: ['1', '1.333', '1.6', '2', '0.75'] },
+  root: { key: 'rootId', choices: [] },
+};
+
+/** Router settings by source attribute. Ranges match the router's own limits. */
+export const ROUTING_PARAMS: Record<string, Param<keyof RoutingSettings>> = {
+  clearance: { key: 'clearance', min: 4, max: 30 },
+  'port-gap': { key: 'portGap', min: 6, max: 28 },
+  'edge-gap': { key: 'edgeGap', min: 4, max: 48 },
+  'bend-penalty': { key: 'bendPenalty', min: 0, max: 100 },
+  'crossing-penalty': { key: 'crossingPenalty', min: 0, max: 1200 },
+  'shared-penalty': { key: 'sharedPenalty', min: 0, max: 20 },
+  'parallel-penalty': { key: 'parallelPenalty', min: 0, max: 60 },
+  'port-stability': { key: 'portStability', min: 0, max: 150 },
+  'fanout-penalty': { key: 'fanoutPenalty', min: 0, max: 160 },
+  passes: { key: 'passes', min: 1, max: 5 },
+  'corner-radius': { key: 'cornerRadius', min: 0, max: 16 },
+};
+
+/** Source attribute for an engine or router setting. */
+export const paramAttr = (table: Record<string, Param<string>>, key: string) =>
+  Object.keys(table).find(attr => table[attr].key === key);
 
 const ID = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
 export const isIdentifier = (s: string) => ID.test(s);
@@ -229,7 +306,14 @@ const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
 /** Parse and validate source. Throws `DslError` with a line number for the first problem. */
 export function parseModel(source: string | SourceDoc): Model {
   const doc = typeof source === 'string' ? readSource(source) : source;
-  const m: Model = { title: 'Untitled diagram', objects: [], edges: [], layouts: [], hints: [] };
+  const m: Model = {
+    title: 'Untitled diagram',
+    objects: [],
+    edges: [],
+    layouts: [],
+    hints: [],
+    routing: {},
+  };
   const objectIds = new Set<string>(),
     edgeIds = new Set<string>(),
     unique = new Set<string>();
@@ -278,6 +362,16 @@ export function parseModel(source: string | SourceDoc): Model {
     const once = (key: string) => {
       assert(!unique.has(key), `Duplicate declaration: ${key}. Edit the existing line instead.`);
       unique.add(key);
+    };
+    const readParams = <K extends string>(table: Record<string, Param<K>>) => {
+      const out: Record<string, string | number> = {};
+      for (const [attr, p] of Object.entries(table)) {
+        if (!attrs.has(attr)) continue;
+        if ('min' in p) out[p.key] = num(attr, 0, p.min, p.max);
+        else if (p.choices.length) out[p.key] = choice(attr, p.choices[0], p.choices);
+        else out[p.key] = id(attrs.get(attr));
+      }
+      return out as never;
     };
 
     switch (command) {
@@ -341,18 +435,32 @@ export function parseModel(source: string | SourceDoc): Model {
         break;
       }
       case 'layout': {
-        count(2);
-        allow(['direction', 'gap', 'min-width', 'min-height']);
         const scope = id(args[0]);
         once('layout:' + scope);
-        const algorithm = args[1]?.value as Algorithm;
+        const named = attrs.get('engine')?.value as LayoutAlgorithmId | undefined;
+        const common = ['direction', 'min-width', 'min-height'];
+        let engine: EngineRecipe | undefined;
+        if (named !== undefined) {
+          count(1);
+          assert(
+            ENGINES.includes(named),
+            `Unknown layout engine ${named}; use ${ENGINES.join(', ')}.`,
+          );
+          allow(['engine', ...common, ...Object.keys(ENGINE_PARAMS)]);
+          engine = { algorithm: named, params: readParams(ENGINE_PARAMS) };
+        } else {
+          count(2);
+          allow(['gap', ...common]);
+        }
+        const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
           ['flow', 'row', 'column'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row or column.`,
+          `The ${algorithm} recipe is not supported; use flow, row or column, or engine=.`,
         );
         m.layouts.push({
           scope,
           algorithm,
+          ...(engine ? { engine } : {}),
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           gap: num('gap', 28, 8, 300),
           minWidth: num('min-width', 0, 0, 10_000),
@@ -361,6 +469,12 @@ export function parseModel(source: string | SourceDoc): Model {
         });
         break;
       }
+      case 'routing':
+        count(0);
+        allow(Object.keys(ROUTING_PARAMS));
+        once('routing');
+        m.routing = readParams(ROUTING_PARAMS);
+        break;
       case 'order':
         count(2, 300);
         allow([]);
@@ -413,8 +527,9 @@ export function parseModel(source: string | SourceDoc): Model {
           m.hints.push({
             type: 'stay',
             id: hid,
-            x: num('x', 0, 0),
-            y: num('y', 0, 0),
+            // The root has no frame, so an arrangement can place objects left of or above 0,0.
+            x: num('x', 0),
+            y: num('y', 0),
             weight: num('weight', 8, 1, 100),
             line,
           });
@@ -472,7 +587,14 @@ function validateReferences(m: Model) {
       exists(end, e.line);
       assert(by.get(end)!.type === 'node', `Connections join nodes; ${end} is a group.`, e.line);
     }
-  for (const l of m.layouts) scope(l.scope, l.line);
+  for (const l of m.layouts) {
+    scope(l.scope, l.line);
+    const root = l.engine?.params.rootId;
+    if (root) {
+      exists(root, l.line);
+      assert(by.get(root)!.type === 'node', `The tree root ${root} must be a node.`, l.line);
+    }
+  }
   for (const h of m.hints) {
     if (h.type === 'order') {
       scope(h.scope, h.line);

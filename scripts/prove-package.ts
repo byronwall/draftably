@@ -29,8 +29,8 @@ execFileSync('pnpm', ['--dir', dir, 'add', '--offline', '--ignore-scripts', pack
 const installed = path.join(dir, 'node_modules/draftably');
 const bin = path.join(dir, 'node_modules/.bin/draftably');
 const entry = path.join(installed, 'dist/cli/main.js');
-const file = path.join(dir, 'checkout.meld');
-fs.copyFileSync(path.join(installed, 'examples/checkout.meld'), file);
+const file = path.join(dir, 'checkout.draft');
+fs.copyFileSync(path.join(installed, 'examples/checkout.draft'), file);
 const run = (...args: string[]) =>
   execFileSync(bin, args, { cwd: dir, encoding: 'utf8', timeout: 10000 });
 assert.match(run('--help'), /Usage: draftably/);
@@ -43,7 +43,7 @@ const formatted = fs.readFileSync(file, 'utf8');
 run('format', file, '--write');
 assert.equal(fs.readFileSync(file, 'utf8'), formatted);
 // Without a file, `open` serves the folder's start page; a missing file is still an error.
-assert.equal(spawnSync(bin, ['open', 'missing.meld'], { cwd: dir, timeout: 10000 }).status, 1);
+assert.equal(spawnSync(bin, ['open', 'missing.draft'], { cwd: dir, timeout: 10000 }).status, 1);
 assert.equal(
   spawnSync(bin, ['open', file, '--port', '-1'], { cwd: dir, timeout: 10000 }).status,
   1,
@@ -91,15 +91,15 @@ try {
     assert.equal((await fetch(`${base}/assets/${asset}`)).status, 200, asset);
   }
   // The CLI must not expose sibling directories or crash on a malformed URL.
-  assert.equal((await fetch(`${base}/..%2fexamples/checkout.meld`)).status, 404);
+  assert.equal((await fetch(`${base}/..%2fexamples/checkout.draft`)).status, 404);
   assert.equal((await fetch(`${base}/%ZZ`)).status, 400);
   // The served folder lists the file, and each file's session is selected with ?file=.
   const listing = await (await fetch(`${base}/api/workspace`)).json();
   assert.deepEqual(
     listing.files.map((f: { path: string }) => f.path),
-    ['checkout.meld'],
+    ['checkout.draft'],
   );
-  const api = (route: string) => `${base}/api/${route}?file=checkout.meld`;
+  const api = (route: string) => `${base}/api/${route}?file=checkout.draft`;
   const session = await (await fetch(api('session'))).json();
   assert.equal(session.source, formatted);
   const updated = formatted + '\nnode audit "Audit log"\n';
@@ -133,7 +133,7 @@ if (process.argv.includes('--browser')) {
     env: {
       ...process.env,
       DRAFTABLY_BIN: entry,
-      DRAFTABLY_EXAMPLE: path.join(installed, 'examples/checkout.meld'),
+      DRAFTABLY_EXAMPLE: path.join(installed, 'examples/checkout.draft'),
     },
   });
 }

@@ -6,7 +6,7 @@ steps, and repair small areas with a layout brush.
 
 Built with SolidJS, TypeScript and Vite. The standalone editor saves to the browser; export JSON or
 editable SVG to keep a portable copy. The Draftably CLI serves the same editor locally and saves
-file-backed edits to `.meld` source.
+file-backed edits to `.draft` source.
 
 ## Develop
 
@@ -59,25 +59,25 @@ src/
   engines/     Layout, routing, comparison and brush engines (plain JS with type declarations)
   workers/     The worker that runs engine computations off the main thread
   samples/     Example diagrams shown in the File menu
-  dsl/         The .meld language: parser, formatter, compiler and editor projection
-  cli/         The `pnpm meld` command
-  server/      The folder and file sessions behind `pnpm meld open`
-examples/      Example .meld diagrams, bundled into the viewer's start page
+  dsl/         The .draft language: parser, formatter, compiler and editor projection
+  cli/         The `pnpm draftably` command
+  server/      The folder and file sessions behind `pnpm draftably open`
+examples/      Example .draft diagrams, bundled into the viewer's start page
 tests/         Vitest unit tests and the engine regression scripts
 reference/v7/  The original release, used by the engine parity test
-reference/meld/ The recovered Meld DSL prototype the .meld language is adapted from
+reference/meld/ The recovered Meld DSL prototype the .draft language is adapted from
 ```
 
 ## Diagram files
 
-`.meld` files describe a diagram as readable text that both a person and an agent can edit. See
+`.draft` files describe a diagram as readable text that both a person and an agent can edit. See
 [Diagram files](docs/DSL.md) for the language. Check, format and inspect them from the terminal:
 
 ```bash
-pnpm meld check examples/checkout.meld
-pnpm meld inspect examples/checkout.meld --svg > checkout.svg
-pnpm build && pnpm meld open                  # pick, create, or try an example
-pnpm meld open examples/checkout.meld         # open one file directly
+pnpm draftably check examples/checkout.draft
+pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
+pnpm build && pnpm draftably open                  # pick, create, or try an example
+pnpm draftably open examples/checkout.draft         # open one file directly
 ```
 
 See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and

@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, onMount, Show } from 'solid-js';
+import { createResource, createSignal, For, onMount, Show } from 'solid-js';
 import { renderSvg } from '../cli/svg';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
@@ -21,7 +21,7 @@ import './start.css';
 
 /**
  * Where a session starts: make a new diagram, open one from the served folder, or try an example.
- * As a page it is the whole screen of `meld open` without a file; as a dialog it sits over the
+ * As a page it is the whole screen of `draftably open` without a file; as a dialog it sits over the
  * editor and can be closed.
  */
 export function StartScreen(props: { variant: 'page' | 'dialog' }) {
@@ -179,15 +179,15 @@ function FolderFiles() {
         when={workspace()}
         fallback={
           <p class="start-hint">
-            Run <code>pnpm meld open</code> in a folder to list and edit its <code>.meld</code>{' '}
-            files here.
+            Run <code>pnpm draftably open</code> in a folder to list and edit its{' '}
+            <code>.draft</code> files here.
           </p>
         }
       >
         <Show
           when={files().length}
           fallback={
-            <p class="start-hint">No .meld files here yet. Create one or save an example.</p>
+            <p class="start-hint">No .draft files here yet. Create one or save an example.</p>
           }
         >
           <ul class="start-list">
@@ -232,14 +232,18 @@ const nesting = (depth: number) =>
   depth === 0 ? 'Flat' : `${depth} level${depth === 1 ? '' : 's'} deep`;
 
 function ExampleCard(props: { example: ExampleInfo }) {
-  const thumbnail = createMemo(() => {
-    try {
-      const svg = renderSvg(projectScene(compile(props.example.source)));
-      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-    } catch {
-      return '';
-    }
-  });
+  // Compiling is async: a file can name a layout engine.
+  const [thumbnail] = createResource(
+    () => props.example.source,
+    async source => {
+      try {
+        const svg = renderSvg(projectScene(await compile(source)));
+        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      } catch {
+        return '';
+      }
+    },
+  );
   return (
     <li>
       <a class="start-example" href={exampleUrl(props.example.id)}>

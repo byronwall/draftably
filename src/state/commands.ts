@@ -314,23 +314,14 @@ export const commands = {
 
 export type CommandId = keyof typeof commands;
 
-/** Tools whose results a diagram file cannot store yet. */
+/**
+ * Tools whose results a diagram file cannot store yet. Rebuilds, Compare and routing are saved as
+ * layout recipes and `routing` lines; passes, timeline steps and brush strokes as `stay`
+ * positions. Checkpoints are not needed: undo steps through the file's versions.
+ */
 const FILE_UNSUPPORTED = new Set<string>([
-  'layout',
-  'layout-rebuild',
-  'layout-preview',
-  'layout-accept',
-  'layout-discard',
-  'layout-menu',
   'layout-checkpoint',
   'layout-restore',
-  'compare-layouts',
-  'compare-routes',
-  'reroute',
-  'timeline-toggle',
-  'timeline-reopen',
-  'timeline-save',
-  'brush-toggle',
   'reset-route',
   'mark-start',
   'mark-end',

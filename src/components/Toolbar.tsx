@@ -98,107 +98,104 @@ export function Toolbar() {
 
         <span class="grow" />
 
-        {/* Layout tools write geometry a diagram file cannot store yet. */}
-        <Show when={!fileMode()}>
-          <div class="toolbar-group layout-group">
-            <select
-              class="algorithm-select"
-              aria-label="Layout approach"
-              disabled={locked()}
-              onChange={e =>
-                updateLayoutSettings({ algorithm: e.currentTarget.value as LayoutAlgorithmId })
-              }
-            >
-              <optgroup label="Nested systems">
-                <For each={LayoutLab.algorithms.filter(a => NESTED.includes(a.id))}>
-                  {a => (
-                    <option value={a.id} selected={a.id === doc.settings.algorithm}>
-                      {a.name}
-                    </option>
-                  )}
-                </For>
-              </optgroup>
-              <For each={LayoutLab.algorithms.filter(a => !NESTED.includes(a.id))}>
+        <div class="toolbar-group layout-group">
+          <select
+            class="algorithm-select"
+            aria-label="Layout approach"
+            disabled={locked()}
+            onChange={e =>
+              updateLayoutSettings({ algorithm: e.currentTarget.value as LayoutAlgorithmId })
+            }
+          >
+            <optgroup label="Nested systems">
+              <For each={LayoutLab.algorithms.filter(a => NESTED.includes(a.id))}>
                 {a => (
                   <option value={a.id} selected={a.id === doc.settings.algorithm}>
                     {a.name}
                   </option>
                 )}
               </For>
-            </select>
-            <div class="split-button">
-              <Show
-                when={!layoutBusy()}
-                fallback={
-                  <button type="button" class="button danger" onClick={cancelLayout}>
-                    Cancel
-                  </button>
-                }
-              >
-                <button
-                  type="button"
-                  class="button primary"
-                  title="Improve layout · L"
-                  disabled={locked()}
-                  onClick={run('layout')}
-                >
-                  <Icon name="layout" />
-                  <span class="label keep">Improve</span>
-                  <kbd>L</kbd>
+            </optgroup>
+            <For each={LayoutLab.algorithms.filter(a => !NESTED.includes(a.id))}>
+              {a => (
+                <option value={a.id} selected={a.id === doc.settings.algorithm}>
+                  {a.name}
+                </option>
+              )}
+            </For>
+          </select>
+          <div class="split-button">
+            <Show
+              when={!layoutBusy()}
+              fallback={
+                <button type="button" class="button danger" onClick={cancelLayout}>
+                  Cancel
                 </button>
-              </Show>
-              <IconButton
-                variant="primary"
-                icon="chevron"
-                label="Layout options"
-                keys="⌥L"
-                aria-expanded={layoutLabOpen()}
-                onClick={run('layout-menu')}
-              />
-            </div>
-            <button
-              type="button"
-              class="button ghost"
-              title="Layout timeline · ⌥T"
-              aria-pressed={timelineOpen()}
-              onClick={run('timeline-toggle')}
+              }
             >
-              <Icon name="journey" />
-              <span class="label">Timeline</span>
-            </button>
+              <button
+                type="button"
+                class="button primary"
+                title="Improve layout · L"
+                disabled={locked() || !commandEnabled('layout')}
+                onClick={run('layout')}
+              >
+                <Icon name="layout" />
+                <span class="label keep">Improve</span>
+                <kbd>L</kbd>
+              </button>
+            </Show>
             <IconButton
-              icon="brush"
-              label="Layout brush"
-              keys="W"
-              pressed={brushActive()}
-              onClick={run('brush-toggle')}
+              variant="primary"
+              icon="chevron"
+              label="Layout options"
+              keys="⌥L"
+              aria-expanded={layoutLabOpen()}
+              onClick={run('layout-menu')}
             />
-            <button
-              type="button"
-              class="button ghost"
-              title="Compare layouts and routing parameters · ⌥E"
-              onClick={run('compare-layouts')}
-            >
-              <Icon name="compare" />
-              <span class="label">Compare</span>
-            </button>
-            <div class="split-button">
-              <IconButton
-                icon="branch"
-                label="Reroute connections"
-                keys="⌥R"
-                onClick={run('reroute')}
-              />
-              <IconButton
-                icon="chevron"
-                label="Routing options"
-                aria-haspopup="menu"
-                aria-expanded={menuOpen('routing')}
-                onClick={menuButton('routing')}
-              />
-            </div>
           </div>
-        </Show>
+          <button
+            type="button"
+            class="button ghost"
+            title="Layout timeline · ⌥T"
+            aria-pressed={timelineOpen()}
+            onClick={run('timeline-toggle')}
+          >
+            <Icon name="journey" />
+            <span class="label">Timeline</span>
+          </button>
+          <IconButton
+            icon="brush"
+            label="Layout brush"
+            keys="W"
+            pressed={brushActive()}
+            onClick={run('brush-toggle')}
+          />
+          <button
+            type="button"
+            class="button ghost"
+            title="Compare layouts and routing parameters · ⌥E"
+            onClick={run('compare-layouts')}
+          >
+            <Icon name="compare" />
+            <span class="label">Compare</span>
+          </button>
+          <div class="split-button">
+            <IconButton
+              icon="branch"
+              label="Reroute connections"
+              keys="⌥R"
+              onClick={run('reroute')}
+            />
+            <IconButton
+              icon="chevron"
+              label="Routing options"
+              aria-haspopup="menu"
+              aria-expanded={menuOpen('routing')}
+              onClick={menuButton('routing')}
+            />
+          </div>
+        </div>
       </div>
 
       <div class="toolbar-group">

@@ -24,7 +24,7 @@ for (const entry of Object.values(pkg.bin) as string[]) {
 assert.ok(readFileSync(resolve(dir, 'dist/index.html'), 'utf8').includes('assets/'));
 const result = spawnSync(
   process.execPath,
-  [resolve(dir, pkg.bin.draftably), 'check', resolve(dir, 'examples/checkout.meld')],
+  [resolve(dir, pkg.bin.draftably), 'check', resolve(dir, 'examples/checkout.draft')],
   {
     encoding: 'utf8',
     timeout: 10000,

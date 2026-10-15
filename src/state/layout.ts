@@ -25,17 +25,31 @@ import {
   snapshot,
 } from './document';
 import { fitView, reducedMotion, stageSize } from './editor';
+import {
+  commitSource,
+  fileBlocked,
+  fileMode,
+  projectSource,
+  sourceScope,
+  sourceWithRecipe,
+  UnstorableLayout,
+} from './file-session';
 import { resetRoutes, setAnimationGeometry } from './scene';
 import { toast } from './toast';
 
 export type LabScope = 'auto' | LayoutScope;
 
+interface LayoutPreview {
+  before: string;
+  mode: 'pass' | 'rebuild';
+  /** In a diagram file: the source that Keep saves, and what it says once saved. */
+  file?: { source: string; label: string; message: string };
+}
+
 const state = createRoot(() => {
   const [busy, setBusy] = createSignal(false);
   const [report, setReport] = createSignal<LayoutReport | null>(null);
-  const [preview, setPreview] = createSignal<{ before: string; mode: 'pass' | 'rebuild' } | null>(
-    null,
-  );
+  const [preview, setPreview] = createSignal<LayoutPreview | null>(null);
   const [labScope, setLabScope] = createSignal<LabScope>('auto');
   const [checkpoint, setCheckpoint] = createSignal<Diagram | null>(null);
   return {
@@ -93,11 +107,14 @@ export interface RunLayoutOptions extends LayoutOptions {
 
 export type LayoutOutcome =
   | { status: 'busy' | 'cancelled' }
+  /** A diagram file's layout recipe was previewed or saved. */
+  | { status: 'recipe' | 'recipe-preview'; source: string }
   | { status: 'error'; message: string }
   | ({ status: 'complete' | 'preview' } & LayoutReport);
 
 export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutOutcome> {
   if (state.busy()) return { status: 'busy' };
+  if (fileMode() && options.mode === 'rebuild') return runRecipe(options);
   prepareForEdit();
   const before = snapshot(),
     startRevision = revision(),
@@ -132,7 +149,7 @@ export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutO
     if (preview) {
       state.setPreview({ before, mode: result.report.mode === 'rebuild' ? 'rebuild' : 'pass' });
       setPersistenceBlocked(true);
-    } else commit(before, 'Layout: ' + result.report.name);
+    } else commit(before, 'Layout: ' + result.report.name, 'arrangement');
     await animateLayout(old, clone(doc.layout.nodes));
     if (fit) fitView();
     const r = result.report;
@@ -152,6 +169,68 @@ export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutO
       running = null;
       state.setBusy(false);
     }
+  }
+}
+
+const engineName = (id: string) => LayoutLab.algorithms.find(a => a.id === id)?.name ?? id;
+
+/**
+ * In a diagram file, a rebuild is a layout recipe: the scope's `layout` line names the engine.
+ * The new source is compiled and shown exactly as the file will draw it.
+ */
+async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
+  const { preview, fit, ...overrides } = options;
+  const fail = (message: string): LayoutOutcome => {
+    toast(message);
+    return { status: 'error', message };
+  };
+  const blocked = fileBlocked();
+  if (blocked) return fail(blocked);
+  const scope = sourceScope({ ...currentScope(), ...overrides });
+  if (!scope)
+    return fail(
+      'A layout recipe arranges the whole diagram or one container. Select one container, or nothing.',
+    );
+  let next: ReturnType<typeof sourceWithRecipe>, settings;
+  try {
+    settings = LayoutLab.settings({ ...doc.settings, ...overrides, mode: 'rebuild' });
+    next = sourceWithRecipe(scope, settings);
+  } catch (error) {
+    if (error instanceof UnstorableLayout || error instanceof Error) return fail(error.message);
+    throw error;
+  }
+  prepareForEdit();
+  const before = snapshot(),
+    startRevision = revision(),
+    thisJob = ++job,
+    name = engineName(settings.algorithm);
+  const where = scope === 'root' ? 'the diagram' : scope;
+  const file = {
+    source: next.source,
+    label: `Layout: ${name}`,
+    message:
+      `${where} uses ${name}` +
+      (next.removed ? ` · removed ${next.removed} position refinements` : ''),
+  };
+  state.setBusy(true);
+  try {
+    const projected = await projectSource(next.source);
+    if (job !== thisJob || revision() !== startRevision) return { status: 'cancelled' };
+    const old = clone(doc.layout.nodes);
+    if (preview) {
+      batch(() => {
+        restoreDocument(projected);
+        resetRoutes();
+        state.setPreview({ before, mode: 'rebuild', file });
+      });
+    } else if (!(await commitSource(file.source, file.label, file.message)))
+      return { status: 'cancelled' };
+    await animateLayout(old, clone(doc.layout.nodes));
+    if (fit) fitView();
+    if (preview) toast(`Preview · ${where} with ${name} · Keep saves it to the file`);
+    return { status: preview ? 'recipe-preview' : 'recipe', source: file.source };
+  } finally {
+    if (thisJob === job) state.setBusy(false);
   }
 }
 
@@ -203,7 +282,8 @@ export function acceptPreview() {
     setAnimationGeometry(null);
     setPersistenceBlocked(false);
   });
-  commit(p.before, 'Layout preview');
+  if (p.file) void commitSource(p.file.source, p.file.label, p.file.message);
+  else commit(p.before, 'Layout preview', 'arrangement');
 }
 
 export function discardPreview() {
