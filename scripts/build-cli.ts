@@ -1,4 +1,4 @@
-import { chmodSync, cpSync, rmSync } from 'node:fs';
+import { chmodSync, cpSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'vite';
@@ -22,4 +22,10 @@ await build({
 chmodSync(path.join(pkg, 'dist/cli/main.js'), 0o755);
 cpSync(path.join(root, 'examples'), path.join(pkg, 'examples'), { recursive: true });
 cpSync(path.join(root, 'docs/DSL.md'), path.join(pkg, 'DSL.md'));
-cpSync(path.join(root, 'reference/meld/original/LICENSE'), path.join(pkg, 'THIRD_PARTY_NOTICES'));
+writeFileSync(
+  path.join(pkg, 'THIRD_PARTY_NOTICES'),
+  'Meld prototype\n\n' +
+    readFileSync(path.join(root, 'reference/meld/original/LICENSE'), 'utf8') +
+    '\n\nSolidJS\n\n' +
+    readFileSync(path.join(root, 'node_modules/solid-js/LICENSE'), 'utf8'),
+);

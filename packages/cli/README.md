@@ -57,4 +57,5 @@ Some advanced tools from the standalone editor are disabled in file mode, includ
 timeline, comparison Apply, custom edge bends, and edge label positions.
 
 Source: [byronwall/draftably](https://github.com/byronwall/draftably).
-The language adapts the Meld prototype; its license notice is included in `THIRD_PARTY_NOTICES`.
+The language adapts the Meld prototype. License notices for Meld and the bundled SolidJS viewer
+are included in `THIRD_PARTY_NOTICES`.
