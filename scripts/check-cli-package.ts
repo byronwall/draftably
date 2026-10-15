@@ -2,8 +2,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 
-const dir = resolve('packages/cli');
+const dir = fileURLToPath(new URL('../packages/cli/', import.meta.url));
 const pkg = JSON.parse(readFileSync(resolve(dir, 'package.json'), 'utf8'));
 assert.equal(pkg.private, false, 'CLI is not ready to publish. See docs/RELEASING.md.');
 assert.ok(pkg.scripts?.build, 'Add the CLI build script before publishing.');
@@ -20,4 +21,14 @@ for (const entry of Object.values(pkg.bin) as string[]) {
   });
   assert.equal(result.status, 0, `${entry} --help failed: ${result.error || result.stderr}`);
 }
-console.log('CLI entry points passed. Pack and test the archive before release.');
+assert.ok(readFileSync(resolve(dir, 'dist/index.html'), 'utf8').includes('assets/'));
+const result = spawnSync(
+  process.execPath,
+  [resolve(dir, pkg.bin.draftably), 'check', resolve(dir, 'examples/checkout.draft')],
+  {
+    encoding: 'utf8',
+    timeout: 10000,
+  },
+);
+assert.equal(result.status, 0, result.stderr);
+console.log('Built CLI, viewer, and example passed.');

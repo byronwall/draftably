@@ -7,3 +7,6 @@ __pycache__/
 .DS_Store
 .claude/
 dist-cli/
+packages/cli/examples/
+packages/cli/DSL.md
+packages/cli/THIRD_PARTY_NOTICES
