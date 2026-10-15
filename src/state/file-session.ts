@@ -12,7 +12,7 @@
  */
 import { batch, createRoot, createSignal } from 'solid-js';
 import { unwrap } from 'solid-js/store';
-import { compile, type Diagnostic, type Scene } from '../dsl/compile';
+import { checkSource, compile, type Diagnostic, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
 import { movedOutsideEdit, reflowGroup, translateEdit, UnsupportedEdit } from '../dsl/translate';
@@ -58,7 +58,11 @@ const state = createRoot(() => {
   const [redoStack, setRedoStack] = createSignal<SourceStep[]>([]);
   /** Objects outside the last external change that moved anyway. */
   const [movedByChange, setMovedByChange] = createSignal<string[]>([]);
+  /** A revision is being laid out; layout engines run asynchronously. */
+  const [compiling, setCompiling] = createSignal(false);
   return {
+    compiling,
+    setCompiling,
     movedByChange,
     setMovedByChange,
     info,
@@ -87,6 +91,7 @@ export const fileScene = state.scene;
 export const fileDiagnostics = (): Diagnostic[] => state.scene()?.diagnostics ?? [];
 export const conflictProposal = state.proposal;
 export const movedByChange = state.movedByChange;
+export const fileCompiling = state.compiling;
 
 /** The last source confirmed on disk and its revision. */
 let diskSource = '',
@@ -106,12 +111,21 @@ const viewState = () => {
   };
 };
 
-/** Compile `source` and show it. Returns the scene, or null when the source is invalid. */
-export function showSource(source: string, selection = selectedIds()): Scene | null {
+let showing = 0;
+
+/**
+ * Compile `source` and show it. Resolves to the scene, or null when the source is invalid or a
+ * newer call superseded this one.
+ */
+export async function showSource(source: string, selection = selectedIds()): Promise<Scene | null> {
+  const ticket = ++showing;
+  state.setCompiling(true);
   let scene: Scene;
   try {
-    scene = compile(source);
+    scene = await compile(source);
   } catch (error) {
+    if (ticket !== showing) return null;
+    state.setCompiling(false);
     if (!(error instanceof DslError)) throw error;
     batch(() => {
       state.setSourceError({ message: error.message, line: error.line });
@@ -119,11 +133,13 @@ export function showSource(source: string, selection = selectedIds()): Scene | n
     });
     return null;
   }
+  if (ticket !== showing) return null;
   batch(() => {
     restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
     setSelection(selection);
     state.setScene(scene);
     state.setSourceError(null);
+    state.setCompiling(false);
   });
   return scene;
 }
@@ -134,13 +150,13 @@ function resetHistory() {
 }
 
 /** Show a newer file from disk. Local history cannot undo past someone else's change. */
-function acceptDisk(source: string, revision: string, { announce = false } = {}) {
+async function acceptDisk(source: string, revision: string, { announce = false } = {}) {
   const previous = state.scene(),
     previousSource = localSource;
   diskSource = localSource = source;
   diskRevision = revision;
   resetHistory();
-  const scene = showSource(source);
+  const scene = await showSource(source);
   if (!scene) return;
   state.setStatus('saved');
   if (!announce) return;
@@ -207,7 +223,7 @@ async function save() {
     externalDuringSave = null;
     // The file was replaced after this save landed; show the newer version.
     if (external && external.revision !== diskRevision && state.status() === 'saved')
-      acceptDisk(external.source, external.revision, { announce: true });
+      void acceptDisk(external.source, external.revision, { announce: true });
   }
 }
 
@@ -220,7 +236,7 @@ function enterConflict(source: string, revision: string) {
   resetHistory();
   batch(() => {
     state.setProposal(unsaved);
-    showSource(source);
+    void showSource(source);
     state.setStatus('conflict');
   });
 }
@@ -239,7 +255,7 @@ export function saveProposalOverDisk() {
   if (!proposal) return;
   state.setProposal(null);
   localSource = proposal;
-  showSource(proposal);
+  void showSource(proposal);
   void save();
 }
 
@@ -250,7 +266,7 @@ export const retrySave = () => void save();
 
 /** Undo an edit the file cannot take by showing the source again, with a reason. */
 function snapBack(message: string) {
-  showSource(localSource);
+  void showSource(localSource);
   toast(message);
   return false;
 }
@@ -258,6 +274,7 @@ function snapBack(message: string) {
 function handleEdit(before: string, label: string): boolean {
   if (state.sourceError()) return snapBack('Fix the error in the file before editing here.');
   if (state.proposal()) return snapBack('Keep the file or save your edit before editing again.');
+  if (state.compiling()) return snapBack('Still laying out the file. Try again in a moment.');
   const scene = state.scene();
   if (!scene) return snapBack('The file has no valid drawing yet.');
   let result;
@@ -278,7 +295,7 @@ function handleEdit(before: string, label: string): boolean {
   // Nothing the file stores changed (for example a move of an object that was not selected).
   if (next === localSource) return snapBack('That change is not saved to diagram files.');
   try {
-    compile(next);
+    checkSource(next);
   } catch (error) {
     if (error instanceof DslError) return snapBack(`That edit cannot be saved. ${error.message}`);
     throw error;
@@ -288,7 +305,7 @@ function handleEdit(before: string, label: string): boolean {
     state.setRedoStack([]);
   });
   localSource = next;
-  showSource(
+  void showSource(
     next,
     selectedIds().map(id => result.ids.get(id) ?? id),
   );
@@ -301,7 +318,7 @@ function handleEdit(before: string, label: string): boolean {
 function commitSource(next: string, label: string, message: string) {
   if (next === localSource) return toast('Nothing to change.');
   try {
-    compile(next);
+    checkSource(next);
   } catch (error) {
     if (error instanceof DslError) return toast(`That change cannot be saved. ${error.message}`);
     throw error;
@@ -311,7 +328,7 @@ function commitSource(next: string, label: string, message: string) {
     state.setRedoStack([]);
   });
   localSource = next;
-  showSource(next);
+  void showSource(next);
   savedMessage = message;
   void save();
 }
@@ -344,7 +361,7 @@ function historyStep(direction: 'undo' | 'redo') {
     }
   });
   localSource = direction === 'undo' ? entry.before : entry.after;
-  showSource(localSource);
+  void showSource(localSource);
   clearSelection();
   toast((direction === 'undo' ? 'Undid ' : 'Redid ') + entry.label.toLowerCase());
   void save();
@@ -375,7 +392,7 @@ export async function detectFileSession(): Promise<boolean> {
   });
   state.setInfo(info);
   document.title = `${info.name} · Diagram Studio`;
-  acceptDisk(info.source, info.revision);
+  await acceptDisk(info.source, info.revision);
   listen();
   return true;
 }
@@ -384,7 +401,7 @@ function onExternalChange(source: string, revision: string) {
   if (revision === diskRevision) return;
   if (saving) externalDuringSave = { source, revision };
   else if (localSource !== diskSource) enterConflict(source, revision);
-  else acceptDisk(source, revision, { announce: true });
+  else void acceptDisk(source, revision, { announce: true });
 }
 
 function listen() {

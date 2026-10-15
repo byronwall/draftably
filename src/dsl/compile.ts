@@ -3,8 +3,17 @@
  *
  * Geometry is a pure function of the source and one fixed render context: no DOM measurement,
  * randomness, clocks or previous output. The browser and the CLI therefore agree exactly.
+ *
+ * A scope whose `layout` names an engine is arranged by the editor's layout engine, run cold
+ * (`rebuild` without a warm start). A cold rebuild depends only on structure and sizes, never on
+ * starting positions, so it is as repeatable as the built-in recipes. Refinements then apply on
+ * top of the engine's arrangement exactly as they do on top of `flow`.
  */
+import { LayoutLab } from '../engines/layout-engine.js';
 import { defaultShapeSize } from '../model/styles';
+import type { Direction } from '../model/types';
+import { GROUP_HEADER, GROUP_INSET, contentOrigin } from './frame';
+import { projectScene } from './project';
 import {
   DslError,
   parseModel,
@@ -17,10 +26,7 @@ import {
 
 /** The single render context. Browser window size changes the camera, never the layout. */
 export const RENDER_CONTEXT = { width: 1100, height: 720 } as const;
-/** Space between a group's frame and its content, on the sides and bottom. */
-export const GROUP_INSET = 24;
-/** Space between a group's top edge and its content; the title sits in it. */
-export const GROUP_HEADER = 48;
+export { GROUP_HEADER, GROUP_INSET, contentOrigin };
 const MIN_GAP = 12;
 const MIN_GROUP = { w: 260, h: 110 };
 
@@ -62,15 +68,85 @@ type Pos = { x: number; y: number };
 
 const round = (n: number) => Math.round(n);
 
-/** Content origin of a group in world coordinates. */
-export const contentOrigin = (group: { x: number; y: number }) => ({
-  x: group.x + GROUP_INSET,
-  y: group.y + GROUP_HEADER,
-});
+export async function compile(source: string): Promise<Scene> {
+  const m = parseModel(source);
+  return layoutModel(m, await engineArrangement(m));
+}
 
-export function compile(source: string): Scene {
+/**
+ * Check source synchronously: every error `compile` can report, without running layout engines
+ * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
+ */
+export function checkSource(source: string): Scene {
   return layoutModel(parseModel(source));
 }
+
+/** The reading direction a scope's layout asks for, resolved against the render context. */
+function axisOf(layout: ModelLayout): 'right' | 'down' {
+  if (layout.direction !== 'auto') return layout.direction;
+  const { width, height } = RENDER_CONTEXT;
+  return width >= 700 && width / height > 1.12 ? 'right' : 'down';
+}
+
+/** The explicit layout line that arranges a scope: its own, or the nearest engine above it. */
+function governingLayout(m: Model, scope: string): ModelLayout | undefined {
+  const parent = new Map(m.objects.map(o => [o.id, o.parent]));
+  for (let s: string | undefined = scope; s; s = s === 'root' ? undefined : parent.get(s)) {
+    const l = m.layouts.find(x => x.scope === s);
+    if (l) return s === scope || l.engine ? l : undefined;
+  }
+  return undefined;
+}
+
+/**
+ * World positions from the layout engines named in the file, outermost scope first. The engines
+ * start from the built-in recipes with sizes but no position refinements.
+ */
+async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined> {
+  const engines = m.layouts.filter(l => l.engine);
+  if (!engines.length) return undefined;
+  const depth = (scope: string) => {
+    let d = 0;
+    for (
+      let o = m.objects.find(x => x.id === scope);
+      o;
+      o = m.objects.find(x => x.id === o!.parent)
+    )
+      d++;
+    return d;
+  };
+  engines.sort((a, b) => depth(a.scope) - depth(b.scope));
+  const plain = layoutModel({
+    ...m,
+    hints: m.hints.filter(h => h.type === 'size' || h.type === 'order'),
+  });
+  let doc = projectScene(plain);
+  for (const l of engines) {
+    const settings = LayoutLab.settings({
+      ...doc.settings,
+      algorithm: l.engine!.algorithm,
+      direction: (axisOf(l) === 'right' ? 'RIGHT' : 'DOWN') as Direction,
+      ...l.engine!.params,
+      // The compiler sizes groups to their content afterwards, so frames never constrain it.
+      growContainers: true,
+    });
+    const result = await LayoutLab.compute(doc, {
+      ...settings,
+      mode: 'rebuild',
+      warmStart: false,
+      settle: true,
+      maxIterations: ENGINE_ITERATIONS,
+      scope: l.scope === 'root' ? 'all' : 'container',
+      ...(l.scope === 'root' ? {} : { containerId: l.scope }),
+      viewport: { w: RENDER_CONTEXT.width, h: RENDER_CONTEXT.height },
+    });
+    doc = result.document;
+  }
+  return new Map(Object.entries(doc.layout.nodes).map(([id, r]) => [id, { x: r.x, y: r.y }]));
+}
+
+/** Solver budget for engine recipes; the same budget Compare and the timeline use. */
+export const ENGINE_ITERATIONS = 640;
 
 export function layoutFor(m: Model, scope: string): ModelLayout {
   return (
@@ -174,16 +250,23 @@ function rankLayers(ids: string[], pairs: Array<[string, string]>): string[][] {
   return layers.filter(Boolean);
 }
 
+/** Siblings placed as the engine arranged them, shifted so the scope's content starts at 0,0. */
+function fromEngine(items: Item[], arranged: Map<string, Pos>, axis: 'right' | 'down') {
+  const x0 = Math.min(...items.map(n => arranged.get(n.id)!.x)),
+    y0 = Math.min(...items.map(n => arranged.get(n.id)!.y));
+  const positions = new Map(
+    items.map(n => {
+      const p = arranged.get(n.id)!;
+      return [n.id, { x: round(p.x - x0), y: round(p.y - y0) }] as const;
+    }),
+  );
+  return { positions, axis };
+}
+
 function baseLayout(items: Item[], layout: ModelLayout, pairs: Array<[string, string]>) {
   const out = new Map<string, Pos>(),
     gap = layout.gap,
-    { width, height } = RENDER_CONTEXT;
-  const axis: 'right' | 'down' =
-    layout.direction === 'auto'
-      ? width >= 700 && width / height > 1.12
-        ? 'right'
-        : 'down'
-      : layout.direction;
+    axis = axisOf(layout);
   const by = new Map(items.map(n => [n.id, n]));
   if (layout.algorithm === 'row' || layout.algorithm === 'column') {
     let cursor = 0;
@@ -487,7 +570,11 @@ function refine(
   return pos;
 }
 
-export function layoutModel(m: Model): Scene {
+/**
+ * Lay out a model. `arranged` holds world positions from layout engines; scopes that an engine
+ * governs take their children's relative placement from it instead of their built-in recipe.
+ */
+export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -532,7 +619,11 @@ export function layoutModel(m: Model): Scene {
     const pairs = m.edges
       .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
-    const base = baseLayout(list, layout, pairs),
+    const governing = arranged && governingLayout(m, scope),
+      base =
+        governing?.engine && list.every(n => arranged!.has(n.id))
+          ? fromEngine(list, arranged!, axisOf(governing))
+          : baseLayout(list, layout, pairs),
       pos = refine(list, base.positions, m.hints, scope, diagnostics, base.axis);
     for (const n of list) {
       local.set(n.id, pos.get(n.id)!);

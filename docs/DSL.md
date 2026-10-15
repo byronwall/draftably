@@ -4,8 +4,8 @@ A `.draft` file is a readable diagram source that a person and an agent can both
 model (objects, groups, connections), the automatic layout recipe, and layout refinements. It
 never holds a picture of the final layout: the same file always compiles to the same geometry.
 
-The language is adapted from the Meld 0.1 prototype in `reference/meld/original/DSL.md`. Views,
-checkpoints, and the grid and radial recipes are not supported yet.
+The language is adapted from the Meld 0.1 prototype in `reference/meld/original/DSL.md`. Views and
+checkpoints are not supported yet.
 
 ```text
 diagram "Checkout architecture" version=1
@@ -41,9 +41,58 @@ and groups. References may point to later lines.
 | `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                         |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`. |
 
+| `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
+| `routing` | Router settings for every connection. See [Routing](#routing). |
+
 Colors are `auto`, `violet`, `blue`, `mint`, `amber`, `rose` and `slate`; Meld's `teal` and
 `orange` are read as `mint` and `amber`. An `auto` color inherits from the nearest colored group.
 Without a `layout` line, `root` uses `flow gap=48` and groups use `column gap=24`.
+
+## Layout engines
+
+`layout scope engine=name` arranges a scope with one of the editor's layout engines instead of a
+built-in recipe. The engine runs from scratch each time the file compiles, so the result depends
+only on the objects, their sizes and the connections, never on an earlier drawing. Adding an
+object lays the scope out again.
+
+```text
+layout root engine=compound-flow
+layout root engine=layered direction=down rank-gap=96 fold=auto
+layout services engine=grid
+```
+
+Engines: `compound-flow`, `boundary-align`, `compound-spring`, `tidy`, `stress`, `force`,
+`flow`, `layered`, `tree` and `grid`. The editor's Layout options panel describes each one.
+
+An engine on `root` arranges everything, including the contents of groups. A group with its own
+`layout` line keeps that recipe instead. An engine on a group arranges only that group. Groups
+are then sized to fit their content, as with the built-in recipes, and `near`, `stay`, `pin` and
+the other refinements apply on top of the engine's arrangement.
+
+| Setting            | Values                   | Setting         | Values                |
+| ------------------ | ------------------------ | --------------- | --------------------- |
+| `direction`        | `auto\|right\|down`      | `edge-length`   | 20–260                |
+| `node-gap`         | 4–160                    | `repulsion`     | 0–100                 |
+| `rank-gap`         | 12–220                   | `flow-strength` | 0–100                 |
+| `group-gap`        | 12–180                   | `alignment`     | 0–100                 |
+| `boundary-pull`    | 0–100                    | `compactness`   | 0–100                 |
+| `hierarchy-sweeps` | 1–4                      | `grid-strength` | 0–100                 |
+| `ordering`         | `stable\|crossings`      | `fold`          | `auto\|never`         |
+| `aspect`           | `1\|1.333\|1.6\|2\|0.75` | `root`          | a node ID, for `tree` |
+
+`min-width` and `min-height` work as they do for the built-in recipes; `gap` does not apply.
+
+## Routing
+
+One `routing` statement sets the router for every connection:
+
+```text
+routing edge-gap=24 clearance=12 corner-radius=0
+```
+
+Settings: `clearance`, `port-gap`, `edge-gap`, `bend-penalty`, `crossing-penalty`,
+`shared-penalty`, `parallel-penalty`, `port-stability`, `fanout-penalty`, `passes` and
+`corner-radius`, with the router's own ranges. Without it, the router's defaults apply.
 
 ## Refinements
 

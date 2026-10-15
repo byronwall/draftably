@@ -36,7 +36,7 @@ export async function main(argv: string[]): Promise<number> {
   try {
     switch (command) {
       case 'check': {
-        const scene = compile(read(file));
+        const scene = await compile(read(file));
         const errors = scene.diagnostics.filter(d => d.level === 'error');
         for (const d of scene.diagnostics) console.log(describe(d));
         const nodes = scene.objects.filter(o => o.type === 'node').length;
@@ -54,7 +54,7 @@ export async function main(argv: string[]): Promise<number> {
         return 0;
       }
       case 'inspect': {
-        const doc = projectScene(compile(read(file)));
+        const doc = projectScene(await compile(read(file)));
         if (flag('--svg')) process.stdout.write(renderSvg(doc));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;

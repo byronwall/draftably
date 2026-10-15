@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
-import { compile } from '../dsl/compile';
+import { checkSource } from '../dsl/compile';
 import { DslError } from '../dsl/syntax';
 
 export interface SessionInfo {
@@ -86,7 +86,7 @@ export function createFileSession(file: string): FileSession {
     if (request.base !== revision)
       return json(res, 409, { error: 'The file changed on disk.', source, revision });
     try {
-      compile(request.source);
+      checkSource(request.source);
     } catch (error) {
       if (error instanceof DslError)
         return json(res, 422, { error: error.message, line: error.line });
