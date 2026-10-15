@@ -306,19 +306,15 @@ export const commands = {
 
 export type CommandId = keyof typeof commands;
 
-/** Tools whose results a diagram file cannot store yet. */
+/**
+ * Tools whose results a diagram file cannot store yet. Rebuilds, Compare and routing are saved as
+ * layout recipes and `routing` lines; see `state/layout.ts` and `state/comparison.ts`.
+ */
 const FILE_UNSUPPORTED = new Set<string>([
   'layout',
-  'layout-rebuild',
   'layout-preview',
-  'layout-accept',
-  'layout-discard',
-  'layout-menu',
   'layout-checkpoint',
   'layout-restore',
-  'compare-layouts',
-  'compare-routes',
-  'reroute',
   'timeline-toggle',
   'timeline-reopen',
   'timeline-save',

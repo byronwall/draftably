@@ -1,5 +1,6 @@
 import { createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
 import {
+  candidateChange,
   anchorFor,
   applyCandidate,
   closeComparison,
@@ -256,7 +257,9 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
         >
           <div>
             <strong classList={{ 'warning-text': !!(routing()!.blocked || routing()!.lanePairs) }}>
-              {stopped()}
+              <Show when={props.cell.source} fallback={stopped()}>
+                {source => <code class="candidate-recipe">{candidateChange(source())}</code>}
+              </Show>
               {routing()!.blocked ? ` · ${routing()!.blocked} blocked` : ''}
             </strong>
             <p>{detail()}</p>

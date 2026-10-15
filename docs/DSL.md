@@ -136,14 +136,16 @@ are left out because the browser measures label text with real fonts.
 
 Edits made in the viewer are written back to the file as readable statements:
 
-| In the viewer                         | In the file                                                       |
-| ------------------------------------- | ----------------------------------------------------------------- |
-| Drag an object                        | `near` the closest sibling it does not overlap; `nudge` if none.  |
-| Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.            |
-| Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.  |
-| Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label. |
-| Wrap in a container or ungroup        | A `group` and the members' `in=`.                                 |
-| Clear manual markers                  | Removes the object's soft position refinements.                   |
+| In the viewer                         | In the file                                                        |
+| ------------------------------------- | ------------------------------------------------------------------ |
+| Drag an object                        | `near` the closest sibling it does not overlap; `nudge` if none.   |
+| Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.             |
+| Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.   |
+| Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label.  |
+| Wrap in a container or ungroup        | A `group` and the members' `in=`.                                  |
+| Clear manual markers                  | Removes the object's soft position refinements.                    |
+| Rebuild, or Apply in Compare          | `layout scope engine=…` for the diagram or the selected container. |
+| Routing options, or a routing Compare | The `routing` line.                                                |
 
 An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
 top-level object, and the siblings of the edited object and of its containers. When an agent later
@@ -157,6 +159,15 @@ shows the file and keeps your edit aside: **Keep file** discards the edit, and *
 it** replaces the newer file. Undo and redo step through the file's versions; a change from
 outside the viewer clears them, so undo never erases someone else's work.
 
-Layout passes, the timeline, the brush, Compare, connection bends, label positions, start/end
-preferences and images are unavailable while a file is open, because the file cannot store their
-results yet.
+## Layout tools
+
+A rebuild arranges a scope from scratch, so it is saved as a recipe. **Preview as file recipe**
+in Layout options, and every rebuild candidate in **Compare**, compile the file with the new
+`layout` line. What you see is exactly what the file will draw, and **Keep** or **Apply** saves
+that line. Soft position refinements inside the scope are removed so the engine's arrangement
+shows; pins, sizes and the nested groups' own `layout` lines stay. Layout options shows the
+scope's current line and the one a rebuild would write. The routing menu and routing comparisons
+write the `routing` line.
+
+Layout passes, the timeline, the brush, connection bends, label positions, start/end preferences
+and images are unavailable while a file is open, because the file cannot store their results yet.

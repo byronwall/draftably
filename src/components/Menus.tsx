@@ -6,7 +6,9 @@ import type { RoutingSettings } from '../model/types';
 import { openSample } from '../state/actions';
 import { commands, runCommand, type CommandId } from '../state/commands';
 import { commit, doc, setDoc, snapshot } from '../state/document';
+import { commitSource, fileBlocked, fileMode, sourceWithRouting } from '../state/file-session';
 import { resetRoutes, routingReport } from '../state/scene';
+import { toast } from '../state/toast';
 import { closeMenu, menu, type MenuState } from '../state/ui';
 import { RangeField } from './controls';
 import { Icon } from './Icon';
@@ -259,14 +261,18 @@ const ADVANCED_ROUTING: typeof ROUTING_FIELDS = [
 
 /** Routing settings are undoable edits: they change how every connection is drawn. */
 function setRouting(patch: Partial<RoutingSettings>, label: string, reset = false) {
-  const before = snapshot();
-  setDoc(
-    'settings',
-    'routing',
-    RouteLab.settings(
-      reset ? { ...RouteLab.defaults, ...patch } : { ...doc.settings.routing, ...patch },
-    ),
+  const next = RouteLab.settings(
+    reset ? { ...RouteLab.defaults, ...patch } : { ...doc.settings.routing, ...patch },
   );
+  // A diagram file stores router settings in its `routing` line.
+  if (fileMode()) {
+    const blocked = fileBlocked();
+    if (blocked) return toast(blocked);
+    void commitSource(sourceWithRouting(next), label, 'Saved · routing');
+    return;
+  }
+  const before = snapshot();
+  setDoc('settings', 'routing', next);
   resetRoutes();
   commit(before, label);
 }

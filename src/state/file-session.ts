@@ -16,7 +16,9 @@ import { checkSource, compile, type Diagnostic, type Scene } from '../dsl/compil
 import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
 import { movedOutsideEdit, reflowGroup, translateEdit, UnsupportedEdit } from '../dsl/translate';
+import { setLayoutRecipe, setRouting, UnstorableLayout } from '../dsl/layout-edits';
 import { normalize } from '../model/document';
+import type { Diagram, LayoutSettings, RoutingSettings } from '../model/types';
 import { clone } from '../model/geometry';
 import {
   clearSelection,
@@ -113,6 +115,19 @@ const viewState = () => {
 
 let showing = 0;
 
+/** Recently compiled sources. A preview and the commit that follows compile the same source. */
+const compiled = new Map<string, Promise<Scene>>();
+function compileCached(source: string): Promise<Scene> {
+  let scene = compiled.get(source);
+  if (!scene) {
+    scene = compile(source);
+    compiled.set(source, scene);
+    scene.catch(() => compiled.delete(source));
+    while (compiled.size > 16) compiled.delete(compiled.keys().next().value!);
+  }
+  return scene;
+}
+
 /**
  * Compile `source` and show it. Resolves to the scene, or null when the source is invalid or a
  * newer call superseded this one.
@@ -122,7 +137,7 @@ export async function showSource(source: string, selection = selectedIds()): Pro
   state.setCompiling(true);
   let scene: Scene;
   try {
-    scene = await compile(source);
+    scene = await compileCached(source);
   } catch (error) {
     if (ticket !== showing) return null;
     state.setCompiling(false);
@@ -314,13 +329,22 @@ function handleEdit(before: string, label: string): boolean {
   return true;
 }
 
-/** Record and save a change made directly to the source, such as a reflow. */
-function commitSource(next: string, label: string, message: string) {
-  if (next === localSource) return toast('Nothing to change.');
+/**
+ * Record and save a change made directly to the source, such as a reflow or a layout recipe.
+ * Resolves once the new revision is on screen; false when the source was refused.
+ */
+export async function commitSource(next: string, label: string, message: string) {
+  if (next === localSource) {
+    toast('Nothing to change.');
+    return false;
+  }
   try {
     checkSource(next);
   } catch (error) {
-    if (error instanceof DslError) return toast(`That change cannot be saved. ${error.message}`);
+    if (error instanceof DslError) {
+      toast(`That change cannot be saved. ${error.message}`);
+      return false;
+    }
     throw error;
   }
   batch(() => {
@@ -328,10 +352,53 @@ function commitSource(next: string, label: string, message: string) {
     state.setRedoStack([]);
   });
   localSource = next;
-  void showSource(next);
   savedMessage = message;
   void save();
+  await showSource(next);
+  return true;
 }
+
+// --- Layout tools ------------------------------------------------------------------------------
+
+/** Why the file cannot take a layout change right now, or null when it can. */
+export function fileBlocked(): string | null {
+  if (state.sourceError()) return 'Fix the error in the file first.';
+  if (state.proposal()) return 'Keep the file or save your edit first.';
+  if (state.compiling()) return 'Still laying out the file. Try again in a moment.';
+  if (!state.scene()) return 'The file has no valid drawing yet.';
+  return null;
+}
+
+/** The source scope a layout scope maps to: `root`, a group, or null for a loose selection. */
+export function sourceScope(scope: { scope: string; containerId?: string }): string | null {
+  if (scope.scope === 'all') return 'root';
+  if (scope.scope === 'container' && scope.containerId) return scope.containerId;
+  return null;
+}
+
+/**
+ * The current source with `scope` arranged by the engine in `settings`. Throws
+ * `UnstorableLayout` for an engine a file cannot name.
+ */
+export function sourceWithRecipe(scope: string, settings: LayoutSettings) {
+  const source = readSource(localSource),
+    removed = setLayoutRecipe(source, state.scene()!, scope, settings);
+  return { source: printSource(source), removed };
+}
+
+/** The current source with these router settings. */
+export function sourceWithRouting(routing: RoutingSettings) {
+  const source = readSource(localSource);
+  setRouting(source, routing);
+  return printSource(source);
+}
+
+/** Compile a source variant into an editor document, keeping the current view state. */
+export async function projectSource(source: string): Promise<Diagram> {
+  return projectScene(await compileCached(source), viewState());
+}
+
+export { UnstorableLayout };
 
 /**
  * Let the automatic recipe arrange a group's contents again. Its soft refinements are removed,
@@ -343,7 +410,11 @@ export function reflowSelectedGroup(id: string) {
     return toast('The file cannot be changed right now.');
   const source = readSource(localSource),
     count = reflowGroup(source, scene, id);
-  commitSource(printSource(source), 'Reflow group', `Saved · reflowed ${count} objects in ${id}`);
+  void commitSource(
+    printSource(source),
+    'Reflow group',
+    `Saved · reflowed ${count} objects in ${id}`,
+  );
 }
 
 function historyStep(direction: 'undo' | 'redo') {

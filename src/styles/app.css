@@ -799,6 +799,22 @@ details.inspector-section[open] > summary {
   margin-top: 6px;
 }
 
+/* A diagram file's layout line, shown as it is written in the file. */
+.recipe-line {
+  display: block;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font: var(--text-sm) / 1.45 var(--mono);
+  overflow-wrap: anywhere;
+}
+
+.recipe-line.next {
+  border-color: transparent;
+  background: var(--accent-soft);
+}
+
 .lab-footer {
   display: flex;
   flex-direction: column;

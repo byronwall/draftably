@@ -16,8 +16,12 @@ export const isStatement = (line: SourceLine): line is Statement => line.kind ==
 
 export const statements = (doc: SourceDoc) => doc.lines.filter(isStatement);
 
-export function statement(command: string, args: Word[], attrs: Array<[string, Word]> = []) {
-  return { kind: 'statement', command, args, attrs, line: 0 } satisfies Statement;
+export function statement(
+  command: string,
+  args: Word[],
+  attrs: Array<[string, Word]> = [],
+): Statement {
+  return { kind: 'statement', command, args, attrs, line: 0 };
 }
 
 /** The `node` or `group` declaration of an object. */
