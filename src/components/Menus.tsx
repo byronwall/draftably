@@ -128,6 +128,7 @@ const Heading = (props: { children: JSX.Element }) => (
 function FileMenu() {
   return (
     <>
+      <MenuItem command="start" />
       <MenuItem command="new-diagram" />
       <MenuItem command="quick-build" />
       <MenuItem command="open" />
@@ -136,7 +137,7 @@ function FileMenu() {
       <MenuItem command="timeline-reopen" />
       <MenuItem command="timeline-save" />
       <hr />
-      <Heading>Examples</Heading>
+      <Heading>Layout test cases</Heading>
       <div class="menu-scroll">
         <For each={SAMPLES}>
           {sample => (
@@ -268,7 +269,7 @@ function setRouting(patch: Partial<RoutingSettings>, label: string, reset = fals
   if (fileMode()) {
     const blocked = fileBlocked();
     if (blocked) return toast(blocked);
-    void commitSource(sourceWithRouting(next), label, 'Saved · routing');
+    void commitSource(sourceWithRouting(next), label, 'routing');
     return;
   }
   const before = snapshot();

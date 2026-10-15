@@ -390,7 +390,7 @@ function applyToFile(cell: Candidate & { source: string }) {
   const source = cell.source;
   closeComparison();
   setSelection([]);
-  void commitSource(source, 'Apply comparison: ' + label, `Saved · ${label}`).then(
+  void commitSource(source, 'Apply comparison: ' + label, label).then(
     saved => saved && requestAnimationFrame(() => fitView()),
   );
   return true;

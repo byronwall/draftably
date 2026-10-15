@@ -1,0 +1,42 @@
+diagram "Observability stack" version=1
+
+# Telemetry flows from instrumented services through collectors into storage and tools.
+group services "Instrumented services" color=blue
+group web_tier "Web tier" in=services
+node gateway "API gateway" in=web_tier
+node frontend "Frontend SSR" in=web_tier
+group worker_tier "Worker tier" in=services
+node jobs "Job runner" in=worker_tier
+node mailer "Mailer" in=worker_tier
+
+group pipeline "Collection" color=amber
+node agent "OTel agent" in=pipeline
+node collector "OTel collector" in=pipeline
+node sampler "Tail sampler" in=pipeline shape=diamond
+
+group storage "Storage" color=violet
+node metrics "Metrics (Prometheus)" in=storage
+node traces "Traces (Tempo)" in=storage
+node logs "Logs (Loki)" in=storage
+
+group tools "Tools" color=mint
+node dashboards "Dashboards" in=tools
+node alerts "Alert rules" in=tools
+node pager "Pager" in=tools shape=pill color=rose
+
+edge t1 gateway -> agent
+edge t2 frontend -> agent
+edge t3 jobs -> agent
+edge t4 mailer -> agent
+edge c1 agent -> collector "OTLP"
+edge c2 collector -> metrics "metrics"
+edge c3 collector -> sampler "spans"
+edge c4 sampler -> traces "keep 10%"
+edge c5 collector -> logs "logs"
+edge q1 metrics -> dashboards
+edge q2 traces -> dashboards
+edge q3 logs -> dashboards
+edge q4 metrics -> alerts
+edge q5 alerts -> pager kind=async
+
+layout root flow gap=56 direction=right

@@ -1,0 +1,42 @@
+diagram "Data lakehouse" version=1
+
+# Medallion layers as containers between external sources and consumers.
+group sources "Sources" color=slate
+node app_db "App database" in=sources
+node events "Clickstream" in=sources
+node crm "CRM export" in=sources
+
+group bronze "Bronze · raw" color=amber
+node raw_tables "Raw tables" in=bronze
+node raw_events "Raw events" in=bronze
+
+group silver "Silver · cleaned" color=blue
+node customers "Customers" in=silver
+node orders "Orders" in=silver
+node sessions "Sessions" in=silver
+
+group gold "Gold · business" color=mint
+node revenue "Daily revenue" in=gold
+node funnel "Conversion funnel" in=gold
+node churn "Churn features" in=gold
+
+group consumers "Consumers" color=violet
+node bi "BI dashboards" in=consumers
+node ml "ML models" in=consumers
+
+edge cdc app_db -> raw_tables "CDC"
+edge stream events -> raw_events "stream"
+edge batch crm -> raw_tables "nightly" kind=async
+edge c1 raw_tables -> customers
+edge c2 raw_tables -> orders
+edge c3 raw_events -> sessions
+edge g1 orders -> revenue
+edge g2 sessions -> funnel
+edge g3 orders -> funnel
+edge g4 customers -> churn
+edge g5 sessions -> churn
+edge u1 revenue -> bi
+edge u2 funnel -> bi
+edge u3 churn -> ml
+
+layout root flow gap=56 direction=right
