@@ -69,6 +69,9 @@ See [current verification](docs/CHECKS.md) for browser coverage and limits.
 
 ## Source and product history
 
+The planned CLI uses Changesets and GitHub Actions for npm releases.
+See [release setup](docs/RELEASING.md) for package activation and npm configuration.
+
 - `src/` contains the current application, components, controllers, engines, and workers.
 - `tests/` contains the engine checks and example fixtures.
 - [Application structure](docs/ARCHITECTURE.md) describes the current modules and state rules.
