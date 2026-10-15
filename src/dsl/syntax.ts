@@ -527,8 +527,9 @@ export function parseModel(source: string | SourceDoc): Model {
           m.hints.push({
             type: 'stay',
             id: hid,
-            x: num('x', 0, 0),
-            y: num('y', 0, 0),
+            // The root has no frame, so an arrangement can place objects left of or above 0,0.
+            x: num('x', 0),
+            y: num('y', 0),
             weight: num('weight', 8, 1, 100),
             line,
           });

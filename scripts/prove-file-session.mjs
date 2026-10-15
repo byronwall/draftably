@@ -67,7 +67,14 @@ async function waitFor(page, test, label, timeout = 4000) {
 }
 /** Wait until the viewer reports the file saved and the file holds what the viewer shows. */
 async function settled(page) {
-  await waitFor(page, () => window.diagramStudio.fileState().status === 'saved', 'saved');
+  await waitFor(
+    page,
+    () => {
+      const state = window.diagramStudio.fileState();
+      return state.status === 'saved' && !state.compiling;
+    },
+    'saved',
+  );
   const shown = await page.evaluate(() => window.diagramStudio.fileState().source);
   const until = Date.now() + 2000;
   while (read() !== shown && Date.now() < until) await sleep(50);

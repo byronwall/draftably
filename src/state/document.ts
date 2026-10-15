@@ -107,14 +107,19 @@ export function prepareForEdit() {
  * Handles every committed edit instead of the browser history while a diagram file is open, so
  * the edit can be written to the file. Returns whether the edit was kept.
  */
-type CommitHandler = (before: string, label: string) => boolean;
+type CommitHandler = (before: string, label: string, kind: EditKind) => boolean;
+/**
+ * `arrangement`: the edit is a drawing produced by a layout pass, a timeline step or the brush,
+ * saved as positions rather than translated move by move.
+ */
+export type EditKind = 'edit' | 'arrangement';
 let commitHandler: CommitHandler | null = null;
 export const setCommitHandler = (handler: CommitHandler | null) => (commitHandler = handler);
 
 /** Push an undo step if the document changed since `before`. Returns whether it did. */
-export function commit(before: string, label = 'Edit'): boolean {
+export function commit(before: string, label = 'Edit', kind: EditKind = 'edit'): boolean {
   if (before === snapshot()) return false;
-  if (commitHandler) return commitHandler(before, label);
+  if (commitHandler) return commitHandler(before, label, kind);
   pushUndo({ data: before, label });
   return true;
 }
@@ -139,11 +144,15 @@ export function annotateLastUndo(holds: HistoryEntry['holds']) {
 }
 
 /** Run `fn` against the document as one undoable step. */
-export function transact(label: string, fn: (draft: Diagram) => void): boolean {
+export function transact(
+  label: string,
+  fn: (draft: Diagram) => void,
+  kind: EditKind = 'edit',
+): boolean {
   prepareForEdit();
   const before = snapshot();
   state.setDoc(produce(fn));
-  return commit(before, label);
+  return commit(before, label, kind);
 }
 
 /** Change the document without recording history, e.g. layout settings. */

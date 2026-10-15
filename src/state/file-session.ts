@@ -15,8 +15,19 @@ import { unwrap } from 'solid-js/store';
 import { checkSource, compile, type Diagnostic, type Scene } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
-import { movedOutsideEdit, reflowGroup, translateEdit, UnsupportedEdit } from '../dsl/translate';
-import { setLayoutRecipe, setRouting, UnstorableLayout } from '../dsl/layout-edits';
+import {
+  anchorSurroundings,
+  movedOutsideEdit,
+  reflowGroup,
+  translateEdit,
+  UnsupportedEdit,
+} from '../dsl/translate';
+import {
+  setLayoutRecipe,
+  setRouting,
+  UnstorableLayout,
+  writeArrangement,
+} from '../dsl/layout-edits';
 import { normalize } from '../model/document';
 import type { Diagram, LayoutSettings, RoutingSettings } from '../model/types';
 import { clone } from '../model/geometry';
@@ -29,6 +40,7 @@ import {
   setCommitHandler,
   setHistoryHandler,
   setSelection,
+  type EditKind,
 } from './document';
 import { toast } from './toast';
 
@@ -286,7 +298,19 @@ function snapBack(message: string) {
   return false;
 }
 
-function handleEdit(before: string, label: string): boolean {
+/** A drawing from a layout pass, timeline step or brush stroke, as positions in the source. */
+function arrangementEdit(scene: Scene, label: string) {
+  const source = readSource(localSource),
+    after = normalize(JSON.parse(JSON.stringify(unwrap(doc))));
+  const placed = writeArrangement(source, scene, after),
+    anchored = anchorSurroundings(source, scene, placed);
+  const notes = placed.length
+    ? [`${placed.length} positions` + (anchored.length ? ` · anchored ${anchored.length}` : '')]
+    : [];
+  return { source, ids: new Map<string, string>(), notes: [label, ...notes] };
+}
+
+function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boolean {
   if (state.sourceError()) return snapBack('Fix the error in the file before editing here.');
   if (state.proposal()) return snapBack('Keep the file or save your edit before editing again.');
   if (state.compiling()) return snapBack('Still laying out the file. Try again in a moment.');
@@ -294,14 +318,17 @@ function handleEdit(before: string, label: string): boolean {
   if (!scene) return snapBack('The file has no valid drawing yet.');
   let result;
   try {
-    result = translateEdit({
-      source: readSource(localSource),
-      scene,
-      before: normalize(JSON.parse(before)),
-      after: normalize(JSON.parse(JSON.stringify(unwrap(doc)))),
-      label,
-      selection: selectedIds(),
-    });
+    result =
+      kind === 'arrangement'
+        ? arrangementEdit(scene, label)
+        : translateEdit({
+            source: readSource(localSource),
+            scene,
+            before: normalize(JSON.parse(before)),
+            after: normalize(JSON.parse(JSON.stringify(unwrap(doc)))),
+            label,
+            selection: selectedIds(),
+          });
   } catch (error) {
     if (error instanceof UnsupportedEdit) return snapBack(error.message);
     throw error;

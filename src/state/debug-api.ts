@@ -43,7 +43,7 @@ import {
   runLayout,
 } from './layout';
 import { measured } from '../dsl/project';
-import { currentSource, fileDiagnostics, fileStatus } from './file-session';
+import { currentSource, fileCompiling, fileDiagnostics, fileStatus } from './file-session';
 import { routes, routingReport, sceneRects, visibleScene } from './scene';
 import {
   activateBrush,
@@ -93,6 +93,7 @@ export function installDebugApi() {
     fileGeometry: () => measured(doc, sceneRects(), routes()),
     fileState: () => ({
       status: fileStatus(),
+      compiling: fileCompiling(),
       source: currentSource(),
       diagnostics: clone(fileDiagnostics()),
     }),

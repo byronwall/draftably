@@ -10,7 +10,10 @@ import {
   setLayoutRecipe,
   setRouting,
   UnstorableLayout,
+  writeArrangement,
 } from '../src/dsl/layout-edits';
+import { projectScene } from '../src/dsl/project';
+import type { Diagram } from '../src/model/types';
 import { parseModel, printSource, readSource } from '../src/dsl/syntax';
 
 const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
@@ -93,5 +96,64 @@ describe('routing line', () => {
 
     setRouting(again, RouteLab.defaults);
     expect(printSource(again)).not.toContain('routing');
+  });
+});
+
+describe('arrangements', () => {
+  const pipeline = readFileSync(path.join(__dirname, '../examples/order-pipeline.draft'), 'utf8');
+
+  /** Run an engine on the compiled file, save the result as positions, and compile it again. */
+  async function roundTrip(text: string, options: object) {
+    const scene = await compile(text),
+      doc = projectScene(scene);
+    const { document: after } = await LayoutLab.compute(doc, options);
+    const source = readSource(text),
+      placed = writeArrangement(source, scene, after);
+    const next = printSource(source);
+    return { after, placed, next, compiled: await compile(next) };
+  }
+
+  /** Largest distance between where the engine put a node and where the file now draws it. */
+  const drift = (after: Diagram, compiled: Awaited<ReturnType<typeof compile>>) =>
+    Math.max(
+      ...after.graph.nodes.map(n => {
+        const a = after.layout.nodes[n.id],
+          b = compiled.byId.get(n.id)!;
+        return Math.hypot(a.x - b.x, a.y - b.y);
+      }),
+    );
+
+  it('saves a pass as stays that compile back to the same drawing', async () => {
+    const { after, placed, next, compiled } = await roundTrip(pipeline, {
+      algorithm: 'force',
+      mode: 'pass',
+      maxMove: 120,
+    });
+    expect(placed.length).toBeGreaterThan(0);
+    expect(next.match(/^stay /gm)!.length).toBe(placed.length);
+    expect(drift(after, compiled)).toBeLessThan(1.5);
+    expect(compiled.diagnostics.filter(d => d.level === 'error')).toEqual([]);
+  });
+
+  it('saves a warm-started rebuild across nested groups', async () => {
+    const { after, compiled } = await roundTrip(pipeline, {
+      algorithm: 'layered',
+      mode: 'rebuild',
+      warmStart: true,
+      direction: 'DOWN',
+      growContainers: true,
+    });
+    expect(drift(after, compiled)).toBeLessThan(1.5);
+  });
+
+  it('updates existing stays in place and never moves pins', async () => {
+    const text = checkout + '\nstay web x=4 y=4\npin db x=900 y=40\n';
+    const { next, compiled } = await roundTrip(text, {
+      algorithm: 'force',
+      mode: 'rebuild',
+    });
+    expect(next.indexOf('stay web')).toBe(text.indexOf('stay web'));
+    expect(next).toContain('pin db x=900 y=40');
+    expect(compiled.byId.get('db')!).toMatchObject({ x: 900, y: 40 });
   });
 });

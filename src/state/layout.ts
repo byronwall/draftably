@@ -149,7 +149,7 @@ export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutO
     if (preview) {
       state.setPreview({ before, mode: result.report.mode === 'rebuild' ? 'rebuild' : 'pass' });
       setPersistenceBlocked(true);
-    } else commit(before, 'Layout: ' + result.report.name);
+    } else commit(before, 'Layout: ' + result.report.name, 'arrangement');
     await animateLayout(old, clone(doc.layout.nodes));
     if (fit) fitView();
     const r = result.report;
@@ -283,7 +283,7 @@ export function acceptPreview() {
     setPersistenceBlocked(false);
   });
   if (p.file) void commitSource(p.file.source, p.file.label, p.file.message);
-  else commit(p.before, 'Layout preview');
+  else commit(p.before, 'Layout preview', 'arrangement');
 }
 
 export function discardPreview() {

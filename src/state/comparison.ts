@@ -336,17 +336,27 @@ export function applyCandidate(i: number) {
     );
     return false;
   }
-  if (fileMode()) return applyToFile(cell);
+  // Rebuild and routing candidates save a recipe line; warm-start and pass candidates depend on
+  // the current drawing and are saved as positions, like any other arrangement.
+  if (fileMode() && cell.source) return applyToFile({ ...cell, source: cell.source });
+  if (fileMode() && fileBlocked()) {
+    setProgress(fileBlocked()!, true);
+    return false;
+  }
   const winner = normalize(clone(cell.result.document)),
     routing = clone(cell.result.routing),
     report = cell.result.report && clone(cell.result.report),
     label = cell.title,
     camera = { ...doc.camera };
   closeComparison();
-  transact('Apply comparison: ' + label, d => {
-    Object.assign(d, winner);
-    d.camera = camera;
-  });
+  transact(
+    'Apply comparison: ' + label,
+    d => {
+      Object.assign(d, winner);
+      d.camera = camera;
+    },
+    'arrangement',
+  );
   batch(() => {
     setSelection([]);
     setConnectFrom(null);
@@ -367,18 +377,11 @@ export function candidateChange(source: string): string {
   );
 }
 
-/** Save a file candidate's source. Candidates that start from the drawing are not stored yet. */
-function applyToFile(cell: Candidate) {
+/** Save a file candidate's source: its layout recipe or routing line. */
+function applyToFile(cell: Candidate & { source: string }) {
   const label =
     cell.title +
     (cell.subtitle && cell.subtitle !== 'One-parameter sweep' ? ` · ${cell.subtitle}` : '');
-  if (!cell.source) {
-    setProgress(
-      'Warm-start and pass candidates depend on the current drawing. Use a rebuild run to save a recipe.',
-      true,
-    );
-    return false;
-  }
   const blocked = fileBlocked();
   if (blocked) {
     setProgress(blocked, true);

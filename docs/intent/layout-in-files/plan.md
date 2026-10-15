@@ -2,11 +2,17 @@
 title: 'Automatic layout in diagram files — restoration plan'
 slug: 'layout-in-files'
 phase: plan
-status: draft
+status: implemented
 last_updated: '2026-10-14'
 ---
 
 # Automatic layout in diagram files
+
+> Implemented in four stacked PRs: byronwall/draftably#10 (`.draft` rename), #11 (engine
+> recipes and `routing`), #12 (Rebuild, Compare and routing write recipes) and #13 (Improve,
+> timeline and brush write arrangements). Two choices differ from the draft below: Compare
+> candidates in file mode are compiled source variants, so previews are exact; and arrangements
+> carry no provenance comment, because `stay` lines are updated in place.
 
 ## What happened
 
@@ -33,14 +39,14 @@ A `.draft` file never stores a picture of the final layout. The same source alwa
 the same geometry. Whether a layout result can be saved as a recipe depends on whether it can be
 recomputed from the source alone:
 
-| Tool                                             | Engine mode                       | Recomputable from source? |
-| ------------------------------------------------ | --------------------------------- | ------------------------- |
-| Layout options + **Rebuild**                     | `rebuild`, cold start             | Yes. The engine reports `deterministic: true`. |
-| **Compare** layout/algorithm grid (rebuild run)  | `rebuild`, cold start per cell    | Yes.                      |
-| Compare routing parameters                       | Router settings                   | Yes, if the router settings are stored. |
-| **Improve** (pass)                               | Warm start from current geometry  | No. It depends on where things were. |
-| **Timeline** step                                | `rebuild` with `warmStart` + trace | No. Step 42 means something else once a node is added. |
-| **Brush** stroke                                 | Local, path dependent             | No.                       |
+| Tool                                            | Engine mode                        | Recomputable from source?                              |
+| ----------------------------------------------- | ---------------------------------- | ------------------------------------------------------ |
+| Layout options + **Rebuild**                    | `rebuild`, cold start              | Yes. The engine reports `deterministic: true`.         |
+| **Compare** layout/algorithm grid (rebuild run) | `rebuild`, cold start per cell     | Yes.                                                   |
+| Compare routing parameters                      | Router settings                    | Yes, if the router settings are stored.                |
+| **Improve** (pass)                              | Warm start from current geometry   | No. It depends on where things were.                   |
+| **Timeline** step                               | `rebuild` with `warmStart` + trace | No. Step 42 means something else once a node is added. |
+| **Brush** stroke                                | Local, path dependent              | No.                                                    |
 
 The engine is safe to run in the compiler: its header says it is Browser, Worker and Node
 compatible, it uses no random start, and its `await`s only yield to the event loop.

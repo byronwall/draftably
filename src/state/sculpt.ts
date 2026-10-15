@@ -336,7 +336,7 @@ export function keepStep({ brush = false } = {}) {
   );
   const moved = movements.filter(d => d > 0.01).length;
   setAdoptedRoutes({ fingerprint: routingFingerprint(doc), result: routed });
-  commit(before, 'Layout timeline · step ' + step);
+  commit(before, 'Layout timeline · step ' + step, 'arrangement');
   setLayoutReport({
     ...data.report,
     mode: 'journey',
@@ -733,7 +733,7 @@ export function brushPointerUp(e?: PointerEvent): boolean {
     return true;
   }
   setDoc('layout', 'nodes', clone(st.working.layout.nodes));
-  const changed = commit(st.before, 'Local layout brush');
+  const changed = commit(st.before, 'Local layout brush', 'arrangement');
   recordHolds(st.holdsBefore, changed, st.before);
   refreshHover();
   console.info('[brush] stroke', { samples: st.samples, moved: st.moved.size, undo: changed });
@@ -774,7 +774,7 @@ export function brushDab(point: Point = state.brushPoint() || canvasCenter()) {
     recordHolds(oldHolds, false, before);
   } else {
     setDoc('layout', 'nodes', result.document.layout.nodes);
-    const changed = commit(before, 'Local layout brush');
+    const changed = commit(before, 'Local layout brush', 'arrangement');
     if (result.mode === 'restore' && state.brushSettings().holdRestored)
       state.setHolds(new Set([...state.holds(), ...result.moved]));
     recordHolds(oldHolds, changed, before);

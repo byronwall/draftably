@@ -99,15 +99,15 @@ Settings: `clearance`, `port-gap`, `edge-gap`, `bend-penalty`, `crossing-penalty
 Refinements adjust the automatic layout for one object. Positions are relative to the parent's
 content area, not the whole canvas, so moving a group moves everything inside it.
 
-| Statement                                | Strength | Meaning                                                             |
-| ---------------------------------------- | -------- | ------------------------------------------------------------------- |
-| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling. `strength=required` enforces side and gap. |
-| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                 |
-| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes.        |
-| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.             |
-| `size id width= height=`                 | —        | Requested node size. Long labels can make it taller.                |
-| `order scope id...`                      | soft     | Preferred order of a scope's children.                              |
-| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.          |
+| Statement                                | Strength | Meaning                                                                                |
+| ---------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
+| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling. `strength=required` enforces side and gap.                    |
+| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                    |
+| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these. |
+| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                |
+| `size id width= height=`                 | —        | Requested node size. Long labels can make it taller.                                   |
+| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                 |
+| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                             |
 
 Soft rules give way to keep siblings from overlapping. When one does, `check` reports it with its
 line. Pins never move; conflicting pins are reported as errors.
@@ -145,6 +145,7 @@ Edits made in the viewer are written back to the file as readable statements:
 | Wrap in a container or ungroup        | A `group` and the members' `in=`.                                  |
 | Clear manual markers                  | Removes the object's soft position refinements.                    |
 | Rebuild, or Apply in Compare          | `layout scope engine=…` for the diagram or the selected container. |
+| Improve, a timeline step, the brush   | `stay` for each object that moved, plus anchors around them.       |
 | Routing options, or a routing Compare | The `routing` line.                                                |
 
 An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
@@ -169,5 +170,14 @@ shows; pins, sizes and the nested groups' own `layout` lines stay. Layout option
 scope's current line and the one a rebuild would write. The routing menu and routing comparisons
 write the `routing` line.
 
-Layout passes, the timeline, the brush, connection bends, label positions, start/end preferences
-and images are unavailable while a file is open, because the file cannot store their results yet.
+**Improve**, **Preview pass**, a kept **timeline** step, a **brush** stroke, and warm-start or
+pass candidates in Compare all start from the current drawing, so a recipe could not reproduce
+them. They are saved as an arrangement instead: each object that moved gets a soft `stay` at its
+new position relative to its parent (an existing `stay` is updated in place), and the objects
+around them are anchored as for a drag. Groups follow their contents, so a group whose children
+moved left or up moves with them. Pins never move. A root-level `stay` may be negative, because
+the root has no frame.
+
+Checkpoints are unavailable while a file is open, because undo steps through the file's versions.
+Connection bends, label positions, start/end preferences and images are unavailable because the
+file cannot store them yet.

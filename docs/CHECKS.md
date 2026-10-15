@@ -31,6 +31,15 @@ redoes, appends a connected node from outside, restarts the server, writes inval
 races an outside write against a viewer save. At each step it compares the browser's geometry
 with `pnpm draftably inspect --json`. Screenshots go to `tmp/proof/`.
 
+## Layout tools in file mode
+
+`pnpm build && pnpm prove:layout` drives the editor against a temporary copy of
+`examples/order-pipeline.draft`. It applies a Compare candidate (a layout recipe), runs Improve,
+keeps a timeline step and paints a brush stroke (positions), appends a node from outside, and
+restarts the server. After every step the browser's geometry must equal `draftably inspect` of
+the saved file, and the arranged region away from the addition must not move. Screenshots go to
+`tmp/proof-layout/`.
+
 ## Browser
 
 The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at 1440 × 900 and

@@ -23,7 +23,8 @@
     "release:check": "pnpm check && pnpm --dir packages/cli --if-present run build && pnpm --dir packages/cli --if-present run test && pnpm cli:pack-check",
     "release": "pnpm release:check && changeset publish",
     "draftably": "node scripts/draftably.mjs",
-    "prove:file": "node scripts/prove-file-session.mjs"
+    "prove:file": "node scripts/prove-file-session.mjs",
+    "prove:layout": "node scripts/prove-layout-tools.mjs"
   },
   "dependencies": {
     "solid-js": "^1.9.9"

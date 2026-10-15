@@ -6,11 +6,15 @@
  */
 import { LayoutLab } from '../engines/layout-engine.js';
 import { RouteLab } from '../engines/routing-engine.js';
-import type { LayoutSettings, RoutingSettings } from '../model/types';
-import type { Scene } from './compile';
+import type { Diagram, LayoutSettings, Rect, RoutingSettings } from '../model/types';
+import type { Scene, SceneObject } from './compile';
+import { contentOrigin, GROUP_HEADER, GROUP_INSET } from './frame';
 import {
   addRefinement,
+  clearPosition,
   getAttr,
+  num,
+  setAttr,
   insertAfter,
   layoutStatement,
   removeWhere,
@@ -148,4 +152,81 @@ export function setRouting(source: SourceDoc, routing: RoutingSettings) {
       insertAfter(source, next, s => s.command === 'layout');
     else addRefinement(source, next);
   }
+}
+
+// --- Arrangements ----------------------------------------------------------------------------
+
+/** Set an object's soft `stay`, updating an existing one in place to keep the diff small. */
+function setStay(source: SourceDoc, id: string, x: number, y: number) {
+  const existing = statements(source).find(s => s.command === 'stay' && s.args[0]?.value === id);
+  removeWhere(source, s => ['near', 'nudge'].includes(s.command) && s.args[0]?.value === id);
+  if (existing) {
+    setAttr(existing, 'x', num(x));
+    setAttr(existing, 'y', num(y));
+  } else {
+    clearPosition(source, id);
+    addRefinement(
+      source,
+      statement(
+        'stay',
+        [bare(id)],
+        [
+          ['x', num(x)],
+          ['y', num(y)],
+        ],
+      ),
+    );
+  }
+}
+
+/**
+ * Save a drawing that a layout pass, a timeline step or the brush produced. Such results depend
+ * on the drawing they started from, so they cannot be recomputed from a recipe; instead each
+ * object that moved gets a soft `stay` at its new position, relative to its parent.
+ *
+ * Groups are fitted to their contents first, as the compiler sizes them, so a group whose
+ * children moved left or up moves with them instead of clipping them. Pinned objects never move.
+ * Returns the ids that were given a position.
+ */
+export function writeArrangement(source: SourceDoc, scene: Scene, after: Diagram): string[] {
+  const children = new Map<string, SceneObject[]>();
+  for (const o of scene.objects) children.set(o.parent, [...(children.get(o.parent) ?? []), o]);
+  const pinned = new Set(scene.model.hints.flatMap(h => (h.type === 'pin' ? [h.id] : [])));
+  const fitted = new Map<string, Rect>();
+  const fit = (o: SceneObject): Rect => {
+    const known = fitted.get(o.id);
+    if (known) return known;
+    const r = after.layout.nodes[o.id] ?? o,
+      kids = (children.get(o.id) ?? []).map(fit);
+    const rect = kids.length
+      ? (() => {
+          const x0 = Math.min(...kids.map(k => k.x)),
+            y0 = Math.min(...kids.map(k => k.y)),
+            x1 = Math.max(...kids.map(k => k.x + k.w)),
+            y1 = Math.max(...kids.map(k => k.y + k.h));
+          return {
+            x: x0 - GROUP_INSET,
+            y: y0 - GROUP_HEADER,
+            w: x1 - x0 + 2 * GROUP_INSET,
+            h: y1 - y0 + GROUP_HEADER + GROUP_INSET,
+          };
+        })()
+      : { x: r.x, y: r.y, w: o.w, h: o.h };
+    fitted.set(o.id, rect);
+    return rect;
+  };
+  scene.objects.forEach(fit);
+
+  const placed: string[] = [];
+  for (const o of scene.objects) {
+    if (pinned.has(o.id)) continue;
+    const r = fitted.get(o.id)!,
+      origin = o.parent === 'root' ? { x: 0, y: 0 } : contentOrigin(fitted.get(o.parent)!);
+    const x = Math.round(r.x - origin.x),
+      y = Math.round(r.y - origin.y);
+    if (Math.abs(x - o.localX) < 1 && Math.abs(y - o.localY) < 1) continue;
+    setStay(source, o.id, x, y);
+    placed.push(o.id);
+  }
+  return placed;
 }
