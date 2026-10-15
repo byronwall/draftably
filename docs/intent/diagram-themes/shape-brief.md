@@ -43,19 +43,19 @@ Diagram appearance
 
 ## Behavior
 
-| Situation | Expected result |
-| --- | --- |
-| A diagram has no appearance declaration | Use Graphite; do not infer appearance from editor mode. |
-| The author chooses Fieldnotes | Diagram, group, and node titles use serif type. Annotations stay sans-serif. |
-| The author changes a color or shade | Repaint without changing geometry. Keep distinct families and readable text. |
-| A node omits its shade | Use the diagram default, initially 500. Color inheritance does not force shade inheritance. |
-| A node references an undefined custom family or shade | Report a source error; keep the last valid drawing. |
-| The author changes padding or type | Recalculate automatic sizes and layout from the same saved inputs. |
-| A node has an explicit size or pin | Keep that authored constraint. Report text overflow without silent resizing or movement. |
-| A larger title reaches a group boundary | Reserve enough header space; keep the title clear of children and borders. |
-| The author selects another preset | Clear built-in overrides in one undoable edit. Keep custom color definitions and object references. |
-| A source edit contains an invalid theme or value | Report the source line and keep the last valid drawing. |
-| An agent or human edits theme/style declarations | Apply saved DSL values in the viewer, CLI, and exports without separate configuration. |
+| Situation                                             | Expected result                                                                                     |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| A diagram has no appearance declaration               | Use Graphite; do not infer appearance from editor mode.                                             |
+| The author chooses Fieldnotes                         | Diagram, group, and node titles use serif type. Annotations stay sans-serif.                        |
+| The author changes a color or shade                   | Repaint without changing geometry. Keep distinct families and readable text.                        |
+| A node omits its shade                                | Use the diagram default, initially 500. Color inheritance does not force shade inheritance.         |
+| A node references an undefined custom family or shade | Report a source error; keep the last valid drawing.                                                 |
+| The author changes padding or type                    | Recalculate automatic sizes and layout from the same saved inputs.                                  |
+| A node has an explicit size or pin                    | Keep that authored constraint. Report text overflow without silent resizing or movement.            |
+| A larger title reaches a group boundary               | Reserve enough header space; keep the title clear of children and borders.                          |
+| The author selects another preset                     | Clear built-in overrides in one undoable edit. Keep custom color definitions and object references. |
+| A source edit contains an invalid theme or value      | Report the source line and keep the last valid drawing.                                             |
+| An agent or human edits theme/style declarations      | Apply saved DSL values in the viewer, CLI, and exports without separate configuration.              |
 
 ## Examples
 

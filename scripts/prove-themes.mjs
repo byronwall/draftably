@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* global window, document, getComputedStyle -- page.evaluate callbacks run in the browser. */
 /**
  * End-to-end proof for diagram themes (docs/intent/diagram-themes).
  *

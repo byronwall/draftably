@@ -111,7 +111,7 @@ export function visualBounds(doc: Diagram, id: string, title: string, r: Rect): 
 export function edgeLabelSize(label: string, r: ResolvedAppearance = resolveAppearance()) {
   const w = measureText(label, r.annotation) + 16;
   return {
-    w: Math.round(Math.min(280, Math.max(36, w))),
+    w: Math.round(Math.max(36, w)),
     h: Math.round(r.annotation.lineHeight + 6),
   };
 }

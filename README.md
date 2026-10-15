@@ -34,16 +34,16 @@ pnpm dev
 
 ## Use the editor
 
-| Action                          | Control                                          |
-| ------------------------------- | ------------------------------------------------ |
-| Create connected steps          | Press **N**, type a title, then press **Tab**.   |
-| Improve the current arrangement | Press **L**.                                     |
-| Preview a full rebuild          | Press **Shift+L**.                               |
-| Compare layouts and routing     | Select **Compare**, or press **Alt+E**.          |
-| Inspect recorded layout steps   | Select **Timeline**, or press **Alt+T**.         |
-| Adjust a local area             | Press **W** for the layout brush.                |
-| Return to Edit                  | Press **Escape** until previews and tools close. |
-| Open help                       | Press **?**.                                     |
+| Action                        | Control                                             |
+| ----------------------------- | --------------------------------------------------- |
+| Create connected steps        | Press **N**, type a title, then press **Tab**.      |
+| Tidy the current arrangement  | Press **L**.                                        |
+| Preview automatic layout      | Select **Automatic layout…**, or press **Shift+L**. |
+| Compare layouts and routing   | Select **Compare**, or press **Alt+E**.             |
+| Inspect recorded layout steps | Select **Timeline**, or press **Alt+T**.            |
+| Adjust a local area           | Press **W** for the layout brush.                   |
+| Return to Edit                | Press **Escape** until previews and tools close.    |
+| Open help                     | Press **?**.                                        |
 
 Comparison candidates all start from the same diagram. Apply one to keep it; Undo restores the
 starting diagram. To repair one area, bookmark an early timeline step, keep a later step with

@@ -31,4 +31,9 @@ const result = spawnSync(
   },
 );
 assert.equal(result.status, 0, result.stderr);
-console.log('Built CLI, viewer, and example passed.');
+const skill = spawnSync(process.execPath, [resolve(dir, pkg.bin.draftably), 'skill', 'print'], {
+  encoding: 'utf8',
+  timeout: 10000,
+});
+assert.match(skill.stdout, /^---\nname: draftably\n/, skill.stderr);
+console.log('Built CLI, viewer, example, and skill passed.');

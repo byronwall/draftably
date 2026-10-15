@@ -20,6 +20,7 @@ import {
   doc,
   isSelected,
   onBeforeEdit,
+  onSourceIdMap,
   selectedIds,
   selection,
   setSelection,
@@ -68,6 +69,11 @@ export function setTool(next: Tool) {
 
 const [inlineDraft, setInlineDraft] = createRoot(() => createSignal(''));
 export { inlineDraft, setInlineDraft };
+
+onSourceIdMap(mapId => {
+  const id = inlineEditId();
+  if (id) setInlineEditId(mapId(id));
+});
 
 export function startInlineEdit(id: string) {
   const entity = findNode(doc, id) ?? findGroup(doc, id) ?? findEdge(doc, id);
