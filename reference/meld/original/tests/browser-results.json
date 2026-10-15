@@ -1,0 +1,141 @@
+{
+  "browser": "144.0.7559.96",
+  "runtime": "Chromium, document injected with set_content; managed file:// navigation blocked",
+  "testScope": "Browser UI and export tested. Native unmanaged file:// opening and other browsers are not verified here.",
+  "passed": 26,
+  "failed": 0,
+  "pageErrors": [],
+  "networkRequests": [],
+  "tests": [
+    {
+      "name": "Application starts with no errors",
+      "passed": true,
+      "ms": 2.2
+    },
+    {
+      "name": "No external requests on startup",
+      "passed": true,
+      "ms": 0.0
+    },
+    {
+      "name": "Initial diagram contains 12 visible objects",
+      "passed": true,
+      "ms": 17.2
+    },
+    {
+      "name": "Named views change disclosure, modality and viewport",
+      "passed": true,
+      "ms": 208.8
+    },
+    {
+      "name": "Collapse/expand writes view state into DSL",
+      "passed": true,
+      "ms": 133.8
+    },
+    {
+      "name": "Real pointer drag round-trips a relative hint",
+      "passed": true,
+      "ms": 248.1
+    },
+    {
+      "name": "Pin drag persists exact parent-local coordinates",
+      "passed": true,
+      "ms": 71.7
+    },
+    {
+      "name": "Soft offset does not accumulate on rerender",
+      "passed": true,
+      "ms": 104.1
+    },
+    {
+      "name": "Container-specific layout changes write a view-local recipe",
+      "passed": true,
+      "ms": 58.9
+    },
+    {
+      "name": "Incremental add captures explicit stays and adds an edge",
+      "passed": true,
+      "ms": 172.3
+    },
+    {
+      "name": "Local reflow removes local soft hints and records outside stays",
+      "passed": true,
+      "ms": 122.3
+    },
+    {
+      "name": "Exact checkpoint round-trip and invalidation",
+      "passed": true,
+      "ms": 232.4
+    },
+    {
+      "name": "Viewport and modality edits are persisted source",
+      "passed": true,
+      "ms": 155.1
+    },
+    {
+      "name": "Invalid edits retain last-good diagram and block mutations",
+      "passed": true,
+      "ms": 639.2
+    },
+    {
+      "name": "Undo/redo restores source authority",
+      "passed": true,
+      "ms": 213.5
+    },
+    {
+      "name": "Rename preserves stable references",
+      "passed": true,
+      "ms": 71.8
+    },
+    {
+      "name": "Verify compares complete geometry for 20 fresh compiles",
+      "passed": true,
+      "ms": 106.8
+    },
+    {
+      "name": "SVG export is standalone, parseable and downloadable",
+      "passed": true,
+      "ms": 79.4
+    },
+    {
+      "name": "DSL export contains current source verbatim",
+      "passed": true,
+      "ms": 78.1
+    },
+    {
+      "name": "Project export/import round-trips source and history",
+      "passed": true,
+      "ms": 318.5
+    },
+    {
+      "name": "Fresh browser context reproduces an edited diagram from DSL alone",
+      "passed": true,
+      "ms": 252.1
+    },
+    {
+      "name": "User text is escaped in UI and SVG; DSL has no execution primitive",
+      "passed": true,
+      "ms": 29.6
+    },
+    {
+      "name": "Narrow browser layout has no horizontal page overflow",
+      "passed": true,
+      "ms": 273.3
+    },
+    {
+      "name": "Final example screenshots and static SVG artifacts",
+      "passed": true,
+      "ms": 489.2
+    },
+    {
+      "name": "Browser and Node agree exactly on every example/view geometry",
+      "passed": true,
+      "ms": 54.8
+    },
+    {
+      "name": "No runtime exceptions during integration tests",
+      "passed": true,
+      "ms": 0.0
+    }
+  ]
+}

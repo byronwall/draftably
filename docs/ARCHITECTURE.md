@@ -5,6 +5,8 @@ runs in a Web Worker. The code is split into three layers, each depending only o
 
 ```
 components/  →  state/  →  model/  →  engines/
+                   ↘  dsl/  ↗
+cli/  →  dsl/
 ```
 
 ## model/ — pure data and operations
@@ -50,6 +52,20 @@ Each module owns one concern and exposes signals plus the actions that change th
 - **Finish pending work before an edit.** Modules register `onBeforeEdit` handlers to commit an
   inline label, accept a layout preview, close a timeline or finish a drag.
 - **Camera movement is not an edit.** It saves with the document but never creates undo steps.
+
+## dsl/ and cli/ — diagram files
+
+`dsl/` reads, formats and compiles `.meld` files (see [Diagram files](DSL.md)). It is pure
+TypeScript shared by the browser and the command line.
+
+| File         | Responsibility                                                                       |
+| ------------ | ------------------------------------------------------------------------------------ |
+| `syntax.ts`  | Source lines with comments, the formatter, and the validated model.                  |
+| `compile.ts` | Layout recipes and refinements for one fixed render context; diagnostics with lines. |
+| `project.ts` | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.  |
+
+`cli/` is the `pnpm meld` command. `scripts/meld.mjs` rebuilds it with `vite build --ssr` when a
+source file is newer than `dist-cli/`.
 
 ## components/ — the interface
 

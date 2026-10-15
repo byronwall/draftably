@@ -1,0 +1,25 @@
+diagram "Preferences, not a frozen canvas" version=1
+
+group system "A container that can grow" color=teal priority=9
+node ingress "Ingress" in=system detail="Stable entry point"
+node worker "Worker" in=system detail="Placed relative to ingress"
+node queue "Queue" in=system kind=queue detail="Shares an alignment"
+node audit "Audit" in=system kind=database detail="A soft offset"
+node output "Output" kind=document detail="Outside the container"
+
+edge jobs ingress -> worker "jobs" importance=9
+edge buffer worker -> queue "buffer" kind=async importance=8
+edge record worker -> audit "record" kind=data importance=6
+edge done queue -> output "deliver" importance=9
+
+layout root row gap=60
+layout system grid columns=2 gap=48 min-width=510 min-height=310
+
+view explore "Explore" mode=interactive width=1100 height=720 detail=full edges=all
+view brief "Briefing" mode=static width=960 height=540 detail=auto edges=primary
+
+# All hints are editable, optional, and scoped to a view.
+order system ingress worker audit queue view=explore
+near worker ingress side=right gap=48 offset=0 view=explore
+align x worker queue strength=required view=explore
+nudge audit dx=0 dy=24 view=explore

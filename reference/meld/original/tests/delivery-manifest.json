@@ -1,0 +1,23 @@
+{
+  "project": "Meld \u2014 diagram lab",
+  "version": "meld-0.1",
+  "researchDate": "2026-09-28",
+  "coreTests": {
+    "passed": 45,
+    "failed": 0,
+    "runtime": "Node v22.16.0, Linux"
+  },
+  "browserTests": {
+    "passed": 26,
+    "failed": 0,
+    "runtime": "Chromium 144.0.7559.96, Linux",
+    "method": "Playwright set_content; managed browser policy blocks file:// navigation"
+  },
+  "checksums": {
+    "src/meld-core.js": "57ddac4ace4d0ae65f09e8bdef669ee6378ca89955f8609b602ec5e93f917b8a",
+    "src/meld-ui.js": "ab13cf70b98337e9ba5c24b593a2507adf5839262efcc955e5ff30fbfa4cd73b",
+    "src/meld.css": "66226efe3d6c862a1d045c8e56a6a49ea913def55eab46bf3f90698a1f58fde8",
+    "src/template.html": "4d4e333e783be7b2cf05570c52739f18dcc6bffb403f63fc99ef27c5e6a293ba",
+    "meld-diagram-lab.html": "fd30b2f9522c3372a4de8d73afab8dff9d27f15665c7f1bda5af5de8eec1e599"
+  }
+}

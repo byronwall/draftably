@@ -1,0 +1,36 @@
+diagram "Build once. Inspect at every scale." version=1
+
+group author "Authoring" color=blue priority=8
+node human "Human" in=author kind=person detail="Structure and intent"
+node agent "Agent" in=author kind=app detail="Small semantic patches"
+
+group compiler "Diagram compiler" color=teal priority=10
+node parse "Parse + validate" in=compiler detail="Source-mapped diagnostics"
+node project "Project the view" in=compiler detail="Viewport + capabilities"
+node place "Solve layout" in=compiler detail="Auto, then preferences"
+node route "Route edges" in=compiler detail="Ports and boundaries"
+
+group outputs "Delivery" color=violet priority=6
+node browser "Browser" in=outputs kind=app detail="Explore and refine"
+node image "Static SVG" in=outputs kind=document detail="One clear message"
+node checkpoint "Checkpoint" in=outputs kind=document detail="Optional exact replay"
+
+edge human_input human -> parse "edit" importance=9
+edge agent_input agent -> parse "patch" importance=6
+edge ast parse -> project "model" importance=9
+edge plan project -> place "view" importance=9
+edge shape place -> route "geometry" importance=9
+edge rich route -> browser "interactive" importance=9
+edge print route -> image "static" importance=9
+edge replay place -> checkpoint "record" importance=5
+
+layout root flow direction=auto gap=52
+layout author column gap=26
+layout compiler column gap=32 min-width=230
+layout outputs column gap=26
+
+view explore "Explore" mode=interactive width=1100 height=800 detail=full edges=all
+view brief "Briefing" mode=static width=960 height=540 detail=auto edges=primary
+# A small static viewport gets a different arrangement, not just a smaller font.
+layout root grid columns=2 gap=24 view=card
+view card "Small card" mode=static width=480 height=320 detail=auto edges=primary

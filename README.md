@@ -58,10 +58,27 @@ src/
   engines/     Layout, routing, comparison and brush engines (plain JS with type declarations)
   workers/     The worker that runs engine computations off the main thread
   samples/     Example diagrams shown in the File menu
+  dsl/         The .meld language: parser, formatter, compiler and editor projection
+  cli/         The `pnpm meld` command
+examples/      Example .meld diagram files
 tests/         Vitest unit tests and the engine regression scripts
 reference/v7/  The original release, used by the engine parity test
+reference/meld/ The recovered Meld DSL prototype the .meld language is adapted from
+```
+
+## Diagram files
+
+`.meld` files describe a diagram as readable text that both a person and an agent can edit. See
+[Diagram files](docs/DSL.md) for the language. Check, format and inspect them from the terminal:
+
+```bash
+pnpm meld check examples/checkout.meld
+pnpm meld inspect examples/checkout.meld --svg > checkout.svg
 ```
 
 See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
 [Checks](docs/CHECKS.md) for what is tested. [Source record](docs/IMPORT.md) describes where the
 original release came from; its product notes live in [reference/v7/docs](reference/v7/docs).
+
+The [Diagram DSL initiative](docs/intent/diagram-dsl/shape-brief.md) records the goals and plan
+for shared file editing.

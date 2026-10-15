@@ -4,7 +4,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'reference', 'tmp', 'src/engines/*.js'] },
+  { ignores: ['dist', 'dist-cli', 'reference', 'tmp', 'src/engines/*.js'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -28,7 +28,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['tests/**', '*.config.*'],
+    files: ['tests/**', 'scripts/**', 'src/cli/**', 'src/server/**', '*.config.*'],
     languageOptions: { globals: globals.node },
   },
 );

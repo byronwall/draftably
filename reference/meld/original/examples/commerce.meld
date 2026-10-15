@@ -1,0 +1,41 @@
+diagram "A checkout, end to end" version=1
+
+# The model: stable IDs, meaningful groups, no coordinates.
+group clients "Customer channels" color=blue priority=8
+node web "Web app" in=clients kind=app detail="Browser checkout"
+node mobile "Mobile app" in=clients kind=app detail="Native checkout"
+
+group commerce "Commerce platform" color=teal priority=10
+node api "API gateway" in=commerce detail="One entry point"
+group workers "Domain services" in=commerce color=teal priority=6
+node orders "Orders" in=workers detail="Owns the order"
+node payments "Payments" in=workers detail="Authorizes payment"
+node events "Event stream" in=commerce kind=queue detail="Asynchronous handoff"
+
+group storage "Data layer" color=violet priority=4
+node db "Postgres" in=storage kind=database detail="System of record"
+node cache "Cache" in=storage kind=database detail="Fast reads"
+
+edge checkout web -> api "HTTPS" importance=9
+edge native mobile -> api "HTTPS" importance=6
+edge dispatch api -> orders "create order" importance=10
+edge charge orders -> payments "authorize" importance=9
+edge publish orders -> events "publish" kind=async importance=6
+edge write orders -> db "persist" kind=data importance=8
+edge lookup api -> cache "lookup" kind=data importance=4
+
+# Each container owns its layout; the parent arranges containers.
+layout root flow direction=auto gap=48
+layout clients column gap=24
+layout commerce column gap=28
+layout workers row gap=24
+layout storage column gap=24
+
+# Same model. Different communication contracts.
+view explore "Explore" mode=interactive width=1100 height=720 detail=auto edges=all
+view brief "Briefing" mode=static width=960 height=540 detail=auto edges=primary min-font=11
+# A small static viewport gets a different arrangement, not just a smaller font.
+layout root grid columns=2 gap=24 view=card
+view card "Small card" mode=static width=480 height=320 detail=auto edges=primary min-font=11
+
+# Drag a box. A refinement appears here, not a rewrite of the model.

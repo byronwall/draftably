@@ -1,0 +1,308 @@
+{
+  "runtime": "v22.16.0",
+  "platform": "linux",
+  "engine": "meld-0.1",
+  "passed": 45,
+  "failed": 0,
+  "tests": [
+    {
+      "name": "SHA-256 matches Node crypto for ASCII, Unicode, and multiblock inputs",
+      "passed": true,
+      "ms": 5.45
+    },
+    {
+      "name": "Quoted strings preserve comments and escaped quotes",
+      "passed": true,
+      "ms": 1.08
+    },
+    {
+      "name": "Forward references and declaration identity",
+      "passed": true,
+      "ms": 0.19
+    },
+    {
+      "name": "Unknown references have line diagnostics",
+      "passed": true,
+      "ms": 0.29
+    },
+    {
+      "name": "Unknown fields rejected",
+      "passed": true,
+      "ms": 0.11
+    },
+    {
+      "name": "Duplicate IDs rejected",
+      "passed": true,
+      "ms": 0.05
+    },
+    {
+      "name": "Duplicate attributes rejected",
+      "passed": true,
+      "ms": 0.05
+    },
+    {
+      "name": "Containment cycles rejected",
+      "passed": true,
+      "ms": 0.2
+    },
+    {
+      "name": "Cross-scope relative hints rejected",
+      "passed": true,
+      "ms": 0.18
+    },
+    {
+      "name": "Relative placement cycles rejected",
+      "passed": true,
+      "ms": 1.82
+    },
+    {
+      "name": "Invalid viewport rejected",
+      "passed": true,
+      "ms": 0.07
+    },
+    {
+      "name": "Containment is bottom-up and encloses every child",
+      "passed": true,
+      "ms": 18.59
+    },
+    {
+      "name": "Every example/view is reproducible across 30 fresh parses",
+      "passed": true,
+      "ms": 566.32
+    },
+    {
+      "name": "Reproducible in three fresh Node processes",
+      "passed": true,
+      "ms": 126.99
+    },
+    {
+      "name": "Comments and blank lines do not affect input/geometry",
+      "passed": true,
+      "ms": 0.63
+    },
+    {
+      "name": "Unrelated view edits do not affect selected geometry/key",
+      "passed": true,
+      "ms": 2.43
+    },
+    {
+      "name": "flow layout reproducibility/non-overlap",
+      "passed": true,
+      "ms": 2.86
+    },
+    {
+      "name": "row layout reproducibility/non-overlap",
+      "passed": true,
+      "ms": 2.97
+    },
+    {
+      "name": "column layout reproducibility/non-overlap",
+      "passed": true,
+      "ms": 2.48
+    },
+    {
+      "name": "grid layout reproducibility/non-overlap",
+      "passed": true,
+      "ms": 4.49
+    },
+    {
+      "name": "radial layout reproducibility/non-overlap",
+      "passed": true,
+      "ms": 6.98
+    },
+    {
+      "name": "Directed cycles handled by SCC condensation",
+      "passed": true,
+      "ms": 0.38
+    },
+    {
+      "name": "View-scoped layout overrides global recipe",
+      "passed": true,
+      "ms": 0.33
+    },
+    {
+      "name": "Explicit order survives rerender",
+      "passed": true,
+      "ms": 1.05
+    },
+    {
+      "name": "Required alignment unifies center variables",
+      "passed": true,
+      "ms": 1.62
+    },
+    {
+      "name": "Required separation is respected when feasible",
+      "passed": true,
+      "ms": 0.43
+    },
+    {
+      "name": "Hard pin remains exactly parent-local",
+      "passed": true,
+      "ms": 0.57
+    },
+    {
+      "name": "Unsatisfiable pinned overlap is diagnosed, not silently moved",
+      "passed": true,
+      "ms": 0.41
+    },
+    {
+      "name": "Conflicting required alignment and pins is diagnosed",
+      "passed": true,
+      "ms": 0.41
+    },
+    {
+      "name": "View-local position preference overrides global pin",
+      "passed": true,
+      "ms": 0.33
+    },
+    {
+      "name": "Nudges are fresh-base offsets, never cumulative",
+      "passed": true,
+      "ms": 3.55
+    },
+    {
+      "name": "Soft stays preserve an unconflicted insertion",
+      "passed": true,
+      "ms": 0.5
+    },
+    {
+      "name": "Static small card adapts without losing semantic model",
+      "passed": true,
+      "ms": 9.8
+    },
+    {
+      "name": "Full static detail warns when viewport is insufficient",
+      "passed": true,
+      "ms": 4.22
+    },
+    {
+      "name": "Interactive auto does not silently collapse content",
+      "passed": true,
+      "ms": 3.86
+    },
+    {
+      "name": "Collapse redirects and aggregates parallel edges with provenance",
+      "passed": true,
+      "ms": 1.64
+    },
+    {
+      "name": "Primary-edge policy discloses filtered edge count",
+      "passed": true,
+      "ms": 0.4
+    },
+    {
+      "name": "Focus includes immediate neighbors, not the entire graph",
+      "passed": true,
+      "ms": 0.58
+    },
+    {
+      "name": "Checkpoint replays complete serialized geometry exactly",
+      "passed": true,
+      "ms": 11.77
+    },
+    {
+      "name": "Checkpoint invalidates on content changes",
+      "passed": true,
+      "ms": 0.83
+    },
+    {
+      "name": "Checkpoint invalidates on viewport changes",
+      "passed": true,
+      "ms": 0.51
+    },
+    {
+      "name": "Checkpoint invalidates on intent changes",
+      "passed": true,
+      "ms": 1.95
+    },
+    {
+      "name": "Orphaned cached boxes do not block model edits",
+      "passed": true,
+      "ms": 0.54
+    },
+    {
+      "name": "Routes are orthogonal and start/end on source/target boundaries",
+      "passed": true,
+      "ms": 3.29
+    },
+    {
+      "name": "Examples have no unresolved layout/route warnings",
+      "passed": true,
+      "ms": 25.77
+    }
+  ],
+  "benchmarks": [
+    {
+      "example": "commerce",
+      "view": "explore",
+      "objects": 12,
+      "edges": 7,
+      "warmMedianMs": 1.14,
+      "p95Ms": 3.12,
+      "runs": 20
+    },
+    {
+      "example": "commerce",
+      "view": "brief",
+      "objects": 12,
+      "edges": 7,
+      "warmMedianMs": 2.24,
+      "p95Ms": 3.99,
+      "runs": 20
+    },
+    {
+      "example": "commerce",
+      "view": "card",
+      "objects": 12,
+      "edges": 7,
+      "warmMedianMs": 3.76,
+      "p95Ms": 6.05,
+      "runs": 20
+    },
+    {
+      "example": "pipeline",
+      "view": "explore",
+      "objects": 12,
+      "edges": 8,
+      "warmMedianMs": 0.98,
+      "p95Ms": 1.33,
+      "runs": 20
+    },
+    {
+      "example": "pipeline",
+      "view": "brief",
+      "objects": 12,
+      "edges": 8,
+      "warmMedianMs": 0.84,
+      "p95Ms": 1.23,
+      "runs": 20
+    },
+    {
+      "example": "pipeline",
+      "view": "card",
+      "objects": 12,
+      "edges": 8,
+      "warmMedianMs": 2.29,
+      "p95Ms": 3.27,
+      "runs": 20
+    },
+    {
+      "example": "constraints",
+      "view": "explore",
+      "objects": 6,
+      "edges": 4,
+      "warmMedianMs": 0.56,
+      "p95Ms": 1.45,
+      "runs": 20
+    },
+    {
+      "example": "constraints",
+      "view": "brief",
+      "objects": 6,
+      "edges": 4,
+      "warmMedianMs": 0.41,
+      "p95Ms": 0.79,
+      "runs": 20
+    }
+  ]
+}

@@ -9,5 +9,7 @@ export default defineConfig({
   plugins: [solid({ hot: false })],
   test: {
     include: ['tests/**/*.test.ts'],
+    // The tests cover model code only; they need no DOM.
+    environment: 'node',
   },
 });
