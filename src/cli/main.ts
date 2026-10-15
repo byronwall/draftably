@@ -16,8 +16,9 @@ Commands:
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
-  open <file> [--port N]    Edit the file in the viewer; saves go back to the file.
-                            Add --no-open to skip launching a browser.
+  open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
+       [--port N]           Without a file, start on a picker for the folder's diagrams,
+                            a new diagram, or an example. --no-open skips the browser.
 `;
 
 const describe = (d: Diagnostic) =>
@@ -61,10 +62,12 @@ export async function main(argv: string[]): Promise<number> {
       }
       case 'open': {
         const { openSession } = await import('./open');
-        const at = rest.indexOf('--port');
-        await openSession(path.resolve(file ?? ''), {
-          port: at >= 0 ? Number(rest[at + 1]) : 5180,
-          launch: !flag('--no-open'),
+        const args = [file, ...rest].filter((a): a is string => !!a);
+        const at = args.indexOf('--port');
+        const target = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--port');
+        await openSession(path.resolve(target ?? '.'), {
+          port: at >= 0 ? Number(args[at + 1]) : 5180,
+          launch: !args.includes('--no-open'),
         });
         return -1;
       }

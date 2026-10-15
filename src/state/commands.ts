@@ -28,6 +28,7 @@ import {
   toggleBrush,
 } from './sculpt';
 import { fileMode, reflowSelectedGroup } from './file-session';
+import { setStartOpen, startUrl, workspace } from './launch';
 import { toast } from './toast';
 import {
   inspectorOpen,
@@ -281,6 +282,13 @@ export const commands = {
     duringTimeline: true,
   },
 
+  start: {
+    label: 'New, open or example…',
+    icon: 'folder',
+    // With a served folder the start page lists its files; otherwise it opens over the editor.
+    run: () => (workspace() ? location.assign(startUrl()) : setStartOpen(true)),
+    duringTimeline: true,
+  },
   'new-diagram': { label: 'New diagram', icon: 'plus', run: actions.newDocument },
   open: {
     label: 'Open diagram…',
