@@ -3,11 +3,12 @@
 ## Automated
 
 ```sh
-pnpm typecheck
-pnpm lint
-pnpm test
-pnpm build
+pnpm check:fast   # typecheck, lint, format check, Vitest: about 10 seconds
+pnpm check        # check:fast, the engine suites (about 80 seconds) and the build
 ```
+
+Run `check:fast` while iterating and `check` before pushing. CI runs `pnpm release:check`, which
+is `check:fast`, the engine suites and the packaged-CLI proof.
 
 | Suite                                   | What it covers                                                                                                                                                                                                                                                                                               |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |

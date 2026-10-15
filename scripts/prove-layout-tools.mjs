@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* global window, document -- page.evaluate callbacks run in the browser. */
 /**
  * End-to-end proof for the layout tools in file mode (docs/intent/layout-in-files).
  *
