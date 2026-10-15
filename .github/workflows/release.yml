@@ -27,7 +27,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: pnpm
       - name: Check whether the CLI is ready for releases
         id: cli
         run: echo "ready=$(node -p 'require("./packages/cli/package.json").private === false')" >> "$GITHUB_OUTPUT"
