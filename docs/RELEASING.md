@@ -1,0 +1,80 @@
+# CLI releases
+
+The release flow follows explorEDA and Product Grid:
+
+1. Add a changeset with the CLI change.
+2. Merge it into `main`.
+3. GitHub Actions opens or updates the **Version Packages** pull request.
+4. Review the version and changelog. Merge that pull request.
+5. Actions checks, builds, tests, and packs the CLI. Changesets publishes it and creates a GitHub release.
+
+The workflow runs when `.changeset/` changes on `main`, or through **Run workflow**.
+Ordinary commits do not start a release. Manual runs on other branches skip publishing.
+The version command updates the pnpm lockfile with the package version.
+
+## Current boundary
+
+This checkout contains the static viewer. It does not contain the planned DSL CLI.
+`packages/cli` reserves its release location. Its name is temporary and `private` is `true`.
+The root viewer package remains private. No initial changeset exists yet.
+Release checks fail until the CLI implementation and package metadata are ready.
+
+## Activate the CLI package
+
+1. Choose the npm package name and executable name from the naming shortlist.
+2. Set `name` in `packages/cli/package.json`. Set `private` to `false`.
+3. Add the actual GitHub `repository.url` and `repository.directory` (`packages/cli`).
+4. Add the CLI implementation, a `build` script, and a `test` script.
+5. Add `bin` with the executable name and compiled JavaScript path under `dist/`.
+6. Build the viewer into the CLI's `dist/` tree. Include its workers and assets.
+7. Start the compiled CLI with `#!/usr/bin/env node`. Support `--help` without starting the server.
+8. Replace the package README with install, file format, and command instructions. Set the intended license.
+9. Run `pnpm release:check`. Test the packed archive from `tmp/cli-dist/` in a fresh directory.
+10. Verify file watching, viewer saves, and restart behavior from that archive.
+11. Run `pnpm changeset:add minor "Release the first diagram DSL CLI."`.
+
+Start the package at `0.0.0`; the first minor changeset produces `0.1.0`.
+The changeset helper reads the package name from its manifest, so it follows a rename.
+Keep runtime dependencies in the CLI manifest. Avoid imports into the repository source tree.
+Add the viewer build to the CLI build script so every release includes matching assets.
+
+## Configure GitHub and npm
+
+The checkout has no Git remote configured. Add the actual repository remote before using Changesets with GitHub.
+In GitHub **Settings → Actions → General**, allow Actions to create and approve pull requests.
+
+Configure an npm trusted publisher for the selected package:
+
+| Field | Value |
+| --- | --- |
+| Provider | GitHub Actions |
+| Organization or user | The actual GitHub repository owner |
+| Repository | The actual repository name |
+| Workflow filename | `release.yml` |
+| Environment | Leave empty; this workflow does not use one |
+| Allowed action | Direct publishing with `npm publish` |
+
+If npm requires the package to exist before setup, publish the first checked archive from your authenticated local session.
+Then configure the trusted publisher before the next Actions release.
+Do not add an npm token to this workflow. Changesets uses npm's OIDC authentication.
+The workflow uses GitHub-hosted Ubuntu and Node 24, which includes a compatible npm CLI.
+Trusted publishing requires npm 11.5.1 or later and Node 22.14 or later.
+See [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/).
+
+Provenance is disabled to match Product Grid and support a private source repository.
+For a public repository, set `NPM_CONFIG_PROVENANCE` to `true` after confirming the repository metadata.
+
+## Add each release note
+
+```sh
+pnpm changeset:add patch "Describe the change for CLI users."
+pnpm changeset:status
+```
+
+Use `minor` for features and `major` for breaking changes.
+Commit the generated `.changeset/*.md` file with the change.
+Do not run `pnpm release` during normal development; it publishes with your current npm credentials.
+
+GitHub Actions runs `pnpm release:check` before publishing.
+The package check requires public metadata and runs each built executable with `--help`.
+The package's own test script must cover the file/viewer loop and the packed runtime.
