@@ -10,26 +10,27 @@
  *
  * Run `pnpm build` first. Usage: pnpm prove:layout
  */
-import { execFileSync, spawn } from 'node:child_process';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright-core';
+import {
+  createProof,
+  same,
+  sleep,
+  startViewer,
+  stopViewer,
+  waitFor as wait,
+} from './lib/proof.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const port = 5198;
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draft-layout-proof-'));
 const file = path.join(dir, 'pipeline.draft');
-const out = path.join(root, 'tmp/proof-layout');
-fs.mkdirSync(out, { recursive: true });
+const proof = createProof(path.join(root, 'tmp/proof-layout'));
+const { check } = proof;
 fs.copyFileSync(path.join(root, 'examples/order-pipeline.draft'), file);
-
-const results = [];
-function check(name, ok, detail = '') {
-  results.push({ name, ok });
-  console.log(`${ok ? 'PASS' : 'FAIL'} ${name}${detail ? ` — ${detail}` : ''}`);
-}
 
 const cli = (...args) =>
   execFileSync(process.execPath, [path.join(root, 'scripts/draftably.mjs'), ...args], {
@@ -38,34 +39,13 @@ const cli = (...args) =>
   });
 const inspect = () => JSON.parse(cli('inspect', file, '--json'));
 const read = () => fs.readFileSync(file, 'utf8');
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const stays = text => (text.match(/^stay /gm) ?? []).length;
 
-function start() {
-  const child = spawn(
-    process.execPath,
-    [path.join(root, 'scripts/draftably.mjs'), 'open', file, '--port', String(port), '--no-open'],
-    { cwd: root, stdio: ['ignore', 'pipe', 'inherit'] },
-  );
-  return new Promise((resolve, reject) => {
-    child.stdout.on('data', chunk => String(chunk).includes('Viewer:') && resolve(child));
-    child.once('exit', code => reject(Error(`draftably open exited with ${code}`)));
-  });
-}
-const stop = child =>
-  new Promise(resolve => {
-    child.once('exit', resolve);
-    child.kill('SIGTERM');
-  });
+const start = (port = 0) =>
+  startViewer({ entry: path.join(root, 'scripts/draftably.mjs'), file, cwd: root, port });
 
-async function waitFor(page, test, label, timeout = 30000) {
-  const until = Date.now() + timeout;
-  for (;;) {
-    if (await page.evaluate(test).catch(() => false)) return true;
-    if (Date.now() > until) throw Error(`Timed out waiting for ${label}`);
-    await sleep(50);
-  }
-}
+// Engine layouts can take several seconds, so waits default to 30 seconds here.
+const waitFor = (page, test, label, timeout = 30000) => wait(page, test, label, timeout);
 /** Wait until a new revision is laid out, saved, and on disk. */
 async function settled(page, previous) {
   const until = Date.now() + 15000;
@@ -82,15 +62,10 @@ async function settled(page, previous) {
   return read() !== previous && read() === shown;
 }
 const browserGeometry = page => page.evaluate(() => window.diagramStudio.fileGeometry());
-const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const matches = async (page, name) =>
   check(`${name}: viewer matches draftably inspect`, same(await browserGeometry(page), inspect()));
 
-async function shot(page, name) {
-  await page.keyboard.press('1');
-  await sleep(250);
-  await page.screenshot({ path: path.join(out, name) });
-}
+const shot = (_page, name) => proof.shot(name);
 
 let server = await start();
 const browser = await chromium.launch();
@@ -98,8 +73,9 @@ const page = await browser.newPage({
   viewport: { width: 1440, height: 900 },
   deviceScaleFactor: 2,
 });
+proof.watch(page);
 try {
-  await page.goto(`http://127.0.0.1:${port}/?file=${path.basename(file)}`);
+  await page.goto(server.url);
   await waitFor(page, () => !!window.diagramStudio?.fileState, 'viewer');
   await matches(page, 'opened file');
 
@@ -107,7 +83,7 @@ try {
   let before = read();
   await page.keyboard.press('Alt+e');
   await waitFor(page, () => /\d+ of \d+ ready/.test(document.body.innerText), 'candidates');
-  await page.screenshot({ path: path.join(out, 'layout-1-compare.png') });
+  await page.screenshot({ path: path.join(proof.out, 'layout-1-compare.png') });
   await page.getByRole('button', { name: 'Apply' }).nth(1).click();
   check('compare apply saved', await settled(page, before));
   check('compare wrote a recipe', /^layout root engine=layered$/m.test(read()));
@@ -136,7 +112,7 @@ try {
     slider.dispatchEvent(new Event('input', { bubbles: true }));
   });
   await sleep(300);
-  await page.screenshot({ path: path.join(out, 'layout-3-timeline.png') });
+  await page.screenshot({ path: path.join(proof.out, 'layout-3-timeline.png') });
   await page.getByRole('button', { name: /Keep & edit/ }).click();
   check('timeline step saved', await settled(page, before));
   check('timeline step wrote positions', read() !== before && stays(read()) > 0);
@@ -179,8 +155,8 @@ try {
   await shot(page, 'layout-4-external-add.png');
 
   // 6. Restart: a fresh process and page draw the same thing.
-  await stop(server);
-  server = await start();
+  await stopViewer(server);
+  server = await start(server.port);
   await page.reload();
   await waitFor(page, () => window.diagramStudio?.fileState().status === 'saved', 'reload');
   await waitFor(page, () => !window.diagramStudio.fileState().compiling, 'laid out');
@@ -188,13 +164,9 @@ try {
 } catch (error) {
   check('proof ran to completion', false, error.message);
 } finally {
+  await proof.capture();
   await browser.close();
-  await stop(server);
+  await stopViewer(server);
 }
 
-const failed = results.filter(r => !r.ok);
-console.log(
-  `\n${results.length - failed.length}/${results.length} checks passed. Screenshots: tmp/proof-layout/`,
-);
-console.log(`Final file: ${file}`);
-process.exit(failed.length ? 1 : 0);
+proof.finish(file);

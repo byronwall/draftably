@@ -32,7 +32,14 @@ below against the installed CLI. Only the proof harness uses the repository's Pl
 The installed product has no runtime package dependencies or install scripts.
 
 GitHub's Check workflow and the release gate run `pnpm release:check`, including the clean-install
-CLI and HTTP proof. The full browser proof runs locally with an installed Playwright Chromium.
+CLI and HTTP proof. The workflow's `proofs` job runs `prove:file` and `prove:layout` in Chromium
+and uploads their screenshots when they fail.
+
+Both browser proofs share `scripts/lib/proof.mjs`. It starts `draftably open --port 0`, so a proof
+never collides with another worktree's viewer. When a check fails, the summary names it and the
+output folder gets `failure.png` (the page at the end of the run) and `failure.json` (failed checks,
+the viewer's file state and the last 50 console lines). One failed run is enough to start
+diagnosing; don't rerun until it passes.
 
 `pnpm build && pnpm prove:file` drives the real editor in Chromium (`playwright-core` with an
 installed Playwright Chromium) against a temporary copy of `examples/checkout.draft` served by
