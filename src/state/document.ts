@@ -189,10 +189,22 @@ function step(direction: 'undo' | 'redo') {
   toast((direction === 'undo' ? 'Undid ' : 'Redid ') + entry.label.toLowerCase());
 }
 
-export const undo = () => step('undo');
-export const redo = () => step('redo');
-export const canUndo = () => state.undoStack().length > 0;
-export const canRedo = () => state.redoStack().length > 0;
+/** Replaces the browser history while a diagram file is open: undo steps through its source. */
+interface HistoryHandler {
+  undo(): void;
+  redo(): void;
+  canUndo(): boolean;
+  canRedo(): boolean;
+}
+let historyHandler: HistoryHandler | null = null;
+export const setHistoryHandler = (handler: HistoryHandler | null) => (historyHandler = handler);
+
+export const undo = () => (historyHandler ? historyHandler.undo() : step('undo'));
+export const redo = () => (historyHandler ? historyHandler.redo() : step('redo'));
+export const canUndo = () =>
+  historyHandler ? historyHandler.canUndo() : state.undoStack().length > 0;
+export const canRedo = () =>
+  historyHandler ? historyHandler.canRedo() : state.redoStack().length > 0;
 
 // --- Camera ----------------------------------------------------------------------------------
 

@@ -27,6 +27,7 @@ import {
   timelineOpen,
   toggleBrush,
 } from './sculpt';
+import { fileMode } from './file-session';
 import { toast } from './toast';
 import {
   inspectorOpen,
@@ -297,8 +298,40 @@ export const commands = {
 
 export type CommandId = keyof typeof commands;
 
+/** Tools whose results a diagram file cannot store yet. */
+const FILE_UNSUPPORTED = new Set<string>([
+  'layout',
+  'layout-rebuild',
+  'layout-preview',
+  'layout-accept',
+  'layout-discard',
+  'layout-menu',
+  'layout-checkpoint',
+  'layout-restore',
+  'compare-layouts',
+  'compare-routes',
+  'reroute',
+  'timeline-toggle',
+  'timeline-reopen',
+  'timeline-save',
+  'brush-toggle',
+  'reset-route',
+  'mark-start',
+  'mark-end',
+  'fit-container',
+  'insert-image',
+  'replace-image',
+  'new-diagram',
+  'open',
+]);
+const unavailableInFile = (id: string) => fileMode() && FILE_UNSUPPORTED.has(id);
+
 export function runCommand(id: CommandId) {
   const command: Command = commands[id];
+  if (unavailableInFile(id)) {
+    toast('Not available while editing a diagram file. Its results cannot be saved to the file.');
+    return;
+  }
   if (timelineOpen() && !command.duringTimeline) {
     toast('Preview only. Keep this step or press Escape to cancel.');
     return;
@@ -315,6 +348,7 @@ export function runCommand(id: CommandId) {
 }
 
 export const commandEnabled = (id: CommandId) => {
+  if (unavailableInFile(id)) return false;
   const command: Command = commands[id];
   return command.enabled ? command.enabled() : true;
 };

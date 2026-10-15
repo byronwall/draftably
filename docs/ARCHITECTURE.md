@@ -58,17 +58,21 @@ Each module owns one concern and exposes signals plus the actions that change th
 `dsl/` reads, formats and compiles `.meld` files (see [Diagram files](DSL.md)). It is pure
 TypeScript shared by the browser and the command line.
 
-| File         | Responsibility                                                                       |
-| ------------ | ------------------------------------------------------------------------------------ |
-| `syntax.ts`  | Source lines with comments, the formatter, and the validated model.                  |
-| `compile.ts` | Layout recipes and refinements for one fixed render context; diagnostics with lines. |
-| `project.ts` | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.  |
+| File              | Responsibility                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `syntax.ts`       | Source lines with comments, the formatter, and the validated model.                         |
+| `compile.ts`      | Layout recipes and refinements for one fixed render context; diagnostics with lines.        |
+| `translate.ts`    | One committed editor edit as source changes: declarations, `near`/`pin`/`size` refinements. |
+| `source-edits.ts` | Helpers that add, change and remove single statements.                                      |
+| `project.ts`      | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.         |
 
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and
 writes saves atomically. A save based on an older revision is refused with 409, and invalid
 source with 422. `state/file-session.ts` is the browser side: it detects a session at startup,
-switches browser storage off, and projects each valid revision into the document.
+switches browser storage off, and projects each valid revision into the document. While a file is
+open, `commit` in `state/document.ts` hands every edit to the session, which translates it, shows
+the recompiled result and saves it; undo and redo walk source versions instead of snapshots.
 
 `cli/` is the `pnpm meld` command. `scripts/meld.mjs` rebuilds it with `vite build --ssr` when a
 source file is newer than `dist-cli/`.

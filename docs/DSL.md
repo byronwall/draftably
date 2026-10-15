@@ -82,3 +82,25 @@ moving the camera never changes the file.
 
 `inspect` uses the editor's own router, so its geometry matches the viewer. Edge label positions
 are left out because the browser measures label text with real fonts.
+
+## Editing in the viewer
+
+Edits made in the viewer are written back to the file as readable statements:
+
+| In the viewer                         | In the file                                                       |
+| ------------------------------------- | ----------------------------------------------------------------- |
+| Drag an object                        | `near` the closest sibling it does not overlap; `nudge` if none.  |
+| Pin or unpin (**P**)                  | `pin` at its position; unpinning leaves a soft `stay`.            |
+| Resize a shape or container           | `size`, or `min-width`/`min-height` on the container's `layout`.  |
+| Add, rename, connect, delete, recolor | `node`, `group` and `edge` declarations, with IDs from the label. |
+| Wrap in a container or ungroup        | A `group` and the members' `in=`.                                 |
+| Clear manual markers                  | Removes the object's soft position refinements.                   |
+
+Each save is checked against the file's revision. If the file changed on disk first, the viewer
+shows the file and keeps your edit aside: **Keep file** discards the edit, and **Save my edit over
+it** replaces the newer file. Undo and redo step through the file's versions; a change from
+outside the viewer clears them, so undo never erases someone else's work.
+
+Layout passes, the timeline, the brush, Compare, connection bends, label positions, start/end
+preferences and images are unavailable while a file is open, because the file cannot store their
+results yet.

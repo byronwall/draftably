@@ -8,7 +8,7 @@
     "last_updated": "2026-10-14",
     "summary": "Make one local DSL file the shared source for agent edits, viewer edits, and reproducible layout refinements.",
     "status": "active",
-    "next_action": "Translate committed editor edits into source (dsl/3-editing)."
+    "next_action": "Add stability anchors, diagnostics, reflow and the end-to-end proof (dsl/4-stability)."
   },
   "artifacts": {
     "intent_brief": {
@@ -535,9 +535,11 @@
         "proof": "Translator unit tests; browser drag writes near; stale save returns 409 and keeps proposal",
         "valid_intermediate_state": "Unsupported tools disabled and rejected edits reverted",
         "rollback": "Commit interceptor is installed only in file mode",
-        "status": "active",
+        "status": "completed",
         "branch": "dsl/3-editing",
-        "evidence": []
+        "evidence": [
+          "Branch dsl/3-editing: tests/translate.test.ts (9 tests). Browser: drag wrote 'near db platform side=right gap=48' and node stayed at drop point; undo restored the file byte-for-byte; redo, P pin and container resize wrote pin/min-width/min-height; external write racing a viewer save returned 409, banner offered Keep file / Save my edit, disk kept the agent's lines"
+        ]
       },
       {
         "id": "m4",
@@ -547,7 +549,7 @@
         "proof": "scripts/prove-file-session.mjs drives the real browser and compares to inspect --json",
         "valid_intermediate_state": "Full shaped loop",
         "rollback": "Anchors are ordinary stay statements that can be deleted",
-        "status": "planned",
+        "status": "active",
         "branch": "dsl/4-stability",
         "evidence": []
       }
