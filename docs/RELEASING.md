@@ -24,7 +24,7 @@ Release checks fail until the CLI implementation and package metadata are ready.
 
 1. Keep `draftably` as the npm package and executable name.
 2. Set `private` to `false` in `packages/cli/package.json` when the CLI is ready.
-3. Add the actual GitHub `repository.url` and `repository.directory` (`packages/cli`).
+3. Keep the package repository metadata set to `byronwall/draftably`, directory `packages/cli`.
 4. Add the CLI implementation, a `build` script, and a `test` script.
 5. Add `bin` with `draftably` as the executable name and its compiled JavaScript path under `dist/`.
 6. Build the viewer into the CLI's `dist/` tree. Include its workers and assets.
@@ -41,7 +41,7 @@ Add the viewer build to the CLI build script so every release includes matching 
 
 ## Configure GitHub and npm
 
-The checkout has no Git remote configured. Add the actual repository remote before using Changesets with GitHub.
+The source repository is [byronwall/draftably](https://github.com/byronwall/draftably).
 In GitHub **Settings → Actions → General**, allow Actions to create and approve pull requests.
 
 Configure an npm trusted publisher for `draftably`:
@@ -49,13 +49,14 @@ Configure an npm trusted publisher for `draftably`:
 | Field | Value |
 | --- | --- |
 | Provider | GitHub Actions |
-| Organization or user | The actual GitHub repository owner |
-| Repository | The actual repository name |
+| Organization or user | `byronwall` |
+| Repository | `draftably` |
 | Workflow filename | `release.yml` |
 | Environment | Leave empty; this workflow does not use one |
 | Allowed action | Direct publishing with `npm publish` |
 
-If npm requires the package to exist before setup, publish the first checked archive from your authenticated local session.
+The npm package must exist before trusted publishing can be configured.
+Publish the first checked archive from your authenticated local session once the CLI is ready.
 Then configure the trusted publisher before the next Actions release.
 Do not add an npm token to this workflow. Changesets uses npm's OIDC authentication.
 The workflow uses GitHub-hosted Ubuntu and Node 24, which includes a compatible npm CLI.
