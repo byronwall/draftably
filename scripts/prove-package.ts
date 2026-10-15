@@ -42,7 +42,8 @@ run('format', file, '--write');
 const formatted = fs.readFileSync(file, 'utf8');
 run('format', file, '--write');
 assert.equal(fs.readFileSync(file, 'utf8'), formatted);
-assert.equal(spawnSync(bin, ['open'], { cwd: dir, timeout: 10000 }).status, 1);
+// Without a file, `open` serves the folder's start page; a missing file is still an error.
+assert.equal(spawnSync(bin, ['open', 'missing.draft'], { cwd: dir, timeout: 10000 }).status, 1);
 assert.equal(
   spawnSync(bin, ['open', file, '--port', '-1'], { cwd: dir, timeout: 10000 }).status,
   1,
@@ -92,16 +93,23 @@ try {
   // The CLI must not expose sibling directories or crash on a malformed URL.
   assert.equal((await fetch(`${base}/..%2fexamples/checkout.draft`)).status, 404);
   assert.equal((await fetch(`${base}/%ZZ`)).status, 400);
-  const session = await (await fetch(`${base}/api/session`)).json();
+  // The served folder lists the file, and each file's session is selected with ?file=.
+  const listing = await (await fetch(`${base}/api/workspace`)).json();
+  assert.deepEqual(
+    listing.files.map((f: { path: string }) => f.path),
+    ['checkout.draft'],
+  );
+  const api = (route: string) => `${base}/api/${route}?file=checkout.draft`;
+  const session = await (await fetch(api('session'))).json();
   assert.equal(session.source, formatted);
   const updated = formatted + '\nnode audit "Audit log"\n';
-  const saved = await fetch(`${base}/api/source`, {
+  const saved = await fetch(api('source'), {
     method: 'PUT',
     body: JSON.stringify({ source: updated, base: session.revision }),
   });
   assert.equal(saved.status, 200);
   assert.equal(fs.readFileSync(file, 'utf8'), updated);
-  const stale = await fetch(`${base}/api/source`, {
+  const stale = await fetch(api('source'), {
     method: 'PUT',
     body: JSON.stringify({ source: formatted, base: session.revision }),
   });

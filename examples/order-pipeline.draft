@@ -1,7 +1,7 @@
 diagram "Order pipeline" version=1
 
-# An order moves from intake through fulfilment. The root is arranged by a layout engine;
-# try other engines with Compare in the viewer, or change the line below.
+# An order from intake to fulfilment, arranged by a layout engine instead of a built-in recipe.
+# Try other engines with Compare in the viewer, or change the layout line at the end.
 group intake "Intake" color=blue
 node web "Web checkout" in=intake
 node partner "Partner API" in=intake

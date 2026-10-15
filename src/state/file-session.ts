@@ -1,5 +1,6 @@
 /**
- * A `.draft` file opened through `pnpm draftably open` (or `DIAGRAM_FILE=… pnpm dev`).
+ * A `.draft` file opened through `pnpm draftably open` (or `DIAGRAM_ROOT=… pnpm dev`), or an example
+ * opened as a scratch copy.
  *
  * The file on disk is the source of truth. Each valid revision is compiled and projected into the
  * editor document; browser storage is switched off. An invalid revision keeps the last valid
@@ -9,6 +10,9 @@
  * saved with the revision they were based on. Undo and redo step through source versions. If the
  * file changes on disk while an edit is unsaved, the edit is kept aside and the file is shown;
  * the user then keeps the file or explicitly saves the edit over it.
+ *
+ * An example works the same way, except that nothing is sent to disk: its edits live only in this
+ * tab until the user saves the example as a new file.
  */
 import { batch, createRoot, createSignal } from 'solid-js';
 import { unwrap } from 'solid-js/store';
@@ -37,6 +41,10 @@ export interface FileSessionInfo {
   path: string;
   source: string;
   revision: string;
+  /** Set for an example: its id. The source is never written to disk. */
+  example?: string;
+  /** The file's path relative to the served folder (files only). */
+  file?: string;
 }
 
 export type FileStatus = 'saved' | 'saving' | 'invalid' | 'conflict' | 'failed' | 'offline';
@@ -84,9 +92,13 @@ const state = createRoot(() => {
   };
 });
 
-/** The open file, or null when the editor works on browser storage as usual. */
+/** The open file or example, or null when the editor works on browser storage as usual. */
 export const fileSession = state.info;
 export const fileMode = () => !!state.info();
+/** True while an example is open: edits are kept in this tab only. */
+export const exampleMode = () => !!state.info()?.example;
+/** The example has edits that are not in any file. */
+export const exampleEdited = () => exampleMode() && state.undoStack().length > 0;
 export const fileStatus = state.status;
 export const sourceError = state.sourceError;
 export const fileScene = state.scene;
@@ -98,6 +110,10 @@ export const fileCompiling = state.compiling;
 /** The last source confirmed on disk and its revision. */
 let diskSource = '',
   diskRevision = '';
+/** Selects this file's session on the server: `?file=…`. */
+let fileQuery = '';
+/** What an edit is called once it is kept: saved to disk, or only in the example. */
+const keptLabel = () => (exampleMode() ? 'Example only' : 'Saved');
 /** The source the viewer shows; it differs from `diskSource` while a save is pending. */
 let localSource = '';
 export const currentSource = () => localSource;
@@ -197,6 +213,12 @@ let savedMessage: string | null = null;
 let externalDuringSave: { source: string; revision: string } | null = null;
 
 async function save() {
+  if (exampleMode()) {
+    // Examples keep their edits in this tab; there is no file to write.
+    if (savedMessage) toast(savedMessage);
+    savedMessage = null;
+    return;
+  }
   if (saving) {
     saveAgain = true;
     return;
@@ -207,7 +229,7 @@ async function save() {
     for (;;) {
       saveAgain = false;
       const sending = localSource;
-      const res = await fetch('./api/source', {
+      const res = await fetch(`./api/source${fileQuery}`, {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ source: sending, base: diskRevision }),
@@ -324,14 +346,15 @@ function handleEdit(before: string, label: string): boolean {
     next,
     selectedIds().map(id => result.ids.get(id) ?? id),
   );
-  savedMessage = result.notes.length ? `Saved · ${result.notes.join(' · ')}` : `Saved · ${label}`;
+  savedMessage = `${keptLabel()} · ${result.notes.length ? result.notes.join(' · ') : label}`;
   void save();
   return true;
 }
 
 /**
  * Record and save a change made directly to the source, such as a reflow or a layout recipe.
- * Resolves once the new revision is on screen; false when the source was refused.
+ * `message` describes it after "Saved ·" (or "Example only ·"). Resolves once the new revision
+ * is on screen; false when the source was refused.
  */
 export async function commitSource(next: string, label: string, message: string) {
   if (next === localSource) {
@@ -352,7 +375,7 @@ export async function commitSource(next: string, label: string, message: string)
     state.setRedoStack([]);
   });
   localSource = next;
-  savedMessage = message;
+  savedMessage = `${keptLabel()} · ${message}`;
   void save();
   await showSource(next);
   return true;
@@ -410,11 +433,7 @@ export function reflowSelectedGroup(id: string) {
     return toast('The file cannot be changed right now.');
   const source = readSource(localSource),
     count = reflowGroup(source, scene, id);
-  void commitSource(
-    printSource(source),
-    'Reflow group',
-    `Saved · reflowed ${count} objects in ${id}`,
-  );
+  void commitSource(printSource(source), 'Reflow group', `reflowed ${count} objects in ${id}`);
 }
 
 function historyStep(direction: 'undo' | 'redo') {
@@ -441,18 +460,50 @@ function historyStep(direction: 'undo' | 'redo') {
 // --- Session ---------------------------------------------------------------------------------
 
 /**
- * Ask the local server for a file session. Resolves false for the static app, where
- * `/api/session` does not exist.
+ * Ask the local server for the session of `file` (a path relative to the served folder).
+ * Resolves false when the server has no such file.
  */
-export async function detectFileSession(): Promise<boolean> {
+export async function openFileSession(file: string): Promise<boolean> {
+  fileQuery = `?file=${encodeURIComponent(file)}`;
   let info: FileSessionInfo;
   try {
-    const res = await fetch('./api/session', { headers: { accept: 'application/json' } });
+    const res = await fetch(`./api/session${fileQuery}`, {
+      headers: { accept: 'application/json' },
+    });
     if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) return false;
-    info = await res.json();
+    info = { ...(await res.json()), file };
   } catch {
     return false;
   }
+  document.title = `${file} · Diagram Studio`;
+  await begin(info);
+  listen();
+  return true;
+}
+
+/** Open an example as a scratch copy. Nothing is read from or written to disk. */
+export function openExampleSession(id: string, title: string, source: string) {
+  document.title = `Example: ${title} · Diagram Studio`;
+  return begin({ name: title, path: '', source, revision: 'example', example: id });
+}
+
+/** The source of the example as it was opened, for Reset. */
+let exampleOriginal = '';
+
+/** Throw away the example's edits and show it as it was opened. */
+export function resetExample() {
+  if (!exampleMode()) return;
+  localSource = exampleOriginal;
+  resetHistory();
+  void showSource(localSource);
+  clearSelection();
+}
+
+/** The example's edits now live in a file; leaving the page no longer loses them. */
+export const markExampleSaved = () => resetHistory();
+
+function begin(info: FileSessionInfo): Promise<void> {
+  exampleOriginal = info.example ? info.source : '';
   disableBrowserStorage();
   setCommitHandler(handleEdit);
   setHistoryHandler({
@@ -462,10 +513,7 @@ export async function detectFileSession(): Promise<boolean> {
     canRedo: () => state.redoStack().length > 0,
   });
   state.setInfo(info);
-  document.title = `${info.name} · Diagram Studio`;
-  await acceptDisk(info.source, info.revision);
-  listen();
-  return true;
+  return acceptDisk(info.source, info.revision);
 }
 
 function onExternalChange(source: string, revision: string) {
@@ -476,7 +524,7 @@ function onExternalChange(source: string, revision: string) {
 }
 
 function listen() {
-  const events = new EventSource('./api/events');
+  const events = new EventSource(`./api/events${fileQuery}`);
   events.addEventListener('source', event => {
     const { source, revision } = JSON.parse((event as MessageEvent).data);
     onExternalChange(source, revision);
@@ -485,7 +533,7 @@ function listen() {
   events.addEventListener('open', async () => {
     // Catch up on anything missed while disconnected.
     try {
-      const info: FileSessionInfo = await (await fetch('./api/session')).json();
+      const info: FileSessionInfo = await (await fetch(`./api/session${fileQuery}`)).json();
       if (info.revision !== diskRevision) onExternalChange(info.source, info.revision);
       else if (state.status() === 'offline')
         state.setStatus(state.sourceError() ? 'invalid' : 'saved');
@@ -497,7 +545,14 @@ function listen() {
 
 /** Short text for the toolbar's save indicator. */
 export function fileStatusText(): string {
-  const name = state.info()?.name ?? '';
+  const info = state.info();
+  if (info?.example) {
+    const edits = state.undoStack().length;
+    return edits
+      ? `Example · ${edits} unsaved edit${edits === 1 ? '' : 's'}`
+      : 'Example · not on disk';
+  }
+  const name = info?.file ?? info?.name ?? '';
   switch (state.status()) {
     case 'saving':
       return `${name} · Saving…`;

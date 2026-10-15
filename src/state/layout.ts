@@ -209,7 +209,7 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
     source: next.source,
     label: `Layout: ${name}`,
     message:
-      `Saved · ${where} uses ${name}` +
+      `${where} uses ${name}` +
       (next.removed ? ` · removed ${next.removed} position refinements` : ''),
   };
   state.setBusy(true);

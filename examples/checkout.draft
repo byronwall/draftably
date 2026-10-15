@@ -1,5 +1,7 @@
 diagram "Checkout architecture" version=1
 
+# Two levels: a platform group holds the API and a nested group of domain services.
+
 # Customer-facing entry points.
 group clients "Customer channels" color=blue
 node web "Web app" in=clients
