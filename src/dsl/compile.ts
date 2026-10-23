@@ -323,9 +323,16 @@ export function foldRanks(
     for (let i = 1; i < count; i++) {
       const at = blocks[0].start + (total * i) / count,
         cost = (b: number) => crossing(b) + (Math.abs(blocks[b].start - at) / (total / count)) * 4;
+      // Keep each band within a quarter of an even share, so a cheap lopsided cut can't win.
+      const from = blocks[cuts.at(-1) ?? 0].start,
+        share = total / count,
+        even = (b: number) =>
+          blocks[b].start - from <= share * 1.25 &&
+          blocks[blocks.length - 1].end - blocks[b].start <= share * (count - i) * 1.25;
       let best = 0;
       for (let b = (cuts.at(-1) ?? 0) + 1; b < blocks.length; b++)
-        if (!best || cost(b) < cost(best)) best = b;
+        if (!best || (even(b) && !even(best)) || (even(b) === even(best) && cost(b) < cost(best)))
+          best = b;
       if (best) cuts.push(best);
     }
     const bands: (typeof blocks)[] = [];
