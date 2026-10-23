@@ -109,4 +109,12 @@ describe('a theme switch holds the layout', () => {
     const [a, b] = ['a', 'b'].map(id => scene.byId.get(id)!);
     expect(b.y - (a.y + a.h)).toBeGreaterThanOrEqual(12);
   });
+
+  it('lines a downward engine rank up by its top in every theme', async () => {
+    for (const theme of ['signal', 'fieldnotes']) {
+      const scene = await compile(withTheme(tree, theme));
+      const tops = ['commands', 'hover', 'lens', 'sidebar'].map(id => scene.byId.get(id)!.y);
+      expect(new Set(tops).size).toBe(1);
+    }
+  });
 });
