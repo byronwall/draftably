@@ -511,6 +511,7 @@ const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
 const HOOK_PENALTY = 80;
+const PORT_SLACK = 4;
 const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
 // Gate a group's header bands to the terminal lines of a route through a member's top.
@@ -1119,7 +1120,28 @@ function compute(input, rawOptions = {}) {
             p.x < Math.max(a.x, b.x) + EPS),
       );
     // `throughWaypoints` lets a waypoint route change when it still passes every waypoint.
-    const attempt = (changes, extra = {}, throughWaypoints = false) => {
+    // Runs alongside a box side, outside it and closer than a stub (clearance + 3), for longer
+    // than a port gap.
+    const boxes = [...rects.values()],
+      hugs = ps => {
+        let n = 0;
+        for (const [a, b] of segments(ps)) {
+          const h = Math.abs(a.y - b.y) < EPS;
+          if (!h && Math.abs(a.x - b.x) >= EPS) continue;
+          const at = h ? a.y : a.x,
+            lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
+            hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y);
+          for (const r of boxes) {
+            const s0 = h ? r.y : r.x,
+              s1 = h ? r.y + r.h : r.x + r.w,
+              run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y),
+              d = at < s0 ? s0 - at : at > s1 ? at - s1 : -1;
+            if (run > s.portGap && d > EPS && d < s.clearance + 5) n++;
+          }
+        }
+        return n;
+      };
+    const attempt = (changes, extra = {}, throughWaypoints = false, slack = 0.5) => {
       const next = routes.map((r, i) =>
         changes.has(i) ? { ...r, ...extra[i], points: compress(changes.get(i)) } : r,
       );
@@ -1148,7 +1170,17 @@ function compute(input, rawOptions = {}) {
         before += standoffCost(routes[i].points, near);
         after += standoffCost(next[i].points, near);
       }
-      if (after > before + 0.5) return false;
+      if (after > before + slack) return false;
+      // Slack never buys a new hug: a run closer than a stub's length to a box beside it.
+      if (slack > 0.5) {
+        let h0 = 0,
+          h1 = 0;
+        for (const i of changes.keys()) {
+          h0 += hugs(routes[i].points);
+          h1 += hugs(next[i].points);
+        }
+        if (h1 > h0) return false;
+      }
       routes = next;
       tidied++;
       return true;
@@ -1200,7 +1232,30 @@ function compute(input, rawOptions = {}) {
         } else tip(ps, end, 1)[axis] = moved[axis];
         changes.set(i, ps);
       }
-      if (changes.size) attempt(changes, extra);
+      if (!changes.size) continue;
+      // A line that turns in beside the side runs alongside it a stub away; the shift can
+      // lengthen that run into a hug. Turn a full standoff out instead, where the line allows.
+      const across = vertical ? 'x' : 'y',
+        face = { left: rect.x, right: rect.x + rect.w, top: rect.y, bottom: rect.y + rect.h }[side],
+        out = side === 'left' || side === 'top' ? -1 : 1,
+        wide = new Map(
+          [...changes].map(([i, ps]) => {
+            const end = list.find(l => l.i === i).end,
+              q = clone(ps);
+            if (
+              q.length >= 4 &&
+              Math.abs(tip(q, end, 1)[across] - tip(q, end, 2)[across]) < EPS &&
+              Math.abs(tip(q, end, 1)[across] - face) < s.standoff
+            ) {
+              tip(q, end, 1)[across] = face + out * s.standoff;
+              tip(q, end, 2)[across] = face + out * s.standoff;
+            }
+            return [i, q];
+          }),
+        );
+      // Centring a side is worth a little standoff: a port gap's shift barely moves a line.
+      const slack = PORT_SLACK * changes.size;
+      if (!attempt(wide, extra, false, slack)) attempt(changes, extra, false, slack);
     }
 
     // Fans: edges leaving (or entering) one side turn on a shared line.
