@@ -1,0 +1,40 @@
+diagram "Tasks: one tRPC request" version=1
+
+# expect left-of browser server
+# expect left-of server data
+
+theme mulberry
+
+group browser "Browser" color=violet
+node page "Workspace page" in=browser color=auto
+node stores "Zustand stores" in=browser color=auto
+node client "tRPC React client" in=browser color=auto
+
+group server "Next.js server" color=blue
+node middleware "middleware.ts" in=server color=auto
+group api "API routes" in=server color=blue
+node handler "/api/trpc handler" in=api color=auto
+node nextauth "/api/identity" in=api color=auto
+group routers "Routers" in=server color=blue
+node task_router "taskRouter" in=routers color=auto
+node goal_router "goalRouter" in=routers color=auto
+node block_router "timeBlockRouter" in=routers color=auto
+
+group data "Data" color=amber
+node prisma "Prisma client" in=data color=auto
+node postgres "Postgres" in=data color=auto
+
+edge r1 page -> stores
+edge r2 page -> client "useQuery"
+edge r3 client -> middleware "HTTP batch"
+edge r4 middleware -> handler
+edge r5 handler -> nextauth "session"
+edge r6 handler -> task_router
+edge r7 handler -> goal_router
+edge r8 handler -> block_router
+edge r9 task_router -> prisma
+edge r10 goal_router -> prisma
+edge r11 block_router -> prisma
+edge r12 prisma -> postgres "SQL"
+
+layout root engine=compound-flow

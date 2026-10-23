@@ -1,0 +1,34 @@
+diagram "Code Annotations: what activate() wires up" version=1
+
+# expect order-y activate commands selection
+# expect above activate sidebar
+# expect still *
+
+theme fieldnotes
+
+node activate "extension.ts activate()" color=slate shade=800
+node commands "annotationCommands" color=blue
+node sidebar "Annotations sidebar" color=teal
+node lens "annotationCodeLens" color=violet
+node hover "annotationHover" color=violet
+node selection "annotationSelection" color=blue shade=300
+node workspace "annotationWorkspace" color=amber
+node navigation "annotationNavigation" color=blue shade=300
+node list_state "annotationListState" color=teal shade=300
+node tools "annotationTools" color=teal shade=300
+node markdown "code-annotations.md" shape=pill color=amber shade=300
+node fix "Fix code ref" color=red
+
+edge m1 activate -> commands
+edge m2 activate -> sidebar
+edge m3 activate -> lens
+edge m4 activate -> hover
+edge m5 commands -> selection
+edge m6 commands -> workspace
+edge m7 commands -> navigation
+edge m8 sidebar -> list_state
+edge m9 sidebar -> tools
+edge m10 workspace -> markdown
+edge m11 navigation -> fix
+
+layout root engine=tree root=activate direction=down
