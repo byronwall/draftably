@@ -4,9 +4,11 @@ Goal: measure how good Draftably's drawings look for real software-explanation d
 the **first render** and **after a few follow-up requests**, then fix the biggest defects and
 measure again. The corpus stays fixed across rounds so results compare.
 
-**Where things stand:** four rounds ran ([r1](rounds/r1.md), [r2](rounds/r2.md),
-[r3](rounds/r3.md), [r4](rounds/r4.md)). [NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence,
-code locations, approaches and open product questions. Start there.
+**Where things stand:** five rounds ran ([r1](rounds/r1.md), [r2](rounds/r2.md),
+[r3](rounds/r3.md), [r4](rounds/r4.md), [r5](rounds/r5.md)). Round 5 reran every earlier round
+with its script: corpus mean DI 28.4 → 8.2 over five rounds, held-out 25.4 → 5.8.
+[NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence, code locations,
+approaches and open product questions. Start there.
 
 Three signals, each doing one job:
 
@@ -155,8 +157,12 @@ doesn't share the exit's span. A C down a channel into the facing side of a box 
 column or row reads as drafted and doesn't count, nor does a fold's wrap or a return lane that
 arrives along the reading direction into a box's leading side), **shared-segment**
 (unrelated edges run along the same line), **edge-through-group** (an edge cuts through a group
-holding neither end), **edge-through-title-band** (a line crosses a group's title band other than
-straight into or out of a top member), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
+holding neither end), **edge-through-title-band** (a line enters a group's title band. Two
+crossings don't count: straight into or out of a top member, and, since round 5's decision 3, a
+line to or from any member that crosses the whole band straight across, clear of the title text,
+which the router allows when going round the group would be over 1.75× longer. A line running
+along the band, through the title, or to something outside the group still counts),
+**back edges** (against the reading direction; an edge that wraps onto the next row of a folded
 flow reads forward and doesn't count).
 
 Clearance (can a reader tell which line is which?): **edge-hugs-node** (a line runs alongside a
