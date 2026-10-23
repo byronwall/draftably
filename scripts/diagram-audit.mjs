@@ -395,6 +395,16 @@ function measure(file) {
       if (r.segs.some(sg => segHitsRect(sg, shrink(n, 2))))
         note('edge-through-node', `${r.id} through ${n.id}`);
     }
+    // Through a group's title band, other than straight into or out of a member's top: the
+    // band holds the title, and a line through it reads as crossing the frame.
+    for (const g of groups) {
+      const band = { x: g.x + 2, y: g.y + 2, w: g.w - 4, h: 28 };
+      const inner = r.segs.filter((sg, k) => {
+        const terminal = (k === 0 || k === r.segs.length - 1) && Math.abs(sg[0].x - sg[1].x) < EPS;
+        return !terminal && segHitsRect(sg, band);
+      });
+      if (inner.length) note('edge-through-title-band', `${r.id} through ${g.id}'s title band`);
+    }
     // Edge through a group that holds neither endpoint.
     for (const g of groups) {
       const holds = id => id === g.id || ancestors(id).includes(g.id);
@@ -609,14 +619,37 @@ function measure(file) {
       top: Math.round(y0 - g.y),
       bottom: Math.round(g.y + g.h - y1),
     };
+    // A side whose padding carries a line running along it is a routing channel, not padding.
+    const strips = {
+      left: { axis: 'v', lo: g.x, hi: x0, from: g.y, to: g.y + g.h },
+      right: { axis: 'v', lo: x1, hi: g.x + g.w, from: g.y, to: g.y + g.h },
+      top: { axis: 'h', lo: g.y + 32, hi: y0, from: g.x, to: g.x + g.w },
+      bottom: { axis: 'h', lo: y1, hi: g.y + g.h, from: g.x, to: g.x + g.w },
+    };
+    pad.channel = {};
+    for (const [side, st] of Object.entries(strips))
+      pad.channel[side] = routes.some(r =>
+        r.segs
+          .map(straight)
+          .some(
+            sg =>
+              sg &&
+              sg.axis === st.axis &&
+              sg.at > st.lo + EPS &&
+              sg.at < st.hi - EPS &&
+              Math.min(sg.to, st.to) - Math.max(sg.from, st.from) > 20,
+          ),
+      );
     pads.push(pad);
-    const sides3 = [pad.left, pad.right, pad.bottom];
-    if (Math.max(...sides3) - Math.min(...sides3) > 12) {
+    const sides3 = ['left', 'right', 'bottom']
+      .filter(side => !pad.channel[side] || pad[side] <= 24)
+      .map(side => pad[side]);
+    if (sides3.length && Math.max(...sides3) - Math.min(...sides3) > 12) {
       note('uneven-padding', `${g.id} left ${pad.left}, right ${pad.right}, bottom ${pad.bottom}`);
     }
   }
   for (const side of ['left', 'top']) {
-    const values = pads.map(p => p[side]);
+    const values = pads.filter(p => !p.channel[side]).map(p => p[side]);
     if (values.length > 1 && Math.max(...values) - Math.min(...values) > 8) {
       note(
         'padding-varies',
@@ -835,6 +868,7 @@ function measure(file) {
       'hook',
       'shared-segment',
       'edge-through-group',
+      'edge-through-title-band',
       'many-bends',
       'low-contrast',
       'clipped',
@@ -873,6 +907,7 @@ function measure(file) {
     hook: 3,
     'shared-segment': 3,
     'edge-through-group': 2,
+    'edge-through-title-band': 2,
     'many-bends': 1,
     'low-contrast': 2,
     clipped: 8,
@@ -1246,7 +1281,11 @@ const lines = [
       c['label-on-group-title'] +
       c['label-detached'] +
       c['label-on-group-border'];
-    const route = c['shared-segment'] + c['edge-through-group'] + c['many-bends'];
+    const route =
+      c['shared-segment'] +
+      c['edge-through-group'] +
+      c['edge-through-title-band'] +
+      c['many-bends'];
     const clear =
       c['edge-hugs-node'] +
       c['edge-on-group-border'] +

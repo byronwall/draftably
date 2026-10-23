@@ -15,6 +15,7 @@ import { measureText, widestPiece } from '../model/fonts';
 import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
+import { planChannels, trimChannels, type Channel } from './channels';
 import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
 import { projectScene } from './project';
 import {
@@ -1252,6 +1253,29 @@ const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SL
  * than `MIN_GAP`. With `slots`, objects come out at their slot size (the engines' input).
  */
 export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false): Scene {
+  // The engines' input (`slots`) has no channels: they are planned on the final arrangement.
+  if (slots) return layoutPass(m, arranged, true);
+  // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
+  // changes the room left for lines elsewhere; then lay out with them.
+  const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
+    plain = layoutPass(unrefined, arranged),
+    area = (objects: SceneObject[]) =>
+      (Math.max(...objects.map(o => o.x + o.w)) - Math.min(...objects.map(o => o.x))) *
+      (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
+    channels = trimChannels(
+      planChannels(plain.objects, m.edges, m.routing),
+      area(plain.objects),
+      c => area(layoutPass(unrefined, arranged, false, c).objects),
+    );
+  return layoutPass(m, arranged, false, channels.size ? channels : undefined);
+}
+
+function layoutPass(
+  m: Model,
+  arranged?: Map<string, Pos>,
+  slots = false,
+  channels?: Map<string, Channel>,
+): Scene {
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -1360,11 +1384,15 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
         size = {
           w: Math.max(
             empty ? EMPTY_GROUP.w : 0,
-            sub.w + 2 * GROUP_INSET,
+            sub.w + GROUP_INSET + (channels?.get(o.id)?.right ?? GROUP_INSET),
             Math.ceil(measureText(o.label, look.groupTitle)) + GROUP_TITLE_CHROME,
             own.minWidth,
           ),
-          h: Math.max(empty ? EMPTY_GROUP.h : 0, sub.h + header + GROUP_INSET, own.minHeight),
+          h: Math.max(
+            empty ? EMPTY_GROUP.h : 0,
+            sub.h + header + (channels?.get(o.id)?.bottom ?? GROUP_INSET),
+            own.minHeight,
+          ),
         };
       } else {
         const hint = m.hints.find(h => h.type === 'size' && h.id === o.id);
@@ -1485,6 +1513,11 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
         base.positions = folded.positions;
         fold = folded.fold;
       }
+      // A routing channel on the left or under the title moves the content over to make room.
+      const room = channels?.get(scope);
+      if (room && (room.left > GROUP_INSET || room.top))
+        for (const [id, p] of base.positions)
+          base.positions.set(id, { x: p.x + room.left - GROUP_INSET, y: p.y + room.top });
       const off = offsets(base.axis);
       const hints = !leaves.size
         ? m.hints

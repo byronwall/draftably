@@ -60,13 +60,14 @@ Each module owns one concern and exposes signals plus the actions that change th
 `dsl/` reads, formats and compiles `.draft` files (see [Diagram files](DSL.md)). It is pure
 TypeScript shared by the browser and the command line.
 
-| File              | Responsibility                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------- |
-| `syntax.ts`       | Source lines with comments, the formatter, and the validated model.                         |
-| `compile.ts`      | Layout recipes and refinements for one fixed render context; diagnostics with lines.        |
-| `translate.ts`    | One committed editor edit as source changes: declarations, `near`/`pin`/`size` refinements. |
-| `source-edits.ts` | Helpers that add, change and remove single statements.                                      |
-| `project.ts`      | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.         |
+| File              | Responsibility                                                                               |
+| ----------------- | -------------------------------------------------------------------------------------------- |
+| `syntax.ts`       | Source lines with comments, the formatter, and the validated model.                          |
+| `compile.ts`      | Layout recipes and refinements for one fixed render context; diagnostics with lines.         |
+| `channels.ts`     | Routing channels: extra room inside a group where lines must travel; compile lays out twice. |
+| `translate.ts`    | One committed editor edit as source changes: declarations, `near`/`pin`/`size` refinements.  |
+| `source-edits.ts` | Helpers that add, change and remove single statements.                                       |
+| `project.ts`      | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.          |
 
 `server/file-session.ts` owns one open file: it serves the source with a content revision,
 watches its folder (so rename-based saves are seen), streams changes as server-sent events, and

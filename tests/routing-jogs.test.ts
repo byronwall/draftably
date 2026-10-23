@@ -41,8 +41,8 @@ describe('small steps in a route', () => {
     ],
   };
 
-  it('stepped 7px between the stub and the lane before', () => {
-    const [route] = RouteLab.compute(input, { jogs: false }).routes;
+  it('stepped 7px between the stub and the lane before, without the standoff', () => {
+    const [route] = RouteLab.compute(input, { jogs: false, standoff: 0 }).routes;
     expect(Math.min(...inner(route.points))).toBeLessThan(12);
   });
 

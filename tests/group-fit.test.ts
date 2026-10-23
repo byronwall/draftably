@@ -44,14 +44,23 @@ const geometry = (scene: Scene) => scene.objects.map(({ id, x, y, w, h }) => ({ 
 describe('group fit', () => {
   const files = readdirSync(examples).filter(f => f.endsWith('.draft'));
 
+  // A routing channel (src/dsl/channels.ts) is two standoffs plus an edge gap per extra line on
+  // a side, or one standoff plus the gaps under the title.
+  const channel = (pad: number) => pad >= 40 && (pad - 40) % 16 === 0;
+  const under = (pad: number) => pad >= 20 && (pad - 20) % 16 === 0;
+
   it.each(files)('%s fits every group to its content with one inset', async file => {
     const scene = await compile(read(file));
     for (const p of paddings(scene)) {
-      expect(p.left, `${p.id} left`).toBe(GROUP_INSET);
-      expect(p.bottom, `${p.id} bottom`).toBe(GROUP_INSET);
-      expect(p.top, `${p.id} top`).toBe(scene.look.groupHeader);
-      // Only a title wider than the content may widen the frame, and then only to fit it.
-      if (p.right !== GROUP_INSET) expect(p.w, `${p.id} right`).toBe(p.titleRoom);
+      expect(p.left === GROUP_INSET || channel(p.left), `${p.id} left ${p.left}`).toBe(true);
+      expect(p.bottom === GROUP_INSET || channel(p.bottom), `${p.id} bottom ${p.bottom}`).toBe(
+        true,
+      );
+      const top = p.top - scene.look.groupHeader;
+      expect(top === 0 || under(top), `${p.id} top ${p.top}`).toBe(true);
+      // Only a title wider than the content or a channel may widen the frame.
+      if (p.right !== GROUP_INSET && !channel(p.right))
+        expect(p.w, `${p.id} right`).toBe(p.titleRoom);
     }
   });
 
