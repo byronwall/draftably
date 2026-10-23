@@ -321,6 +321,7 @@ export const ROUTING_PARAMS: Record<string, Param<keyof RoutingSettings>> = {
   'fanout-penalty': { key: 'fanoutPenalty', min: 0, max: 160 },
   passes: { key: 'passes', min: 1, max: 5 },
   'corner-radius': { key: 'cornerRadius', min: 0, max: 16 },
+  standoff: { key: 'standoff', min: 0, max: 40 },
 };
 
 /** Source attribute for an engine or router setting. */

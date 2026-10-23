@@ -137,6 +137,7 @@ export interface RoutingSettings {
   fanoutPenalty: number;
   passes: number;
   cornerRadius: number;
+  standoff: number;
 }
 
 export interface DiagramSettings extends LayoutSettings {
