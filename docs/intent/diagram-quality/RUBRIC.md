@@ -133,7 +133,8 @@ the label), **label-detached** (label farther than its own height from its edge)
 Routing: **crossings**, **bends per edge**, **many-bends** (≥ 4), **hook** (an edge leaves one
 way and arrives travelling the opposite way: the U-turn into a neighbour), **shared-segment**
 (unrelated edges run along the same line), **edge-through-group** (an edge cuts through a group
-holding neither end), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
+holding neither end), **edge-through-title-band** (a line crosses a group's title band other than
+straight into or out of a top member), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
 flow reads forward and doesn't count).
 
 Clearance (can a reader tell which line is which?): **edge-hugs-node** (a line runs alongside a
@@ -192,7 +193,7 @@ swapped).
 
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
 8; label on node, label overlap 6; expectation failed 4; hook, shared segment, label on edge,
-detached, on title 3; edge-through-group, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
+detached, on title 3; edge-through-group, edge-through-title-band, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
 bends, long edge, group border (label or edge), edge in slot, uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
 uneven padding, padding varies, tight group gap 2; sparse group, group staircase (per link), uneven group gap 1;
 back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.

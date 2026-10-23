@@ -81,6 +81,11 @@ export interface RoutingOptions extends Partial<RoutingSettings> {
    * from their own end boxes. On unless false.
    */
   facing?: boolean;
+  /**
+   * Keep lines out of a group's title band, except a line straight into or out of a member's
+   * top. On unless false.
+   */
+  titleBands?: boolean;
   /** Even out ports, fans and corridors after routing. On unless false. */
   tidy?: boolean;
   /**

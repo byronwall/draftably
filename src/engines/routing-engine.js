@@ -69,13 +69,15 @@ function contains(p, r) {
   return p.x > r.x + EPS && p.x < r.x + r.w - EPS && p.y > r.y + EPS && p.y < r.y + r.h - EPS;
 }
 // An `across` obstacle can be crossed vertically but not run along: a header band beside
-// its title.
+// its title. With `gates`, only on those lines: the band is crossed only by a line straight
+// into or out of a member's top.
+const passes = (r, x) => r.across && (!r.gates || r.gates.some(g => Math.abs(g - x) < EPS));
 function blocked(a, b, obs) {
   if (same(a, b)) return obs.some(r => !r.across && contains(a, r));
   if (Math.abs(a.x - b.x) < EPS)
     return obs.some(
       r =>
-        !r.across &&
+        !passes(r, a.x) &&
         a.x > r.x + EPS &&
         a.x < r.x + r.w - EPS &&
         Math.max(a.y, b.y) > r.y + EPS &&
@@ -199,7 +201,9 @@ function conflicts(points, used) {
 // Soft clearance: a run parallel to a box side inside `band` costs more the closer
 // it gets. Group borders (`border`) count from both sides. The hard clearance
 // still decides what is passable, so tight gaps stay routable.
-const STANDOFF_WEIGHT = 0.5;
+const STANDOFF_WEIGHT = 0.5,
+  // A line along a group border reads as part of the frame: worse than one beside a box.
+  BORDER_WEIGHT = 2;
 function standoffCost(ps, near) {
   let n = 0;
   for (const [a, b] of segments(ps)) {
@@ -218,7 +222,7 @@ function standoffCost(ps, near) {
       else if (at <= s0) d = s0 - at;
       else if (at >= s1) d = at - s1;
       else continue;
-      if (d < r.band) n += run * (1 - d / r.band);
+      if (d < r.band) n += run * (1 - d / r.band) * (r.weight ?? 1);
     }
   }
   return n * STANDOFF_WEIGHT;
@@ -335,17 +339,17 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
       if ((same(p, start) || same(p, end)) && (same(p, t.first) || same(p, t.last))) continue;
       hits.add(t.id + ':' + p.x + ',' + p.y);
     }
-    let near = 0;
+    let lanes = 0;
     for (const t of existing) {
       const q = parallelNear(a, b, t.a, t.b, s.edgeGap);
-      if (q) near += q.deficit;
+      if (q) lanes += q.deficit;
     }
     return (
       distance(a, b) +
       (near.length ? standoffCost([a, b], near) : 0) +
       hits.size * s.crossingPenalty +
       shared * s.sharedPenalty +
-      near * s.parallelPenalty
+      lanes * s.parallelPenalty
     );
   }
 
@@ -507,8 +511,15 @@ const AXIS_PENALTY = 100,
   LEADING = { right: 'left', down: 'top' };
 const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
+// Gate a group's header bands to the terminal lines of a route through a member's top.
+function gate(obs, start, fs, end, ts) {
+  if (!obs.some(r => r.gates)) return obs;
+  const gates = [...(fs === 'top' ? [start.x] : []), ...(ts === 'top' ? [end.x] : [])];
+  return obs.map(r => (r.gates ? { ...r, gates } : r));
+}
 function compute(input, rawOptions = {}) {
-  const facingFans = rawOptions.facing !== false;
+  const facingFans = rawOptions.facing !== false,
+    titleBands = rawOptions.titleBands !== false;
   const began = Date.now(),
     s = settings(rawOptions),
     rects = new Map(input.nodes.map(n => [n.id, { ...n }])),
@@ -520,7 +531,7 @@ function compute(input, rawOptions = {}) {
         ...[...rects.values()].map(r => ({ ...r, band: s.standoff })),
         ...[...groups.values()]
           .filter(g => !g.collapsed)
-          .map(g => ({ ...g, band: s.standoff, border: true })),
+          .map(g => ({ ...g, band: s.standoff, border: true, weight: BORDER_WEIGHT })),
       ]
     : [];
   function ancestors(id) {
@@ -557,9 +568,22 @@ function compute(input, rawOptions = {}) {
         // The title blocks the header band. Beside it, a line may cross the band
         // straight into the group but not run along it under the border.
         const title = Math.max(1, Math.min(g.w - 6, g.titleWidth ?? Infinity)),
-          band = { y: g.y + 2, h: 28 + s.clearance };
+          band = { y: g.y + 2, h: 28 + s.clearance },
+          lip = Math.max(s.clearance, s.standoff);
         obstacles.push({ id: id + ':header', x: g.x + 3, w: title, ...band });
-        if (title < g.w - 6)
+        if (titleBands)
+          // The whole band, from a clearance above the border, is crossed only by a line
+          // straight into or out of a member's top: never run along or through.
+          obstacles.push({
+            id: id + ':header-band',
+            x: g.x - lip,
+            w: g.w + 2 * lip,
+            y: g.y - lip,
+            h: band.y + band.h - g.y + lip,
+            across: true,
+            gates: [],
+          });
+        else if (title < g.w - 6)
           obstacles.push({
             id: id + ':header-band',
             x: g.x + 3 + title,
@@ -584,6 +608,7 @@ function compute(input, rawOptions = {}) {
   };
   function validPath(points, e, fs, ts, obs) {
     if (points.length < 2) return false;
+    obs = gate(obs, points[0], fs, points.at(-1), ts);
     const start = points[0],
       next = points[1],
       end = points.at(-1),
@@ -652,7 +677,7 @@ function compute(input, rawOptions = {}) {
     const a = rects.get(e.from),
       b = rects.get(e.to),
       cfg = e.cfg,
-      obs = obsFor(e),
+      edgeObs = obsFor(e),
       ca = center(a),
       cb = center(b);
     const from =
@@ -729,7 +754,7 @@ function compute(input, rawOptions = {}) {
         axis(c)
       );
     }
-    const remember = (points, c, o = obs) => {
+    const remember = (points, c, o = c.obs) => {
       if (!points) return;
       const full = compress([c.start, ...points, c.end]);
       for (let i = 2; i < full.length; i++) {
@@ -775,7 +800,8 @@ function compute(input, rawOptions = {}) {
             toff = desired;
         }
         const start = port(a, fs, fo),
-          end = port(b, ts, toff);
+          end = port(b, ts, toff),
+          obs = gate(edgeObs, start, fs, end, ts);
         // Stacked neighbours closer than two stubs: meet halfway across the gap
         // between the facing sides instead of hooking round the outside.
         const gap = s.standoff
@@ -806,7 +832,7 @@ function compute(input, rawOptions = {}) {
           blocked(end, bs, ends || obs.filter(r => r.id !== e.to))
         )
           continue;
-        const c = { fs, ts, fo, toff, start, end, as, bs };
+        const c = { fs, ts, fo, toff, start, end, as, bs, obs };
         if (tight) {
           if (cfg.waypoints?.length) continue;
           const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
@@ -860,7 +886,7 @@ function compute(input, rawOptions = {}) {
         path = [];
       let ok = true;
       for (let i = 1; i < points.length; i++) {
-        const part = search(points[i - 1], points[i], obs, used, s, near);
+        const part = search(points[i - 1], points[i], c.obs, used, s, near);
         if (!part) {
           ok = false;
           break;
@@ -888,7 +914,7 @@ function compute(input, rawOptions = {}) {
         reason: 'No clear route within the search budget and current side / waypoint constraints.',
       };
     }
-    best.points = simplify(best.points, e, best.fs, best.ts, obs, used);
+    best.points = simplify(best.points, e, best.fs, best.ts, edgeObs, used);
     return {
       id: e.id,
       from: e.from,
