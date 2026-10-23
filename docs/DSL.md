@@ -153,8 +153,9 @@ Settings: `clearance`, `standoff`, `port-gap`, `edge-gap`, `bend-penalty`, `cros
 `corner-radius`, with the router's own ranges. Without it, the router's defaults apply.
 
 `clearance` (default 10) is the hard distance a line keeps from boxes. `standoff` (default 20,
-0 to 40) is the distance the router prefers for a line running alongside a box; half of it applies
-to group borders. A line comes closer only when no clearer route exists. `standoff=0` turns the
+0 to 40) is the distance the router prefers for a line running alongside a box or a group border,
+inside or outside it. A line comes closer only when no clearer route exists. Only a group's title
+blocks its header band, so a line can enter a group straight down beside the title. `standoff=0` turns the
 preference off.
 
 When the root `layout` line declares `direction=right` or `direction=down`, a forward connection
