@@ -511,6 +511,9 @@ const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
 const HOOK_PENALTY = 80;
+// A detour round a group's title band longer than this many times the crossing route.
+const DETOUR_RATIO = 1.75;
+const pathLength = ps => segments(ps).reduce((n, [a, b]) => n + distance(a, b), 0);
 const PORT_SLACK = 4;
 const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
@@ -561,7 +564,15 @@ function compute(input, rawOptions = {}) {
       cmp(a.id, b.id)
     );
   });
-  const obsFor = e => {
+  // Edges whose route took the title-band exception (`DETOUR_RATIO`): their bands are
+  // crossable straight across anywhere, not only on a top member's terminal line.
+  const openBands = new Set(),
+    opened = new WeakSet(),
+    syncOpen = () => {
+      openBands.clear();
+      for (const r of routes) if (opened.has(r)) openBands.add(r.id);
+    };
+  const obsFor = (e, open = openBands.has(e.id)) => {
     const allowed = new Set([...ancestors(e.from), ...ancestors(e.to)]),
       obstacles = [...rects.values()].map(r => inflate(r, s.clearance));
     for (const [id, g] of groups) {
@@ -584,7 +595,7 @@ function compute(input, rawOptions = {}) {
             y: g.y - lip,
             h: band.y + band.h - g.y + lip,
             across: true,
-            gates: [],
+            ...(open ? {} : { gates: [] }),
           });
         else if (title < g.w - 6)
           obstacles.push({
@@ -676,11 +687,31 @@ function compute(input, rawOptions = {}) {
     }
     return result;
   }
+  // A line may cross a title band straight into any member, not only a top one, when the
+  // way round the group is over `DETOUR_RATIO` times the length of the crossing route.
   function find(e, used, old) {
+    const gated = findIn(e, used, old, false);
+    if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
+    const a = rects.get(e.from),
+      b = rects.get(e.to),
+      ca = center(a),
+      cb = center(b),
+      // No route between the boxes is shorter than the gap between them.
+      floor =
+        Math.max(0, Math.abs(ca.x - cb.x) - (a.w + b.w) / 2) +
+        Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2),
+      gatedLength = gated.blocked ? Infinity : pathLength(gated.points);
+    if (gatedLength <= DETOUR_RATIO * floor) return gated;
+    const open = findIn(e, used, old, true);
+    if (open.blocked || gatedLength <= DETOUR_RATIO * pathLength(open.points)) return gated;
+    opened.add(open);
+    return open;
+  }
+  function findIn(e, used, old, open) {
     const a = rects.get(e.from),
       b = rects.get(e.to),
       cfg = e.cfg,
-      edgeObs = obsFor(e),
+      edgeObs = obsFor(e, open),
       ca = center(a),
       cb = center(b);
     const from =
@@ -907,7 +938,7 @@ function compute(input, rawOptions = {}) {
       }
       if (ok) remember(path, c);
     }
-    if (!best && rawOptions.quick && old) return find(e, used, null);
+    if (!best && rawOptions.quick && old) return findIn(e, used, null, open);
     if (!best) {
       const fs = from[0],
         ts = to[0],
@@ -941,6 +972,7 @@ function compute(input, rawOptions = {}) {
   }
   let routes = [];
   for (const e of edges) routes.push(find(e, routes, previous.get(e.id)));
+  syncOpen();
   const metrics = rs => {
     let crossings = 0,
       shared = 0,
@@ -983,6 +1015,20 @@ function compute(input, rawOptions = {}) {
     );
   };
   const before = metrics(routes);
+  // A route that leaves or enters by a side pointing away from its other end took the long way
+  // round, often because the facing side was full when it was routed. Edges routed later may
+  // have moved off since, so the improvement passes try it again.
+  const far = r => {
+    if (r.from === r.to) return false;
+    const ca = center(rects.get(r.from)),
+      cb = center(rects.get(r.to)),
+      v = vector[r.fromSide],
+      w = vector[r.toSide];
+    return (
+      v.x * (cb.x - ca.x) + v.y * (cb.y - ca.y) < -0.01 ||
+      w.x * (ca.x - cb.x) + w.y * (ca.y - cb.y) < -0.01
+    );
+  };
   let accepted = 0;
   if (!rawOptions.quick)
     for (let pass = 1; pass < s.passes; pass++) {
@@ -991,7 +1037,8 @@ function compute(input, rawOptions = {}) {
         !currentMetrics.crossings &&
         !currentMetrics.shared &&
         !currentMetrics.blocked &&
-        !currentMetrics.lanePairs
+        !currentMetrics.lanePairs &&
+        !routes.some(far)
       )
         break;
       const order = [...edges].sort((a, b) => {
@@ -1018,7 +1065,8 @@ function compute(input, rawOptions = {}) {
           !routes[i].blocked &&
           !c.crossings &&
           !c.shared &&
-          !parallelConflicts(routes[i].points, used, s.edgeGap).lanePairs
+          !parallelConflicts(routes[i].points, used, s.edgeGap).lanePairs &&
+          !far(routes[i])
         )
           continue;
         const next = find(e, used, routes[i]),
@@ -1026,6 +1074,7 @@ function compute(input, rawOptions = {}) {
         candidate[i] = next;
         if (total(candidate) < total(routes) - 0.1) {
           routes = candidate;
+          syncOpen();
           accepted++;
         }
       }
