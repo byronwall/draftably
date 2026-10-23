@@ -136,6 +136,19 @@ by side 2–10px apart; exactly on top of each other is **shared-segment**), and
 **edge-on-group-border** (a line runs along a group's border, under 8px from it). Only parallel
 runs count; a line crossing a border or entering a box is fine.
 
+Orderliness (does the routing look drafted on purpose?): **uneven-channel** (three or more lines
+sharing a corridor, within 40px of each other and overlapping, are spaced at different pitches),
+**ragged-bends** (edges fanning out of one side of a node, or into one side, turn at different
+places instead of sharing a trunk), **uneven-ports** (the ports on a side sit lopsided about its
+centre; a symmetric bunch around the middle is fine), **jog** (a tiny step under 12px inside a
+route). The target is a skilled draftsman's look, not bundling: common gaps, bends taken at the
+same place, symmetric fans.
+
+Container fit: **uneven-padding** (a group's left, right and bottom padding differ by more than
+12px) and **padding-varies** (groups in one drawing use different padding). The top holds the
+title, so it is only compared across groups. Fitting must converge: a fix may not loop between
+parent size and child placement.
+
 Space: **empty-band** (a row or column gap over 120px with nothing in it), **long-edge** (a
 forward edge over 400px and four times the median length). Also aspect ratio, density (object
 area / drawing area), and the share of objects aligned with another.
@@ -151,7 +164,8 @@ swapped).
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
 8; label on node, label overlap 6; expectation failed 4; hook, shared segment, label on edge,
 detached, on title 3; edge-through-group, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
-bends, long edge, group border (label or edge) 1; back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.
+bends, long edge, group border (label or edge), uneven channel, ragged bends, uneven ports, jog 1;
+uneven padding, padding varies 2; back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.
 
 ## Review
 
@@ -190,7 +204,7 @@ One line per defect a reader would notice:
   `S2` a reader notices and slows down (hook, detached label, lost reading order); `S3` polish
   (uneven gap, one extra bend).
 - **Cause tags**: `label-placement`, `routing-ports`, `routing-detour`, `export-bounds`,
-  `engine-order`, `engine-spacing`, `routing-clearance`, `group-packing`, `recipe-default`, `theme-metrics`,
+  `engine-order`, `engine-spacing`, `routing-clearance`, `routing-order`, `container-fit`, `group-packing`, `recipe-default`, `theme-metrics`,
   `palette`, `stability`, `dsl-gap`, `skill-guidance`. Add a tag when none fits, and list it in
   the round summary.
 - `MISSED` marks a defect no metric counted. Two or more MISSED lines of the same kind in a round
