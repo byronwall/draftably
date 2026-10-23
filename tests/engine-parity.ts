@@ -55,6 +55,10 @@ const clean = (value: unknown) => {
   };
   return visit(plain);
 };
+// The soft standoff band and the tidy pass postdate v7, so routing parity runs with
+// them off. Their own behaviour is covered in tests/routing-clearance.test.ts and
+// tests/routing-order.test.ts.
+const LEGACY_ROUTING = { standoff: 0, tidy: false };
 let checks = 0;
 const results: Array<{ name: string; status: string; message?: string }> = [];
 function parity(name: string, before: unknown, after: unknown) {
@@ -89,16 +93,19 @@ for (const name of fixtureNames) {
       engines.explorer.sceneInput(oldLayout.document),
       oldLayout.document.settings.routing,
     );
-    const newRoutes = current.routing.compute(
-      current.explorer.sceneInput(newLayout.document),
-      newLayout.document.settings.routing,
-    );
+    const newRoutes = current.routing.compute(current.explorer.sceneInput(newLayout.document), {
+      ...newLayout.document.settings.routing,
+      ...LEGACY_ROUTING,
+    });
     parity(`${name}/${algorithm.id}: routed layout result`, oldRoutes, newRoutes);
   }
   parity(
     `${name}: route authored fixture`,
     engines.routing.compute(engines.explorer.sceneInput(fixture), fixture.settings.routing),
-    current.routing.compute(current.explorer.sceneInput(fixture), fixture.settings.routing),
+    current.routing.compute(current.explorer.sceneInput(fixture), {
+      ...fixture.settings.routing,
+      ...LEGACY_ROUTING,
+    }),
   );
 }
 

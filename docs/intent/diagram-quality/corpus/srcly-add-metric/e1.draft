@@ -1,6 +1,6 @@
 diagram "Srcly: adding a metric end to end" version=1
 
-# expect order-x analyzer models catalog client
+# expect reads-x analyzer models catalog client
 # expect near marker_test markers 120
 # expect near catalog_test snapshots 120
 

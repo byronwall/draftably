@@ -14,6 +14,7 @@
  *
  *   # expect left-of a b       a's right edge is left of b's left edge (also right-of, above, below)
  *   # expect order-x a b c     centers run left to right (order-y: top to bottom)
+ *   # expect reads-x a b c     reading order, left to right, wrapping onto lower rows (reads-y: columns)
  *   # expect aligned-x a b     centers share x within 4px (aligned-y: y)
  *   # expect near a b 80       the gap between a and b is at most 80px
  *   # expect still a b         a and b moved at most 24px from the previous version
@@ -787,6 +788,26 @@ function checkExpectations(r, prev) {
           pass: off.length === 0,
           why: off.length ? `moved: ${off.join(', ')}` : undefined,
         };
+      }
+      case 'reads-x':
+      case 'reads-y': {
+        // Reading order with wraps: each next object is further along the axis in the same band,
+        // or starts a new band further across, like lines of text.
+        // Text-like: a step forward along the axis is reading on; a step back along it must go
+        // down (or right, for columns) to the next band.
+        const [along, across] = kind === 'reads-x' ? ['x', 'y'] : ['y', 'x'];
+        let along_ = 0,
+          wraps = 0;
+        const ok = need.every((id, i) => {
+          if (i === 0) return true;
+          const p = center(rect.get(need[i - 1])),
+            q = center(rect.get(id));
+          if (q[along] > p[along] + 4) return ++along_ > 0;
+          wraps++;
+          return q[across] > p[across];
+        });
+        // A single line across the axis (a column for reads-x) is not reading along it.
+        return { line, pass: ok && along_ >= wraps, why: `${along_} along, ${wraps} wraps` };
       }
       case 'keeps-order': {
         const flips = r.stabilityFromPrev?.orderFlips ?? 0;

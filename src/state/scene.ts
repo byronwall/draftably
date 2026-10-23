@@ -5,9 +5,8 @@
 import { createMemo, createRoot, createSignal } from 'solid-js';
 import type { PriorRoute, RoutingResult } from '../engines/routing-engine.js';
 import { routingFingerprint } from '../model/document';
-import { rectUnion } from '../model/geometry';
+import { drawingBounds } from '../model/bounds';
 import { frameRect, makeGeometry, styleOf, visibleGraph, type VisibleGraph } from '../model/graph';
-import { visualBounds } from '../model/labels';
 import { computeRoutes, drawRoutes, routeInput, type DrawnRoute } from '../model/routes';
 import type { NodeGeometry, NodeLayout, Rect } from '../model/types';
 import { doc } from './document';
@@ -146,18 +145,5 @@ export const blockedRouteIds = () =>
 
 /** Bounds of everything drawn: shapes with labels, containers, and connections. */
 export function sceneBounds(): Rect {
-  const vg = visibleScene(),
-    rects: Rect[] = vg.nodes.map(n => visualBounds(doc, n.id, n.title, geometry(n.id)));
-  for (const g of vg.groups) rects.push(sceneRects().get(g.id)!);
-  for (const route of routes()) {
-    for (const p of route.points) rects.push({ x: p.x, y: p.y, w: 0, h: 0 });
-    if (route.label)
-      rects.push({
-        x: route.label.x - route.label.w / 2,
-        y: route.label.y - 12,
-        w: route.label.w,
-        h: 24,
-      });
-  }
-  return rectUnion(rects);
+  return drawingBounds(doc, visibleScene(), sceneRects(), routes());
 }

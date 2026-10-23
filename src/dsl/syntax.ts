@@ -211,6 +211,8 @@ export interface ModelLayout {
   /** Set when the scope is arranged by a layout engine instead of a built-in recipe. */
   engine?: EngineRecipe;
   direction: 'auto' | 'right' | 'down';
+  /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
+  fold: 'auto' | 'never';
   gap: number;
   minWidth: number;
   minHeight: number;
@@ -321,6 +323,7 @@ export const ROUTING_PARAMS: Record<string, Param<keyof RoutingSettings>> = {
   'fanout-penalty': { key: 'fanoutPenalty', min: 0, max: 160 },
   passes: { key: 'passes', min: 1, max: 5 },
   'corner-radius': { key: 'cornerRadius', min: 0, max: 16 },
+  standoff: { key: 'standoff', min: 0, max: 40 },
 };
 
 /** Source attribute for an engine or router setting. */
@@ -506,7 +509,7 @@ export function parseModel(source: string | SourceDoc): Model {
           engine = { algorithm: named, params: readParams(ENGINE_PARAMS) };
         } else {
           count(2);
-          allow(['gap', ...common]);
+          allow(['gap', ...(args[1]?.value === 'flow' ? ['fold'] : []), ...common]);
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
@@ -518,6 +521,7 @@ export function parseModel(source: string | SourceDoc): Model {
           algorithm,
           ...(engine ? { engine } : {}),
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
+          fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
           gap: num('gap', 28, 8, 300),
           minWidth: num('min-width', 0, 0, 10_000),
           minHeight: num('min-height', 0, 0, 10_000),

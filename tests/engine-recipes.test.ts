@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { checkSource, compile } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, parseModel } from '../src/dsl/syntax';
+import { edgeLabelSize } from '../src/model/labels';
 
 const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 /** Checkout with its root arranged by an engine instead of `flow`. */
@@ -68,9 +69,12 @@ describe('engine recipes', () => {
     const scene = await compile(withRoot('engine=layered'));
     const orders = scene.byId.get('orders')!,
       payments = scene.byId.get('payments')!;
-    // `layout services row gap=56` still places payments to the right of orders.
+    // `layout services row gap=56` still places payments to the right of orders, at least 56px
+    // away and wider when the "authorize" label between them needs more room.
     expect(payments.localY).toBe(orders.localY);
-    expect(payments.localX).toBe(orders.localX + orders.w + 56);
+    expect(payments.localX).toBe(
+      orders.localX + orders.w + Math.max(56, edgeLabelSize('authorize').w + 28),
+    );
   });
 
   it('arranges only the named group when an engine is scoped to it', async () => {
@@ -96,6 +100,27 @@ describe('engine recipes', () => {
   it('shows the root engine in the projected settings', async () => {
     const doc = projectScene(await compile(withRoot('engine=tree rank-gap=80 direction=down')));
     expect(doc.settings).toMatchObject({ algorithm: 'tree', rankGap: 80, direction: 'DOWN' });
+  });
+});
+
+describe('layered folding', () => {
+  const chain = (recipe: string) =>
+    Array.from({ length: 12 }, (_, i) => `node n${i} "Step ${i}"`).join('\n') +
+    '\n' +
+    Array.from({ length: 11 }, (_, i) => `edge e${i} n${i} -> n${i + 1}`).join('\n') +
+    `\nlayout root ${recipe}\n`;
+  const rows = (scene: Awaited<ReturnType<typeof compile>>) =>
+    new Set(scene.objects.map(o => Math.round(o.y))).size;
+
+  it('folds a long layered chain into rows unless fold=never', async () => {
+    const folded = await compile(chain('engine=layered direction=right'));
+    const xs = folded.objects.flatMap(o => [o.x, o.x + o.w]),
+      ys = folded.objects.flatMap(o => [o.y, o.y + o.h]);
+    expect(rows(folded)).toBeGreaterThan(1);
+    expect(
+      (Math.max(...xs) - Math.min(...xs)) / (Math.max(...ys) - Math.min(...ys)),
+    ).toBeLessThanOrEqual(3);
+    expect(rows(await compile(chain('engine=layered direction=right fold=never')))).toBe(1);
   });
 });
 

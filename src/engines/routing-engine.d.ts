@@ -58,6 +58,7 @@ export interface RoutingReport {
   initial: unknown;
   accepted: number;
   nudged: number;
+  tidied?: number;
   edges: number;
   milliseconds: number;
   passes: number;
@@ -71,6 +72,8 @@ export interface RoutingResult {
 export interface RoutingOptions extends Partial<RoutingSettings> {
   previous?: PriorRoute[];
   quick?: boolean;
+  /** Even out ports, fans and corridors after routing. On unless false. */
+  tidy?: boolean;
 }
 
 export const RouteLab: {

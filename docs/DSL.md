@@ -50,6 +50,12 @@ Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color i
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
 use `column gap=24`.
 
+`flow` ranks objects along its direction by their connections. A loop keeps its path in that
+direction, and only the edge that closes it runs backwards. A run of ranks that is wider than
+the canvas (1100×720) and more than three times longer than it is deep folds into rows (or
+columns, for `direction=down`) that each start again at the beginning, like lines of text.
+`fold=never` keeps it on one line. `engine=layered` folds the same way unless it has `fold=never`.
+
 ## Themes and colors
 
 The file owns the diagram's appearance. A `theme` line picks a preset and may override its
@@ -142,9 +148,14 @@ One `routing` statement sets the router for every connection:
 routing edge-gap=24 clearance=12 corner-radius=0
 ```
 
-Settings: `clearance`, `port-gap`, `edge-gap`, `bend-penalty`, `crossing-penalty`,
+Settings: `clearance`, `standoff`, `port-gap`, `edge-gap`, `bend-penalty`, `crossing-penalty`,
 `shared-penalty`, `parallel-penalty`, `port-stability`, `fanout-penalty`, `passes` and
 `corner-radius`, with the router's own ranges. Without it, the router's defaults apply.
+
+`clearance` (default 10) is the hard distance a line keeps from boxes. `standoff` (default 20,
+0 to 40) is the distance the router prefers for a line running alongside a box; half of it applies
+to group borders. A line comes closer only when no clearer route exists. `standoff=0` turns the
+preference off.
 
 ## Refinements
 
