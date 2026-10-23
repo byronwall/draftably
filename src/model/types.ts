@@ -46,6 +46,8 @@ export interface EdgeLayout {
   labelDx?: number;
   labelDy?: number;
   waypoints?: Point[];
+  /** The reading direction of the layout that places both ends; the edge runs along it. */
+  flow?: 'right' | 'down';
 }
 
 export interface LabelLayout {
@@ -143,8 +145,7 @@ export interface RoutingSettings {
 export interface DiagramSettings extends LayoutSettings {
   snap: boolean;
   showManual: boolean;
-  /** `direction` is the file's declared reading direction; forward edges run along it. */
-  routing: RoutingSettings & { direction?: 'right' | 'down' };
+  routing: RoutingSettings;
 }
 
 export interface Camera {

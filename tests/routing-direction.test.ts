@@ -61,14 +61,15 @@ describe('routing along the reading direction', () => {
     expect(route.toSide).toBe('top');
   });
 
-  it('takes the reading direction from the file', () => {
-    const doc = projectScene(
-      checkSource(
-        'diagram "t"\nnode a "A"\nnode b "B"\nedge e a -> b\nlayout root flow direction=down\n',
-      ),
-    );
-    expect(doc.settings.routing.direction).toBe('down');
-    const auto = projectScene(checkSource('diagram "t"\nnode a "A"\nnode b "B"\nedge e a -> b\n'));
-    expect(auto.settings.routing.direction).toBeUndefined();
+  it('takes the reading direction from the root layout that places both ends', () => {
+    const flows = (source: string) =>
+      projectScene(checkSource('diagram "t"\n' + source)).layout.edges;
+    const nodes = 'node a "A"\nnode b "B"\nedge e a -> b\n';
+    expect(flows(nodes + 'layout root flow direction=down\n').e.flow).toBe('down');
+    expect(flows(nodes).e.flow).toBeUndefined();
+    // Members of a group arranged by its own recipe read by that recipe.
+    const grouped = 'group g "G"\nnode a "A" in=g\nnode b "B" in=g\nedge e a -> b\n';
+    expect(flows(grouped + 'layout root flow direction=right\n').e.flow).toBeUndefined();
+    expect(flows(grouped + 'layout root engine=layered direction=right\n').e.flow).toBe('right');
   });
 });

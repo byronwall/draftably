@@ -503,7 +503,6 @@ const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
 function compute(input, rawOptions = {}) {
-  const flow = ['right', 'down'].includes(rawOptions.direction) ? rawOptions.direction : null;
   const began = Date.now(),
     s = settings(rawOptions),
     rects = new Map(input.nodes.map(n => [n.id, { ...n }])),
@@ -659,6 +658,7 @@ function compute(input, rawOptions = {}) {
     // trailing side and enters its target's leading side (bottom → top going down), so
     // it reads as parent → child. Other sides cost `AXIS_PENALTY` each, more than the
     // standoff or fan-out a clean Z pays, so they win only when the axis sides are blocked.
+    const flow = [cfg.flow, rawOptions.direction].find(d => d === 'right' || d === 'down');
     const along = flow === 'down' ? cb.y - ca.y : cb.x - ca.x,
       forward = flow && e.from !== e.to && along > 20,
       axis = c =>
