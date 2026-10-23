@@ -1708,26 +1708,48 @@ function layoutPass(
       packGaps = pack ? { node: pack.nodeGap, rank: pack.rankGap, group: groupGap } : undefined,
       engine = governing?.engine && governing.scope === scope ? governing.engine : undefined;
     /**
-     * Where each drawn box sits in its slot, and its size. Engines place centres, so it is
-     * centred. The built-in recipes line a rank's boxes up by their start across the reading
-     * direction (a row of a fold shares its top), so there the drawn box keeps the slot's start
-     * across and is centred along. Pins and stays hold the drawn box.
+     * Where each drawn box sits in its slot, and its size. The built-in recipes line a rank's
+     * boxes up by their start across the reading direction (a row of a fold shares its top), so
+     * there the drawn box keeps the slot's start across and is centred along. Engines place
+     * centres, so there the drawn box is centred. In a downward engine layout a rank is a row:
+     * the nodes on one centre line share their top, with the row's tallest box centred on the
+     * line, so a wrapped title or a taller theme grows the row evenly instead of giving it
+     * ragged tops. The slots stay the theme-independent reference ones.
+     * Pins and stays hold the drawn box.
      */
-    const offsets = (axis: 'right' | 'down') => {
+    const offsets = (axis: 'right' | 'down', at: Map<string, Pos>) => {
       const reads =
         layout.algorithm === 'row' ? 'right' : layout.algorithm === 'column' ? 'down' : axis;
       const centre = {
         x: !!governing?.engine || reads === 'right',
         y: !!governing?.engine || reads === 'down',
       };
+      const look = (n: Item) => (slots ? n : (leaves.get(n.id)?.look ?? n));
+      /** Offset down from the slot's top that lines a node up with the rest of its row. */
+      const rowTop = new Map<string, number>();
+      if (governing?.engine && axis === 'down' && !slots) {
+        // Nodes only: a group's frame is sized to its content and keeps its place. Two slots
+        // share a row when they overlap down the page by over half the shorter one; the row's
+        // top is the highest centred top in it.
+        const nodes = list.filter(o => leaves.has(o.id) && at.has(o.id)),
+          top = (n: Item) => at.get(n.id)!.y,
+          centred = (n: Item) => top(n) + (n.h - look(n).h) / 2,
+          shared = (a: Item, b: Item) =>
+            Math.min(top(a) + a.h, top(b) + b.h) - Math.max(top(a), top(b)) >
+            Math.min(a.h, b.h) / 2;
+        for (const n of nodes) {
+          const row = nodes.filter(o => shared(o, n));
+          if (row.length > 1) rowTop.set(n.id, Math.min(...row.map(centred)) - top(n));
+        }
+      }
       return new Map(
         list.map(n => {
-          const l = slots ? n : (leaves.get(n.id)?.look ?? n);
+          const l = look(n);
           return [
             n.id,
             {
               x: centre.x ? (n.w - l.w) / 2 : 0,
-              y: centre.y ? (n.h - l.h) / 2 : 0,
+              y: rowTop.get(n.id) ?? (centre.y ? (n.h - l.h) / 2 : 0),
               w: l.w,
               h: l.h,
             },
@@ -1766,7 +1788,7 @@ function layoutPass(
             new Map(
               list.map(n => {
                 const p = plain.positions.get(n.id)!,
-                  o = offsets(plain.axis).get(n.id)!;
+                  o = offsets(plain.axis, plain.positions).get(n.id)!;
                 return [n.id, { x: p.x + o.x, y: p.y + o.y, w: o.w, h: o.h }];
               }),
             ),
@@ -1833,7 +1855,7 @@ function layoutPass(
       if (room && (room.left > GROUP_INSET || room.top))
         for (const [id, p] of base.positions)
           base.positions.set(id, { x: p.x + room.left - GROUP_INSET, y: p.y + room.top });
-      const off = offsets(base.axis);
+      const off = offsets(base.axis, base.positions);
       const hints = !leaves.size
         ? m.hints
         : m.hints.map(h =>
