@@ -6,6 +6,7 @@ import {
 } from '../engines/routing-engine.js';
 import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
+import { truncateText, measureText } from './fonts';
 import { edgeLabelSize } from './labels';
 import { isCollapsed, styleOf, type VisibleGraph } from './graph';
 import type { Diagram, EdgeLayout, Point, Rect, ShapeKind, Side } from './types';
@@ -205,6 +206,12 @@ export interface SceneRoutes {
   result: RoutingResult;
 }
 
+/** Room a group's header icon and title take from its left edge, as GroupView draws them. */
+function titleWidth(title: string, w: number, look: ResolvedAppearance) {
+  const text = truncateText(title, Math.max(40, w - 33 - 64), look.groupTitle);
+  return 33 + measureText(text, look.groupTitle) + 8;
+}
+
 /** How far inside a box's corner a lane turns. */
 const LANE_INSET = 12;
 
@@ -246,9 +253,18 @@ export function laneBends(cfg: EdgeLayout, a: Rect, b: Rect): EdgeLayout {
 
 /** Engine input for the visible part of a diagram with the given rectangles. */
 export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
+  const look = resolveAppearance(doc.appearance);
   return {
     nodes: vg.nodes.map(n => ({ ...n, ...rects.get(n.id)!, shape: styleOf(doc, n.id).shape })),
-    groups: vg.groups.map(g => ({ ...g, ...rects.get(g.id)!, collapsed: isCollapsed(doc, g.id) })),
+    groups: vg.groups.map(g => {
+      const r = rects.get(g.id)!;
+      return {
+        ...g,
+        ...r,
+        collapsed: isCollapsed(doc, g.id),
+        titleWidth: titleWidth(g.title, r.w, look),
+      };
+    }),
     edges: vg.edges.map(e => ({
       ...e,
       from: e.a,

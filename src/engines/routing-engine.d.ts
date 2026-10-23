@@ -10,6 +10,8 @@ export interface RouteGroupInput extends Rect {
   id: string;
   parentId?: string;
   collapsed: boolean;
+  /** Width of the header's icon and title from the group's left edge; the rest of the band is open. */
+  titleWidth?: number;
 }
 
 export interface RouteEdgeInput {

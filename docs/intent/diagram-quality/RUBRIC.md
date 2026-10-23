@@ -135,9 +135,11 @@ flow reads forward and doesn't count).
 Clearance (can a reader tell which line is which?): **edge-hugs-node** (a line runs alongside a
 box, under 15px from its side, for more than 16px, including a box it connects; this catches the
 U-turn hooks and lines squeezed between stacked boxes), **edges-too-close** (two lines run side
-by side 2–10px apart; exactly on top of each other is **shared-segment**), and
-**edge-on-group-border** (a line runs along a group's border, under 8px from it). Only parallel
-runs count; a line crossing a border or entering a box is fine.
+by side 2–10px apart; exactly on top of each other is **shared-segment**),
+**edge-on-group-border** (a line runs along a group's border, under 8px from it), and
+**edge-near-group-border** (a line rides a group's border 8–15px inside or outside it, the same
+distance that counts as a hug on a box). Only parallel runs count; a line crossing a border or
+entering a box is fine.
 
 Orderliness (does the routing look drafted on purpose?): **uneven-channel** (three or more lines
 sharing a corridor, within 40px of each other and overlapping, are spaced at different pitches),

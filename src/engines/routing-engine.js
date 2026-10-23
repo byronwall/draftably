@@ -68,11 +68,14 @@ function inflate(r, p) {
 function contains(p, r) {
   return p.x > r.x + EPS && p.x < r.x + r.w - EPS && p.y > r.y + EPS && p.y < r.y + r.h - EPS;
 }
+// An `across` obstacle can be crossed vertically but not run along: a header band beside
+// its title.
 function blocked(a, b, obs) {
-  if (same(a, b)) return obs.some(r => contains(a, r));
+  if (same(a, b)) return obs.some(r => !r.across && contains(a, r));
   if (Math.abs(a.x - b.x) < EPS)
     return obs.some(
       r =>
+        !r.across &&
         a.x > r.x + EPS &&
         a.x < r.x + r.w - EPS &&
         Math.max(a.y, b.y) > r.y + EPS &&
@@ -514,7 +517,7 @@ function compute(input, rawOptions = {}) {
         ...[...rects.values()].map(r => ({ ...r, band: s.standoff })),
         ...[...groups.values()]
           .filter(g => !g.collapsed)
-          .map(g => ({ ...g, band: s.standoff / 2, border: true })),
+          .map(g => ({ ...g, band: s.standoff, border: true })),
       ]
     : [];
   function ancestors(id) {
@@ -547,14 +550,21 @@ function compute(input, rawOptions = {}) {
     for (const [id, g] of groups) {
       if (g.collapsed) continue;
       if (!allowed.has(id)) obstacles.push(inflate(g, s.clearance));
-      else
-        obstacles.push({
-          id: id + ':header',
-          x: g.x + 3,
-          y: g.y + 2,
-          w: Math.max(1, g.w - 6),
-          h: 28 + s.clearance,
-        });
+      else {
+        // The title blocks the header band. Beside it, a line may cross the band
+        // straight into the group but not run along it under the border.
+        const title = Math.max(1, Math.min(g.w - 6, g.titleWidth ?? Infinity)),
+          band = { y: g.y + 2, h: 28 + s.clearance };
+        obstacles.push({ id: id + ':header', x: g.x + 3, w: title, ...band });
+        if (title < g.w - 6)
+          obstacles.push({
+            id: id + ':header-band',
+            x: g.x + 3 + title,
+            w: g.w - 6 - title,
+            ...band,
+            across: true,
+          });
+      }
     }
     const common = ancestors(e.from).find(id => ancestors(e.to).includes(id));
     const g = groups.get(common);
