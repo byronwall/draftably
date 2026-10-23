@@ -209,3 +209,67 @@ function between(a: Box, b: Box, o: Box) {
     hi = { x: Math.max(x0, x1), y: Math.max(y0, y1) };
   return o.x < hi.x && o.x + o.w > lo.x && o.y < hi.y && o.y + o.h > lo.y;
 }
+
+/** A line runs along a channel when it travels at least this far inside it. */
+const ALONG = 12;
+
+/**
+ * The channels in `plan` that a line runs along. `routes` are the lines the router drew for the
+ * scene laid out with `plan`, and `groups` its group frames. The router may take another way than
+ * the one a channel was planned for, which leaves that side of the group padded and empty; a side
+ * no line runs along goes back to the plain inset. Returns `plan` itself when every channel is used.
+ */
+export function usedChannels(
+  plan: Map<string, Channel>,
+  groups: Array<{ id: string; x: number; y: number; w: number; h: number }>,
+  routes: Array<Array<{ x: number; y: number }>>,
+  header: number,
+): Map<string, Channel> {
+  const byId = new Map(groups.map(g => [g.id, g]));
+  /** The strip a side's channel takes, [x0, y0, x1, y1], and whether lines run along it upright. */
+  const strip = (g: { x: number; y: number; w: number; h: number }, c: Channel, side: Side) => {
+    const right = g.x + g.w,
+      bottom = g.y + g.h;
+    if (side === 'left') return { box: [g.x, g.y + header, g.x + c.left, bottom], upright: true };
+    if (side === 'right')
+      return { box: [right - c.right, g.y + header, right, bottom], upright: true };
+    if (side === 'bottom') return { box: [g.x, bottom - c.bottom, right, bottom], upright: false };
+    // A top channel sits under the title band; a line along it may ride the band's lower part.
+    return { box: [g.x, g.y + header / 2, right, g.y + header + c.top], upright: false };
+  };
+  const runsAlong = ([x0, y0, x1, y1]: number[], upright: boolean) =>
+    routes.some(points =>
+      points.slice(1).some((q, i) => {
+        const p = points[i];
+        if (upright ? p.x !== q.x : p.y !== q.y) return false;
+        const at = upright ? p.x : p.y,
+          [lo, hi] = upright ? [x0, x1] : [y0, y1];
+        if (at <= lo + 1 || at >= hi - 1) return false;
+        const [from, to] = upright ? [y0, y1] : [x0, x1],
+          a = upright ? p.y : p.x,
+          b = upright ? q.y : q.x;
+        return Math.min(to, Math.max(a, b)) - Math.max(from, Math.min(a, b)) >= ALONG;
+      }),
+    );
+  let out = plan;
+  for (const [id, c] of plan) {
+    const g = byId.get(id);
+    if (!g) continue;
+    let next = c;
+    for (const side of ['left', 'right', 'top', 'bottom'] as const) {
+      if (!c.lines[side]) continue;
+      const { box, upright } = strip(g, c, side);
+      if (runsAlong(box, upright)) continue;
+      next = {
+        ...next,
+        [side]: side === 'top' ? 0 : GROUP_INSET,
+        lines: { ...next.lines, [side]: 0 },
+      };
+    }
+    if (next === c) continue;
+    if (out === plan) out = new Map(plan);
+    if (Object.values(next.lines).some(Boolean)) out.set(id, next);
+    else out.delete(id);
+  }
+  return out;
+}
