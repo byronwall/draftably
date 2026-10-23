@@ -171,7 +171,7 @@ Re-measure with [RUBRIC.md](RUBRIC.md)'s loop before starting, since main will h
 
 ## Metric work before the next round
 
-- Group fill, group staircase and group gap (item 4).
+- Group fill, group staircase and group gap (item 4): done as `sparse-group`, `group-staircase`, `tight-group-gap` and `uneven-group-gap`.
 - Two labels on different edges closer than their height (item 6).
 - A run inside a group near both a member and the border (item 2).
 - `ragged-bends`: accept turns that step by the edge gap (item 5).
