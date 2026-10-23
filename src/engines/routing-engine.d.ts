@@ -83,6 +83,11 @@ export interface RoutingOptions extends Partial<RoutingSettings> {
   facing?: boolean;
   /** Even out ports, fans and corridors after routing. On unless false. */
   tidy?: boolean;
+  /**
+   * In the tidy pass, straighten steps under 12px by sliding a run (and its port, or through a
+   * fold lane's waypoints) onto the next. On unless false.
+   */
+  jogs?: boolean;
 }
 
 export const RouteLab: {

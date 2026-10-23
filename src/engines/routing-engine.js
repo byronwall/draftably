@@ -1068,15 +1068,31 @@ function compute(input, rawOptions = {}) {
         segments(ps)
           .slice(1, -1)
           .filter(([a, b]) => distance(a, b) < 12).length;
-    const attempt = (changes, extra = {}) => {
+    // Whether `p` lies on the polyline `ps`.
+    const onPath = (p, ps) =>
+      segments(ps).some(
+        ([a, b]) =>
+          (Math.abs(a.x - b.x) < EPS &&
+            Math.abs(p.x - a.x) < EPS &&
+            p.y > Math.min(a.y, b.y) - EPS &&
+            p.y < Math.max(a.y, b.y) + EPS) ||
+          (Math.abs(a.y - b.y) < EPS &&
+            Math.abs(p.y - a.y) < EPS &&
+            p.x > Math.min(a.x, b.x) - EPS &&
+            p.x < Math.max(a.x, b.x) + EPS),
+      );
+    // `throughWaypoints` lets a waypoint route change when it still passes every waypoint.
+    const attempt = (changes, extra = {}, throughWaypoints = false) => {
       const next = routes.map((r, i) =>
         changes.has(i) ? { ...r, ...extra[i], points: compress(changes.get(i)) } : r,
       );
       for (const i of changes.keys()) {
         const r = next[i],
-          e = byId.get(r.id);
+          e = byId.get(r.id),
+          waypoints = e.cfg.waypoints || [];
         // Waypoint routes stay as authored, as in the nudge pass.
-        if (e.cfg.waypoints?.length) return false;
+        if (waypoints.length && !(throughWaypoints && waypoints.every(p => onPath(p, r.points))))
+          return false;
         if (!validPath(r.points, e, r.fromSide, r.toSide, obsOf(e))) return false;
         if (steps(r.points) > steps(routes[i].points)) return false;
       }
@@ -1181,6 +1197,59 @@ function compute(input, rawOptions = {}) {
         if (attempt(changes)) break;
       }
     }
+
+    // Jogs: a step under 12px between two parallel runs straightens by sliding one run onto
+    // the other's line. A run that ends at a port slides the port too, when its side has room
+    // and no other port sits there.
+    if (rawOptions.jogs !== false)
+      for (let i = 0; i < routes.length; i++) {
+        const separation = Math.max(s.portGap, s.edgeGap);
+        // Slide the run of segment `j` to `value` on `axis`; null when its port can't follow.
+        const slide = (ps, j, axis, value) => {
+          const next = clone(ps),
+            extra = {};
+          next[j][axis] = value;
+          next[j + 1][axis] = value;
+          for (const [k, end] of [
+            [j, 'from'],
+            [j + 1, 'to'],
+          ]) {
+            if (k !== (end === 'from' ? 0 : ps.length - 1)) continue;
+            const id = routes[i][end],
+              side = routes[i][end + 'Side'],
+              rect = rects.get(id);
+            if (!rect || !flat(rect) || (side === 'left' || side === 'right') !== (axis === 'y'))
+              return null;
+            const offset = round(value - center(rect)[axis]);
+            if (Math.abs(offset) > (axis === 'y' ? rect.h : rect.w) / 2 - 10 + EPS) return null;
+            const crowded = routes.some((q, m) =>
+              ends.some(
+                e2 =>
+                  (m !== i || e2 !== end) &&
+                  q[e2] === id &&
+                  q[e2 + 'Side'] === side &&
+                  Math.abs(tip(q.points, e2)[axis] - value) < separation - 0.01,
+              ),
+            );
+            if (crowded) return null;
+            Object.assign(next[k], port(rect, side, offset));
+            extra[end + 'Offset'] = offset;
+          }
+          return { next, extra };
+        };
+        const ps = routes[i].points;
+        for (let k = 1; k < ps.length - 2; k++) {
+          if (distance(ps[k], ps[k + 1]) >= 12) continue;
+          // The step runs along `axis`'s other coordinate; its neighbours run across it.
+          const axis = Math.abs(ps[k].x - ps[k + 1].x) < EPS ? 'y' : 'x';
+          const options = [
+            slide(ps, k - 1, axis, ps[k + 1][axis]),
+            slide(ps, k + 1, axis, ps[k][axis]),
+          ];
+          if (options.some(o => o && attempt(new Map([[i, o.next]]), { [i]: o.extra }, true)))
+            break;
+        }
+      }
 
     // Corridors: parallel inner runs close together keep one pitch.
     const pitch = s.edgeGap;
