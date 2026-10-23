@@ -148,13 +148,16 @@ U-turn hooks and lines squeezed between stacked boxes), **edges-too-close** (two
 by side 2–10px apart; exactly on top of each other is **shared-segment**),
 **edge-on-group-border** (a line runs along a group's border, under 8px from it), and
 **edge-near-group-border** (a line rides a group's border 8–15px inside or outside it, the same
-distance that counts as a hug on a box). Only parallel runs count; a line crossing a border or
+distance that counts as a hug on a box), and **edge-in-slot** (a line runs inside a group between
+one of its members and its border, under 24px from both: the inset round a group's members is no
+channel). Only parallel runs count; a line crossing a border or
 entering a box is fine.
 
 Orderliness (does the routing look drafted on purpose?): **uneven-channel** (three or more lines
 sharing a corridor, within 40px of each other and overlapping, are spaced at different pitches),
 **ragged-bends** (edges fanning out of one side of a node, or into one side, turn at different
-places instead of sharing a trunk), **uneven-ports** (the ports on a side sit lopsided about its
+places instead of sharing a trunk; a bundle whose turns step by exactly the edge gap, 16px or the
+file's `edge-gap`/`port-gap`, is the accepted stagger and doesn't count), **uneven-ports** (the ports on a side sit lopsided about its
 centre; a symmetric bunch around the middle is fine; ports on a diamond's slanted faces aren't on a
 side), **off-axis-port** (with a declared `direction`, a forward edge arrives sideways, as into a
 child's side in a downward tree, or leaves against the direction), **jog** (a tiny step under 12px inside a
@@ -196,7 +199,7 @@ swapped).
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
 8; label on node, label overlap 6; expectation failed 4; hook, shared segment, label on edge,
 detached, on title 3; edge-through-group, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
-bends, long edge, group border (label or edge), uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
+bends, long edge, group border (label or edge), edge in slot, uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
 uneven padding, padding varies, tight group gap 2; sparse group, group staircase (per link), uneven group gap 1;
 back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.
 
