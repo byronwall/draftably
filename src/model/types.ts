@@ -46,6 +46,8 @@ export interface EdgeLayout {
   labelDx?: number;
   labelDy?: number;
   waypoints?: Point[];
+  /** The reading direction of the layout that places both ends; the edge runs along it. */
+  flow?: 'right' | 'down';
   /** Set by the compiler for a fold's wrap edge: the line it returns along, between two bands. */
   lane?: Lane;
 }

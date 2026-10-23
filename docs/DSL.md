@@ -157,6 +157,11 @@ Settings: `clearance`, `standoff`, `port-gap`, `edge-gap`, `bend-penalty`, `cros
 to group borders. A line comes closer only when no clearer route exists. `standoff=0` turns the
 preference off.
 
+When the root `layout` line declares `direction=right` or `direction=down`, a forward connection
+between objects that layout places leaves its source's trailing side and enters its target's
+leading side (bottom to top going down), turning in the gap between ranks. It uses another side
+only when those are blocked. Connections inside a group with its own recipe are left to that recipe.
+
 ## Refinements
 
 Refinements adjust the automatic layout for one object. Positions are relative to the parent's

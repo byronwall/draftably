@@ -56,6 +56,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       icon: '',
     };
   }
+  const flow = readingDirections(scene);
   for (const e of scene.edges) {
     doc.graph.edges.push({
       id: e.id,
@@ -69,6 +70,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     doc.layout.edges[e.id] = {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
       ...(e.to !== 'auto' ? { toSide: e.to } : {}),
+      ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
       ...(e.lane ? { lane: e.lane } : {}),
     };
   }
@@ -88,6 +90,31 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   if (view.camera) doc.camera = { ...view.camera };
   if (view.theme) doc.theme = view.theme;
   return doc;
+}
+
+/**
+ * The declared reading direction for an edge: the root layout's `direction`, when the root layout
+ * places both ends. Ends that share a group arranged by its own recipe (a layout line, or the
+ * default column under a recipe root) read by that group's arrangement, so they get none.
+ */
+function readingDirections(scene: Scene) {
+  const layouts = scene.model.layouts,
+    root = layouts.find(l => l.scope === 'root');
+  const direction = root && root.direction !== 'auto' ? root.direction : undefined;
+  const chain = (id: string) => {
+    const list: string[] = [];
+    for (let p = scene.byId.get(id)?.parent; p && p !== 'root'; p = scene.byId.get(p)?.parent)
+      list.push(p);
+    return list;
+  };
+  return (a: string, b: string) => {
+    if (!direction) return undefined;
+    const above = new Set(chain(b));
+    const common = chain(a).find(p => above.has(p));
+    if (!common) return direction;
+    const own = layouts.some(l => l.scope === common) || !root?.engine;
+    return own ? undefined : direction;
+  };
 }
 
 export interface CanonicalGeometry {
