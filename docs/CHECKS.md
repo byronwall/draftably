@@ -106,6 +106,7 @@ promise a globally optimal drawing.
 
 `pnpm shoot <target> tmp/out.png` captures a URL, a `.draft` file (drawn through
 `draftably inspect --svg`), or an SVG, PNG or HTML file. `pnpm shoot --sheet tmp/sheet.png
-Label::a.draft b.draft …` lays several targets out as a labeled contact sheet. Use it for PR
-screenshots and visual checks instead of writing a one-off Playwright script. Keep the output in the
+Label::a.draft b.draft …` lays several targets out as a labeled contact sheet. `--crop x,y,w,h` zooms
+in on one region at 2x, in the target's own pixels. Use it for PR screenshots and visual checks
+instead of writing a one-off Playwright script or an image library. Keep the output in the
 ignored `tmp/` folder.

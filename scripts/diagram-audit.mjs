@@ -830,6 +830,26 @@ const slugs = fs
   .sort();
 
 const rows = [];
+/**
+ * Sheets are 1000 CSS px wide, so the 2x PNG is 2000px: what a reviewer sees without
+ * downscaling. The column count is the one that leaves each card largest once the whole sheet
+ * fits a 2000x2000 view.
+ */
+const SHEET_WIDTH = 1000;
+function sheetCols(renders, cards) {
+  const aspects = renders.filter(r => !r.error).map(r => r.aspect);
+  const aspect = aspects.reduce((a, b) => a + b, 0) / Math.max(1, aspects.length) || 1;
+  let best = 1;
+  let bestWidth = 0;
+  for (let cols = 1; cols <= cards; cols++) {
+    const card = (SHEET_WIDTH - 32 - 16 * (cols - 1)) / cols;
+    const height = 32 + Math.ceil(cards / cols) * (card / aspect + 30) + 16;
+    const shown = card / Math.max(1, height / SHEET_WIDTH);
+    if (shown > bestWidth) [best, bestWidth] = [cols, shown];
+  }
+  return best;
+}
+
 for (const slug of slugs) {
   const dir = path.join(corpusDir, slug);
   const variants = fs
@@ -901,9 +921,9 @@ for (const slug of slugs) {
           '--sheet',
           path.join(outSlug, 'sheet.png'),
           '--size',
-          `${Math.min(3600, 1200 * variants.length)}x800`,
+          `${SHEET_WIDTH}x800`,
           '--cols',
-          String(variants.length),
+          String(sheetCols(results, variants.length)),
           ...cards,
         ],
         { stdio: 'ignore' },
@@ -922,9 +942,14 @@ for (const slug of slugs) {
           '--sheet',
           path.join(outSlug, `compare-${png}`),
           '--size',
-          '2400x800',
+          `${SHEET_WIDTH}x800`,
           '--cols',
-          '2',
+          String(
+            sheetCols(
+              results.filter(r => r.file === v),
+              2,
+            ),
+          ),
           `before ${slug} ${v}::${old}`,
           `after ${slug} ${v}::${path.join(outSlug, png)}`,
         ],
