@@ -70,7 +70,7 @@ describe('routing clearance', () => {
       groups: [],
       edges: [edge('e', 'a', 'b')],
     };
-    const legacy = RouteLab.compute(input, { standoff: 0 }).routes[0];
+    const legacy = RouteLab.compute(input, { standoff: 0, facing: false }).routes[0];
     const route = RouteLab.compute(input).routes[0];
     expect(closestParallel(legacy.points, blocker)).toBeLessThan(15);
     expect(closestParallel(route.points, blocker)).toBeGreaterThanOrEqual(20);
@@ -96,7 +96,7 @@ describe('routing clearance', () => {
       }
       return best;
     };
-    const legacy = RouteLab.compute(input, { standoff: 0 }).routes[0];
+    const legacy = RouteLab.compute(input, { standoff: 0, facing: false }).routes[0];
     const route = RouteLab.compute(input).routes[0];
     expect(nearestBorder(legacy.points)).toBeLessThan(8);
     expect(route.blocked).toBe(false);

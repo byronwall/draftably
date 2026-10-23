@@ -505,7 +505,9 @@ function slot(id, side, r, used, s, other) {
 const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
+const FAR_PENALTY = 100;
 function compute(input, rawOptions = {}) {
+  const facingFans = rawOptions.facing !== false;
   const began = Date.now(),
     s = settings(rawOptions),
     rects = new Map(input.nodes.map(n => [n.id, { ...n }])),
@@ -679,25 +681,41 @@ function compute(input, rawOptions = {}) {
       onAxis = (side, end) => forward && side === (end === 'from' ? TRAILING : LEADING)[flow];
     const candidates = [];
     let best = null;
+    // Ports already on side `side` of node `id`, from this edge's end of the fan.
+    const taken = (id, side, end) =>
+      used.filter(r => r[end] === id && r[end + 'Side'] === side).length;
+    // A side faces the other end when it points toward it. A fan spreads along a
+    // facing side for free until the side runs out of port slots (`slot` spacing),
+    // and only then pays the fan-out penalty that pushes it round to another side.
+    const facing = (side, from, to) =>
+      vector[side].x * (to.x - from.x) + vector[side].y * (to.y - from.y) > 0.01;
+    const roomy = (side, r, n) => {
+      const span = (side === 'left' || side === 'right' ? r.h : r.w) - 24,
+        separation = Math.max(s.portGap, s.edgeGap);
+      return n < 1 + 2 * Math.floor(span / 2 / separation + EPS);
+    };
+    function fan(side, r, from, to, end, id) {
+      const n = taken(id, side, end);
+      if (!n || (end === 'from' ? onAxis(side, 'from') : onAxis(side, 'to'))) return 0;
+      if (facingFans && facing(side, from, to) && roomy(side, r, n)) return 0;
+      return n * s.fanoutPenalty;
+    }
     function score(points, c) {
       const v = vector[c.fs],
         w = vector[c.ts],
         delta = { x: cb.x - ca.x, y: cb.y - ca.y };
+      // Leaving or arriving by a far side (one that points away from the other end)
+      // draws a hook round the box; it is worth a detour only when the facing sides
+      // are blocked.
+      const far = facingFans ? FAR_PENALTY : 18;
       const backwards =
-        (v.x * delta.x + v.y * delta.y < -0.01 ? 18 : 0) +
-        (w.x * -delta.x + w.y * -delta.y < -0.01 ? 18 : 0);
+        (v.x * delta.x + v.y * delta.y < -0.01 ? far : 0) +
+        (w.x * -delta.x + w.y * -delta.y < -0.01 ? far : 0);
       const stability = old
         ? (c.fs !== old.fromSide ? s.portStability : 0) +
           (c.ts !== old.toSide ? s.portStability : 0)
         : 0;
-      const fanout =
-        used.reduce(
-          (n, r) =>
-            n +
-            (r.from === e.from && r.fromSide === c.fs && !onAxis(c.fs, 'from') ? 1 : 0) +
-            (r.to === e.to && r.toSide === c.ts && !onAxis(c.ts, 'to') ? 1 : 0),
-          0,
-        ) * s.fanoutPenalty;
+      const fanout = fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to);
       return cost(points, used, s, near) + backwards + stability + fanout + axis(c);
     }
     const remember = (points, c, o = obs) => {
