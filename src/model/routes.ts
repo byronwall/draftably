@@ -70,41 +70,78 @@ const segmentHits = (a: Point, b: Point, r: Rect) =>
   Math.max(a.y, b.y) > r.y &&
   Math.min(a.y, b.y) < r.y + r.h;
 
+/** A spot for an edge's label, with what it crosses (`cost`) and how well it reads (`score`). */
+interface LabelSpot extends EdgeLabelBox {
+  cost: number;
+  score: number;
+}
+
+/** Room a label wants between itself and another edge's line. */
+const LINE_CLEARANCE = 8;
+
 /**
- * Choose a label spot on the edge's own route: on its longest clear segment, or just beside it.
- * A spot never covers a shape, a group title or an earlier label, and it avoids other edges and
- * group borders when it can. Only when every spot near the route is blocked does the label move
- * away from it, and then as little as possible.
+ * Every spot on the edge's own route, or just beside it, that covers no shape or group title.
+ * Another edge through the text misleads the reader (5) and one through its padding seems to stop
+ * at it (3); a line touching it or a group border under it (2), or a line within
+ * `LINE_CLEARANCE` or a shared trunk (1), only crowds it.
  */
-export function placeEdgeLabel(
+function labelSpots(
   label: string,
   points: Point[],
   obstacles: Rect[],
-  existing: Rect[] = [],
-  look: ResolvedAppearance = resolveAppearance(),
-  avoid: LabelAvoid = {},
-): EdgeLabelBox {
+  look: ResolvedAppearance,
+  avoid: LabelAvoid,
+) {
   const { w, h } = edgeLabelSize(label, look),
-    candidates: Array<EdgeLabelBox & { cost: number }> = [];
+    spots: LabelSpot[] = [];
   const box = (p: Point) => ({ x: p.x - w / 2, y: p.y - h / 2, w, h });
-  const blocked = (p: Point) => {
-    const r = box(p);
-    return obstacles.some(o => overlaps(r, o, 4)) || existing.some(o => overlaps(r, o, 6));
-  };
   const start = points[0],
     lines = (avoid.routes ?? []).map(route => ({
       route,
       shared: !!start && !!route[0] && manhattan(route[0], start) < 1,
     }));
-  // Another edge under the label misleads the reader; a shared trunk or a border only crowds it.
+  const grown = (r: Rect, d: number) => ({
+    x: r.x - d,
+    y: r.y - d,
+    w: r.w + 2 * d,
+    h: r.h + 2 * d,
+  });
+  // The text itself, inside the label's padding (8px each side, one line of the annotation type).
+  const size = look.annotation.size;
   const cost = (p: Point) => {
     const r = box(p),
-      near = { x: r.x - 2, y: r.y - 2, w: r.w + 4, h: r.h + 4 };
+      ink = { x: r.x + 8, y: p.y - size / 2, w: Math.max(1, w - 16), h: size },
+      through = grown(r, -1),
+      touch = grown(r, 3),
+      near = grown(r, LINE_CLEARANCE);
     let c = 0;
-    for (const { route, shared } of lines)
-      if (route.some((q, i) => i && segmentHits(route[i - 1], q, near))) c += shared ? 1 : 3;
-    for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 1;
+    for (const { route, shared } of lines) {
+      const hits = (q: Rect) => route.some((s, i) => i && segmentHits(route[i - 1], s, q));
+      if (hits(ink)) c += shared ? 1 : 5;
+      else if (hits(through)) c += shared ? 1 : 3;
+      else if (!shared && hits(touch)) c += 2;
+      else if (!shared && hits(near)) c += 1;
+    }
+    for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 2;
     return c;
+  };
+  // Shifts across an upright segment that put the label's edge just past a parallel line beside
+  // it, keeping the segment at least 6px inside the label.
+  const beside = (a: Point, b: Point) => {
+    const lo = Math.min(a.y, b.y) - h,
+      hi = Math.max(a.y, b.y) + h,
+      out: number[] = [];
+    for (const { route } of lines)
+      for (let i = 1; i < route.length; i++) {
+        const p = route[i - 1],
+          q = route[i];
+        if (p.x !== q.x || Math.max(p.y, q.y) < lo || Math.min(p.y, q.y) > hi) continue;
+        const d = p.x - a.x;
+        if (!d || Math.abs(d) > w) continue;
+        const offset = d < 0 ? d + 4 + w / 2 : d - 4 - w / 2;
+        if (Math.abs(offset) <= w / 2 - 6 && Math.abs(offset) > h - 4) out.push(offset);
+      }
+    return out;
   };
   for (let i = 1; i < points.length; i++) {
     const a = points[i - 1],
@@ -114,16 +151,17 @@ export function placeEdgeLabel(
     const flat = a.y === b.y,
       base = len + (flat ? 50 : 0),
       // Beside a level segment the label sits just above or below it; a vertical segment runs
-      // through the label, which may shift a little to either side.
-      offsets = flat ? [0, -(h / 2 + 4), h / 2 + 4] : [0, -(h - 4), h - 4],
+      // through the label, which may shift a little to either side, or far enough to clear a
+      // line running alongside while its own line still crosses it.
+      offsets = flat ? [0, -(h / 2 + 4), h / 2 + 4] : [0, -(h - 4), h - 4, ...beside(a, b)],
       steps = Math.max(2, Math.ceil(len / 6));
     for (let k = 0; k <= steps; k++) {
       const t = k / steps,
         along = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
       for (const offset of offsets) {
         const p = flat ? { x: along.x, y: along.y + offset } : { x: along.x + offset, y: along.y };
-        if (blocked(p)) continue;
-        candidates.push({
+        if (obstacles.some(o => overlaps(box(p), o, 4))) continue;
+        spots.push({
           ...p,
           w,
           h,
@@ -134,12 +172,92 @@ export function placeEdgeLabel(
       }
     }
   }
-  candidates.sort((a, b) => a.cost - b.cost || b.score! - a.score!);
-  if (candidates[0]) {
-    const { cost: _cost, ...best } = candidates[0];
-    return best;
-  }
-  return shiftedLabel(points, w, h, obstacles, existing, blocked);
+  return { w, h, spots, cost };
+}
+
+/** One edge label for `placeEdgeLabels`: its text, its route, and what it should keep clear of. */
+export interface LabelJob {
+  label: string;
+  points: Point[];
+  avoid?: LabelAvoid;
+  /** The user's nudge, added to the chosen spot. */
+  dx?: number;
+  dy?: number;
+}
+
+/**
+ * Place every edge label at once, after all routes exist. Each label takes a spot on its own
+ * route that covers no shape, group title or other label, and crosses as few other lines as it
+ * can; a label closer to another than its own height costs as much as a line beside it. Labels
+ * with a clean spot go first, then one repair sweep moves each label to its best spot given all
+ * the others. Only a label with every spot near its route blocked moves away from it, and then as
+ * little as possible.
+ */
+export function placeEdgeLabels(
+  jobs: LabelJob[],
+  obstacles: Rect[],
+  look: ResolvedAppearance = resolveAppearance(),
+  fixed: Rect[] = [],
+): EdgeLabelBox[] {
+  const prepared = jobs.map(j => labelSpots(j.label, j.points, obstacles, look, j.avoid ?? {})),
+    chosen: Array<EdgeLabelBox | null> = jobs.map(() => null);
+  const rectOf = (i: number, s: EdgeLabelBox) => ({
+    x: s.x + (jobs[i].dx ?? 0) - s.w / 2,
+    y: s.y + (jobs[i].dy ?? 0) - s.h / 2,
+    w: s.w,
+    h: s.h,
+  });
+  const pick = (i: number): EdgeLabelBox => {
+    const others = [...fixed, ...chosen.flatMap((c, k) => (k !== i && c ? [rectOf(k, c)] : []))],
+      { w, h, spots, cost } = prepared[i];
+    let best: LabelSpot | null = null,
+      bestCost = Infinity;
+    for (const s of spots) {
+      const r = rectOf(i, s);
+      if (others.some(o => overlaps(r, o, 6))) continue;
+      const c = s.cost + others.filter(o => overlaps(r, o, h)).length;
+      if (c < bestCost || (c === bestCost && s.score > best!.score)) [best, bestCost] = [s, c];
+    }
+    if (best) {
+      const { cost: _cost, ...spot } = best;
+      return spot;
+    }
+    const box = (p: Point) => ({ x: p.x - w / 2, y: p.y - h / 2, w, h });
+    return shiftedLabel(
+      jobs[i].points,
+      w,
+      h,
+      obstacles,
+      others,
+      p => obstacles.some(o => overlaps(box(p), o, 4)) || others.some(o => overlaps(box(p), o, 6)),
+      cost,
+    );
+  };
+  // Labels with a clean spot go first, so one that crosses lines wherever it goes never takes it.
+  const least = prepared.map(p => Math.min(Infinity, ...p.spots.map(s => s.cost))),
+    order = jobs.map((_, i) => i).sort((a, b) => least[a] - least[b] || a - b);
+  for (const i of order) chosen[i] = pick(i);
+  for (const i of order) chosen[i] = pick(i);
+  return chosen.map((c, i) => ({
+    ...c!,
+    x: c!.x + (jobs[i].dx ?? 0),
+    y: c!.y + (jobs[i].dy ?? 0),
+  }));
+}
+
+/**
+ * Choose a label spot on the edge's own route, clear of the labels already placed: see
+ * `placeEdgeLabels`.
+ */
+export function placeEdgeLabel(
+  label: string,
+  points: Point[],
+  obstacles: Rect[],
+  existing: Rect[] = [],
+  look: ResolvedAppearance = resolveAppearance(),
+  avoid: LabelAvoid = {},
+): EdgeLabelBox {
+  return placeEdgeLabels([{ label, points, avoid }], obstacles, look, existing)[0];
 }
 
 /** Last resort when every spot on or beside the route is covered: the nearest clear spot. */
@@ -150,6 +268,7 @@ function shiftedLabel(
   obstacles: Rect[],
   existing: Rect[],
   blocked: (p: Point) => boolean,
+  cost: (p: Point) => number = () => 0,
 ): EdgeLabelBox {
   const shifted: EdgeLabelBox[] = [];
   for (let i = 1; i < points.length; i++) {
@@ -190,7 +309,10 @@ function shiftedLabel(
       }
     }
   }
-  shifted.sort((a, b) => b.score! - a.score!);
+  // The nearest spot, where a line through the text (cost 5) counts as 40px further: the label
+  // may step past a line or two, but never flees far from its edge to avoid one.
+  const rank = new Map(shifted.map(s => [s, s.score! - cost(s) * 16]));
+  shifted.sort((a, b) => rank.get(b)! - rank.get(a)!);
   const a = points[0] || { x: 0, y: 0 },
     b = points[1] || a;
   return shifted[0] || { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, w, h };
@@ -270,10 +392,24 @@ function outLane(rest: EdgeLayout, lane: Lane, a: Rect, b: Rect): EdgeLayout {
     enter = lane.enter;
   const beyond = (r: Rect) => (before ? at < r[v] : at > r[v] + depth(r));
   if (enter === undefined || !beyond(a) || !beyond(b)) return rest;
-  if (back ? enter <= b[u] + length(b) : enter >= b[u]) return rest;
   const point = (along: number, across: number) =>
-      level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) },
-    offset = (before ? -1 : 1) * Math.min(LANE_PORT, depth(b) / 2 - LANE_INSET);
+    level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) };
+  if (lane.face) {
+    // Square into the target's face toward the lane: the gap beside it holds another label.
+    if (enter < b[u] || enter > b[u] + length(b)) return rest;
+    const toward = level ? (before ? 'top' : 'bottom') : before ? 'left' : 'right';
+    return {
+      fromSide: toward,
+      toSide: toward,
+      ...rest,
+      waypoints: [
+        point(back ? a[u] + LANE_INSET : a[u] + length(a) - LANE_INSET, at),
+        point(enter, at),
+      ],
+    };
+  }
+  if (back ? enter <= b[u] + length(b) : enter >= b[u]) return rest;
+  const offset = (before ? -1 : 1) * Math.min(LANE_PORT, depth(b) / 2 - LANE_INSET);
   return {
     fromSide: level ? (before ? 'top' : 'bottom') : before ? 'left' : 'right',
     toSide: level ? (back ? 'right' : 'left') : back ? 'bottom' : 'top',
@@ -335,24 +471,30 @@ export function drawRoutes(
     );
   }
   const look = resolveAppearance(doc.appearance),
-    placed: Rect[] = [],
     byEdge = new Map(vg.edges.map(e => [e.id, e])),
     radius = doc.settings.routing?.cornerRadius ?? 6;
-  return result.routes.map(route => {
-    const edge = byEdge.get(route.id)!,
-      cfg = doc.layout.edges[route.id] || {};
-    let label: EdgeLabelBox | null = null;
-    if (edge.label) {
-      label = placeEdgeLabel(edge.label, route.points, obstacles, placed, look, {
-        routes: result.routes.filter(r => r !== route).map(r => r.points),
-        borders,
-      });
-      label.x += cfg.labelDx || 0;
-      label.y += cfg.labelDy || 0;
-      placed.push({ x: label.x - label.w / 2, y: label.y - label.h / 2, w: label.w, h: label.h });
-    }
-    return { ...route, label, path: roundedPath(route.points, radius) };
-  });
+  // Labels are placed together once every route exists, so none sits on a line drawn after it.
+  const labelled = result.routes.filter(route => byEdge.get(route.id)!.label),
+    boxes = placeEdgeLabels(
+      labelled.map(route => {
+        const cfg = doc.layout.edges[route.id] || {};
+        return {
+          label: byEdge.get(route.id)!.label!,
+          points: route.points,
+          avoid: { routes: result.routes.filter(r => r !== route).map(r => r.points), borders },
+          dx: cfg.labelDx || 0,
+          dy: cfg.labelDy || 0,
+        };
+      }),
+      obstacles,
+      look,
+    ),
+    labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
+  return result.routes.map(route => ({
+    ...route,
+    label: labels.get(route) ?? null,
+    path: roundedPath(route.points, radius),
+  }));
 }
 
 export function computeRoutes(

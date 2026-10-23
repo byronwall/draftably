@@ -68,6 +68,11 @@ export type Lane = ({ y: number } | { x: number }) & {
    * along it, and at `enter` turns into the target's side that faces back toward the source.
    */
   out?: boolean;
+  /**
+   * With `out`: the gap beside the target holds another edge's label, so the edge arrives square
+   * on the target's face toward the lane, at `enter` (its middle), instead of turning into that gap.
+   */
+  face?: boolean;
 };
 
 export interface LabelLayout {

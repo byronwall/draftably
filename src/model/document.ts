@@ -313,6 +313,7 @@ export function normalize(input: unknown): Diagram {
           next.lane[key] = cfg.lane[key];
         }
       if (cfg.lane.out === true) next.lane.out = true;
+      if (cfg.lane.face === true) next.lane.face = true;
     }
     if (cfg.flow === 'right' || cfg.flow === 'down') next.flow = cfg.flow;
     out.layout.edges[e.id] = next;
