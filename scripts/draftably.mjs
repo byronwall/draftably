@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // Run the `draftably` CLI, rebuilding it first when any source file is newer than the build.
+// `open` also rebuilds the viewer it serves.
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -38,6 +39,23 @@ if (built < newest(path.join(root, 'src'))) {
     );
   } catch {
     console.error('The draftably CLI failed to build.');
+    process.exit(1);
+  }
+}
+
+// `open` serves the built viewer from dist/, so a fresh or edited checkout builds it first.
+const viewer = path.join(root, 'dist/index.html');
+const viewerBuilt = fs.existsSync(viewer) ? fs.statSync(viewer).mtimeMs : 0;
+if (process.argv[2] === 'open' && viewerBuilt < newest(path.join(root, 'src'))) {
+  console.error('Building the viewer…');
+  try {
+    execFileSync(
+      process.execPath,
+      [path.join(root, 'node_modules/vite/bin/vite.js'), 'build', '--logLevel', 'error'],
+      { cwd: root, stdio: ['ignore', 'ignore', 'inherit'] },
+    );
+  } catch {
+    console.error('The draftably viewer failed to build.');
     process.exit(1);
   }
 }

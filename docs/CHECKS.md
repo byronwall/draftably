@@ -102,10 +102,24 @@ The SolidJS rewrite was exercised in Chrome (the Claude desktop browser pane) at
 The layout engines are heuristics: they can leave crossings or ordering conflicts and do not
 promise a globally optimal drawing.
 
+## Diagram quality audit
+
+`node scripts/diagram-audit.mjs docs/intent/diagram-quality/corpus tmp/audit/rN` measures the
+audit corpus and writes metrics, PNGs, contact sheets and `summary.md`. The rubric, the corpus
+rules and the round loop are in
+[intent/diagram-quality/RUBRIC.md](intent/diagram-quality/RUBRIC.md); past rounds are in
+`rounds/`.
+
+- A full run with screenshots takes about 90 seconds. While iterating on one cause, pass
+  `--only slug,slug` and `--no-shots`, then do a full run before the PR.
+- Run full rounds in the background and wait for them to finish; don't poll with sleep loops.
+- `--baseline tmp/audit/rN-1` adds before/after `compare-*.png` sheets for PR screenshots.
+
 ## Screenshots
 
 `pnpm shoot <target> tmp/out.png` captures a URL, a `.draft` file (drawn through
 `draftably inspect --svg`), or an SVG, PNG or HTML file. `pnpm shoot --sheet tmp/sheet.png
-Label::a.draft b.draft …` lays several targets out as a labeled contact sheet. Use it for PR
-screenshots and visual checks instead of writing a one-off Playwright script. Keep the output in the
+Label::a.draft b.draft …` lays several targets out as a labeled contact sheet. `--crop x,y,w,h` zooms
+in on one region at 2x, in the target's own pixels. Use it for PR screenshots and visual checks
+instead of writing a one-off Playwright script or an image library. Keep the output in the
 ignored `tmp/` folder.

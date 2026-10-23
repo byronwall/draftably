@@ -4,12 +4,15 @@
  * Playwright Chromium.
  *
  *   pnpm shoot <target> <out.png> [--size 1440x900] [--wait 500]
+ *   pnpm shoot <target> <out.png> --crop x,y,w,h
  *   pnpm shoot --sheet <out.png> [--cols N] [Label::]<target> [Label::]<target> ...
  *
  * A target is a URL, a `.draft` file (drawn with `draftably inspect --svg`), or an SVG, PNG or
  * HTML file. `--sheet` lays the targets out as a labeled contact sheet, one card per target;
  * `--cols` fixes the number of columns (by default as many 420px columns as fit).
  * Without `--size`, a file target is captured at its own size and a URL at 1440x900.
+ * `--crop` zooms in on one region at 2x: x,y,w,h are in the target's own pixels (a PNG's pixels,
+ * an SVG's or diagram's units, a page's CSS pixels). Use it to inspect detail in a large render.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -20,7 +23,7 @@ import { chromium } from 'playwright-core';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const usage = `Usage:
-  pnpm shoot <target> <out.png> [--size WxH] [--wait ms]
+  pnpm shoot <target> <out.png> [--size WxH] [--wait ms] [--crop x,y,w,h]
   pnpm shoot --sheet <out.png> [--cols N] [Label::]<target> ...`;
 
 const args = process.argv.slice(2);
@@ -34,6 +37,11 @@ const sheet = args.includes('--sheet') ? (args.splice(args.indexOf('--sheet'), 1
 const size = option('--size');
 const wait = Number(option('--wait') ?? 300);
 const cols = option('--cols');
+const crop = option('--crop')?.split(',').map(Number);
+if (crop && (crop.length !== 4 || crop.some(n => !Number.isFinite(n)))) {
+  console.error('--crop takes x,y,w,h');
+  process.exit(1);
+}
 if (args.length < 2 || args.some(a => a.startsWith('--'))) {
   console.error(usage);
   process.exit(1);
@@ -88,6 +96,27 @@ try {
     await page.waitForTimeout(wait);
     await page.screenshot({ path: out, fullPage: true });
     console.log(`Wrote ${out} (${items.length} cards)`);
+  } else if (crop) {
+    const [target, out] = args;
+    const [x, y, width, height] = crop;
+    let url = urlFor(target);
+    // A file is drawn at its intrinsic size from the page origin, so its pixels are CSS pixels.
+    if (url.startsWith('file:')) {
+      const html = path.join(tmp, 'crop.html');
+      fs.writeFileSync(
+        html,
+        `<!doctype html><style>body{margin:0}img{display:block}</style><img src="${url}">`,
+      );
+      url = pathToFileURL(html).href;
+    }
+    const page = await browser.newPage({
+      viewport: { width: Math.max(1440, x + width), height: Math.max(900, y + height) },
+      deviceScaleFactor: 2,
+    });
+    await page.goto(url, { waitUntil: 'load' });
+    await page.waitForTimeout(wait);
+    await page.screenshot({ path: out, clip: { x, y, width, height }, fullPage: true });
+    console.log(`Wrote ${out} (${width}x${height} at ${x},${y}, 2x)`);
   } else {
     const [target, out] = args;
     const url = urlFor(target);

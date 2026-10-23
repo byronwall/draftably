@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
+import * as prettier from 'prettier';
 
 const [bump, ...words] = process.argv.slice(2);
 const summary = words.join(' ').trim();
@@ -14,5 +15,8 @@ if (pkg.private) {
   process.exit(1);
 }
 const path = `.changeset/${randomUUID()}.md`;
-writeFileSync(path, `---\n${JSON.stringify(pkg.name)}: ${bump}\n---\n\n${summary}\n`);
+// Formatted with the repo's Prettier settings, so `format:check` passes on the new file.
+const text = `---\n${JSON.stringify(pkg.name)}: ${bump}\n---\n\n${summary}\n`;
+const options = await prettier.resolveConfig(path);
+writeFileSync(path, await prettier.format(text, { ...options, filepath: path }));
 console.log(`Wrote ${path}`);

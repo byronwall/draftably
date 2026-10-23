@@ -172,7 +172,8 @@ uneven padding, padding varies 2; back edge 0.5. Lower is better. It ranks and t
 ## Review
 
 Look at each render at the size a reader would see it (`v0.png`, not the sheet), with its issue
-list from `metrics.json` open.
+list from `metrics.json` open. Zoom in on a spot with `pnpm shoot <slug>/v0.png tmp/zoom.png --crop
+x,y,w,h` (in the PNG's pixels) rather than judging spacing from a scaled-down view.
 
 ### Checklist
 

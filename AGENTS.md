@@ -5,8 +5,11 @@ Pointers only. Read the linked doc when the task touches it.
 - **Checks:** `pnpm check:fast` (about 10s) while iterating; `pnpm check` before pushing. The engine
   suites take about 80s, so run them in the background. Suites, browser proofs and
   failure output: [docs/CHECKS.md](docs/CHECKS.md).
-- **Screenshots:** `pnpm shoot <url|file.draft|file.svg> tmp/out.png`, or `--sheet` for a contact
-  sheet. Don't write one-off Playwright scripts.
+- **Diagram quality audit:** rubric, corpus and round loop in
+  [docs/intent/diagram-quality/RUBRIC.md](docs/intent/diagram-quality/RUBRIC.md); run it as
+  [docs/CHECKS.md](docs/CHECKS.md) describes.
+- **Screenshots:** `pnpm shoot <url|file.draft|file.svg> tmp/out.png`, `--sheet` for a contact
+  sheet, or `--crop x,y,w,h` to zoom in. Don't write one-off Playwright or image scripts.
 - **Releases:** a PR that changes `src/`, `examples/`, `docs/DSL.md` or `packages/cli/` needs a
   changeset ([docs/RELEASING.md](docs/RELEASING.md)).
 - **File language:** [docs/DSL.md](docs/DSL.md). Code map: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
