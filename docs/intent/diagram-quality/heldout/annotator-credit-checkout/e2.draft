@@ -1,0 +1,41 @@
+diagram "Image Annotator: buying a credit pack" version=1
+
+# expect reads-y buy checkout session webhook mark ledger
+# expect keeps-order
+# expect near failed signed 200
+# expect near dup mark 160
+
+theme mulberry
+
+node buy "Buy credits" shape=pill
+node checkout "POST /billing/checkout"
+node session "Stripe Checkout"
+node webhook "POST /stripe/webhook"
+node signed "Signature valid?" shape=diamond
+node reject "400 invalid webhook"
+node paid "Paid credit pack?" shape=diamond
+node ignored "Record ignored event"
+node user "Upsert user by email"
+node mark "markCheckoutPaid"
+node dup "Already processed?" shape=diamond
+node ledger "Credit ledger"
+node purchases "Purchases"
+node failed "markCheckoutFailed"
+
+edge c1 buy -> checkout
+edge c2 checkout -> session "redirect"
+edge c3 session -> webhook "completed"
+edge c4 webhook -> signed
+edge c5 signed -> reject "no"
+edge c6 signed -> paid "yes"
+edge c7 paid -> ignored "no"
+edge c8 paid -> user "yes"
+edge c9 user -> mark
+edge c10 mark -> purchases
+edge c11 mark -> dup
+edge c12 dup -> ledger "no: grant credits"
+edge c13 dup -> ignored "yes"
+edge c14 signed -> failed "expired or failed"
+edge c15 failed -> purchases "status failed"
+
+layout root flow direction=down
