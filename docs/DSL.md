@@ -87,6 +87,11 @@ title), `radius` (0–24, rectangle corners), `title-font` and `annotation-font`
 `mono`), and `canvas`, `text` and `connection` colors. Colors are hex values in double quotes:
 `#` outside quotes starts a comment.
 
+Switching themes keeps the layout: nodes are placed on slots sized in Graphite (with the file's
+own overrides) and drawn at the theme's size in their slot, centred along the reading direction
+with each row keeping its top. A slot grows only where the theme's node is larger than the gap
+around it can absorb, so rows and order always hold.
+
 **Families and shades.** Built-in families: `primary` and `secondary` (the theme's own accents),
 `slate`, `stone`, `blue`, `sky`, `teal`, `mint`, `green`, `amber`, `orange`, `red`, `rose` and
 `violet`. Each has shades `50 100 200 300 400 500 600 700 800 900 950`; lower numbers are lighter
