@@ -48,7 +48,16 @@ export interface EdgeLayout {
   waypoints?: Point[];
   /** The reading direction of the layout that places both ends; the edge runs along it. */
   flow?: 'right' | 'down';
+  /** Set by the compiler for a fold's wrap edge: the line it returns along, between two bands. */
+  lane?: Lane;
 }
+
+/**
+ * A channel between two bands of a fold: a level line at `y`, or an upright one at `x`. With
+ * `leave`, the edge leaves its source's side and turns onto the lane at that coordinate; with
+ * `enter`, it runs on along the lane to that coordinate and turns into its target's side.
+ */
+export type Lane = ({ y: number } | { x: number }) & { leave?: number; enter?: number };
 
 export interface LabelLayout {
   mode?: LabelMode;

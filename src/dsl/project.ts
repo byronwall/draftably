@@ -71,6 +71,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
       ...(e.to !== 'auto' ? { toSide: e.to } : {}),
       ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
+      ...(e.lane ? { lane: e.lane } : {}),
     };
   }
   const groups = new Set(doc.graph.groups.map(g => g.id));

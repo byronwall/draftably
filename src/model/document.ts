@@ -303,6 +303,17 @@ export function normalize(input: unknown): Diagram {
         throw Error(e.id + ': invalid connection bends.');
       next.waypoints = cfg.waypoints.map((p: Raw) => ({ x: p.x, y: p.y }));
     }
+    if (cfg.lane) {
+      const at = 'y' in cfg.lane ? cfg.lane.y : cfg.lane.x;
+      if (!finite(at)) throw Error(e.id + ': invalid connection lane.');
+      next.lane = 'y' in cfg.lane ? { y: at } : { x: at };
+      for (const key of ['leave', 'enter'] as const)
+        if (cfg.lane[key] !== undefined) {
+          if (!finite(cfg.lane[key])) throw Error(e.id + ': invalid connection lane.');
+          next.lane[key] = cfg.lane[key];
+        }
+    }
+    if (cfg.flow === 'right' || cfg.flow === 'down') next.flow = cfg.flow;
     out.layout.edges[e.id] = next;
   }
 
