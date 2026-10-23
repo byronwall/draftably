@@ -114,3 +114,35 @@ describe('group packing', () => {
     expect(box(scene, 'device').x).toBeGreaterThan(server.x + server.w);
   });
 });
+
+describe('busy gaps', () => {
+  /** A client group whose session sends two lines into the gap above the project. */
+  const busy = [
+    'group client "Client"',
+    'node canvas "Canvas" in=client',
+    'node session "Session" in=client',
+    'node project "Project" in=client',
+    'group server "Server"',
+    'node save "Save" in=server',
+    'node watch "Watch" in=server',
+    'edge e1 canvas -> session',
+    'edge e2 session -> project "recompile"',
+    'edge e3 session -> save "edit"',
+    'edge e4 project -> canvas "redraw"',
+    'edge e5 save -> watch',
+    'layout root engine=layered direction=down',
+    '',
+  ].join('\n');
+
+  it('widens a gap in a group to fit the lines that run through it', async () => {
+    const scene = await compile(busy);
+    // recompile and edit leave Session through the gap above Project: two standoffs, one pitch
+    // and both labels.
+    expect(gap(scene, 'session', 'project')).toBeGreaterThanOrEqual(2 * 20 + 20 + 2 * 14);
+  });
+
+  it('keeps a gap with one line at the group gap', async () => {
+    const scene = await compile(busy);
+    expect(gap(scene, 'canvas', 'session')).toBeLessThan(gap(scene, 'session', 'project'));
+  });
+});
