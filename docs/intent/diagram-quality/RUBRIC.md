@@ -129,7 +129,8 @@ the label), **label-detached** (label farther than its own height from its edge)
 Routing: **crossings**, **bends per edge**, **many-bends** (≥ 4), **hook** (an edge leaves one
 way and arrives travelling the opposite way: the U-turn into a neighbour), **shared-segment**
 (unrelated edges run along the same line), **edge-through-group** (an edge cuts through a group
-holding neither end), **back edges** (against the reading direction).
+holding neither end), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
+flow reads forward and doesn't count).
 
 Clearance (can a reader tell which line is which?): **edge-hugs-node** (a line runs alongside a
 box, under 15px from its side, for more than 16px, including a box it connects; this catches the
@@ -142,7 +143,9 @@ Orderliness (does the routing look drafted on purpose?): **uneven-channel** (thr
 sharing a corridor, within 40px of each other and overlapping, are spaced at different pitches),
 **ragged-bends** (edges fanning out of one side of a node, or into one side, turn at different
 places instead of sharing a trunk), **uneven-ports** (the ports on a side sit lopsided about its
-centre; a symmetric bunch around the middle is fine), **jog** (a tiny step under 12px inside a
+centre; a symmetric bunch around the middle is fine; ports on a diamond's slanted faces aren't on a
+side), **off-axis-port** (with a declared `direction`, a forward edge arrives sideways, as into a
+child's side in a downward tree, or leaves against the direction), **jog** (a tiny step under 12px inside a
 route). The target is a skilled draftsman's look, not bundling: common gaps, bends taken at the
 same place, symmetric fans.
 
@@ -166,7 +169,7 @@ swapped).
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
 8; label on node, label overlap 6; expectation failed 4; hook, shared segment, label on edge,
 detached, on title 3; edge-through-group, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
-bends, long edge, group border (label or edge), uneven channel, ragged bends, uneven ports, jog 1;
+bends, long edge, group border (label or edge), uneven channel, ragged bends, uneven ports, off-axis port, jog 1;
 uneven padding, padding varies 2; back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.
 
 ## Review

@@ -1,0 +1,49 @@
+diagram "User Flow Workbench: from .diagram to picture" version=1
+
+# expect left-of files workbench
+# expect near cli catalog 160
+# expect keeps-order
+
+theme graphite
+theme-color brand shade=200 fill="#FCE7D6" stroke="#E0A87C" ink="#4A2510"
+theme-color brand shade=600 fill="#C2581C" stroke="#9A4313" ink="#FFFFFF"
+
+group files "Project folder" color=brand shade=200
+node flows "flows/*.diagram" in=files color=brand shade=600
+node overviews "overview.diagram" in=files color=brand shade=600
+
+group core "Diagram library" color=slate
+node lexer "DSL lexer" in=core
+node parser "Graph parser" in=core
+node lint "Graph lint" in=core
+node catalog "Flow catalog" in=core
+
+group workbench "Workbench SPA" color=blue
+group canvas_box "Canvas" in=workbench color=blue
+node layout "ELK layout" in=canvas_box
+node canvas "Flow canvas" in=canvas_box
+node inspector "Inspector panel" in=workbench
+
+group cli "pnpm flow CLI" color=violet
+node check "flow check" in=cli
+node view "flow view" in=cli
+node render "flow render" in=cli
+node chrome "Local Chrome (CDP)" color=slate
+node png "diagram.png" shape=pill color=amber
+
+edge e1 flows -> lexer
+edge e2 overviews -> lexer
+edge e3 lexer -> parser
+edge e4 parser -> lint
+edge e5 lint -> catalog
+edge e6 catalog -> layout
+edge e7 layout -> canvas
+edge e8 canvas -> inspector "select node"
+edge e9 lint -> check "errors"
+edge e10 catalog -> view
+edge e11 view -> canvas kind=async
+edge e12 render -> chrome
+edge e13 chrome -> canvas "load viewer"
+edge e14 chrome -> png
+
+layout root engine=compound-flow

@@ -1,0 +1,35 @@
+diagram "explorEDA: one selection filters every view" version=1
+
+# expect reads-y click store
+# expect still *
+
+theme signal
+
+node click "Brush a bar" color=primary
+node chart "Bar chart view"
+node store "Filter store" color=amber
+node chip "Filter chip bar"
+
+group engine "Data layer"
+node rows "Source rows" in=engine color=amber
+node calc "Calculated fields" in=engine
+node filtered "Filtered rows" in=engine color=amber
+
+node views "Other chart views"
+node table "Record table"
+node metric "Metric cards"
+node trace "Source trace panel" color=slate
+
+edge e1 click -> chart
+edge e2 chart -> store "category = Web"
+edge e3 store -> chip "active filters"
+edge e4 rows -> calc
+edge e5 calc -> filtered
+edge e6 store -> filtered "predicate"
+edge e7 filtered -> views "167 of 500 rows"
+edge e8 filtered -> table "matching records"
+edge e9 filtered -> metric
+edge e10 metric -> trace "alt-click" kind=async
+edge e11 chip -> store "clear" kind=async
+
+layout root engine=layered direction=down
