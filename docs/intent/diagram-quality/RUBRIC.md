@@ -4,6 +4,10 @@ Goal: measure how good Draftably's drawings look for real software-explanation d
 the **first render** and **after a few follow-up requests**, then fix the biggest defects and
 measure again. The corpus stays fixed across rounds so results compare.
 
+**Where things stand:** three rounds ran ([r1](rounds/r1.md), [r2](rounds/r2.md),
+[r3](rounds/r3.md)). [NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence,
+code locations, approaches and open product questions. Start there.
+
 Three signals, each doing one job:
 
 | Signal                              | Answers                                      | Source                          |
