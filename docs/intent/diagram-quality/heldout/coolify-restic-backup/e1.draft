@@ -1,7 +1,8 @@
 diagram "Coolify: one nightly Restic backup" version=1
 
 # expect reads-x timer env inventory backup forget check
-# expect still *
+# expect still-shape *
+# expect keeps-order
 
 theme midnight
 

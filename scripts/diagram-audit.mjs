@@ -20,6 +20,9 @@
  *   # expect still a b         a and b moved at most 24px from the previous version
  *   # expect still *           nothing that existed before moved more than 24px; the summary also
  *                              reports each `still` with the drawing's median shift removed
+ *   # expect still-shape *     nothing moved more than 24px once each band's own shift along the
+ *                              reading direction is removed (the relabel promise: a widened gap
+ *                              slides what follows it, and nothing else changes shape)
  *   # expect keeps-order       no pair of old objects swapped sides (growth may push things aside)
  *   # expect back-edges 0      at most this many edges run against the reading direction
  *
@@ -67,6 +70,21 @@ const run = (...a) => {
 
 // ---------- geometry helpers ----------
 const EPS = 0.5;
+// Thresholds for the space metrics, calibrated on the round-4 renders (RUBRIC.md).
+/** A forward edge shorter than this is never long. */
+const LONG_EDGE_MIN = 400;
+/** A forward edge this many times the gap between its two boxes (along both axes) is a detour. */
+const LONG_EDGE_DETOUR = 2;
+/** A forward edge longer than this share of the drawing's diagonal runs across the drawing. */
+const LONG_EDGE_SPAN = 0.6;
+/** The largest empty rectangle over this share of the drawing's area is an empty quarter. */
+const EMPTY_AREA = 0.15;
+/** ...and only when both its sides are at least this long (a thin strip is `empty-band`). */
+const EMPTY_SIDE = 160;
+/** ...and it would hold at least this many of the drawing's average boxes. */
+const EMPTY_BOXES = 11;
+/** A drawing wider (or taller) than this ratio reads as a strip. */
+const MAX_ASPECT = 5;
 const segs = pts => pts.slice(1).map((p, i) => [pts[i], p]);
 const len = ([a, b]) => Math.hypot(b.x - a.x, b.y - a.y);
 const shrink = (r, d) => ({ x: r.x + d, y: r.y + d, w: r.w - 2 * d, h: r.h - 2 * d });
@@ -129,18 +147,21 @@ const opposite = { R: 'L', L: 'R', U: 'D', D: 'U' };
 // ---------- source parsing (edge endpoints, declared direction) ----------
 function parseSource(text) {
   const edges = new Map();
+  const diamonds = new Set();
   let direction,
     edgeGap = 16;
   for (const raw of text.split('\n')) {
     const line = raw.replace(/(^|\s)(#|\/\/).*$/, '').trim();
     const e = line.match(/^edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
+    const n = line.match(/^node\s+(\S+)\b.*\bshape=diamond\b/);
+    if (n) diamonds.add(n[1]);
     const l = line.match(/^layout\s+root\b.*direction=(right|down)/);
     if (l) direction = l[1];
     const g = line.match(/^routing\b.*\b(?:edge|port)-gap=(\d+)/g);
     if (g) for (const m of g) edgeGap = Math.max(edgeGap, +m.match(/(\d+)$/)[1]);
   }
-  return { edges, direction, edgeGap };
+  return { edges, diamonds, direction, edgeGap };
 }
 
 // ---------- SVG parsing (edge label boxes) ----------
@@ -155,6 +176,16 @@ function parseLabels(svg) {
   while ((m = re.exec(svg))) {
     if (canvas && m[5] !== canvas) continue;
     labels.push({ x: +m[1], y: +m[2], w: +m[3], h: +m[4], text: m[6], at: m.index });
+  }
+  // The text itself, inside the label's padding: the renderer pads the measured text by 8px
+  // each side (to at least 36px wide) and centres one line of the annotation type in the box.
+  for (const label of labels) {
+    const tag = svg.slice(label.at).match(/<text[^>]*font-size="([\d.]+)"/);
+    const size = tag ? +tag[1] : 10.5;
+    const chars = label.text.replace(/&[a-z#0-9]+;/g, '_').length;
+    const w = Math.min(label.w - 16, chars * size * 0.62);
+    const c = center(label);
+    label.ink = { x: c.x - w / 2, y: c.y - size / 2, w, h: size };
   }
   // The label's own path is the last <path d="M…"> before it in document order.
   for (const label of labels) {
@@ -209,6 +240,73 @@ const pointSegDist = (p, [a, b]) => {
   );
   return Math.hypot(p.x - (a.x + dx * t), p.y - (a.y + dy * t));
 };
+
+// ---------- hooks ----------
+/** Spans of two boxes along an axis overlap (with a little slack). */
+const spansMeet = (s, t, axis) => {
+  const size = axis === 'x' ? 'w' : 'h';
+  return Math.min(s[axis] + s[size], t[axis] + t[size]) - Math.max(s[axis], t[axis]) > -STEP;
+};
+
+/** Why a route is a hook (a U-turn), or '' when it isn't. */
+function hookOf(r, s, t) {
+  if (!s || !t || r.segs.length < 2) return '';
+  const first = dir(r.segs[0]),
+    last = dir(r.segs.at(-1));
+  // Overshoot: arriving travelling up (into the bottom) while the source sits wholly above the
+  // target, and so on: the line passed the target and turned back into its far side.
+  const far = {
+    U: s.y + s.h <= t.y,
+    D: t.y + t.h <= s.y,
+    L: s.x + s.w <= t.x,
+    R: t.x + t.w <= s.x,
+  }[last];
+  if (far) return 'into its far side';
+  if (r.segs.length >= 3 && first === opposite[last]) {
+    // A C: out one side, along a channel, back into the same-facing side of a box stacked in
+    // line with the source. The boxes share the exit axis' span, so the line never doubles back.
+    const axis = 'RL'.includes(first) ? 'x' : 'y';
+    if (!spansMeet(s, t, axis)) return 'doubles back';
+  }
+  return '';
+}
+
+// ---------- empty area ----------
+/**
+ * The largest empty rectangle inside a frame, among obstacle rectangles: for each pair of
+ * x-coordinates, the longest free run in y between the obstacles that span it.
+ */
+function largestEmpty(frame, obstacles, minSide = 0) {
+  const xs = [
+    ...new Set(
+      [frame.x, frame.x + frame.w, ...obstacles.flatMap(o => [o.x, o.x + o.w])]
+        .map(v => Math.min(frame.x + frame.w, Math.max(frame.x, v)))
+        .map(Math.round),
+    ),
+  ].sort((a, b) => a - b);
+  let best = { x: frame.x, y: frame.y, w: 0, h: 0 };
+  for (let i = 0; i < xs.length; i++) {
+    for (let j = i + 1; j < xs.length; j++) {
+      const x0 = xs[i],
+        x1 = xs[j];
+      const block = obstacles
+        .filter(o => Math.min(o.x + o.w, x1) - Math.max(o.x, x0) > EPS)
+        .map(o => [o.y, o.y + o.h])
+        .sort((a, b) => a[0] - b[0]);
+      let reach = frame.y;
+      const consider = (from, to) => {
+        if (to - from >= minSide && x1 - x0 >= minSide && (to - from) * (x1 - x0) > best.w * best.h)
+          best = { x: x0, y: from, w: x1 - x0, h: to - from };
+      };
+      for (const [y0, y1] of block) {
+        if (y0 > reach) consider(reach, y0);
+        reach = Math.max(reach, y1);
+      }
+      consider(reach, frame.y + frame.h);
+    }
+  }
+  return best;
+}
 
 // ---------- group packing ----------
 /** Below this share of its interior covered by members, a group reads as mostly empty. */
@@ -348,7 +446,7 @@ function measure(file) {
   if (!check.ok) return { file, error: check.out.trim() };
   const geo = JSON.parse(run('inspect', file).out);
   const svg = run('inspect', file, '--svg').out;
-  const { edges, direction, edgeGap } = parseSource(source);
+  const { edges, diamonds, direction, edgeGap } = parseSource(source);
 
   const byId = new Map(geo.nodes.map(n => [n.id, n]));
   const parents = new Set(geo.nodes.map(n => n.parent));
@@ -384,11 +482,6 @@ function measure(file) {
     maxBends = Math.max(maxBends, b);
     totalLen += r.segs.reduce((s, sg) => s + len(sg), 0);
     if (b >= 4) note('many-bends', `${r.id} (${b})`);
-    // Hook: the edge leaves one way and arrives travelling the opposite way.
-    if (r.segs.length >= 3 && dir(r.segs[0]) === opposite[dir(r.segs.at(-1))]) {
-      hooks++;
-      note('hook', `${r.id} ${r.source}→${r.target}`);
-    }
     // Edge through an unrelated leaf.
     for (const n of leaves) {
       if (n.id === r.source || n.id === r.target) continue;
@@ -713,6 +806,17 @@ function measure(file) {
     r.wrap = d < -20 && wraps;
     r.back = d < -20 && !wraps;
     if (r.back) backEdges++;
+    // Hook: a U-turn. Either the line leaves one way and comes back the opposite way into a box
+    // that doesn't share its exit's span (a C down a channel into the facing side of a box in
+    // the same column or row reads as drafted), or it overshoots: it arrives in the target's far
+    // side, travelling back toward the source. A fold's wrap into the next row's leading side, or a
+    // return lane into the leading side of an earlier box, arrives along the reading direction and
+    // is the accepted shape.
+    const hook = hookOf(r, s, t);
+    if (hook && !((r.wrap || r.back) && dir(r.segs.at(-1)) === flowArrow)) {
+      hooks++;
+      note('hook', `${r.id} ${r.source}→${r.target} ${hook}`);
+    }
     // Off-axis port: in a layout with a declared direction, a forward edge should arrive travelling
     // that way (into a child's top in a downward tree) and never leave against it. A side entry
     // reads as a sibling link.
@@ -721,6 +825,31 @@ function measure(file) {
         note('off-axis-port', `${r.id} ${r.source}→${r.target} arrives sideways`);
       else if (dir(r.segs[0]) === opposite[flowArrow])
         note('off-axis-port', `${r.id} ${r.source}→${r.target} leaves backwards`);
+    }
+  }
+  // Diamonds: a line meets a decision at one of its four vertices, travelling straight out of
+  // (or into) it. A port on a slanted face, or a line that leaves a vertex sideways, reads as
+  // missing the shape's point.
+  for (const r of routes) {
+    if (!r.segs.length) continue;
+    for (const [id, p, sg, end] of [
+      [r.source, r.points[0], r.segs[0], 'leaves'],
+      [r.target, r.points.at(-1), r.segs.at(-1), 'enters'],
+    ]) {
+      if (!diamonds.has(id)) continue;
+      const n = byId.get(id);
+      if (!n) continue;
+      const c = center(n);
+      const vertex = [
+        ['top', c.x, n.y, 'U'],
+        ['bottom', c.x, n.y + n.h, 'D'],
+        ['left', n.x, c.y, 'L'],
+        ['right', n.x + n.w, c.y, 'R'],
+      ].find(([, x, y]) => Math.hypot(p.x - x, p.y - y) <= 3);
+      const travel = end === 'leaves' ? dir(sg) : opposite[dir(sg)];
+      if (!vertex) note('off-axis-port', `${r.id} ${end} diamond ${id} off its vertices`);
+      else if (travel !== vertex[3])
+        note('off-axis-port', `${r.id} ${end} diamond ${id}'s ${vertex[0]} vertex sideways`);
     }
   }
 
@@ -740,8 +869,22 @@ function measure(file) {
       if (edgesCut.some(c => rectsOverlap(l, c)))
         note('label-on-group-border', `"${l.text}" on ${g.id}`);
     }
-    for (const m of labels.slice(i + 1))
-      if (rectsOverlap(l, m)) note('label-overlap', `"${l.text}" × "${m.text}"`);
+    for (const m of labels.slice(i + 1)) {
+      if (rectsOverlap(l, m)) {
+        note('label-overlap', `"${l.text}" × "${m.text}"`);
+        continue;
+      }
+      // Two labels on different edges closer than a label's height read as one phrase, or as
+      // two labels on one edge.
+      const gap = Math.max(
+        m.x - (l.x + l.w),
+        l.x - (m.x + m.w),
+        m.y - (l.y + l.h),
+        l.y - (m.y + m.h),
+      );
+      if (gap < Math.min(l.h, m.h))
+        note('labels-too-close', `"${l.text}" & "${m.text}" ${Math.round(gap)}px apart`);
+    }
     const dist = Math.min(...segs(l.path).map(sg => pointSegDist(center(l), sg)));
     if (dist > l.h) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
     // Another edge running under the label.
@@ -753,7 +896,11 @@ function measure(file) {
         Math.abs(r.points[0].y - l.path[0].y) < 1
       )
         continue;
-      if (r.segs.some(sg => segHitsRect(sg, shrink(l, 1))))
+      // Through the text itself is misleading (S1); under the padding only, a reader still
+      // reads the label but the line seems to stop at it.
+      if (r.segs.some(sg => segHitsRect(sg, shrink(l.ink, 1))))
+        note('label-through-text', `${r.id} through the "${l.text}" text`);
+      else if (r.segs.some(sg => segHitsRect(sg, shrink(l, 1))))
         note('label-on-edge', `"${l.text}" over ${r.id}`);
     }
   }
@@ -807,14 +954,73 @@ function measure(file) {
       reach = Math.max(reach, end);
     }
   }
+  // Long edges: a forward line far longer than the straight way between its ends (a detour), or
+  // one that spans most of the drawing (its ends were placed far apart).
   const lengths = routes.map(r => r.segs.reduce((sum, sg) => sum + len(sg), 0));
-  const median = [...lengths].sort((a, b) => a - b)[Math.floor(lengths.length / 2)] ?? 0;
+  const xs0 = geo.nodes.flatMap(n => [n.x, n.x + n.w]),
+    ys0 = geo.nodes.flatMap(n => [n.y, n.y + n.h]);
+  const diagonal = Math.hypot(
+    Math.max(...xs0) - Math.min(...xs0),
+    Math.max(...ys0) - Math.min(...ys0),
+  );
+  const stretch = [];
   for (const [i, r] of routes.entries()) {
-    // A return edge in a cycle, or a fold's wrap onto the next row, is long by nature; only
-    // forward edges count.
-    if (!r.back && !r.wrap && lengths[i] > 400 && lengths[i] > 4 * median)
-      note('long-edge', `${r.id} ${Math.round(lengths[i])}px (median ${Math.round(median)})`);
+    if (lengths[i] <= LONG_EDGE_MIN) continue;
+    const s = byId.get(r.source),
+      t = byId.get(r.target);
+    if (!s || !t) continue;
+    // The straight way: the gap between the two boxes along each axis.
+    const direct =
+      Math.max(0, Math.abs(center(t).x - center(s).x) - (s.w + t.w) / 2) +
+      Math.max(0, Math.abs(center(t).y - center(s).y) - (s.h + t.h) / 2);
+    const detour = lengths[i] / Math.max(1, direct),
+      span = lengths[i] / Math.max(1, diagonal);
+    stretch.push({
+      id: r.id,
+      kind: r.back ? 'back' : r.wrap ? 'wrap' : 'forward',
+      length: Math.round(lengths[i]),
+      detour: +detour.toFixed(2),
+      span: +span.toFixed(2),
+    });
+    // A return in a cycle, or a fold's wrap onto the next row, is long by nature: it counts
+    // only when it runs longer than the drawing's diagonal.
+    if (r.back || r.wrap) {
+      if (span > 1)
+        note(
+          'long-edge',
+          `${r.id} ${Math.round(lengths[i])}px ${r.back ? 'return' : 'wrap'}, longer than the diagonal`,
+        );
+      continue;
+    }
+    if (detour > LONG_EDGE_DETOUR)
+      note(
+        'long-edge',
+        `${r.id} ${Math.round(lengths[i])}px, ${detour.toFixed(1)}× the direct way`,
+      );
+    else if (span > LONG_EDGE_SPAN)
+      note('long-edge', `${r.id} ${Math.round(lengths[i])}px, ${span.toFixed(2)} of the diagonal`);
   }
+
+  // Empty area: the largest empty rectangle inside the drawing (between the boxes and the edge
+  // labels; a group frame with nothing in it is still empty), as a share of the drawing's area.
+  // A quarter left empty reads as a layout that lost its shape. Natural corners of a small flow
+  // are not counted: the hole must also have room for EMPTY_BOXES of the drawing's boxes. A
+  // thin band across the drawing is `empty-band`.
+  const rootFrame = {
+    x: Math.min(...xs0),
+    y: Math.min(...ys0),
+    w: Math.max(...xs0) - Math.min(...xs0),
+    h: Math.max(...ys0) - Math.min(...ys0),
+  };
+  const leafArea0 = leaves.reduce((s, n) => s + n.w * n.h, 0);
+  const hole = largestEmpty(rootFrame, [...leaves, ...labels], EMPTY_SIDE);
+  const emptyShare = (hole.w * hole.h) / Math.max(1, rootFrame.w * rootFrame.h);
+  const emptyBoxes = (hole.w * hole.h) / Math.max(1, leafArea0 / Math.max(1, leaves.length));
+  if (emptyShare > EMPTY_AREA && emptyBoxes >= EMPTY_BOXES)
+    note(
+      'empty-area',
+      `${Math.round(hole.w)}×${Math.round(hole.h)}px at ${Math.round(hole.x)},${Math.round(hole.y)} (${Math.round(emptyShare * 100)}% of the drawing, room for ${Math.round(emptyBoxes)} boxes)`,
+    );
 
   // Anything drawn outside the SVG's viewBox is cut off in every export.
   const vb = svg
@@ -846,6 +1052,12 @@ function measure(file) {
   const width = Math.max(...xs) - Math.min(...xs),
     height = Math.max(...ys) - Math.min(...ys);
   const leafArea = leaves.reduce((s, n) => s + n.w * n.h, 0);
+  const aspect = width / Math.max(1, height);
+  if (aspect > MAX_ASPECT || aspect < 1 / MAX_ASPECT)
+    note(
+      'wide-aspect',
+      `${width}×${height}px (${aspect >= 1 ? aspect.toFixed(1) : (1 / aspect).toFixed(1)}:1)`,
+    );
   const aligned = leaves.filter(a =>
     leaves.some(
       b =>
@@ -892,6 +1104,10 @@ function measure(file) {
       'group-staircase',
       'tight-group-gap',
       'uneven-group-gap',
+      'label-through-text',
+      'labels-too-close',
+      'empty-area',
+      'wide-aspect',
     ].map(k => [k, count(k)]),
   );
   // Weighted defect index; hard defects dominate. Normalized per 10 edges so sizes compare.
@@ -931,6 +1147,10 @@ function measure(file) {
     'group-staircase': 1,
     'tight-group-gap': 2,
     'uneven-group-gap': 1,
+    'label-through-text': 6,
+    'labels-too-close': 2,
+    'empty-area': 3,
+    'wide-aspect': 2,
   };
   const raw =
     Object.entries(counts).reduce((s, [k, v]) => s + v * weights[k], 0) +
@@ -965,6 +1185,15 @@ function measure(file) {
     minTextContrast: Math.min(...colors.pairs.map(p => p.ratio)),
     groupFill: packing.fills,
     groupGaps: packing.gaps,
+    emptyArea: {
+      share: +emptyShare.toFixed(2),
+      boxes: +emptyBoxes.toFixed(1),
+      w: Math.round(hole.w),
+      h: Math.round(hole.h),
+      x: Math.round(hole.x),
+      y: Math.round(hole.y),
+    },
+    edgeStretch: stretch,
     counts,
     defectIndex,
     issues,
@@ -1016,6 +1245,94 @@ function stability(a, b) {
     orderFlips: flips,
     shift: { x: Math.round(sx), y: Math.round(sy) },
   };
+}
+
+/**
+ * `still-shape`: the objects in `list` that moved more than 24px once each band's own shift
+ * along the reading direction is removed. Bands are the runs of the previous version's boxes
+ * whose spans along the reading axis overlap (a rank, or a column in a rightward flow); a group
+ * follows the band of its first member at its start and of its last member at its end.
+ */
+function stillShape(prev, r, list) {
+  if (!prev) return [];
+  const axis = r.flowDir === 'down' ? 'y' : 'x',
+    across = axis === 'x' ? 'y' : 'x',
+    size = axis === 'x' ? 'w' : 'h';
+  const before = new Map(prev.geo.nodes.map(n => [n.id, n])),
+    after = new Map(r.geo.nodes.map(n => [n.id, n]));
+  const parents = new Set(prev.geo.nodes.map(n => n.parent));
+  const leaves = prev.geo.nodes.filter(n => !parents.has(n.id) && after.has(n.id));
+  // Rows: a folded flow wraps onto rows separated by a clear gap across the reading axis; each
+  // row widens on its own. Bands: within a row, merge the leaves' spans along the reading axis.
+  const acrossSize = axis === 'x' ? 'h' : 'w';
+  const runs = (list, a, s) => {
+    const out = new Map();
+    let k = -1,
+      reach = -Infinity;
+    for (const n of [...list].sort((p, q) => p[a] - q[a])) {
+      if (n[a] >= reach - EPS) k++;
+      reach = Math.max(reach, n[a] + n[s]);
+      out.set(n.id, k);
+    }
+    return out;
+  };
+  const rowOf = runs(leaves, across, acrossSize);
+  const bandOf = new Map();
+  let band = -1;
+  for (const row of new Set(rowOf.values())) {
+    const inRow = runs(
+      leaves.filter(n => rowOf.get(n.id) === row),
+      axis,
+      size,
+    );
+    const base = band + 1;
+    for (const [id, k] of inRow) {
+      bandOf.set(id, base + k);
+      band = Math.max(band, base + k);
+    }
+  }
+  const median = values => [...values].sort((x, y) => x - y)[Math.floor(values.length / 2)] ?? 0;
+  const shifts = new Map();
+  for (let b = 0; b <= band; b++)
+    shifts.set(
+      b,
+      median(leaves.filter(n => bandOf.get(n.id) === b).map(n => after.get(n.id)[axis] - n[axis])),
+    );
+  const crossShift = median(leaves.map(n => after.get(n.id)[across] - n[across]));
+  const within = id => {
+    const out = [];
+    for (const n of leaves) {
+      for (let p = n; p && p.parent !== 'root'; p = before.get(p.parent))
+        if (p.parent === id) {
+          out.push(n);
+          break;
+        }
+    }
+    return out;
+  };
+  return list.filter(id => {
+    const a = before.get(id),
+      b = after.get(id);
+    if (!a || !b) return false;
+    let startShift, endShift;
+    if (bandOf.has(id)) startShift = endShift = shifts.get(bandOf.get(id));
+    else {
+      const kids = within(id);
+      if (!kids.length) return false;
+      const first = kids.reduce((p, q) => (q[axis] < p[axis] ? q : p)),
+        last = kids.reduce((p, q) => (q[axis] + q[size] > p[axis] + p[size] ? q : p));
+      startShift = shifts.get(bandOf.get(first.id));
+      endShift = shifts.get(bandOf.get(last.id));
+    }
+    const dStart = b[axis] - a[axis] - startShift,
+      dEnd = b[axis] + b[size] - (a[axis] + a[size]) - endShift,
+      dAcross =
+        b[across] +
+        (axis === 'x' ? b.h : b.w) / 2 -
+        (a[across] + (axis === 'x' ? a.h : a.w) / 2) -
+        crossShift;
+    return Math.max(Math.abs(dStart), Math.abs(dEnd), Math.abs(dAcross)) > 24;
+  });
 }
 
 /** Check a version's `# expect` lines. `prev` is the version before it, for `still`. */
@@ -1087,6 +1404,20 @@ function checkExpectations(r, prev) {
           why: off.length
             ? `moved: ${off.join(', ')}${slid}; ${reshaped.length ? `after shift: ${reshaped.join(', ')}` : 'holds its shape after shift'}`
             : undefined,
+        };
+      }
+      case 'still-shape': {
+        // A relabel may widen the gap between two bands (ranks across the reading direction):
+        // everything past it slides along the reading direction by that band's own shift.
+        // Remove each band's shift along the reading axis (and the drawing's median shift
+        // across it) and check that nothing else moved: nothing outside the widened gap changed
+        // shape.
+        const list = ids.includes('*') ? [...was.keys()].filter(id => rect.has(id)) : need;
+        const off = stillShape(prev, r, list);
+        return {
+          line,
+          pass: off.length === 0,
+          why: off.length ? `reshaped: ${off.join(', ')}` : undefined,
         };
       }
       case 'reads-x':
@@ -1280,7 +1611,9 @@ const lines = [
       c['label-on-edge'] +
       c['label-on-group-title'] +
       c['label-detached'] +
-      c['label-on-group-border'];
+      c['label-on-group-border'] +
+      c['label-through-text'] +
+      c['labels-too-close'];
     const route =
       c['shared-segment'] +
       c['edge-through-group'] +
@@ -1297,7 +1630,7 @@ const lines = [
     const fit = c['uneven-padding'] + c['padding-varies'];
     const pack =
       c['sparse-group'] + c['group-staircase'] + c['tight-group-gap'] + c['uneven-group-gap'];
-    return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${order} | ${fit} | ${pack} | ${c['empty-band'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
+    return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${order} | ${fit} | ${pack} | ${c['empty-band'] + c['empty-area'] + c['wide-aspect'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
   }),
 ];
 const ok = rows.filter(r => !r.error);
@@ -1316,6 +1649,7 @@ lines.push(
 // Follow-up stability: the `still` and `keeps-order` promises, and how far follow-ups move.
 const checksOf = kind => ok.flatMap(r => r.checks.filter(c => c.line.split(/\s+/)[0] === kind));
 const stills = checksOf('still'),
+  shapes = checksOf('still-shape'),
   keeps = checksOf('keeps-order'),
   follow = ok.filter(r => r.stabilityFromPrev);
 const count = (list, pass) => `${list.filter(pass).length}/${list.length}`;
@@ -1325,6 +1659,7 @@ lines.push(
   '| --- | --- |',
   `| still (raw) | ${count(stills, c => c.pass)} |`,
   `| still (median shift removed) | ${count(stills, c => c.shape)} |`,
+  `| still-shape (each band's shift removed) | ${count(shapes, c => c.pass)} |`,
   `| keeps-order | ${count(keeps, c => c.pass)} |`,
   `| mean move (px, over ${follow.length} follow-ups) | ${(follow.reduce((t, r) => t + r.stabilityFromPrev.meanMove, 0) / Math.max(1, follow.length)).toFixed(1)} |`,
   `| order flips (total) | ${follow.reduce((t, r) => t + r.stabilityFromPrev.orderFlips, 0)} |`,
