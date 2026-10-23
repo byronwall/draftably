@@ -76,7 +76,10 @@ export interface RoutingOptions extends Partial<RoutingSettings> {
   quick?: boolean;
   /** A reading direction for every edge without its own `cfg.flow`; forward edges run along it. */
   direction?: 'right' | 'down';
-  /** Keep fans on the sides facing their other ends and off far sides. On unless false. */
+  /**
+   * Keep fans on the sides facing their other ends, off far sides, and a full standoff away
+   * from their own end boxes. On unless false.
+   */
   facing?: boolean;
   /** Even out ports, fans and corridors after routing. On unless false. */
   tidy?: boolean;

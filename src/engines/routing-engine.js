@@ -505,7 +505,8 @@ function slot(id, side, r, used, s, other) {
 const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
-const FAR_PENALTY = 100;
+const FAR_PENALTY = 100,
+  OWN_STANDOFF = 1;
 function compute(input, rawOptions = {}) {
   const facingFans = rawOptions.facing !== false;
   const began = Date.now(),
@@ -681,6 +682,9 @@ function compute(input, rawOptions = {}) {
       onAxis = (side, end) => forward && side === (end === 'from' ? TRAILING : LEADING)[flow];
     const candidates = [];
     let best = null;
+    // A line that leaves a box and turns to run alongside it, just past the stub, reads as
+    // hugging its own box. Runs beside the edge's own ends pay the standoff again.
+    const own = facingFans ? near.filter(r => !r.border && (r.id === e.from || r.id === e.to)) : [];
     // Ports already on side `side` of node `id`, from this edge's end of the fan.
     const taken = (id, side, end) =>
       used.filter(r => r[end] === id && r[end + 'Side'] === side).length;
@@ -716,7 +720,14 @@ function compute(input, rawOptions = {}) {
           (c.ts !== old.toSide ? s.portStability : 0)
         : 0;
       const fanout = fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to);
-      return cost(points, used, s, near) + backwards + stability + fanout + axis(c);
+      return (
+        cost(points, used, s, near) +
+        (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
+        backwards +
+        stability +
+        fanout +
+        axis(c)
+      );
     }
     const remember = (points, c, o = obs) => {
       if (!points) return;
