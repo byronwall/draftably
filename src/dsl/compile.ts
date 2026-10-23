@@ -761,6 +761,101 @@ function pocketed(
   return out;
 }
 
+/** Engines whose scopes holding groups are packed tight instead of kept on global rank columns. */
+const PACKED_ENGINES = new Set(['compound-flow', 'layered']);
+
+/** The most a group gap grows to leave room for the lines that pass between groups. */
+const MAX_GROUP_GAP = 96;
+
+/** Gaps a packed scope uses: between boxes across a rank, between ranks, and next to a group. */
+interface PackGaps {
+  node: number;
+  rank: number;
+  group: number;
+}
+
+/**
+ * Pack an engine-arranged scope tight. Members take local ranks from the edges between them, so a
+ * chain reads as a straight row or column in the reading direction instead of stepping across the
+ * engine's global rank columns. Each rank keeps the engine's order across it, and every rank is
+ * centred on one line. A gap next to a group is the drawing's one group gap.
+ */
+function packed(
+  items: Item[],
+  arranged: Map<string, Pos>,
+  axis: 'right' | 'down',
+  pairs: Array<[string, string]>,
+  rooms: LabelRoom[],
+  gaps: PackGaps,
+) {
+  const by = new Map(items.map(n => [n.id, n])),
+    ids = items.map(n => n.id),
+    right = axis === 'right';
+  const major = (id: string) => (right ? by.get(id)!.w : by.get(id)!.h),
+    minor = (id: string) => (right ? by.get(id)!.h : by.get(id)!.w),
+    group = (id: string) => by.get(id)!.type === 'group';
+  const across = (id: string) => {
+    const p = arranged.get(id)!;
+    return right ? p.y + by.get(id)!.h / 2 : p.x + by.get(id)!.w / 2;
+  };
+  const layers = rankLayers(ids, pairs).map(layer =>
+    [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
+  );
+  const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
+  const between = (a: string, b: string) =>
+    roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right);
+  const extents = layers.map(layer =>
+    layer.reduce((s, id, j) => s + minor(id) + (j ? between(layer[j - 1], id) : 0), 0),
+  );
+  const widest = Math.max(...extents);
+  // A chain link, a member with one way on into a member with one way in, shares its
+  // predecessor's centre line so the chain reads straight. Other members stay centred on the
+  // ranks' common line; members are pushed along only to keep their order and gaps.
+  const outs = new Map(ids.map(id => [id, new Set<string>()])),
+    ins = new Map(ids.map(id => [id, new Set<string>()]));
+  for (const [a, b] of pairs)
+    if (rank.get(b)! > rank.get(a)!) {
+      outs.get(a)!.add(b);
+      ins.get(b)!.add(a);
+    }
+  const cross = new Map<string, number>(),
+    mid = new Map<string, number>();
+  for (const [i, layer] of layers.entries()) {
+    let slot = (widest - extents[i]) / 2,
+      end = -Infinity;
+    for (const [j, id] of layer.entries()) {
+      const [pred] = ins.get(id)!,
+        link = ins.get(id)!.size === 1 && outs.get(pred)!.size === 1,
+        want = link ? mid.get(pred)! - minor(id) / 2 : slot,
+        start = j ? Math.max(want, end + between(layer[j - 1], id)) : want;
+      cross.set(id, start);
+      mid.set(id, start + minor(id) / 2);
+      end = start + minor(id);
+      slot = Math.max(slot + minor(id), end) + (layer[j + 1] ? between(id, layer[j + 1]) : 0);
+    }
+  }
+  const low = Math.min(...cross.values());
+  const out = new Map<string, Pos>();
+  let at = 0;
+  for (const [i, layer] of layers.entries()) {
+    for (const id of layer) {
+      const c = round(cross.get(id)! - low);
+      out.set(id, right ? { x: at, y: c } : { x: c, y: at });
+    }
+    const next = layers[i + 1];
+    if (!next) break;
+    let after = layer.some(group) || next.some(group) ? gaps.group : gaps.rank;
+    for (const r of rooms)
+      if (
+        Math.min(rank.get(r.a)!, rank.get(r.b)!) === i &&
+        Math.abs(rank.get(r.a)! - rank.get(r.b)!) === 1
+      )
+        after = Math.max(after, right ? r.w : r.h);
+    at += Math.max(...layer.map(major)) + after;
+  }
+  return { positions: out, axis };
+}
+
 /**
  * Engines space every rank alike. Where a labelled edge between two ranks has less room than its
  * label needs, push everything past the first rank's end along the reading axis.
@@ -1180,6 +1275,49 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
     );
   };
 
+  // Scopes an engine arranges that hold groups, and every group inside one, are packed tight.
+  const pairsIn = (scope: string) =>
+    m.edges
+      .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
+      .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
+  const packEngine = (scope: string) => {
+    const governing = arranged && governingLayout(m, scope),
+      kids = children.get(scope) ?? [];
+    if (!governing?.engine || !PACKED_ENGINES.has(governing.engine.algorithm)) return undefined;
+    if (scope === 'root' && !kids.some(k => k.type === 'group')) return undefined;
+    if (!kids.every(k => arranged!.has(k.id))) return undefined;
+    return LayoutLab.settings({
+      algorithm: governing.engine.algorithm,
+      ...governing.engine.params,
+    });
+  };
+  // One group gap for the whole drawing: the engines' group gap, or wider for the most lines that
+  // cross one rank gap of a packed scope, so lines passing between groups keep their pitch.
+  let groupGap = 0,
+    lines = 0;
+  for (const scope of children.keys()) {
+    const s = packEngine(scope);
+    if (!s) continue;
+    groupGap = Math.max(groupGap, s.groupGap);
+    const pairs = pairsIn(scope),
+      rank = new Map(
+        rankLayers(
+          (children.get(scope) ?? []).map(k => k.id),
+          pairs,
+        ).flatMap((layer, i) => layer.map(id => [id, i] as const)),
+      ),
+      ranks = Math.max(0, ...rank.values());
+    for (let i = 0; i < ranks; i++)
+      lines = Math.max(
+        lines,
+        pairs.filter(
+          ([a, b]) =>
+            Math.min(rank.get(a)!, rank.get(b)!) <= i && Math.max(rank.get(a)!, rank.get(b)!) > i,
+        ).length,
+      );
+  }
+  groupGap = Math.min(MAX_GROUP_GAP, Math.max(groupGap, (lines + 1) * (m.routing.edgeGap ?? 16)));
+
   function arrange(scope: string): { w: number; h: number } {
     const layout = layoutFor(m, scope),
       order = m.hints.find(h => h.type === 'order' && h.scope === scope);
@@ -1232,9 +1370,7 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
       items.set(o.id, item);
       return item;
     });
-    const pairs = m.edges
-      .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
-      .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
+    const pairs = pairsIn(scope);
     // Label rooms are measured on the reference appearance too; a theme's label may use up to
     // one `LABEL_RUN` of the line beside it before the room grows.
     const rooms = m.edges.flatMap(e => {
@@ -1247,6 +1383,8 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
       return [{ a, b, w: Math.max(r.w, own.w - LABEL_RUN), h: Math.max(r.h, own.h - LABEL_RUN) }];
     });
     const governing = arranged && governingLayout(m, scope),
+      pack = packEngine(scope),
+      packGaps = pack ? { node: pack.nodeGap, rank: pack.rankGap, group: groupGap } : undefined,
       engine = governing?.engine && governing.scope === scope ? governing.engine : undefined;
     /**
      * Where each drawn box sits in its slot, and its size. Engines place centres, so it is
@@ -1285,9 +1423,11 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
         n.h = Math.max(l.ref.h, l.look.h - spill.h);
       }
       const laidOut = (with_: LabelRoom[]) =>
-        governing?.engine && list.every(n => arranged!.has(n.id))
-          ? fromEngine(list, arranged!, axisOf(governing), with_)
-          : baseLayout(list, layout, pairs, with_);
+        packGaps
+          ? packed(list, arranged!, axisOf(governing!), pairs, with_, packGaps)
+          : governing?.engine && list.every(n => arranged!.has(n.id))
+            ? fromEngine(list, arranged!, axisOf(governing), with_)
+            : baseLayout(list, layout, pairs, with_);
       // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
       // whose labels have nowhere else to go widen.
       const plain = rooms.length ? laidOut([]) : undefined;

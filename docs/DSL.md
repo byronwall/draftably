@@ -138,6 +138,13 @@ An engine on `root` arranges everything, including the contents of groups. A gro
 are then sized to fit their content, as with the built-in recipes, and `near`, `stay`, `pin` and
 the other refinements apply on top of the engine's arrangement.
 
+Under `compound-flow` or `layered`, groups are packed tight. Members of a group rank by the
+connections between them, so a chain reads as a straight row or column in the reading direction.
+They don't keep the drawing's global rank columns. The engine still decides their order across
+each rank. A scope that holds groups is packed the same way. Every gap next to a group is the same
+across the drawing: `group-gap`, widened up to 96px when more lines cross a gap, at 16px pitch
+(the router's `edge-gap`).
+
 | Setting            | Values                   | Setting         | Values                |
 | ------------------ | ------------------------ | --------------- | --------------------- |
 | `direction`        | `auto\|right\|down`      | `edge-length`   | 20–260                |
