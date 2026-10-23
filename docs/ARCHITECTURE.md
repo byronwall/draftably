@@ -65,6 +65,7 @@ TypeScript shared by the browser and the command line.
 | `syntax.ts`       | Source lines with comments, the formatter, and the validated model.                          |
 | `compile.ts`      | Layout recipes and refinements for one fixed render context; diagnostics with lines.         |
 | `channels.ts`     | Routing channels: extra room inside a group where lines must travel; compile lays out twice. |
+| `lanes.ts`        | Lanes outside a flow's band for returns and skips; fold wraps keep theirs (compile.ts).      |
 | `translate.ts`    | One committed editor edit as source changes: declarations, `near`/`pin`/`size` refinements.  |
 | `source-edits.ts` | Helpers that add, change and remove single statements.                                       |
 | `project.ts`      | A compiled scene as an editor `Diagram`, and the canonical geometry the CLI prints.          |

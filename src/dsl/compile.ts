@@ -16,6 +16,7 @@ import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/label
 import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
+import { returnLanes, type FlowScope } from './lanes';
 import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
 import { projectScene } from './project';
 import {
@@ -1300,7 +1301,8 @@ function layoutPass(
     return o?.id;
   };
 
-  const folds: Array<{ scope: string; fold: Fold }> = [];
+  const folds: Array<{ scope: string; fold: Fold }> = [],
+    flows: FlowScope[] = [];
   // A decision: a diamond, or any node whose branches are labelled, with two or more ways out.
   const decisionsIn = (scope: string) => {
     const outs = new Map<string, ModelEdge[]>();
@@ -1572,6 +1574,8 @@ function layoutPass(
       laid = lay({ w: 0, h: 0 });
     }
     if (laid.fold) folds.push({ scope, fold: laid.fold });
+    if (engine ? engine.algorithm === 'layered' : !governing?.engine && layout.algorithm === 'flow')
+      flows.push({ scope, axis: laid.base.axis });
     // Drawn boxes, in this scope's coordinates. Group content starts at 0,0, so a box that spills
     // past its slot at the top or left moves the content over by that much.
     const boxes = list.map(n => drawnBox(n, laid));
@@ -1632,6 +1636,14 @@ function layoutPass(
     immediate,
     Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
   );
+  // Returns and skips within a band take lanes outside it; fold wraps keep theirs.
+  for (const [id, lane] of returnLanes(
+    flows.map(f => ({ ...f, bands: folds.find(x => x.scope === f.scope)?.fold.bands })),
+    m.edges,
+    new Map(objects.map(o => [o.id, o])),
+    new Set(lanes.keys()),
+  ))
+    lanes.set(id, lane);
   // Report groups that are larger than their requested size because of their content.
   for (const l of m.layouts) {
     const g = objects.find(o => o.id === l.scope);
