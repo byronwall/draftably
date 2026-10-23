@@ -1,6 +1,6 @@
 diagram "Srcly: from merged PR to PyPI" version=1
 
-# expect order-y merge rp relpr review tag verify tests build wheel pypi
+# expect reads-y merge rp relpr review tag verify tests build wheel pypi
 
 theme signal
 

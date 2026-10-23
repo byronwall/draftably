@@ -91,6 +91,8 @@ can check whether they were met:
 ```text
 # expect left-of a b       # also right-of, above, below (a relative to b, no overlap)
 # expect order-x a b c     # centers run left to right; order-y for top to bottom
+# expect reads-x a b c     # reading order like text: right along a row, or back and down to the
+                           # next row; most steps must go along (reads-y: down columns)
 # expect aligned-x a b     # centers within 4px; aligned-y
 # expect near a b 80       # gap at most 80px
 # expect still a b         # moved at most 24px since the previous version; `still *` for all

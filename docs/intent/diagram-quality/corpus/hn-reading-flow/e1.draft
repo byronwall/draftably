@@ -1,6 +1,6 @@
 diagram "HN Offline: reading on the train" version=1
 
-# expect order-x open list story
+# expect reads-x open list story
 # expect near toast fetch_ok 120
 
 theme fieldnotes
