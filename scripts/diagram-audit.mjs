@@ -207,6 +207,136 @@ const pointSegDist = (p, [a, b]) => {
   return Math.hypot(p.x - (a.x + dx * t), p.y - (a.y + dy * t));
 };
 
+// ---------- group packing ----------
+/** Below this share of its interior covered by members, a group reads as mostly empty. */
+const MIN_GROUP_FILL = 0.35;
+/** Sibling groups (or a group and a sibling box) closer than this read as pressed together. */
+const MIN_GROUP_GAP = 16;
+/** Facing gaps between groups in one drawing that differ by more than this read as uneven. */
+const GROUP_GAP_SPREAD = 16;
+/** A step this large on both axes is diagonal, not aligned. */
+const STEP = 16;
+
+/**
+ * Group fill, staircases and the gaps between sibling groups. Returns the issues plus the raw
+ * numbers (each group's fill, the facing gaps) for `metrics.json`.
+ */
+function groupPacking(nodes, routes, byId) {
+  const issues = [];
+  const kids = new Map();
+  for (const n of nodes) (kids.get(n.parent) ?? kids.set(n.parent, []).get(n.parent)).push(n);
+  const isGroup = id => kids.has(id);
+  const fills = {};
+
+  // Fill: member area over the area the members span (the group's interior, since groups fit
+  // their content). Two boxes at opposite ends of a wide frame score low.
+  for (const [id, list] of kids) {
+    if (id === 'root' || list.length < 2) continue;
+    const x0 = Math.min(...list.map(k => k.x)),
+      y0 = Math.min(...list.map(k => k.y)),
+      x1 = Math.max(...list.map(k => k.x + k.w)),
+      y1 = Math.max(...list.map(k => k.y + k.h));
+    const fill = list.reduce((s, k) => s + k.w * k.h, 0) / Math.max(1, (x1 - x0) * (y1 - y0));
+    fills[id] = +fill.toFixed(2);
+    if (fill < MIN_GROUP_FILL) issues.push(['sparse-group', `${id} fill ${fills[id]}`]);
+  }
+
+  // Staircase: inside a group, a chain link (a member with one way on to a sibling that has one
+  // way in, through any descendants) whose ends sit diagonally: a chain should read as a straight
+  // row or column. A fan out of one member may spread diagonally; that is not counted. In any
+  // scope, three or more sibling groups whose centres step monotonically on both axes are a
+  // staircase too. (A chain of plain boxes at the root may bend through a layered drawing.)
+  const sibling = (id, scope) => {
+    let n = byId.get(id);
+    while (n && n.parent !== scope) n = byId.get(n.parent);
+    return n?.id;
+  };
+  // Two boxes line up on an axis when their starts, centres or ends agree (a row may align tops).
+  const lined = (m, n, axis, size) =>
+    [0, 0.5, 1].some(f => Math.abs(m[axis] + f * m[size] - (n[axis] + f * n[size])) <= 4);
+  const step = (a, b) => {
+    const m = byId.get(a),
+      n = byId.get(b);
+    const dx = center(n).x - center(m).x,
+      dy = center(n).y - center(m).y;
+    const diagonal =
+      Math.abs(dx) > STEP &&
+      Math.abs(dy) > STEP &&
+      !lined(m, n, 'x', 'w') &&
+      !lined(m, n, 'y', 'h');
+    return diagonal ? `${Math.sign(dx)},${Math.sign(dy)}` : '';
+  };
+  for (const [scope, list] of kids) {
+    const next = new Map(),
+      prev = new Map();
+    for (const r of routes) {
+      const a = sibling(r.source, scope),
+        b = sibling(r.target, scope);
+      if (!a || !b || a === b) continue;
+      (next.get(a) ?? next.set(a, new Set()).get(a)).add(b);
+      (prev.get(b) ?? prev.set(b, new Set()).get(b)).add(a);
+    }
+    let links = 0;
+    if (scope !== 'root')
+      for (const [a, outs] of next)
+        for (const b of outs)
+          if (outs.size === 1 && prev.get(b).size === 1 && step(a, b)) {
+            links++;
+            issues.push(['group-staircase', `${scope}: ${a} → ${b} sit diagonally`]);
+          }
+    const frames = list.filter(n => isGroup(n.id)).sort((p, q) => center(p).x - center(q).x);
+    if (frames.length >= 3 && !links) {
+      const steps = frames.slice(1).map((g, i) => step(frames[i].id, g.id));
+      if (steps.every(s => s && s === steps[0]))
+        issues.push([
+          'group-staircase',
+          `${scope}: groups ${frames.map(g => g.id).join(', ')} step diagonally`,
+        ]);
+    }
+  }
+
+  // Gaps: for each group, the nearest sibling straight across on each side (projections
+  // overlapping). Too small is pressed together; group-to-group gaps that vary a lot across one
+  // drawing are uneven.
+  const gaps = new Map();
+  for (const [, list] of kids) {
+    for (const g of list.filter(n => isGroup(n.id))) {
+      for (const axis of ['x', 'y']) {
+        const [size, other, otherSize] = axis === 'x' ? ['w', 'y', 'h'] : ['h', 'x', 'w'];
+        for (const side of [-1, 1]) {
+          let best;
+          for (const n of list) {
+            if (n === g) continue;
+            const overlap =
+              Math.min(g[other] + g[otherSize], n[other] + n[otherSize]) -
+              Math.max(g[other], n[other]);
+            if (overlap <= EPS) continue;
+            const gap = side > 0 ? n[axis] - (g[axis] + g[size]) : g[axis] - (n[axis] + n[size]);
+            if (gap < -EPS) continue;
+            if (!best || gap < best.gap) best = { n, gap };
+          }
+          if (!best) continue;
+          const key = [g.id, best.n.id].sort().join(' | ');
+          gaps.set(key, { gap: Math.round(best.gap), groups: isGroup(best.n.id) });
+        }
+      }
+    }
+  }
+  for (const [key, { gap }] of gaps)
+    if (gap < MIN_GROUP_GAP) issues.push(['tight-group-gap', `${key} ${gap}px apart`]);
+  const between = [...gaps.values()].filter(g => g.groups && g.gap <= 160).map(g => g.gap);
+  if (between.length > 1 && Math.max(...between) - Math.min(...between) > GROUP_GAP_SPREAD)
+    issues.push([
+      'uneven-group-gap',
+      `gaps between groups run ${Math.min(...between)}–${Math.max(...between)}px`,
+    ]);
+  return {
+    issues,
+    fills,
+    gaps: Object.fromEntries([...gaps].map(([k, v]) => [k, v.gap])),
+  };
+}
+
 // ---------- metrics for one file ----------
 function measure(file) {
   const source = fs.readFileSync(file, 'utf8');
@@ -460,6 +590,10 @@ function measure(file) {
     }
   }
 
+  // Group packing: how members sit inside a group, and how sibling groups sit beside each other.
+  const packing = groupPacking(geo.nodes, routes, byId);
+  for (const [kind, detail] of packing.issues) note(kind, detail);
+
   // Crossings and unrelated shared segments.
   let crossings = 0;
   for (let i = 0; i < routes.length; i++) {
@@ -684,6 +818,10 @@ function measure(file) {
       'uneven-padding',
       'padding-varies',
       'mid-word-wrap',
+      'sparse-group',
+      'group-staircase',
+      'tight-group-gap',
+      'uneven-group-gap',
     ].map(k => [k, count(k)]),
   );
   // Weighted defect index; hard defects dominate. Normalized per 10 edges so sizes compare.
@@ -717,6 +855,10 @@ function measure(file) {
     'uneven-padding': 2,
     'padding-varies': 2,
     'mid-word-wrap': 1,
+    'sparse-group': 1,
+    'group-staircase': 1,
+    'tight-group-gap': 2,
+    'uneven-group-gap': 1,
   };
   const raw =
     Object.entries(counts).reduce((s, [k, v]) => s + v * weights[k], 0) +
@@ -749,6 +891,8 @@ function measure(file) {
     theme: source.match(/^theme\s+(\S+)/m)?.[1] ?? 'graphite',
     fills: colors.fills.length,
     minTextContrast: Math.min(...colors.pairs.map(p => p.ratio)),
+    groupFill: packing.fills,
+    groupGaps: packing.gaps,
     counts,
     defectIndex,
     issues,
@@ -1052,10 +1196,10 @@ const fmtStab = s =>
     ? `${s.meanMove}/${s.maxMove}px, ${s.moved} moved (${s.alignedMoved} after shift), ${s.orderFlips} flips`
     : '';
 const lines = [
-  '| Diagram | Ver | Theme | Fills | N/G/E | Aspect | Cross | Bends/e | Hooks | Back | Hard | Label | Route | Clear | Order | Fit | Space | Expect | DI | Base DI | Δ prev (mean/max) |',
-  '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+  '| Diagram | Ver | Theme | Fills | N/G/E | Aspect | Cross | Bends/e | Hooks | Back | Hard | Label | Route | Clear | Order | Fit | Pack | Space | Expect | DI | Base DI | Δ prev (mean/max) |',
+  '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
   ...rows.map(r => {
-    if (r.error) return `| ${r.slug} | ${r.file} | ERROR | | | | | | | | | | | | | | | | | | |`;
+    if (r.error) return `| ${r.slug} | ${r.file} | ERROR | | | | | | | | | | | | | | | | | | | |`;
     const c = r.counts;
     const hard = c['node-overlap'] + c['edge-through-node'] + c.clipped;
     const label =
@@ -1074,7 +1218,9 @@ const lines = [
     const order =
       c['uneven-channel'] + c['ragged-bends'] + c['uneven-ports'] + c['off-axis-port'] + c.jog;
     const fit = c['uneven-padding'] + c['padding-varies'];
-    return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${order} | ${fit} | ${c['empty-band'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
+    const pack =
+      c['sparse-group'] + c['group-staircase'] + c['tight-group-gap'] + c['uneven-group-gap'];
+    return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${order} | ${fit} | ${pack} | ${c['empty-band'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
   }),
 ];
 const ok = rows.filter(r => !r.error);
