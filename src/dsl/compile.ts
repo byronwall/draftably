@@ -10,7 +10,7 @@
  * top of the engine's arrangement exactly as they do on top of `flow`.
  */
 import { LayoutLab } from '../engines/layout-engine.js';
-import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
+import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../model/appearance';
 import { measureText, widestPiece } from '../model/fonts';
 import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
@@ -77,6 +77,11 @@ export interface Scene {
 }
 
 type Item = ModelObject & { w: number; h: number };
+type Size = { w: number; h: number };
+
+/** Space between two boxes: the larger of their gaps across either axis (negative if they overlap). */
+const clearance = (a: Size & Pos, b: Size & Pos) =>
+  Math.max(b.x - a.x - a.w, a.x - b.x - b.w, b.y - a.y - a.h, a.y - b.y - b.h);
 type Pos = { x: number; y: number };
 
 const round = (n: number) => Math.round(n);
@@ -129,10 +134,15 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
     return d;
   };
   engines.sort((a, b) => depth(a.scope) - depth(b.scope));
-  const plain = layoutModel({
-    ...m,
-    hints: m.hints.filter(h => h.type === 'size' || h.type === 'order'),
-  });
+  // The engines arrange slots (see `layoutModel`), so a theme switch hands them the same boxes.
+  const plain = layoutModel(
+    {
+      ...m,
+      hints: m.hints.filter(h => h.type === 'size' || h.type === 'order'),
+    },
+    undefined,
+    true,
+  );
   let doc = projectScene(plain);
   for (const l of engines) {
     const settings = LayoutLab.settings({
@@ -450,12 +460,21 @@ export function foldRanks(
     }
     return cuts;
   };
+  // A side leaf (a node with no way out that shares its rank with another) deepens its band
+  // without lengthening the run. Bands are measured without them when deciding how many to cut,
+  // so adding an error exit or a note beside a step keeps the fold's bands and cuts.
+  const sideLeaves = new Set(
+    blocks.flatMap(b =>
+      b.ids.length > 1 ? b.ids.filter(id => !pairs.some(([a, z]) => a === id && z !== id)) : [],
+    ),
+  );
   const place = (cuts: number[], bs: typeof blocks, at: Map<string, Pos>, labelled: boolean) => {
     const bands: (typeof blocks)[] = [];
     bs.forEach((b, i) => (i === 0 || cuts.includes(i) ? bands.push([b]) : bands.at(-1)!.push(b)));
     const out = new Map<string, Pos>();
     let offset = 0,
-      length = 0;
+      length = 0,
+      typical = 0;
     for (const [k, band] of bands.entries()) {
       const ids = band.flatMap(b => b.ids),
         lo = Math.min(...ids.map(id => at.get(id)![across])),
@@ -466,13 +485,21 @@ export function foldRanks(
           c = p[across] - lo + offset;
         out.set(id, axis === 'right' ? { x: a, y: c } : { x: c, y: a });
       }
-      offset += hi - lo + (k < cuts.length ? bandGap(cuts[k], labelled) : 0);
+      const gapAfter = k < cuts.length ? bandGap(cuts[k], labelled) : 0,
+        main = ids.filter(id => !sideLeaves.has(id)),
+        kept = main.length ? main : ids;
+      offset += hi - lo + gapAfter;
+      typical +=
+        Math.max(...kept.map(id => at.get(id)![across] + size(byId.get(id)!, across))) -
+        Math.min(...kept.map(id => at.get(id)![across])) +
+        gapAfter;
       length = Math.max(length, band.at(-1)!.end - band[0].start);
     }
     return {
       out,
       length,
-      depth: offset,
+      // The depth that decides the count leaves side leaves out.
+      depth: typical,
       count: bands.length,
       bands: bands.map(band => band.flatMap(b => b.ids)),
     };
@@ -691,6 +718,66 @@ function fromEngine(
     }),
   );
   return { positions: withLabelRoom(items, positions, axis, rooms), axis };
+}
+
+/** Clearance kept between a label in a pocket and the boxes and other labels around it. */
+const POCKET_PAD = 4;
+
+/**
+ * Labelled edges whose label fits in a pocket, so their gap need not widen. An edge between two
+ * ranks that are offset across the reading direction turns in the gap between them, and its run
+ * across that gap can carry the label wherever the rows leave a hole beside it: the space between
+ * two rows, clear of every box on either side of the gap. Each pocket taken stays clear for the
+ * next label. `boxes` are the drawn boxes laid out without label room; widening other gaps only
+ * moves whole ranks along, so a pocket found there stays open.
+ */
+function pocketed(
+  boxes: Map<string, Size & Pos>,
+  axis: 'right' | 'down',
+  rooms: LabelRoom[],
+): Set<LabelRoom> {
+  const along = axis === 'right' ? 'x' : 'y',
+    across = axis === 'right' ? 'y' : 'x',
+    size = (n: Size, a: 'x' | 'y') => (a === 'x' ? n.w : n.h);
+  const taken: Array<{ lo: number; hi: number; from: number; to: number }> = [],
+    out = new Set<LabelRoom>();
+  for (const r of rooms) {
+    let [a, b] = [boxes.get(r.a), boxes.get(r.b)];
+    if (!a || !b) continue;
+    if (b[along] < a[along]) [a, b] = [b, a];
+    const gapFrom = a[along] + size(a, along),
+      gapTo = b[along];
+    // Boxes side by side share no gap; their label room is set across.
+    if (gapTo <= gapFrom) continue;
+    const w = (axis === 'right' ? r.w : r.h) - 2 * LABEL_RUN,
+      h = (axis === 'right' ? r.h : r.w) - 2 * LABEL_RUN;
+    // The router may run the turn anywhere in the gap, so the label may sit anywhere across it.
+    const from = gapFrom - w / 2 - POCKET_PAD,
+      to = gapTo + w / 2 + POCKET_PAD;
+    const ca = a[across] + size(a, across) / 2,
+      cb = b[across] + size(b, across) / 2,
+      runLo = Math.min(ca, cb) + POCKET_PAD,
+      runHi = Math.max(ca, cb) - POCKET_PAD;
+    if (runHi - runLo < h) continue;
+    const blocks = [
+      ...[...boxes.values()]
+        .filter(o => o[along] < to && o[along] + size(o, along) > from)
+        .map(o => ({
+          lo: o[across] - POCKET_PAD,
+          hi: o[across] + size(o, across) + POCKET_PAD,
+        })),
+      ...taken.filter(t => t.from < to && t.to > from),
+    ];
+    const free = (t: number) => blocks.every(k => t + h <= k.lo || t >= k.hi);
+    const mid = (runLo + runHi - h) / 2;
+    const spot = [runLo, mid, ...blocks.map(k => k.hi)]
+      .filter(t => t >= runLo && t + h <= runHi && free(t))
+      .sort((p, q) => Math.abs(p - mid) - Math.abs(q - mid))[0];
+    if (spot === undefined) continue;
+    out.add(r);
+    taken.push({ lo: spot - POCKET_PAD, hi: spot + h + POCKET_PAD, from, to });
+  }
+  return out;
 }
 
 /** Engines whose scopes holding groups are packed tight instead of kept on global rank columns. */
@@ -1148,35 +1235,48 @@ function refine(
 }
 
 /**
+ * A node drawn larger than its slot may spill past it by this share of its scope's gap, in total
+ * along each axis, before the slot grows: two facing neighbours still keep half the gap, and
+ * never less than `SLOT_KEEP`, the room a line between them needs.
+ */
+const SLOT_SPILL = 0.5,
+  SLOT_KEEP = 16;
+const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SLOT_KEEP));
+
+/**
  * Lay out a model. `arranged` holds world positions from layout engines; scopes that an engine
  * governs take their children's relative placement from it instead of their built-in recipe.
+ *
+ * Nodes are laid out on slots: their size in the reference appearance (the default theme, with
+ * the file's own overrides), so a theme switch keeps rows, order and positions. Each node is drawn
+ * at its theme's size in its slot. A slot grows only where the theme's size is larger
+ * than the scope's gap can absorb (`SLOT_SPILL`), or where spilling would bring two boxes closer
+ * than `MIN_GAP`. With `slots`, objects come out at their slot size (the engines' input).
  */
-export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
+export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false): Scene {
+  // The engines' input (`slots`) has no channels: they are planned on the final arrangement.
+  if (slots) return layoutPass(m, arranged, true);
   // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
   // changes the room left for lines elsewhere; then lay out with them.
-  const plain = layoutPass(
-      { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
-      arranged,
-    ),
+  const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
+    plain = layoutPass(unrefined, arranged),
     area = (objects: SceneObject[]) =>
       (Math.max(...objects.map(o => o.x + o.w)) - Math.min(...objects.map(o => o.x))) *
       (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
     channels = trimChannels(
       planChannels(plain.objects, m.edges, m.routing),
       area(plain.objects),
-      c =>
-        area(
-          layoutPass(
-            { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
-            arranged,
-            c,
-          ).objects,
-        ),
+      c => area(layoutPass(unrefined, arranged, false, c).objects),
     );
-  return layoutPass(m, arranged, channels.size ? channels : undefined);
+  return layoutPass(m, arranged, false, channels.size ? channels : undefined);
 }
 
-function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string, Channel>): Scene {
+function layoutPass(
+  m: Model,
+  arranged?: Map<string, Pos>,
+  slots = false,
+  channels?: Map<string, Channel>,
+): Scene {
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -1184,7 +1284,13 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
     children.get(o.parent)!.push(o);
   }
   const look = resolveAppearance(m.appearance),
-    header = look.groupHeader;
+    header = look.groupHeader,
+    ref =
+      look.theme === DEFAULT_THEME
+        ? look
+        : resolveAppearance({ ...m.appearance, theme: DEFAULT_THEME });
+  /** The size each node is drawn at, where it differs from its slot. */
+  const drawn = new Map<string, { w: number; h: number }>();
   const items = new Map<string, Item>(),
     local = new Map<string, Pos>(),
     bases = new Map<string, Pos>();
@@ -1266,6 +1372,8 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
       const listed = order.ids.flatMap(id => kids.filter(k => k.id === id));
       kids = [...listed, ...kids.filter(k => !order.ids.includes(k.id))];
     }
+    // Theme size and reference size of each leaf; the slot is chosen below.
+    const leaves = new Map<string, { look: Size; ref: Size }>();
     const list: Item[] = kids.map(o => {
       let size: { w: number; h: number };
       if (o.type === 'group') {
@@ -1292,6 +1400,13 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
         const hint = m.hints.find(h => h.type === 'size' && h.id === o.id);
         const leaf = leafSize(o, hint?.type === 'size' ? hint : undefined, look);
         size = leaf;
+        if (ref !== look) {
+          const r = leafSize(o, hint?.type === 'size' ? hint : undefined, ref);
+          leaves.set(o.id, {
+            look: { w: round(leaf.w), h: round(leaf.h) },
+            ref: { w: round(r.w), h: round(r.h) },
+          });
+        }
         if (leaf.overflow)
           diagnostics.push({
             level: 'warning',
@@ -1306,69 +1421,195 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
       return item;
     });
     const pairs = pairsIn(scope);
+    // Label rooms are measured on the reference appearance too; a theme's label may use up to
+    // one `LABEL_RUN` of the line beside it before the room grows.
     const rooms = m.edges.flatMap(e => {
       const a = immediate(e.source, scope),
         b = immediate(e.target, scope);
-      return e.label && a && b && a !== b ? [labelRoom(a, b, e.label, look)] : [];
+      if (!e.label || !a || !b || a === b) return [];
+      const own = labelRoom(a, b, e.label, look);
+      if (ref === look) return [own];
+      const r = labelRoom(a, b, e.label, ref);
+      return [{ a, b, w: Math.max(r.w, own.w - LABEL_RUN), h: Math.max(r.h, own.h - LABEL_RUN) }];
     });
     const governing = arranged && governingLayout(m, scope),
       pack = packEngine(scope),
       packGaps = pack ? { node: pack.nodeGap, rank: pack.rankGap, group: groupGap } : undefined,
-      base = packGaps
-        ? packed(list, arranged!, axisOf(governing!), pairs, rooms, packGaps)
-        : governing?.engine && list.every(n => arranged!.has(n.id))
-          ? fromEngine(list, arranged!, axisOf(governing), rooms)
-          : baseLayout(list, layout, pairs, rooms),
       engine = governing?.engine && governing.scope === scope ? governing.engine : undefined;
-    if (
-      engine
-        ? engine.algorithm === 'layered' && engine.params.fold !== 'never'
-        : !governing?.engine && layout.algorithm === 'flow' && layout.fold === 'auto'
-    ) {
-      // The fold is planned without edge labels, so a relabel keeps the bands and cuts.
-      const plain = !rooms.length
-        ? base
-        : packGaps
-          ? packed(list, arranged!, axisOf(governing!), pairs, [], packGaps)
-          : governing?.engine && list.every(n => arranged!.has(n.id))
-            ? fromEngine(list, arranged!, axisOf(governing), [])
-            : baseLayout(list, layout, pairs, []);
-      const folded = foldRanks(
-        list,
-        base.positions,
-        base.axis,
-        layout.gap,
-        pairs,
-        rooms,
-        decisionsIn(scope),
-        plain.positions,
+    /**
+     * Where each drawn box sits in its slot, and its size. Engines place centres, so it is
+     * centred. The built-in recipes line a rank's boxes up by their start across the reading
+     * direction (a row of a fold shares its top), so there the drawn box keeps the slot's start
+     * across and is centred along. Pins and stays hold the drawn box.
+     */
+    const offsets = (axis: 'right' | 'down') => {
+      const reads =
+        layout.algorithm === 'row' ? 'right' : layout.algorithm === 'column' ? 'down' : axis;
+      const centre = {
+        x: !!governing?.engine || reads === 'right',
+        y: !!governing?.engine || reads === 'down',
+      };
+      return new Map(
+        list.map(n => {
+          const l = slots ? n : (leaves.get(n.id)?.look ?? n);
+          return [
+            n.id,
+            {
+              x: centre.x ? (n.w - l.w) / 2 : 0,
+              y: centre.y ? (n.h - l.h) / 2 : 0,
+              w: l.w,
+              h: l.h,
+            },
+          ] as const;
+        }),
       );
-      base.positions = folded.positions;
-      if (folded.fold) folds.push({ scope, fold: folded.fold });
-    }
-    if (engine ? engine.algorithm === 'layered' : !governing?.engine && layout.algorithm === 'flow')
-      flows.push({ scope, axis: base.axis });
-    // A routing channel on the left or under the title moves the content over to make room.
-    const room = channels?.get(scope);
-    if (room && (room.left > GROUP_INSET || room.top))
-      for (const [id, p] of base.positions)
-        base.positions.set(id, { x: p.x + room.left - GROUP_INSET, y: p.y + room.top });
-    const pos = refine(list, base.positions, m.hints, scope, diagnostics, base.axis);
-    for (const n of list) {
-      local.set(n.id, pos.get(n.id)!);
-      bases.set(n.id, base.positions.get(n.id)!);
-    }
-    return {
-      w: list.length ? Math.max(...list.map(n => pos.get(n.id)!.x + n.w)) : 0,
-      h: list.length ? Math.max(...list.map(n => pos.get(n.id)!.y + n.h)) : 0,
     };
+    /** Lay the scope out on slots that let each drawn node spill `spill` past them. */
+    const lay = (spill: Size) => {
+      for (const n of list) {
+        const l = leaves.get(n.id);
+        if (!l) continue;
+        n.w = Math.max(l.ref.w, l.look.w - spill.w);
+        n.h = Math.max(l.ref.h, l.look.h - spill.h);
+      }
+      const laidOut = (with_: LabelRoom[]) =>
+        packGaps
+          ? packed(list, arranged!, axisOf(governing!), pairs, with_, packGaps)
+          : governing?.engine && list.every(n => arranged!.has(n.id))
+            ? fromEngine(list, arranged!, axisOf(governing), with_)
+            : baseLayout(list, layout, pairs, with_);
+      // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
+      // whose labels have nowhere else to go widen.
+      const plain = rooms.length ? laidOut([]) : undefined;
+      const pockets = plain
+        ? pocketed(
+            new Map(
+              list.map(n => {
+                const p = plain.positions.get(n.id)!,
+                  o = offsets(plain.axis).get(n.id)!;
+                return [n.id, { x: p.x + o.x, y: p.y + o.y, w: o.w, h: o.h }];
+              }),
+            ),
+            plain.axis,
+            rooms,
+          )
+        : new Set<LabelRoom>();
+      const base = laidOut(rooms.filter(r => !pockets.has(r)));
+      let fold: Fold | undefined;
+      if (
+        engine
+          ? engine.algorithm === 'layered' && engine.params.fold !== 'never'
+          : !governing?.engine && layout.algorithm === 'flow' && layout.fold === 'auto'
+      ) {
+        // The fold is planned without edge labels, so a relabel keeps the bands and cuts.
+        const folded = foldRanks(
+          list,
+          base.positions,
+          base.axis,
+          layout.gap,
+          pairs,
+          rooms,
+          decisionsIn(scope),
+          (plain ?? base).positions,
+        );
+        base.positions = folded.positions;
+        fold = folded.fold;
+      }
+      // A routing channel on the left or under the title moves the content over to make room.
+      const room = channels?.get(scope);
+      if (room && (room.left > GROUP_INSET || room.top))
+        for (const [id, p] of base.positions)
+          base.positions.set(id, { x: p.x + room.left - GROUP_INSET, y: p.y + room.top });
+      const off = offsets(base.axis);
+      const hints = !leaves.size
+        ? m.hints
+        : m.hints.map(h =>
+            (h.type === 'stay' || h.type === 'pin') && off.has(h.id)
+              ? { ...h, x: h.x - off.get(h.id)!.x, y: h.y - off.get(h.id)!.y }
+              : h,
+          );
+      const pos = refine(list, base.positions, hints, scope, diagnostics, base.axis);
+      return { base, fold, pos, off };
+    };
+    const drawnBox = (n: Item, at: ReturnType<typeof lay>) => {
+      const p = at.pos.get(n.id)!,
+        o = at.off.get(n.id)!;
+      return { x: p.x + o.x, y: p.y + o.y, w: o.w, h: o.h };
+    };
+    const slotBox = (n: Item, at: ReturnType<typeof lay>) => ({
+      ...at.pos.get(n.id)!,
+      w: n.w,
+      h: n.h,
+    });
+    // Spill into the gaps first; if that brings two drawn boxes closer than `MIN_GAP` where their
+    // slots were not, lay the scope out again on slots that hold the whole drawn size.
+    // An engine spaces ranks by its rank gap and neighbours by its node gap.
+    const spill = !leaves.size
+        ? { w: 0, h: 0 }
+        : governing?.engine
+          ? (() => {
+              const along = spillOf(governing.engine.params.rankGap ?? 52),
+                across = spillOf(governing.engine.params.nodeGap ?? 24);
+              return axisOf(governing) === 'right'
+                ? { w: along, h: across }
+                : { w: across, h: along };
+            })()
+          : { w: spillOf(layout.gap), h: spillOf(layout.gap) },
+      diagnosed = diagnostics.length;
+    let laid = lay(spill);
+    if (
+      !slots &&
+      (spill.w || spill.h) &&
+      list.some((a, i) =>
+        list
+          .slice(i + 1)
+          .some(
+            b =>
+              clearance(slotBox(a, laid), slotBox(b, laid)) >= MIN_GAP - 0.5 &&
+              clearance(drawnBox(a, laid), drawnBox(b, laid)) < MIN_GAP - 0.5,
+          ),
+      )
+    ) {
+      diagnostics.length = diagnosed;
+      laid = lay({ w: 0, h: 0 });
+    }
+    if (laid.fold) folds.push({ scope, fold: laid.fold });
+    if (engine ? engine.algorithm === 'layered' : !governing?.engine && layout.algorithm === 'flow')
+      flows.push({ scope, axis: laid.base.axis });
+    // Drawn boxes, in this scope's coordinates. Group content starts at 0,0, so a box that spills
+    // past its slot at the top or left moves the content over by that much.
+    const boxes = list.map(n => drawnBox(n, laid));
+    const shift =
+      scope === 'root' || !list.length
+        ? { x: 0, y: 0 }
+        : {
+            x: Math.max(0, -Math.min(...boxes.map(b => b.x))),
+            y: Math.max(0, -Math.min(...boxes.map(b => b.y))),
+          };
+    for (const [i, n] of list.entries()) {
+      const b = boxes[i],
+        o = laid.off.get(n.id)!,
+        p = laid.base.positions.get(n.id)!;
+      local.set(n.id, { x: round(b.x + shift.x), y: round(b.y + shift.y) });
+      bases.set(n.id, { x: p.x + o.x + shift.x, y: p.y + o.y + shift.y });
+      if (leaves.has(n.id)) drawn.set(n.id, { w: round(b.w), h: round(b.h) });
+    }
+    const extent = (a: 'x' | 'y', size: 'w' | 'h') =>
+      list.length
+        ? Math.max(
+            ...list.map((n, i) =>
+              Math.max(laid.pos.get(n.id)![a] + n[size], boxes[i][a] + boxes[i][size]),
+            ),
+          ) + shift[a]
+        : 0;
+    return { w: extent('x', 'w'), h: extent('y', 'h') };
   }
   arrange('root');
 
   const objects: SceneObject[] = [];
   const place = (scope: string, origin: Pos, depth: number) => {
     for (const o of children.get(scope) ?? []) {
-      const item = items.get(o.id)!,
+      const item = drawn.get(o.id) ?? items.get(o.id)!,
         l = local.get(o.id)!,
         b = bases.get(o.id)!;
       const box: SceneObject = {
