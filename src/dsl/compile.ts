@@ -458,12 +458,21 @@ export function foldRanks(
     }
     return cuts;
   };
+  // A side leaf (a node with no way out that shares its rank with another) deepens its band
+  // without lengthening the run. Bands are measured without them when deciding how many to cut,
+  // so adding an error exit or a note beside a step keeps the fold's bands and cuts.
+  const sideLeaves = new Set(
+    blocks.flatMap(b =>
+      b.ids.length > 1 ? b.ids.filter(id => !pairs.some(([a, z]) => a === id && z !== id)) : [],
+    ),
+  );
   const place = (cuts: number[], bs: typeof blocks, at: Map<string, Pos>, labelled: boolean) => {
     const bands: (typeof blocks)[] = [];
     bs.forEach((b, i) => (i === 0 || cuts.includes(i) ? bands.push([b]) : bands.at(-1)!.push(b)));
     const out = new Map<string, Pos>();
     let offset = 0,
-      length = 0;
+      length = 0,
+      typical = 0;
     for (const [k, band] of bands.entries()) {
       const ids = band.flatMap(b => b.ids),
         lo = Math.min(...ids.map(id => at.get(id)![across])),
@@ -474,13 +483,21 @@ export function foldRanks(
           c = p[across] - lo + offset;
         out.set(id, axis === 'right' ? { x: a, y: c } : { x: c, y: a });
       }
-      offset += hi - lo + (k < cuts.length ? bandGap(cuts[k], labelled) : 0);
+      const gapAfter = k < cuts.length ? bandGap(cuts[k], labelled) : 0,
+        main = ids.filter(id => !sideLeaves.has(id)),
+        kept = main.length ? main : ids;
+      offset += hi - lo + gapAfter;
+      typical +=
+        Math.max(...kept.map(id => at.get(id)![across] + size(byId.get(id)!, across))) -
+        Math.min(...kept.map(id => at.get(id)![across])) +
+        gapAfter;
       length = Math.max(length, band.at(-1)!.end - band[0].start);
     }
     return {
       out,
       length,
-      depth: offset,
+      // The depth that decides the count leaves side leaves out.
+      depth: typical,
       count: bands.length,
       bands: bands.map(band => band.flatMap(b => b.ids)),
     };
