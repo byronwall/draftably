@@ -1,0 +1,35 @@
+diagram "RegionShot: capture to clipboard" version=1
+
+# expect reads-x menubar drag editor annotate escape
+# expect keeps-order
+# expect near keepopen copy 120
+
+theme fieldnotes
+
+node menubar "Menu-bar accessory" color=blue shade=100
+node hotkey "Control-Option-4" color=blue shade=200
+node guard "Capture running?" shape=diamond color=blue shade=200
+node drag "screencapture drag" color=blue shade=300
+node cancelled "Drag cancelled?" shape=diamond color=blue shade=400
+node editor "Editor on that display" color=blue shade=500
+node annotate "Annotate the image" color=blue shade=600
+node escape "Escape in neutral" color=blue shade=700
+node copy "Copy flattened PNG" color=blue shade=800
+node closed "Last window closed?" shape=diamond color=blue shade=800
+node keepopen "Keep window open" color=red
+
+edge e1 menubar -> hotkey
+edge e2 hotkey -> guard
+edge e3 guard -> drag "no"
+edge e4 guard -> menubar "yes" kind=async
+edge e5 drag -> cancelled
+edge e6 cancelled -> editor "no"
+edge e7 cancelled -> menubar "yes" kind=async
+edge e8 editor -> annotate
+edge e9 annotate -> escape
+edge e10 escape -> copy
+edge e13 copy -> keepopen "copy failed" kind=async
+edge e11 copy -> closed
+edge e12 closed -> menubar "yes"
+
+layout root flow direction=right gap=48

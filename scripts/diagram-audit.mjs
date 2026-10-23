@@ -390,7 +390,11 @@ function measure(file) {
             ? 'right'
             : Math.abs(p.y - n.y) < 2
               ? 'top'
-              : 'bottom';
+              : Math.abs(p.y - n.y - n.h) < 2
+                ? 'bottom'
+                : null;
+      // A port on a diamond's slanted face is on no side of the box.
+      if (!side) continue;
       const along = side === 'left' || side === 'right' ? p.y - n.y : p.x - n.x;
       const key = `${id}|${side}`;
       (ports.get(key) ?? ports.set(key, []).get(key)).push(along);
@@ -486,14 +490,28 @@ function measure(file) {
       }
       return h >= v ? 'right' : 'down';
     })();
+  // A folded flow wraps onto the next row (or column): an edge into a later row runs back along
+  // the axis but forward in reading order, as `reads-x` reads it, so it is not a back edge.
   let backEdges = 0;
+  const flowArrow = flowDir === 'right' ? 'R' : 'D';
   for (const r of routes) {
     const s = byId.get(r.source),
       t = byId.get(r.target);
     if (!s || !t) continue;
     const d = flowDir === 'right' ? center(t).x - center(s).x : center(t).y - center(s).y;
-    r.back = d < -20;
+    const wraps = flowDir === 'right' ? t.y >= s.y + s.h - EPS : t.x >= s.x + s.w - EPS;
+    r.wrap = d < -20 && wraps;
+    r.back = d < -20 && !wraps;
     if (r.back) backEdges++;
+    // Off-axis port: in a layout with a declared direction, a forward edge should arrive travelling
+    // that way (into a child's top in a downward tree) and never leave against it. A side entry
+    // reads as a sibling link.
+    if (direction && d > 20 && r.segs.length) {
+      if (dir(r.segs.at(-1)) !== flowArrow)
+        note('off-axis-port', `${r.id} ${r.source}→${r.target} arrives sideways`);
+      else if (dir(r.segs[0]) === opposite[flowArrow])
+        note('off-axis-port', `${r.id} ${r.source}→${r.target} leaves backwards`);
+    }
   }
 
   // Labels.
@@ -547,8 +565,9 @@ function measure(file) {
   const lengths = routes.map(r => r.segs.reduce((sum, sg) => sum + len(sg), 0));
   const median = [...lengths].sort((a, b) => a - b)[Math.floor(lengths.length / 2)] ?? 0;
   for (const [i, r] of routes.entries()) {
-    // A return edge in a cycle is long by nature; only forward edges count.
-    if (!r.back && lengths[i] > 400 && lengths[i] > 4 * median)
+    // A return edge in a cycle, or a fold's wrap onto the next row, is long by nature; only
+    // forward edges count.
+    if (!r.back && !r.wrap && lengths[i] > 400 && lengths[i] > 4 * median)
       note('long-edge', `${r.id} ${Math.round(lengths[i])}px (median ${Math.round(median)})`);
   }
 
@@ -616,6 +635,7 @@ function measure(file) {
       'uneven-channel',
       'ragged-bends',
       'uneven-ports',
+      'off-axis-port',
       'jog',
       'uneven-padding',
       'padding-varies',
@@ -646,6 +666,7 @@ function measure(file) {
     'uneven-channel': 1,
     'ragged-bends': 1,
     'uneven-ports': 1,
+    'off-axis-port': 1,
     jog: 1,
     'uneven-padding': 2,
     'padding-varies': 2,
@@ -983,7 +1004,8 @@ const lines = [
       c['label-on-group-border'];
     const route = c['shared-segment'] + c['edge-through-group'] + c['many-bends'];
     const clear = c['edge-hugs-node'] + c['edge-on-group-border'] + c['edges-too-close'];
-    const order = c['uneven-channel'] + c['ragged-bends'] + c['uneven-ports'] + c.jog;
+    const order =
+      c['uneven-channel'] + c['ragged-bends'] + c['uneven-ports'] + c['off-axis-port'] + c.jog;
     const fit = c['uneven-padding'] + c['padding-varies'];
     return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${order} | ${fit} | ${c['empty-band'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
   }),
