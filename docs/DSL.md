@@ -55,6 +55,9 @@ direction, and only the edge that closes it runs backwards. A run of ranks that 
 the canvas (1100×720) and more than three times longer than it is deep folds into rows (or
 columns, for `direction=down`) that each start again at the beginning, like lines of text.
 `fold=never` keeps it on one line. `engine=layered` folds the same way unless it has `fold=never`.
+Where to fold is decided without edge labels, so labelling or relabelling an edge keeps every
+object in its row; labels only widen the gaps they need, and add a row only when the labelled
+rows run more than a quarter past the canvas.
 
 ## Themes and colors
 

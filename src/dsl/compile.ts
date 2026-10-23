@@ -283,6 +283,8 @@ export function rankLayers(ids: string[], pairs: Array<[string, string]>): strin
 
 /** A long run folds once it is this many times longer than it is deep. */
 const FOLD_ASPECT = 3;
+/** How far past fitting a relabelled fold may grow before it takes another band. */
+const HOLD_SLACK = 1.25;
 
 /** Space between the lanes that a fold's wrap edges return along. */
 const LANE_PITCH = 20;
@@ -331,6 +333,10 @@ function loops(ids: string[], pairs: Array<[string, string]>): string[][] {
  * no box spans the cut), into the fewest bands that bring it within both. Within a quarter of an
  * even share, a cut is chosen for the fewest edges across it, keeping each decision with its
  * branches and each loop whole, before an exact balance. Other runs are returned unchanged.
+ *
+ * `plan` is the same run laid out without its edge labels. Whether to fold, how many bands and
+ * where to cut are decided on it, so relabelling an edge never adds a band or moves a cut: the
+ * labels only widen the gaps they need inside their own band.
  */
 export function foldRanks(
   items: Array<{ id: string; w: number; h: number }>,
@@ -340,33 +346,46 @@ export function foldRanks(
   pairs: Array<[string, string]>,
   rooms: LabelRoom[] = [],
   decisions: Set<string> = new Set(),
+  plan: Map<string, Pos> = positions,
 ): { positions: Map<string, Pos>; fold?: Fold } {
   const byId = new Map(items.map(n => [n.id, n]));
   const along = axis === 'right' ? 'x' : 'y',
     across = axis === 'right' ? 'y' : 'x';
   const size = (n: { w: number; h: number }, a: 'x' | 'y') => (a === 'x' ? n.w : n.h);
-  const span = (a: 'x' | 'y') => {
-    const lo = Math.min(...items.map(n => positions.get(n.id)![a])),
-      hi = Math.max(...items.map(n => positions.get(n.id)![a] + size(n, a)));
-    return { lo, hi, length: hi - lo };
+  // Blocks of ranks that overlap along the reading direction; bands are cut only between blocks.
+  const blocksOf = (at: Map<string, Pos>) => {
+    const sorted = [...items].sort((a, b) => at.get(a.id)![along] - at.get(b.id)![along]);
+    const out: Array<{ start: number; end: number; ids: string[] }> = [];
+    for (const n of sorted) {
+      const start = at.get(n.id)![along],
+        end = start + size(n, along),
+        last = out[out.length - 1];
+      if (last && start < last.end) {
+        last.end = Math.max(last.end, end);
+        last.ids.push(n.id);
+      } else out.push({ start, end, ids: [n.id] });
+    }
+    return out;
+  };
+  const blocks = blocksOf(positions);
+  let planned = blocksOf(plan);
+  // Label room only widens gaps between ranks, so both have the same blocks; if not, plan on the
+  // labelled run.
+  const key = (bs: typeof blocks) => bs.map(b => [...b.ids].sort().join(',')).join('|');
+  if (key(planned) !== key(blocks)) {
+    plan = positions;
+    planned = blocks;
+  }
+  const span = (at: Map<string, Pos>, a: 'x' | 'y') => {
+    const lo = Math.min(...items.map(n => at.get(n.id)![a])),
+      hi = Math.max(...items.map(n => at.get(n.id)![a] + size(n, a)));
+    return hi - lo;
   };
   const room = axis === 'right' ? RENDER_CONTEXT.width : RENDER_CONTEXT.height,
-    fits = (length: number, depth: number) => length <= room || length <= FOLD_ASPECT * depth;
-  if (items.length < 4 || fits(span(along).length, span(across).length)) return { positions };
-  // Blocks of ranks that overlap along the reading direction; bands are cut only between blocks.
-  const sorted = [...items].sort(
-    (a, b) => positions.get(a.id)![along] - positions.get(b.id)![along],
-  );
-  const blocks: Array<{ start: number; end: number; ids: string[] }> = [];
-  for (const n of sorted) {
-    const start = positions.get(n.id)![along],
-      end = start + size(n, along),
-      last = blocks[blocks.length - 1];
-    if (last && start < last.end) {
-      last.end = Math.max(last.end, end);
-      last.ids.push(n.id);
-    } else blocks.push({ start, end, ids: [n.id] });
-  }
+    fits = (length: number, depth: number, slack = 1) =>
+      length <= room * slack || length <= FOLD_ASPECT * depth * slack;
+  const unfolded = (at: Map<string, Pos>) => fits(span(at, along), span(at, across));
+  if (items.length < 4 || (unfolded(plan) && unfolded(positions))) return { positions };
   const block = new Map(blocks.flatMap((b, i) => b.ids.map(id => [id, i] as const)));
   const splits = (cut: number, a: string, b: string) => {
     const [i, j] = [block.get(a), block.get(b)];
@@ -384,8 +403,8 @@ export function foldRanks(
     SPLIT_LOOP * cycles.filter(l => l.some(id => splits(cut, l[0], id))).length;
   // Wrap edges return along lanes in the gap between bands, so it fits a lane for each edge
   // across the cut and the labels on them.
-  const bandGap = (cut: number) => {
-    const labels = rooms
+  const bandGap = (cut: number, labelled: boolean) => {
+    const labels = (labelled ? rooms : [])
       .filter(r => splits(cut, r.a, r.b))
       .map(r => (axis === 'right' ? r.h : r.w) - 2 * LABEL_RUN);
     return Math.max(
@@ -395,24 +414,24 @@ export function foldRanks(
       (crossing(cut) + 1) * LANE_PITCH + labels.reduce((sum, h) => sum + h, 0),
     );
   };
-  const total = blocks[blocks.length - 1].end - blocks[0].start;
-  const build = (count: number) => {
-    // Cut near each equal share of the length; among nearby cuts, prefer one that fewer edges
-    // cross and that splits no decision or loop.
+  // Cut near each equal share of the length; among nearby cuts, prefer one that fewer edges
+  // cross and that splits no decision or loop.
+  const chooseCuts = (count: number, bs: typeof blocks) => {
+    const total = bs[bs.length - 1].end - bs[0].start;
     const cuts: number[] = [];
     for (let i = 1; i < count; i++) {
-      const at = blocks[0].start + (total * i) / count,
+      const at = bs[0].start + (total * i) / count,
         cost = (b: number) =>
-          crossing(b) + broken(b) + (Math.abs(blocks[b].start - at) / (total / count)) * 2;
+          crossing(b) + broken(b) + (Math.abs(bs[b].start - at) / (total / count)) * 2;
       // Keep each band within a quarter of an even share (and at least half of one), so a cheap
       // lopsided cut can't win; or up to half over, at any length, when that is the only way to
       // keep decisions and loops whole. A band's length is its boxes, not the gap after them.
-      const from = blocks[cuts.at(-1) ?? 0].start,
+      const from = bs[cuts.at(-1) ?? 0].start,
         share = total / count,
         even = (b: number, slack: number, floor: number) =>
-          blocks[b - 1].end - from >= share * floor &&
-          blocks[b - 1].end - from <= share * (1 + slack) &&
-          blocks[blocks.length - 1].end - blocks[b].start <= share * (count - i) * (1 + slack);
+          bs[b - 1].end - from >= share * floor &&
+          bs[b - 1].end - from <= share * (1 + slack) &&
+          bs[bs.length - 1].end - bs[b].start <= share * (count - i) * (1 + slack);
       const tier = (b: number) =>
         !broken(b) && even(b, 0.25, 0.5)
           ? 0
@@ -422,29 +441,30 @@ export function foldRanks(
               ? 2
               : 3;
       let best = 0;
-      for (let b = (cuts.at(-1) ?? 0) + 1; b < blocks.length; b++)
+      for (let b = (cuts.at(-1) ?? 0) + 1; b < bs.length; b++)
         if (!best || tier(b) < tier(best) || (tier(b) === tier(best) && cost(b) < cost(best)))
           best = b;
       if (best) cuts.push(best);
     }
+    return cuts;
+  };
+  const place = (cuts: number[], bs: typeof blocks, at: Map<string, Pos>, labelled: boolean) => {
     const bands: (typeof blocks)[] = [];
-    blocks.forEach((b, i) =>
-      i === 0 || cuts.includes(i) ? bands.push([b]) : bands.at(-1)!.push(b),
-    );
+    bs.forEach((b, i) => (i === 0 || cuts.includes(i) ? bands.push([b]) : bands.at(-1)!.push(b)));
     const out = new Map<string, Pos>();
     let offset = 0,
       length = 0;
     for (const [k, band] of bands.entries()) {
       const ids = band.flatMap(b => b.ids),
-        lo = Math.min(...ids.map(id => positions.get(id)![across])),
-        hi = Math.max(...ids.map(id => positions.get(id)![across] + size(byId.get(id)!, across)));
+        lo = Math.min(...ids.map(id => at.get(id)![across])),
+        hi = Math.max(...ids.map(id => at.get(id)![across] + size(byId.get(id)!, across)));
       for (const id of ids) {
-        const p = positions.get(id)!,
+        const p = at.get(id)!,
           a = p[along] - band[0].start,
           c = p[across] - lo + offset;
         out.set(id, axis === 'right' ? { x: a, y: c } : { x: c, y: a });
       }
-      offset += hi - lo + (k < cuts.length ? bandGap(cuts[k]) : 0);
+      offset += hi - lo + (k < cuts.length ? bandGap(cuts[k], labelled) : 0);
       length = Math.max(length, band.at(-1)!.end - band[0].start);
     }
     return {
@@ -455,10 +475,19 @@ export function foldRanks(
       bands: bands.map(band => band.flatMap(b => b.ids)),
     };
   };
-  // The fewest bands that fit: wide layouts read best.
-  for (let count = 2; count <= blocks.length; count++) {
-    const c = build(count);
-    if (c.count === count && fits(c.length, c.depth))
+  // The fewest bands that fit: wide layouts read best. The plan sets the least count; the
+  // labelled run keeps it while it stays within `HOLD_SLACK` of fitting, and takes another band
+  // only when its labels no longer fit at all.
+  let least = 0;
+  if (!unfolded(plan))
+    for (let count = 2; count <= blocks.length && !least; count++) {
+      const c = place(chooseCuts(count, planned), planned, plan, false);
+      if (c.count === count && fits(c.length, c.depth)) least = count;
+    }
+  for (let count = Math.max(2, least); count <= blocks.length; count++) {
+    const cuts = chooseCuts(count, planned),
+      c = place(cuts, blocks, positions, true);
+    if (c.count === count && fits(c.length, c.depth, count === least ? HOLD_SLACK : 1))
       return { positions: c.out, fold: { bands: c.bands, axis } };
   }
   return { positions };
@@ -1125,6 +1154,12 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
         ? engine.algorithm === 'layered' && engine.params.fold !== 'never'
         : !governing?.engine && layout.algorithm === 'flow' && layout.fold === 'auto'
     ) {
+      // The fold is planned without edge labels, so a relabel keeps the bands and cuts.
+      const plain = !rooms.length
+        ? base
+        : governing?.engine && list.every(n => arranged!.has(n.id))
+          ? fromEngine(list, arranged!, axisOf(governing), [])
+          : baseLayout(list, layout, pairs, []);
       const folded = foldRanks(
         list,
         base.positions,
@@ -1133,6 +1168,7 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
         pairs,
         rooms,
         decisionsIn(scope),
+        plain.positions,
       );
       base.positions = folded.positions;
       if (folded.fold) folds.push({ scope, fold: folded.fold });

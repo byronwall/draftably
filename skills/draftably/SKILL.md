@@ -98,7 +98,8 @@ Good defaults:
 - Pipelines and request flows: `layout root engine=layered direction=right` or
   `layout root flow direction=right`.
   A loop's return edge runs backwards; a run longer than the canvas folds into rows, like lines
-  of text. Add `fold=never` to keep one long line.
+  of text. Add `fold=never` to keep one long line. Adding or changing edge labels keeps every
+  object in its row, so a relabel is safe to make without rechecking the layout.
 - Hierarchies and org charts: `layout root engine=tree root=top direction=down`.
 - Nested architecture (several container levels): `layout root engine=compound-flow`.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
