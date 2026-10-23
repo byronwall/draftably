@@ -16,6 +16,7 @@ import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/label
 import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
+import { returnLanes, type FlowScope } from './lanes';
 import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
 import { projectScene } from './project';
 import {
@@ -1194,7 +1195,8 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
     return o?.id;
   };
 
-  const folds: Array<{ scope: string; fold: Fold }> = [];
+  const folds: Array<{ scope: string; fold: Fold }> = [],
+    flows: FlowScope[] = [];
   // A decision: a diamond, or any node whose branches are labelled, with two or more ways out.
   const decisionsIn = (scope: string) => {
     const outs = new Map<string, ModelEdge[]>();
@@ -1344,6 +1346,8 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
       base.positions = folded.positions;
       if (folded.fold) folds.push({ scope, fold: folded.fold });
     }
+    if (engine ? engine.algorithm === 'layered' : !governing?.engine && layout.algorithm === 'flow')
+      flows.push({ scope, axis: base.axis });
     // A routing channel on the left or under the title moves the content over to make room.
     const room = channels?.get(scope);
     if (room && (room.left > GROUP_INSET || room.top))
@@ -1391,6 +1395,14 @@ function layoutPass(m: Model, arranged?: Map<string, Pos>, channels?: Map<string
     immediate,
     Math.max(m.routing.portGap ?? 16, m.routing.edgeGap ?? 16),
   );
+  // Returns and skips within a band take lanes outside it; fold wraps keep theirs.
+  for (const [id, lane] of returnLanes(
+    flows.map(f => ({ ...f, bands: folds.find(x => x.scope === f.scope)?.fold.bands })),
+    m.edges,
+    new Map(objects.map(o => [o.id, o])),
+    new Set(lanes.keys()),
+  ))
+    lanes.set(id, lane);
   // Report groups that are larger than their requested size because of their content.
   for (const l of m.layouts) {
     const g = objects.find(o => o.id === l.scope);

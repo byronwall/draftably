@@ -9,7 +9,7 @@ import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { truncateText, measureText } from './fonts';
 import { edgeLabelSize } from './labels';
 import { isCollapsed, styleOf, type VisibleGraph } from './graph';
-import type { Diagram, EdgeLayout, Point, Rect, ShapeKind, Side } from './types';
+import type { Diagram, EdgeLayout, Lane, Point, Rect, ShapeKind, Side } from './types';
 
 export const SIDE_VECTORS: Record<Side, Point> = {
   left: { x: -1, y: 0 },
@@ -214,6 +214,8 @@ function titleWidth(title: string, w: number, look: ResolvedAppearance) {
 
 /** How far inside a box's corner a lane turns. */
 const LANE_INSET = 12;
+/** How far off a side's middle a return or skip lane arrives: one port gap. */
+const LANE_PORT = 16;
 
 /**
  * An edge's routing settings, with its lane turned into bends and sides: out of the source to
@@ -229,6 +231,7 @@ export function laneBends(cfg: EdgeLayout, a: Rect, b: Rect): EdgeLayout {
     [u, v] = level ? (['x', 'y'] as const) : (['y', 'x'] as const),
     depth = (r: Rect) => (level ? r.h : r.w),
     length = (r: Rect) => (level ? r.w : r.h);
+  if (lane.out) return outLane(rest, lane, a, b);
   if (!(a[v] + depth(a) < at && at < b[v])) return rest;
   const point = (along: number, across: number) =>
     level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) };
@@ -248,6 +251,41 @@ export function laneBends(cfg: EdgeLayout, a: Rect, b: Rect): EdgeLayout {
     toSide: lane.enter !== undefined ? (level ? 'left' : 'top') : level ? 'top' : 'left',
     ...rest,
     waypoints: waypoints.filter((p, i) => !i || manhattan(p, waypoints[i - 1]) >= 1),
+  };
+}
+
+/**
+ * A return or skip lane beyond both ends (`Lane.out`): out of the source's side facing the lane,
+ * from its corner toward the target, along the lane, and at `enter` into the target's side facing
+ * back toward the source. Ignored once an end has moved past the lane or the turn.
+ */
+function outLane(rest: EdgeLayout, lane: Lane, a: Rect, b: Rect): EdgeLayout {
+  const level = 'y' in lane,
+    at = 'y' in lane ? lane.y : lane.x,
+    [u, v] = level ? (['x', 'y'] as const) : (['y', 'x'] as const),
+    depth = (r: Rect) => (level ? r.h : r.w),
+    length = (r: Rect) => (level ? r.w : r.h),
+    before = at < a[v],
+    back = b[u] + length(b) / 2 < a[u] + length(a) / 2,
+    enter = lane.enter;
+  const beyond = (r: Rect) => (before ? at < r[v] : at > r[v] + depth(r));
+  if (enter === undefined || !beyond(a) || !beyond(b)) return rest;
+  if (back ? enter <= b[u] + length(b) : enter >= b[u]) return rest;
+  const point = (along: number, across: number) =>
+      level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) },
+    offset = (before ? -1 : 1) * Math.min(LANE_PORT, depth(b) / 2 - LANE_INSET);
+  return {
+    fromSide: level ? (before ? 'top' : 'bottom') : before ? 'left' : 'right',
+    toSide: level ? (back ? 'right' : 'left') : back ? 'bottom' : 'top',
+    ...rest,
+    waypoints: [
+      point(back ? a[u] + LANE_INSET : a[u] + length(a) - LANE_INSET, at),
+      point(enter, at),
+      // Into the target one port gap off its middle, on the lane's side: clear of the flow's
+      // own line through the middle of that side.
+      point(enter, b[v] + depth(b) / 2 + offset),
+    ],
+    toOffset: offset,
   };
 }
 

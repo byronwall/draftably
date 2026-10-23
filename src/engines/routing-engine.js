@@ -221,7 +221,8 @@ function standoffCost(ps, near) {
       if (r.border) d = Math.min(Math.abs(at - s0), Math.abs(at - s1));
       else if (at <= s0) d = s0 - at;
       else if (at >= s1) d = at - s1;
-      else continue;
+      // Inside a box (only an edge's own end lets it in): as close as it gets.
+      else d = 0;
       if (d < r.band) n += run * (1 - d / r.band) * (r.weight ?? 1);
     }
   }
@@ -509,6 +510,7 @@ function slot(id, side, r, used, s, other) {
 const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
+const HOOK_PENALTY = 80;
 const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
 // Gate a group's header bands to the terminal lines of a route through a member's top.
@@ -745,10 +747,14 @@ function compute(input, rawOptions = {}) {
           (c.ts !== old.toSide ? s.portStability : 0)
         : 0;
       const fanout = fan(c.fs, a, ca, cb, 'from', e.from) + fan(c.ts, b, cb, ca, 'to', e.to);
+      // Out of one side and back into the same side of the other end: a U-turn, which a line
+      // into a perpendicular side draws with one bend fewer.
+      const hook = facingFans && c.fs === c.ts && points.length > 3 ? HOOK_PENALTY : 0;
       return (
         cost(points, used, s, near) +
         (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
         backwards +
+        hook +
         stability +
         fanout +
         axis(c)
@@ -799,6 +805,8 @@ function compute(input, rawOptions = {}) {
           )
             toff = desired;
         }
+        // A lane may say where along the target's side the edge arrives.
+        if (typeof cfg.toOffset === 'number' && cfg.toSide === ts) toff = cfg.toOffset;
         const start = port(a, fs, fo),
           end = port(b, ts, toff),
           obs = gate(edgeObs, start, fs, end, ts);
@@ -886,7 +894,10 @@ function compute(input, rawOptions = {}) {
         path = [];
       let ok = true;
       for (let i = 1; i < points.length; i++) {
-        const part = search(points[i - 1], points[i], c.obs, used, s, near);
+        // The standoff makes some searches wander; a failed one gets a larger budget once.
+        const part =
+          search(points[i - 1], points[i], c.obs, used, s, near) ||
+          (near.length ? search(points[i - 1], points[i], c.obs, used, s, near, 64000) : null);
         if (!part) {
           ok = false;
           break;

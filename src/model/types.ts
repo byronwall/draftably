@@ -50,14 +50,25 @@ export interface EdgeLayout {
   flow?: 'right' | 'down';
   /** Set by the compiler for a fold's wrap edge: the line it returns along, between two bands. */
   lane?: Lane;
+  /** From a lane, at route time: where along its target's side the edge arrives, off centre. */
+  toOffset?: number;
 }
 
 /**
  * A channel between two bands of a fold: a level line at `y`, or an upright one at `x`. With
  * `leave`, the edge leaves its source's side and turns onto the lane at that coordinate; with
  * `enter`, it runs on along the lane to that coordinate and turns into its target's side.
+ * With `out`, it is a return or skip lane beyond both ends.
  */
-export type Lane = ({ y: number } | { x: number }) & { leave?: number; enter?: number };
+export type Lane = ({ y: number } | { x: number }) & {
+  leave?: number;
+  enter?: number;
+  /**
+   * A lane beyond both ends, outside their band: the edge leaves by the side facing it, runs
+   * along it, and at `enter` turns into the target's side that faces back toward the source.
+   */
+  out?: boolean;
+};
 
 export interface LabelLayout {
   mode?: LabelMode;

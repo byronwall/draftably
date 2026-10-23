@@ -312,6 +312,7 @@ export function normalize(input: unknown): Diagram {
           if (!finite(cfg.lane[key])) throw Error(e.id + ': invalid connection lane.');
           next.lane[key] = cfg.lane[key];
         }
+      if (cfg.lane.out === true) next.lane.out = true;
     }
     if (cfg.flow === 'right' || cfg.flow === 'down') next.flow = cfg.flow;
     out.layout.edges[e.id] = next;
