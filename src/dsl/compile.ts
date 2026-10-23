@@ -750,74 +750,6 @@ function wrapLanes(
   return out;
 }
 
-/**
- * Lanes for the jogs in a group's busy gaps. Where two or more edges between neighbouring ranks of
- * a group turn in the gap between them, each runs its turn along its own line, evenly pitched
- * across the gap like a fold's wraps, in the order where they cross least. Only edges with no
- * lane yet, no sides set in the file, and ends that don't line up take one; a gap where one box
- * starts or ends two of them is left to the router, which spreads a fan from its ports.
- */
-function gapLanes(
-  scopes: Array<{ scope: string; axis: 'right' | 'down' }>,
-  edges: ModelEdge[],
-  byId: Map<string, SceneObject>,
-  immediate: (id: string, scope: string) => string | undefined,
-  taken: Set<string>,
-): Map<string, Lane> {
-  const out = new Map<string, Lane>();
-  for (const { scope, axis } of scopes) {
-    const level = axis === 'down',
-      start = (o: SceneObject) => (level ? o.y : o.x),
-      end = (o: SceneObject) => (level ? o.y + o.h : o.x + o.w),
-      mid = (o: SceneObject) => (level ? o.x + o.w / 2 : o.y + o.h / 2);
-    const kids = [...byId.values()]
-      .filter(o => o.parent === scope)
-      .sort((a, b) => start(a) - start(b));
-    // Ranks: runs of children that overlap along the reading direction.
-    const ranks: SceneObject[][] = [];
-    let reach = -Infinity;
-    for (const o of kids) {
-      if (ranks.length && start(o) < reach) ranks.at(-1)!.push(o);
-      else ranks.push([o]);
-      reach = Math.max(reach, end(o));
-    }
-    const rankOf = new Map(ranks.flatMap((r, i) => r.map(o => [o.id, i] as const)));
-    for (let k = 0; k + 1 < ranks.length; k++) {
-      const top = Math.max(...ranks[k].map(end)),
-        bottom = Math.min(...ranks[k + 1].map(start));
-      const jogs = edges.flatMap(e => {
-        const a = immediate(e.source, scope),
-          b = immediate(e.target, scope);
-        if (!a || !b || rankOf.get(a) !== k || rankOf.get(b) !== k + 1) return [];
-        if (taken.has(e.id) || e.from !== 'auto' || e.to !== 'auto') return [];
-        const source = byId.get(e.source)!,
-          target = byId.get(e.target)!;
-        if (end(source) > top + 0.5 || start(target) < bottom - 0.5) return [];
-        if (Math.abs(mid(source) - mid(target)) < 1) return [];
-        return [{ id: e.id, source, target }];
-      });
-      if (jogs.length < 2 || bottom - top < (jogs.length + 1) * LANE_PITCH) continue;
-      const ends = [...jogs.map(j => j.source.id), ...jogs.map(j => j.target.id)];
-      if (new Set(ends).size < ends.length) continue;
-      const at = (i: number) => round(top + ((bottom - top) * (i + 1)) / (jogs.length + 1));
-      const order = fewestCrossings(
-        [...jogs].sort((a, b) => mid(a.source) - mid(b.source)),
-        o =>
-          crossings(
-            o.map((j, i) => [
-              { u: mid(j.source), v: top },
-              { u: mid(j.source), v: at(i) },
-              { u: mid(j.target), v: at(i) },
-              { u: mid(j.target), v: bottom },
-            ]),
-          ),
-      );
-      order.forEach((j, i) => out.set(j.id, level ? { y: at(i) } : { x: at(i) }));
-    }
-  }
-  return out;
-}
-
 /** How many times orthogonal paths, given as points along and across, cross one another. */
 export function crossings(paths: Array<Array<{ u: number; v: number }>>) {
   const segments = paths.map(p => p.slice(1).map((q, i) => [p[i], q] as const));
@@ -1149,9 +1081,9 @@ const GAP_STANDOFF = 20;
  * The room each gap between consecutive ranks needs for the lines that run through it, or 0
  * where the scope's own gap will do. A line runs through a gap it leaves its source by or enters
  * its target by: one between members ending next to the gap, one leaving the scope from the rank
- * before it, or one entering the scope into the rank after it. Two or more lines widen the gap
- * the way a group gap widens: a standoff each side, `LANE_PITCH` per extra line, and, between
- * rows, each labelled line's label height.
+ * before it, or one entering the scope into the rank after it. A gap where a line would run
+ * through a label (see below) widens the way a group gap widens: a standoff each side,
+ * `LANE_PITCH` per extra line, and, between rows, each labelled line's label height.
  */
 function gapRoom(
   layers: string[][],
@@ -1168,7 +1100,9 @@ function gapRoom(
   return layers.slice(0, -1).map((_, i) => {
     let n = 0,
       labels = 0;
-    const unused = [...rooms];
+    const unused = [...rooms],
+      counted: ScopeLine[] = [],
+      labelled: ScopeLine[] = [];
     for (const l of lines) {
       const ra = l.a !== undefined ? rank.get(l.a) : undefined,
         rb = l.b !== undefined ? rank.get(l.b) : undefined;
@@ -1181,16 +1115,25 @@ function gapRoom(
         const k = unused.findIndex(
           r => (r.a === l.a && r.b === l.b) || (r.a === l.b && r.b === l.a),
         );
-        if (k >= 0) labels += along(unused.splice(k, 1)[0]) - run;
+        if (k >= 0) {
+          labels += along(unused.splice(k, 1)[0]) - run;
+          if (lo === i && hi === i + 1) labelled.push(l);
+        }
       } else {
         through = ra !== undefined ? ra === i : rb === i + 1;
         if (!through) continue;
         if (l.label && rooms.length) labels += along(l.label) - (axis === 'right' ? run : 0);
       }
       n++;
+      counted.push(l);
     }
-    // Two unlabelled lines share a scope's ordinary gap well enough.
-    return n < 3 && !(n === 2 && labels) ? 0 : 2 * GAP_STANDOFF + (n - 1) * LANE_PITCH + labels;
+    // The gap widens only where a line would run through a label in it: a labelled edge across
+    // the gap, and a line leaving or entering the group by one of its two boxes, which turns in
+    // the gap past the label on its way out of the group.
+    const clash = labelled.some(l =>
+      counted.some(o => !(o.a && o.b) && [o.a, o.b].some(e => e && (e === l.a || e === l.b))),
+    );
+    return clash ? 2 * GAP_STANDOFF + (n - 1) * LANE_PITCH + labels : 0;
   });
 }
 
@@ -2041,17 +1984,6 @@ function layoutPass(
     flows.map(f => ({ ...f, bands: folds.find(x => x.scope === f.scope)?.fold.bands })),
     m.edges,
     new Map(objects.map(o => [o.id, o])),
-    new Set(lanes.keys()),
-  ))
-    lanes.set(id, lane);
-  // Jogs through a group's busy gaps take evenly pitched lanes.
-  for (const [id, lane] of gapLanes(
-    [...children.keys()]
-      .filter(scope => scope !== 'root' && (children.get(scope)?.length ?? 0) > 1)
-      .map(scope => ({ scope, axis: readsAlong(scope) })),
-    m.edges,
-    new Map(objects.map(o => [o.id, o])),
-    immediate,
     new Set(lanes.keys()),
   ))
     lanes.set(id, lane);
