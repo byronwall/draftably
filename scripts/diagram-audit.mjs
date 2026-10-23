@@ -298,10 +298,17 @@ function measure(file) {
       if (close) note('edge-hugs-node', `${r.id} along ${n.id}`);
     }
     for (const g of groups) {
-      const close = runs.some(s =>
-        sides(g).some(side => Math.abs(s.at - side.at) < 8 && alongside(s, side) > 20),
-      );
-      if (close) note('edge-on-group-border', `${r.id} along ${g.id}`);
+      const gap = s =>
+        Math.min(
+          ...sides(g)
+            .filter(side => alongside(s, side) > 20)
+            .map(side => Math.abs(s.at - side.at)),
+        );
+      const nearest = Math.min(...runs.map(gap));
+      if (nearest < 8) note('edge-on-group-border', `${r.id} along ${g.id}`);
+      // 8–15px inside or outside the border: the line rides it, as close as a hug on a box.
+      else if (nearest < 15)
+        note('edge-near-group-border', `${r.id} ${Math.round(nearest)}px from ${g.id}`);
     }
   }
   for (let i = 0; i < routes.length; i++) {
@@ -631,6 +638,7 @@ function measure(file) {
       'expectation-failed',
       'edge-hugs-node',
       'edge-on-group-border',
+      'edge-near-group-border',
       'edges-too-close',
       'uneven-channel',
       'ragged-bends',
@@ -662,6 +670,7 @@ function measure(file) {
     'expectation-failed': 4,
     'edge-hugs-node': 1,
     'edge-on-group-border': 1,
+    'edge-near-group-border': 1,
     'edges-too-close': 2,
     'uneven-channel': 1,
     'ragged-bends': 1,
@@ -1003,7 +1012,11 @@ const lines = [
       c['label-detached'] +
       c['label-on-group-border'];
     const route = c['shared-segment'] + c['edge-through-group'] + c['many-bends'];
-    const clear = c['edge-hugs-node'] + c['edge-on-group-border'] + c['edges-too-close'];
+    const clear =
+      c['edge-hugs-node'] +
+      c['edge-on-group-border'] +
+      c['edge-near-group-border'] +
+      c['edges-too-close'];
     const order =
       c['uneven-channel'] + c['ragged-bends'] + c['uneven-ports'] + c['off-axis-port'] + c.jog;
     const fit = c['uneven-padding'] + c['padding-varies'];
