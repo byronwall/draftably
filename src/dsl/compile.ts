@@ -701,6 +701,66 @@ function fromEngine(
   return { positions: withLabelRoom(items, positions, axis, rooms), axis };
 }
 
+/** Clearance kept between a label in a pocket and the boxes and other labels around it. */
+const POCKET_PAD = 4;
+
+/**
+ * Labelled edges whose label fits in a pocket, so their gap need not widen. An edge between two
+ * ranks that are offset across the reading direction turns in the gap between them, and its run
+ * across that gap can carry the label wherever the rows leave a hole beside it: the space between
+ * two rows, clear of every box on either side of the gap. Each pocket taken stays clear for the
+ * next label. `boxes` are the drawn boxes laid out without label room; widening other gaps only
+ * moves whole ranks along, so a pocket found there stays open.
+ */
+function pocketed(
+  boxes: Map<string, Size & Pos>,
+  axis: 'right' | 'down',
+  rooms: LabelRoom[],
+): Set<LabelRoom> {
+  const along = axis === 'right' ? 'x' : 'y',
+    across = axis === 'right' ? 'y' : 'x',
+    size = (n: Size, a: 'x' | 'y') => (a === 'x' ? n.w : n.h);
+  const taken: Array<{ lo: number; hi: number; from: number; to: number }> = [],
+    out = new Set<LabelRoom>();
+  for (const r of rooms) {
+    let [a, b] = [boxes.get(r.a), boxes.get(r.b)];
+    if (!a || !b) continue;
+    if (b[along] < a[along]) [a, b] = [b, a];
+    const gapFrom = a[along] + size(a, along),
+      gapTo = b[along];
+    // Boxes side by side share no gap; their label room is set across.
+    if (gapTo <= gapFrom) continue;
+    const w = (axis === 'right' ? r.w : r.h) - 2 * LABEL_RUN,
+      h = (axis === 'right' ? r.h : r.w) - 2 * LABEL_RUN;
+    // The router may run the turn anywhere in the gap, so the label may sit anywhere across it.
+    const from = gapFrom - w / 2 - POCKET_PAD,
+      to = gapTo + w / 2 + POCKET_PAD;
+    const ca = a[across] + size(a, across) / 2,
+      cb = b[across] + size(b, across) / 2,
+      runLo = Math.min(ca, cb) + POCKET_PAD,
+      runHi = Math.max(ca, cb) - POCKET_PAD;
+    if (runHi - runLo < h) continue;
+    const blocks = [
+      ...[...boxes.values()]
+        .filter(o => o[along] < to && o[along] + size(o, along) > from)
+        .map(o => ({
+          lo: o[across] - POCKET_PAD,
+          hi: o[across] + size(o, across) + POCKET_PAD,
+        })),
+      ...taken.filter(t => t.from < to && t.to > from),
+    ];
+    const free = (t: number) => blocks.every(k => t + h <= k.lo || t >= k.hi);
+    const mid = (runLo + runHi - h) / 2;
+    const spot = [runLo, mid, ...blocks.map(k => k.hi)]
+      .filter(t => t >= runLo && t + h <= runHi && free(t))
+      .sort((p, q) => Math.abs(p - mid) - Math.abs(q - mid))[0];
+    if (spot === undefined) continue;
+    out.add(r);
+    taken.push({ lo: spot - POCKET_PAD, hi: spot + h + POCKET_PAD, from, to });
+  }
+  return out;
+}
+
 /**
  * Engines space every rank alike. Where a labelled edge between two ranks has less room than its
  * label needs, push everything past the first rank's end along the reading axis.
@@ -1188,6 +1248,34 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
     });
     const governing = arranged && governingLayout(m, scope),
       engine = governing?.engine && governing.scope === scope ? governing.engine : undefined;
+    /**
+     * Where each drawn box sits in its slot, and its size. Engines place centres, so it is
+     * centred. The built-in recipes line a rank's boxes up by their start across the reading
+     * direction (a row of a fold shares its top), so there the drawn box keeps the slot's start
+     * across and is centred along. Pins and stays hold the drawn box.
+     */
+    const offsets = (axis: 'right' | 'down') => {
+      const reads =
+        layout.algorithm === 'row' ? 'right' : layout.algorithm === 'column' ? 'down' : axis;
+      const centre = {
+        x: !!governing?.engine || reads === 'right',
+        y: !!governing?.engine || reads === 'down',
+      };
+      return new Map(
+        list.map(n => {
+          const l = slots ? n : (leaves.get(n.id)?.look ?? n);
+          return [
+            n.id,
+            {
+              x: centre.x ? (n.w - l.w) / 2 : 0,
+              y: centre.y ? (n.h - l.h) / 2 : 0,
+              w: l.w,
+              h: l.h,
+            },
+          ] as const;
+        }),
+      );
+    };
     /** Lay the scope out on slots that let each drawn node spill `spill` past them. */
     const lay = (spill: Size) => {
       for (const n of list) {
@@ -1196,10 +1284,27 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
         n.w = Math.max(l.ref.w, l.look.w - spill.w);
         n.h = Math.max(l.ref.h, l.look.h - spill.h);
       }
-      const base =
+      const laidOut = (with_: LabelRoom[]) =>
         governing?.engine && list.every(n => arranged!.has(n.id))
-          ? fromEngine(list, arranged!, axisOf(governing), rooms)
-          : baseLayout(list, layout, pairs, rooms);
+          ? fromEngine(list, arranged!, axisOf(governing), with_)
+          : baseLayout(list, layout, pairs, with_);
+      // Labels that fit in a pocket on their own edge leave their gap as it is; only the gaps
+      // whose labels have nowhere else to go widen.
+      const plain = rooms.length ? laidOut([]) : undefined;
+      const pockets = plain
+        ? pocketed(
+            new Map(
+              list.map(n => {
+                const p = plain.positions.get(n.id)!,
+                  o = offsets(plain.axis).get(n.id)!;
+                return [n.id, { x: p.x + o.x, y: p.y + o.y, w: o.w, h: o.h }];
+              }),
+            ),
+            plain.axis,
+            rooms,
+          )
+        : new Set<LabelRoom>();
+      const base = laidOut(rooms.filter(r => !pockets.has(r)));
       let fold: Fold | undefined;
       if (
         engine
@@ -1207,11 +1312,6 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
           : !governing?.engine && layout.algorithm === 'flow' && layout.fold === 'auto'
       ) {
         // The fold is planned without edge labels, so a relabel keeps the bands and cuts.
-        const plain = !rooms.length
-          ? base
-          : governing?.engine && list.every(n => arranged!.has(n.id))
-            ? fromEngine(list, arranged!, axisOf(governing), [])
-            : baseLayout(list, layout, pairs, []);
         const folded = foldRanks(
           list,
           base.positions,
@@ -1220,30 +1320,12 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
           pairs,
           rooms,
           decisionsIn(scope),
-          plain.positions,
+          (plain ?? base).positions,
         );
         base.positions = folded.positions;
         fold = folded.fold;
       }
-      // Where the drawn box sits in its slot. Engines place centres, so it is centred. The
-      // built-in recipes line a rank's boxes up by their start across the reading direction (a
-      // row of a fold shares its top), so there the drawn box keeps the slot's start across and
-      // is centred along. Pins and stays hold the drawn box.
-      const reads =
-        layout.algorithm === 'row' ? 'right' : layout.algorithm === 'column' ? 'down' : base.axis;
-      const centre = {
-        x: !!governing?.engine || reads === 'right',
-        y: !!governing?.engine || reads === 'down',
-      };
-      const off = new Map(
-        list.map(n => {
-          const l = slots ? n : (leaves.get(n.id)?.look ?? n);
-          return [
-            n.id,
-            { x: centre.x ? (n.w - l.w) / 2 : 0, y: centre.y ? (n.h - l.h) / 2 : 0 },
-          ] as const;
-        }),
-      );
+      const off = offsets(base.axis);
       const hints = !leaves.size
         ? m.hints
         : m.hints.map(h =>
@@ -1257,8 +1339,7 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
     const drawnBox = (n: Item, at: ReturnType<typeof lay>) => {
       const p = at.pos.get(n.id)!,
         o = at.off.get(n.id)!;
-      const l = slots ? n : (leaves.get(n.id)?.look ?? n);
-      return { x: p.x + o.x, y: p.y + o.y, w: l.w, h: l.h };
+      return { x: p.x + o.x, y: p.y + o.y, w: o.w, h: o.h };
     };
     const slotBox = (n: Item, at: ReturnType<typeof lay>) => ({
       ...at.pos.get(n.id)!,
