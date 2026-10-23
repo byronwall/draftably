@@ -15,10 +15,12 @@ import { measureText, widestPiece } from '../model/fonts';
 import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
-import { planChannels, trimChannels, type Channel } from './channels';
+import { RouteLab } from '../engines/routing-engine.js';
+import { routeInput } from '../model/routes';
+import { planChannels, trimChannels, usedChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
 import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
-import { projectScene } from './project';
+import { projectScene, visibleRects } from './project';
 import {
   DslError,
   parseModel,
@@ -1268,7 +1270,49 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
       area(plain.objects),
       c => area(layoutPass(unrefined, arranged, false, c).objects),
     );
-  return layoutPass(m, arranged, false, channels.size ? channels : undefined);
+  if (!channels.size) return layoutPass(m, arranged);
+  // The router may take another way than a channel was planned for. Route the same unrefined
+  // arrangement once, drop the channels no line runs along, and lay out again: one more pass,
+  // channels only shrink, no loop.
+  const refined = m.hints.length !== unrefined.hints.length,
+    probe = layoutPass(unrefined, arranged, false, channels),
+    routed = route(probe),
+    used = usedChannels(
+      channels,
+      probe.objects.filter(o => o.type === 'group'),
+      routed.routes.map(r => r.points),
+      probe.look.groupHeader,
+    );
+  if (used === channels) return refined ? layoutPass(m, arranged, false, channels) : probe;
+  // A dropped channel can still have been the room a line needed to clear a member or a title:
+  // keep the re-pack only when its lines are no worse.
+  const tight = layoutPass(unrefined, arranged, false, used.size ? used : undefined),
+    before = routed.report,
+    after = route(tight).report,
+    keep =
+      after.blocked <= before.blocked &&
+      after.crossings <= before.crossings &&
+      after.bends <= before.bends &&
+      after.length <= before.length * ROUTE_SLACK;
+  if (!keep) return refined ? layoutPass(m, arranged, false, channels) : probe;
+  return refined ? layoutPass(m, arranged, false, used.size ? used : undefined) : tight;
+}
+
+/**
+ * A re-pack without unused channels may lengthen the lines by this share at most: the drawing is
+ * tighter, so a line or two may run a little further round, but not take a new detour.
+ */
+const ROUTE_SLACK = 1.05;
+
+/** Route a scene with the editor's router, as `projectScene` and the canvas do. */
+function route(scene: Scene) {
+  const doc = projectScene(scene),
+    { vg, rects } = visibleRects(doc);
+  return RouteLab.compute(routeInput(doc, vg, rects), {
+    ...doc.settings.routing,
+    previous: [],
+    quick: true,
+  });
 }
 
 function layoutPass(
