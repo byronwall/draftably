@@ -11,10 +11,11 @@
  */
 import { LayoutLab } from '../engines/layout-engine.js';
 import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
+import { measureText } from '../model/fonts';
 import { titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction } from '../model/types';
-import { GROUP_HEADER, GROUP_INSET, contentOrigin } from './frame';
+import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
 import { projectScene } from './project';
 import {
   DslError,
@@ -30,7 +31,8 @@ import {
 export const RENDER_CONTEXT = { width: 1100, height: 720 } as const;
 export { GROUP_HEADER, GROUP_INSET, contentOrigin };
 const MIN_GAP = 12;
-const MIN_GROUP = { w: 260, h: 110 };
+/** Size of a group with nothing in it yet; groups with content fit it exactly. */
+const EMPTY_GROUP = { w: 260, h: 110 };
 
 export interface SceneObject extends ModelObject {
   /** World (diagram) coordinates. */
@@ -610,11 +612,20 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
     const list: Item[] = kids.map(o => {
       let size: { w: number; h: number };
       if (o.type === 'group') {
+        // Bottom-up: the group's content is already placed in its own coordinates, so the frame
+        // is that box plus the same inset on every side, and never feeds back into the content.
+        // Only the title or an explicit minimum can make it larger.
         const sub = arrange(o.id),
-          own = layoutFor(m, o.id);
+          own = layoutFor(m, o.id),
+          empty = !children.get(o.id)?.length;
         size = {
-          w: Math.max(MIN_GROUP.w, sub.w + 2 * GROUP_INSET, own.minWidth),
-          h: Math.max(MIN_GROUP.h, sub.h + header + GROUP_INSET, own.minHeight),
+          w: Math.max(
+            empty ? EMPTY_GROUP.w : 0,
+            sub.w + 2 * GROUP_INSET,
+            Math.ceil(measureText(o.label, look.groupTitle)) + GROUP_TITLE_CHROME,
+            own.minWidth,
+          ),
+          h: Math.max(empty ? EMPTY_GROUP.h : 0, sub.h + header + GROUP_INSET, own.minHeight),
         };
       } else {
         const hint = m.hints.find(h => h.type === 'size' && h.id === o.id);
