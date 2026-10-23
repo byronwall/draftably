@@ -175,10 +175,14 @@ try {
   );
   check('distant region stays put', steady.length === 0, steady.join(', '));
   const notes = await page.evaluate(() => window.diagramStudio.fileState().diagnostics);
+  // The wider platform lands on db: their stays went stale and were dropped (`stale-stay`), or
+  // an anchor gave way (`relaxed`). Either way the movement is reported.
   const moved = ['platform', 'db'].filter(id => !same(rect(refined, id), rect(added, id)));
   check(
     'unavoidable movement is diagnosed',
-    moved.every(id => notes.some(n => n.code === 'relaxed' && n.ids.includes(id))),
+    moved.every(id =>
+      notes.some(n => (n.code === 'stale-stay' || n.code === 'relaxed') && n.ids.includes(id)),
+    ),
     moved.length ? `moved: ${moved.join(', ')}` : 'nothing else moved',
   );
   await shot(page, 'proof-2-external-add.png');

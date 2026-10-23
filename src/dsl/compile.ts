@@ -1217,6 +1217,54 @@ interface Variable {
 }
 
 /**
+ * The `stay`s in a scope that went stale. The viewer writes a `stay` for each object around a
+ * drag, recording where it sat in the arrangement of the time. When growth changes that
+ * arrangement, honouring the stays can land two siblings that the packing keeps in different
+ * ranks on top of each other along the reading direction. Separation then slides one under the
+ * other and the drawing no longer reads in order. Those two stays describe a layout that no
+ * longer exists, so both are dropped and the packing places them. A pair counts when two stayed
+ * boxes collide and overlap by at least half the smaller one along the reading direction, while
+ * the packing holds them apart along it. Stays written together never collide, so only a change
+ * since then can do that. A stayed box that a little growth nudges into a neighbour still holds,
+ * and a new object that lands on a stayed one is moved aside as before.
+ */
+function staleStays(
+  items: Item[],
+  base: Map<string, Pos>,
+  local: Hint[],
+  axis: 'right' | 'down',
+): Extract<Hint, { type: 'stay' }>[] {
+  const stays = local.filter((h): h is Extract<Hint, { type: 'stay' }> => h.type === 'stay');
+  if (!stays.length) return [];
+  const stayed = new Map(stays.map(h => [h.id, { x: h.x, y: h.y }])),
+    stale = new Set<string>();
+  const along = axis === 'right' ? 'x' : 'y',
+    across = axis === 'right' ? 'y' : 'x',
+    size = (n: Item, a: 'x' | 'y') => (a === 'x' ? n.w : n.h);
+  /** Overlap of two boxes' extents on one axis (negative when apart). */
+  const overlap = (a: Item, p: Pos, b: Item, q: Pos, ax: 'x' | 'y') =>
+    Math.min(p[ax] + size(a, ax), q[ax] + size(b, ax)) - Math.max(p[ax], q[ax]);
+  for (let i = 0; i < items.length; i++)
+    for (let j = i + 1; j < items.length; j++) {
+      const a = items[i],
+        b = items[j];
+      const sa = stayed.get(a.id),
+        sb = stayed.get(b.id),
+        pa = base.get(a.id),
+        pb = base.get(b.id);
+      if (!sa || !sb || !pa || !pb || overlap(a, pa, b, pb, along) > 0) continue;
+      if (
+        overlap(a, sa, b, sb, across) > 0 &&
+        overlap(a, sa, b, sb, along) >= Math.min(size(a, along), size(b, along)) / 2
+      ) {
+        stale.add(a.id);
+        stale.add(b.id);
+      }
+    }
+  return stays.filter(h => stale.has(h.id));
+}
+
+/**
  * Apply refinements to one scope: stays, nudges, near, preferred alignment and pins set starting
  * positions; required alignment and near become shared or ordered variables; then overlapping
  * siblings are separated, moving lighter objects more. Pins never move.
@@ -1237,8 +1285,17 @@ function refine(
     'ids' in h ? h.type === 'align' && h.ids.every(id => by.has(id)) : 'id' in h && by.has(h.id),
   );
   const intended = new Map<string, { pos: Pos; hint: Hint }>();
+  const stale = staleStays(items, base, local, axis);
+  if (stale.length)
+    diagnostics.push({
+      level: 'info',
+      code: 'stale-stay',
+      message: `The stays on ${stale.map(h => h.id).join(', ')} no longer fit ${scope}'s arrangement, so they were ignored. Drag again to anchor the new layout.`,
+      line: stale[0].line,
+      ids: stale.map(h => h.id),
+    });
   for (const h of local)
-    if (h.type === 'stay') {
+    if (h.type === 'stay' && !stale.includes(h)) {
       pos.set(h.id, { x: h.x, y: h.y });
       weight.set(h.id, h.weight);
       intended.set(h.id, { pos: { x: h.x, y: h.y }, hint: h });
