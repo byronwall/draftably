@@ -295,6 +295,12 @@ export function rankLayers(ids: string[], pairs: Array<[string, string]>): strin
 
 /** A long run folds once it is this many times longer than it is deep. */
 const FOLD_ASPECT = 3;
+/**
+ * A packed scope (a drawing or group holding groups, under a packing engine) wraps its run into
+ * rows once it is this many times longer than it is deep, like a line of text: groups are wide
+ * words, so the cap is looser than a plain run's.
+ */
+const PACKED_FOLD_ASPECT = 5;
 /** How far past fitting a relabelled fold may grow before it takes another band. */
 const HOLD_SLACK = 1.25;
 
@@ -361,6 +367,11 @@ export function foldRanks(
   rooms: LabelRoom[] = [],
   decisions: Set<string> = new Set(),
   plan: Map<string, Pos> = positions,
+  {
+    aspect = FOLD_ASPECT,
+    fewest = 4,
+    room = axis === 'right' ? RENDER_CONTEXT.width : RENDER_CONTEXT.height,
+  }: { aspect?: number; fewest?: number; room?: number } = {},
 ): { positions: Map<string, Pos>; fold?: Fold } {
   const byId = new Map(items.map(n => [n.id, n]));
   const along = axis === 'right' ? 'x' : 'y',
@@ -395,11 +406,10 @@ export function foldRanks(
       hi = Math.max(...items.map(n => at.get(n.id)![a] + size(n, a)));
     return hi - lo;
   };
-  const room = axis === 'right' ? RENDER_CONTEXT.width : RENDER_CONTEXT.height,
-    fits = (length: number, depth: number, slack = 1) =>
-      length <= room * slack || length <= FOLD_ASPECT * depth * slack;
+  const fits = (length: number, depth: number, slack = 1) =>
+    length <= room * slack || length <= aspect * depth * slack;
   const unfolded = (at: Map<string, Pos>) => fits(span(at, along), span(at, across));
-  if (items.length < 4 || (unfolded(plan) && unfolded(positions))) return { positions };
+  if (items.length < fewest || (unfolded(plan) && unfolded(positions))) return { positions };
   const block = new Map(blocks.flatMap((b, i) => b.ids.map(id => [id, i] as const)));
   const splits = (cut: number, a: string, b: string) => {
     const [i, j] = [block.get(a), block.get(b)];
@@ -885,6 +895,50 @@ interface PackGaps {
 }
 
 /**
+ * Move a sink group (one with no way out) back into its callers' rank, beside them, when all its
+ * callers share one rank and one of them goes on into another member of the next rank. Called
+ * groups such as an upstream API then sit next to the code that calls them instead of opening a
+ * rank of their own past it, where they leave the space beside their callers empty and draw long
+ * lines back. Of a caller's sinks in the next rank, the longest along the reading direction
+ * stays, so the run keeps its next step.
+ */
+function besideCallers(
+  layers: string[][],
+  pairs: Array<[string, string]>,
+  movable: (id: string) => boolean,
+  length: (id: string) => number,
+): string[][] {
+  const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const))),
+    sink = (id: string) => !pairs.some(([a, b]) => a === id && b !== id),
+    callers = (id: string) => [
+      ...new Set(pairs.filter(([a, b]) => b === id && a !== id).map(p => p[0])),
+    ];
+  const moved = new Set<string>();
+  for (const [i, layer] of layers.entries()) {
+    if (!i) continue;
+    for (const id of layer) {
+      const from = callers(id);
+      if (!movable(id) || !sink(id) || !from.length) continue;
+      if (from.some(c => rank.get(c) !== i - 1)) continue;
+      // It moves only if the run still goes on past the callers: into a member of this rank that
+      // goes further, or into a longer sink.
+      const next = [...new Set(pairs.filter(([a]) => from.includes(a)).map(p => p[1]))].filter(
+        t => t !== id && rank.get(t) === i,
+      );
+      const longest = [id, ...next].filter(sink).sort((a, b) => length(b) - length(a))[0];
+      if (next.some(t => !sink(t)) || longest !== id) moved.add(id);
+    }
+  }
+  if (!moved.size) return layers;
+  return layers
+    .map((layer, i) => [
+      ...layer.filter(id => !moved.has(id)),
+      ...(layers[i + 1] ?? []).filter(id => moved.has(id)),
+    ])
+    .filter(layer => layer.length);
+}
+
+/**
  * Pack an engine-arranged scope tight. Members take local ranks from the edges between them, so a
  * chain reads as a straight row or column in the reading direction instead of stepping across the
  * engine's global rank columns. Each rank keeps the engine's order across it, and every rank is
@@ -897,6 +951,7 @@ function packed(
   pairs: Array<[string, string]>,
   rooms: LabelRoom[],
   gaps: PackGaps,
+  sinks = false,
 ) {
   const by = new Map(items.map(n => [n.id, n])),
     ids = items.map(n => n.id),
@@ -908,7 +963,12 @@ function packed(
     const p = arranged.get(id)!;
     return right ? p.y + by.get(id)!.h / 2 : p.x + by.get(id)!.w / 2;
   };
-  const layers = rankLayers(ids, pairs).map(layer =>
+  const layers = besideCallers(
+    rankLayers(ids, pairs),
+    pairs,
+    sinks ? group : () => false,
+    major,
+  ).map(layer =>
     [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
   );
   const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
@@ -1350,23 +1410,36 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
   // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
   // changes the room left for lines elsewhere; then lay out with them.
   const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
-    plain = layoutPass(unrefined, arranged),
+    planned = layoutPass(unrefined, arranged),
+    // Which groups fold is decided on the arrangement before refinements too, so a stay or pin
+    // never folds or unfolds a group.
+    plain = planned,
+    packFold = packFolds.get(plain),
     area = (objects: SceneObject[]) =>
       (Math.max(...objects.map(o => o.x + o.w)) - Math.min(...objects.map(o => o.x))) *
       (Math.max(...objects.map(o => o.y + o.h)) - Math.min(...objects.map(o => o.y))),
     channels = trimChannels(
       planChannels(plain.objects, m.edges, m.routing),
       area(plain.objects),
-      c => area(layoutPass(unrefined, arranged, false, c).objects),
+      c => area(layoutPass(unrefined, arranged, false, c, packFold).objects),
     );
-  return layoutPass(m, arranged, false, channels.size ? channels : undefined);
+  return layoutPass(m, arranged, false, channels.size ? channels : undefined, packFold);
 }
+
+/** The groups a packed drawing folds, and whether it wraps its own run into rows. */
+interface PackFold {
+  groups: Set<string>;
+  wrap: boolean;
+}
+/** The fold decision each pass made, so later passes of one layout can reuse it. */
+const packFolds = new WeakMap<Scene, PackFold>();
 
 function layoutPass(
   m: Model,
   arranged?: Map<string, Pos>,
   slots = false,
   channels?: Map<string, Channel>,
+  packFold?: PackFold,
 ): Scene {
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
@@ -1394,6 +1467,9 @@ function layoutPass(
 
   const folds: Array<{ scope: string; fold: Fold }> = [],
     flows: FlowScope[] = [];
+  /** Packed groups that fold their own long runs, and whether the drawing wraps: see below. */
+  const foldGroups = new Set<string>(packFold?.groups);
+  let wrapRoot = packFold?.wrap ?? false;
   // A decision: a diamond, or any node whose branches are labelled, with two or more ways out.
   const decisionsIn = (scope: string) => {
     const outs = new Map<string, ModelEdge[]>();
@@ -1565,7 +1641,7 @@ function layoutPass(
       }
       const laidOut = (with_: LabelRoom[]) =>
         packGaps
-          ? packed(list, arranged!, axisOf(governing!), pairs, with_, packGaps)
+          ? packed(list, arranged!, axisOf(governing!), pairs, with_, packGaps, scope === 'root')
           : governing?.engine && list.every(n => arranged!.has(n.id))
             ? fromEngine(list, arranged!, axisOf(governing), with_)
             : baseLayout(list, layout, pairs, with_);
@@ -1589,7 +1665,7 @@ function layoutPass(
       let fold: Fold | undefined;
       if (
         engine
-          ? engine.algorithm === 'layered' && engine.params.fold !== 'never'
+          ? !pack && engine.algorithm === 'layered' && engine.params.fold !== 'never'
           : !governing?.engine && layout.algorithm === 'flow' && layout.fold === 'auto'
       ) {
         // The fold is planned without edge labels, so a relabel keeps the bands and cuts.
@@ -1602,6 +1678,39 @@ function layoutPass(
           rooms,
           decisionsIn(scope),
           (plain ?? base).positions,
+        );
+        base.positions = folded.positions;
+        fold = folded.fold;
+      }
+      // A packed drawing too long for its depth first folds its long groups (a second pass, see
+      // below), then wraps its own ranks into rows, groups and all, like a line of text.
+      const canFold = !fold && pack && governing?.engine?.params.fold !== 'never';
+      if (canFold && foldGroups.has(scope)) {
+        const folded = foldRanks(
+          list,
+          base.positions,
+          base.axis,
+          packGaps!.rank,
+          pairs,
+          rooms,
+          decisionsIn(scope),
+          (plain ?? base).positions,
+          { fewest: 2, room: 0 },
+        );
+        base.positions = folded.positions;
+        fold = folded.fold;
+      }
+      if (canFold && scope === 'root' && wrapRoot) {
+        const folded = foldRanks(
+          list,
+          base.positions,
+          base.axis,
+          packGaps!.rank,
+          pairs,
+          rooms,
+          decisionsIn(scope),
+          (plain ?? base).positions,
+          { aspect: PACKED_FOLD_ASPECT, fewest: 2 },
         );
         base.positions = folded.positions;
         fold = folded.fold;
@@ -1695,7 +1804,37 @@ function layoutPass(
         : 0;
     return { w: extent('x', 'w'), h: extent('y', 'h') };
   }
-  arrange('root');
+  // A packed drawing whose run is more than `PACKED_FOLD_ASPECT` times its depth is laid out
+  // again with its longest group folded, one group at a time, so the groups keep their order along
+  // the reading direction. Only a drawing still too long once no group can fold wraps its groups
+  // into rows.
+  const diagnosed = diagnostics.length,
+    rootLayout = packEngine('root') && governingLayout(m, 'root');
+  let size = arrange('root');
+  if (!packFold && rootLayout && rootLayout.engine?.params.fold !== 'never') {
+    const right = axisOf(rootLayout) === 'right',
+      along = (o: Size) => (right ? o.w : o.h),
+      across = (o: Size) => (right ? o.h : o.w);
+    const room = right ? RENDER_CONTEXT.width : RENDER_CONTEXT.height,
+      tooLong = (o: Size) => along(o) > room && along(o) > PACKED_FOLD_ASPECT * across(o);
+    while (tooLong(size) && !wrapRoot) {
+      const next = [...items.values()]
+        .filter(
+          o => o.type === 'group' && !foldGroups.has(o.id) && packEngine(o.id) && tooLongRun(o),
+        )
+        .sort((a, b) => along(b) - along(a))[0];
+      if (next) foldGroups.add(next.id);
+      else wrapRoot = true;
+      diagnostics.length = diagnosed;
+      folds.length = flows.length = 0;
+      drawn.clear();
+      size = arrange('root');
+    }
+    /** A group whose content runs more than `FOLD_ASPECT` times its depth. */
+    function tooLongRun(o: Size) {
+      return along(o) > FOLD_ASPECT * across(o);
+    }
+  }
 
   const objects: SceneObject[] = [];
   const place = (scope: string, origin: Pos, depth: number) => {
@@ -1751,7 +1890,7 @@ function layoutPass(
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
   objects.sort((a, b) => index.get(a.id)! - index.get(b.id)!);
-  return {
+  const scene: Scene = {
     model: m,
     title: m.title,
     objects,
@@ -1760,4 +1899,6 @@ function layoutPass(
     diagnostics,
     look,
   };
+  packFolds.set(scene, { groups: foldGroups, wrap: wrapRoot });
+  return scene;
 }
