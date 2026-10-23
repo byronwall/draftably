@@ -128,15 +128,18 @@ const opposite = { R: 'L', L: 'R', U: 'D', D: 'U' };
 // ---------- source parsing (edge endpoints, declared direction) ----------
 function parseSource(text) {
   const edges = new Map();
-  let direction;
+  let direction,
+    edgeGap = 16;
   for (const raw of text.split('\n')) {
     const line = raw.replace(/(^|\s)(#|\/\/).*$/, '').trim();
     const e = line.match(/^edge\s+(\S+)\s+(\S+)\s*->\s*(\S+)/);
     if (e) edges.set(e[1], { source: e[2], target: e[3], label: /"[^"]+"/.test(line) });
     const l = line.match(/^layout\s+root\b.*direction=(right|down)/);
     if (l) direction = l[1];
+    const g = line.match(/^routing\b.*\b(?:edge|port)-gap=(\d+)/g);
+    if (g) for (const m of g) edgeGap = Math.max(edgeGap, +m.match(/(\d+)$/)[1]);
   }
-  return { edges, direction };
+  return { edges, direction, edgeGap };
 }
 
 // ---------- SVG parsing (edge label boxes) ----------
@@ -214,7 +217,7 @@ function measure(file) {
   if (!check.ok) return { file, error: check.out.trim() };
   const geo = JSON.parse(run('inspect', file).out);
   const svg = run('inspect', file, '--svg').out;
-  const { edges, direction } = parseSource(source);
+  const { edges, direction, edgeGap } = parseSource(source);
 
   const byId = new Map(geo.nodes.map(n => [n.id, n]));
   const parents = new Set(geo.nodes.map(n => n.parent));
@@ -310,6 +313,32 @@ function measure(file) {
       else if (nearest < 15)
         note('edge-near-group-border', `${r.id} ${Math.round(nearest)}px from ${g.id}`);
     }
+    // In a slot: inside a group, between one of its members and its border, close to both (the
+    // inset a group leaves round its members is no channel).
+    for (const g of groups) {
+      const members = leaves.filter(n => ancestors(n.id).includes(g.id));
+      const slot = runs.find(s => {
+        if (s.to - s.from <= 20) return false;
+        const [lo, hi] = s.axis === 'v' ? [g.x, g.x + g.w] : [g.y, g.y + g.h];
+        if (s.at <= lo + EPS || s.at >= hi - EPS) return false;
+        const [from, to] = s.axis === 'v' ? [g.y, g.y + g.h] : [g.x, g.x + g.w];
+        if (s.from < from - EPS || s.to > to + EPS) return false;
+        return sides(g).some(border => {
+          if (border.axis !== s.axis) return false;
+          const toBorder = (border.at - s.at) * border.out;
+          if (toBorder <= 0 || toBorder >= 24) return false;
+          // A member side facing the border, on the run's other side and close to it.
+          return members.some(n =>
+            sides(n).some(side => {
+              if (side.axis !== s.axis || side.out !== border.out) return false;
+              const d = (s.at - side.at) * side.out;
+              return d > EPS && d < 24 && alongside(s, side) > 16;
+            }),
+          );
+        });
+      });
+      if (slot) note('edge-in-slot', `${r.id} between ${g.id}'s members and its border`);
+    }
   }
   for (let i = 0; i < routes.length; i++) {
     for (let j = i + 1; j < routes.length; j++) {
@@ -373,9 +402,15 @@ function measure(file) {
     (fans.get(out) ?? fans.set(out, []).get(out)).push(firstTurn);
     (fans.get(into) ?? fans.set(into, []).get(into)).push(lastTurn);
   }
+  // A bundle into (or out of) one side, each line turning one edge gap past the last, is the
+  // stagger a draftsman uses; only other spreads are ragged.
+  const staggered = turns => {
+    const at = [...new Set(turns.map(Math.round))].sort((a, b) => a - b);
+    return at.slice(1).every((t, i) => Math.abs(t - at[i] - edgeGap) <= 2);
+  };
   for (const [key, turns] of fans) {
     const distinct = [...new Set(turns.map(t => Math.round(t / 3)))];
-    if (turns.length >= 2 && distinct.length > 1) {
+    if (turns.length >= 2 && distinct.length > 1 && !staggered(turns)) {
       note(
         'ragged-bends',
         `${key.replace(/\|/g, ' ')}: turns at ${turns.map(Math.round).join(', ')}`,
@@ -674,6 +709,7 @@ function measure(file) {
       'edge-hugs-node',
       'edge-on-group-border',
       'edge-near-group-border',
+      'edge-in-slot',
       'edges-too-close',
       'uneven-channel',
       'ragged-bends',
@@ -707,6 +743,7 @@ function measure(file) {
     'edge-hugs-node': 1,
     'edge-on-group-border': 1,
     'edge-near-group-border': 1,
+    'edge-in-slot': 1,
     'edges-too-close': 2,
     'uneven-channel': 1,
     'ragged-bends': 1,
@@ -1053,6 +1090,7 @@ const lines = [
       c['edge-hugs-node'] +
       c['edge-on-group-border'] +
       c['edge-near-group-border'] +
+      c['edge-in-slot'] +
       c['edges-too-close'];
     const order =
       c['uneven-channel'] + c['ragged-bends'] + c['uneven-ports'] + c['off-axis-port'] + c.jog;
