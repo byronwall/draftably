@@ -1234,9 +1234,12 @@ function refine(
 
 /**
  * A node drawn larger than its slot may spill past it by this share of its scope's gap, in total
- * along each axis, before the slot grows: two facing neighbours still keep half the gap.
+ * along each axis, before the slot grows: two facing neighbours still keep half the gap, and
+ * never less than `SLOT_KEEP`, the room a line between them needs.
  */
-const SLOT_SPILL = 0.5;
+const SLOT_SPILL = 0.5,
+  SLOT_KEEP = 16;
+const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SLOT_KEEP));
 
 /**
  * Lay out a model. `arranged` holds world positions from layout engines; scopes that an engine
@@ -1510,13 +1513,13 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false
         ? { w: 0, h: 0 }
         : governing?.engine
           ? (() => {
-              const along = (governing.engine.params.rankGap ?? 52) * SLOT_SPILL,
-                across = (governing.engine.params.nodeGap ?? 24) * SLOT_SPILL;
+              const along = spillOf(governing.engine.params.rankGap ?? 52),
+                across = spillOf(governing.engine.params.nodeGap ?? 24);
               return axisOf(governing) === 'right'
                 ? { w: along, h: across }
                 : { w: across, h: along };
             })()
-          : { w: layout.gap * SLOT_SPILL, h: layout.gap * SLOT_SPILL },
+          : { w: spillOf(layout.gap), h: spillOf(layout.gap) },
       diagnosed = diagnostics.length;
     let laid = lay(spill);
     if (
