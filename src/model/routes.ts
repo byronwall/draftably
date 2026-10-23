@@ -81,8 +81,9 @@ const LINE_CLEARANCE = 8;
 
 /**
  * Every spot on the edge's own route, or just beside it, that covers no shape or group title.
- * Another edge through the label misleads the reader (4); a group border under it (2), another
- * line within `LINE_CLEARANCE` or a shared trunk through it (1) only crowd it.
+ * Another edge through the text misleads the reader (5) and one through its padding seems to stop
+ * at it (3); a line touching it or a group border under it (2), or a line within
+ * `LINE_CLEARANCE` or a shared trunk (1), only crowds it.
  */
 function labelSpots(
   label: string,
@@ -105,14 +106,20 @@ function labelSpots(
     w: r.w + 2 * d,
     h: r.h + 2 * d,
   });
+  // The text itself, inside the label's padding (8px each side, one line of the annotation type).
+  const size = look.annotation.size;
   const cost = (p: Point) => {
     const r = box(p),
-      through = grown(r, 2),
+      ink = { x: r.x + 8, y: p.y - size / 2, w: Math.max(1, w - 16), h: size },
+      through = grown(r, -1),
+      touch = grown(r, 3),
       near = grown(r, LINE_CLEARANCE);
     let c = 0;
     for (const { route, shared } of lines) {
       const hits = (q: Rect) => route.some((s, i) => i && segmentHits(route[i - 1], s, q));
-      if (hits(through)) c += shared ? 1 : 4;
+      if (hits(ink)) c += shared ? 1 : 5;
+      else if (hits(through)) c += shared ? 1 : 3;
+      else if (!shared && hits(touch)) c += 2;
       else if (!shared && hits(near)) c += 1;
     }
     for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 2;
@@ -131,7 +138,7 @@ function labelSpots(
         if (p.x !== q.x || Math.max(p.y, q.y) < lo || Math.min(p.y, q.y) > hi) continue;
         const d = p.x - a.x;
         if (!d || Math.abs(d) > w) continue;
-        const offset = d < 0 ? d + 3 + w / 2 : d - 3 - w / 2;
+        const offset = d < 0 ? d + 4 + w / 2 : d - 4 - w / 2;
         if (Math.abs(offset) <= w / 2 - 6 && Math.abs(offset) > h - 4) out.push(offset);
       }
     return out;
@@ -302,8 +309,9 @@ function shiftedLabel(
       }
     }
   }
-  // The nearest spot, where a line through the label (cost 4) counts as moving it 40px further.
-  const rank = new Map(shifted.map(s => [s, s.score! - cost(s) * 20]));
+  // The nearest spot, where a line through the text (cost 5) counts as 40px further: the label
+  // may step past a line or two, but never flees far from its edge to avoid one.
+  const rank = new Map(shifted.map(s => [s, s.score! - cost(s) * 16]));
   shifted.sort((a, b) => rank.get(b)! - rank.get(a)!);
   const a = points[0] || { x: 0, y: 0 },
     b = points[1] || a;
