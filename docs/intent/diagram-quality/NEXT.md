@@ -107,6 +107,10 @@ Re-measure with [RUBRIC.md](RUBRIC.md)'s loop before starting, since main will h
   aligning groups on the global rank grid, and enforce the group gap after the engine runs.
 - **Product questions**: Should a group keep its members in global rank columns (reading order
   across groups) or pack them tight (compact groups)? The two pull against each other.
+- **Status (r4)**: decided to pack tight. Under `compound-flow` and `layered`, a group's members
+  (and a scope holding groups) rank by their own edges, chain links share a centre line, and
+  every gap next to a group is one drawing-wide group gap. Remaining: viewer `stay`s written
+  against the old layout can let a grown row slide under an anchored group (hn e2 keeps-order).
 
 ## 5. Fans use several sides; ports sit lopsided
 
@@ -171,7 +175,7 @@ Re-measure with [RUBRIC.md](RUBRIC.md)'s loop before starting, since main will h
 
 ## Metric work before the next round
 
-- Group fill, group staircase and group gap (item 4).
+- Group fill, group staircase and group gap (item 4): done as `sparse-group`, `group-staircase`, `tight-group-gap` and `uneven-group-gap`.
 - Two labels on different edges closer than their height (item 6).
 - A run inside a group near both a member and the border (item 2).
 - `ragged-bends`: accept turns that step by the edge gap (item 5).
