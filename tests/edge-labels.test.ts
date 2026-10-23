@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
 import { edgeLabelSize } from '../src/model/labels';
-import { placeEdgeLabel } from '../src/model/routes';
+import { placeEdgeLabel, placeEdgeLabels } from '../src/model/routes';
 import type { Point, Rect } from '../src/model/types';
 
 const rectOf = (l: { x: number; y: number; w: number; h: number }): Rect => ({
@@ -104,5 +104,47 @@ describe('edge label placement', () => {
 
     expect(plain).toBe(48);
     expect(labelled).toBeGreaterThanOrEqual(edgeLabelSize('markdown + source id').w + 20);
+  });
+
+  it('shifts off-centre on an upright segment to clear a line running alongside', () => {
+    // Two lines leave one box 16px apart; the label stays crossed by its own line only.
+    const own = [
+        { x: 100, y: 0 },
+        { x: 100, y: 50 },
+      ],
+      other = [
+        { x: 116, y: 0 },
+        { x: 116, y: 50 },
+      ],
+      placed = placeEdgeLabel('import error', own, [], [], undefined, { routes: [other] }),
+      rect = rectOf(placed);
+
+    expect(rect.x + rect.w).toBeLessThan(116);
+    expect(rect.x + rect.w).toBeGreaterThan(100);
+  });
+});
+
+describe('the label pass', () => {
+  it('lets a label with a clean spot keep it, and keeps two labels apart', () => {
+    // `b` crosses a line wherever it goes; placed first in route order, it would take `a`'s spot.
+    const a = [
+        { x: 0, y: 100 },
+        { x: 200, y: 100 },
+      ],
+      b = [
+        { x: 60, y: 60 },
+        { x: 60, y: 130 },
+      ],
+      jobs = [
+        { label: 'crossing', points: b, avoid: { routes: [a] } },
+        { label: 'clean', points: a, avoid: { routes: [b] } },
+      ],
+      [pb, pa] = placeEdgeLabels(jobs, []).map(rectOf);
+
+    expect(overlaps(pa, pb, 6)).toBe(false);
+    // `clean` is not crossed by `b`'s line.
+    expect(pa.x > 62 || pa.x + pa.w < 58).toBe(true);
+    // Nor do the two read as one pair: they stand at least a label's height apart.
+    expect(overlaps(pa, pb, pa.h)).toBe(false);
   });
 });

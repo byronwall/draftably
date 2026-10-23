@@ -1872,6 +1872,7 @@ function layoutPass(
     m.edges,
     new Map(objects.map(o => [o.id, o])),
     new Set(lanes.keys()),
+    label => edgeLabelSize(label, look),
   ))
     lanes.set(id, lane);
   // Report groups that are larger than their requested size because of their content.

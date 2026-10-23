@@ -13,6 +13,7 @@
  * left. Only edges between two leaves of the drawing's top-level flow are planned, and only on a
  * side of the band with nothing beyond it.
  */
+import { edgeLabelSize } from '../model/labels';
 import type { Lane } from '../model/types';
 import type { ModelEdge } from './syntax';
 
@@ -36,12 +37,16 @@ export interface FlowScope {
 /** Space between a band and its first lane, and between lanes. */
 const STANDOFF = 20,
   PITCH = 20;
+/** As `laneBends` draws the turn into the target: inset from a corner, one port gap off centre. */
+const LANE_INSET = 12,
+  LANE_PORT = 16;
 
 export function returnLanes(
   flows: FlowScope[],
   edges: ModelEdge[],
   byId: Map<string, Box>,
   taken: Set<string>,
+  labelSize: (label: string) => { w: number; h: number } = label => edgeLabelSize(label),
 ): Map<string, Lane> {
   const out = new Map<string, Lane>();
   // Only the drawing's own flow: inside a group, the side before the band is the title band and
@@ -132,11 +137,16 @@ export function returnLanes(
             target = byId.get(e.target)!,
             at = before ? lo - STANDOFF - k * PITCH : hi + STANDOFF + k * PITCH,
             // Turn into the target halfway across the gap on the side facing the source.
-            // A gap holding another edge's label is closed: the turn would run through its
-            // text. That gap is the same from either side of the band, so the edge then arrives
-            // square on the target's face toward the lane instead.
+            // The turn runs one port gap off the side's middle; a gap whose label reaches that far
+            // across is closed, since the turn would run through its text. That gap is the same
+            // from either side of the band, so the edge then arrives square on the target's face
+            // toward the lane instead.
             gap = gapBeside(target, band, !p.back, u0, u1),
-            face = labelledGap(target, band, !p.back, e.id, edges, u0, u1, v0, v1),
+            port = Math.min(LANE_PORT, (v1(target) - v0(target)) / 2 - LANE_INSET),
+            face = labelledGap(target, band, !p.back, e.id, edges, u0, u1, v0, v1).some(label => {
+              const { w, h } = labelSize(label);
+              return (level ? h : w) / 2 + 2 > port;
+            }),
             enter = face ? um(target) : p.back ? u1(target) + gap / 2 : u0(target) - gap / 2;
           out.set(p.id, {
             ...(level ? { y: Math.round(at) } : { x: Math.round(at) }),
@@ -166,8 +176,8 @@ function gapBeside(
 }
 
 /**
- * Whether the gap beside `n`, before (or after) it along the axis, holds another edge's label: a
- * labelled edge joins `n` to a band neighbour on that side, level with it across the axis.
+ * The labels in the gap beside `n`, before (or after) it along the axis: those of other edges
+ * joining `n` to a band neighbour on that side, level with it across the axis.
  */
 function labelledGap(
   n: Box,
@@ -188,10 +198,12 @@ function labelledGap(
       )
       .map(o => o.id),
   );
-  return edges.some(
-    e =>
-      e.id !== self &&
-      !!e.label &&
-      ((e.source === n.id && side.has(e.target)) || (e.target === n.id && side.has(e.source))),
-  );
+  return edges
+    .filter(
+      e =>
+        e.id !== self &&
+        !!e.label &&
+        ((e.source === n.id && side.has(e.target)) || (e.target === n.id && side.has(e.source))),
+    )
+    .map(e => e.label!);
 }

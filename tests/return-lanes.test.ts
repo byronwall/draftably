@@ -52,17 +52,29 @@ describe('return and skip lanes', () => {
     expect(laneBends({ lane }, a, moved).waypoints).toBeUndefined();
   });
 
-  it("arrives on the target's face when the gap beside it holds another label", async () => {
-    const labelled = flow.replace('edge ab a -> b', 'edge ab a -> b "push to main"');
-    const scene = await compile(labelled);
+  it("arrives on the target's face when the label in the gap beside it lies across the turn", async () => {
+    // Down a column, the label on a → b spans the gap the return would turn through.
+    const column = flow
+      .replace('edge ab a -> b', 'edge ab a -> b "push to main"')
+      .replace('direction=right', 'direction=down');
+    const scene = await compile(column);
     const lane = scene.edges.find(e => e.id === 'back')!.lane!,
       a = scene.byId.get('a')!,
       d = scene.byId.get('d')!;
-    expect(lane).toMatchObject({ out: true, face: true, enter: a.x + a.w / 2 });
+    expect(lane).toMatchObject({ out: true, face: true, enter: a.y + a.h / 2 });
     const back = laneBends({ lane }, d, a);
     // Square into the face toward the lane, never through the gap that holds the label.
-    expect(back.toSide).toBe('bottom');
-    expect(back.waypoints!.every(p => p.x <= a.x + a.w || p.y > a.y + a.h)).toBe(true);
-    expect(back.waypoints!.at(-1)!.x).toBe(a.x + a.w / 2);
+    expect(back.toSide).toBe('x' in lane && lane.x < a.x ? 'left' : 'right');
+    const b = scene.byId.get('b')!;
+    expect(
+      back.waypoints!.some(p => p.y > a.y + a.h && p.y < b.y && p.x > a.x && p.x < a.x + a.w),
+    ).toBe(false);
+    expect(back.waypoints!.at(-1)!.y).toBe(a.y + a.h / 2);
+  });
+
+  it('keeps the turn into a row gap whose label sits level with the line', async () => {
+    // Along a row the label is no taller than the port gap, so the turn passes beside it.
+    const scene = await compile(flow.replace('edge ab a -> b', 'edge ab a -> b "push to main"'));
+    expect(scene.edges.find(e => e.id === 'back')!.lane!.face).toBeUndefined();
   });
 });

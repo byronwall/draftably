@@ -231,15 +231,12 @@ function parseColors(svg) {
   };
 }
 
-const pointSegDist = (p, [a, b]) => {
-  const dx = b.x - a.x,
-    dy = b.y - a.y;
-  const t = Math.max(
-    0,
-    Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy || 1)),
+/** Gap between a rectangle and an orthogonal segment: 0 when the segment crosses it. */
+const rectSegDist = (r, [a, b]) =>
+  Math.hypot(
+    Math.max(0, Math.min(a.x, b.x) - (r.x + r.w), r.x - Math.max(a.x, b.x)),
+    Math.max(0, Math.min(a.y, b.y) - (r.y + r.h), r.y - Math.max(a.y, b.y)),
   );
-  return Math.hypot(p.x - (a.x + dx * t), p.y - (a.y + dy * t));
-};
 
 // ---------- hooks ----------
 /** Spans of two boxes along an axis overlap (with a little slack). */
@@ -885,8 +882,11 @@ function measure(file) {
       if (gap < Math.min(l.h, m.h))
         note('labels-too-close', `"${l.text}" & "${m.text}" ${Math.round(gap)}px apart`);
     }
-    const dist = Math.min(...segs(l.path).map(sg => pointSegDist(center(l), sg)));
-    if (dist > l.h) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
+    // Detached: the label's box stands more than half its height clear of its own line. (Measured
+    // from the box, not its centre, so a wide label crossed off-centre by an upright line counts
+    // as on it; for a label beside a level line the two measures agree.)
+    const dist = Math.min(...segs(l.path).map(sg => rectSegDist(l, sg)));
+    if (dist > l.h / 2) note('label-detached', `"${l.text}" ${Math.round(dist)}px from its edge`);
     // Another edge running under the label.
     for (const r of routes) {
       if (
