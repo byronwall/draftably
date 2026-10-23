@@ -304,6 +304,8 @@ const LANE_PITCH = 20;
 /** What a cut costs, in crossing edges, for each decision or loop it splits. */
 const SPLIT_DECISION = 3,
   SPLIT_LOOP = 2;
+/** What a cut costs, in crossing edges, for each band's length its new edges run back. */
+const WRAP_WEIGHT = 1;
 
 /** A folded run: each band's ids in reading order, and the axis the bands read along. */
 export interface Fold {
@@ -431,10 +433,24 @@ export function foldRanks(
   const chooseCuts = (count: number, bs: typeof blocks) => {
     const total = bs[bs.length - 1].end - bs[0].start;
     const cuts: number[] = [];
+    const startOf = new Map(bs.flatMap(b => b.ids.map(id => [id, b.start] as const)));
     for (let i = 1; i < count; i++) {
+      // How far the edges a cut creates run back along the gap between bands: from each source's
+      // place in the band it leaves to its target's place in the next, in shares of a band.
+      const wrapped = (b: number) =>
+        pairs
+          .filter(p => splits(b, ...p))
+          .reduce((sum, [a, z]) => {
+            const [s, t] = block.get(a)! < block.get(z)! ? [a, z] : [z, a];
+            return sum + Math.abs(startOf.get(s)! - from - (startOf.get(t)! - bs[b].start));
+          }, 0) /
+        (total / count);
       const at = bs[0].start + (total * i) / count,
         cost = (b: number) =>
-          crossing(b) + broken(b) + (Math.abs(bs[b].start - at) / (total / count)) * 2;
+          crossing(b) +
+          broken(b) +
+          wrapped(b) * WRAP_WEIGHT +
+          (Math.abs(bs[b].start - at) / (total / count)) * 2;
       // Keep each band within a quarter of an even share (and at least half of one), so a cheap
       // lopsided cut can't win; or up to half over, at any length, when that is the only way to
       // keep decisions and loops whole. A band's length is its boxes, not the gap after them.
@@ -468,20 +484,85 @@ export function foldRanks(
       b.ids.length > 1 ? b.ids.filter(id => !pairs.some(([a, z]) => a === id && z !== id)) : [],
     ),
   );
-  const place = (cuts: number[], bs: typeof blocks, at: Map<string, Pos>, labelled: boolean) => {
+  const bandsOf = (cuts: number[], bs: typeof blocks) => {
     const bands: (typeof blocks)[] = [];
     bs.forEach((b, i) => (i === 0 || cuts.includes(i) ? bands.push([b]) : bands.at(-1)!.push(b)));
-    const out = new Map<string, Pos>();
+    return bands;
+  };
+  /**
+   * Branches to pull back across a cut: a node that starts a band, whose every source ends the
+   * band before, comes back to that band's end, beside its nearest source, when that shortens its
+   * lines along the run without adding a wrap. A side branch then stays with its source instead
+   * of starting the next band and sending its edge across the whole drawing. Keyed by the node,
+   * the value is the source it lines up with.
+   */
+  const pullsFor = (cuts: number[], bs: typeof blocks) => {
+    const bands = bandsOf(cuts, bs),
+      bandOf = new Map(bands.flatMap((band, k) => band.flatMap(b => b.ids.map(id => [id, k])))),
+      startOf = new Map(bs.flatMap(b => b.ids.map(id => [id, b.start] as const))),
+      out = new Map<string, string>();
+    for (const [k, band] of bands.entries()) {
+      if (!k) continue;
+      const found: Array<{ id: string; source: string; saves: number }> = [];
+      for (const id of band[0].ids) {
+        if (decisions.has(id)) continue;
+        const ins = pairs.filter(([a, z]) => z === id && a !== id).map(([a]) => a),
+          outs = pairs.filter(([a, z]) => a === id && z !== id).map(([, z]) => z);
+        if (!ins.length || ins.some(a => bandOf.get(a) !== k - 1)) continue;
+        const rel = (n: string, b: number) => startOf.get(n)! - bands[b][0].start,
+          length = (home: number) =>
+            ins.reduce((s, a) => s + Math.abs(rel(a, k - 1) - rel(id, home)), 0) +
+            outs.reduce((s, z) => s + Math.abs(rel(id, home) - rel(z, bandOf.get(z)!)), 0),
+          wraps = (home: number) =>
+            (home === k - 1 ? 0 : ins.length) + outs.filter(z => bandOf.get(z) !== home).length;
+        if (wraps(k - 1) > wraps(k) || length(k - 1) >= length(k)) continue;
+        const source = ins.reduce((best, a) => (startOf.get(a)! > startOf.get(best)! ? a : best));
+        found.push({ id, source, saves: length(k) - length(k - 1) });
+      }
+      // The band keeps at least one of its first boxes: pulling them all would move the cut.
+      found.sort((a, b) => b.saves - a.saves);
+      for (const f of found.slice(0, band[0].ids.length - 1)) out.set(f.id, f.source);
+    }
+    return out;
+  };
+  const place = (
+    cuts: number[],
+    bs: typeof blocks,
+    at: Map<string, Pos>,
+    labelled: boolean,
+    pulls = new Map<string, string>(),
+  ) => {
+    const bands = bandsOf(cuts, bs);
+    // A pulled branch lines up across with its source, past any branch already pulled beside it.
+    if (pulls.size) {
+      at = new Map(at);
+      const placed: Array<{ lo: number; hi: number }> = [];
+      for (const [id, source] of pulls) {
+        const n = byId.get(id)!,
+          s = at.get(source)!;
+        let lo = s[across] + (size(byId.get(source)!, across) - size(n, across)) / 2;
+        for (const p of placed) if (lo < p.hi + gap && lo + size(n, across) > p.lo) lo = p.hi + gap;
+        placed.push({ lo, hi: lo + size(n, across) });
+        at.set(id, { ...at.get(id)!, [across]: lo });
+      }
+    }
+    const out = new Map<string, Pos>(),
+      members: string[][] = [];
     let offset = 0,
       length = 0,
       typical = 0;
     for (const [k, band] of bands.entries()) {
-      const ids = band.flatMap(b => b.ids),
+      const next = bands[k + 1]?.[0].ids ?? [],
+        ids = [
+          ...band.flatMap(b => b.ids).filter(id => !pulls.has(id)),
+          ...next.filter(id => pulls.has(id)),
+        ],
+        start = Math.min(...ids.map(id => at.get(id)![along])),
         lo = Math.min(...ids.map(id => at.get(id)![across])),
         hi = Math.max(...ids.map(id => at.get(id)![across] + size(byId.get(id)!, across)));
       for (const id of ids) {
         const p = at.get(id)!,
-          a = p[along] - band[0].start,
+          a = p[along] - start,
           c = p[across] - lo + offset;
         out.set(id, axis === 'right' ? { x: a, y: c } : { x: c, y: a });
       }
@@ -493,7 +574,11 @@ export function foldRanks(
         Math.max(...kept.map(id => at.get(id)![across] + size(byId.get(id)!, across))) -
         Math.min(...kept.map(id => at.get(id)![across])) +
         gapAfter;
-      length = Math.max(length, band.at(-1)!.end - band[0].start);
+      length = Math.max(
+        length,
+        Math.max(...ids.map(id => at.get(id)![along] + size(byId.get(id)!, along))) - start,
+      );
+      members.push(ids);
     }
     return {
       out,
@@ -501,7 +586,7 @@ export function foldRanks(
       // The depth that decides the count leaves side leaves out.
       depth: typical,
       count: bands.length,
-      bands: bands.map(band => band.flatMap(b => b.ids)),
+      bands: members,
     };
   };
   // The fewest bands that fit: wide layouts read best. The plan sets the least count; the
@@ -515,9 +600,15 @@ export function foldRanks(
     }
   for (let count = Math.max(2, least); count <= blocks.length; count++) {
     const cuts = chooseCuts(count, planned),
-      c = place(cuts, blocks, positions, true);
-    if (c.count === count && fits(c.length, c.depth, count === least ? HOLD_SLACK : 1))
-      return { positions: c.out, fold: { bands: c.bands, axis } };
+      c = place(cuts, blocks, positions, true),
+      slack = count === least ? HOLD_SLACK : 1;
+    if (c.count !== count || !fits(c.length, c.depth, slack)) continue;
+    // Branches are pulled back on the plan too, so a relabel never moves one; only while the
+    // band they join still has room.
+    const pulls = pullsFor(cuts, planned),
+      pulled = pulls.size ? place(cuts, blocks, positions, true, pulls) : undefined,
+      done = pulled && fits(pulled.length, pulled.depth, slack) ? pulled : c;
+    return { positions: done.out, fold: { bands: done.bands, axis } };
   }
   return { positions };
 }

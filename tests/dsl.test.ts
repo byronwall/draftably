@@ -222,8 +222,21 @@ layout root flow direction=right`;
         expect(band.get(e.target), e.id).toBe(band.get(e.source));
   });
 
-  it('returns wrap edges along lanes that share the gap between bands', () => {
+  it('pulls a side branch back to the end of its source band', () => {
     const scene = checkSource(checks),
+      band = bandOf(scene),
+      at = (id: string) => scene.byId.get(id)!;
+    // Upload screenshots would start the second band; it stays beside prove:layout instead.
+    expect(band.get('upload')).toBe(band.get('proof'));
+    expect(at('upload').x).toBeGreaterThan(at('proof').x + at('proof').w);
+    expect(at('upload').y + at('upload').h / 2).toBeCloseTo(at('proof').y + at('proof').h / 2, 0);
+    // The main line still wraps.
+    expect(band.get('fast')).toBe(1);
+  });
+
+  it('returns wrap edges along lanes that share the gap between bands', () => {
+    // A retry from Check fails gives the gap a second wrap edge.
+    const scene = checkSource(checks + '\nedge c14 fail -> fast "retry"'),
       band = bandOf(scene);
     const wraps = scene.edges.filter(e => band.get(e.target)! > band.get(e.source)!);
     expect(wraps.length).toBeGreaterThan(1);
