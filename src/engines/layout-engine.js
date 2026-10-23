@@ -369,18 +369,20 @@ function layeredTarget(items, t, s, aspect) {
       l => l.reduce((n, id) => n + minor(byId.get(id)), 0) + (l.length - 1) * s.nodeGap,
     );
   if (s.mode === 'rebuild' || s.ordering === 'crossings') {
-    // Order prior: a rebuild starts from the authored order within each rank and keeps it
-    // unless the barycentre sweeps cut crossings by a clear margin, so growing a diagram
-    // doesn't reshuffle the ranks it didn't touch.
+    // Order prior: a rebuild keeps the authored order within each rank unless the barycentre
+    // sweeps cut crossings by a clear margin, so growing a diagram doesn't reshuffle the ranks
+    // it didn't touch. The sweeps still start from ID order, so where they win the drawing is
+    // the one they always gave.
     const declared = s.mode === 'rebuild' ? t.declared : null;
-    if (declared) {
-      for (const l of layers)
-        l.sort(
-          (a, b) => (declared.get(a) ?? Infinity) - (declared.get(b) ?? Infinity) || cmp(a, b),
-        );
-      refresh();
-    }
-    const prior = declared ? layers.map(l => l.slice()) : null;
+    const prior = declared
+      ? layers.map(l =>
+          l
+            .slice()
+            .sort(
+              (a, b) => (declared.get(a) ?? Infinity) - (declared.get(b) ?? Infinity) || cmp(a, b),
+            ),
+        )
+      : null;
     for (let sweep = 0; sweep < 10; sweep++) {
       const forward = sweep % 2 === 0,
         seq = forward ? [...layers.keys()] : [...layers.keys()].reverse();
