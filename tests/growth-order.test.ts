@@ -49,4 +49,11 @@ describe('growth keeps the fold', () => {
       after = checkSource(read(`${dir}/e1.draft`));
     expect(flips(before, after)).toEqual([]);
   });
+
+  it('keeps the authored order within ranks when a layered pipeline grows', () => {
+    const dir = 'docs/intent/diagram-quality/heldout/v2ctx-pipeline';
+    const before = checkSource(read(`${dir}/v0.draft`)),
+      after = checkSource(read(`${dir}/e1.draft`));
+    expect(flips(before, after)).toEqual([]);
+  });
 });

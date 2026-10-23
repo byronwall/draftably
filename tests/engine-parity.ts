@@ -85,6 +85,9 @@ for (const name of fixtureNames) {
       mode: 'rebuild' as const,
       settle: true,
       maxIterations: 160,
+      // The layered order prior (authored in-rank order unless sweeps clearly cut crossings)
+      // postdates v7; tests/growth-order.test.ts covers it.
+      orderPrior: false,
     };
     const oldLayout = await engines.layout.compute(copy(fixture), options);
     const newLayout = await current.layout.compute(copy(fixture), options);

@@ -324,6 +324,29 @@ function seedGrid(items, s, aspect) {
     ]),
   );
 }
+/** Crossings the sweeps must remove before they may override the authored order in a rank. */
+const ORDER_PRIOR_MARGIN = before => Math.max(1, Math.ceil(before * 0.25));
+/** Straight centre-to-centre crossings between a candidate placement's edges. */
+function sketchCrossings(t, map) {
+  const segs = [];
+  for (const e of t.edges) {
+    const a = map.get(e.from),
+      b = map.get(e.to);
+    if (a && b) segs.push([e.from, e.to, a, b]);
+  }
+  const side = (p, q, r) => Math.sign((q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x));
+  let cross = 0;
+  for (let i = 0; i < segs.length; i++) {
+    const [f1, t1, p1, q1] = segs[i];
+    for (let j = i + 1; j < segs.length; j++) {
+      const [f2, t2, p2, q2] = segs[j];
+      if (f1 === f2 || f1 === t2 || t1 === f2 || t1 === t2) continue;
+      if (side(p1, q1, p2) * side(p1, q1, q2) < 0 && side(p2, q2, p1) * side(p2, q2, q1) < 0)
+        cross++;
+    }
+  }
+  return cross;
+}
 function layeredTarget(items, t, s, aspect) {
   const byId = new Map(items.map(i => [i.id, i])),
     vertical = s.direction === 'DOWN';
@@ -341,7 +364,25 @@ function layeredTarget(items, t, s, aspect) {
   const ord = new Map(),
     refresh = () => layers.forEach(l => l.forEach((id, i) => ord.set(id, i)));
   refresh();
-  if (s.mode === 'rebuild' || s.ordering === 'crossings')
+  const widths = layers.map(l => Math.max(...l.map(id => major(byId.get(id))))),
+    heights = layers.map(
+      l => l.reduce((n, id) => n + minor(byId.get(id)), 0) + (l.length - 1) * s.nodeGap,
+    );
+  if (s.mode === 'rebuild' || s.ordering === 'crossings') {
+    // Order prior: a rebuild keeps the authored order within each rank unless the barycentre
+    // sweeps cut crossings by a clear margin, so growing a diagram doesn't reshuffle the ranks
+    // it didn't touch. The sweeps still start from ID order, so where they win the drawing is
+    // the one they always gave.
+    const declared = s.mode === 'rebuild' ? t.declared : null;
+    const prior = declared
+      ? layers.map(l =>
+          l
+            .slice()
+            .sort(
+              (a, b) => (declared.get(a) ?? Infinity) - (declared.get(b) ?? Infinity) || cmp(a, b),
+            ),
+        )
+      : null;
     for (let sweep = 0; sweep < 10; sweep++) {
       const forward = sweep % 2 === 0,
         seq = forward ? [...layers.keys()] : [...layers.keys()].reverse();
@@ -355,10 +396,15 @@ function layeredTarget(items, t, s, aspect) {
         refresh();
       }
     }
-  const widths = layers.map(l => Math.max(...l.map(id => major(byId.get(id))))),
-    heights = layers.map(
-      l => l.reduce((n, id) => n + minor(byId.get(id)), 0) + (l.length - 1) * s.nodeGap,
-    );
+    if (prior) {
+      const swept = sketchCrossings(t, build(layers.length).map),
+        sweptLayers = layers.map(l => l.slice());
+      prior.forEach((l, i) => (layers[i] = l));
+      const kept = sketchCrossings(t, build(layers.length).map);
+      if (kept - swept >= ORDER_PRIOR_MARGIN(kept)) sweptLayers.forEach((l, i) => (layers[i] = l));
+      refresh();
+    }
+  }
   function build(count) {
     const map = new Map();
     let cross = 0;
@@ -826,6 +872,8 @@ async function compute(input, opts = {}) {
     return s.direction;
   };
   const descend = id => child(id).flatMap(n => [n.id, ...(groups.has(n.id) ? descend(n.id) : [])]);
+  // Source order: each node's place in the document, the order the file declares them in.
+  const nodeIndex = new Map(doc.graph.nodes.map((n, i) => [n.id, i]));
   const extraFixed = new Set(opts.fixedIds || []);
   const direct = id =>
     extraFixed.has(id) || !!pos[id]?.pinned || (s.respectManual && !!pos[id]?.manual);
@@ -1067,6 +1115,17 @@ async function compute(input, opts = {}) {
         .map(e => ({ from: owner(e.from), to: owner(e.to), directed: e.directed !== false }))
         .filter(e => e.from && e.to && e.from !== e.to),
       t = topology(items, edges, localIntent);
+    // The order prior applies where the layered target is the drawing, not a seed for forces,
+    // and to a flat drawing: centre lines say little about crossings between groups, and a
+    // group's members are ranked without the outside edges that decide their order.
+    // `orderPrior: false` restores the v7 behaviour (engine parity).
+    if (
+      opts.orderPrior !== false &&
+      s.algorithm === 'layered' &&
+      !parentId &&
+      !items.some(p => groups.has(p.id))
+    )
+      t.declared = new Map(items.map(p => [p.id, nodeIndex.get(p.id) ?? Infinity]));
     const boundaryLinks = compound
       ? doc.graph.edges
           .map(e => ({ ...e, a: owner(e.from), b: owner(e.to) }))
