@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { checkSource, compile } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, parseModel } from '../src/dsl/syntax';
+import { edgeLabelSize } from '../src/model/labels';
 
 const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 /** Checkout with its root arranged by an engine instead of `flow`. */
@@ -68,9 +69,12 @@ describe('engine recipes', () => {
     const scene = await compile(withRoot('engine=layered'));
     const orders = scene.byId.get('orders')!,
       payments = scene.byId.get('payments')!;
-    // `layout services row gap=56` still places payments to the right of orders.
+    // `layout services row gap=56` still places payments to the right of orders, at least 56px
+    // away and wider when the "authorize" label between them needs more room.
     expect(payments.localY).toBe(orders.localY);
-    expect(payments.localX).toBe(orders.localX + orders.w + 56);
+    expect(payments.localX).toBe(
+      orders.localX + orders.w + Math.max(56, edgeLabelSize('authorize').w + 28),
+    );
   });
 
   it('arranges only the named group when an engine is scoped to it', async () => {
