@@ -174,12 +174,13 @@ describe('stability after a refinement', () => {
     const orders = after.byId.get('orders')!,
       payments = after.byId.get('payments')!;
     expect(payments.y).toBe(orders.y + orders.h + 40);
-    // The wider platform now overlaps db; both anchors give way, and that is reported.
-    const relaxed = after.diagnostics.filter(d => d.code === 'relaxed').map(d => d.ids[0]);
-    expect(relaxed.sort()).toEqual(['db', 'platform']);
+    // The wider platform now lands on db: their stays went stale, so both are dropped and the
+    // packing places them, and that is reported. The packing keeps platform where it was and
+    // moves db out of its way.
+    const stale = after.diagnostics.filter(d => d.code === 'stale-stay').flatMap(d => d.ids);
+    expect(stale.sort()).toEqual(['db', 'platform']);
     expect(movedOutsideEdit(before, after, readSource(text), readSource(added)).sort()).toEqual([
       'db',
-      'platform',
     ]);
   });
 
