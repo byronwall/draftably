@@ -992,12 +992,190 @@ function compute(input, rawOptions = {}) {
       }
       if (!changed) break;
     }
+  // Tidy: make routes look drafted on purpose. Ports on a side sit symmetrically
+  // about its centre, edges fanning from one side turn on one line, and parallel
+  // runs in a corridor keep one pitch. A move stands only when every moved route
+  // stays valid and nothing gets worse: no crossing, shared run, lane conflict,
+  // short step or standoff cost is added.
+  const tidyOn = !rawOptions.quick && rawOptions.tidy !== false;
+  let tidied = 0;
+  if (tidyOn) {
+    const byId = new Map(edges.map(e => [e.id, e])),
+      obsCache = new Map(),
+      obsOf = e => {
+        if (!obsCache.has(e.id)) obsCache.set(e.id, obsFor(e));
+        return obsCache.get(e.id);
+      },
+      steps = ps =>
+        segments(ps)
+          .slice(1, -1)
+          .filter(([a, b]) => distance(a, b) < 12).length;
+    const attempt = (changes, extra = {}) => {
+      const next = routes.map((r, i) =>
+        changes.has(i) ? { ...r, ...extra[i], points: compress(changes.get(i)) } : r,
+      );
+      for (const i of changes.keys()) {
+        const r = next[i],
+          e = byId.get(r.id);
+        if (!validPath(r.points, e, r.fromSide, r.toSide, obsOf(e))) return false;
+        if (steps(r.points) > steps(routes[i].points)) return false;
+      }
+      const m0 = metrics(routes),
+        m1 = metrics(next);
+      if (
+        m1.crossings > m0.crossings ||
+        m1.shared > m0.shared + 0.01 ||
+        m1.lanePairs > m0.lanePairs ||
+        m1.laneDeficit > m0.laneDeficit + 0.1
+      )
+        return false;
+      let before = 0,
+        after = 0;
+      for (const i of changes.keys()) {
+        before += standoffCost(routes[i].points, near);
+        after += standoffCost(next[i].points, near);
+      }
+      if (after > before + 0.5) return false;
+      routes = next;
+      tidied++;
+      return true;
+    };
+    const flat = r => !['pill', 'circle', 'diamond', 'icon'].includes(r.shape),
+      ends = ['from', 'to'],
+      tip = (ps, end, k = 0) => (end === 'from' ? ps[k] : ps[ps.length - 1 - k]);
+
+    // Ports: shift a side's ports so their mean sits on the side's centre.
+    const sides = new Map();
+    routes.forEach((r, i) => {
+      for (const end of ends) {
+        const key = r[end] + '|' + r[end + 'Side'];
+        if (!sides.has(key)) sides.set(key, []);
+        sides.get(key).push({ i, end });
+      }
+    });
+    for (const [key, list] of sides) {
+      const [id, side] = key.split('|'),
+        rect = rects.get(id),
+        vertical = side === 'left' || side === 'right',
+        axis = vertical ? 'y' : 'x',
+        mid = center(rect)[axis],
+        limit = (vertical ? rect.h : rect.w) / 2 - 10,
+        at = [...new Set(list.map(({ i, end }) => round(tip(routes[i].points, end)[axis])))];
+      // Diamonds and round shapes keep their ports on the tips.
+      if (at.length < 2 || !flat(rect)) continue;
+      const d = round(mid - at.reduce((n, v) => n + v, 0) / at.length);
+      if (Math.abs(d) < 2 || at.some(v => Math.abs(v + d - mid) > limit + EPS)) continue;
+      const changes = new Map(),
+        extra = {};
+      for (const { i, end } of list) {
+        const ps = clone(changes.get(i) ?? routes[i].points),
+          offset = round(tip(ps, end)[axis] + d - mid),
+          moved = port(rect, side, offset);
+        Object.assign(tip(ps, end), moved);
+        extra[i] = { ...extra[i], [end + 'Offset']: offset };
+        if (ps.length === 2) {
+          // A straight route slides as a whole, moving its other port too.
+          const other = end === 'from' ? 'to' : 'from',
+            far = rects.get(routes[i][other]),
+            otherOffset = round(tip(ps, other)[axis] + d - center(far)[axis]);
+          if (!flat(far)) {
+            changes.clear();
+            break;
+          }
+          Object.assign(tip(ps, other), port(far, routes[i][other + 'Side'], otherOffset));
+          extra[i][other + 'Offset'] = otherOffset;
+        } else tip(ps, end, 1)[axis] = moved[axis];
+        changes.set(i, ps);
+      }
+      if (changes.size) attempt(changes, extra);
+    }
+
+    // Fans: edges leaving (or entering) one side turn on a shared line.
+    const fans = new Map();
+    routes.forEach((r, i) => {
+      if (r.points.length < 4) return;
+      for (const end of ends) {
+        const key = r[end] + '|' + end + '|' + r[end + 'Side'];
+        if (!fans.has(key)) fans.set(key, []);
+        fans.get(key).push(i);
+      }
+    });
+    for (const [key, list] of fans) {
+      if (list.length < 2) continue;
+      const [, end, side] = key.split('|'),
+        axis = side === 'left' || side === 'right' ? 'x' : 'y',
+        turn = i => round(tip(routes[i].points, end, 1)[axis]),
+        values = [...new Set(list.map(turn))];
+      if (values.length < 2) continue;
+      const spread = t => list.reduce((n, i) => n + Math.abs(turn(i) - t), 0);
+      values.sort((a, b) => spread(a) - spread(b) || a - b);
+      for (const t of values) {
+        const changes = new Map();
+        for (const i of list) {
+          if (turn(i) === t) continue;
+          const ps = clone(routes[i].points);
+          tip(ps, end, 1)[axis] = t;
+          tip(ps, end, 2)[axis] = t;
+          changes.set(i, ps);
+        }
+        if (attempt(changes)) break;
+      }
+    }
+
+    // Corridors: parallel inner runs close together keep one pitch.
+    const pitch = s.edgeGap;
+    for (const h of [true, false]) {
+      const axis = h ? 'y' : 'x',
+        along = h ? 'x' : 'y',
+        runs = [];
+      routes.forEach((r, i) =>
+        segments(r.points).forEach(([a, b], k) => {
+          if (k === 0 || k === r.points.length - 2 || distance(a, b) <= 12) return;
+          if (Math.abs(a.y - b.y) < EPS !== h) return;
+          runs.push({
+            i,
+            k,
+            at: round(a[axis]),
+            lo: Math.min(a[along], b[along]),
+            hi: Math.max(a[along], b[along]),
+          });
+        }),
+      );
+      runs.sort((a, b) => a.at - b.at);
+      for (let j = 1; j < runs.length; j++) {
+        const run = runs[j],
+          prev = runs
+            .slice(0, j)
+            .filter(
+              q =>
+                q.i !== run.i &&
+                q.at < run.at &&
+                Math.min(q.hi, run.hi) - Math.max(q.lo, run.lo) > 1,
+            )
+            .at(-1);
+        if (!prev) continue;
+        const gap = run.at - prev.at;
+        if (Math.abs(gap - pitch) <= 1 || gap > 2.5 * pitch) continue;
+        const target = round(prev.at + pitch),
+          ps = clone(routes[run.i].points);
+        if (
+          Math.abs(ps[run.k][axis] - run.at) > EPS ||
+          Math.abs(ps[run.k + 1][axis] - run.at) > EPS
+        )
+          continue;
+        ps[run.k][axis] = target;
+        ps[run.k + 1][axis] = target;
+        if (attempt(new Map([[run.i, ps]]))) run.at = target;
+      }
+    }
+  }
   routes.sort((a, b) => cmp(a.id, b.id));
   const report = {
     ...metrics(routes),
     initial: before,
     accepted,
     nudged,
+    ...(tidyOn ? { tidied } : {}),
     edges: routes.length,
     milliseconds: Date.now() - began,
     passes: rawOptions.quick ? 1 : s.passes,
