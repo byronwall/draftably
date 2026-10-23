@@ -165,6 +165,22 @@ function parseSource(text) {
 }
 
 // ---------- SVG parsing (edge label boxes) ----------
+/**
+ * The room a group's header icon and title text take, as the renderer draws them: the icon from
+ * the frame's left, then the 13px semibold title at `x + 33`, plus 8px. Falls back to the whole
+ * band when the title isn't found.
+ */
+function groupTitleInk(svg, g) {
+  const re =
+    /<text x="([-\d.]+)" y="([-\d.]+)"[^>]*font-size="([\d.]+)" font-weight="600"[^>]*>([^<]*)</g;
+  for (const m of svg.matchAll(re)) {
+    if (Math.abs(+m[1] - (g.x + 33)) > 1 || Math.abs(+m[2] - (g.y + 17)) > 1) continue;
+    const chars = m[4].replace(/&[a-z#0-9]+;/g, '_').length;
+    return { x: g.x + 3, y: g.y + 2, w: 30 + chars * +m[3] * 0.62 + 8, h: 28 };
+  }
+  return { x: g.x + 2, y: g.y + 2, w: g.w - 4, h: 28 };
+}
+
 function parseLabels(svg) {
   const canvas = svg.match(
     /<rect x="[-\d.]+" y="[-\d.]+" width="[\d.]+" height="[\d.]+" fill="(#[0-9A-Fa-f]+)"\/>/,
@@ -486,12 +502,24 @@ function measure(file) {
         note('edge-through-node', `${r.id} through ${n.id}`);
     }
     // Through a group's title band, other than straight into or out of a member's top: the
-    // band holds the title, and a line through it reads as crossing the frame.
+    // band holds the title, and a line through it reads as crossing the frame. Since round 5
+    // (decision 3, `DETOUR_RATIO`) a line to or from a member may also cross the band straight
+    // across, beside the title text, where going round the group would be much longer: that
+    // crossing reads as entering the frame, so it doesn't count either.
     for (const g of groups) {
       const band = { x: g.x + 2, y: g.y + 2, w: g.w - 4, h: 28 };
+      const member = id => id === g.id || ancestors(id).includes(g.id);
+      const title = groupTitleInk(svg, g);
       const inner = r.segs.filter((sg, k) => {
-        const terminal = (k === 0 || k === r.segs.length - 1) && Math.abs(sg[0].x - sg[1].x) < EPS;
-        return !terminal && segHitsRect(sg, band);
+        const upright = Math.abs(sg[0].x - sg[1].x) < EPS;
+        const terminal = (k === 0 || k === r.segs.length - 1) && upright;
+        const across =
+          upright &&
+          (member(r.source) || member(r.target)) &&
+          Math.min(sg[0].y, sg[1].y) <= g.y + EPS &&
+          Math.max(sg[0].y, sg[1].y) >= band.y + band.h - EPS &&
+          !segHitsRect(sg, title);
+        return !terminal && !across && segHitsRect(sg, band);
       });
       if (inner.length) note('edge-through-title-band', `${r.id} through ${g.id}'s title band`);
     }
