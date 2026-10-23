@@ -107,6 +107,12 @@ can check whether they were met:
 Group IDs work as well as node IDs. Put the reading-order expectation on `v0` too. Each failed
 expectation is an `expectation-failed` issue.
 
+Each `still` is also checked with the drawing's median shift removed, and the summary's
+**Follow-ups** table counts both: a `still` that fails raw but passes after the shift is a drawing
+that slid as a whole (a wider title moved the origin) and kept its shape; one that fails both
+changed shape. Only the raw check counts as a defect. The table also gives `keeps-order` passes,
+the mean move over follow-ups and the total order flips.
+
 ### Viewer follow-ups
 
 Agents edit source, but people drag things in the viewer. A drag writes `near` and soft `stay`

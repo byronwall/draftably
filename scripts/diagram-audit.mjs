@@ -18,7 +18,8 @@
  *   # expect aligned-x a b     centers share x within 4px (aligned-y: y)
  *   # expect near a b 80       the gap between a and b is at most 80px
  *   # expect still a b         a and b moved at most 24px from the previous version
- *   # expect still *           nothing that existed before moved more than 24px
+ *   # expect still *           nothing that existed before moved more than 24px; the summary also
+ *                              reports each `still` with the drawing's median shift removed
  *   # expect keeps-order       no pair of old objects swapped sides (growth may push things aside)
  *   # expect back-edges 0      at most this many edges run against the reading direction
  *
@@ -797,6 +798,7 @@ function stability(a, b) {
     alignedMean: Math.round(aligned.reduce((t, m) => t + m, 0) / Math.max(1, aligned.length)),
     alignedMoved: aligned.filter(m => m > 24).length,
     orderFlips: flips,
+    shift: { x: Math.round(sx), y: Math.round(sy) },
   };
 }
 
@@ -850,10 +852,25 @@ function checkExpectations(r, prev) {
       case 'still': {
         const list = ids.includes('*') ? [...was.keys()].filter(id => rect.has(id)) : need;
         const off = list.filter(id => moved(id) > 24);
+        // Alongside the raw check: the same objects after removing the drawing's median shift, so
+        // a drawing that slid as a whole (`shape` passes) is told apart from one that changed shape.
+        const shift = r.stabilityFromPrev?.shift ?? { x: 0, y: 0 },
+          reshaped = list.filter(
+            id =>
+              was.has(id) &&
+              Math.hypot(
+                center(rect.get(id)).x - was.get(id).x - shift.x,
+                center(rect.get(id)).y - was.get(id).y - shift.y,
+              ) > 24,
+          );
+        const slid = shift.x || shift.y ? `; shift ${shift.x},${shift.y}` : '';
         return {
           line,
           pass: off.length === 0,
-          why: off.length ? `moved: ${off.join(', ')}` : undefined,
+          shape: reshaped.length === 0,
+          why: off.length
+            ? `moved: ${off.join(', ')}${slid}; ${reshaped.length ? `after shift: ${reshaped.join(', ')}` : 'holds its shape after shift'}`
+            : undefined,
         };
       }
       case 'reads-x':
@@ -1072,6 +1089,22 @@ lines.push(
   ...Object.entries(totals)
     .sort((a, b) => b[1] - a[1])
     .map(([k, v]) => `| ${k} | ${v} |`),
+);
+// Follow-up stability: the `still` and `keeps-order` promises, and how far follow-ups move.
+const checksOf = kind => ok.flatMap(r => r.checks.filter(c => c.line.split(/\s+/)[0] === kind));
+const stills = checksOf('still'),
+  keeps = checksOf('keeps-order'),
+  follow = ok.filter(r => r.stabilityFromPrev);
+const count = (list, pass) => `${list.filter(pass).length}/${list.length}`;
+lines.push(
+  '',
+  '| Follow-ups | Value |',
+  '| --- | --- |',
+  `| still (raw) | ${count(stills, c => c.pass)} |`,
+  `| still (median shift removed) | ${count(stills, c => c.shape)} |`,
+  `| keeps-order | ${count(keeps, c => c.pass)} |`,
+  `| mean move (px, over ${follow.length} follow-ups) | ${(follow.reduce((t, r) => t + r.stabilityFromPrev.meanMove, 0) / Math.max(1, follow.length)).toFixed(1)} |`,
+  `| order flips (total) | ${follow.reduce((t, r) => t + r.stabilityFromPrev.orderFlips, 0)} |`,
 );
 fs.writeFileSync(path.join(outDir, 'summary.md'), lines.join('\n') + '\n');
 console.log(`\nWrote ${path.join(outDir, 'summary.md')}`);
