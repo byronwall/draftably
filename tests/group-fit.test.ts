@@ -120,7 +120,11 @@ describe('group fit converges', () => {
   );
 
   it('compiles a file the viewer saved to the drawing it saved, and saving again changes nothing', async () => {
-    const text = read('order-pipeline.draft');
+    // On one row, as in the arrangement round trips (see layout-edits.test.ts).
+    const text = read('order-pipeline.draft').replace(
+      /^layout root engine=compound-flow$/m,
+      '$& fold=never',
+    );
     const scene = await compile(text);
     const { document: after } = await LayoutLab.compute(projectScene(scene), {
       algorithm: 'force',

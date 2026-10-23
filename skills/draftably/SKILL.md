@@ -102,6 +102,8 @@ Good defaults:
   object in its row, so a relabel is safe to make without rechecking the layout.
 - Hierarchies and org charts: `layout root engine=tree root=top direction=down`.
 - Nested architecture (several container levels): `layout root engine=compound-flow`.
+  A long chain of groups folds its longest groups, then wraps into rows, so the drawing stays
+  within 5:1; `fold=never` keeps one line. A called-only group sits beside its caller.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
 
 ### Refinements

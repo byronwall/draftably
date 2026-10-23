@@ -59,6 +59,13 @@ Where to fold is decided without edge labels, so labelling or relabelling an edg
 object in its row; labels only widen the gaps they need, and add a row only when the labelled
 rows run more than a quarter past the canvas.
 
+Under `engine=layered` or `engine=compound-flow`, a drawing that holds groups is packed instead:
+a drawing wider than the canvas and more than five times longer than it is deep first folds its
+longest group into rows, one group at a time, so the groups keep their order; only if no group
+can fold do the groups themselves wrap into rows. A group that only receives lines (an upstream
+API, a cache) sits beside the group that calls it rather than past it. `fold=never` on the root
+engine keeps one long line. Stays and pins never change what folds.
+
 ## Themes and colors
 
 The file owns the diagram's appearance. A `theme` line picks a preset and may override its

@@ -100,7 +100,12 @@ describe('routing line', () => {
 });
 
 describe('arrangements', () => {
-  const pipeline = readFileSync(path.join(__dirname, '../examples/order-pipeline.draft'), 'utf8');
+  // Kept on one row: a force pass started from the wrapped rows sets boxes closer than the
+  // minimum gap, which compiling again then separates; that is not what these round trips test.
+  const pipeline = readFileSync(
+    path.join(__dirname, '../examples/order-pipeline.draft'),
+    'utf8',
+  ).replace(/^layout root engine=compound-flow$/m, '$& fold=never');
 
   /** Run an engine on the compiled file, save the result as positions, and compile it again. */
   async function roundTrip(text: string, options: object) {
