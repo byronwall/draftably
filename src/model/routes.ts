@@ -270,10 +270,24 @@ function outLane(rest: EdgeLayout, lane: Lane, a: Rect, b: Rect): EdgeLayout {
     enter = lane.enter;
   const beyond = (r: Rect) => (before ? at < r[v] : at > r[v] + depth(r));
   if (enter === undefined || !beyond(a) || !beyond(b)) return rest;
-  if (back ? enter <= b[u] + length(b) : enter >= b[u]) return rest;
   const point = (along: number, across: number) =>
-      level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) },
-    offset = (before ? -1 : 1) * Math.min(LANE_PORT, depth(b) / 2 - LANE_INSET);
+    level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) };
+  if (lane.face) {
+    // Square into the target's face toward the lane: the gap beside it holds another label.
+    if (enter < b[u] || enter > b[u] + length(b)) return rest;
+    const toward = level ? (before ? 'top' : 'bottom') : before ? 'left' : 'right';
+    return {
+      fromSide: toward,
+      toSide: toward,
+      ...rest,
+      waypoints: [
+        point(back ? a[u] + LANE_INSET : a[u] + length(a) - LANE_INSET, at),
+        point(enter, at),
+      ],
+    };
+  }
+  if (back ? enter <= b[u] + length(b) : enter >= b[u]) return rest;
+  const offset = (before ? -1 : 1) * Math.min(LANE_PORT, depth(b) / 2 - LANE_INSET);
   return {
     fromSide: level ? (before ? 'top' : 'bottom') : before ? 'left' : 'right',
     toSide: level ? (back ? 'right' : 'left') : back ? 'bottom' : 'top',

@@ -132,12 +132,17 @@ export function returnLanes(
             target = byId.get(e.target)!,
             at = before ? lo - STANDOFF - k * PITCH : hi + STANDOFF + k * PITCH,
             // Turn into the target halfway across the gap on the side facing the source.
+            // A gap holding another edge's label is closed: the turn would run through its
+            // text. That gap is the same from either side of the band, so the edge then arrives
+            // square on the target's face toward the lane instead.
             gap = gapBeside(target, band, !p.back, u0, u1),
-            enter = p.back ? u1(target) + gap / 2 : u0(target) - gap / 2;
+            face = labelledGap(target, band, !p.back, e.id, edges, u0, u1, v0, v1),
+            enter = face ? um(target) : p.back ? u1(target) + gap / 2 : u0(target) - gap / 2;
           out.set(p.id, {
             ...(level ? { y: Math.round(at) } : { x: Math.round(at) }),
             enter: Math.round(enter),
             out: true,
+            ...(face ? { face: true } : {}),
           });
         }
       }
@@ -158,4 +163,35 @@ function gapBeside(
     .filter(o => o !== n && (before ? u1(o) <= u0(n) : u0(o) >= u1(n)))
     .map(o => (before ? u0(n) - u1(o) : u0(o) - u1(n)));
   return Math.min(48, ...gaps);
+}
+
+/**
+ * Whether the gap beside `n`, before (or after) it along the axis, holds another edge's label: a
+ * labelled edge joins `n` to a band neighbour on that side, level with it across the axis.
+ */
+function labelledGap(
+  n: Box,
+  band: Box[],
+  before: boolean,
+  self: string,
+  edges: ModelEdge[],
+  u0: (o: Box) => number,
+  u1: (o: Box) => number,
+  v0: (o: Box) => number,
+  v1: (o: Box) => number,
+) {
+  const side = new Set(
+    band
+      .filter(
+        o =>
+          o !== n && (before ? u1(o) <= u0(n) : u0(o) >= u1(n)) && v0(o) < v1(n) && v1(o) > v0(n),
+      )
+      .map(o => o.id),
+  );
+  return edges.some(
+    e =>
+      e.id !== self &&
+      !!e.label &&
+      ((e.source === n.id && side.has(e.target)) || (e.target === n.id && side.has(e.source))),
+  );
 }

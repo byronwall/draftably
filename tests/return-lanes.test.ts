@@ -51,4 +51,18 @@ describe('return and skip lanes', () => {
     const moved = { ...c, y: ('y' in lane ? lane.y : 0) - c.h - 40 };
     expect(laneBends({ lane }, a, moved).waypoints).toBeUndefined();
   });
+
+  it("arrives on the target's face when the gap beside it holds another label", async () => {
+    const labelled = flow.replace('edge ab a -> b', 'edge ab a -> b "push to main"');
+    const scene = await compile(labelled);
+    const lane = scene.edges.find(e => e.id === 'back')!.lane!,
+      a = scene.byId.get('a')!,
+      d = scene.byId.get('d')!;
+    expect(lane).toMatchObject({ out: true, face: true, enter: a.x + a.w / 2 });
+    const back = laneBends({ lane }, d, a);
+    // Square into the face toward the lane, never through the gap that holds the label.
+    expect(back.toSide).toBe('bottom');
+    expect(back.waypoints!.every(p => p.x <= a.x + a.w || p.y > a.y + a.h)).toBe(true);
+    expect(back.waypoints!.at(-1)!.x).toBe(a.x + a.w / 2);
+  });
 });
