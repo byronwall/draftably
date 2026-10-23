@@ -55,9 +55,10 @@ const clean = (value: unknown) => {
   };
   return visit(plain);
 };
-// The soft standoff band postdates v7, so routing parity runs with it off. Its own
-// behaviour is covered in tests/routing-clearance.test.ts.
-const LEGACY_ROUTING = { standoff: 0 };
+// The soft standoff band and the tidy pass postdate v7, so routing parity runs with
+// them off. Their own behaviour is covered in tests/routing-clearance.test.ts and
+// tests/routing-order.test.ts.
+const LEGACY_ROUTING = { standoff: 0, tidy: false };
 let checks = 0;
 const results: Array<{ name: string; status: string; message?: string }> = [];
 function parity(name: string, before: unknown, after: unknown) {
