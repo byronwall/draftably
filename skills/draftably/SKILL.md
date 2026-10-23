@@ -71,7 +71,7 @@ layout services row gap=56
 | `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`                             |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                |
-| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12`                         |
+| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`             |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
