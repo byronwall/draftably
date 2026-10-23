@@ -1,7 +1,7 @@
 import type { RoutingResult } from '../engines/routing-engine.js';
-import { center, rectUnion } from './geometry';
+import { drawingBounds } from './bounds';
+import { center } from './geometry';
 import { findGroup, frameRect, makeGeometry, visibleGraph, type VisibleGraph } from './graph';
-import { visualBounds } from './labels';
 import { drawRoutes, type DrawnRoute } from './routes';
 import type { Diagram, Point, Rect } from './types';
 
@@ -21,24 +21,7 @@ export function buildStaticScene(doc: Diagram, routing: RoutingResult): StaticSc
   for (const n of vg.nodes) rects.set(n.id, geometry(n.id));
   for (const g of vg.groups) rects.set(g.id, frameRect(doc, geometry, g.id));
   const routes = drawRoutes(doc, vg, rects, routing);
-  const boxes: Rect[] = [
-    ...rects.values(),
-    ...vg.nodes.map(n => visualBounds(doc, n.id, n.title, geometry(n.id))),
-    ...routes.flatMap(r =>
-      r.label
-        ? [
-            {
-              x: r.label.x - r.label.w / 2,
-              y: r.label.y - r.label.h / 2,
-              w: r.label.w,
-              h: r.label.h,
-            },
-          ]
-        : [],
-    ),
-    ...routes.flatMap(r => r.points.map(p => ({ ...p, w: 0, h: 0 }))),
-  ];
-  return { doc, vg, rects, routes, bounds: rectUnion(boxes) };
+  return { doc, vg, rects, routes, bounds: drawingBounds(doc, vg, rects, routes) };
 }
 
 /** Center of an object in a scene, or of its nearest visible container when it is hidden. */
