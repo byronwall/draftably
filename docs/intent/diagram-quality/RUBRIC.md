@@ -156,6 +156,10 @@ Container fit: **uneven-padding** (a group's left, right and bottom padding diff
 title, so it is only compared across groups. Fitting must converge: a fix may not loop between
 parent size and child placement.
 
+Text: **mid-word-wrap** (a node or group title wraps inside a word, as `annotationCommand / s`,
+rather than at a space or where an identifier's parts meet, or strands one or two characters
+after a break, as `installed / ?`; a short word wrapped at a space is not counted).
+
 Space: **empty-band** (a row or column gap over 120px with nothing in it), **long-edge** (a
 forward edge over 400px and four times the median length). Also aspect ratio, density (object
 area / drawing area), and the share of objects aligned with another.
@@ -171,7 +175,7 @@ swapped).
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
 8; label on node, label overlap 6; expectation failed 4; hook, shared segment, label on edge,
 detached, on title 3; edge-through-group, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
-bends, long edge, group border (label or edge), uneven channel, ragged bends, uneven ports, off-axis port, jog 1;
+bends, long edge, group border (label or edge), uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
 uneven padding, padding varies 2; back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.
 
 ## Review

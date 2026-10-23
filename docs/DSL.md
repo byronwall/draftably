@@ -104,7 +104,10 @@ the old preset's overrides and keeps your own `theme-color` families.
 
 Titles wrap using width tables for the bundled fonts (Inter, Source Serif 4 and JetBrains Mono,
 under the SIL Open Font License), so the compiler, the viewer and `inspect --svg` break every
-title at the same place. Exported SVG files embed the fonts they use.
+title at the same place. A word too long for a line breaks where an identifier's parts meet
+(`annotation` / `Commands`, `src/` / `viz/`), and a node without a `size` grows wider, up to twice
+its default width, rather than break a word in the middle. Exported SVG files embed the fonts
+they use.
 
 ## Layout engines
 
