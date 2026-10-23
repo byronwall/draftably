@@ -555,6 +555,41 @@ function measure(file) {
     }
   }
 
+  // Titles that wrap inside a word: a break with no space in the source label, and not where an
+  // identifier's pieces meet (after / . _ - : or at a camelCase capital), as `annotationCommand /
+  // s`, or that leave one or two characters after a break inside a word, as `installed / ?`.
+  const titles = [...source.matchAll(/^\s*(?:node|group)\s+\S+\s+"([^"]*)"/gm)].map(m => m[1]);
+  const decode = t =>
+    t
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&');
+  for (const m of svg.matchAll(/<text[^>]*>((?:<tspan[^>]*>[^<]*<\/tspan>){2,})<\/text>/g)) {
+    const parts = [...m[1].matchAll(/<tspan[^>]*>([^<]*)<\/tspan>/g)].map(t => decode(t[1]));
+    const squash = t => t.replace(/\s+/g, '');
+    const title = titles.find(t => squash(t) === squash(parts.join('')));
+    if (!title) continue;
+    let at = 0;
+    for (const [i, part] of parts.slice(0, -1).entries()) {
+      // Walk the title past this line's characters, skipping spaces, to the break.
+      for (const ch of squash(part)) {
+        while (/\s/.test(title[at] ?? '')) at++;
+        if (title[at] === ch) at++;
+      }
+      const before = title[at - 1] ?? '',
+        after = title[at] ?? '';
+      const boundary =
+        /\s/.test(after) ||
+        /[/._:-]/.test(before) ||
+        (/[a-z0-9]/.test(before) && /[A-Z]/.test(after));
+      // A short word wrapped at a space ("Analyzer counts / it") is a widow, not a broken word.
+      if (!boundary || (!/\s/.test(after) && parts[i + 1].trim().length <= 2))
+        note('mid-word-wrap', `"${parts[i]} / ${parts[i + 1]}"`);
+    }
+  }
+
   // Dead space: wide empty bands across the drawing, and edges far longer than the rest.
   for (const axis of ['x', 'y']) {
     const size = axis === 'x' ? 'w' : 'h';
@@ -647,6 +682,7 @@ function measure(file) {
       'jog',
       'uneven-padding',
       'padding-varies',
+      'mid-word-wrap',
     ].map(k => [k, count(k)]),
   );
   // Weighted defect index; hard defects dominate. Normalized per 10 edges so sizes compare.
@@ -679,6 +715,7 @@ function measure(file) {
     jog: 1,
     'uneven-padding': 2,
     'padding-varies': 2,
+    'mid-word-wrap': 1,
   };
   const raw =
     Object.entries(counts).reduce((s, [k, v]) => s + v * weights[k], 0) +

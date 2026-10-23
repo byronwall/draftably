@@ -11,7 +11,7 @@
  */
 import { LayoutLab } from '../engines/layout-engine.js';
 import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
-import { measureText } from '../model/fonts';
+import { measureText, widestPiece } from '../model/fonts';
 import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
@@ -199,6 +199,21 @@ export function layoutFor(m: Model, scope: string): ModelLayout {
   );
 }
 
+/** A default-sized node grows at most this much wider so its longest word piece fits whole. */
+const MAX_GROW = 2;
+
+/**
+ * Width of a node with no requested size: the shape's default, or wider (in 4px steps, up to
+ * `MAX_GROW` times) when a word piece of its title would otherwise break by character, as
+ * `Maintenanceverificationreport` or `installed?` in a diamond would.
+ */
+function fitWidth(o: ModelObject, base: { w: number; h: number }, look: ResolvedAppearance) {
+  const need = widestPiece(o.label, look.title);
+  let w = base.w;
+  while (titleArea(o.shape, w, base.h, look).width < need && w < base.w * MAX_GROW) w += 4;
+  return Math.min(w, base.w * MAX_GROW);
+}
+
 /**
  * Size of a node: its requested size, or the default width with a height that fits the title in
  * the theme's type and padding. A requested size is kept exactly; `overflow` reports a title that
@@ -210,7 +225,7 @@ export function leafSize(
   look: ResolvedAppearance,
 ) {
   const base = defaultShapeSize(o.shape);
-  const w = size?.width ?? base.w;
+  const w = size?.width ?? fitWidth(o, base, look);
   const area = titleArea(o.shape, w, size?.height ?? base.h, look),
     lines = wrapTitle(o.label, area.width, look).length;
   if (size)

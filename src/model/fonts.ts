@@ -84,7 +84,46 @@ export function measureText(text: string, profile: Pick<TypeProfile, 'face' | 's
   return (units * profile.size) / table.unitsPerEm;
 }
 
-/** Break text into lines no wider than `width`, splitting over-long words by character. */
+/**
+ * The pieces an identifier reads in, so a long one can break where a reader would: after a
+ * separator (`/`, `.`, `_`, `-`, `:`) or between a lower-case letter or digit and a capital
+ * (camelCase). `annotationCommands` → `annotation`, `Commands`; `src/viz/Treemap.tsx` → `src/`,
+ * `viz/`, `Treemap.tsx`. A word with none of these is one piece.
+ */
+export function wordPieces(word: string): string[] {
+  const pieces: string[] = [];
+  let pending = '';
+  for (const piece of word.split(/(?<=[/._:-])(?=[^/._:-])|(?<=[a-z0-9])(?=[A-Z])/)) {
+    // Punctuation alone (`*.` in `examples/*.draft`) leads into the piece after it.
+    if (!/[\p{L}\p{N}]/u.test(piece)) pending += piece;
+    else {
+      pieces.push(pending + piece);
+      pending = '';
+    }
+  }
+  if (pending && pieces.length) pieces[pieces.length - 1] += pending;
+  else if (pending) pieces.push(pending);
+  // A short tail (a file extension, `md` in `notes.md`) stays with the piece before it.
+  if (pieces.length > 1 && pieces[pieces.length - 1].length <= 3)
+    pieces.splice(-2, 2, pieces[pieces.length - 2] + pieces[pieces.length - 1]);
+  return pieces;
+}
+
+/** Width of the widest piece of any word in `text`: the narrowest line it wraps into whole. */
+export function widestPiece(text: string, profile: Pick<TypeProfile, 'face' | 'size'>) {
+  return Math.max(
+    0,
+    ...String(text)
+      .split(/\s+/)
+      .flatMap(wordPieces)
+      .map(piece => measureText(piece, profile)),
+  );
+}
+
+/**
+ * Break text into lines no wider than `width`. A word longer than a line breaks between its
+ * pieces (`wordPieces`), and only a piece that is itself too long breaks by character.
+ */
 export function wrapLines(text: string, width: number, profile: TypeProfile): string[] {
   const fits = (s: string) => measureText(s, profile) <= width;
   const lines: string[] = [];
@@ -95,12 +134,24 @@ export function wrapLines(text: string, width: number, profile: TypeProfile): st
       if (!fits(word)) {
         if (line) lines.push(line);
         let part = '';
-        for (const char of word) {
-          if (part && !fits(part + char)) {
-            lines.push(part);
-            part = '';
+        for (const piece of wordPieces(word)) {
+          if (part && fits(part + piece)) {
+            part += piece;
+            continue;
           }
-          part += char;
+          if (part) lines.push(part);
+          part = '';
+          if (fits(piece)) {
+            part = piece;
+            continue;
+          }
+          for (const char of piece) {
+            if (part && !fits(part + char)) {
+              lines.push(part);
+              part = '';
+            }
+            part += char;
+          }
         }
         line = part;
         continue;
