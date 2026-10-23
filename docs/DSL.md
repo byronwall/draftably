@@ -50,6 +50,12 @@ Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color i
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
 use `column gap=24`.
 
+`flow` ranks objects along its direction by their connections. A loop keeps its path in that
+direction, and only the edge that closes it runs backwards. A run of ranks that is wider than
+the canvas (1100×720) and more than three times longer than it is deep folds into rows (or
+columns, for `direction=down`) that each start again at the beginning, like lines of text.
+`fold=never` keeps it on one line. `engine=layered` folds the same way unless it has `fold=never`.
+
 ## Themes and colors
 
 The file owns the diagram's appearance. A `theme` line picks a preset and may override its

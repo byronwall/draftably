@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { checkSource, contentOrigin } from '../src/dsl/compile';
+import { checkSource, contentOrigin, rankLayers } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
@@ -89,6 +89,91 @@ describe('compile', () => {
 
   it('rejects relative placement cycles with a line', () => {
     expect(() => checkSource('node a "A"\nnode b "B"\nnear a b\nnear b a\n')).toThrow(/Line [34]/);
+  });
+});
+
+/** A chain of `n` nodes, `n0 -> n1 -> …`, with optional extra lines. */
+const chain = (n: number, extra = '') =>
+  Array.from({ length: n }, (_, i) => `node n${i} "Step ${i}"`).join('\n') +
+  '\n' +
+  Array.from({ length: n - 1 }, (_, i) => `edge e${i} n${i} -> n${i + 1}`).join('\n') +
+  '\n' +
+  extra;
+const aspect = (scene: ReturnType<typeof checkSource>) => {
+  const xs = scene.objects.flatMap(o => [o.x, o.x + o.w]),
+    ys = scene.objects.flatMap(o => [o.y, o.y + o.h]);
+  return (Math.max(...xs) - Math.min(...xs)) / (Math.max(...ys) - Math.min(...ys));
+};
+const centre = (scene: ReturnType<typeof checkSource>, id: string) => {
+  const o = scene.byId.get(id)!;
+  return { x: o.x + o.w / 2, y: o.y + o.h / 2 };
+};
+
+describe('flow ranks', () => {
+  it('breaks a loop at its return edge instead of putting the loop in one layer', () => {
+    const ids = ['a', 'b', 'c', 'd', 'e'];
+    const pairs: Array<[string, string]> = [
+      ['a', 'b'],
+      ['b', 'c'],
+      ['c', 'd'],
+      ['d', 'b'],
+      ['d', 'e'],
+    ];
+    expect(rankLayers(ids, pairs)).toEqual([['a'], ['b'], ['c'], ['d'], ['e']]);
+  });
+
+  it('starts from the first declared node when every node is on a cycle', () => {
+    expect(
+      rankLayers(
+        ['x', 'y', 'z'],
+        [
+          ['y', 'z'],
+          ['z', 'x'],
+          ['x', 'y'],
+        ],
+      ),
+    ).toEqual([['x'], ['y'], ['z']]);
+  });
+
+  it('keeps a looping pipeline along the requested direction', () => {
+    const scene = checkSource(
+      chain(4, 'edge back n3 -> n1 "retry"\nlayout root flow direction=right'),
+    );
+    const xs = ['n0', 'n1', 'n2', 'n3'].map(id => centre(scene, id).x);
+    expect(xs).toEqual([...xs].sort((a, b) => a - b));
+    expect(new Set(['n0', 'n1', 'n2', 'n3'].map(id => centre(scene, id).y)).size).toBe(1);
+  });
+});
+
+describe('flow folding', () => {
+  it('leaves a short chain on one line', () => {
+    const scene = checkSource(chain(4, 'layout root flow direction=right'));
+    expect(new Set(scene.objects.map(o => o.y)).size).toBe(1);
+  });
+
+  it('folds a long chain into rows that each read left to right', () => {
+    const scene = checkSource(chain(12, 'layout root flow direction=right'));
+    expect(aspect(scene)).toBeLessThanOrEqual(3);
+    const rows = [...new Set(scene.objects.map(o => o.y))].sort((a, b) => a - b);
+    expect(rows.length).toBeGreaterThan(1);
+    // Reading row by row, left to right, visits the chain in order.
+    const read = [...scene.objects].sort((a, b) => a.y - b.y || a.x - b.x).map(o => o.id);
+    expect(read).toEqual(Array.from({ length: 12 }, (_, i) => `n${i}`));
+    // Every row starts again at the left edge.
+    for (const y of rows)
+      expect(Math.min(...scene.objects.filter(o => o.y === y).map(o => o.x))).toBe(0);
+  });
+
+  it('folds a long downward chain into columns', () => {
+    const scene = checkSource(chain(12, 'layout root flow direction=down'));
+    expect(1 / aspect(scene)).toBeLessThanOrEqual(3);
+    expect(new Set(scene.objects.map(o => o.x)).size).toBeGreaterThan(1);
+  });
+
+  it('keeps a long chain on one line with fold=never', () => {
+    const scene = checkSource(chain(12, 'layout root flow direction=right fold=never'));
+    expect(new Set(scene.objects.map(o => o.y)).size).toBe(1);
+    expect(() => checkSource(chain(3, 'layout root row fold=never'))).toThrow(/fold/);
   });
 });
 

@@ -103,6 +103,27 @@ describe('engine recipes', () => {
   });
 });
 
+describe('layered folding', () => {
+  const chain = (recipe: string) =>
+    Array.from({ length: 12 }, (_, i) => `node n${i} "Step ${i}"`).join('\n') +
+    '\n' +
+    Array.from({ length: 11 }, (_, i) => `edge e${i} n${i} -> n${i + 1}`).join('\n') +
+    `\nlayout root ${recipe}\n`;
+  const rows = (scene: Awaited<ReturnType<typeof compile>>) =>
+    new Set(scene.objects.map(o => Math.round(o.y))).size;
+
+  it('folds a long layered chain into rows unless fold=never', async () => {
+    const folded = await compile(chain('engine=layered direction=right'));
+    const xs = folded.objects.flatMap(o => [o.x, o.x + o.w]),
+      ys = folded.objects.flatMap(o => [o.y, o.y + o.h]);
+    expect(rows(folded)).toBeGreaterThan(1);
+    expect(
+      (Math.max(...xs) - Math.min(...xs)) / (Math.max(...ys) - Math.min(...ys)),
+    ).toBeLessThanOrEqual(3);
+    expect(rows(await compile(chain('engine=layered direction=right fold=never')))).toBe(1);
+  });
+});
+
 describe('routing statement', () => {
   it('parses router settings and applies them to the projection and routes', async () => {
     const source = checkout + 'routing edge-gap=32 corner-radius=0 passes=1\n';

@@ -69,7 +69,7 @@ layout services row gap=56
 | `theme name`                       | Preset look (see below); optional, at most one                                                       |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family          |
 | `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides |
-| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`                             |
+| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`   |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`             |
 
@@ -97,6 +97,8 @@ Good defaults:
 
 - Pipelines and request flows: `layout root engine=layered direction=right` or
   `layout root flow direction=right`.
+  A loop's return edge runs backwards; a run longer than the canvas folds into rows, like lines
+  of text. Add `fold=never` to keep one long line.
 - Hierarchies and org charts: `layout root engine=tree root=top direction=down`.
 - Nested architecture (several container levels): `layout root engine=compound-flow`.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
