@@ -175,6 +175,17 @@ function parallelConflicts(points, used, gap) {
     minGap: Number.isFinite(minGap) ? round(minGap) : null,
   };
 }
+// Lane deficit against `used` from runs at least `min` apart.
+function siblingDeficit(points, used, min, gap) {
+  let deficit = 0;
+  for (const r of used)
+    for (const [a, b] of segments(points))
+      for (const [c, d] of segments(r.points)) {
+        const p = parallelNear(a, b, c, d, gap);
+        if (p && p.separation >= min) deficit += p.deficit;
+      }
+  return deficit;
+}
 function conflicts(points, used) {
   const hits = new Set();
   let shared = 0;
@@ -478,23 +489,39 @@ function port(rect, side, offset = 0) {
   }
   return { x: round(x), y: round(y) };
 }
-function slot(id, side, r, used, s, other) {
+// A full fan's pitch: closer than the port gap, still clear of `edges-too-close` (< 10px).
+const TIGHT_PITCH = 12;
+// `tight`: more edges face this side than it has full-gap slots, so its fan takes `TIGHT_PITCH`
+// from the first port on. Handing the tight slots out from the start keeps the fan nested:
+// the nearer ends take the middle slots and the farther ones the outer slots.
+function slot(id, side, r, used, s, other, tight = false, spread = true) {
   const vertical = side === 'left' || side === 'right',
     span = (vertical ? r.h : r.w) - 24,
     cross = vertical ? 'y' : 'x',
     desired = center(other)[cross] - center(r)[cross];
-  const separation = Math.max(s.portGap, s.edgeGap);
+  const separation = tight
+    ? Math.min(TIGHT_PITCH, Math.max(s.portGap, s.edgeGap))
+    : Math.max(s.portGap, s.edgeGap);
   const occupied = [];
   for (const q of used) {
     if (q.from === id && q.fromSide === side) occupied.push(q.fromOffset);
     if (q.to === id && q.toSide === side) occupied.push(q.toOffset);
   }
   const options = [0];
-  for (let i = 1; i <= 8; i++)
+  for (let i = 1; i <= 16; i++)
     for (const sign of [1, -1])
       if (i * separation <= span / 2 + EPS) options.push(sign * i * separation);
   options.sort((a, b) => Math.abs(a) - Math.abs(b) || (desired < 0 ? a - b : b - a));
   for (const n of options) if (occupied.every(v => Math.abs(n - v) >= separation - 0.01)) return n;
+  // A full side packs its fan tighter, at `TIGHT_PITCH`, before it gives up on spacing.
+  if (spread && !tight && TIGHT_PITCH < separation) {
+    const pitch = TIGHT_PITCH,
+      closer = [];
+    for (let i = 1; i <= 16; i++)
+      for (const sign of [1, -1]) if (i * pitch <= span / 2 + EPS) closer.push(sign * i * pitch);
+    closer.sort((a, b) => Math.abs(a) - Math.abs(b) || (desired < 0 ? a - b : b - a));
+    for (const n of closer) if (occupied.every(v => Math.abs(n - v) >= pitch - 0.01)) return n;
+  }
   // Crowded small sides degrade to evenly-spaced choices. Overlap is reported.
   let best = 0,
     score = -1;
@@ -511,6 +538,8 @@ const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
 const HOOK_PENALTY = 80;
+// Fan siblings this far apart or more read as separate lines (the audit's `edges-too-close` is < 10).
+const FAN_PITCH = 10;
 // A detour round a group's title band longer than this many times the crossing route.
 const DETOUR_RATIO = 1.75;
 const pathLength = ps => segments(ps).reduce((n, [a, b]) => n + distance(a, b), 0);
@@ -572,6 +601,41 @@ function compute(input, rawOptions = {}) {
       openBands.clear();
       for (const r of routes) if (opened.has(r)) openBands.add(r.id);
     };
+  // How many edges have their other end beyond each side of a box: a fan that outgrows the
+  // side's full-gap slots spreads at `TIGHT_PITCH` (`slot`'s `tight`).
+  const facingCount = new Map(),
+    // Whether `other`'s centre lies past side `side` of box `id`, mostly in that direction.
+    beyond = (id, other, side) => {
+      const r = rects.get(id),
+        o = center(rects.get(other)),
+        c = center(r),
+        level = Math.abs(o.x - c.x) >= Math.abs(o.y - c.y);
+      return {
+        left: level && o.x < r.x,
+        right: level && o.x > r.x + r.w,
+        top: !level && o.y < r.y,
+        bottom: !level && o.y > r.y + r.h,
+      }[side];
+    };
+  // Only unlabelled fans out of a box: arrowheads into one side, and labels, need the full gap.
+  for (const e of edges)
+    if (e.from !== e.to && !e.label)
+      for (const side of SIDES)
+        if (beyond(e.from, e.to, side))
+          facingCount.set(e.from + '|' + side, (facingCount.get(e.from + '|' + side) ?? 0) + 1);
+  const crowdedSide = (id, side) => {
+    const r = rects.get(id),
+      span = (side === 'left' || side === 'right' ? r.h : r.w) - 24,
+      gap = Math.max(s.portGap, s.edgeGap),
+      slots = pitch => 1 + 2 * Math.floor(span / 2 / pitch + EPS),
+      full = slots(gap);
+    // Only when the tighter pitch makes room for more: otherwise the side is just full.
+    return (
+      facingFans &&
+      (facingCount.get(id + '|' + side) ?? 0) > full &&
+      slots(Math.min(TIGHT_PITCH, gap)) > full
+    );
+  };
   const obsFor = (e, open = openBands.has(e.id)) => {
     const allowed = new Set([...ancestors(e.from), ...ancestors(e.to)]),
       obstacles = [...rects.values()].map(r => inflate(r, s.clearance));
@@ -752,10 +816,13 @@ function compute(input, rawOptions = {}) {
     // and only then pays the fan-out penalty that pushes it round to another side.
     const facing = (side, from, to) =>
       vector[side].x * (to.x - from.x) + vector[side].y * (to.y - from.y) > 0.01;
+    // A facing side holds its fan at `TIGHT_PITCH` once full spacing runs out.
     const roomy = (side, r, n) => {
       const span = (side === 'left' || side === 'right' ? r.h : r.w) - 24,
-        separation = Math.max(s.portGap, s.edgeGap);
-      return n < 1 + 2 * Math.floor(span / 2 / separation + EPS);
+        pitch = facingFans
+          ? Math.min(TIGHT_PITCH, Math.max(s.portGap, s.edgeGap))
+          : Math.max(s.portGap, s.edgeGap);
+      return n < 1 + 2 * Math.floor(span / 2 / pitch + EPS);
     };
     function fan(side, r, from, to, end, id) {
       const n = taken(id, side, end);
@@ -782,7 +849,32 @@ function compute(input, rawOptions = {}) {
       // Out of one side and back into the same side of the other end: a U-turn, which a line
       // into a perpendicular side draws with one bend fewer.
       const hook = facingFans && c.fs === c.ts && points.length > 3 ? HOOK_PENALTY : 0;
+      // A fan planned at `TIGHT_PITCH` keeps to its side: leaving by another side costs, and
+      // the close pitch to its siblings there is the plan, not a lane conflict.
+      let packed = 0;
+      for (const [end, id, other, side] of facingFans
+        ? [
+            ['from', e.from, e.to, c.fs],
+            ['to', e.to, e.from, c.ts],
+          ]
+        : []) {
+        if (id === other) continue;
+        const siblings = used.filter(q => q[end] === id && q[end + 'Side'] === side);
+        const want =
+          end === 'from' && !e.label
+            ? SIDES.filter(x => crowdedSide(id, x) && beyond(id, other, x))
+            : [];
+        if (want.length && !want.includes(side)) packed += 2 * s.fanoutPenalty;
+        // Lines fanning out of (or into) one side nest in the gap beside it. Siblings closer than
+        // the edge gap but still apart (`FAN_PITCH`) are the fan's shape, not a lane conflict:
+        // charging them pushed a tree's third child out of its parent's side. A fan planned at
+        // `TIGHT_PITCH` is that close by design.
+        packed -=
+          siblingDeficit(points, siblings, want.includes(side) ? 0 : FAN_PITCH, s.edgeGap) *
+          s.parallelPenalty;
+      }
       return (
+        packed +
         cost(points, used, s, near) +
         (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
         backwards +
@@ -816,13 +908,28 @@ function compute(input, rawOptions = {}) {
       const scoreValue = score(full, c);
       if (!best || scoreValue < best.score - 0.01) best = { ...c, points: full, score: scoreValue };
     };
+    // A diamond's ports sit on its four vertices, one edge each; a further edge goes to a free
+    // vertex. Only when all four are taken do they share.
+    const vertices = r => facingFans && r.shape === 'diamond',
+      vertexTaken = (id, side) =>
+        used.some(
+          q => (q.from === id && q.fromSide === side) || (q.to === id && q.toSide === side),
+        ),
+      vertexClosed = (r, id, side, sides) =>
+        vertices(r) &&
+        sides.length > 1 &&
+        vertexTaken(id, side) &&
+        sides.some(x => !vertexTaken(id, x));
     for (const fs of from)
       for (const ts of to) {
         if (e.from === e.to && fs === ts) continue;
-        let fo = slot(e.from, fs, a, used, s, b),
-          toff = slot(e.to, ts, b, used, s, a);
+        if (vertexClosed(a, e.from, fs, from) || vertexClosed(b, e.to, ts, to)) continue;
+        let fo = vertices(a)
+            ? 0
+            : slot(e.from, fs, a, used, s, b, !e.label && crowdedSide(e.from, fs), facingFans),
+          toff = vertices(b) ? 0 : slot(e.to, ts, b, used, s, a, false, facingFans);
         const sameAxis = (fs === 'left' || fs === 'right') === (ts === 'left' || ts === 'right');
-        if (sameAxis && e.from !== e.to) {
+        if (sameAxis && e.from !== e.to && !vertices(b)) {
           const vertical = fs === 'left' || fs === 'right',
             axis = vertical ? 'y' : 'x',
             limit = (vertical ? b.h : b.w) / 2 - 12;
@@ -838,7 +945,8 @@ function compute(input, rawOptions = {}) {
             toff = desired;
         }
         // A lane may say where along the target's side the edge arrives.
-        if (typeof cfg.toOffset === 'number' && cfg.toSide === ts) toff = cfg.toOffset;
+        if (typeof cfg.toOffset === 'number' && cfg.toSide === ts && !vertices(b))
+          toff = cfg.toOffset;
         const start = port(a, fs, fo),
           end = port(b, ts, toff),
           obs = gate(edgeObs, start, fs, end, ts);
@@ -859,19 +967,25 @@ function compute(input, rawOptions = {}) {
             gap < 2 * (s.clearance + 3),
           stub = tight ? gap / 2 : s.clearance + 3,
           ends = tight ? obs.filter(r => r.id !== e.from && r.id !== e.to) : null;
-        const as = {
-            x: round(fs === 'left' ? a.x - stub : fs === 'right' ? a.x + a.w + stub : start.x),
-            y: round(fs === 'top' ? a.y - stub : fs === 'bottom' ? a.y + a.h + stub : start.y),
-          },
-          bs = {
-            x: round(ts === 'left' ? b.x - stub : ts === 'right' ? b.x + b.w + stub : end.x),
-            y: round(ts === 'top' ? b.y - stub : ts === 'bottom' ? b.y + b.h + stub : end.y),
-          };
-        if (
-          blocked(start, as, ends || obs.filter(r => r.id !== e.from)) ||
-          blocked(end, bs, ends || obs.filter(r => r.id !== e.to))
-        )
-          continue;
+        // A diamond's vertex is a point, so a stub turning a clearance out runs along the
+        // diamond's corners. It leaves a full standoff out where there is room.
+        const stubAt = (r, side, p, n) => ({
+            x: round(side === 'left' ? r.x - n : side === 'right' ? r.x + r.w + n : p.x),
+            y: round(side === 'top' ? r.y - n : side === 'bottom' ? r.y + r.h + n : p.y),
+          }),
+          clearOf = (p, q, id) => !blocked(p, q, ends || obs.filter(r => r.id !== id)),
+          long = Math.max(stub, s.standoff);
+        let as = stubAt(a, fs, start, stub),
+          bs = stubAt(b, ts, end, stub);
+        if (!clearOf(start, as, e.from) || !clearOf(end, bs, e.to)) continue;
+        if (!tight && vertices(a) && long > stub) {
+          const far = stubAt(a, fs, start, long);
+          if (clearOf(start, far, e.from)) as = far;
+        }
+        if (!tight && vertices(b) && long > stub) {
+          const far = stubAt(b, ts, end, long);
+          if (clearOf(end, far, e.to)) bs = far;
+        }
         const c = { fs, ts, fo, toff, start, end, as, bs, obs };
         if (tight) {
           if (cfg.waypoints?.length) continue;
