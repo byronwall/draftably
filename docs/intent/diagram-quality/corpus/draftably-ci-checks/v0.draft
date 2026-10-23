@@ -1,0 +1,35 @@
+diagram "Draftably: what CI runs on a PR" version=1
+
+# expect order-x pr install changeset skill release_check fast
+
+theme signal
+
+node pr "Pull request" shape=pill color=primary
+node install "pnpm install" color=slate
+node changeset "Changeset present?" shape=diamond color=amber
+node skill "Skill updated?" shape=diamond color=amber
+node release_check "release:check" color=primary
+node fast "check:fast" color=blue
+node engines "test:engines" color=blue
+node cli "cli:build + pack-check" color=blue
+node build "pnpm build" color=violet
+node prove_file "prove:file" color=violet
+node prove_layout "prove:layout" color=violet
+node artifacts "Upload screenshots" color=red
+node fail "Check fails" color=red
+
+edge c1 pr -> install
+edge c2 install -> changeset
+edge c3 changeset -> skill "yes"
+edge c4 skill -> release_check "yes"
+edge c5 release_check -> fast
+edge c6 fast -> engines
+edge c7 engines -> cli
+edge c8 install -> build "proofs job"
+edge c9 build -> prove_file
+edge c10 prove_file -> prove_layout
+edge c11 prove_layout -> artifacts "on failure" kind=async
+edge c12 changeset -> fail "no"
+edge c13 skill -> fail "no"
+
+layout root engine=layered direction=right

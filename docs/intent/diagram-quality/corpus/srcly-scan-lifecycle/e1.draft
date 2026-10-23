@@ -1,0 +1,42 @@
+diagram "Srcly: how a scan runs" version=1
+
+# expect order-x browser api services
+# expect near activity scan 120
+
+group browser "Browser (SolidJS)" color=blue
+node app "App shell" in=browser
+node treemap "Explorer + Treemap" in=browser
+
+group api "FastAPI routers" color=violet
+node scans_router "POST /api/scans" in=api
+node events "GET /scans/{id}/events" in=api
+node result "GET /scans/{id}/result" in=api
+
+group services "Scan services" color=mint
+node jobs "ScanJobManager" in=services
+node scan "scan_codebase" in=services
+node discover "discover_files" in=services
+node pool "Worker pool" in=services
+node analyzers "Language analyzers" in=services
+node aggregate "aggregate_metrics" in=services
+
+node cache "Analysis cache" color=amber
+
+edge start app -> scans_router "start scan"
+edge spawn scans_router -> jobs "create job"
+edge run jobs -> scan "thread per job"
+edge find scan -> discover
+edge dispatch scan -> pool "per file"
+edge analyze pool -> analyzers
+edge rollup scan -> aggregate
+edge progress jobs -> events "snapshots" kind=async
+edge sse events -> app "SSE progress" kind=async
+edge fetch app -> result
+edge tree result -> treemap "Node tree"
+edge lookup jobs -> cache "fingerprint"
+
+node activity "Git activity" in=services
+edge overlay activity -> result "overlay"
+edge gitlog scan -> activity "HEAD + window" kind=async
+
+layout root engine=layered direction=right

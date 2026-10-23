@@ -1,0 +1,46 @@
+diagram "HN Offline: how stories reach the phone" version=1
+
+# expect below external server
+
+group external "Upstream APIs" color=slate
+node firebase "HN Firebase API" in=external
+node algolia "Algolia search" in=external
+
+group server "SolidStart server" color=blue
+group jobs "Refresh jobs" in=server
+node timer "10-minute timer" in=jobs shape=pill
+node top "getTopStories" in=jobs
+node full "getFullDataForIds" in=jobs
+node db "db.json" in=server color=amber
+node api "Server API" in=server
+
+group device "Phone browser" color=mint
+group sw "Service worker" in=device
+node precache "Precache shell" in=sw
+node runtime "Runtime cache" in=sw
+group stores "Local stores" in=device
+node data_store "useDataStore" in=stores
+node read_items "Read items" in=stores
+node collapse "Collapse state" in=stores
+node views "Story + comment views" in=device
+
+edge c1 timer -> top "front page"
+edge c2 top -> firebase
+edge c3 top -> algolia "day / week"
+edge c4 top -> full "story ids"
+edge c5 full -> firebase "all comments"
+edge c6 full -> db "save"
+edge c7 db -> api
+edge c8 api -> data_store "story bundles"
+edge c9 data_store -> views
+edge c10 read_items -> views "grey out"
+edge c11 collapse -> views
+edge c12 precache -> views "offline shell" kind=async
+edge c13 api -> runtime kind=async
+
+layout root engine=compound-flow
+
+# Layout refinements
+near external server side=below gap=74 offset=-354
+stay server x=0 y=417
+stay device x=973 y=0

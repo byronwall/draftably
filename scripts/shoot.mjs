@@ -4,10 +4,11 @@
  * Playwright Chromium.
  *
  *   pnpm shoot <target> <out.png> [--size 1440x900] [--wait 500]
- *   pnpm shoot --sheet <out.png> [Label::]<target> [Label::]<target> ...
+ *   pnpm shoot --sheet <out.png> [--cols N] [Label::]<target> [Label::]<target> ...
  *
  * A target is a URL, a `.draft` file (drawn with `draftably inspect --svg`), or an SVG, PNG or
- * HTML file. `--sheet` lays the targets out as a labeled contact sheet, one card per target.
+ * HTML file. `--sheet` lays the targets out as a labeled contact sheet, one card per target;
+ * `--cols` fixes the number of columns (by default as many 420px columns as fit).
  * Without `--size`, a file target is captured at its own size and a URL at 1440x900.
  */
 import { execFileSync } from 'node:child_process';
@@ -20,7 +21,7 @@ import { chromium } from 'playwright-core';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const usage = `Usage:
   pnpm shoot <target> <out.png> [--size WxH] [--wait ms]
-  pnpm shoot --sheet <out.png> [Label::]<target> ...`;
+  pnpm shoot --sheet <out.png> [--cols N] [Label::]<target> ...`;
 
 const args = process.argv.slice(2);
 const option = name => {
@@ -32,6 +33,7 @@ const option = name => {
 const sheet = args.includes('--sheet') ? (args.splice(args.indexOf('--sheet'), 1), true) : false;
 const size = option('--size');
 const wait = Number(option('--wait') ?? 300);
+const cols = option('--cols');
 if (args.length < 2 || args.some(a => a.startsWith('--'))) {
   console.error(usage);
   process.exit(1);
@@ -69,7 +71,8 @@ try {
       html,
       `<!doctype html><style>
         body { margin: 0; padding: 16px; background: #fff; font: 13px system-ui, sans-serif;
-               display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px;
+               display: grid; gap: 16px;
+               grid-template-columns: ${cols ? `repeat(${Number(cols)}, 1fr)` : 'repeat(auto-fill, minmax(420px, 1fr))'};
                align-items: start; }
         figure { margin: 0; border: 1px solid #d5d9e0; border-radius: 6px; overflow: hidden; }
         figcaption { padding: 6px 10px; border-bottom: 1px solid #d5d9e0; font-weight: 600; }
@@ -78,7 +81,7 @@ try {
     );
     const w = size ? Number(size.split('x')[0]) : 1400;
     const page = await browser.newPage({
-      viewport: { width: w, height: 800 },
+      viewport: { width: w, height: 200 },
       deviceScaleFactor: 2,
     });
     await page.goto(pathToFileURL(html).href, { waitUntil: 'load' });
