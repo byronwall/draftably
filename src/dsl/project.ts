@@ -69,6 +69,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     doc.layout.edges[e.id] = {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
       ...(e.to !== 'auto' ? { toSide: e.to } : {}),
+      ...(e.lane ? { lane: e.lane } : {}),
     };
   }
   const groups = new Set(doc.graph.groups.map(g => g.id));
