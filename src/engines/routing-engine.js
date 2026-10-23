@@ -499,7 +499,11 @@ function slot(id, side, r, used, s, other) {
   }
   return round(best);
 }
+const AXIS_PENALTY = 100,
+  TRAILING = { right: 'right', down: 'bottom' },
+  LEADING = { right: 'left', down: 'top' };
 function compute(input, rawOptions = {}) {
+  const flow = ['right', 'down'].includes(rawOptions.direction) ? rawOptions.direction : null;
   const began = Date.now(),
     s = settings(rawOptions),
     rects = new Map(input.nodes.map(n => [n.id, { ...n }])),
@@ -651,6 +655,18 @@ function compute(input, rawOptions = {}) {
           : rawOptions.quick && old
             ? [old.toSide]
             : SIDES;
+    // A forward edge in a layout with a declared reading direction leaves its source's
+    // trailing side and enters its target's leading side (bottom → top going down), so
+    // it reads as parent → child. Other sides cost `AXIS_PENALTY` each, more than the
+    // standoff or fan-out a clean Z pays, so they win only when the axis sides are blocked.
+    const along = flow === 'down' ? cb.y - ca.y : cb.x - ca.x,
+      forward = flow && e.from !== e.to && along > 20,
+      axis = c =>
+        forward
+          ? (c.fs !== TRAILING[flow] ? AXIS_PENALTY : 0) +
+            (c.ts !== LEADING[flow] ? AXIS_PENALTY : 0)
+          : 0,
+      onAxis = (side, end) => forward && side === (end === 'from' ? TRAILING : LEADING)[flow];
     const candidates = [];
     let best = null;
     function score(points, c) {
@@ -668,11 +684,11 @@ function compute(input, rawOptions = {}) {
         used.reduce(
           (n, r) =>
             n +
-            (r.from === e.from && r.fromSide === c.fs ? 1 : 0) +
-            (r.to === e.to && r.toSide === c.ts ? 1 : 0),
+            (r.from === e.from && r.fromSide === c.fs && !onAxis(c.fs, 'from') ? 1 : 0) +
+            (r.to === e.to && r.toSide === c.ts && !onAxis(c.ts, 'to') ? 1 : 0),
           0,
         ) * s.fanoutPenalty;
-      return cost(points, used, s, near) + backwards + stability + fanout;
+      return cost(points, used, s, near) + backwards + stability + fanout + axis(c);
     }
     const remember = (points, c, o = obs) => {
       if (!points) return;
@@ -760,6 +776,7 @@ function compute(input, rawOptions = {}) {
         }
         c.lower =
           distance(start, end) +
+          axis(c) +
           (old && fs !== old.fromSide ? s.portStability : 0) +
           (old && ts !== old.toSide ? s.portStability : 0);
         candidates.push(c);

@@ -77,6 +77,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   // The file decides routing, and its root engine recipe is what layout tools start from.
   doc.settings.routing = { ...DEFAULT_SETTINGS.routing, ...scene.model.routing };
   const root = scene.model.layouts.find(l => l.scope === 'root');
+  // A declared reading direction makes forward edges run along it (into a child's top).
+  if (root && root.direction !== 'auto') doc.settings.routing.direction = root.direction;
   if (root?.engine)
     Object.assign(
       doc.settings,

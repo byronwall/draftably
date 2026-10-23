@@ -143,7 +143,8 @@ export interface RoutingSettings {
 export interface DiagramSettings extends LayoutSettings {
   snap: boolean;
   showManual: boolean;
-  routing: RoutingSettings;
+  /** `direction` is the file's declared reading direction; forward edges run along it. */
+  routing: RoutingSettings & { direction?: 'right' | 'down' };
 }
 
 export interface Camera {

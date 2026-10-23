@@ -72,6 +72,8 @@ export interface RoutingResult {
 export interface RoutingOptions extends Partial<RoutingSettings> {
   previous?: PriorRoute[];
   quick?: boolean;
+  /** The layout's declared reading direction. Forward edges leave and enter along it. */
+  direction?: 'right' | 'down';
   /** Even out ports, fans and corridors after routing. On unless false. */
   tidy?: boolean;
 }
