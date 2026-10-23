@@ -4,6 +4,7 @@
  */
 import { resolveAppearance, swatchFor } from '../model/appearance';
 import { truncateText } from '../model/fonts';
+import { drawingBounds } from '../model/bounds';
 import { styleOf } from '../model/graph';
 import { ICONS } from '../model/icons';
 import { nodeLabel } from '../model/labels';
@@ -32,11 +33,11 @@ export function renderSvg(doc: Diagram): string {
   const look = resolveAppearance(doc.appearance);
   const { vg, rects } = visibleRects(doc);
   const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
-  const all = [...rects.values()];
-  const x0 = Math.min(...all.map(r => r.x)) - 40,
-    y0 = Math.min(...all.map(r => r.y)) - 40,
-    w = Math.max(...all.map(r => r.x + r.w)) - x0 + 40,
-    h = Math.max(...all.map(r => r.y + r.h)) - y0 + 40;
+  const b = drawingBounds(doc, vg, rects, routes, 40),
+    x0 = Math.floor(b.x),
+    y0 = Math.floor(b.y),
+    w = Math.ceil(b.x + b.w) - x0,
+    h = Math.ceil(b.y + b.h) - y0;
   const out = [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title>${esc(doc.title)}</title>`,

@@ -1,6 +1,6 @@
 diagram "Draftably: what CI runs on a PR" version=1
 
-# expect order-x pr install changeset skill release_check fast
+# expect reads-x pr install changeset skill release_check fast
 
 theme signal
 

@@ -11,7 +11,7 @@
  */
 import { LayoutLab } from '../engines/layout-engine.js';
 import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
-import { titleArea, titleHeight, wrapTitle } from '../model/labels';
+import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction } from '../model/types';
 import { GROUP_HEADER, GROUP_INSET, contentOrigin } from './frame';
@@ -152,6 +152,31 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
 /** Solver budget for engine recipes; the same budget Compare and the timeline use. */
 export const ENGINE_ITERATIONS = 640;
 
+/** Line left showing on each side of an edge label, so the label reads as part of its edge. */
+const LABEL_RUN = 14;
+
+/** A labelled edge between two siblings, with the room its label needs across and down a gap. */
+interface LabelRoom {
+  a: string;
+  b: string;
+  w: number;
+  h: number;
+}
+
+function labelRoom(a: string, b: string, label: string, look: ResolvedAppearance): LabelRoom {
+  const size = edgeLabelSize(label, look);
+  return { a, b, w: size.w + 2 * LABEL_RUN, h: size.h + 2 * LABEL_RUN };
+}
+
+/** Gap between two siblings: `gap`, or more when a labelled edge between them needs it. */
+function roomBetween(rooms: LabelRoom[], a: string, b: string, gap: number, across: boolean) {
+  let room = gap;
+  for (const r of rooms)
+    if ((r.a === a && r.b === b) || (r.a === b && r.b === a))
+      room = Math.max(room, across ? r.w : r.h);
+  return room;
+}
+
 export function layoutFor(m: Model, scope: string): ModelLayout {
   return (
     m.layouts.find(l => l.scope === scope) ?? {
@@ -250,6 +275,7 @@ export function foldRanks(
   axis: 'right' | 'down',
   gap: number,
   pairs: Array<[string, string]>,
+  rooms: LabelRoom[] = [],
 ): Map<string, Pos> {
   const byId = new Map(items.map(n => [n.id, n]));
   const along = axis === 'right' ? 'x' : 'y',
@@ -278,13 +304,19 @@ export function foldRanks(
     } else blocks.push({ start, end, ids: [n.id] });
   }
   const block = new Map(blocks.flatMap((b, i) => b.ids.map(id => [id, i] as const)));
-  const crossing = (cut: number) =>
-    pairs.filter(([a, b]) => {
-      const [i, j] = [block.get(a), block.get(b)];
-      return i !== undefined && j !== undefined && Math.min(i, j) < cut && Math.max(i, j) >= cut;
-    }).length;
-  const bandGap = Math.max(gap + 40, 84),
-    total = blocks[blocks.length - 1].end - blocks[0].start;
+  const splits = (cut: number, a: string, b: string) => {
+    const [i, j] = [block.get(a), block.get(b)];
+    return i !== undefined && j !== undefined && Math.min(i, j) < cut && Math.max(i, j) >= cut;
+  };
+  const crossing = (cut: number) => pairs.filter(([a, b]) => splits(cut, a, b)).length;
+  // Wrap edges run through the gap between bands, so it also fits the labels on them.
+  const bandGap = (cut: number) =>
+    Math.max(
+      gap + 40,
+      84,
+      ...rooms.filter(r => splits(cut, r.a, r.b)).map(r => (axis === 'right' ? r.h : r.w)),
+    );
+  const total = blocks[blocks.length - 1].end - blocks[0].start;
   const build = (count: number) => {
     // Cut near each equal share of the length; among nearby cuts, prefer one fewer edges cross.
     const cuts: number[] = [];
@@ -303,7 +335,7 @@ export function foldRanks(
     const out = new Map<string, Pos>();
     let offset = 0,
       length = 0;
-    for (const band of bands) {
+    for (const [k, band] of bands.entries()) {
       const ids = band.flatMap(b => b.ids),
         lo = Math.min(...ids.map(id => positions.get(id)![across])),
         hi = Math.max(...ids.map(id => positions.get(id)![across] + size(byId.get(id)!, across)));
@@ -313,10 +345,10 @@ export function foldRanks(
           c = p[across] - lo + offset;
         out.set(id, axis === 'right' ? { x: a, y: c } : { x: c, y: a });
       }
-      offset += hi - lo + bandGap;
+      offset += hi - lo + (k < cuts.length ? bandGap(cuts[k]) : 0);
       length = Math.max(length, band.at(-1)!.end - band[0].start);
     }
-    return { out, length, depth: offset - bandGap, count: bands.length };
+    return { out, length, depth: offset, count: bands.length };
   };
   // The fewest bands that fit: wide layouts read best.
   for (let count = 2; count <= blocks.length; count++) {
@@ -327,7 +359,12 @@ export function foldRanks(
 }
 
 /** Siblings placed as the engine arranged them, shifted so the scope's content starts at 0,0. */
-function fromEngine(items: Item[], arranged: Map<string, Pos>, axis: 'right' | 'down') {
+function fromEngine(
+  items: Item[],
+  arranged: Map<string, Pos>,
+  axis: 'right' | 'down',
+  rooms: LabelRoom[] = [],
+) {
   const x0 = Math.min(...items.map(n => arranged.get(n.id)!.x)),
     y0 = Math.min(...items.map(n => arranged.get(n.id)!.y));
   const positions = new Map(
@@ -336,33 +373,85 @@ function fromEngine(items: Item[], arranged: Map<string, Pos>, axis: 'right' | '
       return [n.id, { x: round(p.x - x0), y: round(p.y - y0) }] as const;
     }),
   );
-  return { positions, axis };
+  return { positions: withLabelRoom(items, positions, axis, rooms), axis };
 }
 
-function baseLayout(items: Item[], layout: ModelLayout, pairs: Array<[string, string]>) {
+/**
+ * Engines space every rank alike. Where a labelled edge between two ranks has less room than its
+ * label needs, push everything past the first rank's end along the reading axis.
+ */
+function withLabelRoom(
+  items: Item[],
+  positions: Map<string, Pos>,
+  axis: 'right' | 'down',
+  rooms: LabelRoom[],
+) {
+  const by = new Map(items.map(n => [n.id, n])),
+    start = (id: string) => (axis === 'right' ? positions.get(id)!.x : positions.get(id)!.y),
+    end = (id: string) => start(id) + (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
+  const cuts = new Map<number, number>();
+  for (const r of rooms) {
+    const [a, b] = start(r.a) <= start(r.b) ? [r.a, r.b] : [r.b, r.a],
+      free = start(b) - end(a),
+      need = axis === 'right' ? r.w : r.h;
+    // Siblings that overlap on the axis sit side by side; their edge doesn't cross a rank gap.
+    if (free >= 0 && free < need) cuts.set(end(a), Math.max(cuts.get(end(a)) ?? 0, need - free));
+  }
+  if (!cuts.size) return positions;
+  const out = new Map<string, Pos>();
+  for (const n of items) {
+    let shift = 0;
+    for (const [at, amount] of cuts) if (start(n.id) >= at) shift += amount;
+    const p = positions.get(n.id)!;
+    out.set(
+      n.id,
+      axis === 'right' ? { x: round(p.x + shift), y: p.y } : { x: p.x, y: round(p.y + shift) },
+    );
+  }
+  return out;
+}
+
+function baseLayout(
+  items: Item[],
+  layout: ModelLayout,
+  pairs: Array<[string, string]>,
+  rooms: LabelRoom[] = [],
+) {
   const out = new Map<string, Pos>(),
     gap = layout.gap,
     axis = axisOf(layout);
   const by = new Map(items.map(n => [n.id, n]));
   if (layout.algorithm === 'row' || layout.algorithm === 'column') {
     let cursor = 0;
-    for (const n of items) {
+    for (const [i, n] of items.entries()) {
+      const next = items[i + 1]?.id ?? '';
       out.set(n.id, layout.algorithm === 'row' ? { x: cursor, y: 0 } : { x: 0, y: cursor });
-      cursor += (layout.algorithm === 'row' ? n.w : n.h) + gap;
+      cursor +=
+        (layout.algorithm === 'row' ? n.w : n.h) +
+        roomBetween(rooms, n.id, next, gap, layout.algorithm === 'row');
     }
   } else {
     const ids = items.map(n => n.id);
     const layers = pairs.length ? rankLayers(ids, pairs) : ids.map(id => [id]);
     const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
     const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
+    // A gap between ranks grows to fit the labels on edges that cross it.
+    const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
     let at = 0;
-    for (const layer of layers) {
-      let across = 0;
-      for (const id of layer) {
+    for (const [i, layer] of layers.entries()) {
+      let across = 0,
+        after = gap;
+      for (const [j, id] of layer.entries()) {
         out.set(id, axis === 'right' ? { x: at, y: across } : { x: across, y: at });
-        across += minor(id) + gap;
+        across += minor(id) + roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right');
       }
-      at += Math.max(...layer.map(major)) + gap;
+      for (const r of rooms)
+        if (
+          Math.min(rank.get(r.a)!, rank.get(r.b)!) === i &&
+          Math.abs(rank.get(r.a)! - rank.get(r.b)!) === 1
+        )
+          after = Math.max(after, axis === 'right' ? r.w : r.h);
+      at += Math.max(...layer.map(major)) + after;
     }
   }
   return { positions: out, axis };
@@ -706,18 +795,23 @@ export function layoutModel(m: Model, arranged?: Map<string, Pos>): Scene {
     const pairs = m.edges
       .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
+    const rooms = m.edges.flatMap(e => {
+      const a = immediate(e.source, scope),
+        b = immediate(e.target, scope);
+      return e.label && a && b && a !== b ? [labelRoom(a, b, e.label, look)] : [];
+    });
     const governing = arranged && governingLayout(m, scope),
       base =
         governing?.engine && list.every(n => arranged!.has(n.id))
-          ? fromEngine(list, arranged!, axisOf(governing))
-          : baseLayout(list, layout, pairs),
+          ? fromEngine(list, arranged!, axisOf(governing), rooms)
+          : baseLayout(list, layout, pairs, rooms),
       engine = governing?.engine && governing.scope === scope ? governing.engine : undefined;
     if (
       engine
         ? engine.algorithm === 'layered' && engine.params.fold !== 'never'
         : !governing?.engine && layout.algorithm === 'flow' && layout.fold === 'auto'
     )
-      base.positions = foldRanks(list, base.positions, base.axis, layout.gap, pairs);
+      base.positions = foldRanks(list, base.positions, base.axis, layout.gap, pairs, rooms);
     const pos = refine(list, base.positions, m.hints, scope, diagnostics, base.axis);
     for (const n of list) {
       local.set(n.id, pos.get(n.id)!);

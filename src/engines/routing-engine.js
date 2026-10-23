@@ -30,6 +30,7 @@ const defaults = {
   fanoutPenalty: 50,
   passes: 3,
   cornerRadius: 6,
+  standoff: 20,
 };
 function settings(raw = {}) {
   const s = { ...defaults, ...raw },
@@ -45,6 +46,7 @@ function settings(raw = {}) {
       edgeGap: [4, 48],
       parallelPenalty: [0, 60],
       cornerRadius: [0, 16],
+      standoff: [0, 40],
     };
   for (const [k, [lo, hi]] of Object.entries(ranges)) {
     if (typeof s[k] !== 'number' || !Number.isFinite(s[k]))
@@ -191,9 +193,46 @@ function conflicts(points, used) {
   }
   return { crossings: hits.size, shared };
 }
-function cost(ps, used, s) {
+// Soft clearance: a run parallel to a box side inside `band` costs more the closer
+// it gets. Group borders (`border`) count from both sides. The hard clearance
+// still decides what is passable, so tight gaps stay routable.
+const STANDOFF_WEIGHT = 0.5;
+function standoffCost(ps, near) {
+  let n = 0;
+  for (const [a, b] of segments(ps)) {
+    const h = Math.abs(a.y - b.y) < EPS;
+    if (!h && Math.abs(a.x - b.x) >= EPS) continue;
+    const lo = h ? Math.min(a.x, b.x) : Math.min(a.y, b.y),
+      hi = h ? Math.max(a.x, b.x) : Math.max(a.y, b.y),
+      at = h ? a.y : a.x;
+    for (const r of near) {
+      const run = Math.min(hi, h ? r.x + r.w : r.y + r.h) - Math.max(lo, h ? r.x : r.y);
+      if (run <= 1) continue;
+      const s0 = h ? r.y : r.x,
+        s1 = h ? r.y + r.h : r.x + r.w;
+      let d;
+      if (r.border) d = Math.min(Math.abs(at - s0), Math.abs(at - s1));
+      else if (at <= s0) d = s0 - at;
+      else if (at >= s1) d = at - s1;
+      else continue;
+      if (d < r.band) n += run * (1 - d / r.band);
+    }
+  }
+  return n * STANDOFF_WEIGHT;
+}
+function standoffLines(near, xs, ys) {
+  for (const r of near) {
+    const add = r.border ? [-r.band, r.band] : [-r.band];
+    for (const k of add) {
+      xs.push(r.x + k, r.x + r.w - k);
+      ys.push(r.y + k, r.y + r.h - k);
+    }
+  }
+}
+function cost(ps, used, s, near = []) {
   const c = conflicts(ps, used);
   return (
+    (near.length ? standoffCost(ps, near) : 0) +
     segments(ps).reduce((n, [a, b]) => n + distance(a, b), 0) +
     Math.max(0, ps.length - 2) * s.bendPenalty +
     c.crossings * s.crossingPenalty +
@@ -239,13 +278,14 @@ class Heap {
     return this.q.length;
   }
 }
-function search(start, end, obs, used, s, limit = 16000) {
+function search(start, end, obs, used, s, near = [], limit = 16000) {
   const xs = [start.x, end.x],
     ys = [start.y, end.y];
   for (const r of obs) {
     xs.push(r.x, r.x + r.w);
     ys.push(r.y, r.y + r.h);
   }
+  standoffLines(near, xs, ys);
   for (const p of [start, end]) {
     xs.push(p.x - s.edgeGap, p.x + s.edgeGap);
     ys.push(p.y - s.edgeGap, p.y + s.edgeGap);
@@ -299,6 +339,7 @@ function search(start, end, obs, used, s, limit = 16000) {
     }
     return (
       distance(a, b) +
+      (near.length ? standoffCost([a, b], near) : 0) +
       hits.size * s.crossingPenalty +
       shared * s.sharedPenalty +
       near * s.parallelPenalty
@@ -358,7 +399,7 @@ function search(start, end, obs, used, s, limit = 16000) {
   }
   return compress(ps.reverse());
 }
-function doglegs(a, b, obs, s, used = []) {
+function doglegs(a, b, obs, s, used = [], near = []) {
   const choices = [
       [a, b],
       [a, { x: b.x, y: a.y }, b],
@@ -386,6 +427,12 @@ function doglegs(a, b, obs, s, used = []) {
         ys.add(u.y + s.edgeGap);
       }
     }
+  const lines = { x: [], y: [] };
+  standoffLines(near, lines.x, lines.y);
+  for (const x of lines.x)
+    if (x > Math.min(a.x, b.x) - 80 && x < Math.max(a.x, b.x) + 80) xs.add(x);
+  for (const y of lines.y)
+    if (y > Math.min(a.y, b.y) - 80 && y < Math.max(a.y, b.y) + 80) ys.add(y);
   xs.add(Math.min(a.x, b.x) - s.portGap);
   xs.add(Math.max(a.x, b.x) + s.portGap);
   ys.add(Math.min(a.y, b.y) - s.portGap);
@@ -459,6 +506,14 @@ function compute(input, rawOptions = {}) {
     groups = new Map((input.groups || []).map(g => [g.id, { ...g }]));
   for (const [id, g] of groups) if (g.collapsed) rects.set(id, { ...g, shape: 'box' });
   const all = new Map([...groups, ...rects]);
+  const near = s.standoff
+    ? [
+        ...[...rects.values()].map(r => ({ ...r, band: s.standoff })),
+        ...[...groups.values()]
+          .filter(g => !g.collapsed)
+          .map(g => ({ ...g, band: s.standoff / 2, border: true })),
+      ]
+    : [];
   function ancestors(id) {
     const list = [];
     for (let p = all.get(id)?.parentId; p; p = all.get(p)?.parentId) {
@@ -542,7 +597,7 @@ function compute(input, rawOptions = {}) {
   function simplify(points, e, fs, ts, obs, used) {
     if (e.cfg.waypoints?.length) return points;
     let result = compress(points),
-      bestCost = cost(result, used, s);
+      bestCost = cost(result, used, s, near);
     // Replacing a subpath removes staircase artefacts only if the complete path
     // remains obstacle-safe, respects terminal normals, and does not add a lane
     // conflict or crossing. This is geometric simplification, not SVG cosmetics.
@@ -560,7 +615,7 @@ function compute(input, rawOptions = {}) {
             if (p.length >= result.length || !validPath(p, e, fs, ts, obs)) continue;
             const c = conflicts(p, used),
               lane = parallelConflicts(p, used, s.edgeGap),
-              score = cost(p, used, s);
+              score = cost(p, used, s, near);
             if (
               c.crossings > before.crossings ||
               lane.laneDeficit > beforeLane.laneDeficit + 0.1 ||
@@ -617,9 +672,9 @@ function compute(input, rawOptions = {}) {
             (r.to === e.to && r.toSide === c.ts ? 1 : 0),
           0,
         ) * s.fanoutPenalty;
-      return cost(points, used, s) + backwards + stability + fanout;
+      return cost(points, used, s, near) + backwards + stability + fanout;
     }
-    const remember = (points, c) => {
+    const remember = (points, c, o = obs) => {
       if (!points) return;
       const full = compress([c.start, ...points, c.end]);
       for (let i = 2; i < full.length; i++) {
@@ -637,7 +692,7 @@ function compute(input, rawOptions = {}) {
       // No doubled-back first/last segments after attaching shape stubs.
       if (
         full.length < 2 ||
-        segments(full).some(([u, v], i) => i > 0 && i < full.length - 2 && blocked(u, v, obs))
+        segments(full).some(([u, v], i) => i > 0 && i < full.length - 2 && blocked(u, v, o))
       )
         return;
       const scoreValue = score(full, c);
@@ -665,8 +720,24 @@ function compute(input, rawOptions = {}) {
             toff = desired;
         }
         const start = port(a, fs, fo),
-          end = port(b, ts, toff),
-          stub = s.clearance + 3;
+          end = port(b, ts, toff);
+        // Stacked neighbours closer than two stubs: meet halfway across the gap
+        // between the facing sides instead of hooking round the outside.
+        const gap = s.standoff
+            ? {
+                right: b.x - a.x - a.w,
+                left: a.x - b.x - b.w,
+                bottom: b.y - a.y - a.h,
+                top: a.y - b.y - b.h,
+              }[fs]
+            : 0,
+          tight =
+            vector[fs].x === -vector[ts].x &&
+            vector[fs].y === -vector[ts].y &&
+            gap > 0 &&
+            gap < 2 * (s.clearance + 3),
+          stub = tight ? gap / 2 : s.clearance + 3,
+          ends = tight ? obs.filter(r => r.id !== e.from && r.id !== e.to) : null;
         const as = {
             x: round(fs === 'left' ? a.x - stub : fs === 'right' ? a.x + a.w + stub : start.x),
             y: round(fs === 'top' ? a.y - stub : fs === 'bottom' ? a.y + a.h + stub : start.y),
@@ -676,19 +747,17 @@ function compute(input, rawOptions = {}) {
             y: round(ts === 'top' ? b.y - stub : ts === 'bottom' ? b.y + b.h + stub : end.y),
           };
         if (
-          blocked(
-            start,
-            as,
-            obs.filter(r => r.id !== e.from),
-          ) ||
-          blocked(
-            end,
-            bs,
-            obs.filter(r => r.id !== e.to),
-          )
+          blocked(start, as, ends || obs.filter(r => r.id !== e.from)) ||
+          blocked(end, bs, ends || obs.filter(r => r.id !== e.to))
         )
           continue;
         const c = { fs, ts, fo, toff, start, end, as, bs };
+        if (tight) {
+          if (cfg.waypoints?.length) continue;
+          const o = [...ends, { ...a, id: e.from }, { ...b, id: e.to }];
+          for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
+          continue;
+        }
         c.lower =
           distance(start, end) +
           (old && fs !== old.fromSide ? s.portStability : 0) +
@@ -712,7 +781,7 @@ function compute(input, rawOptions = {}) {
           )
         )
           remember([start, end], c);
-        for (const path of doglegs(as, bs, obs, s, used)) remember(path, c);
+        for (const path of doglegs(as, bs, obs, s, used, near)) remember(path, c);
       }
     candidates.sort((a, b) => a.lower - b.lower || cmp(a.fs + ':' + a.ts, b.fs + ':' + b.ts));
     // Search is reserved for candidates whose lower bound can beat the best.
@@ -733,7 +802,7 @@ function compute(input, rawOptions = {}) {
         path = [];
       let ok = true;
       for (let i = 1; i < points.length; i++) {
-        const part = search(points[i - 1], points[i], obs, used, s);
+        const part = search(points[i - 1], points[i], obs, used, s, near);
         if (!part) {
           ok = false;
           break;
@@ -879,7 +948,7 @@ function compute(input, rawOptions = {}) {
           obs = obsFor(e);
         if (!parallelConflicts(route.points, used, s.edgeGap).lanePairs) continue;
         let best = route.points,
-          bestValue = cost(best, used, s),
+          bestValue = cost(best, used, s, near),
           before = conflicts(best, used);
         for (let i = 1; i < route.points.length - 2; i++) {
           const a = route.points[i],
@@ -905,7 +974,7 @@ function compute(input, rawOptions = {}) {
               conflicts(clean, used).crossings > before.crossings
             )
               continue;
-            const score = cost(clean, used, s);
+            const score = cost(clean, used, s, near);
             if (score < bestValue - 0.1) {
               best = clean;
               bestValue = score;

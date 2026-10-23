@@ -14,6 +14,7 @@
  *
  *   # expect left-of a b       a's right edge is left of b's left edge (also right-of, above, below)
  *   # expect order-x a b c     centers run left to right (order-y: top to bottom)
+ *   # expect reads-x a b c     reading order, left to right, wrapping onto lower rows (reads-y: columns)
  *   # expect aligned-x a b     centers share x within 4px (aligned-y: y)
  *   # expect near a b 80       the gap between a and b is at most 80px
  *   # expect still a b         a and b moved at most 24px from the previous version
@@ -317,6 +318,136 @@ function measure(file) {
     }
   }
 
+  // Orderliness: does routing look drawn on purpose? Lines sharing a corridor should keep one
+  // pitch, edges fanning out of (or into) one side should turn at the same place, ports on a
+  // side should be spread evenly, and no edge should carry a tiny zigzag.
+  const allRuns = routes.flatMap(r =>
+    r.segs
+      .map(straight)
+      .filter(s => s && s.to - s.from > 12)
+      .map(s => ({ ...s, edge: r.id })),
+  );
+  for (const axis of ['h', 'v']) {
+    const runs = allRuns.filter(s => s.axis === axis).sort((a, b) => a.at - b.at);
+    const seen = new Set();
+    for (const seed of runs) {
+      if (seen.has(seed)) continue;
+      const corridor = [seed];
+      seen.add(seed);
+      for (let k = 0; k < corridor.length; k++) {
+        for (const s of runs) {
+          if (seen.has(s) || s.edge === corridor[k].edge) continue;
+          if (Math.abs(s.at - corridor[k].at) <= 40 && alongside(s, corridor[k]) > 0) {
+            corridor.push(s);
+            seen.add(s);
+          }
+        }
+      }
+      const lines = [...new Set(corridor.map(s => Math.round(s.at)))].sort((a, b) => a - b);
+      if (lines.length < 3) continue;
+      const gaps = lines.slice(1).map((v, i) => v - lines[i]);
+      if (
+        Math.max(...gaps) > 1.6 * Math.min(...gaps) &&
+        Math.max(...gaps) - Math.min(...gaps) > 6
+      ) {
+        note('uneven-channel', `${axis === 'v' ? 'x' : 'y'}≈${lines[0]}: gaps ${gaps.join('/')}`);
+      }
+    }
+  }
+  const fans = new Map();
+  for (const r of routes) {
+    if (r.segs.length < 3) continue;
+    const first = r.segs[0],
+      last = r.segs.at(-1);
+    const out = `${r.source}|out|${dir(first)}`,
+      into = `${r.target}|in|${dir(last)}`;
+    const firstTurn = 'RL'.includes(dir(first)) ? first[1].x : first[1].y;
+    const lastTurn = 'RL'.includes(dir(last)) ? last[0].x : last[0].y;
+    (fans.get(out) ?? fans.set(out, []).get(out)).push(firstTurn);
+    (fans.get(into) ?? fans.set(into, []).get(into)).push(lastTurn);
+  }
+  for (const [key, turns] of fans) {
+    const distinct = [...new Set(turns.map(t => Math.round(t / 3)))];
+    if (turns.length >= 2 && distinct.length > 1) {
+      note(
+        'ragged-bends',
+        `${key.replace(/\|/g, ' ')}: turns at ${turns.map(Math.round).join(', ')}`,
+      );
+    }
+  }
+  const ports = new Map();
+  for (const r of routes) {
+    for (const [id, p] of [
+      [r.source, r.points[0]],
+      [r.target, r.points.at(-1)],
+    ]) {
+      const n = byId.get(id);
+      if (!n || !p) continue;
+      const side =
+        Math.abs(p.x - n.x) < 2
+          ? 'left'
+          : Math.abs(p.x - n.x - n.w) < 2
+            ? 'right'
+            : Math.abs(p.y - n.y) < 2
+              ? 'top'
+              : 'bottom';
+      const along = side === 'left' || side === 'right' ? p.y - n.y : p.x - n.x;
+      const key = `${id}|${side}`;
+      (ports.get(key) ?? ports.set(key, []).get(key)).push(along);
+    }
+  }
+  for (const [key, list] of ports) {
+    const [id, side] = key.split('|');
+    const n = byId.get(id);
+    const span = side === 'left' || side === 'right' ? n.h : n.w;
+    const at = [...new Set(list.map(Math.round))].sort((a, b) => a - b);
+    if (at.length < 2) continue;
+    // Ports bunched around the middle are a deliberate style; lopsided ones are not.
+    const offset = at.reduce((t, p) => t + p, 0) / at.length - span / 2;
+    if (Math.abs(offset) > Math.max(8, span * 0.1)) {
+      note('uneven-ports', `${id} ${side}: ${at.join(', ')} of ${Math.round(span)}`);
+    }
+  }
+  for (const r of routes) {
+    const inner = r.segs.slice(1, -1);
+    if (inner.some(sg => len(sg) > 0 && len(sg) < 12))
+      note('jog', `${r.id} has a ${Math.round(Math.min(...inner.map(len)))}px step`);
+  }
+
+  // Container fit: a group should wrap its contents with the same padding on every side, and
+  // every group in a drawing should use the same padding. The top holds the title, so it is
+  // compared across groups rather than with the other sides.
+  const pads = [];
+  for (const g of groups) {
+    const kids = geo.nodes.filter(n => n.parent === g.id);
+    if (!kids.length) continue;
+    const x0 = Math.min(...kids.map(k => k.x)),
+      y0 = Math.min(...kids.map(k => k.y)),
+      x1 = Math.max(...kids.map(k => k.x + k.w)),
+      y1 = Math.max(...kids.map(k => k.y + k.h));
+    const pad = {
+      id: g.id,
+      left: Math.round(x0 - g.x),
+      right: Math.round(g.x + g.w - x1),
+      top: Math.round(y0 - g.y),
+      bottom: Math.round(g.y + g.h - y1),
+    };
+    pads.push(pad);
+    const sides3 = [pad.left, pad.right, pad.bottom];
+    if (Math.max(...sides3) - Math.min(...sides3) > 12) {
+      note('uneven-padding', `${g.id} left ${pad.left}, right ${pad.right}, bottom ${pad.bottom}`);
+    }
+  }
+  for (const side of ['left', 'top']) {
+    const values = pads.map(p => p[side]);
+    if (values.length > 1 && Math.max(...values) - Math.min(...values) > 8) {
+      note(
+        'padding-varies',
+        `${side} padding ${Math.min(...values)}–${Math.max(...values)} across groups`,
+      );
+    }
+  }
+
   // Crossings and unrelated shared segments.
   let crossings = 0;
   for (let i = 0; i < routes.length; i++) {
@@ -482,6 +613,12 @@ function measure(file) {
       'edge-hugs-node',
       'edge-on-group-border',
       'edges-too-close',
+      'uneven-channel',
+      'ragged-bends',
+      'uneven-ports',
+      'jog',
+      'uneven-padding',
+      'padding-varies',
     ].map(k => [k, count(k)]),
   );
   // Weighted defect index; hard defects dominate. Normalized per 10 edges so sizes compare.
@@ -506,6 +643,12 @@ function measure(file) {
     'edge-hugs-node': 1,
     'edge-on-group-border': 1,
     'edges-too-close': 2,
+    'uneven-channel': 1,
+    'ragged-bends': 1,
+    'uneven-ports': 1,
+    jog: 1,
+    'uneven-padding': 2,
+    'padding-varies': 2,
   };
   const raw =
     Object.entries(counts).reduce((s, [k, v]) => s + v * weights[k], 0) +
@@ -646,6 +789,26 @@ function checkExpectations(r, prev) {
           why: off.length ? `moved: ${off.join(', ')}` : undefined,
         };
       }
+      case 'reads-x':
+      case 'reads-y': {
+        // Reading order with wraps: each next object is further along the axis in the same band,
+        // or starts a new band further across, like lines of text.
+        // Text-like: a step forward along the axis is reading on; a step back along it must go
+        // down (or right, for columns) to the next band.
+        const [along, across] = kind === 'reads-x' ? ['x', 'y'] : ['y', 'x'];
+        let along_ = 0,
+          wraps = 0;
+        const ok = need.every((id, i) => {
+          if (i === 0) return true;
+          const p = center(rect.get(need[i - 1])),
+            q = center(rect.get(id));
+          if (q[along] > p[along] + 4) return ++along_ > 0;
+          wraps++;
+          return q[across] > p[across];
+        });
+        // A single line across the axis (a column for reads-x) is not reading along it.
+        return { line, pass: ok && along_ >= wraps, why: `${along_} along, ${wraps} wraps` };
+      }
       case 'keeps-order': {
         const flips = r.stabilityFromPrev?.orderFlips ?? 0;
         return { line, pass: flips === 0, why: `${flips} order flips` };
@@ -780,10 +943,10 @@ const fmtStab = s =>
     ? `${s.meanMove}/${s.maxMove}px, ${s.moved} moved (${s.alignedMoved} after shift), ${s.orderFlips} flips`
     : '';
 const lines = [
-  '| Diagram | Ver | Theme | Fills | N/G/E | Aspect | Cross | Bends/e | Hooks | Back | Hard | Label | Route | Clear | Space | Expect | DI | Base DI | Δ prev (mean/max) |',
-  '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+  '| Diagram | Ver | Theme | Fills | N/G/E | Aspect | Cross | Bends/e | Hooks | Back | Hard | Label | Route | Clear | Order | Fit | Space | Expect | DI | Base DI | Δ prev (mean/max) |',
+  '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
   ...rows.map(r => {
-    if (r.error) return `| ${r.slug} | ${r.file} | ERROR | | | | | | | | | | | | | | | | |`;
+    if (r.error) return `| ${r.slug} | ${r.file} | ERROR | | | | | | | | | | | | | | | | | | |`;
     const c = r.counts;
     const hard = c['node-overlap'] + c['edge-through-node'] + c.clipped;
     const label =
@@ -795,7 +958,9 @@ const lines = [
       c['label-on-group-border'];
     const route = c['shared-segment'] + c['edge-through-group'] + c['many-bends'];
     const clear = c['edge-hugs-node'] + c['edge-on-group-border'] + c['edges-too-close'];
-    return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${c['empty-band'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
+    const order = c['uneven-channel'] + c['ragged-bends'] + c['uneven-ports'] + c.jog;
+    const fit = c['uneven-padding'] + c['padding-varies'];
+    return `| ${r.slug} | ${r.file.replace('.draft', '')} | ${r.theme} | ${r.fills} | ${r.nodes}/${r.groups}/${r.edges} | ${r.aspect} | ${r.crossings} | ${r.bendsPerEdge} | ${r.hooks} | ${r.backEdges} | ${hard} | ${label} | ${route} | ${clear} | ${order} | ${fit} | ${c['empty-band'] + c['long-edge']} | ${r.checks.length ? `${r.checks.filter(x => x.pass).length}/${r.checks.length}` : ''} | ${r.defectIndex} | ${r.baselineDI ?? ''} | ${fmtStab(r.stabilityFromPrev)} |`;
   }),
 ];
 const ok = rows.filter(r => !r.error);
