@@ -9,7 +9,7 @@ import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { truncateText, measureText } from './fonts';
 import { edgeLabelSize } from './labels';
 import { isCollapsed, styleOf, type VisibleGraph } from './graph';
-import type { Diagram, Point, Rect, ShapeKind, Side } from './types';
+import type { Diagram, EdgeLayout, Point, Rect, ShapeKind, Side } from './types';
 
 export const SIDE_VECTORS: Record<Side, Point> = {
   left: { x: -1, y: 0 },
@@ -212,6 +212,45 @@ function titleWidth(title: string, w: number, look: ResolvedAppearance) {
   return 33 + measureText(text, look.groupTitle) + 8;
 }
 
+/** How far inside a box's corner a lane turns. */
+const LANE_INSET = 12;
+
+/**
+ * An edge's routing settings, with its lane turned into bends and sides: out of the source to
+ * the lane, along it, and into the target. A lane with `leave` or `enter` turns at that coordinate beside
+ * the source or target, to meet it side on. A lane that no longer lies between the two ends (a
+ * node was dragged across it) is ignored, as is any lane on an edge with its own bends.
+ */
+export function laneBends(cfg: EdgeLayout, a: Rect, b: Rect): EdgeLayout {
+  const { lane, ...rest } = cfg;
+  if (!lane || cfg.waypoints?.length) return rest;
+  const level = 'y' in lane,
+    at = 'y' in lane ? lane.y : lane.x,
+    [u, v] = level ? (['x', 'y'] as const) : (['y', 'x'] as const),
+    depth = (r: Rect) => (level ? r.h : r.w),
+    length = (r: Rect) => (level ? r.w : r.h);
+  if (!(a[v] + depth(a) < at && at < b[v])) return rest;
+  const point = (along: number, across: number) =>
+    level ? { x: rounded(along), y: rounded(across) } : { x: rounded(across), y: rounded(along) };
+  // Every turn sits at a box's corner, inset like a port: on the side nearest the lane, at the
+  // end the line runs toward. A port anywhere on that side then runs on without doubling back.
+  const back = b[u] + length(b) / 2 < a[u] + length(a) / 2,
+    waypoints =
+      lane.leave !== undefined
+        ? [point(lane.leave, a[v] + depth(a) - LANE_INSET), point(lane.leave, at)]
+        : [point(back ? a[u] + LANE_INSET : a[u] + length(a) - LANE_INSET, at)];
+  if (lane.enter !== undefined)
+    waypoints.push(point(lane.enter, at), point(lane.enter, b[v] + LANE_INSET));
+  else waypoints.push(point(back ? b[u] + length(b) - LANE_INSET : b[u] + LANE_INSET, at));
+  // The lane decides which way the edge leaves and arrives, so the router needn't try the rest.
+  return {
+    fromSide: lane.leave !== undefined ? (level ? 'right' : 'bottom') : level ? 'bottom' : 'right',
+    toSide: lane.enter !== undefined ? (level ? 'left' : 'top') : level ? 'top' : 'left',
+    ...rest,
+    waypoints: waypoints.filter((p, i) => !i || manhattan(p, waypoints[i - 1]) >= 1),
+  };
+}
+
 /** Engine input for the visible part of a diagram with the given rectangles. */
 export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
   const look = resolveAppearance(doc.appearance);
@@ -226,7 +265,12 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Re
         titleWidth: titleWidth(g.title, r.w, look),
       };
     }),
-    edges: vg.edges.map(e => ({ ...e, from: e.a, to: e.b, cfg: doc.layout.edges[e.id] || {} })),
+    edges: vg.edges.map(e => ({
+      ...e,
+      from: e.a,
+      to: e.b,
+      cfg: laneBends(doc.layout.edges[e.id] || {}, rects.get(e.a)!, rects.get(e.b)!),
+    })),
   };
 }
 

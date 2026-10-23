@@ -802,8 +802,10 @@ function compute(input, rawOptions = {}) {
           for (const path of doglegs(as, bs, o, s, used, near)) remember(path, c, o);
           continue;
         }
+        // Through any waypoints, so a side facing away from the first one ranks last.
+        const via = [start, ...(cfg.waypoints || []), end];
         c.lower =
-          distance(start, end) +
+          via.reduce((sum, p, i) => (i ? sum + distance(via[i - 1], p) : 0), 0) +
           axis(c) +
           (old && fs !== old.fromSide ? s.portStability : 0) +
           (old && ts !== old.toSide ? s.portStability : 0);
@@ -1062,6 +1064,8 @@ function compute(input, rawOptions = {}) {
       for (const i of changes.keys()) {
         const r = next[i],
           e = byId.get(r.id);
+        // Waypoint routes stay as authored, as in the nudge pass.
+        if (e.cfg.waypoints?.length) return false;
         if (!validPath(r.points, e, r.fromSide, r.toSide, obsOf(e))) return false;
         if (steps(r.points) > steps(routes[i].points)) return false;
       }
