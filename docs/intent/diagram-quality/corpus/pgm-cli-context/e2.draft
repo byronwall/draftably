@@ -1,6 +1,7 @@
 diagram "PGM: agent context through the CLI" version=1
 
-# expect still *
+# expect still-shape *
+# expect keeps-order
 
 theme mulberry
 

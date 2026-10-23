@@ -81,7 +81,7 @@ check out that round's commit in a temporary worktree and run the current script
   | -------- | ----------------------------------------- | ----------------------------------------- | -------------------------------------- |
   | grow     | "Add the cache between API and DB"        | new `node` + rewired `edge`s              | `near cache api 120`                   |
   | branch   | "Show what happens when the check fails"  | new node, back/side edge                  | `below fail check`                     |
-  | relabel  | "Label the arrows with what flows"        | edge labels added or lengthened           | `still *`                              |
+  | relabel  | "Label the arrows with what flows"        | edge labels added or lengthened           | `still-shape *`, `keeps-order`         |
   | regroup  | "Put the workers in their own box"        | new `group`, `in=` changes                | `near workers queue 120`               |
   | place    | "Move the DB under the API"               | `near`, `order` or `align`                | `below db api`                         |
   | relayout | "Make it read top to bottom"              | `direction=` or `engine=` change          | `order-y a b c`                        |
@@ -100,6 +100,8 @@ can check whether they were met:
 # expect aligned-x a b     # centers within 4px; aligned-y
 # expect near a b 80       # gap at most 80px
 # expect still a b         # moved at most 24px since the previous version; `still *` for all
+# expect still-shape *     # moved at most 24px once each band's own shift along the reading
+                           # direction is removed: a relabel widens a gap and slides what follows
 # expect keeps-order       # no two old objects swapped sides (growth may push things aside)
 # expect back-edges 0      # at most this many edges against the reading direction
 ```
@@ -112,6 +114,14 @@ Each `still` is also checked with the drawing's median shift removed, and the su
 that slid as a whole (a wider title moved the origin) and kept its shape; one that fails both
 changed shape. Only the raw check counts as a defect. The table also gives `keeps-order` passes,
 the mean move over follow-ups and the total order flips.
+
+A relabel promises `still-shape *` plus `keeps-order`, not `still *` (round 5). A label that no
+longer fits widens only the gap that needs it, so everything past that gap slides along the
+reading direction. `still-shape` groups the previous version's boxes into rows (split by a clear
+gap across the reading direction, as a fold makes) and, within a row, bands (boxes whose spans
+along the reading direction overlap). It removes each band's median shift along the reading
+direction and the drawing's median shift across it, then checks that nothing moved more than
+24px. A group follows its first member's band at its start and its last member's at its end.
 
 ### Viewer follow-ups
 
@@ -132,12 +142,18 @@ This is the only way to test the `stay` path.
 Hard defects (should be zero): **node-overlap**, **edge-through-node** (an edge crosses an object
 it does not connect), **clipped** (a route or label outside the exported drawing).
 
-Label defects: **label-on-node**, **label-overlap**, **label-on-edge** (another edge runs under
-the label), **label-detached** (label farther than its own height from its edge),
+Label defects: **label-on-node**, **label-overlap**, **label-through-text** (another edge runs through the label's text: a reader
+can take the label for that line's, S1), **label-on-edge** (another edge runs only under the
+label's padding), **labels-too-close** (two labels on different edges closer than a label's height:
+they read as one phrase, or as two labels on one edge), **label-detached** (label farther than its own height from its edge),
 **label-on-group-title**, **label-on-group-border**.
 
-Routing: **crossings**, **bends per edge**, **many-bends** (≥ 4), **hook** (an edge leaves one
-way and arrives travelling the opposite way: the U-turn into a neighbour), **shared-segment**
+Routing: **crossings**, **bends per edge**, **many-bends** (≥ 4), **hook** (a U-turn: the line
+overruns its target and arrives in the side facing away from the source, as into a box's bottom
+from a source above it; or it leaves one way and comes back the opposite way into a box that
+doesn't share the exit's span. A C down a channel into the facing side of a box in the same
+column or row reads as drafted and doesn't count, nor does a fold's wrap or a return lane that
+arrives along the reading direction into a box's leading side), **shared-segment**
 (unrelated edges run along the same line), **edge-through-group** (an edge cuts through a group
 holding neither end), **edge-through-title-band** (a line crosses a group's title band other than
 straight into or out of a top member), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
@@ -160,8 +176,9 @@ sharing a corridor, within 40px of each other and overlapping, are spaced at dif
 places instead of sharing a trunk; a bundle whose turns step by exactly the edge gap, 16px or the
 file's `edge-gap`/`port-gap`, is the accepted stagger and doesn't count), **uneven-ports** (the ports on a side sit lopsided about its
 centre; a symmetric bunch around the middle is fine; ports on a diamond's slanted faces aren't on a
-side), **off-axis-port** (with a declared `direction`, a forward edge arrives sideways, as into a
-child's side in a downward tree, or leaves against the direction), **jog** (a tiny step under 12px inside a
+side; `off-axis-port` counts those), **off-axis-port** (with a declared `direction`, a forward edge arrives sideways, as into a
+child's side in a downward tree, or leaves against the direction; on a diamond, any line that meets it off its four vertices, or
+leaves or enters a vertex sideways), **jog** (a tiny step under 12px inside a
 route). The target is a skilled draftsman's look, not bundling: common gaps, bends taken at the
 same place, symmetric fans.
 
@@ -185,9 +202,16 @@ Text: **mid-word-wrap** (a node or group title wraps inside a word, as `annotati
 rather than at a space or where an identifier's parts meet, or strands one or two characters
 after a break, as `installed / ?`; a short word wrapped at a space is not counted).
 
-Space: **empty-band** (a row or column gap over 120px with nothing in it), **long-edge** (a
-forward edge over 400px and four times the median length). Also aspect ratio, density (object
-area / drawing area), and the share of objects aligned with another.
+Space: **empty-band** (a row or column gap over 120px with nothing in it); **empty-area** (the
+largest empty rectangle among the boxes and edge labels, at least 160px on each side, covers over
+15% of the drawing and has room for 11 or more of its average boxes: a quarter left empty. A group
+frame with nothing inside counts as empty; the box count keeps a small flow's natural corners
+out); **wide-aspect** (the drawing is wider or taller than 5:1); **long-edge** (a line over 400px
+that runs more than twice the gap between its two boxes, a detour, or a forward line longer than
+0.6 of the drawing's diagonal; a return or a fold's wrap counts only when longer than the
+diagonal). Also aspect ratio, density (object area / drawing area), and the share of objects
+aligned with another. `metrics.json` records the hole (`emptyArea`) and each long line's ratios
+(`edgeStretch`).
 
 Color: **low-contrast** (label text under 4.5:1 on its fill, or connections under 3:1 on the
 canvas), number of distinct fills, minimum text contrast, theme.
@@ -198,8 +222,9 @@ as a whole kept its shape); **order flips** (pairs whose left/right or above/bel
 swapped).
 
 **Defect index (DI)** = weighted defect count per 10 edges: overlap 10; clipped, edge-through-node
-8; label on node, label overlap 6; expectation failed 4; hook, shared segment, label on edge,
-detached, on title 3; edge-through-group, edge-through-title-band, empty band, low contrast, edges too close 2; crossing, edge hugs node (per line and box), many
+8; label on node, label overlap, label through text 6; expectation failed 4; hook, shared segment, label on edge,
+detached, on title, empty area 3; edge-through-group, edge-through-title-band, empty band, low contrast, edges too close, labels too
+close, wide aspect 2; crossing, edge hugs node (per line and box), many
 bends, long edge, group border (label or edge), edge in slot, uneven channel, ragged bends, uneven ports, off-axis port, jog, mid-word wrap 1;
 uneven padding, padding varies, tight group gap 2; sparse group, group staircase (per link), uneven group gap 1;
 back edge 0.5. Lower is better. It ranks and tracks; the ledger explains.

@@ -1,7 +1,8 @@
 diagram "Srcly: adding a metric end to end" version=1
 
 # expect reads-x analyzer models catalog client
-# expect still *
+# expect still-shape *
+# expect keeps-order
 
 theme fieldnotes
 

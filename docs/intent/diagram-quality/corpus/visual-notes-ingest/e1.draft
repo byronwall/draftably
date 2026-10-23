@@ -1,7 +1,8 @@
 diagram "Visual Notes: Apple Notes ingest" version=1
 
 # expect reads-x jxa html markdown post persist
-# expect still *
+# expect still-shape *
+# expect keeps-order
 
 theme signal
 
