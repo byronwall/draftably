@@ -1,0 +1,52 @@
+diagram "HN Offline: build and run" version=1
+
+# expect keeps-order
+# expect near health serve 120
+
+theme midnight
+
+group source "Repository" color=slate
+node pkg "package.json + lock" in=source
+node code "src/ + public/" in=source
+node dockerfile "Dockerfile" in=source
+
+group build "Builder stage" color=blue
+node b_install "pnpm install" in=build
+node b_build "pnpm build" in=build
+node output ".output/" in=build
+
+group runtime "Runner stage" color=mint
+node r_install "Prod deps only" in=runtime
+node copy "Copy .output + public" in=runtime
+node serve "Node server :3000" in=runtime
+
+group host "Coolify host" color=violet
+node container "hn-client container" in=host
+node volume "hnclient-db volume" in=host color=amber
+
+edge d1 pkg -> b_install
+edge d2 code -> b_build
+edge d3 b_install -> b_build
+edge d4 b_build -> output
+edge d5 output -> copy
+edge d6 pkg -> r_install
+edge d7 r_install -> copy
+edge d8 copy -> serve
+edge d9 serve -> container "image"
+edge d10 container -> volume "db.json"
+edge d11 dockerfile -> b_install "defines" kind=async
+
+node health "curl health check" in=runtime
+edge d12 serve -> health
+edge d13 health -> container "restart on fail" kind=async
+
+layout root flow direction=right gap=56
+layout build engine=grid
+layout runtime engine=grid
+layout source engine=grid
+
+# Layout refinements
+near host runtime side=below gap=133 offset=-194
+stay source x=0 y=0
+stay build x=644 y=0
+stay runtime x=1340 y=0

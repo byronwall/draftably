@@ -1,0 +1,40 @@
+diagram "Draftably: one edit in the viewer" version=1
+
+# expect above browser server
+# expect near file write 120
+
+theme mulberry
+theme-color brand shade=100 fill="#F3ECF7" stroke="#B9A2C9" ink="#3B2449"
+theme-color brand shade=700 fill="#5B3A73" stroke="#43285A" ink="#FFFFFF"
+
+group browser "Browser" color=brand shade=100
+node canvas "Canvas edit" in=browser color=brand shade=700
+node commit "commit()" in=browser
+node session "File session client" in=browser
+node project "Project revision" in=browser
+
+group server "Node server" color=slate
+node translate "Translate to source" in=server
+node save "Save handler" in=server
+node revcheck "Revision current?" in=server shape=diamond
+node write "Atomic write" in=server
+node watch "Folder watcher" in=server
+node sse "SSE stream" in=server
+
+node file "diagram.draft" color=amber shape=pill
+
+edge e1 canvas -> commit
+edge e2 commit -> session
+edge e3 session -> translate "edit"
+edge e4 translate -> save "new source"
+edge e5 save -> revcheck
+edge e6 revcheck -> write "yes"
+edge e7 revcheck -> session "409 conflict" kind=async
+edge e8 write -> file
+edge e9 file -> watch "change" kind=async
+edge e10 watch -> sse
+edge e11 sse -> session "revision" kind=async
+edge e12 session -> project "recompile"
+edge e13 project -> canvas "redraw"
+
+layout root engine=layered direction=down

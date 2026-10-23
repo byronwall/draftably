@@ -1,0 +1,36 @@
+diagram "PGM: agent context through the CLI" version=1
+
+# expect still *
+
+theme mulberry
+
+node agent "Coding agent"
+node cli "pgm CLI"
+node contract "api-contract"
+node server "SolidStart server"
+node registry "projects registry"
+node project_json "project.json"
+node nodes_md "nodes/*.md"
+node history "history/*.json"
+node images "images/<id>/"
+node viewer "pgm viewer"
+node canvas "Spatial canvas"
+
+edge p1 agent -> cli "query / edit"
+edge p2 cli -> contract "typed calls"
+edge p3 contract -> server
+edge p4 server -> registry "list projects"
+edge p5 server -> project_json "schema + types"
+edge p6 server -> nodes_md "one file per node"
+edge p7 server -> history "append"
+edge p8 server -> images "attachments"
+edge p9 cli -> viewer "open"
+edge p10 viewer -> canvas
+edge p11 canvas -> server "edits"
+
+node landing "Landing page"
+node zip "project.zip" shape=pill
+edge p12 landing -> zip "export"
+edge p13 zip -> server "import"
+
+layout root engine=force

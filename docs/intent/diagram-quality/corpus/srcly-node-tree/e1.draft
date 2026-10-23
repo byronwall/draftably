@@ -1,0 +1,36 @@
+diagram "Srcly: the scan result tree" version=1
+
+# expect order-y root_node src_folder css_file rule
+# expect still root_node
+
+node root_node "Repository root" color=teal shade=900
+node src_folder "src/" color=teal shade=700
+node tests_folder "tests/" color=teal shade=700
+node viz_folder "viz/" color=teal shade=600
+node ts_file "Treemap.tsx" color=teal shade=500
+node py_file "analysis.py" color=teal shade=500
+node md_file "README.md" color=teal shade=500
+node component "Treemap component" color=teal shade=300
+node hook "useTreemapTooltip" color=teal shade=300
+node func "scan_codebase()" color=teal shade=300
+node body "(body)" color=teal shade=100
+node nested "inner closure" color=teal shade=100
+
+edge t1 root_node -> src_folder
+edge t2 root_node -> tests_folder
+edge t3 src_folder -> viz_folder
+edge t4 viz_folder -> ts_file
+edge t5 src_folder -> py_file
+edge t6 root_node -> md_file
+edge t7 ts_file -> component
+edge t8 ts_file -> hook
+edge t9 py_file -> func
+edge t10 func -> body
+edge t11 func -> nested
+
+node css_file "app.css" color=teal shade=500
+node rule ".treemap rule" color=teal shade=300
+edge t12 src_folder -> css_file
+edge t13 css_file -> rule
+
+layout root engine=tree root=root_node direction=down

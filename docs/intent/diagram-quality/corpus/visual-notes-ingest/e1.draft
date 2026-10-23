@@ -1,0 +1,33 @@
+diagram "Visual Notes: Apple Notes ingest" version=1
+
+# expect reads-x jxa html markdown post persist
+# expect still *
+
+theme signal
+
+node jxa "export-apple-notes.jxa" shape=pill
+node filter "Modified since?" shape=diamond
+node html "Per-note HTML"
+node images "Inline images"
+node markdown "Convert to Markdown" color=primary
+node post "POST /api/docs" color=primary
+node dedupe "Same source id?" shape=diamond
+node update "Update note"
+node create "Create note"
+node persist "Doc in Postgres" color=primary
+node embed "Embedding job"
+
+edge i1 jxa -> filter "all notes"
+edge i2 filter -> html "changed"
+edge i3 html -> images
+edge i4 html -> markdown "note body"
+edge i5 images -> markdown "data URLs"
+edge i6 markdown -> post "markdown + source id"
+edge i7 post -> dedupe
+edge i8 dedupe -> update "yes"
+edge i9 dedupe -> create "no"
+edge i10 update -> persist
+edge i11 create -> persist
+edge i12 persist -> embed "sections" kind=async
+
+layout root engine=layered direction=right
