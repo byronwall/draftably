@@ -5,6 +5,7 @@ import { checkSource, contentOrigin, rankLayers } from '../src/dsl/compile';
 import { canonicalGeometry, projectScene } from '../src/dsl/project';
 import { DslError, formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
+import { edgeLabelSize } from '../src/model/labels';
 
 const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 
@@ -168,6 +169,114 @@ describe('flow folding', () => {
     const scene = checkSource(chain(12, 'layout root flow direction=down'));
     expect(1 / aspect(scene)).toBeLessThanOrEqual(3);
     expect(new Set(scene.objects.map(o => o.x)).size).toBeGreaterThan(1);
+  });
+
+  // A CI run: two decisions on the main line, a proofs job beside it, and a shared failure.
+  const checks = `
+node pr "Pull request" shape=pill
+node install "pnpm install"
+node changeset "Changeset present?" shape=diamond
+node skill "Skill updated?" shape=diamond
+node release "release:check"
+node fast "check:fast"
+node engines "test:engines"
+node cli "cli:build + pack-check"
+node build "pnpm build"
+node file "prove:file"
+node proof "prove:layout"
+node upload "Upload screenshots"
+node fail "Check fails"
+edge c1 pr -> install
+edge c2 install -> changeset
+edge c3 changeset -> skill "yes"
+edge c4 skill -> release "yes"
+edge c5 release -> fast
+edge c6 fast -> engines
+edge c7 engines -> cli
+edge c8 install -> build "proofs job"
+edge c9 build -> file
+edge c10 file -> proof
+edge c11 proof -> upload "on failure"
+edge c12 changeset -> fail "no"
+edge c13 skill -> fail "no"
+layout root flow direction=right`;
+  // Bands are separated by a gap wider than any gap inside one.
+  const bandOf = (scene: ReturnType<typeof checkSource>) => {
+    const band = new Map<string, number>();
+    let k = 0,
+      bottom = -Infinity;
+    for (const o of [...scene.objects].sort((a, b) => a.y - b.y)) {
+      if (bottom > -Infinity && o.y > bottom + 60) k++;
+      band.set(o.id, k);
+      bottom = Math.max(bottom, o.y + o.h);
+    }
+    return band;
+  };
+
+  it('keeps each decision in the same band as its branches', () => {
+    const scene = checkSource(checks),
+      band = bandOf(scene);
+    expect(new Set(band.values()).size).toBe(2);
+    for (const e of scene.edges)
+      if (['changeset', 'skill'].includes(e.source))
+        expect(band.get(e.target), e.id).toBe(band.get(e.source));
+  });
+
+  it('returns wrap edges along lanes that share the gap between bands', () => {
+    const scene = checkSource(checks),
+      band = bandOf(scene);
+    const wraps = scene.edges.filter(e => band.get(e.target)! > band.get(e.source)!);
+    expect(wraps.length).toBeGreaterThan(1);
+    const top = Math.max(...scene.objects.filter(o => !band.get(o.id)).map(o => o.y + o.h)),
+      bottom = Math.min(...scene.objects.filter(o => band.get(o.id)).map(o => o.y));
+    const lanes = wraps.map(e => (e.lane && 'y' in e.lane ? e.lane.y : NaN)).sort((a, b) => a - b);
+    // Evenly spaced across the gap, one lane per edge, at least a pitch apart.
+    const pitch = (bottom - top) / (lanes.length + 1);
+    expect(pitch).toBeGreaterThanOrEqual(20);
+    lanes.forEach((y, i) => expect(Math.abs(y - (top + pitch * (i + 1)))).toBeLessThanOrEqual(1));
+    // The router draws each wrap along its own lane.
+    const doc = projectScene(scene);
+    expect(normalize(doc)).toEqual(doc);
+    const routes = new Map(canonicalGeometry(doc).routes.map(r => [r.id, r.points]));
+    for (const e of wraps) {
+      const y = (e.lane as { y: number }).y,
+        points = routes.get(e.id)!;
+      expect(
+        points.some((p, i) => i && p.y === y && points[i - 1].y === y),
+        e.id,
+      ).toBe(true);
+    }
+  });
+
+  it('widens the band gap to fit the labels on its lanes', () => {
+    // Three side-by-side chains, so three wraps share each gap.
+    const chains = (label: string) =>
+      ['a', 'b', 'c']
+        .flatMap(c =>
+          Array.from({ length: 12 }, (_, i) => [
+            `node ${c}${i} "Step ${i}"`,
+            ...(i ? [`edge ${c}e${i} ${c}${i - 1} -> ${c}${i}${label}`] : []),
+          ]),
+        )
+        .flat()
+        .join('\n') + '\nlayout root flow direction=right';
+    const gap = (scene: ReturnType<typeof checkSource>) => {
+      const band = bandOf(scene),
+        top = Math.max(...scene.objects.filter(o => !band.get(o.id)).map(o => o.y + o.h));
+      return Math.min(...scene.objects.filter(o => band.get(o.id) === 1).map(o => o.y)) - top;
+    };
+    const plain = checkSource(chains('')),
+      labelled = checkSource(chains(' "a long wrap label"'));
+    expect(gap(labelled)).toBeGreaterThan(gap(plain));
+    const lanes = labelled.edges
+      .flatMap(e => (e.lane && 'y' in e.lane ? [e.lane.y] : []))
+      .sort((a, b) => a - b)
+      .slice(0, 3);
+    expect(lanes).toHaveLength(3);
+    // A label on one lane leaves a lane pitch clear of its neighbours.
+    const { h } = edgeLabelSize('a long wrap label', labelled.look);
+    for (let i = 1; i < lanes.length; i++)
+      expect(lanes[i] - lanes[i - 1]).toBeGreaterThanOrEqual(20 + h / 2);
   });
 
   it('keeps a long chain on one line with fold=never', () => {
