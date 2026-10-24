@@ -32,7 +32,9 @@ import {
   UnstorableLayout,
   writeArrangement,
 } from '../dsl/layout-edits';
-import { normalize } from '../model/document';
+import type { RoutingResult } from '../engines/routing-engine.js';
+import { runShared } from '../lib/engine-tasks';
+import { normalize, routingFingerprint } from '../model/document';
 import type { Diagram, LayoutSettings, RoutingSettings } from '../model/types';
 import { clone } from '../model/geometry';
 import {
@@ -144,17 +146,48 @@ const viewState = () => {
 
 let showing = 0;
 
+/** How a redrawn file reaches the scene's routes; `scene.ts` registers it (it imports this module). */
+let routeSink: {
+  adopt: (routes: { fingerprint: string; result: RoutingResult }) => void;
+  quick: (on: boolean) => void;
+} = { adopt: () => {}, quick: () => {} };
+export const setRouteSink = (sink: typeof routeSink) => (routeSink = sink);
+
+interface Compiled {
+  scene: Scene;
+  /** Routes drawn off the main thread, for the document `fingerprint` describes. */
+  routes?: { fingerprint: string; result: RoutingResult };
+}
+
 /** Recently compiled sources. A preview and the commit that follows compile the same source. */
-const compiled = new Map<string, Promise<Scene>>();
-function compileCached(source: string): Promise<Scene> {
+const compiled = new Map<string, Promise<Compiled>>();
+function compileCached(source: string): Promise<Compiled> {
   let scene = compiled.get(source);
   if (!scene) {
-    scene = compile(source);
+    scene = compileOffThread(source);
     compiled.set(source, scene);
     scene.catch(() => compiled.delete(source));
     while (compiled.size > 16) compiled.delete(compiled.keys().next().value!);
   }
   return scene;
+}
+
+/**
+ * Layout and routing take hundreds of milliseconds on a mid-sized file, so they run in the
+ * engine worker while the drawing stays responsive. A source the worker refuses is compiled here
+ * again, which reports the error with its line.
+ */
+async function compileOffThread(source: string): Promise<Compiled> {
+  try {
+    const { scene, fingerprint, routing } = await runShared({
+      kind: 'scene',
+      source,
+      view: viewState(),
+    });
+    return { scene, routes: { fingerprint, result: routing } };
+  } catch {
+    return { scene: await compile(source) };
+  }
 }
 
 /**
@@ -168,12 +201,13 @@ export async function showSource(
 ): Promise<Scene | null> {
   const ticket = ++showing;
   state.setCompiling(true);
-  let scene: Scene;
+  let scene: Scene, routes: Compiled['routes'];
   try {
-    scene = await compileCached(source);
+    ({ scene, routes } = await compileCached(source));
   } catch (error) {
     if (ticket !== showing) return null;
     state.setCompiling(false);
+    routeSink.quick(false);
     if (!(error instanceof DslError)) throw error;
     batch(() => {
       state.setSourceError({ message: error.message, line: error.line });
@@ -185,6 +219,10 @@ export async function showSource(
   batch(() => {
     mapSourceIds(mapId);
     restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
+    // The worker's routes stand only if it projected the same document; otherwise route here.
+    if (routes?.fingerprint === routingFingerprint(unwrap(doc))) routeSink.adopt(routes);
+    // A drag in a file keeps quick routes until its saved version is drawn.
+    routeSink.quick(false);
     setSelection(typeof selection === 'function' ? selection() : selection);
     state.setScene(scene);
     state.setSourceError(null);
@@ -449,7 +487,7 @@ export function sourceWithRouting(routing: RoutingSettings) {
 
 /** Compile a source variant into an editor document, keeping the current view state. */
 export async function projectSource(source: string): Promise<Diagram> {
-  return projectScene(await compileCached(source), viewState());
+  return projectScene((await compileCached(source)).scene, viewState());
 }
 
 export { UnstorableLayout };

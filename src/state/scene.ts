@@ -10,7 +10,7 @@ import { frameRect, makeGeometry, styleOf, visibleGraph, type VisibleGraph } fro
 import { computeRoutes, drawRoutes, routeInput, type DrawnRoute } from '../model/routes';
 import type { NodeGeometry, NodeLayout, Rect } from '../model/types';
 import { doc } from './document';
-import { fileMode } from './file-session';
+import { fileMode, setRouteSink } from './file-session';
 
 const sameIds = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && a.every((id, i) => id === b[i]);
@@ -136,6 +136,8 @@ export const {
   resetRoutes,
   routeInputFor,
 } = state;
+
+setRouteSink({ adopt: setAdoptedRoutes, quick: setQuickRouting });
 
 export const routes = () => routing().routes;
 export const routingReport = () => routing().result.report;

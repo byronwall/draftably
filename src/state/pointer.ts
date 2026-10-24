@@ -32,6 +32,7 @@ import {
   clearSelection,
   commit,
   doc,
+  editsGoToFile,
   isSelected,
   onBeforeEdit,
   persist,
@@ -145,11 +146,12 @@ function begin(kind: DragKind, e: PointerEvent, canvas: Element, extra: Partial<
   }
 }
 
-function end() {
+/** `keepQuick` leaves quick routes up for a file edit, which ends them once it is redrawn. */
+function end(keepQuick = false) {
   gesture = null;
   batch(() => {
     setDrag(null);
-    setQuickRouting(false);
+    if (!keepQuick) setQuickRouting(false);
   });
 }
 
@@ -578,7 +580,7 @@ export function onPointerUp(e: PointerEvent | null) {
   if (brushPointerUp(e ?? undefined)) return;
   const g = gesture;
   if (!g) return;
-  end();
+  end(g.moved && (g.kind === 'objects' || g.kind === 'resize') && editsGoToFile());
   if (g.kind === 'connect') return finishConnect(g, e);
   if (g.kind === 'zoom') return persist();
   if (g.kind === 'pan') {
