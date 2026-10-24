@@ -7,6 +7,9 @@ import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles } from './parts';
 
+/** A container's border is quieter than a connection: thinner and partly transparent. */
+export const GROUP_BORDER = { width: 1, opacity: 0.65 };
+
 export interface GroupViewProps {
   doc: Diagram;
   id: string;
@@ -61,7 +64,8 @@ export function GroupView(props: GroupViewProps) {
         rx={Math.min(10, look().radius + 4)}
         fill={color().fill}
         stroke={color().stroke}
-        stroke-width={1.2}
+        stroke-width={GROUP_BORDER.width}
+        stroke-opacity={GROUP_BORDER.opacity}
       />
       <rect
         class="group-header"

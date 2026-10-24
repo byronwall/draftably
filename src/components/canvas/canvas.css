@@ -151,12 +151,14 @@
 }
 
 .stage[data-tool='select']:not(.is-dragging) .group:not(.selected):hover .group-bg {
+  stroke-opacity: 1;
   stroke: color-mix(in srgb, var(--accent) 85%, transparent);
   stroke-width: 2;
 }
 
 .group.selected .group-bg,
 .group:focus-visible .group-bg {
+  stroke-opacity: 1;
   stroke: var(--accent);
   stroke-width: 1.8;
 }
@@ -186,6 +188,10 @@
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.edge-halo {
+  pointer-events: none;
 }
 
 .edge-hit {

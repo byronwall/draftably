@@ -54,7 +54,7 @@ export function renderSvg(doc: Diagram): string {
       c = drawnSwatch(doc, look, g.id, 'group'),
       band = look.groupHeader / 2 - 7;
     out.push(
-      `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.2"/>`,
+      `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1" stroke-opacity="0.65"/>`,
       `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
       `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}">${esc(truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle))}</text>`,
     );
@@ -62,6 +62,7 @@ export function renderSvg(doc: Diagram): string {
   for (const route of routes) {
     const edge = doc.graph.edges.find(e => e.id === route.id)!;
     out.push(
+      `<path d="${route.path}" fill="none" stroke="${look.canvas}" stroke-width="8" stroke-linejoin="round"/>`,
       `<path d="${route.path}" fill="none" stroke="${look.connection}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"${edge.dashed ? ' stroke-dasharray="5 5"' : ''} marker-end="url(#arrow)"/>`,
     );
     const l = route.label;

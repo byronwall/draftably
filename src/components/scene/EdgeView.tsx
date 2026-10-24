@@ -4,6 +4,9 @@ import type { DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
 import type { Diagram } from '../../model/types';
 
+/** Width of the halo under a connection, in drawing units. */
+export const EDGE_HALO = 8;
+
 export interface EdgeViewProps {
   doc: Diagram;
   route: DrawnRoute;
@@ -71,6 +74,16 @@ export function EdgeView(props: EdgeViewProps) {
       <Show when={props.interactive}>
         <path class="edge-hit" d={props.route.path} />
       </Show>
+      {/* A canvas-colored halo breaks container borders (and earlier lines) where this line
+          crosses them, so the connection reads as the stronger mark. */}
+      <path
+        class="edge-halo"
+        d={props.route.path}
+        stroke={look().canvas}
+        stroke-width={EDGE_HALO}
+        fill="none"
+        stroke-linejoin="round"
+      />
       <path
         class="edge-line"
         d={props.route.path}
