@@ -3,6 +3,7 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import { resolveAppearance } from '../model/appearance';
+import { legendMarkup, legendSize } from '../model/legend';
 import { drawnSwatch } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
@@ -37,8 +38,10 @@ export function renderSvg(doc: Diagram): string {
   const b = drawingBounds(doc, vg, rects, routes, 40),
     x0 = Math.floor(b.x),
     y0 = Math.floor(b.y),
-    w = Math.ceil(b.x + b.w) - x0,
-    h = Math.ceil(b.y + b.h) - y0;
+    key = legendSize(look, doc.appearance.legend),
+    w = Math.max(Math.ceil(b.x + b.w) - x0, key.w + 80),
+    drawnH = Math.ceil(b.y + b.h) - y0,
+    h = drawnH + key.h;
   const out = [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title>${esc(doc.title)}</title>`,
@@ -92,6 +95,8 @@ export function renderSvg(doc: Diagram): string {
         '</text>',
     );
   }
+  // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
+  out.push(legendMarkup(look, doc.appearance.legend, x0 + 40, y0 + drawnH - 12));
   out.push('</svg>\n');
   return out.join('\n');
 }

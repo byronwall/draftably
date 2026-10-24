@@ -11,6 +11,7 @@ import {
   THEME_IDS,
   type AppearanceOverrides,
   type DiagramAppearance,
+  type LegendEntry,
 } from './appearance';
 import { FONT_ROLES } from './fonts';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
@@ -391,6 +392,20 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
       throw Error(`${c.family} ${c.shade}: a new color needs fill, stroke and ink.`);
     out.colors.push(def);
   }
+  const legend: LegendEntry[] = [];
+  for (const e of Array.isArray(input.legend) ? input.legend : []) {
+    if (!e || typeof e.family !== 'string' || !/^[A-Za-z_][A-Za-z0-9_-]*$/.test(e.family))
+      throw Error('Legend entries need a color family.');
+    if (typeof e.label !== 'string') throw Error(`Legend ${e.family}: a label is required.`);
+    if (e.shade !== undefined && !isShade(e.shade))
+      throw Error(`Legend ${e.family}: unknown shade ${e.shade}.`);
+    legend.push({
+      family: e.family,
+      label: e.label,
+      ...(e.shade !== undefined ? { shade: e.shade } : {}),
+    });
+  }
+  if (legend.length) out.legend = legend;
   return out;
 }
 

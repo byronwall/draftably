@@ -417,6 +417,37 @@
   visibility: hidden;
 }
 
+.diagram-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 20;
+  display: grid;
+  gap: 4px;
+  max-width: min(320px, 40%);
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.diagram-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.3;
+}
+
+.diagram-legend-swatch {
+  flex: none;
+  width: 16px;
+  height: 12px;
+  border: 1px solid;
+  border-radius: 3px;
+}
+
 .zoom-controls {
   position: absolute;
   right: 16px;

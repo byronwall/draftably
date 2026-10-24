@@ -255,6 +255,8 @@ export interface Model {
   /** Source line of the `theme` statement, and of each `theme-color` by `family:shade`. */
   themeLine: number;
   colorLines: Map<string, number>;
+  /** Source line of each `legend` entry, in order. */
+  legendLines: number[];
 }
 
 /** Theme attributes in the file and the override each sets. */
@@ -352,6 +354,7 @@ export function parseModel(source: string | SourceDoc): Model {
     appearance: defaultAppearance(),
     themeLine: 0,
     colorLines: new Map(),
+    legendLines: [],
   };
   const objectIds = new Set<string>(),
     edgeIds = new Set<string>(),
@@ -570,6 +573,25 @@ export function parseModel(source: string | SourceDoc): Model {
         m.colorLines.set(`${family}:${shade}`, line);
         break;
       }
+      case 'legend': {
+        count(2);
+        allow(['shade']);
+        const family = args[0].value;
+        assert(
+          !args[0].quoted && FAMILY.test(family) && family !== 'auto',
+          `Expected legend family "meaning", with a built-in color (${BUILT_IN_FAMILIES.join(', ')}) or a theme-color name.`,
+        );
+        once(`legend:${family}:${attrs.get('shade')?.value ?? ''}`);
+        const shade = attrs.has('shade') ? shadeOf(attrs.get('shade')!) : undefined;
+        assert(text(args[1]).trim(), 'A legend entry needs its meaning in quotes.');
+        (m.appearance.legend ??= []).push({
+          family,
+          label: text(args[1]),
+          ...(shade !== undefined ? { shade } : {}),
+        });
+        m.legendLines.push(line);
+        break;
+      }
       case 'routing':
         count(0);
         allow(Object.keys(ROUTING_PARAMS));
@@ -679,6 +701,18 @@ function validateReferences(m: Model) {
     if (!defined.has(c.family)) defined.set(c.family, new Set());
     defined.get(c.family)!.add(c.shade);
   }
+  (m.appearance.legend ?? []).forEach((e, i) => {
+    if (isBuiltInFamily(e.family)) return;
+    const shades = defined.get(e.family),
+      shade = e.shade ?? NODE_SHADE;
+    assert(
+      shades?.has(shade),
+      shades
+        ? `${e.family} has no shade ${shade}; it defines ${[...shades].sort((a, b) => a - b).join(', ')}.`
+        : `Unknown color ${e.family}. Define it with theme-color ${e.family} shade=… fill= stroke= ink=.`,
+      m.legendLines[i],
+    );
+  });
   for (const o of m.objects) {
     if (o.color !== 'auto' && !isBuiltInFamily(o.color)) {
       const shades = defined.get(o.color),

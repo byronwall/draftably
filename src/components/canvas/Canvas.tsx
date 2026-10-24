@@ -23,6 +23,7 @@ import { GroupView } from '../scene/GroupView';
 import { NodeView } from '../scene/NodeView';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
+import { Legend } from './Legend';
 import { ZoomControls } from './ZoomControls';
 import { LayoutPreviewBar } from '../LayoutPreviewBar';
 import { Icon } from '../Icon';
@@ -203,6 +204,7 @@ export function Canvas() {
         </div>
       </Show>
       <InlineEditor />
+      <Legend />
       <ZoomControls />
       <TimelineDeck />
       <BrushDock />

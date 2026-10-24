@@ -116,7 +116,7 @@ function paletteNotes(m: Model): Diagnostic[] {
     notes.push({
       level: 'info',
       code: 'many-colors',
-      message: `${families.length} accent colors (${families.join(', ')}). Use two to four, each for one role, with slate or stone for the rest, and say what each one means.`,
+      message: `${families.length} accent colors (${families.join(', ')}). Use two to four, each for one role, with slate or stone for the rest, and say what each one means with legend lines.`,
       line: named.find(o => o.color === families[MANY_FAMILIES])?.line,
       ids: named.filter(o => families.includes(o.color)).map(o => o.id),
     });

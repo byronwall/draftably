@@ -3,6 +3,7 @@ import { batch } from 'solid-js';
 import { isLegacyDiagram } from '../model/document';
 import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
+import { legendMarkup, legendSize } from '../model/legend';
 import { findNode } from '../model/graph';
 import { fontFaceCss } from '../lib/font-data';
 import {
@@ -130,11 +131,13 @@ export function exportSvg(): string {
     setConnectFrom(null);
   });
   try {
-    const b = sceneBounds(),
+    const look = resolveAppearance(doc.appearance),
+      key = legendSize(look, doc.appearance.legend),
+      b = sceneBounds(),
       x = b.x - 28,
       y = b.y - 28,
-      w = b.w + 56,
-      h = b.h + 56;
+      w = Math.max(b.w + 56, key.w + 56),
+      h = b.h + 56 + key.h;
     const svg = createSvgElement('svg', {
       xmlns: 'http://www.w3.org/2000/svg',
       width: Math.ceil(w),
@@ -147,8 +150,7 @@ export function exportSvg(): string {
     const meta = createSvgElement('metadata', { id: 'diagram-studio-data' });
     meta.textContent = snapshot();
     // The drawing's own canvas and fonts, so the file renders the same without the app.
-    const look = resolveAppearance(doc.appearance),
-      defs = createSvgElement('defs'),
+    const defs = createSvgElement('defs'),
       style = createSvgElement('style');
     style.textContent = fontFaceCss(look);
     defs.append(style);
@@ -159,6 +161,17 @@ export function exportSvg(): string {
       createSvgElement('rect', { x, y, width: w, height: h, fill: look.canvas }),
     );
     svg.appendChild(materializeSvg(world));
+    // The key from the file's legend lines goes under the drawing, as in `inspect --svg`.
+    const markup = legendMarkup(look, doc.appearance.legend, x + 28, y + b.h + 44);
+    if (markup) {
+      const parsed = new DOMParser().parseFromString(
+        `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,
+        'image/svg+xml',
+      );
+      svg.append(
+        ...[...parsed.documentElement.childNodes].map(n => svg.ownerDocument.importNode(n, true)),
+      );
+    }
     return '<?xml version="1.0" encoding="UTF-8"?>\n' + serializeSvg(svg);
   } finally {
     batch(() => {
