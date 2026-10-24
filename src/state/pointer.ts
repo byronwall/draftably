@@ -138,7 +138,6 @@ function begin(kind: DragKind, e: PointerEvent, canvas: Element, extra: Partial<
     ...extra,
   };
   setDrag({ kind });
-  if (kind === 'objects' || kind === 'resize') setQuickRouting(true);
   try {
     canvas.setPointerCapture(e.pointerId);
   } catch {
@@ -453,7 +452,11 @@ export function onPointerMove(e: PointerEvent) {
   g.current = pos;
   const dx = pos.x - g.start.x,
     dy = pos.y - g.start.y;
-  if (Math.hypot(e.clientX - g.startClient.x, e.clientY - g.startClient.y) > 3) g.moved = true;
+  if (!g.moved && Math.hypot(e.clientX - g.startClient.x, e.clientY - g.startClient.y) > 3) {
+    g.moved = true;
+    // Quick routes only once something really moves: a click alone must not redraw every line.
+    if (g.kind === 'objects' || g.kind === 'resize') setQuickRouting(true);
+  }
 
   if (g.kind === 'zoom') {
     const k = clamp(
