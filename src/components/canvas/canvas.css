@@ -67,8 +67,13 @@
   pointer-events: none;
 }
 
-.node:hover .selection-ring {
-  opacity: 0.45;
+/* Anything a drag would move shows it on hover: shapes lift, containers and lines take the accent. */
+.stage[data-tool='select']:not(.is-dragging) .node:hover .selection-ring {
+  opacity: 0.6;
+}
+
+.stage[data-tool='select']:not(.is-dragging) .node:hover .node-shape {
+  filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--accent) 22%, transparent));
 }
 
 .node.selected .selection-ring,
@@ -145,6 +150,11 @@
   cursor: grab;
 }
 
+.stage[data-tool='select']:not(.is-dragging) .group:not(.selected):hover .group-bg {
+  stroke: color-mix(in srgb, var(--accent) 85%, transparent);
+  stroke-width: 2;
+}
+
 .group.selected .group-bg,
 .group:focus-visible .group-bg {
   stroke: var(--accent);
@@ -183,6 +193,11 @@
   stroke: transparent;
   stroke-width: 14;
   pointer-events: stroke;
+}
+
+.stage[data-tool='select']:not(.is-dragging) .edge:not(.selected):hover .edge-line {
+  stroke: color-mix(in srgb, var(--accent) 70%, transparent);
+  stroke-width: 2.2;
 }
 
 .edge.selected .edge-line,
