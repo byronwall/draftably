@@ -51,8 +51,8 @@ below is a checklist for finding defects, not a scoresheet.
 
 **Metric versions.** The defect index is only comparable when both rounds ran the same script.
 When the script changes, re-run the previous round's code with the new script before comparing:
-check out that round's commit in a temporary worktree and run the current script there, with
-`--no-shots` unless you also need its images.
+`pnpm audit:compare --base <that round's commit>` does this for the corpus, the held-out set and
+the examples (add `--shots` if you also need its images).
 
 ## Corpus rules
 

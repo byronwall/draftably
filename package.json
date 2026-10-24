@@ -32,6 +32,7 @@
     "prove:layout": "node scripts/prove-layout-tools.mjs",
     "prove:themes": "node scripts/prove-themes.mjs",
     "font-metrics": "node scripts/font-metrics.mjs",
+    "audit:compare": "node scripts/audit-compare.mjs",
     "shoot": "node scripts/shoot.mjs"
   },
   "dependencies": {
