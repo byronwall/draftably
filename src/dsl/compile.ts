@@ -1199,7 +1199,7 @@ function baseLayout(
     }
   } else {
     const ids = items.map(n => n.id);
-    const layers = pairs.length ? rankLayers(ids, pairs) : ids.map(id => [id]);
+    const layers = pairs.length ? byBarycenter(rankLayers(ids, pairs), pairs) : ids.map(id => [id]);
     const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
     const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
     // A gap between ranks grows to fit the labels on edges that cross it.
@@ -1223,6 +1223,39 @@ function baseLayout(
     }
   }
   return { positions: out, axis };
+}
+
+/**
+ * Order each rank across the run by where its connections point: the mean place of its members'
+ * neighbours in the rank before, as `layered` orders nodes. A group fed by another group then sits
+ * on that group's side instead of in declaration order between unrelated siblings (FEEL.md:
+ * siblings sit where their connections point). A member with no neighbour in the rank before
+ * keeps its place.
+ */
+function byBarycenter(layers: string[][], pairs: Array<[string, string]>): string[][] {
+  const out = [layers[0]];
+  for (let i = 1; i < layers.length; i++) {
+    const before = new Map(out[i - 1].map((id, k) => [id, k]));
+    const keyed = layers[i].map((id, k) => {
+      const at = pairs
+        .flatMap(([a, b]) => (a === id ? [b] : b === id ? [a] : []))
+        .filter(n => before.has(n))
+        .map(n => before.get(n)!);
+      return {
+        id,
+        key: at.length ? at.reduce((s, v) => s + v, 0) / at.length : null,
+        k,
+      };
+    });
+    // Members with a key take the free places in key order; the others stay put.
+    const free = keyed.filter(x => x.key !== null);
+    const sorted = [...free].sort((a, b) => a.key! - b.key! || a.k - b.k);
+    const slots = free.map(x => x.k);
+    const layer = [...layers[i]];
+    sorted.forEach((x, j) => (layer[slots[j]] = x.id));
+    out.push(layer);
+  }
+  return out;
 }
 
 class Union {
