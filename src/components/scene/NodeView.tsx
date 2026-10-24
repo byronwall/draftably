@@ -2,7 +2,8 @@ import { createMemo, For, Match, Show, Switch } from 'solid-js';
 import { findNode, styleOf } from '../../model/graph';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
-import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
@@ -30,7 +31,7 @@ export function NodeView(props: NodeViewProps) {
   const node = () => findNode(props.doc, props.id)!;
   const style = () => styleOf(props.doc, props.id);
   const look = () => resolveAppearance(props.doc.appearance);
-  const color = () => swatchFor(look(), style().color, style().shade, 'node');
+  const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   const ringRadius = () => {
     const { shape } = style(),

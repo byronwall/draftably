@@ -127,7 +127,15 @@ content area.
   later edits; `pin` and `nudge` do not adapt when content grows.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
-- Use color to mean something (one color per domain or tier), not for decoration.
+- Use color to mean something, not for decoration:
+  - Two to four accent families, each for one role (external systems, data stores, the failure
+    path), and `slate` or `stone` for everything else. More reads as noise.
+  - Say what each color means, in a note or the diagram's title.
+  - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
+    unless they encode opposites.
+  - Color the outer group and let members inherit (`color=auto`); nested groups of one family
+    are drawn in stepped shades. Never give a member its container's family at a pale shade.
+  - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.
 - When editing an existing file, keep its IDs and any `stay`/`near`/`pin` lines the user's viewer
   edits wrote; add new statements rather than rewriting the file.

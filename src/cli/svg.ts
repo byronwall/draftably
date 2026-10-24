@@ -2,7 +2,8 @@
  * A standalone SVG of a projected diagram for terminal and agent inspection. It draws with the
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
-import { resolveAppearance, swatchFor } from '../model/appearance';
+import { resolveAppearance } from '../model/appearance';
+import { drawnSwatch } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
 import { styleOf } from '../model/graph';
@@ -47,8 +48,7 @@ export function renderSvg(doc: Diagram): string {
   ];
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,
-      style = styleOf(doc, g.id),
-      c = swatchFor(look, style.color, style.shade, 'group'),
+      c = drawnSwatch(doc, look, g.id, 'group'),
       band = look.groupHeader / 2 - 7;
     out.push(
       `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.2"/>`,
@@ -71,7 +71,7 @@ export function renderSvg(doc: Diagram): string {
   for (const n of vg.nodes) {
     const r = rects.get(n.id)!,
       style = styleOf(doc, n.id),
-      c = swatchFor(look, style.color, style.shade, 'node'),
+      c = drawnSwatch(doc, look, n.id, 'node'),
       label = nodeLabel(doc, n.id, n.title, r),
       first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
       ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text;

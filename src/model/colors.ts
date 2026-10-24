@@ -1,0 +1,68 @@
+/**
+ * The colors an object is drawn in. A file names a family and maybe a shade; drawing adds one
+ * rule on top, so nesting stays readable without the author doing shade arithmetic:
+ *
+ * - A container inside a container of the same family steps one shade toward emphasis per level
+ *   (lighter frames underneath, smaller and stronger ones on top), instead of repeating the fill.
+ * - A shape whose shade is within two steps of its container's, in the same family, moves three
+ *   steps past the container, so a member never melts into its frame.
+ *
+ * The canvas, the CLI's SVG and exports all draw through `drawnSwatch`.
+ */
+import {
+  groupShadeFor,
+  NODE_SHADE,
+  PRESETS,
+  SHADES,
+  shadesOf,
+  swatchFor,
+  type ResolvedAppearance,
+  type Shade,
+  type Swatch,
+} from './appearance';
+import { findGroup, findObject, isGroup, styleOf } from './graph';
+import type { Diagram } from './types';
+
+/** Steps a nested container keeps from its parent, and a shape from its container. */
+const GROUP_STEP = 1,
+  NODE_STEP = 3;
+
+/** The shade an object is drawn at, or undefined for the theme's neutral surface. */
+export function drawnShade(doc: Diagram, look: ResolvedAppearance, id: string): Shade | undefined {
+  const style = styleOf(doc, id),
+    group = isGroup(doc, id),
+    family = style.color;
+  if (!family || family === 'auto') return style.shade;
+  const own = style.shade ?? (group ? groupShadeFor(look.theme) : NODE_SHADE);
+  const parentId = findObject(doc, id)?.parentId,
+    parent = parentId ? findGroup(doc, parentId) : undefined;
+  if (!parent || styleOf(doc, parent.id).color !== family) return own;
+  const outer = drawnShade(doc, look, parent.id);
+  if (outer === undefined) return own;
+  const need = group ? GROUP_STEP : NODE_STEP,
+    toward = PRESETS[look.theme]?.dark ? -1 : 1,
+    at = SHADES.indexOf(own),
+    from = SHADES.indexOf(outer);
+  // Far enough from the frame already, on the emphasis side or well past it on the other.
+  if ((at - from) * toward >= need || (from - at) * toward > 2) return own;
+  return nearestShade(look, family, SHADES[clampIndex(from + need * toward)]);
+}
+
+/** The swatch an object is drawn with. */
+export function drawnSwatch(
+  doc: Diagram,
+  look: ResolvedAppearance,
+  id: string,
+  kind: 'node' | 'group',
+): Swatch {
+  return swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), kind);
+}
+
+const clampIndex = (i: number) => Math.max(0, Math.min(SHADES.length - 1, i));
+
+/** A custom family may define only some shades; take the closest one it has. */
+function nearestShade(look: ResolvedAppearance, family: string, shade: Shade): Shade {
+  const have = shadesOf(look, family);
+  if (!have.length || have.includes(shade)) return shade;
+  return have.reduce((best, s) => (Math.abs(s - shade) < Math.abs(best - shade) ? s : best));
+}

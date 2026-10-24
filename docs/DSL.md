@@ -108,6 +108,13 @@ dark text and 400–950 are fills with white text, each held to WCAG contrast ta
 (100, or 900 in Midnight). Shade is chosen per object: `color=auto` inherits a group's family,
 never its shade. A node with neither color nor shade uses the theme's neutral surface.
 
+Drawing keeps an object apart from a container of its own family. A group inside a same-family
+group steps one shade toward emphasis per level (100, 200, 300 in light themes; 900, 800, 700 in
+Midnight), so nested frames read as layers rather than one fill. A node whose shade is within
+two steps of its container's moves three steps past it. `check` notes a file with more than four
+accent families (`many-colors`; `slate` and `stone` don't count) and a member that names its
+container's family (`color-matches-container`).
+
 `theme-color family shade=N fill= stroke= ink=` sets one shade (`shade` defaults to 500). For a
 built-in family any of the three may be given and the rest come from the theme. A new family,
 such as `brand`, defines each shade it uses with all three. Referencing a family or shade that is

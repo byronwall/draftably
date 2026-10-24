@@ -1,6 +1,7 @@
 import { createMemo, Show } from 'solid-js';
-import { descendants, findGroup, findNode, isCollapsed, styleOf } from '../../model/graph';
-import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
+import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
 import { truncateText } from '../../model/fonts';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
@@ -22,10 +23,7 @@ export interface GroupViewProps {
 export function GroupView(props: GroupViewProps) {
   const group = () => findGroup(props.doc, props.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
-  const color = () => {
-    const style = styleOf(props.doc, props.id);
-    return swatchFor(look(), style.color, style.shade, 'group');
-  };
+  const color = () => drawnSwatch(props.doc, look(), props.id, 'group');
   const collapsed = () => isCollapsed(props.doc, props.id);
   const shapeCount = createMemo(
     () => descendants(props.doc, props.id).filter(id => findNode(props.doc, id)).length,

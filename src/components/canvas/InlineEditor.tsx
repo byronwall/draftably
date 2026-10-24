@@ -1,6 +1,7 @@
 import { createEffect, createMemo, on, onMount, Show } from 'solid-js';
 import { clamp } from '../../model/geometry';
-import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
 import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
 import {
   finishInlineEdit,
@@ -44,8 +45,7 @@ function Editor(props: { id: string }) {
       world = { x: at.x - w / 2, y: at.y - h / 2, w, h };
     } else if (findGroup(doc, props.id)) {
       const r = objectRect(doc, geometry, props.id),
-        style = styleOf(doc, props.id),
-        swatch = swatchFor(look(), style.color, style.shade, 'group'),
+        swatch = drawnSwatch(doc, look(), props.id, 'group'),
         band = look().groupHeader / 2 - 7;
       type = look().groupTitle;
       fill = swatch.fill;
@@ -55,7 +55,7 @@ function Editor(props: { id: string }) {
     } else {
       const r = objectRect(doc, geometry, props.id),
         style = styleOf(doc, props.id),
-        swatch = swatchFor(look(), style.color, style.shade, 'node');
+        swatch = drawnSwatch(doc, look(), props.id, 'node');
       type = look().title;
       // Text shapes and images keep their title off the face; those edit on the canvas color.
       const onFace = style.shape !== 'text' && style.shape !== 'image';
