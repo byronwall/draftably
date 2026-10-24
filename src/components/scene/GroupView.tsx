@@ -15,6 +15,8 @@ export interface GroupViewProps {
   interactive?: boolean;
   zoom?: number;
   focused?: boolean;
+  /** Its title is being edited in place, so the drawn title hides. */
+  editing?: boolean;
 }
 
 export function GroupView(props: GroupViewProps) {
@@ -42,6 +44,7 @@ export function GroupView(props: GroupViewProps) {
         selected: props.selected,
         'drop-target': props.dropTarget,
         focused: props.focused,
+        editing: props.editing,
       }}
       data-kind="group"
       data-id={props.id}

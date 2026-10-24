@@ -19,6 +19,8 @@ export interface NodeViewProps {
   zoom?: number;
   /** Highlight used by comparisons for the visual anchor. */
   focused?: boolean;
+  /** Its title is being edited in place, so the drawn title hides. */
+  editing?: boolean;
   /** Comparison candidates: focusable so a keyboard user can choose the anchor. */
   focusable?: boolean;
   idPrefix?: string;
@@ -60,7 +62,7 @@ export function NodeView(props: NodeViewProps) {
   return (
     <g
       class="node"
-      classList={{ selected: props.selected, focused: props.focused }}
+      classList={{ selected: props.selected, focused: props.focused, editing: props.editing }}
       data-kind="node"
       data-id={props.id}
       transform={`translate(${props.rect.x},${props.rect.y})`}

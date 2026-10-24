@@ -379,19 +379,42 @@
   margin-top: var(--space-2);
 }
 
+/* Editing happens on the object: the box takes its face, font and colors (InlineEditor). */
 .inline-edit {
   position: absolute;
   z-index: 30;
-  min-height: 40px;
-  padding: 8px;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px var(--accent-soft);
-  font-size: 14px;
-  line-height: 1.5;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 5px var(--accent-soft);
+}
+
+.inline-edit textarea {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
   resize: none;
+  text-align: center;
+  caret-color: currentColor;
+}
+
+.inline-edit textarea::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* The object's own title hides while its editor sits on top of it. */
+.node.editing .node-title,
+.group.editing .group-title,
+.edge.editing .edge-label {
+  visibility: hidden;
 }
 
 .zoom-controls {

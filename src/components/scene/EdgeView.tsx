@@ -9,6 +9,8 @@ export interface EdgeViewProps {
   route: DrawnRoute;
   selected?: boolean;
   interactive?: boolean;
+  /** Its label is being edited in place, so the drawn label hides. */
+  editing?: boolean;
   /** Keeps marker ids unique when several scenes share a page. */
   idPrefix?: string;
 }
@@ -35,7 +37,7 @@ export function EdgeView(props: EdgeViewProps) {
   return (
     <g
       class="edge"
-      classList={{ selected: props.selected }}
+      classList={{ selected: props.selected, editing: props.editing }}
       data-kind="edge"
       data-id={props.route.id}
       tabindex={props.interactive ? 0 : undefined}
