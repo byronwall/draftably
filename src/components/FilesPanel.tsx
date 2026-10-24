@@ -5,6 +5,7 @@ import {
   createDiagramFile,
   fileNameFor,
   fileUrl,
+  go,
   newDiagramSource,
   startUrl,
   watchWorkspace,
@@ -43,7 +44,7 @@ export function FilesPanel() {
     list.querySelector('.file-row.current')?.scrollIntoView({ block: 'center' });
   });
 
-  const go = (path: string) => location.assign(fileUrl(path));
+  const open = (path: string) => void go(fileUrl(path));
   const move = (by: number) => {
     const count = files().length;
     if (!count) return;
@@ -57,7 +58,7 @@ export function FilesPanel() {
       move(e.key === 'ArrowDown' ? 1 : -1);
     } else if (e.key === 'Enter') {
       const file = files()[active()];
-      if (file && query().trim()) go(file.path);
+      if (file && query().trim()) open(file.path);
     } else if (e.key === 'Escape') {
       e.stopPropagation();
       if (query()) setQuery('');
@@ -190,7 +191,7 @@ function NewFileRow(props: { onDone: () => void }) {
     e.preventDefault();
     setError('');
     try {
-      location.assign(fileUrl(await createDiagramFile(path(), newDiagramSource(title()))));
+      await go(fileUrl(await createDiagramFile(path(), newDiagramSource(title()))));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }

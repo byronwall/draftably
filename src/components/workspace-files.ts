@@ -55,6 +55,13 @@ export const ago = (ms: number) => {
   if (minutes < 60) return `${minutes} min ago`;
   const hours = Math.round(minutes / 60);
   if (hours < 24) return `${hours} h ago`;
+  // Within a week the time of day tells same-day files apart, so a Recent list reads as sorted.
+  if (hours < 24 * 7)
+    return new Date(ms).toLocaleString(undefined, {
+      weekday: 'short',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
   return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 };
 

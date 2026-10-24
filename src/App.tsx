@@ -17,13 +17,13 @@ import { Toast } from './components/Toast';
 import { Toolbar } from './components/Toolbar';
 import { finishInlineEdit } from './state/actions';
 import { setFilePicker } from './state/commands';
-import { cancelGeneration } from './state/comparison';
+import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
 import { exampleEdited, exampleMode, fileMode } from './state/file-session';
 import { openFile } from './state/files';
-import { setStartOpen, startOpen } from './state/launch';
+import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
 import { cancelLayout } from './state/layout';
 import { resetModifiers } from './state/pointer';
@@ -42,6 +42,9 @@ function listen<E extends Event>(
   target.addEventListener(type, listener);
   return () => target.removeEventListener(type, listener);
 }
+
+// Switching files in place closes Compare, which belongs to the drawing it was opened on.
+onLeaveFile(closeComparison);
 
 export default function App() {
   let diagramInput!: HTMLInputElement;

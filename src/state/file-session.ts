@@ -512,6 +512,19 @@ export async function openFileSession(file: string): Promise<boolean> {
   return true;
 }
 
+/** Wait for a save in flight, so leaving the file never drops an edit. */
+export async function settleSave() {
+  while (saving) await new Promise(resolve => setTimeout(resolve, 20));
+}
+
+/** Leave the open file for the start page: stop following it on disk. */
+export function closeFileSession() {
+  stopListening();
+  setCommitHandler(null);
+  setHistoryHandler(null);
+  state.setInfo(null);
+}
+
 /** Open an example as a scratch copy. Nothing is read from or written to disk. */
 export function openExampleSession(id: string, title: string, source: string) {
   document.title = `Example: ${title} · Diagram Studio`;

@@ -9,7 +9,16 @@
 import { createRoot, createSignal } from 'solid-js';
 import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
-import { openExampleSession, openFileSession } from './file-session';
+import { clearSelection, prepareForEdit, setDoc } from './document';
+import { fitView } from './editor';
+import {
+  closeFileSession,
+  exampleMode,
+  fileSession,
+  openExampleSession,
+  openFileSession,
+  settleSave,
+} from './file-session';
 
 export type LaunchMode = 'static' | 'start' | 'file' | 'example';
 
@@ -17,7 +26,17 @@ const state = createRoot(() => {
   const [workspace, setWorkspace] = createSignal<WorkspaceInfo | null>(null);
   const [startOpen, setStartOpen] = createSignal(false);
   const [launchNotice, setLaunchNotice] = createSignal('');
-  return { workspace, setWorkspace, startOpen, setStartOpen, launchNotice, setLaunchNotice };
+  const [view, setView] = createSignal<LaunchMode>('static');
+  return {
+    workspace,
+    setWorkspace,
+    startOpen,
+    setStartOpen,
+    launchNotice,
+    setLaunchNotice,
+    view,
+    setView,
+  };
 });
 
 /** The served folder, or null on the static site. */
@@ -27,6 +46,8 @@ export const startOpen = state.startOpen;
 export const setStartOpen = state.setStartOpen;
 /** Why the requested file or example could not be opened. */
 export const launchNotice = state.launchNotice;
+/** What the page shows: the start page, or the editor on a file, an example or browser storage. */
+export const launchView = state.view;
 
 export const fileUrl = (path: string) => `${location.pathname}?file=${encodeURIComponent(path)}`;
 export const exampleUrl = (id: string) => `${location.pathname}?example=${encodeURIComponent(id)}`;
@@ -78,6 +99,12 @@ export const thumbnailUrl = (file: WorkspaceFile) =>
   `./api/workspace/thumbnail?file=${encodeURIComponent(file.path)}&v=${Math.round(file.modified)}`;
 
 export async function launch(): Promise<LaunchMode> {
+  const mode = await chooseLaunch();
+  state.setView(mode);
+  return mode;
+}
+
+async function chooseLaunch(): Promise<LaunchMode> {
   const params = new URLSearchParams(location.search);
   const info = await fetchWorkspace();
   state.setWorkspace(info);
@@ -120,3 +147,70 @@ export const fileNameFor = (title: string) =>
 /** Source for a new, nearly empty diagram. */
 export const newDiagramSource = (title: string) =>
   `diagram ${JSON.stringify(title || 'Untitled diagram')} version=1\n\nnode start "Start" shape=pill\n`;
+
+// --- Switching in place ----------------------------------------------------------------------
+
+const leaveHandlers: Array<() => void> = [];
+/** Register work to close before the page shows another file, such as an open Compare. */
+export const onLeaveFile = (handler: () => void) => void leaveHandlers.push(handler);
+
+/**
+ * Open a served file, or the start page, without reloading the page, so the current drawing
+ * stays on screen until the next one is ready. Anything else (an example, another site, an edited
+ * example that the browser should ask about) loads as a normal page.
+ */
+export async function go(url: string, { push = true } = {}) {
+  const next = new URL(url, location.href);
+  const file = next.searchParams.get('file');
+  const toStart = next.pathname === location.pathname && !next.search;
+  if (next.origin !== location.origin || !state.workspace() || exampleMode() || (!file && !toStart))
+    return location.assign(url);
+  prepareForEdit();
+  for (const handler of leaveHandlers) handler();
+  await settleSave();
+  if (file) {
+    const switching = fileSession()?.file !== file;
+    if (switching && !(await openFileSession(file))) return location.assign(url);
+    if (push) history.pushState(null, '', next.href);
+    state.setStartOpen(false);
+    if (switching) {
+      clearSelection();
+      setDoc('collapsed', []);
+      // The new drawing is projected in this same task, so it never paints at the old camera.
+      fitView();
+    }
+    state.setView('file');
+  } else {
+    closeFileSession();
+    if (push) history.pushState(null, '', next.href);
+    document.title = 'Diagram Studio';
+    state.setView('start');
+    void refreshWorkspace();
+  }
+}
+
+const isPlainClick = (e: MouseEvent) =>
+  e.button === 0 && !e.defaultPrevented && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+
+/**
+ * Route plain clicks on links to served files and the start page through `go`, and follow the
+ * browser's back and forward buttons. Returns a function that stops.
+ */
+export function navigateInPlace() {
+  const onClick = (e: MouseEvent) => {
+    const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+    if (!link || !isPlainClick(e) || link.target || link.hasAttribute('download')) return;
+    const next = new URL(link.href, location.href);
+    if (next.origin !== location.origin || next.pathname !== location.pathname) return;
+    if (next.search && !next.searchParams.get('file')) return;
+    e.preventDefault();
+    void go(next.href);
+  };
+  const onPopState = () => void go(location.href, { push: false });
+  document.addEventListener('click', onClick);
+  window.addEventListener('popstate', onPopState);
+  return () => {
+    document.removeEventListener('click', onClick);
+    window.removeEventListener('popstate', onPopState);
+  };
+}

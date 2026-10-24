@@ -9,6 +9,7 @@ import {
   exampleUrl,
   fileNameFor,
   fileUrl,
+  go,
   launchNotice,
   newDiagramSource,
   refreshWorkspace,
@@ -110,7 +111,7 @@ function NewDiagram() {
     setBusy(true);
     try {
       const created = await createDiagramFile(shownPath().trim(), newDiagramSource(title().trim()));
-      location.assign(fileUrl(created));
+      await go(fileUrl(created));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setBusy(false);
@@ -252,7 +253,7 @@ function FolderHome() {
           onInput={e => setQuery(e.currentTarget.value)}
           onKeyDown={e => {
             const first = files()[0];
-            if (e.key === 'Enter' && first) location.assign(fileUrl(first.path));
+            if (e.key === 'Enter' && first) void go(fileUrl(first.path));
             if (e.key === 'Escape') setQuery('');
           }}
         />
