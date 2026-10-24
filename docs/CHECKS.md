@@ -118,6 +118,18 @@ rules and the round loop are in
 - Run full rounds in the background and wait for them to finish; don't poll with sleep loops.
 - `--baseline tmp/audit/rN-1` adds before/after `compare-*.png` sheets for PR screenshots.
 
+To measure a fix, use `pnpm audit:compare` instead of hand-built baselines, corpus copies and
+diff scripts. It audits the corpus, the held-out diagrams and `examples/` against
+`origin/main` and against the working tree, in parallel. Both sides use this checkout's audit
+script and inputs, so only the engine differs. It then prints `compare.md`: mean defect index
+per set, the issue kinds whose counts changed, and the renders that moved most.
+
+- `--base <ref>`, `--sets corpus,heldout,examples`, `--only slug,slug`, and `--shots` for the
+  images and before/after `compare-*.png` sheets (slower). Output goes to `tmp/audit/compare/`
+  (`--out` to change it).
+- The base ref is checked out once into `tmp/audit-base/<sha>`, and its results are cached
+  there, so later runs only audit the working tree.
+
 ## Screenshots
 
 `pnpm shoot <target> tmp/out.png` captures a URL, a `.draft` file (drawn through
