@@ -51,7 +51,10 @@ installed Playwright Chromium) against a temporary copy of `examples/checkout.dr
 `pnpm draftably open`. It resizes a group, drags a sibling, pins an object, moves the camera, undoes and
 redoes, appends a connected node from outside, restarts the server, writes invalid source, and
 races an outside write against a viewer save. At each step it compares the browser's geometry
-with `pnpm draftably inspect --json`. Screenshots go to `tmp/proof/`.
+with `pnpm draftably inspect --json`. Screenshots go to `tmp/proof/`. It takes about 10 seconds.
+It launches full Chromium rather than the headless shell the other proofs use, so on a new
+machine run `pnpm exec playwright-core install chromium` once; without it the proof stops at
+once and prints that command.
 
 The file proof also switches between more than six diagrams with Chrome’s back/forward cache enabled, then restores a cached page after an external file change. This catches retained EventSource connections that can exhaust the browser’s HTTP/1 pool; Playwright disables that cache by default.
 

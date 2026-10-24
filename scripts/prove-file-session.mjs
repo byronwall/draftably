@@ -71,10 +71,17 @@ async function drag(page, from, to) {
 
 let server = await start();
 // Playwright disables this by default, hiding retained live streams during ordinary navigation.
-const browser = await chromium.launch({
-  channel: 'chromium',
-  ignoreDefaultArgs: ['--disable-back-forward-cache'],
-});
+// Full Chromium, not the headless shell that `pnpm shoot` and the layout proof use.
+const browser = await chromium
+  .launch({ channel: 'chromium', ignoreDefaultArgs: ['--disable-back-forward-cache'] })
+  .catch(async e => {
+    await stopViewer(server);
+    if (!/Executable doesn't exist/.test(e.message)) throw e;
+    console.error(
+      'The file proof needs full Chromium. Install it once with:\n\n  pnpm exec playwright-core install chromium\n',
+    );
+    process.exit(1);
+  });
 const page = await browser.newPage({
   viewport: { width: 1280, height: 800 },
   deviceScaleFactor: 2,
