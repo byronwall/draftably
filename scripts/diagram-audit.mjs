@@ -523,6 +523,23 @@ function measure(file) {
       });
       if (inner.length) note('edge-through-title-band', `${r.id} through ${g.id}'s title band`);
     }
+    // Arrives from below: the last run climbs into the target's bottom although the source does
+    // not sit below the target. Reads as backwards (viewer feedback 2026-10-23, R1).
+    {
+      const [a, b] = r.points.slice(-2),
+        src = byId.get(r.source),
+        dst = byId.get(r.target);
+      if (
+        a &&
+        b &&
+        src &&
+        dst &&
+        Math.abs(a.x - b.x) < EPS &&
+        a.y > b.y + EPS &&
+        src.y + src.h / 2 < dst.y + dst.h
+      )
+        note('arrives-below', `${r.id} into ${r.target}`);
+    }
     // Edge through a group that holds neither endpoint.
     for (const g of groups) {
       const holds = id => id === g.id || ancestors(id).includes(g.id);
@@ -1106,6 +1123,7 @@ function measure(file) {
       'label-on-group-border',
       'label-detached',
       'hook',
+      'arrives-below',
       'shared-segment',
       'edge-through-group',
       'edge-through-title-band',
@@ -1149,6 +1167,7 @@ function measure(file) {
     'label-on-group-border': 1,
     'label-detached': 3,
     hook: 3,
+    'arrives-below': 2,
     'shared-segment': 3,
     'edge-through-group': 2,
     'edge-through-title-band': 2,

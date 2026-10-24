@@ -61,6 +61,12 @@ Compile time over the corpus and held-out went 23.9 → 51.2ms per file. The def
 
 ## 1. Detours that leave the far side and come back under
 
+> **Progress (viewer feedback, 23 October):** a far side now also pays half the route's length
+> beyond the gap between the boxes, and arriving on a box's bottom costs 40 (right 12, leaving by
+> top or left 12). The new `arrives-below` metric went 10 → 3 in the corpus and hooks 7 → 2;
+> `many-bends` rose by 5 per set, the price of entering from the top instead of below. See
+> [viewer-feedback-2026-10-23](../viewer-feedback-2026-10-23/README.md).
+
 - **Cause**: `routing-detour`. **Severity**: S2 (17), S3 (4); 7 MISSED.
 - **Evidence**: long-edge 24 → 14 and hook 5 → 7. The loops `long-edge` still catches are fewer;
   what remains is shorter loops that enter the target from the side facing away from the source.

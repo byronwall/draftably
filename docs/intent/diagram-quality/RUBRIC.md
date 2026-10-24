@@ -162,7 +162,8 @@ crossings don't count: straight into or out of a top member, and, since round 5'
 line to or from any member that crosses the whole band straight across, clear of the title text,
 which the router allows when going round the group would be over 1.75× longer. A line running
 along the band, through the title, or to something outside the group still counts),
-**back edges** (against the reading direction; an edge that wraps onto the next row of a folded
+**arrives-below** (the last run climbs into the target's bottom although the source does not sit
+below it: reads as backwards; added after the 23 October viewer feedback), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
 flow reads forward and doesn't count).
 
 Clearance (can a reader tell which line is which?): **edge-hugs-node** (a line runs alongside a

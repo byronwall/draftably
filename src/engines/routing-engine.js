@@ -538,6 +538,11 @@ const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
 const HOOK_PENALTY = 80;
+// Side conventions without a declared direction, and the price of a far side's loop per unit.
+const ARRIVE_BELOW = 40,
+  ARRIVE_RIGHT = 12,
+  LEAVE_BACK = 12,
+  DETOUR_WEIGHT = 0.5;
 // Fan siblings this far apart or more read as separate lines (the audit's `edges-too-close` is < 10).
 const FAN_PITCH = 10;
 // A detour round a group's title band longer than this many times the crossing route.
@@ -830,6 +835,11 @@ function compute(input, rawOptions = {}) {
       if (facingFans && facing(side, from, to) && roomy(side, r, n)) return 0;
       return n * s.fanoutPenalty;
     }
+    // Route length beyond the gap between the two boxes, which no route can avoid.
+    const floor =
+      Math.max(0, Math.abs(ca.x - cb.x) - (a.w + b.w) / 2) +
+      Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2);
+    const excess = points => Math.max(0, pathLength(points) - floor);
     function score(points, c) {
       const v = vector[c.fs],
         w = vector[c.ts],
@@ -838,9 +848,24 @@ function compute(input, rawOptions = {}) {
       // draws a hook round the box; it is worth a detour only when the facing sides
       // are blocked.
       const far = facingFans ? FAR_PENALTY : 18;
-      const backwards =
-        (v.x * delta.x + v.y * delta.y < -0.01 ? far : 0) +
-        (w.x * -delta.x + w.y * -delta.y < -0.01 ? far : 0);
+      const awayOut = v.x * delta.x + v.y * delta.y < -0.01,
+        awayIn = w.x * -delta.x + w.y * -delta.y < -0.01;
+      // A far side also pays for the loop it draws: the length beyond the shortest way between
+      // the boxes, so a line into a box's back from round the far side of a group loses to a
+      // crossing (NEXT.md item 1).
+      // Only a side the router chose pays it; a side the file fixed is the author's call.
+      const detour =
+        facingFans && ((awayOut && from.length > 1) || (awayIn && to.length > 1))
+          ? DETOUR_WEIGHT * excess(points)
+          : 0;
+      const backwards = (awayOut ? far : 0) + (awayIn ? far : 0) + detour;
+      // Diagrams read left to right and top to bottom: lines arrive on a box's left or top and
+      // leave by its right or bottom. Arriving from below costs most; it reads as backwards.
+      const convention = facingFans
+        ? (c.ts === 'bottom' ? ARRIVE_BELOW : 0) +
+          (c.ts === 'right' ? ARRIVE_RIGHT : 0) +
+          (c.fs === 'top' || c.fs === 'left' ? LEAVE_BACK : 0)
+        : 0;
       const stability = old
         ? (c.fs !== old.fromSide ? s.portStability : 0) +
           (c.ts !== old.toSide ? s.portStability : 0)
@@ -878,6 +903,7 @@ function compute(input, rawOptions = {}) {
         cost(points, used, s, near) +
         (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
         backwards +
+        convention +
         hook +
         stability +
         fanout +
