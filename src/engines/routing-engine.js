@@ -542,7 +542,25 @@ const HOOK_PENALTY = 80;
 const ARRIVE_BELOW = 40,
   ARRIVE_RIGHT = 12,
   LEAVE_BACK = 12,
-  DETOUR_WEIGHT = 0.5;
+  DETOUR_WEIGHT = 0.5,
+  // Per unit of a line's run inside a container that holds only one of its ends.
+  LINGER_WEIGHT = 0.3;
+/** Length of a route's axis-aligned segments that lies inside rectangle `r`. */
+function insideLength(ps, r) {
+  let n = 0;
+  for (let i = 1; i < ps.length; i++) {
+    const p = ps[i - 1],
+      q = ps[i];
+    if (Math.abs(p.y - q.y) < EPS) {
+      if (p.y <= r.y || p.y >= r.y + r.h) continue;
+      n += Math.max(0, Math.min(Math.max(p.x, q.x), r.x + r.w) - Math.max(Math.min(p.x, q.x), r.x));
+    } else if (Math.abs(p.x - q.x) < EPS) {
+      if (p.x <= r.x || p.x >= r.x + r.w) continue;
+      n += Math.max(0, Math.min(Math.max(p.y, q.y), r.y + r.h) - Math.max(Math.min(p.y, q.y), r.y));
+    }
+  }
+  return n;
+}
 // Fan siblings this far apart or more read as separate lines (the audit's `edges-too-close` is < 10).
 const FAN_PITCH = 10;
 // A detour round a group's title band longer than this many times the crossing route.
@@ -840,6 +858,29 @@ function compute(input, rawOptions = {}) {
       Math.max(0, Math.abs(ca.x - cb.x) - (a.w + b.w) / 2) +
       Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2);
     const excess = points => Math.max(0, pathLength(points) - floor);
+    // Containers that hold one end but not the other: the line should leave (or enter) them by
+    // the short way and run outside, not along their inside to reach something beyond.
+    const passing = facingFans
+      ? [
+          ...ancestors(e.from)
+            .filter(g => !ancestors(e.to).includes(g))
+            .map(g => ({ g: groups.get(g), box: a })),
+          ...ancestors(e.to)
+            .filter(g => !ancestors(e.from).includes(g))
+            .map(g => ({ g: groups.get(g), box: b })),
+        ].filter(p => p.g && !p.g.collapsed)
+      : [];
+    // Run inside each such container beyond the shortest way between the box and its border.
+    const lingering = points =>
+      passing.reduce((sum, { g, box }) => {
+        const shortest = Math.min(
+          box.x - g.x,
+          g.x + g.w - (box.x + box.w),
+          box.y - g.y,
+          g.y + g.h - (box.y + box.h),
+        );
+        return sum + Math.max(0, insideLength(points, g) - Math.max(0, shortest));
+      }, 0);
     function score(points, c) {
       const v = vector[c.fs],
         w = vector[c.ts],
@@ -899,6 +940,7 @@ function compute(input, rawOptions = {}) {
           s.parallelPenalty;
       }
       return (
+        LINGER_WEIGHT * lingering(points) +
         packed +
         cost(points, used, s, near) +
         (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
