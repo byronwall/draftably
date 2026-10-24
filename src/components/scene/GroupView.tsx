@@ -32,8 +32,8 @@ export function GroupView(props: GroupViewProps) {
   const title = () =>
     truncateText(group().title, Math.max(40, props.rect.w - 33 - 64), look().groupTitle);
   const w = () => props.rect.w;
-  /** Middle of the title band at the top of the frame. */
-  const band = () => Math.min(look().groupHeader, collapsed() ? 32 : Infinity) / 2 - 7;
+  /** Middle of the title band at the top of the frame, the same open or collapsed. */
+  const band = () => look().groupHeader / 2 - 7;
 
   return (
     <g
@@ -103,8 +103,8 @@ export function GroupView(props: GroupViewProps) {
       </Show>
       <Show when={collapsed()}>
         <text
-          x={14}
-          y={43}
+          x={33}
+          y={band() * 2 + 9}
           font-family={look().annotation.family}
           font-size="10"
           fill={color().ink}

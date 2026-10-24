@@ -134,6 +134,7 @@ export const {
   routing,
   routesById,
   resetRoutes,
+  routeInputFor,
 } = state;
 
 export const routes = () => routing().routes;

@@ -13,14 +13,28 @@ import {
   type Shade,
   type ThemeId,
 } from '../model/appearance';
-import { normalize } from '../model/document';
+import type { RoutingResult } from '../engines/routing-engine.js';
+import { startEngineTask, type RunningTask } from '../lib/engine-tasks';
+import { normalize, routingFingerprint } from '../model/document';
 import * as edits from '../model/edits';
-import { findEdge, findGroup, findNode, isEdge, isGroup, selectionRoots } from '../model/graph';
+import {
+  descendants,
+  findEdge,
+  findGroup,
+  findNode,
+  frameRect,
+  isCollapsed,
+  isEdge,
+  isGroup,
+  selectionRoots,
+} from '../model/graph';
 import { loadSample } from '../model/samples';
-import type { Diagram, IntentPlacement, IntentRole, Point, Side } from '../model/types';
+import type { Diagram, IntentPlacement, IntentRole, Point, Rect, Side } from '../model/types';
 import {
   clearSelection,
   doc,
+  editsGoToFile,
+  mutate,
   isSelected,
   onBeforeEdit,
   onSourceIdMap,
@@ -33,10 +47,12 @@ import {
 } from './document';
 import {
   canvasCenter,
+  canvasElement,
   connectFrom,
   fitView,
   focusCanvas,
   inlineEditId,
+  reducedMotion,
   revealObject,
   setConnectFrom,
   setInlineEditId,
@@ -45,7 +61,15 @@ import {
   type Tool,
 } from './editor';
 import { discardPreview, setDocumentOpener } from './layout';
-import { resetRoutes, routesById, routingReport, setAdoptedRoutes } from './scene';
+import {
+  geometry,
+  resetRoutes,
+  routeInputFor,
+  routesById,
+  routingReport,
+  setAdoptedRoutes,
+  setQuickRouting,
+} from './scene';
 import { toast } from './toast';
 import { confirmAction } from './ui';
 
@@ -367,7 +391,73 @@ export function fitSelectedContainer() {
 }
 
 export function toggleCollapse(id = selectionRoots(doc, selection()).find(id => isGroup(doc, id))) {
-  if (id && isGroup(doc, id)) transact('Toggle container', d => edits.toggleCollapsed(d, id));
+  if (!id || !isGroup(doc, id)) return;
+  const before = frameRect(doc, geometry, id);
+  // A file never stores which containers are collapsed: there it is a view, like the camera,
+  // and needs no translation, recompile or save.
+  if (editsGoToFile()) {
+    // Full routing takes 20–25ms a line; draw quick routes now and adopt full ones when ready.
+    batch(() => {
+      setQuickRouting(true);
+      mutate(d => edits.toggleCollapsed(d, id));
+    });
+    refineRoutes();
+  } else transact('Toggle container', d => edits.toggleCollapsed(d, id));
+  animateToggle(id, before);
+}
+
+let refining: RunningTask<RoutingResult> | null = null;
+
+/** Route the drawing in the worker, as a file would be routed, then show those routes. */
+function refineRoutes() {
+  refining?.cancel();
+  const fingerprint = routingFingerprint(doc),
+    task = startEngineTask({
+      kind: 'route',
+      input: routeInputFor(),
+      options: { ...doc.settings.routing, previous: [] },
+    });
+  refining = task;
+  task.promise.then(
+    result => {
+      if (refining !== task) return;
+      refining = null;
+      batch(() => {
+        if (routingFingerprint(doc) === fingerprint) setAdoptedRoutes({ fingerprint, result });
+        setQuickRouting(false);
+      });
+    },
+    () => {
+      if (refining === task) setQuickRouting(false);
+    },
+  );
+}
+
+/** Grow or shrink the frame from its old size, and fade in what an expand reveals. */
+function animateToggle(id: string, before: Rect) {
+  const svg = canvasElement();
+  if (!svg || reducedMotion()) return;
+  const after = frameRect(doc, geometry, id),
+    expanded = !isCollapsed(doc, id),
+    inside = new Set(descendants(doc, id));
+  requestAnimationFrame(() => {
+    const timing = { duration: 200, easing: 'cubic-bezier(0.2, 0, 0, 1)' };
+    svg.querySelector(`g.group[data-id="${CSS.escape(id)}"] > .group-bg`)?.animate(
+      [
+        { width: `${before.w}px`, height: `${before.h}px` },
+        { width: `${after.w}px`, height: `${after.h}px` },
+      ],
+      timing,
+    );
+    if (!expanded) return;
+    for (const el of svg.querySelectorAll<SVGGElement>('g[data-kind][data-id]')) {
+      const edge = findEdge(doc, el.dataset.id!);
+      const revealed = edge
+        ? inside.has(edge.from) || inside.has(edge.to)
+        : inside.has(el.dataset.id!);
+      if (revealed) el.animate([{ opacity: 0 }, { opacity: 1 }], { ...timing, delay: 60 });
+    }
+  });
 }
 
 export function reverseSelectedEdge() {

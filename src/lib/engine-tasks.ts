@@ -6,7 +6,12 @@ import {
 } from '../engines/explorer-engine.js';
 import { LayoutLab, type LayoutOptions, type LayoutResult } from '../engines/layout-engine.js';
 import { SculptLab, type Timeline } from '../engines/sculpt-engine.js';
-import { RouteLab } from '../engines/routing-engine.js';
+import {
+  RouteLab,
+  type RouteInput,
+  type RoutingOptions,
+  type RoutingResult,
+} from '../engines/routing-engine.js';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import type { Diagram } from '../model/types';
@@ -16,18 +21,23 @@ export type EngineTask =
   | { kind: 'candidate'; baseline: Diagram; spec: CandidateSpec; config: ComparisonConfig }
   | { kind: 'timeline'; doc: Diagram; options: LayoutOptions }
   /** A diagram file variant, compiled exactly as the file would be. */
-  | { kind: 'source'; source: string; spec: CandidateSpec };
+  | { kind: 'source'; source: string; spec: CandidateSpec }
+  /** Full-quality routes for a drawing shown meanwhile with quick routes. */
+  | { kind: 'route'; input: RouteInput; options: RoutingOptions };
 
 export type EngineResult<T extends EngineTask> = T extends { kind: 'layout' }
   ? LayoutResult
   : T extends { kind: 'candidate' | 'source' }
     ? CandidateResult
-    : Timeline;
+    : T extends { kind: 'route' }
+      ? RoutingResult
+      : Timeline;
 
 export function runEngineTask(
   task: EngineTask,
-): Promise<LayoutResult | CandidateResult | Timeline> {
+): Promise<LayoutResult | CandidateResult | Timeline | RoutingResult> {
   if (task.kind === 'layout') return LayoutLab.compute(task.doc, task.options);
+  if (task.kind === 'route') return Promise.resolve(RouteLab.compute(task.input, task.options));
   if (task.kind === 'candidate')
     return ExplorerLab.candidate(task.baseline, task.spec, task.config);
   if (task.kind === 'source') return compileCandidate(task.source, task.spec);

@@ -9,6 +9,7 @@ import type {
   NodeStyle,
   Rect,
 } from './types';
+import { resolveAppearance } from './appearance';
 import { DEFAULT_STYLE } from './styles';
 
 export const findNode = (doc: Diagram, id: string | null | undefined): DiagramNode | undefined =>
@@ -119,12 +120,15 @@ export function makeGeometry(doc: Diagram, override?: Record<string, NodeLayout>
     override?.[id] ?? doc.layout.nodes[id] ?? { x: 0, y: 0, w: 176, h: 68 };
 }
 
-/** Container frame as drawn: collapsed containers shrink to a header. */
+/**
+ * Container frame as drawn: collapsed containers shrink to their title band plus a line for the
+ * shape count, so the title stays where it was in the open frame.
+ */
 export function frameRect(doc: Diagram, geometry: GeometryLookup, id: string): NodeLayout {
   const r = { ...geometry(id) };
   if (isCollapsed(doc, id)) {
     r.w = Math.min(r.w, 210);
-    r.h = COLLAPSED_HEIGHT;
+    r.h = Math.max(COLLAPSED_HEIGHT, resolveAppearance(doc.appearance).groupHeader + 10);
   }
   return r;
 }
