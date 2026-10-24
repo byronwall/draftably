@@ -73,6 +73,15 @@ export interface DiagramAppearance {
   theme: ThemeId;
   overrides: AppearanceOverrides;
   colors: ColorDefinition[];
+  /** What the colors mean, from `legend` statements, drawn as a key beside the diagram. */
+  legend?: LegendEntry[];
+}
+
+export interface LegendEntry {
+  family: string;
+  /** Shade of the swatch; nodes' default when omitted. */
+  shade?: Shade;
+  label: string;
 }
 
 export const defaultAppearance = (): DiagramAppearance => ({

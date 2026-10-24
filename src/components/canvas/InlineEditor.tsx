@@ -1,7 +1,8 @@
-import { createMemo, onMount, Show } from 'solid-js';
+import { createEffect, createMemo, on, onMount, Show } from 'solid-js';
 import { clamp } from '../../model/geometry';
-import { findEdge, findGroup, findNode, objectRect } from '../../model/graph';
-import { nodeLabel } from '../../model/labels';
+import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
+import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
 import {
   finishInlineEdit,
   inlineDraft,
@@ -20,35 +21,73 @@ export function InlineEditor() {
 
 function Editor(props: { id: string }) {
   let input!: HTMLTextAreaElement;
+  const look = () => resolveAppearance(doc.appearance);
 
-  /** Screen box centered on the label, in canvas pixels. */
-  const box = createMemo(() => {
-    const k = doc.camera.k;
-    let at,
-      w = 180,
-      h = 44;
+  /**
+   * The editor sits on the object itself: a shape's whole face, a container's title band, or a
+   * connection's label, in the object's own font, colors and line height. Below about 12px text
+   * it is drawn larger than the object, around the same center, so it stays legible.
+   */
+  const frame = createMemo(() => {
+    const k = doc.camera.k,
+      { width, height } = stageSize();
+    let world: { x: number; y: number; w: number; h: number },
+      type = look().annotation,
+      fill = look().canvas,
+      ink = look().text,
+      align: 'center' | 'left' = 'center',
+      radius = 4;
     if (findEdge(doc, props.id)) {
       const route = routesById().get(props.id),
-        points = route?.points ?? [{ x: 0, y: 0 }];
-      at = route?.label ?? points[Math.floor(points.length / 2)];
+        at = route?.label ?? route?.points[Math.floor(route.points.length / 2)] ?? { x: 0, y: 0 };
+      const w = Math.max(route?.label?.w ?? 0, 120),
+        h = route?.label?.h ?? type.lineHeight + 6;
+      world = { x: at.x - w / 2, y: at.y - h / 2, w, h };
+    } else if (findGroup(doc, props.id)) {
+      const r = objectRect(doc, geometry, props.id),
+        swatch = drawnSwatch(doc, look(), props.id, 'group'),
+        band = look().groupHeader / 2 - 7;
+      type = look().groupTitle;
+      fill = swatch.fill;
+      ink = swatch.ink;
+      align = 'left';
+      world = { x: r.x + 28, y: r.y + 3, w: Math.max(80, r.w - 28 - 34), h: band * 2 - 6 };
     } else {
       const r = objectRect(doc, geometry, props.id),
-        node = findNode(doc, props.id);
-      const l = node
-        ? nodeLabel(doc, props.id, node.title, r)
-        : { x: r.w / 2, y: 17, width: r.w - 70, height: 20 };
-      at = { x: r.x + l.x, y: r.y + l.y };
-      w = clamp(l.width * k + 22, 140, 420);
-      h = Math.max(42, l.height * k + 16);
+        style = styleOf(doc, props.id),
+        swatch = drawnSwatch(doc, look(), props.id, 'node');
+      type = look().title;
+      // Text shapes and images keep their title off the face; those edit on the canvas color.
+      const onFace = style.shape !== 'text' && style.shape !== 'image';
+      fill = onFace ? swatch.fill : look().canvas;
+      ink = onFace ? swatch.ink : look().text;
+      radius = Math.min(look().radius, r.h / 2);
+      world = r;
     }
-    const { width, height } = stageSize();
+    const scale = Math.max(k, 12 / type.size),
+      w = world.w * scale,
+      h = world.h * scale,
+      cx = (world.x + world.w / 2) * k + doc.camera.x,
+      cy = (world.y + world.h / 2) * k + doc.camera.y;
     return {
+      left: clamp(cx - w / 2, 5, Math.max(5, width - w - 5)),
+      top: clamp(cy - h / 2, 5, Math.max(5, height - h - 5)),
       w,
       h,
-      left: clamp(at.x * k + doc.camera.x - w / 2, 5, Math.max(5, width - w - 5)),
-      top: clamp(at.y * k + doc.camera.y - h / 2, 5, height - h - 5),
+      scale,
+      type,
+      fill,
+      ink,
+      align,
+      radius: radius * scale,
     };
   });
+
+  /** Grow the text box to its content, so a long title never scrolls. */
+  const fit = () => {
+    input.style.height = '0px';
+    input.style.height = `${input.scrollHeight}px`;
+  };
 
   const label = () =>
     findEdge(doc, props.id)
@@ -60,7 +99,9 @@ function Editor(props: { id: string }) {
   onMount(() => {
     input.focus();
     input.select();
+    fit();
   });
+  createEffect(on(frame, () => fit(), { defer: true }));
 
   const onKeyDown = (e: KeyboardEvent) => {
     e.stopPropagation();
@@ -85,20 +126,38 @@ function Editor(props: { id: string }) {
   };
 
   return (
-    <textarea
-      ref={input}
+    <div
       class="inline-edit"
-      aria-label={label()}
-      value={inlineDraft()}
-      onInput={e => setInlineDraft(e.currentTarget.value)}
-      onKeyDown={onKeyDown}
-      onBlur={() => finishInlineEdit(true)}
+      classList={{ left: frame().align === 'left' }}
       style={{
-        width: `${box().w}px`,
-        height: `${box().h}px`,
-        left: `${box().left}px`,
-        top: `${box().top}px`,
+        left: `${frame().left}px`,
+        top: `${frame().top}px`,
+        width: `${frame().w}px`,
+        'min-height': `${frame().h}px`,
+        background: frame().fill,
+        'border-radius': `${frame().radius}px`,
       }}
-    />
+    >
+      <textarea
+        ref={input}
+        rows={1}
+        aria-label={label()}
+        value={inlineDraft()}
+        onInput={e => {
+          setInlineDraft(e.currentTarget.value);
+          fit();
+        }}
+        onKeyDown={onKeyDown}
+        onBlur={() => finishInlineEdit(true)}
+        style={{
+          color: frame().ink,
+          'font-family': frame().type.family,
+          'font-size': `${frame().type.size * frame().scale}px`,
+          'font-weight': String(frame().type.weight),
+          'line-height': `${frame().type.lineHeight * frame().scale}px`,
+          'text-align': frame().align,
+        }}
+      />
+    </div>
   );
 }

@@ -523,6 +523,23 @@ function measure(file) {
       });
       if (inner.length) note('edge-through-title-band', `${r.id} through ${g.id}'s title band`);
     }
+    // Arrives from below: the last run climbs into the target's bottom although the source does
+    // not sit below the target. Reads as backwards (viewer feedback 2026-10-23, R1).
+    {
+      const [a, b] = r.points.slice(-2),
+        src = byId.get(r.source),
+        dst = byId.get(r.target);
+      if (
+        a &&
+        b &&
+        src &&
+        dst &&
+        Math.abs(a.x - b.x) < EPS &&
+        a.y > b.y + EPS &&
+        src.y + src.h / 2 < dst.y + dst.h
+      )
+        note('arrives-below', `${r.id} into ${r.target}`);
+    }
     // Edge through a group that holds neither endpoint.
     for (const g of groups) {
       const holds = id => id === g.id || ancestors(id).includes(g.id);
@@ -881,7 +898,11 @@ function measure(file) {
   // Labels.
   const labels = parseLabels(svg);
   for (const [i, l] of labels.entries()) {
-    for (const n of leaves) if (rectsOverlap(l, n)) note('label-on-node', `"${l.text}" on ${n.id}`);
+    for (const n of leaves)
+      if (rectsOverlap(l, n)) note('label-on-node', `"${l.text}" on ${n.id}`);
+      // Pressed against a box without touching it: hard to read as the line's (feedback R5).
+      else if (rectsOverlap(l, { x: n.x - 6, y: n.y - 6, w: n.w + 12, h: n.h + 12 }))
+        note('label-near-node', `"${l.text}" by ${n.id}`);
     for (const g of groups) {
       const header = { x: g.x, y: g.y, w: g.w, h: 32 };
       if (rectsOverlap(l, header)) note('label-on-group-title', `"${l.text}" on ${g.id}`);
@@ -1100,12 +1121,14 @@ function measure(file) {
       'node-overlap',
       'edge-through-node',
       'label-on-node',
+      'label-near-node',
       'label-overlap',
       'label-on-edge',
       'label-on-group-title',
       'label-on-group-border',
       'label-detached',
       'hook',
+      'arrives-below',
       'shared-segment',
       'edge-through-group',
       'edge-through-title-band',
@@ -1143,12 +1166,14 @@ function measure(file) {
     'node-overlap': 10,
     'edge-through-node': 8,
     'label-on-node': 6,
+    'label-near-node': 1,
     'label-overlap': 6,
     'label-on-edge': 3,
     'label-on-group-title': 3,
     'label-on-group-border': 1,
     'label-detached': 3,
     hook: 3,
+    'arrives-below': 2,
     'shared-segment': 3,
     'edge-through-group': 2,
     'edge-through-title-band': 2,

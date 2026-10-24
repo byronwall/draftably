@@ -99,6 +99,40 @@ export function checkSource(source: string): Scene {
   return layoutModel(parseModel(source));
 }
 
+/** More accent families than this reads as decoration rather than meaning. */
+const MANY_FAMILIES = 4;
+const NEUTRALS = new Set(['slate', 'stone']);
+
+/**
+ * Color advice for agents: many families with nothing to say what they mean, or a member drawn
+ * in its own container's family (drawing steps the shade apart, but the color then says nothing).
+ */
+function paletteNotes(m: Model): Diagnostic[] {
+  const notes: Diagnostic[] = [];
+  const named = m.objects.filter(o => o.color !== 'auto');
+  // Neutrals frame things; only accent families compete for meaning.
+  const families = [...new Set(named.map(o => o.color))].filter(f => !NEUTRALS.has(f));
+  if (families.length > MANY_FAMILIES)
+    notes.push({
+      level: 'info',
+      code: 'many-colors',
+      message: `${families.length} accent colors (${families.join(', ')}). Use two to four, each for one role, with slate or stone for the rest, and say what each one means with legend lines.`,
+      line: named.find(o => o.color === families[MANY_FAMILIES])?.line,
+      ids: named.filter(o => families.includes(o.color)).map(o => o.id),
+    });
+  const byId = new Map(m.objects.map(o => [o.id, o]));
+  const same = named.filter(o => byId.get(o.parent)?.color === o.color);
+  if (same.length)
+    notes.push({
+      level: 'info',
+      code: 'color-matches-container',
+      message: `${same.map(o => o.id).join(', ')} ${same.length > 1 ? 'repeat their containers’ colors' : 'repeats its container’s color'}. Drop the color to inherit it, or give the member a family of its own.`,
+      line: same[0].line,
+      ids: same.map(o => o.id),
+    });
+  return notes;
+}
+
 /** The reading direction a scope's layout asks for, resolved against the render context. */
 function axisOf(layout: ModelLayout): 'right' | 'down' {
   if (layout.direction !== 'auto') return layout.direction;
@@ -1165,7 +1199,7 @@ function baseLayout(
     }
   } else {
     const ids = items.map(n => n.id);
-    const layers = pairs.length ? rankLayers(ids, pairs) : ids.map(id => [id]);
+    const layers = pairs.length ? byBarycenter(rankLayers(ids, pairs), pairs) : ids.map(id => [id]);
     const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
     const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
     // A gap between ranks grows to fit the labels on edges that cross it.
@@ -1189,6 +1223,39 @@ function baseLayout(
     }
   }
   return { positions: out, axis };
+}
+
+/**
+ * Order each rank across the run by where its connections point: the mean place of its members'
+ * neighbours in the rank before, as `layered` orders nodes. A group fed by another group then sits
+ * on that group's side instead of in declaration order between unrelated siblings (FEEL.md:
+ * siblings sit where their connections point). A member with no neighbour in the rank before
+ * keeps its place.
+ */
+function byBarycenter(layers: string[][], pairs: Array<[string, string]>): string[][] {
+  const out = [layers[0]];
+  for (let i = 1; i < layers.length; i++) {
+    const before = new Map(out[i - 1].map((id, k) => [id, k]));
+    const keyed = layers[i].map((id, k) => {
+      const at = pairs
+        .flatMap(([a, b]) => (a === id ? [b] : b === id ? [a] : []))
+        .filter(n => before.has(n))
+        .map(n => before.get(n)!);
+      return {
+        id,
+        key: at.length ? at.reduce((s, v) => s + v, 0) / at.length : null,
+        k,
+      };
+    });
+    // Members with a key take the free places in key order; the others stay put.
+    const free = keyed.filter(x => x.key !== null);
+    const sorted = [...free].sort((a, b) => a.key! - b.key! || a.k - b.k);
+    const slots = free.map(x => x.k);
+    const layer = [...layers[i]];
+    sorted.forEach((x, j) => (layer[slots[j]] = x.id));
+    out.push(layer);
+  }
+  return out;
 }
 
 class Union {
@@ -2080,6 +2147,7 @@ function layoutPass(
         ids: [g.id],
       });
   }
+  diagnostics.push(...paletteNotes(m));
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
   objects.sort((a, b) => index.get(a.id)! - index.get(b.id)!);

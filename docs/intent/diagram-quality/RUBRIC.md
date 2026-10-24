@@ -7,7 +7,7 @@ measure again. The corpus stays fixed across rounds so results compare.
 **Where things stand:** five rounds ran ([r1](rounds/r1.md), [r2](rounds/r2.md),
 [r3](rounds/r3.md), [r4](rounds/r4.md), [r5](rounds/r5.md)). Round 5 reran every earlier round
 with its script: corpus mean DI 28.4 → 8.2 over five rounds, held-out 25.4 → 5.8.
-[NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence, code locations,
+[FEEL.md](FEEL.md) says what good looks and feels like; it is the tie-breaker when a metric and the eye disagree. [NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence, code locations,
 approaches and open product questions. Start there.
 
 Three signals, each doing one job:
@@ -144,7 +144,8 @@ This is the only way to test the `stay` path.
 Hard defects (should be zero): **node-overlap**, **edge-through-node** (an edge crosses an object
 it does not connect), **clipped** (a route or label outside the exported drawing).
 
-Label defects: **label-on-node**, **label-overlap**, **label-through-text** (another edge runs through the label's text: a reader
+Label defects: **label-on-node**, **label-near-node** (within 6px of a box it doesn't cover, so it reads
+as the box's; added after the 23 October viewer feedback), **label-overlap**, **label-through-text** (another edge runs through the label's text: a reader
 can take the label for that line's, S1), **label-on-edge** (another edge runs only under the
 label's padding), **labels-too-close** (two labels on different edges closer than a label's height:
 they read as one phrase, or as two labels on one edge), **label-detached** (label farther than its own height from its edge),
@@ -162,7 +163,8 @@ crossings don't count: straight into or out of a top member, and, since round 5'
 line to or from any member that crosses the whole band straight across, clear of the title text,
 which the router allows when going round the group would be over 1.75× longer. A line running
 along the band, through the title, or to something outside the group still counts),
-**back edges** (against the reading direction; an edge that wraps onto the next row of a folded
+**arrives-below** (the last run climbs into the target's bottom although the source does not sit
+below it: reads as backwards; added after the 23 October viewer feedback), **back edges** (against the reading direction; an edge that wraps onto the next row of a folded
 flow reads forward and doesn't count).
 
 Clearance (can a reader tell which line is which?): **edge-hugs-node** (a line runs alongside a

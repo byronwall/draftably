@@ -101,7 +101,11 @@ async function settled(page) {
 const caughtUp = page =>
   waitFor(
     page,
-    text => window.diagramStudio.fileState().source === text,
+    // The source arrives before its layout, which compiles in the engine worker.
+    text => {
+      const state = window.diagramStudio.fileState();
+      return state.source === text && !state.compiling;
+    },
     'file update',
     5000,
     read(),

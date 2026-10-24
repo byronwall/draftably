@@ -33,15 +33,16 @@ Write one statement per line. Indentation means nothing; containment comes from 
 use JSON double quotes. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
 and groups. References may point to later lines.
 
-| Statement                          | Meaning                                                                                                                           |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one.                                                                                                      |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                      |
-| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                      |
-| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                         |
-| `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                         |
-| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`. |
+| Statement                          | Meaning                                                                                                                                            |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `diagram "title" version=1`        | Optional title. At most one.                                                                                                                       |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                                 |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
+| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
+| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                          |
+| `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors). |
+| `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                                          |
+| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                  |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
@@ -107,6 +108,25 @@ dark text and 400–950 are fills with white text, each held to WCAG contrast ta
 4.5:1). A node that names a color without a shade uses 500; a group uses a quiet surface shade
 (100, or 900 in Midnight). Shade is chosen per object: `color=auto` inherits a group's family,
 never its shade. A node with neither color nor shade uses the theme's neutral surface.
+
+**Legend.** `legend family "meaning"` adds a row to the diagram's color key, in file order: a
+swatch of that family (`shade=` picks one; 500 by default) and its meaning. The viewer shows the
+key in the canvas corner, in the diagram's colors; `inspect --svg` and exports draw it under the
+drawing. Each family and shade may appear once. A legend never moves anything.
+
+```text
+group edge "Edge" color=blue
+node db "Postgres" color=violet
+legend blue "Public entry points"
+legend violet "Data stores"
+```
+
+Drawing keeps an object apart from a container of its own family. A group inside a same-family
+group steps one shade toward emphasis per level (100, 200, 300 in light themes; 900, 800, 700 in
+Midnight), so nested frames read as layers rather than one fill. A node whose shade is within
+two steps of its container's moves three steps past it. `check` notes a file with more than four
+accent families (`many-colors`; `slate` and `stone` don't count) and a member that names its
+container's family (`color-matches-container`).
 
 `theme-color family shade=N fill= stroke= ink=` sets one shade (`shade` defaults to 500). For a
 built-in family any of the three may be given and the rest come from the theme. A new family,

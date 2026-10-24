@@ -17,16 +17,16 @@ import { Toast } from './components/Toast';
 import { Toolbar } from './components/Toolbar';
 import { finishInlineEdit } from './state/actions';
 import { setFilePicker } from './state/commands';
-import { cancelGeneration } from './state/comparison';
+import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
 import { exampleEdited, exampleMode, fileMode } from './state/file-session';
 import { openFile } from './state/files';
-import { setStartOpen, startOpen } from './state/launch';
+import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
 import { cancelLayout } from './state/layout';
-import { releaseModifierZoom, resetModifiers } from './state/pointer';
+import { resetModifiers } from './state/pointer';
 import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
 import { filesShown, inspectorOpen, layoutLabOpen, objectsOpen, showError } from './state/ui';
@@ -42,6 +42,9 @@ function listen<E extends Event>(
   target.addEventListener(type, listener);
   return () => target.removeEventListener(type, listener);
 }
+
+// Switching files in place closes Compare, which belongs to the drawing it was opened on.
+onLeaveFile(closeComparison);
 
 export default function App() {
   let diagramInput!: HTMLInputElement;
@@ -99,10 +102,6 @@ export default function App() {
       resetModifiers();
       setSpaceHeld(false);
     };
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'Meta' || e.key === 'Control') releaseModifierZoom();
-      handleKeyUp(e);
-    };
     // Leaving an edited example would lose its edits; the browser asks first.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       if (exampleEdited()) e.preventDefault();
@@ -114,7 +113,7 @@ export default function App() {
     };
     const cleanups = [
       listen(document, 'keydown', handleKeyDown),
-      listen(document, 'keyup', onKeyUp),
+      listen(document, 'keyup', handleKeyUp),
       listen(document, 'copy', handleCopy),
       listen(document, 'paste', handlePaste),
       listen(window, 'blur', onBlur),

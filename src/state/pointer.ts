@@ -5,6 +5,7 @@
  */
 import { batch } from 'solid-js';
 import { produce } from 'solid-js/store';
+import { wheelZoomFactor } from '../model/camera';
 import { normalize } from '../model/document';
 import * as edits from '../model/edits';
 import {
@@ -31,6 +32,7 @@ import {
   clearSelection,
   commit,
   doc,
+  editsGoToFile,
   isSelected,
   onBeforeEdit,
   persist,
@@ -136,7 +138,6 @@ function begin(kind: DragKind, e: PointerEvent, canvas: Element, extra: Partial<
     ...extra,
   };
   setDrag({ kind });
-  if (kind === 'objects' || kind === 'resize') setQuickRouting(true);
   try {
     canvas.setPointerCapture(e.pointerId);
   } catch {
@@ -144,11 +145,12 @@ function begin(kind: DragKind, e: PointerEvent, canvas: Element, extra: Partial<
   }
 }
 
-function end() {
+/** `keepQuick` leaves quick routes up for a file edit, which ends them once it is redrawn. */
+function end(keepQuick = false) {
   gesture = null;
   batch(() => {
     setDrag(null);
-    setQuickRouting(false);
+    if (!keepQuick) setQuickRouting(false);
   });
 }
 
@@ -167,12 +169,11 @@ onBeforeEdit(() => {
     onPointerUp(null);
 });
 
-// --- Touch and modifier zoom -----------------------------------------------------------------
+// --- Touch zoom ------------------------------------------------------------------------------
 
 const touches = new Map<number, Point>();
 let pinch: { distance: number; world: Point; camera: { x: number; y: number; k: number } } | null =
   null;
-let modifierZoom: { start: Point; lastY: number; world: Point } | null = null;
 
 function beginTouch(e: PointerEvent, canvas: Element) {
   touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -221,44 +222,11 @@ function endTouch(e: PointerEvent) {
   return true;
 }
 
-/** Cmd + moving the mouse (no button) zooms around the point where Cmd was pressed. */
-function modifierMove(e: PointerEvent, canvas: Element) {
-  if (!e.metaKey || e.buttons || gesture || inlineEditId() || pinch) {
-    modifierZoom = null;
-    return false;
-  }
-  if (!modifierZoom) {
-    modifierZoom = {
-      start: { x: e.clientX, y: e.clientY },
-      lastY: e.clientY,
-      world: screenToWorld(e.clientX, e.clientY),
-    };
-    return true;
-  }
-  const dy = modifierZoom.lastY - e.clientY;
-  modifierZoom.lastY = e.clientY;
-  if (Math.abs(dy) > 120) {
-    modifierZoom = null;
-    return true;
-  }
-  const r = canvas.getBoundingClientRect(),
-    k = clamp(doc.camera.k * Math.exp(dy * 0.008), MIN_ZOOM, MAX_ZOOM);
-  setCamera({
-    x: modifierZoom.start.x - r.left - modifierZoom.world.x * k,
-    y: modifierZoom.start.y - r.top - modifierZoom.world.y * k,
-    k,
-  });
-  return true;
-}
-
 export function resetModifiers() {
   touches.clear();
   pinch = null;
-  modifierZoom = null;
   if (gesture) cancelGesture();
 }
-
-export const releaseModifierZoom = () => (modifierZoom = null);
 
 // --- Wheel -----------------------------------------------------------------------------------
 
@@ -268,19 +236,22 @@ export function onWheel(e: WheelEvent) {
   actions.finishInlineEdit(true);
   if (gesture || pinch) return;
   const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? stageSize().height : 1;
-  if (e.ctrlKey || e.metaKey) {
-    const factor = Math.exp(-clamp(e.deltaY * unit, -350, 350) * 0.007);
-    const canvas = e.currentTarget as Element,
-      r = canvas.getBoundingClientRect(),
-      c = doc.camera,
-      x = e.clientX - r.left,
-      y = e.clientY - r.top,
-      k = clamp(c.k * factor, MIN_ZOOM, MAX_ZOOM);
-    setCamera({ x: x - ((x - c.x) / c.k) * k, y: y - ((y - c.y) / c.k) * k, k });
+  // Shift + wheel pans; the wheel and a pinch zoom around the pointer.
+  if (e.shiftKey) {
+    const c = doc.camera,
+      // Browsers turn Shift + a vertical wheel into a horizontal delta.
+      dx = e.deltaX || 0,
+      dy = e.deltaX ? 0 : e.deltaY;
+    setCamera({ ...c, x: c.x - dx * unit, y: c.y - dy * unit });
     return;
   }
-  const c = doc.camera;
-  setCamera({ ...c, x: c.x - e.deltaX * unit, y: c.y - e.deltaY * unit });
+  const canvas = e.currentTarget as Element,
+    r = canvas.getBoundingClientRect(),
+    c = doc.camera,
+    x = e.clientX - r.left,
+    y = e.clientY - r.top,
+    k = clamp(c.k * wheelZoomFactor(e, unit), MIN_ZOOM, MAX_ZOOM);
+  setCamera({ x: x - ((x - c.x) / c.k) * k, y: y - ((y - c.y) / c.k) * k, k });
 }
 
 // --- Pointer down ----------------------------------------------------------------------------
@@ -474,7 +445,6 @@ export function onPointerMove(e: PointerEvent) {
   const canvas = e.currentTarget as Element;
   if (e.pointerType === 'touch' && moveTouch(e, canvas)) return e.preventDefault();
   if (!gesture && brushPointerMove(e)) return;
-  if (modifierMove(e, canvas)) return;
   const pos = screenToWorld(e.clientX, e.clientY);
   setPointer(pos);
   const g = gesture;
@@ -482,7 +452,11 @@ export function onPointerMove(e: PointerEvent) {
   g.current = pos;
   const dx = pos.x - g.start.x,
     dy = pos.y - g.start.y;
-  if (Math.hypot(e.clientX - g.startClient.x, e.clientY - g.startClient.y) > 3) g.moved = true;
+  if (!g.moved && Math.hypot(e.clientX - g.startClient.x, e.clientY - g.startClient.y) > 3) {
+    g.moved = true;
+    // Quick routes only once something really moves: a click alone must not redraw every line.
+    if (g.kind === 'objects' || g.kind === 'resize') setQuickRouting(true);
+  }
 
   if (g.kind === 'zoom') {
     const k = clamp(
@@ -609,7 +583,7 @@ export function onPointerUp(e: PointerEvent | null) {
   if (brushPointerUp(e ?? undefined)) return;
   const g = gesture;
   if (!g) return;
-  end();
+  end(g.moved && (g.kind === 'objects' || g.kind === 'resize') && editsGoToFile());
   if (g.kind === 'connect') return finishConnect(g, e);
   if (g.kind === 'zoom') return persist();
   if (g.kind === 'pan') {

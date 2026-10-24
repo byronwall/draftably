@@ -50,6 +50,10 @@ node payments "Payments" in=services shape=pill
 
 node db "Postgres" color=violet
 
+legend blue "Clients"
+legend mint "Our services"
+legend violet "Data stores"
+
 edge checkout web -> api "HTTPS"
 edge native mobile -> api "HTTPS"
 edge dispatch api -> orders "create order"
@@ -67,6 +71,7 @@ layout services row gap=56
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`                             |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                         |
 | `theme name`                       | Preset look (see below); optional, at most one                                                       |
+| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family          |
 | `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`   |
@@ -127,7 +132,16 @@ content area.
   later edits; `pin` and `nudge` do not adapt when content grows.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
-- Use color to mean something (one color per domain or tier), not for decoration.
+- Use color to mean something, not for decoration:
+  - Two to four accent families, each for one role (external systems, data stores, the failure
+    path), and `slate` or `stone` for everything else. More reads as noise.
+  - Say what each color means with one `legend family "meaning"` line per color; the viewer and
+    exports draw them as a key.
+  - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
+    unless they encode opposites.
+  - Color the outer group and let members inherit (`color=auto`); nested groups of one family
+    are drawn in stepped shades. Never give a member its container's family at a pale shade.
+  - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.
 - When editing an existing file, keep its IDs and any `stay`/`near`/`pin` lines the user's viewer
   edits wrote; add new statements rather than rewriting the file.

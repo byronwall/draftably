@@ -1,7 +1,14 @@
 import { createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { selection } from '../../state/document';
 import { doc } from '../../state/document';
-import { drag, registerCanvas, setStageSize, spaceHeld, tool } from '../../state/editor';
+import {
+  drag,
+  inlineEditId,
+  registerCanvas,
+  setStageSize,
+  spaceHeld,
+  tool,
+} from '../../state/editor';
 import { registerSceneElement, openFile } from '../../state/files';
 import * as pointer from '../../state/pointer';
 import { edgeIds, geometry, groupIds, nodeIds, routesById, sceneRects } from '../../state/scene';
@@ -16,6 +23,7 @@ import { GroupView } from '../scene/GroupView';
 import { NodeView } from '../scene/NodeView';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
+import { Legend } from './Legend';
 import { ZoomControls } from './ZoomControls';
 import { LayoutPreviewBar } from '../LayoutPreviewBar';
 import { Icon } from '../Icon';
@@ -23,7 +31,7 @@ import './canvas.css';
 
 const CANVAS_LABEL =
   'Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. ' +
-  'Escape returns to Edit. Shift drag selects. Two-finger scroll pans; pinch zooms. Question mark opens shortcuts.';
+  'Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.';
 
 export function Canvas() {
   let stage!: HTMLElement;
@@ -141,6 +149,7 @@ export function Canvas() {
                   rect={sceneRects().get(id)!}
                   selected={isSelected(id)}
                   dropTarget={drag()?.dropTargetId === id}
+                  editing={inlineEditId() === id}
                   interactive
                   zoom={camera().k}
                 />
@@ -152,7 +161,13 @@ export function Canvas() {
               {id => (
                 <Show when={routesById().get(id)}>
                   {route => (
-                    <EdgeView doc={doc} route={route()} selected={isSelected(id)} interactive />
+                    <EdgeView
+                      doc={doc}
+                      route={route()}
+                      selected={isSelected(id)}
+                      editing={inlineEditId() === id}
+                      interactive
+                    />
                   )}
                 </Show>
               )}
@@ -166,6 +181,7 @@ export function Canvas() {
                   id={id}
                   rect={geometry(id)}
                   selected={isSelected(id)}
+                  editing={inlineEditId() === id}
                   interactive
                   zoom={camera().k}
                 />
@@ -188,6 +204,7 @@ export function Canvas() {
         </div>
       </Show>
       <InlineEditor />
+      <Legend />
       <ZoomControls />
       <TimelineDeck />
       <BrushDock />

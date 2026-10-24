@@ -1,5 +1,5 @@
 import { onCleanup, onMount, type JSX } from 'solid-js';
-import { clamp } from '../../model/geometry';
+import { wheelZoomFactor } from '../../model/camera';
 import {
   chooseAnchor,
   effectiveCamera,
@@ -69,10 +69,15 @@ export function ViewportCanvas(props: {
     e.stopPropagation();
     const unit =
       e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? svg.getBoundingClientRect().height : 1;
-    if (e.ctrlKey || e.metaKey) {
+    // As on the main canvas: the wheel zooms, Shift + wheel pans.
+    if (e.shiftKey) {
+      const dx = e.deltaX || 0,
+        dy = e.deltaX ? 0 : e.deltaY;
+      panCamera(props.index, -dx * unit, -dy * unit);
+    } else {
       const { dx, dy } = fromCenter(e.clientX, e.clientY);
-      zoomCamera(props.index, Math.exp(-clamp(e.deltaY * unit, -300, 300) * 0.007), dx, dy);
-    } else panCamera(props.index, -e.deltaX * unit, -e.deltaY * unit);
+      zoomCamera(props.index, wheelZoomFactor(e, unit), dx, dy);
+    }
   };
 
   const onPointerDown = (e: PointerEvent) => {

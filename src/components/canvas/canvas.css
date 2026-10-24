@@ -67,8 +67,13 @@
   pointer-events: none;
 }
 
-.node:hover .selection-ring {
-  opacity: 0.45;
+/* Anything a drag would move shows it on hover: shapes lift, containers and lines take the accent. */
+.stage[data-tool='select']:not(.is-dragging) .node:hover .selection-ring {
+  opacity: 0.6;
+}
+
+.stage[data-tool='select']:not(.is-dragging) .node:hover .node-shape {
+  filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--accent) 22%, transparent));
 }
 
 .node.selected .selection-ring,
@@ -145,8 +150,15 @@
   cursor: grab;
 }
 
+.stage[data-tool='select']:not(.is-dragging) .group:not(.selected):hover .group-bg {
+  stroke-opacity: 1;
+  stroke: color-mix(in srgb, var(--accent) 85%, transparent);
+  stroke-width: 2;
+}
+
 .group.selected .group-bg,
 .group:focus-visible .group-bg {
+  stroke-opacity: 1;
   stroke: var(--accent);
   stroke-width: 1.8;
 }
@@ -178,11 +190,20 @@
   stroke-linejoin: round;
 }
 
+.edge-halo {
+  pointer-events: none;
+}
+
 .edge-hit {
   fill: none;
   stroke: transparent;
   stroke-width: 14;
   pointer-events: stroke;
+}
+
+.stage[data-tool='select']:not(.is-dragging) .edge:not(.selected):hover .edge-line {
+  stroke: color-mix(in srgb, var(--accent) 70%, transparent);
+  stroke-width: 2.2;
 }
 
 .edge.selected .edge-line,
@@ -364,19 +385,73 @@
   margin-top: var(--space-2);
 }
 
+/* Editing happens on the object: the box takes its face, font and colors (InlineEditor). */
 .inline-edit {
   position: absolute;
   z-index: 30;
-  min-height: 40px;
-  padding: 8px;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius);
-  background: var(--surface);
-  box-shadow: 0 0 0 3px var(--accent-soft);
-  font-size: 14px;
-  line-height: 1.5;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 5px var(--accent-soft);
+}
+
+.inline-edit textarea {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  outline: none;
+  background: transparent;
+  box-shadow: none;
   resize: none;
+  text-align: center;
+  caret-color: currentColor;
+}
+
+.inline-edit textarea::selection {
+  background: color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* The object's own title hides while its editor sits on top of it. */
+.node.editing .node-title,
+.group.editing .group-title,
+.edge.editing .edge-label {
+  visibility: hidden;
+}
+
+.diagram-legend {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 20;
+  display: grid;
+  gap: 4px;
+  max-width: min(320px, 40%);
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+.diagram-legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.3;
+}
+
+.diagram-legend-swatch {
+  flex: none;
+  width: 16px;
+  height: 12px;
+  border: 1px solid;
+  border-radius: 3px;
 }
 
 .zoom-controls {

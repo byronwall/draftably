@@ -9,6 +9,7 @@ import {
   exampleUrl,
   fileNameFor,
   fileUrl,
+  go,
   launchNotice,
   newDiagramSource,
   refreshWorkspace,
@@ -19,16 +20,16 @@ import {
 } from '../state/launch';
 import type { WorkspaceFile } from '../server/workspace';
 import { IconButton } from './controls';
-import { FileTime } from './FilesPanel';
+import { FileOrderSwitch, FileTime, FolderHeading } from './FilesPanel';
 import { Icon } from './Icon';
 import './start.css';
 import {
   ago,
   baseName,
-  fileOrder,
   folderOf,
+  groupByFolder,
   matchFiles,
-  setFileOrder,
+  shownOrder,
   sortFiles,
 } from './workspace-files';
 
@@ -110,7 +111,7 @@ function NewDiagram() {
     setBusy(true);
     try {
       const created = await createDiagramFile(shownPath().trim(), newDiagramSource(title().trim()));
-      location.assign(fileUrl(created));
+      await go(fileUrl(created));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
       setBusy(false);
@@ -233,9 +234,9 @@ function FolderFiles() {
 function FolderHome() {
   const [query, setQuery] = createSignal('');
   const [creating, setCreating] = createSignal(false);
-  const files = createMemo(() =>
-    sortFiles(matchFiles(workspace()?.files ?? [], query()), fileOrder()),
-  );
+  const all = () => workspace()?.files ?? [];
+  const files = createMemo(() => sortFiles(matchFiles(all(), query()), shownOrder(all())));
+  const byFolder = () => shownOrder(all()) === 'folder';
   return (
     <div class="start-home">
       <div class="start-toolbar">
@@ -252,26 +253,11 @@ function FolderHome() {
           onInput={e => setQuery(e.currentTarget.value)}
           onKeyDown={e => {
             const first = files()[0];
-            if (e.key === 'Enter' && first) location.assign(fileUrl(first.path));
+            if (e.key === 'Enter' && first) void go(fileUrl(first.path));
             if (e.key === 'Escape') setQuery('');
           }}
         />
-        <div class="segmented" role="group" aria-label="Order">
-          <button
-            type="button"
-            aria-pressed={fileOrder() === 'recent'}
-            onClick={() => setFileOrder('recent')}
-          >
-            Recent
-          </button>
-          <button
-            type="button"
-            aria-pressed={fileOrder() === 'name'}
-            onClick={() => setFileOrder('name')}
-          >
-            A–Z
-          </button>
-        </div>
+        <FileOrderSwitch />
         <span class="grow" />
         <button
           type="button"
@@ -292,9 +278,25 @@ function FolderHome() {
         when={files().length}
         fallback={<p class="start-hint start-none">No diagram matches “{query()}”.</p>}
       >
-        <ul class="start-gallery start-file-grid">
-          <For each={files()}>{file => <FileCard file={file} />}</For>
-        </ul>
+        <Show
+          when={byFolder()}
+          fallback={
+            <ul class="start-gallery start-file-grid">
+              <For each={files()}>{file => <FileCard file={file} />}</For>
+            </ul>
+          }
+        >
+          <For each={groupByFolder(files())}>
+            {group => (
+              <section class="start-folder">
+                <FolderHeading folder={group.folder} />
+                <ul class="start-gallery start-file-grid">
+                  <For each={group.files}>{file => <FileCard file={file} />}</For>
+                </ul>
+              </section>
+            )}
+          </For>
+        </Show>
       </Show>
       <details class="start-more-examples">
         <summary>

@@ -21,3 +21,13 @@ export function fitCamera(
   );
   return { cx: bounds.x + bounds.w / 2, cy: bounds.y + bounds.h / 2, k: clamp(k, 0.015, 2) };
 }
+
+/**
+ * The zoom factor for one wheel event. A mouse notch (about 100px) zooms by about 18%; a pinch,
+ * which arrives as small Ctrl + wheel deltas, keeps its faster rate. `unit` converts line and
+ * page deltas to pixels.
+ */
+export function wheelZoomFactor(e: { deltaY: number; ctrlKey: boolean }, unit = 1) {
+  const rate = e.ctrlKey ? 0.01 : 0.002;
+  return Math.exp(-clamp(e.deltaY * unit, -120, 120) * rate);
+}

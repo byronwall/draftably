@@ -28,7 +28,7 @@ import {
   toggleBrush,
 } from './sculpt';
 import { fileMode, reflowSelectedGroup } from './file-session';
-import { setStartOpen, startUrl, workspace } from './launch';
+import { go, setStartOpen, startUrl, workspace } from './launch';
 import { toast } from './toast';
 import {
   filesShown,
@@ -91,7 +91,7 @@ function findFile() {
 }
 
 function openStart() {
-  if (workspace()) location.assign(startUrl());
+  if (workspace()) void go(startUrl());
   else setStartOpen(true);
 }
 

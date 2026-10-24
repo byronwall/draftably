@@ -118,6 +118,8 @@ export function canvasCenter(): Point {
 
 export const MIN_ZOOM = 0.08;
 export const MAX_ZOOM = 4;
+/** The share of the stage a fitted diagram fills. */
+const FIT_SHARE = 0.92;
 
 /** Zoom by `factor` around a screen point. */
 export function zoomAt(factor: number, clientX?: number, clientY?: number) {
@@ -135,7 +137,11 @@ export function panBy(dx: number, dy: number) {
   setCamera({ ...c, x: c.x + dx, y: c.y + dy });
 }
 
-/** Fit the whole diagram in view, leaving room for the zoom controls. */
+/**
+ * Fit the whole diagram in view, leaving room for the zoom controls. The drawing takes about 92%
+ * of the stage, never more than its actual size: edge to edge reads as overwhelming on a large
+ * monitor.
+ */
 export function fitView() {
   const { width: w, height: h } = stageSize();
   if (!doc.graph.nodes.length && !doc.graph.groups.length) return;
@@ -143,9 +149,9 @@ export function fitView() {
     pad = 40,
     bottom = 60,
     k = clamp(
-      Math.min((w - pad * 2) / Math.max(1, b.w), (h - pad - bottom) / Math.max(1, b.h)),
+      FIT_SHARE * Math.min((w - pad * 2) / Math.max(1, b.w), (h - pad - bottom) / Math.max(1, b.h)),
       MIN_ZOOM,
-      1.2,
+      1,
     );
   setCamera({ x: (w - b.w * k) / 2 - b.x * k, y: (h - bottom + pad - b.h * k) / 2 - b.y * k, k });
 }

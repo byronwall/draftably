@@ -2,7 +2,8 @@ import { createMemo, For, Match, Show, Switch } from 'solid-js';
 import { findNode, styleOf } from '../../model/graph';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
-import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
@@ -19,6 +20,8 @@ export interface NodeViewProps {
   zoom?: number;
   /** Highlight used by comparisons for the visual anchor. */
   focused?: boolean;
+  /** Its title is being edited in place, so the drawn title hides. */
+  editing?: boolean;
   /** Comparison candidates: focusable so a keyboard user can choose the anchor. */
   focusable?: boolean;
   idPrefix?: string;
@@ -28,7 +31,7 @@ export function NodeView(props: NodeViewProps) {
   const node = () => findNode(props.doc, props.id)!;
   const style = () => styleOf(props.doc, props.id);
   const look = () => resolveAppearance(props.doc.appearance);
-  const color = () => swatchFor(look(), style().color, style().shade, 'node');
+  const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   const ringRadius = () => {
     const { shape } = style(),
@@ -60,7 +63,7 @@ export function NodeView(props: NodeViewProps) {
   return (
     <g
       class="node"
-      classList={{ selected: props.selected, focused: props.focused }}
+      classList={{ selected: props.selected, focused: props.focused, editing: props.editing }}
       data-kind="node"
       data-id={props.id}
       transform={`translate(${props.rect.x},${props.rect.y})`}

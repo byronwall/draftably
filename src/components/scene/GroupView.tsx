@@ -1,10 +1,14 @@
 import { createMemo, Show } from 'solid-js';
-import { descendants, findGroup, findNode, isCollapsed, styleOf } from '../../model/graph';
-import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
+import { resolveAppearance } from '../../model/appearance';
+import { drawnSwatch } from '../../model/colors';
 import { truncateText } from '../../model/fonts';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles } from './parts';
+
+/** A container's border is quieter than a connection: thinner and partly transparent. */
+export const GROUP_BORDER = { width: 1, opacity: 0.65 };
 
 export interface GroupViewProps {
   doc: Diagram;
@@ -15,15 +19,14 @@ export interface GroupViewProps {
   interactive?: boolean;
   zoom?: number;
   focused?: boolean;
+  /** Its title is being edited in place, so the drawn title hides. */
+  editing?: boolean;
 }
 
 export function GroupView(props: GroupViewProps) {
   const group = () => findGroup(props.doc, props.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
-  const color = () => {
-    const style = styleOf(props.doc, props.id);
-    return swatchFor(look(), style.color, style.shade, 'group');
-  };
+  const color = () => drawnSwatch(props.doc, look(), props.id, 'group');
   const collapsed = () => isCollapsed(props.doc, props.id);
   const shapeCount = createMemo(
     () => descendants(props.doc, props.id).filter(id => findNode(props.doc, id)).length,
@@ -32,8 +35,8 @@ export function GroupView(props: GroupViewProps) {
   const title = () =>
     truncateText(group().title, Math.max(40, props.rect.w - 33 - 64), look().groupTitle);
   const w = () => props.rect.w;
-  /** Middle of the title band at the top of the frame. */
-  const band = () => Math.min(look().groupHeader, collapsed() ? 32 : Infinity) / 2 - 7;
+  /** Middle of the title band at the top of the frame, the same open or collapsed. */
+  const band = () => look().groupHeader / 2 - 7;
 
   return (
     <g
@@ -42,6 +45,7 @@ export function GroupView(props: GroupViewProps) {
         selected: props.selected,
         'drop-target': props.dropTarget,
         focused: props.focused,
+        editing: props.editing,
       }}
       data-kind="group"
       data-id={props.id}
@@ -60,7 +64,8 @@ export function GroupView(props: GroupViewProps) {
         rx={Math.min(10, look().radius + 4)}
         fill={color().fill}
         stroke={color().stroke}
-        stroke-width={1.2}
+        stroke-width={GROUP_BORDER.width}
+        stroke-opacity={GROUP_BORDER.opacity}
       />
       <rect
         class="group-header"
@@ -103,8 +108,8 @@ export function GroupView(props: GroupViewProps) {
       </Show>
       <Show when={collapsed()}>
         <text
-          x={14}
-          y={43}
+          x={33}
+          y={band() * 2 + 9}
           font-family={look().annotation.family}
           font-size="10"
           fill={color().ink}

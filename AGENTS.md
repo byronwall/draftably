@@ -8,6 +8,8 @@ Pointers only. Read the linked doc when the task touches it.
 - **Diagram quality audit:** rubric, corpus and round loop in
   [docs/intent/diagram-quality/RUBRIC.md](docs/intent/diagram-quality/RUBRIC.md); run it as
   [docs/CHECKS.md](docs/CHECKS.md) describes.
+- **How diagrams should feel:** [docs/intent/diagram-quality/FEEL.md](docs/intent/diagram-quality/FEEL.md).
+  Read it before changing layout, routing, color or viewer interaction.
 - **Screenshots:** `pnpm shoot <url|file.draft|file.svg> tmp/out.png`, `--sheet` for a contact
   sheet, or `--crop x,y,w,h` to zoom in. Don't write one-off Playwright or image scripts.
 - **Releases:** a PR that changes `src/`, `examples/`, `docs/DSL.md` or `packages/cli/` needs a

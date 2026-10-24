@@ -125,6 +125,8 @@ type CommitHandler = (before: string, label: string, kind: EditKind) => boolean;
 export type EditKind = 'edit' | 'arrangement';
 let commitHandler: CommitHandler | null = null;
 export const setCommitHandler = (handler: CommitHandler | null) => (commitHandler = handler);
+/** Edits are written to a diagram file rather than kept as browser snapshots. */
+export const editsGoToFile = () => commitHandler !== null;
 
 /** Push an undo step if the document changed since `before`. Returns whether it did. */
 export function commit(before: string, label = 'Edit', kind: EditKind = 'edit'): boolean {

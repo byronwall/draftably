@@ -538,6 +538,29 @@ const AXIS_PENALTY = 100,
   TRAILING = { right: 'right', down: 'bottom' },
   LEADING = { right: 'left', down: 'top' };
 const HOOK_PENALTY = 80;
+// Side conventions without a declared direction, and the price of a far side's loop per unit.
+const ARRIVE_BELOW = 40,
+  ARRIVE_RIGHT = 12,
+  LEAVE_BACK = 12,
+  DETOUR_WEIGHT = 0.5,
+  // Per unit of a line's run inside a container that holds only one of its ends.
+  LINGER_WEIGHT = 0.3;
+/** Length of a route's axis-aligned segments that lies inside rectangle `r`. */
+function insideLength(ps, r) {
+  let n = 0;
+  for (let i = 1; i < ps.length; i++) {
+    const p = ps[i - 1],
+      q = ps[i];
+    if (Math.abs(p.y - q.y) < EPS) {
+      if (p.y <= r.y || p.y >= r.y + r.h) continue;
+      n += Math.max(0, Math.min(Math.max(p.x, q.x), r.x + r.w) - Math.max(Math.min(p.x, q.x), r.x));
+    } else if (Math.abs(p.x - q.x) < EPS) {
+      if (p.x <= r.x || p.x >= r.x + r.w) continue;
+      n += Math.max(0, Math.min(Math.max(p.y, q.y), r.y + r.h) - Math.max(Math.min(p.y, q.y), r.y));
+    }
+  }
+  return n;
+}
 // Fan siblings this far apart or more read as separate lines (the audit's `edges-too-close` is < 10).
 const FAN_PITCH = 10;
 // A detour round a group's title band longer than this many times the crossing route.
@@ -546,6 +569,8 @@ const pathLength = ps => segments(ps).reduce((n, [a, b]) => n + distance(a, b), 
 const PORT_SLACK = 4;
 const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
+// Crossing pairs the repair pass tries before it stops, to bound its time on busy drawings.
+const MAX_REPAIRS = 24;
 // Gate a group's header bands to the terminal lines of a route through a member's top.
 function gate(obs, start, fs, end, ts) {
   if (!obs.some(r => r.gates)) return obs;
@@ -753,8 +778,8 @@ function compute(input, rawOptions = {}) {
   }
   // A line may cross a title band straight into any member, not only a top one, when the
   // way round the group is over `DETOUR_RATIO` times the length of the crossing route.
-  function find(e, used, old) {
-    const gated = findIn(e, used, old, false);
+  function find(e, used, old, wall = []) {
+    const gated = findIn(e, used, old, false, wall);
     if (!titleBands || !obsFor(e, false).some(r => r.gates)) return gated;
     const a = rects.get(e.from),
       b = rects.get(e.to),
@@ -766,16 +791,16 @@ function compute(input, rawOptions = {}) {
         Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2),
       gatedLength = gated.blocked ? Infinity : pathLength(gated.points);
     if (gatedLength <= DETOUR_RATIO * floor) return gated;
-    const open = findIn(e, used, old, true);
+    const open = findIn(e, used, old, true, wall);
     if (open.blocked || gatedLength <= DETOUR_RATIO * pathLength(open.points)) return gated;
     opened.add(open);
     return open;
   }
-  function findIn(e, used, old, open) {
+  function findIn(e, used, old, open, wall = []) {
     const a = rects.get(e.from),
       b = rects.get(e.to),
       cfg = e.cfg,
-      edgeObs = obsFor(e, open),
+      edgeObs = wall.length ? [...obsFor(e, open), ...wall] : obsFor(e, open),
       ca = center(a),
       cb = center(b);
     const from =
@@ -830,6 +855,34 @@ function compute(input, rawOptions = {}) {
       if (facingFans && facing(side, from, to) && roomy(side, r, n)) return 0;
       return n * s.fanoutPenalty;
     }
+    // Route length beyond the gap between the two boxes, which no route can avoid.
+    const floor =
+      Math.max(0, Math.abs(ca.x - cb.x) - (a.w + b.w) / 2) +
+      Math.max(0, Math.abs(ca.y - cb.y) - (a.h + b.h) / 2);
+    const excess = points => Math.max(0, pathLength(points) - floor);
+    // Containers that hold one end but not the other: the line should leave (or enter) them by
+    // the short way and run outside, not along their inside to reach something beyond.
+    const passing = facingFans
+      ? [
+          ...ancestors(e.from)
+            .filter(g => !ancestors(e.to).includes(g))
+            .map(g => ({ g: groups.get(g), box: a })),
+          ...ancestors(e.to)
+            .filter(g => !ancestors(e.from).includes(g))
+            .map(g => ({ g: groups.get(g), box: b })),
+        ].filter(p => p.g && !p.g.collapsed)
+      : [];
+    // Run inside each such container beyond the shortest way between the box and its border.
+    const lingering = points =>
+      passing.reduce((sum, { g, box }) => {
+        const shortest = Math.min(
+          box.x - g.x,
+          g.x + g.w - (box.x + box.w),
+          box.y - g.y,
+          g.y + g.h - (box.y + box.h),
+        );
+        return sum + Math.max(0, insideLength(points, g) - Math.max(0, shortest));
+      }, 0);
     function score(points, c) {
       const v = vector[c.fs],
         w = vector[c.ts],
@@ -838,9 +891,24 @@ function compute(input, rawOptions = {}) {
       // draws a hook round the box; it is worth a detour only when the facing sides
       // are blocked.
       const far = facingFans ? FAR_PENALTY : 18;
-      const backwards =
-        (v.x * delta.x + v.y * delta.y < -0.01 ? far : 0) +
-        (w.x * -delta.x + w.y * -delta.y < -0.01 ? far : 0);
+      const awayOut = v.x * delta.x + v.y * delta.y < -0.01,
+        awayIn = w.x * -delta.x + w.y * -delta.y < -0.01;
+      // A far side also pays for the loop it draws: the length beyond the shortest way between
+      // the boxes, so a line into a box's back from round the far side of a group loses to a
+      // crossing (NEXT.md item 1).
+      // Only a side the router chose pays it; a side the file fixed is the author's call.
+      const detour =
+        facingFans && ((awayOut && from.length > 1) || (awayIn && to.length > 1))
+          ? DETOUR_WEIGHT * excess(points)
+          : 0;
+      const backwards = (awayOut ? far : 0) + (awayIn ? far : 0) + detour;
+      // Diagrams read left to right and top to bottom: lines arrive on a box's left or top and
+      // leave by its right or bottom. Arriving from below costs most; it reads as backwards.
+      const convention = facingFans
+        ? (c.ts === 'bottom' ? ARRIVE_BELOW : 0) +
+          (c.ts === 'right' ? ARRIVE_RIGHT : 0) +
+          (c.fs === 'top' || c.fs === 'left' ? LEAVE_BACK : 0)
+        : 0;
       const stability = old
         ? (c.fs !== old.fromSide ? s.portStability : 0) +
           (c.ts !== old.toSide ? s.portStability : 0)
@@ -874,10 +942,12 @@ function compute(input, rawOptions = {}) {
           s.parallelPenalty;
       }
       return (
+        LINGER_WEIGHT * lingering(points) +
         packed +
         cost(points, used, s, near) +
         (own.length ? standoffCost(points, own) * OWN_STANDOFF : 0) +
         backwards +
+        convention +
         hook +
         stability +
         fanout +
@@ -1052,7 +1122,7 @@ function compute(input, rawOptions = {}) {
       }
       if (ok) remember(path, c);
     }
-    if (!best && rawOptions.quick && old) return findIn(e, used, null, open);
+    if (!best && rawOptions.quick && old) return findIn(e, used, null, open, wall);
     if (!best) {
       const fs = from[0],
         ts = to[0],
@@ -1193,6 +1263,107 @@ function compute(input, rawOptions = {}) {
         }
       }
     }
+  // Edges are routed one at a time, so a crossing priced when the later edge was routed is never
+  // repaired: moving either line alone costs more than the crossing. Try each crossing pair
+  // together: route one with the other's line as a wall, then the other round it, and keep the
+  // pair when the drawing as a whole costs less (NEXT.md item 9, R6).
+  let repaired = 0;
+  if (!rawOptions.quick && facingFans) {
+    // A repair buys its crossing with length or bends, never with a line that reads backwards:
+    // into a box from below, out of or into a far side, or a U-turn (FEEL.md: never arrive from
+    // below; a loop round the outside is worse than one crossing).
+    const backwards = r =>
+      r.toSide === 'bottom' || far(r) || (r.fromSide === r.toSide && r.points.length > 3);
+    // Lines along a box or a group border cost here as they do when routed.
+    const value = rs => total(rs) + rs.reduce((n, r) => n + standoffCost(r.points, near), 0);
+    // A route as a wall: each segment a sliver half a lane wide each way. Segments at an end the
+    // two edges share stay open, so a fan off one side can still leave beside it.
+    const wallOf = (r, e) => {
+      const ends = new Set([e.from, e.to]),
+        segs = segments(r.points);
+      return segs
+        .filter(
+          (_, k) => !(k === 0 && ends.has(r.from)) && !(k === segs.length - 1 && ends.has(r.to)),
+        )
+        .map(([a, b]) =>
+          inflate(
+            {
+              x: Math.min(a.x, b.x),
+              y: Math.min(a.y, b.y),
+              w: Math.abs(a.x - b.x),
+              h: Math.abs(a.y - b.y),
+            },
+            s.edgeGap / 2,
+          ),
+        );
+    };
+    const byId = new Map(edges.map(e => [e.id, e])),
+      fixed = e => e.cfg.waypoints?.length > 0;
+    const tried = new Set();
+    for (let sweep = 0; sweep < 2; sweep++) {
+      let changed = false;
+      for (let i = 0; i < routes.length; i++)
+        for (let j = i + 1; j < routes.length; j++) {
+          if (!conflicts(routes[i].points, [routes[j]]).crossings) continue;
+          const key = routes[i].id + '|' + routes[j].id;
+          if (tried.has(key) || tried.size >= MAX_REPAIRS) continue;
+          tried.add(key);
+          let best = null,
+            bestValue = value(routes) - 0.1;
+          for (const [m, k] of [
+            [i, j],
+            [j, i],
+          ]) {
+            const em = byId.get(routes[m].id),
+              ek = byId.get(routes[k].id);
+            if (fixed(em)) continue;
+            const rest = routes.filter((_, q) => q !== m && q !== k),
+              tries = [],
+              moved = find(em, [...rest, routes[k]], routes[m], wallOf(routes[k], em));
+            if (!moved.blocked) {
+              const one = [...routes];
+              one[m] = moved;
+              tries.push(one);
+              if (!fixed(ek)) {
+                const two = [...one];
+                two[k] = find(ek, [...rest, moved], routes[k]);
+                tries.push(two);
+              }
+            }
+            // Or in the other order: `k` first, as if `m` were not there, then `m` round it.
+            if (!fixed(ek)) {
+              const first = find(ek, rest, routes[k]),
+                then = find(em, [...rest, first], routes[m], wallOf(first, em));
+              if (!then.blocked) {
+                const swap = [...routes];
+                swap[k] = first;
+                swap[m] = then;
+                tries.push(swap);
+              }
+            }
+            for (const t of tries) {
+              if (
+                t.some((r, q) => r !== routes[q] && backwards(r) && !backwards(routes[q])) ||
+                metrics(t).crossings >= metrics(routes).crossings
+              )
+                continue;
+              const v = value(t);
+              if (v < bestValue) {
+                best = t;
+                bestValue = v;
+              }
+            }
+          }
+          if (best) {
+            routes = best;
+            syncOpen();
+            repaired++;
+            changed = true;
+          }
+        }
+      if (!changed) break;
+    }
+  }
   // Slide complete internal orthogonal segments into nearby free channels.
   // Endpoints, sides, node coordinates and authored waypoint routes stay fixed.
   let nudged = 0;
@@ -1558,6 +1729,7 @@ function compute(input, rawOptions = {}) {
     ...metrics(routes),
     initial: before,
     accepted,
+    ...(facingFans && !rawOptions.quick ? { repaired } : {}),
     nudged,
     ...(tidyOn ? { tidied } : {}),
     edges: routes.length,

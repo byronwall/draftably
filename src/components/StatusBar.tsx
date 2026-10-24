@@ -12,7 +12,7 @@ import { ancestors } from '../model/graph';
 const HINTS: Record<Tool, string> = {
   brush: 'Hover previews · drag paints · [ / ] radius · Alt restores · Space pans',
   select: 'Drag shapes to edit · background pans · Shift drag selects',
-  pan: 'Drag to pan · scroll to pan · pinch to zoom · V to edit',
+  pan: 'Drag to pan · wheel zooms · Shift + wheel pans · V to edit',
   connect: 'Connect: choose source, then target · Esc to stop',
   container: 'Drag to draw a container around shapes',
   box: 'Click or drag to add a rectangle',

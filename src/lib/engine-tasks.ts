@@ -6,28 +6,53 @@ import {
 } from '../engines/explorer-engine.js';
 import { LayoutLab, type LayoutOptions, type LayoutResult } from '../engines/layout-engine.js';
 import { SculptLab, type Timeline } from '../engines/sculpt-engine.js';
-import { RouteLab } from '../engines/routing-engine.js';
-import { compile } from '../dsl/compile';
-import { projectScene } from '../dsl/project';
-import type { Diagram } from '../model/types';
+import {
+  RouteLab,
+  type RouteInput,
+  type RoutingOptions,
+  type RoutingResult,
+} from '../engines/routing-engine.js';
+import { compile, type Scene } from '../dsl/compile';
+import { projectScene, type ViewState } from '../dsl/project';
+import { routingFingerprint } from '../model/document';
+import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
+import { computeRoutes } from '../model/routes';
+import type { Diagram, Rect } from '../model/types';
 
 export type EngineTask =
   | { kind: 'layout'; doc: Diagram; options: LayoutOptions }
   | { kind: 'candidate'; baseline: Diagram; spec: CandidateSpec; config: ComparisonConfig }
   | { kind: 'timeline'; doc: Diagram; options: LayoutOptions }
   /** A diagram file variant, compiled exactly as the file would be. */
-  | { kind: 'source'; source: string; spec: CandidateSpec };
+  | { kind: 'source'; source: string; spec: CandidateSpec }
+  /** Full-quality routes for a drawing shown meanwhile with quick routes. */
+  | { kind: 'route'; input: RouteInput; options: RoutingOptions }
+  /** A diagram file compiled, projected with the editor's view and routed, as the viewer shows it. */
+  | { kind: 'scene'; source: string; view: ViewState };
+
+/** A compiled file and its routes, keyed by the projected document they were drawn for. */
+export interface SceneResult {
+  scene: Scene;
+  fingerprint: string;
+  routing: RoutingResult;
+}
 
 export type EngineResult<T extends EngineTask> = T extends { kind: 'layout' }
   ? LayoutResult
   : T extends { kind: 'candidate' | 'source' }
     ? CandidateResult
-    : Timeline;
+    : T extends { kind: 'route' }
+      ? RoutingResult
+      : T extends { kind: 'scene' }
+        ? SceneResult
+        : Timeline;
 
 export function runEngineTask(
   task: EngineTask,
-): Promise<LayoutResult | CandidateResult | Timeline> {
+): Promise<LayoutResult | CandidateResult | Timeline | RoutingResult | SceneResult> {
+  if (task.kind === 'scene') return compileScene(task.source, task.view);
   if (task.kind === 'layout') return LayoutLab.compute(task.doc, task.options);
+  if (task.kind === 'route') return Promise.resolve(RouteLab.compute(task.input, task.options));
   if (task.kind === 'candidate')
     return ExplorerLab.candidate(task.baseline, task.spec, task.config);
   if (task.kind === 'source') return compileCandidate(task.source, task.spec);
@@ -42,6 +67,67 @@ async function compileCandidate(source: string, spec: CandidateSpec): Promise<Ca
     previous: [],
   });
   return { spec, document, report: null, routing };
+}
+
+/** Compile, project and route a file exactly as the viewer's scene state would. */
+async function compileScene(source: string, view: ViewState): Promise<SceneResult> {
+  const scene = await compile(source),
+    document = projectScene(scene, view),
+    vg = visibleGraph(document),
+    geometry = makeGeometry(document),
+    rects = new Map<string, Rect>();
+  for (const n of vg.nodes) rects.set(n.id, { ...geometry(n.id) });
+  for (const g of vg.groups) rects.set(g.id, frameRect(document, geometry, g.id));
+  const { result } = computeRoutes(document, vg, rects, { previous: [] });
+  return { scene, fingerprint: routingFingerprint(document), routing: result };
+}
+
+// --- One long-lived worker -------------------------------------------------------------------
+
+let shared: Worker | null | undefined;
+let nextId = 0;
+const waiting = new Map<number, { resolve: (value: never) => void; reject: (e: Error) => void }>();
+
+/**
+ * Run a short task in one worker that stays up, so frequent work such as recompiling a file after
+ * each edit pays no start-up cost. Without workers the task runs on the main thread.
+ */
+export function runShared<T extends EngineTask>(input: T): Promise<EngineResult<T>> {
+  const task: T = JSON.parse(JSON.stringify(input));
+  if (shared === undefined) shared = startShared();
+  if (!shared) return runEngineTask(task) as Promise<EngineResult<T>>;
+  const id = ++nextId,
+    worker = shared;
+  return new Promise<EngineResult<T>>((resolve, reject) => {
+    waiting.set(id, { resolve: resolve as (value: never) => void, reject });
+    worker.postMessage({ id, task });
+  });
+}
+
+function startShared(): Worker | null {
+  if (typeof Worker === 'undefined') return null;
+  try {
+    const worker = new Worker(new URL('../workers/engine.worker.ts', import.meta.url), {
+      type: 'module',
+    });
+    worker.onmessage = ({
+      data,
+    }: MessageEvent<{ id: number; ok: boolean; result: never; error: string }>) => {
+      const job = waiting.get(data.id);
+      waiting.delete(data.id);
+      if (data.ok) job?.resolve(data.result);
+      else job?.reject(Error(data.error));
+    };
+    worker.onerror = e => {
+      e.preventDefault();
+      shared = null;
+      for (const job of waiting.values()) job.reject(Error('The engine worker stopped.'));
+      waiting.clear();
+    };
+    return worker;
+  } catch {
+    return null;
+  }
 }
 
 export class CancelledError extends Error {
