@@ -144,7 +144,8 @@ This is the only way to test the `stay` path.
 Hard defects (should be zero): **node-overlap**, **edge-through-node** (an edge crosses an object
 it does not connect), **clipped** (a route or label outside the exported drawing).
 
-Label defects: **label-on-node**, **label-overlap**, **label-through-text** (another edge runs through the label's text: a reader
+Label defects: **label-on-node**, **label-near-node** (within 6px of a box it doesn't cover, so it reads
+as the box's; added after the 23 October viewer feedback), **label-overlap**, **label-through-text** (another edge runs through the label's text: a reader
 can take the label for that line's, S1), **label-on-edge** (another edge runs only under the
 label's padding), **labels-too-close** (two labels on different edges closer than a label's height:
 they read as one phrase, or as two labels on one edge), **label-detached** (label farther than its own height from its edge),

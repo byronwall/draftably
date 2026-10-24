@@ -85,6 +85,9 @@ const LINE_CLEARANCE = 8;
  * at it (3); a line touching it or a group border under it (2), or a line within
  * `LINE_CLEARANCE` or a shared trunk (1), only crowds it.
  */
+/** Gap a label keeps from a box when its line offers a spot that far away. */
+const BOX_CLEARANCE = 10;
+
 function labelSpots(
   label: string,
   points: Point[],
@@ -123,6 +126,8 @@ function labelSpots(
       else if (!shared && hits(near)) c += 1;
     }
     for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 2;
+    // A label pressed against a box reads as part of it; a spot a little further along is clearer.
+    if (obstacles.some(o => overlaps(r, o, BOX_CLEARANCE))) c += 1;
     return c;
   };
   // Shifts across an upright segment that put the label's edge just past a parallel line beside

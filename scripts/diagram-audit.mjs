@@ -898,7 +898,11 @@ function measure(file) {
   // Labels.
   const labels = parseLabels(svg);
   for (const [i, l] of labels.entries()) {
-    for (const n of leaves) if (rectsOverlap(l, n)) note('label-on-node', `"${l.text}" on ${n.id}`);
+    for (const n of leaves)
+      if (rectsOverlap(l, n)) note('label-on-node', `"${l.text}" on ${n.id}`);
+      // Pressed against a box without touching it: hard to read as the line's (feedback R5).
+      else if (rectsOverlap(l, { x: n.x - 6, y: n.y - 6, w: n.w + 12, h: n.h + 12 }))
+        note('label-near-node', `"${l.text}" by ${n.id}`);
     for (const g of groups) {
       const header = { x: g.x, y: g.y, w: g.w, h: 32 };
       if (rectsOverlap(l, header)) note('label-on-group-title', `"${l.text}" on ${g.id}`);
@@ -1117,6 +1121,7 @@ function measure(file) {
       'node-overlap',
       'edge-through-node',
       'label-on-node',
+      'label-near-node',
       'label-overlap',
       'label-on-edge',
       'label-on-group-title',
@@ -1161,6 +1166,7 @@ function measure(file) {
     'node-overlap': 10,
     'edge-through-node': 8,
     'label-on-node': 6,
+    'label-near-node': 1,
     'label-overlap': 6,
     'label-on-edge': 3,
     'label-on-group-title': 3,
