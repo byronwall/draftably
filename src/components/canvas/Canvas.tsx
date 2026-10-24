@@ -23,7 +23,7 @@ import './canvas.css';
 
 const CANVAS_LABEL =
   'Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. ' +
-  'Escape returns to Edit. Shift drag selects. Two-finger scroll pans; pinch zooms. Question mark opens shortcuts.';
+  'Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.';
 
 export function Canvas() {
   let stage!: HTMLElement;

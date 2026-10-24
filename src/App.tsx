@@ -26,7 +26,7 @@ import { openFile } from './state/files';
 import { setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
 import { cancelLayout } from './state/layout';
-import { releaseModifierZoom, resetModifiers } from './state/pointer';
+import { resetModifiers } from './state/pointer';
 import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
 import { filesShown, inspectorOpen, layoutLabOpen, objectsOpen, showError } from './state/ui';
@@ -99,10 +99,6 @@ export default function App() {
       resetModifiers();
       setSpaceHeld(false);
     };
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'Meta' || e.key === 'Control') releaseModifierZoom();
-      handleKeyUp(e);
-    };
     // Leaving an edited example would lose its edits; the browser asks first.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       if (exampleEdited()) e.preventDefault();
@@ -114,7 +110,7 @@ export default function App() {
     };
     const cleanups = [
       listen(document, 'keydown', handleKeyDown),
-      listen(document, 'keyup', onKeyUp),
+      listen(document, 'keyup', handleKeyUp),
       listen(document, 'copy', handleCopy),
       listen(document, 'paste', handlePaste),
       listen(window, 'blur', onBlur),
