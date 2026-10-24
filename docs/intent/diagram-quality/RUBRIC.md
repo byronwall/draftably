@@ -7,7 +7,7 @@ measure again. The corpus stays fixed across rounds so results compare.
 **Where things stand:** five rounds ran ([r1](rounds/r1.md), [r2](rounds/r2.md),
 [r3](rounds/r3.md), [r4](rounds/r4.md), [r5](rounds/r5.md)). Round 5 reran every earlier round
 with its script: corpus mean DI 28.4 → 8.2 over five rounds, held-out 25.4 → 5.8.
-[NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence, code locations,
+[FEEL.md](FEEL.md) says what good looks and feels like; it is the tie-breaker when a metric and the eye disagree. [NEXT.md](NEXT.md) is the ranked list of remaining issues, with evidence, code locations,
 approaches and open product questions. Start there.
 
 Three signals, each doing one job:

@@ -251,6 +251,24 @@ job`).
 - `engine-order`: ci-checks e1's Pull request stands above pnpm install.
 - All S3.
 
+## 9. From the 23 October viewer feedback: crossings, leaf placement, sibling group order
+
+Three requests from the [deploy walkthrough](../viewer-feedback-2026-10-23/README.md) need layout or
+global routing work that the feedback stack did not take on. [FEEL.md](FEEL.md) states the intent.
+
+- **Avoidable crossings** (R6; deploy 08, 09, 11). "It could have gone below this other one."
+  Edges are routed one at a time in length order; a crossing is priced (360) when the later edge
+  is routed but never repaired. Approach: after routing, for each crossing pair try rerouting
+  either edge with the other's route as a hard obstacle on the shared corridor, and keep the
+  pair if total cost drops. Measure with `crossings` and DI; watch `many-bends`.
+- **A leaf far down the flow** (R7; deploy 11, 10:44). A node with one connection sits ranks away
+  from its neighbour to keep the aspect ratio. Approach: in the flow recipes, seat a single-edge
+  leaf in its neighbour's rank (beside it) when its own rank is more than one away, unless that
+  widens the drawing past the 5:1 cap.
+- **Sibling group order** (R8; deploy 13, 12:19). Configuration sat between Per-PR database and
+  Operator tools although only Operator tools feeds it. Approach: order sibling groups in a row
+  by the barycenter of edges between their members, as `layered` orders nodes, before packing.
+
 ## Metric work before the next round
 
 - **A line on a box's own side** (0px): `edge-hugs-node` requires a gap over 0 and
