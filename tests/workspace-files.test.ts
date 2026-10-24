@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ago, sortFiles } from '../src/components/workspace-files';
+import { ago, groupByFolder, sortFiles } from '../src/components/workspace-files';
 
 const HOUR = 3_600_000;
 
@@ -27,5 +27,27 @@ describe('recent diagram times', () => {
       { path: 'c.draft', title: 'C', modified: 2 },
     ];
     expect(sortFiles(files, 'recent').map(f => f.path)).toEqual(['b.draft', 'c.draft', 'a.draft']);
+  });
+});
+
+describe('folder view', () => {
+  it('lists the root first, then each folder before its sub-folders', () => {
+    const files = [
+      'z.draft',
+      'deploy/railway/b.draft',
+      'deploy/a.draft',
+      'deploy-old/c.draft',
+      'deploy/aws/d.draft',
+      'a.draft',
+    ].map(path => ({ path, title: path, modified: 0 }));
+    const groups = groupByFolder(sortFiles(files, 'folder'));
+    expect(groups.map(g => [g.folder, g.depth])).toEqual([
+      ['', 0],
+      ['deploy', 1],
+      ['deploy/aws', 2],
+      ['deploy/railway', 2],
+      ['deploy-old', 1],
+    ]);
+    expect(groups[0].files.map(f => f.path)).toEqual(['a.draft', 'z.draft']);
   });
 });

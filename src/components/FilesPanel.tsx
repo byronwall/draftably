@@ -17,11 +17,13 @@ import { Icon } from './Icon';
 import {
   ago,
   baseName,
-  fileOrder,
+  type FileOrder,
   folderOf,
   changedSinceOpen,
+  hasFolders,
   matchFiles,
   setFileOrder,
+  shownOrder,
   sortFiles,
 } from './workspace-files';
 
@@ -34,9 +36,12 @@ export function FilesPanel() {
   const [active, setActive] = createSignal(0);
   const [creating, setCreating] = createSignal(false);
   const current = () => fileSession()?.file;
-  const files = createMemo(() =>
-    sortFiles(matchFiles(workspace()?.files ?? [], query()), fileOrder()),
-  );
+  const all = () => workspace()?.files ?? [];
+  const files = createMemo(() => sortFiles(matchFiles(all(), query()), shownOrder(all())));
+  const byFolder = () => shownOrder(all()) === 'folder';
+  /** In the folder view, a heading opens each folder's run of files. */
+  const opensFolder = (i: number) =>
+    byFolder() && (i === 0 || folderOf(files()[i - 1].path) !== folderOf(files()[i].path));
   let list!: HTMLDivElement;
 
   onMount(() => {
@@ -98,24 +103,7 @@ export function FilesPanel() {
           }}
           onKeyDown={onKeyDown}
         />
-        <div class="segmented files-order" role="group" aria-label="Order">
-          <button
-            type="button"
-            title="Newest first"
-            aria-pressed={fileOrder() === 'recent'}
-            onClick={() => setFileOrder('recent')}
-          >
-            Recent
-          </button>
-          <button
-            type="button"
-            title="By path"
-            aria-pressed={fileOrder() === 'name'}
-            onClick={() => setFileOrder('name')}
-          >
-            A–Z
-          </button>
-        </div>
+        <FileOrderSwitch class="files-order" />
       </div>
       <div class="panel-scroll files-list" ref={list}>
         <For
@@ -127,27 +115,37 @@ export function FilesPanel() {
           }
         >
           {(file, i) => (
-            <a
-              class="file-row"
-              classList={{
-                current: file.path === current(),
-                active: !!query().trim() && i() === active(),
-              }}
-              href={fileUrl(file.path)}
-              aria-current={file.path === current() ? 'page' : undefined}
-              title={file.path}
-            >
-              <span class="file-row-title">{file.title || baseName(file.path)}</span>
-              <span class="file-row-meta">
-                <span class="file-row-path">
-                  <Show when={folderOf(file.path)}>
-                    <span class="file-row-folder">{folderOf(file.path)}/</span>
-                  </Show>
-                  {baseName(file.path)}
+            <>
+              <Show when={opensFolder(i())}>
+                <FolderHeading folder={folderOf(file.path)} />
+              </Show>
+              <a
+                class="file-row"
+                classList={{
+                  current: file.path === current(),
+                  active: !!query().trim() && i() === active(),
+                }}
+                href={fileUrl(file.path)}
+                aria-current={file.path === current() ? 'page' : undefined}
+                title={file.path}
+                style={
+                  byFolder()
+                    ? { '--depth': folderOf(file.path) ? folderOf(file.path).split('/').length : 0 }
+                    : undefined
+                }
+              >
+                <span class="file-row-title">{file.title || baseName(file.path)}</span>
+                <span class="file-row-meta">
+                  <span class="file-row-path">
+                    <Show when={!byFolder() && folderOf(file.path)}>
+                      <span class="file-row-folder">{folderOf(file.path)}/</span>
+                    </Show>
+                    {baseName(file.path)}
+                  </span>
+                  <FileTime modified={file.modified} />
                 </span>
-                <FileTime modified={file.modified} />
-              </span>
-            </a>
+              </a>
+            </>
           )}
         </For>
       </div>
@@ -156,6 +154,45 @@ export function FilesPanel() {
         <span class="files-footer-name">All diagrams in {workspace()?.name}</span>
       </a>
     </aside>
+  );
+}
+
+/** Recent, A–Z, and Folders when any diagram sits in a sub-folder. */
+export function FileOrderSwitch(props: { class?: string }) {
+  const option = (order: FileOrder, label: string, title: string) => (
+    <button
+      type="button"
+      title={title}
+      aria-pressed={shownOrder(workspace()?.files ?? []) === order}
+      onClick={() => setFileOrder(order)}
+    >
+      {label}
+    </button>
+  );
+  return (
+    <div class={`segmented ${props.class ?? ''}`} role="group" aria-label="Order">
+      {option('recent', 'Recent', 'Newest first')}
+      {option('name', 'A–Z', 'By path')}
+      <Show when={hasFolders(workspace()?.files ?? [])}>
+        {option('folder', 'Folders', 'Grouped by folder')}
+      </Show>
+    </div>
+  );
+}
+
+/** A folder's name over its files, indented by its depth. */
+export function FolderHeading(props: { folder: string }) {
+  const depth = () => (props.folder ? props.folder.split('/').length : 0);
+  return (
+    <div class="folder-heading" style={{ '--depth': depth() }} role="presentation">
+      <Icon name="folder" />
+      <span class="folder-heading-name">
+        <Show when={depth() > 1}>
+          <span class="folder-heading-parent">{folderOf(props.folder)}/</span>
+        </Show>
+        {props.folder ? baseName(props.folder) : 'Top level'}
+      </span>
+    </div>
   );
 }
 

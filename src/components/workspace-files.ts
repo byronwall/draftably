@@ -2,13 +2,14 @@
 import { createSignal } from 'solid-js';
 import type { WorkspaceFile } from '../server/workspace';
 
-export type FileOrder = 'recent' | 'name';
+export type FileOrder = 'recent' | 'name' | 'folder';
 
 const ORDER_STORAGE = 'diagram-studio-file-order';
 
 function readOrder(): FileOrder {
   try {
-    return localStorage.getItem(ORDER_STORAGE) === 'name' ? 'name' : 'recent';
+    const stored = localStorage.getItem(ORDER_STORAGE);
+    return stored === 'name' || stored === 'folder' ? stored : 'recent';
   } catch {
     return 'recent';
   }
@@ -38,9 +39,51 @@ export function matchFiles(files: readonly WorkspaceFile[], query: string) {
 }
 
 export function sortFiles(files: WorkspaceFile[], by: FileOrder) {
-  return by === 'recent'
-    ? files.sort((a, b) => b.modified - a.modified || a.path.localeCompare(b.path))
-    : files.sort((a, b) => a.path.localeCompare(b.path));
+  if (by === 'recent')
+    return files.sort((a, b) => b.modified - a.modified || a.path.localeCompare(b.path));
+  if (by === 'folder')
+    return files.sort(
+      (a, b) =>
+        compareFolders(folderOf(a.path), folderOf(b.path)) ||
+        baseName(a.path).localeCompare(baseName(b.path)),
+    );
+  return files.sort((a, b) => a.path.localeCompare(b.path));
+}
+
+/** Folders in tree order: the root first, then each folder followed by its own sub-folders. */
+function compareFolders(a: string, b: string) {
+  if (a === b) return 0;
+  if (!a || !b) return a ? 1 : -1;
+  const as = a.split('/'),
+    bs = b.split('/');
+  for (let i = 0; i < Math.min(as.length, bs.length); i++) {
+    const order = as[i].localeCompare(bs[i]);
+    if (order) return order;
+  }
+  return as.length - bs.length;
+}
+
+/** The order to show: the folder view falls back to A–Z when every file is in the root. */
+export const shownOrder = (files: readonly WorkspaceFile[]): FileOrder =>
+  order() === 'folder' && !hasFolders(files) ? 'name' : order();
+
+/** Whether any diagram sits in a sub-folder, so a folder view has something to show. */
+export const hasFolders = (files: readonly WorkspaceFile[]) =>
+  files.some(f => f.path.includes('/'));
+
+/**
+ * Files already sorted by folder, cut into one run per folder. `depth` counts the folder's
+ * levels below the root, for indenting a tree.
+ */
+export function groupByFolder(files: readonly WorkspaceFile[]) {
+  const groups: { folder: string; depth: number; files: WorkspaceFile[] }[] = [];
+  for (const file of files) {
+    const folder = folderOf(file.path),
+      last = groups.at(-1);
+    if (last?.folder === folder) last.files.push(file);
+    else groups.push({ folder, depth: folder ? folder.split('/').length : 0, files: [file] });
+  }
+  return groups;
 }
 
 /** The folder part of a path, or '' at the root: "flows/checkout.draft" → "flows". */
