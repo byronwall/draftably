@@ -14,13 +14,21 @@ import type { Diagram, DiagramEdge } from './types';
 export type Status = 'same' | 'added' | 'removed' | 'changed' | 'context';
 export const STATUSES: Status[] = ['same', 'added', 'removed', 'changed', 'context'];
 
-/** Legend order and wording; `same` needs no row. */
+/** Legend order and wording, after a count; `same` needs no entry. */
 export const STATUS_LABELS: Partial<Record<Status, string>> = {
-  added: 'Added',
-  changed: 'Changed',
-  removed: 'Removed',
-  context: 'Unchanged, for context',
+  added: 'added',
+  changed: 'changed',
+  removed: 'removed',
+  context: 'shown for context',
 };
+
+export interface StatusCount {
+  status: Status;
+  count: number;
+}
+
+/** A legend entry's text: how many objects and connections carry the mark, then what it means. */
+export const statusLabel = ({ status, count }: StatusCount) => `${count} ${STATUS_LABELS[status]}`;
 
 /** The color family each status is drawn in. */
 const HUES: Partial<Record<Status, string>> = { added: 'green', changed: 'amber', removed: 'red' };
@@ -83,13 +91,21 @@ export function statusSwatch(
 export const edgeInk = (look: ResolvedAppearance, edge: DiagramEdge, diff: boolean) =>
   statusPaint(look, edge.status).stroke ?? (diff ? look.muted : look.connection);
 
-/** Statuses a document uses that the legend explains, in legend order. */
-export function usedStatuses(doc: Diagram): Status[] {
-  const used = new Set<Status | undefined>([
-    ...Object.values(doc.styles).map(s => s.status),
-    ...doc.graph.edges.map(e => e.status),
-  ]);
-  return (Object.keys(STATUS_LABELS) as Status[]).filter(s => used.has(s));
+/**
+ * The marks a document uses that the legend explains, in legend order, each with how many
+ * objects and connections carry it, so the key doubles as the change's size.
+ */
+export function usedStatuses(doc: Diagram): StatusCount[] {
+  const ids = new Set([...doc.graph.nodes, ...doc.graph.groups].map(o => o.id)),
+    marks = [
+      ...Object.entries(doc.styles)
+        .filter(([id]) => ids.has(id))
+        .map(([, s]) => s.status),
+      ...doc.graph.edges.map(e => e.status),
+    ];
+  return (Object.keys(STATUS_LABELS) as Status[])
+    .map(status => ({ status, count: marks.filter(m => m === status).length }))
+    .filter(c => c.count);
 }
 
 /** The color key's rows: a diff draws no family colors, so it lists only its statuses. */

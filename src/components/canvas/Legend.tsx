@@ -2,7 +2,7 @@ import { For, Show } from 'solid-js';
 import { NODE_SHADE, resolveAppearance, swatchFor } from '../../model/appearance';
 import {
   drawnLegend,
-  STATUS_LABELS,
+  statusLabel,
   statusPaint,
   statusSwatch,
   usedStatuses,
@@ -44,8 +44,8 @@ export function Legend() {
         </For>
         <For each={statuses()}>
           {s => {
-            const p = () => statusPaint(look(), s),
-              c = () => statusSwatch(look(), s, 'node');
+            const p = () => statusPaint(look(), s.status),
+              c = () => statusSwatch(look(), s.status, 'node');
             return (
               <div class="diagram-legend-row">
                 <span
@@ -58,7 +58,7 @@ export function Legend() {
                     opacity: p().opacity,
                   }}
                 />
-                <span>{STATUS_LABELS[s]}</span>
+                <span>{statusLabel(s)}</span>
               </div>
             );
           }}

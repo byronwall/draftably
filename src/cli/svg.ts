@@ -50,10 +50,28 @@ function outline(shape: string, r: Rect, radius: number, paint: string) {
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
 }
 
-/** One drawing's marks in its own coordinates, and the box they need with a margin. */
-function sceneMarkup(doc: Diagram, look: ResolvedAppearance, arrow: (ink: string) => string) {
+type Route = ReturnType<typeof computeRoutes>['routes'][number];
+
+/** The connections' paths and label spots, routed around the document's own shapes. */
+function routesOf(doc: Diagram) {
   const { vg, rects } = visibleRects(doc);
-  const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
+  return computeRoutes(doc, vg, rects, { previous: [] }).routes;
+}
+
+/**
+ * One drawing's marks in its own coordinates, and the box they need with a margin. A comparison
+ * panel passes the merged drawing's routes, so every line it keeps runs exactly where it does in
+ * the other panel.
+ */
+function sceneMarkup(
+  doc: Diagram,
+  look: ResolvedAppearance,
+  arrow: (ink: string) => string,
+  shared?: Route[],
+) {
+  const { vg, rects } = visibleRects(doc);
+  const kept = new Set(doc.graph.edges.map(e => e.id)),
+    routes = shared ? shared.filter(r => kept.has(r.id)) : routesOf(doc);
   const out: string[] = [],
     diff = isDiff(doc);
   for (const g of vg.groups) {
@@ -143,9 +161,10 @@ export function renderSvg(doc: Diagram): string {
   const arrow = (ink: string) => (inks.indexOf(ink) ? `arrow-${inks.indexOf(ink)}` : 'arrow');
   // With `compare`, each version is its own panel drawn from the merged positions, so the panels
   // share one box and every unchanged object lines up across them.
-  const scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map(d =>
-    sceneMarkup(d, look, arrow),
-  );
+  const shared = compare ? routesOf(doc) : undefined,
+    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map(d =>
+      sceneMarkup(d, look, arrow, shared),
+    );
   const b = scenes.map(s => s.bounds).reduce(union),
     x0 = Math.floor(b.x),
     y0 = Math.floor(b.y),

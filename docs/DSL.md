@@ -104,12 +104,13 @@ node api "API gateway"
 `draftably compare before.draft after.draft` writes these marks for you. It matches nodes,
 groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and
 puts each removed declaration back, marked `-`, after the line that preceded it in the older file.
-A tool that generates diagrams only has to write two plain files.
+It also prints the size of the change, such as `3 added, 1 changed, 2 removed.`, on stderr, so
+stdout stays the file. A tool that generates diagrams only has to write two plain files.
 
 **Side by side.** Add a `compare` line to draw the two versions as panels instead of one merged
 drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
 leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
-use the merged positions, so every unchanged object sits at the same place in each. `direction=right` sets the
+use the merged positions and the merged routes, so every unchanged object and line sits at the same place in each. `direction=right` sets the
 panels side by side, so every row lines up across them; `direction=down` stacks them, so every
 column lines up. Without it, the arrangement whose whole image comes closest to `aspect` (width
 over height, 1.6 by default) wins: a wide flow usually stacks and a tall one sits side by side. Each panel takes
@@ -125,7 +126,7 @@ theme's neutral surface, containers become quiet outlines, and unchanged lines t
 the marked objects carry a hue. `color=` and `legend` lines are kept but not drawn; remove the
 marks and the file draws in its own colors again. The green, amber and red come from the theme,
 so every theme draws a diff in its own palette. Each mark also has a border weight, dash, fade
-or strike, so it reads in grayscale too, and the legend lists only the marks the file uses. Marks never move anything: the drawing
+or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects and lines carry it. Marks never move anything: the drawing
 holds both versions at once, so unchanged objects stay where they are.
 
 ## Themes and colors

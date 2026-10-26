@@ -28,9 +28,14 @@ describe('change marks', () => {
     expect(m.objects[1].was).toBe('Orders');
     expect(formatSource(SOURCE)).toBe(SOURCE);
     const doc = normalize(JSON.parse(JSON.stringify(projectScene(checkSource(SOURCE)))));
-    expect(usedStatuses(doc)).toEqual(['added', 'changed', 'removed', 'context']);
+    expect(usedStatuses(doc).map(s => `${s.count} ${s.status}`)).toEqual([
+      '2 added',
+      '1 changed',
+      '2 removed',
+      '1 context',
+    ]);
     const svg = renderSvg(doc);
-    expect(svg).toContain('Unchanged, for context');
+    expect(svg).toContain('1 shown for context');
     expect(svg).toContain('line-through');
   });
 
