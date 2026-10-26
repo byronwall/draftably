@@ -55,8 +55,16 @@ layout root flow gap=48
     const before = 'node a "A"\nnode b "B"\nnode c "C"\nedge e a -> b\n';
     const after = 'group g "G"\nnode a "A"\nnode b "B" in=g\nnode c "C"\nedge e a -> c\n';
     const { merged, moved } = compareDetailed(before, after);
-    expect(merged).toContain('-edge e-was a -> b\n+edge e a -> c\n');
-    expect(moved).toEqual(['b']);
+    expect(merged).toContain('-edge e-was a -> b-was\n+edge e a -> c\n');
+    expect(moved).toEqual([]);
+  });
+
+  it('keeps a node that moved container in its old container in the older version', () => {
+    const before = 'group g "G"\nnode a "A" in=g\nnode b "B"\nedge e a -> b\n';
+    const after = 'group g "G"\nnode a "A"\nnode b "B"\nedge e a -> b\n';
+    expect(compareSources(before, after)).toBe(
+      'group g "G"\n-node a-was "A" in=g\n+node a "A"\nnode b "B"\n-edge e-was a-was -> b\n+edge e a -> b\n',
+    );
   });
 
   it('refuses files that already carry marks', () => {

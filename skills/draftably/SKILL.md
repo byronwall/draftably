@@ -151,7 +151,8 @@ content area.
   write two near-identical diagrams for the reader to compare. Marked files draw in change colors
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
   `draftably compare old.draft new.draft --write diff.draft` writes the marked file and prints
-  the change's size (`3 added, 1 changed, 2 removed.`) on stderr. Add
+  the change's size (`3 added, 1 changed, 2 removed.`) on stderr. To mark a node that moved
+  container by hand, remove the old one as `-node <id>-was ... in=<old>` and add the new one. Add
   `compare "main" "PR 123"` when the reader needs each version whole; leave it out for one merged
   drawing. `direction=right` (rows align) or `direction=down` (columns align) fixes the
   arrangement; by default it follows `aspect=` (1.6).
