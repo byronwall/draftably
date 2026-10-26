@@ -1,5 +1,11 @@
 # draftably
 
+## 0.5.1
+
+### Patch Changes
+
+- ead0b11: `draftably compare` now keeps a node that moved to another container in its old container in the older panel: the old node and its lines are removed under `<id>-was`, and the new ones added, so the merged drawing shows the move.
+
 ## 0.5.0
 
 ### Minor Changes
