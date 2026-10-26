@@ -406,6 +406,13 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     });
   }
   if (legend.length) out.legend = legend;
+  const h = input.heading;
+  if (h && typeof h === 'object') {
+    const heading: NonNullable<DiagramAppearance['heading']> = {};
+    for (const key of ['title', 'subtitle'] as const)
+      if (typeof h[key] === 'string' && h[key]) heading[key] = h[key];
+    if (heading.title || heading.subtitle) out.heading = heading;
+  }
   return out;
 }
 

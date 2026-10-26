@@ -3,6 +3,7 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import { resolveAppearance } from '../model/appearance';
+import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
 import { drawnSwatch } from '../model/colors';
 import { truncateText } from '../model/fonts';
@@ -39,15 +40,19 @@ export function renderSvg(doc: Diagram): string {
     x0 = Math.floor(b.x),
     y0 = Math.floor(b.y),
     key = legendSize(look, doc.appearance.legend),
-    w = Math.max(Math.ceil(b.x + b.w) - x0, key.w + 80),
+    head = headingSize(look, doc.appearance.heading),
+    w = Math.max(Math.ceil(b.x + b.w) - x0, key.w + 80, head.w + 80),
     drawnH = Math.ceil(b.y + b.h) - y0,
-    h = drawnH + key.h;
+    y1 = y0 - head.h,
+    h = drawnH + key.h + head.h;
   const out = [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y0} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y1} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title>${esc(doc.title)}</title>`,
     `<defs><style>${fontFaceCss(look)}</style>` +
       `<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${look.connection}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>`,
-    `<rect x="${x0}" y="${y0}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
+    `<rect x="${x0}" y="${y1}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
+    // The title and subtitle sit above the drawing, left-aligned with the legend under it.
+    headingMarkup(look, doc.appearance.heading, x0 + 40, y1 + 28),
   ];
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,

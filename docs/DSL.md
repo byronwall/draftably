@@ -35,7 +35,8 @@ and groups. References may point to later lines.
 
 | Statement                          | Meaning                                                                                                                                            |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one.                                                                                                                       |
+| `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                    |
+| `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                                 |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
@@ -66,6 +67,11 @@ longest group into rows, one group at a time, so the groups keep their order; on
 can fold do the groups themselves wrap into rows. A group that only receives lines (an upstream
 API, a cache) sits beside the group that calls it rather than past it. `fold=never` on the root
 engine keeps one long line. Stays and pins never change what folds.
+
+**Title and subtitle.** `inspect --svg` and the viewer's SVG and PNG exports draw the `diagram`
+title and the `subtitle` line above the drawing, left-aligned with the legend, so a copied image
+still says what it shows and why it matters. Like the legend, they never move anything. A file
+without either draws no heading.
 
 ## Themes and colors
 

@@ -440,6 +440,14 @@ export function parseModel(source: string | SourceDoc): Model {
         diagramLine = line;
         m.title = text(args[0]);
         num('version', 1, 1, 1);
+        if (m.title) (m.appearance.heading ??= {}).title = m.title;
+        break;
+      case 'subtitle':
+        count(1);
+        allow([]);
+        once('subtitle');
+        assert(text(args[0]).trim(), 'A subtitle needs its text in quotes.');
+        (m.appearance.heading ??= {}).subtitle = text(args[0]);
         break;
       case 'node':
       case 'group': {

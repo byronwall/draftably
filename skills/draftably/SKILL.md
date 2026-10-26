@@ -37,6 +37,7 @@ References may point to later lines. Comments start with `#` or `//`.
 
 ```text
 diagram "Checkout architecture" version=1
+subtitle "Orders persist before payment is authorized"
 
 group clients "Customer channels" color=blue
 node web "Web app" in=clients
@@ -67,7 +68,8 @@ layout services row gap=56
 
 | Statement                          | Options                                                                                              |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional, at most one.                                                                               |
+| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                      |
+| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title         |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`                             |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                         |
 | `theme name`                       | Preset look (see below); optional, at most one                                                       |
@@ -142,6 +144,8 @@ content area.
   - Color the outer group and let members inherit (`color=auto`); nested groups of one family
     are drawn in stepped shades. Never give a member its container's family at a pale shade.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
+- Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
+  `subtitle` stating its takeaway, so the exported picture stands alone.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.
 - When editing an existing file, keep its IDs and any `stay`/`near`/`pin` lines the user's viewer
   edits wrote; add new statements rather than rewriting the file.

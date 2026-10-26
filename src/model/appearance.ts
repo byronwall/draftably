@@ -75,6 +75,13 @@ export interface DiagramAppearance {
   colors: ColorDefinition[];
   /** What the colors mean, from `legend` statements, drawn as a key beside the diagram. */
   legend?: LegendEntry[];
+  /** Title and subtitle drawn above exported images, from `diagram` and `subtitle` statements. */
+  heading?: Heading;
+}
+
+export interface Heading {
+  title?: string;
+  subtitle?: string;
 }
 
 export interface LegendEntry {
