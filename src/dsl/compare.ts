@@ -25,8 +25,8 @@ const edgeKey = (e: ModelEdge) => [e.source, e.target, e.label, e.dashed, e.from
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
 
 /**
- * Merge two plain versions into one marked file. `moved` lists nodes and groups that changed
- * container: they share one position, so the older panel draws them in their new container.
+ * Merge two plain versions into one marked file. `moved` lists groups that changed container:
+ * they keep one position, so the older panel draws them in their new container.
  */
 export function compareSources(before: string, after: string): string {
   return compareDetailed(before, after).merged;
@@ -48,24 +48,46 @@ export function compareDetailed(before: string, after: string) {
     ...next.edges.map(e => ['edge:' + e.id, edgeKey(e)] as const),
   ]);
   const scopes = new Set(next.layouts.map(l => l.scope));
-  // An edge that now joins other objects is a different line: the old one is removed, under a
-  // spare ID, and the new one added, so each panel draws the line its version had.
-  const ends = (e: ModelEdge) => e.source + '\0' + e.target,
-    retargeted = new Set(
-      next.edges
-        .filter(e => old.edges.some(o => o.id === e.id && ends(o) !== ends(e)))
-        .map(e => 'edge:' + e.id),
-    ),
-    taken = new Set([...was.keys(), ...now.keys()]),
-    spare = (id: string) => {
+  // A node in another container, or an edge that joins other objects or touches such a node, is
+  // a different thing in each version: the old one is removed under a spare ID and the new one
+  // added, so each panel draws its own and the merged drawing shows the move.
+  const taken = new Set([...was.keys(), ...now.keys()]),
+    spare = (kind: string, id: string) => {
       let n = `${id}-was`;
-      for (let i = 2; taken.has('edge:' + n); i++) n = `${id}-was${i}`;
-      taken.add('edge:' + n);
+      for (let i = 2; taken.has(kind + n); i++) n = `${id}-was${i}`;
+      taken.add(kind + n);
       return n;
     };
-  const moved = next.objects
-    .filter(o => old.objects.some(p => p.id === o.id && p.parent !== o.parent))
-    .map(o => o.id);
+  const parentMoved = next.objects.filter(o =>
+      old.objects.some(p => p.id === o.id && p.parent !== o.parent),
+    ),
+    movedNodes = new Map(
+      parentMoved.filter(o => o.type === 'node').map(o => [o.id, spare('object:', o.id)]),
+    ),
+    moved = parentMoved.filter(o => o.type === 'group').map(o => o.id);
+  const ends = (e: ModelEdge) => e.source + '\0' + e.target,
+    split = new Set([
+      ...[...movedNodes.keys()].map(id => 'object:' + id),
+      ...next.edges
+        .filter(e =>
+          old.edges.some(
+            o =>
+              o.id === e.id &&
+              (ends(o) !== ends(e) || [o.source, o.target].some(id => movedNodes.has(id))),
+          ),
+        )
+        .map(e => 'edge:' + e.id),
+    ]);
+  // A removed line, joined to the old copies of moved nodes; a split one also takes a spare ID.
+  const removedLine = (line: Statement): Statement => {
+    const args = line.args.map(w => ({ ...w })),
+      own = split.has(keyOf(line));
+    if (line.command === 'edge') {
+      if (own) args[0].value = spare('edge:', args[0].value);
+      for (const i of [1, 3]) args[i].value = movedNodes.get(args[i].value) ?? args[i].value;
+    } else if (own) args[0].value = movedNodes.get(args[0].value)!;
+    return { ...line, args, mark: '-', comment: undefined };
+  };
 
   const out: SourceLine[] = [];
   for (const line of docs[1].lines) {
@@ -74,7 +96,7 @@ export function compareDetailed(before: string, after: string) {
       continue;
     }
     const prior = was.get(keyOf(line));
-    if (!prior || retargeted.has(keyOf(line))) out.push({ ...line, mark: '+' });
+    if (!prior || split.has(keyOf(line))) out.push({ ...line, mark: '+' });
     else if (prior.key !== now.get(keyOf(line))) {
       const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '';
       out.push({
@@ -102,20 +124,13 @@ export function compareDetailed(before: string, after: string) {
     }
     if (!DECLARATIONS.includes(line.command)) continue;
     const key = keyOf(line);
-    if (now.has(key) && !retargeted.has(key)) {
+    if (now.has(key) && !split.has(key)) {
       anchor = out.findIndex(
         l => l.kind === 'statement' && DECLARATIONS.includes(l.command) && keyOf(l) === key,
       );
       continue;
     }
-    const removed: Statement = retargeted.has(key)
-      ? {
-          ...line,
-          mark: '-',
-          comment: undefined,
-          args: [{ ...line.args[0], value: spare(line.args[0].value) }, ...line.args.slice(1)],
-        }
-      : { ...line, mark: '-', comment: undefined };
+    const removed = removedLine(line);
     if (anchor < 0) {
       const first = out.findIndex(l => l.kind === 'statement' && DECLARATIONS.includes(l.command));
       anchor = (first < 0 ? out.length : first) - 1;

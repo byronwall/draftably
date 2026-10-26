@@ -107,7 +107,7 @@ export async function main(argv: string[]): Promise<number> {
         console.error(sizes.length ? sizes.map(statusLabel).join(', ') + '.' : 'No changes.');
         if (moved.length)
           console.error(
-            `Moved to another container: ${moved.join(', ')}. Both panels draw them where they are now.`,
+            `Groups moved to another container: ${moved.join(', ')}. Both panels draw them where they are now.`,
           );
         if (await maybePng(draw, rest)) return 0;
         if (out) {
