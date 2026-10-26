@@ -1,0 +1,32 @@
+diagram "PR diagrams: who owns what" version=1
+
+group prtool "PR summary repo" color=blue
+node code "Code on disk" in=prtool
+node analysis "Static analysis" in=prtool
+node before "before.draft" in=prtool shape=pill
+node after "after.draft" in=prtool shape=pill
+
+group draftably "Draftably" color=mint
+node merge "ID-matched merge" in=draftably
+node union "Union layout" in=draftably
+node diff "Diff view" in=draftably
+node side "Side-by-side panels" in=draftably
+
+node pr "PR description" shape=pill color=amber
+
+edge e1 code -> analysis "base + head"
+edge e2 analysis -> before
+edge e3 analysis -> after
+edge e4 before -> merge
+edge e5 after -> merge
+edge e6 merge -> union "status per object"
+edge e7 union -> diff
+edge e8 union -> side "same positions"
+edge e9 diff -> pr "PNG"
+edge e10 side -> pr "PNG"
+
+legend blue "Owned by the PR summary repo"
+legend mint "Owned by Draftably (proposed)"
+legend amber "Output"
+
+layout root engine=layered direction=right
