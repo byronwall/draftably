@@ -14,6 +14,7 @@ import {
   type LegendEntry,
 } from './appearance';
 import { FONT_ROLES } from './fonts';
+import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {
   ContainerLayout,
@@ -194,6 +195,7 @@ export function normalize(input: unknown): Diagram {
       directed: e.directed !== false,
       emphasis: !!e.emphasis,
       dashed: !!e.dashed || ['dependency', 'annotation'].includes(e.type),
+      ...(STATUSES.includes(e.status) && e.status !== 'same' ? { status: e.status } : {}),
     });
   }
 
@@ -236,6 +238,9 @@ export function normalize(input: unknown): Diagram {
       color: style.color || 'auto',
       ...(style.shade !== undefined ? { shade: style.shade } : {}),
       icon: ICONS[style.icon] ? style.icon : '',
+      ...(STATUSES.includes(style.status) && style.status !== 'same'
+        ? { status: style.status }
+        : {}),
     };
     const label = data.layout?.labels?.[n.id];
     if (label) {

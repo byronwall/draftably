@@ -5,6 +5,7 @@ import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
 import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
+import { usedStatuses } from '../model/status';
 import { findNode } from '../model/graph';
 import { fontFaceCss } from '../lib/font-data';
 import {
@@ -133,7 +134,8 @@ export function exportSvg(): string {
   });
   try {
     const look = resolveAppearance(doc.appearance),
-      key = legendSize(look, doc.appearance.legend),
+      statuses = usedStatuses(doc),
+      key = legendSize(look, doc.appearance.legend, statuses),
       head = headingSize(look, doc.appearance.heading),
       b = sceneBounds(),
       x = b.x - 28,
@@ -166,7 +168,7 @@ export function exportSvg(): string {
     // The key from the file's legend lines goes under the drawing, as in `inspect --svg`.
     const markup =
       headingMarkup(look, doc.appearance.heading, x + 28, y + 24) +
-      legendMarkup(look, doc.appearance.legend, x + 28, y + head.h + b.h + 44);
+      legendMarkup(look, doc.appearance.legend, x + 28, y + head.h + b.h + 44, statuses);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,

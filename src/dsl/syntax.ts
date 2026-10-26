@@ -20,6 +20,7 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
+import type { Status } from '../model/status';
 import type {
   ColorKey,
   LayoutAlgorithmId,
@@ -39,6 +40,10 @@ export class DslError extends Error {
   }
 }
 
+/** Change marks before `node`, `group` and `edge`, read like a diff, and the status each sets. */
+export const MARKS = { '+': 'added', '-': 'removed', '~': 'changed', '.': 'context' } as const;
+export type Mark = keyof typeof MARKS;
+
 /** A word in a statement. Quoted words are strings; bare words are identifiers and numbers. */
 export interface Word {
   value: string;
@@ -48,6 +53,8 @@ export interface Word {
 export interface Statement {
   kind: 'statement';
   command: string;
+  /** Change mark written before the command, as in a diff: `+`, `-`, `~` or `.`. */
+  mark?: Mark;
   args: Word[];
   attrs: Array<[string, Word]>;
   /** Inline comment including its `#` or `//` marker. */
@@ -121,7 +128,9 @@ export function readSource(source: string): SourceDoc {
     const line = i + 1,
       { tokens, comment } = tokenize(text, line);
     if (!tokens.length) return comment ? { kind: 'comment', text: comment } : { kind: 'blank' };
-    const [command, ...rest] = tokens,
+    const [first, ...rest] = tokens,
+      mark = MARKS[first[0] as Mark] && first.length > 1 ? (first[0] as Mark) : undefined,
+      command = mark ? first.slice(1) : first,
       args: Word[] = [],
       attrs: Array<[string, Word]> = [];
     for (const raw of rest) {
@@ -132,7 +141,7 @@ export function readSource(source: string): SourceDoc {
         attrs.push([key, word(raw.slice(eq + 1), line)]);
       } else args.push(word(raw, line));
     }
-    return { kind: 'statement', command, args, attrs, comment, line };
+    return { kind: 'statement', command, ...(mark ? { mark } : {}), args, attrs, comment, line };
   });
   return { lines };
 }
@@ -145,7 +154,7 @@ const printWord = (w: Word) =>
 
 export function printStatement(s: Statement): string {
   const parts = [
-    s.command,
+    (s.mark ?? '') + s.command,
     ...s.args.map(printWord),
     ...s.attrs.map(([k, v]) => k + '=' + printWord(v)),
   ];
@@ -185,6 +194,10 @@ export interface ModelObject {
   /** Explicit shade; omitted means the default for the object type. */
   shade?: Shade;
   shape: DslShape;
+  /** From a change mark; unchanged when omitted. */
+  status?: Status;
+  /** With `~`: the label before the change. */
+  was?: string;
   line: number;
 }
 
@@ -196,6 +209,10 @@ export interface ModelEdge {
   dashed: boolean;
   from: PortSide;
   to: PortSide;
+  /** From a change mark; unchanged when omitted. */
+  status?: Status;
+  /** With `~`: the label before the change. */
+  was?: string;
   line: number;
 }
 
@@ -421,6 +438,17 @@ export function parseModel(source: string | SourceDoc): Model {
       assert(!unique.has(key), `Duplicate declaration: ${key}. Edit the existing line instead.`);
       unique.add(key);
     };
+    const status: Status | undefined = s.mark && MARKS[s.mark];
+    assert(
+      !s.mark || ['node', 'group', 'edge'].includes(command),
+      `Only node, group and edge lines take a ${s.mark} mark.`,
+    );
+    const was = () => {
+      const w = attrs.get('was');
+      if (!w) return {};
+      assert(s.mark === '~', 'was= belongs on a changed (~) line.');
+      return { was: w.value };
+    };
     const readParams = <K extends string>(table: Record<string, Param<K>>) => {
       const out: Record<string, string | number> = {};
       for (const [attr, p] of Object.entries(table)) {
@@ -454,8 +482,8 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? ['in', 'color', 'shade', 'shape', 'kind', 'detail', 'priority']
-            : ['in', 'color', 'shade', 'kind', 'detail', 'priority'],
+            ? ['in', 'color', 'shade', 'shape', 'was', 'kind', 'detail', 'priority']
+            : ['in', 'color', 'shade', 'was', 'kind', 'detail', 'priority'],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -477,13 +505,15 @@ export function parseModel(source: string | SourceDoc): Model {
           color,
           ...(shade !== undefined ? { shade } : {}),
           shape: command === 'node' ? choice('shape', 'box', DSL_SHAPES) : 'box',
+          ...(s.mark ? { status } : {}),
+          ...was(),
           line,
         });
         break;
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'importance']);
+        allow(['kind', 'from', 'to', 'was', 'importance']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -500,6 +530,8 @@ export function parseModel(source: string | SourceDoc): Model {
           dashed: choice('kind', 'sync', ['sync', 'async', 'data']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
+          ...(s.mark ? { status } : {}),
+          ...was(),
           line,
         });
         break;

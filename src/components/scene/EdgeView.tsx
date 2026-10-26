@@ -2,6 +2,7 @@ import { For, Show } from 'solid-js';
 import { findEdge, findNode } from '../../model/graph';
 import type { DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { statusPaint } from '../../model/status';
 import type { Diagram } from '../../model/types';
 
 /** Width of the halo under a connection, in drawing units. */
@@ -21,12 +22,15 @@ export interface EdgeViewProps {
 export function EdgeView(props: EdgeViewProps) {
   const edge = () => findEdge(props.doc, props.route.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
+  const paint = () => statusPaint(look(), edge().status);
   const stroke = () =>
     props.route.blocked
       ? swatchFor(look(), 'red', 600).fill
-      : edge().emphasis && !edge().dashed
-        ? swatchFor(look(), 'primary', 700).fill
-        : look().connection;
+      : paint().stroke
+        ? paint().stroke!
+        : edge().emphasis && !edge().dashed
+          ? swatchFor(look(), 'primary', 700).fill
+          : look().connection;
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
   const waypoints = () =>
     props.interactive && props.selected
@@ -43,6 +47,7 @@ export function EdgeView(props: EdgeViewProps) {
       classList={{ selected: props.selected, editing: props.editing }}
       data-kind="edge"
       data-id={props.route.id}
+      opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive ? 0 : undefined}
       role={props.interactive ? 'button' : undefined}
       aria-label={props.interactive ? description() : undefined}
@@ -88,8 +93,10 @@ export function EdgeView(props: EdgeViewProps) {
         class="edge-line"
         d={props.route.path}
         stroke={stroke()}
-        stroke-width={edge().emphasis ? 2 : 1.4}
-        stroke-dasharray={edge().dashed || props.route.blocked ? '5 5' : undefined}
+        stroke-width={paint().width ? paint().width! - 0.5 : edge().emphasis ? 2 : 1.4}
+        stroke-dasharray={
+          paint().dash ?? (edge().dashed || props.route.blocked ? '5 5' : undefined)
+        }
         marker-end={edge().directed ? `url(#${markerId()})` : undefined}
       />
       <Show when={props.route.label}>
@@ -112,6 +119,7 @@ export function EdgeView(props: EdgeViewProps) {
               font-family={look().annotation.family}
               font-size={String(look().annotation.size)}
               font-weight={String(look().annotation.weight)}
+              text-decoration={paint().strike ? 'line-through' : undefined}
             >
               {edge().label}
             </text>

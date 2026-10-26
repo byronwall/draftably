@@ -54,6 +54,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       color: resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
       icon: '',
+      ...(o.status ? { status: o.status } : {}),
     };
   }
   const flow = readingDirections(scene);
@@ -66,6 +67,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       directed: true,
       emphasis: false,
       dashed: e.dashed,
+      ...(e.status ? { status: e.status } : {}),
     });
     doc.layout.edges[e.id] = {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),

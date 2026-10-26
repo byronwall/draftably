@@ -6,6 +6,7 @@ export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
+import type { Status } from './status';
 
 export type ShapeKind = 'box' | 'pill' | 'circle' | 'diamond' | 'text' | 'icon' | 'image';
 /** A color family: a built-in one, one the file defines, or `auto` for the theme's surface. */
@@ -33,6 +34,8 @@ export interface DiagramEdge {
   directed: boolean;
   emphasis: boolean;
   dashed: boolean;
+  /** How it differs between two versions of the diagram. */
+  status?: Status;
 }
 
 export interface NodeLayout extends Rect {
@@ -108,6 +111,8 @@ export interface NodeStyle {
   /** Numeric shade; omitted means the default for the object (500 for nodes, 100 for groups). */
   shade?: Shade;
   icon: string;
+  /** How it differs between two versions of the diagram. */
+  status?: Status;
 }
 
 export type LayoutAlgorithmId =

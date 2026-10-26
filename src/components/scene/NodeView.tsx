@@ -4,6 +4,7 @@ import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
+import { RING_GAP, statusPaint } from '../../model/status';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
@@ -32,6 +33,7 @@ export function NodeView(props: NodeViewProps) {
   const style = () => styleOf(props.doc, props.id);
   const look = () => resolveAppearance(props.doc.appearance);
   const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
+  const paint = () => statusPaint(look(), style().status);
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   const ringRadius = () => {
     const { shape } = style(),
@@ -42,8 +44,9 @@ export function NodeView(props: NodeViewProps) {
 
   const shapeAttrs = () => ({
     fill: color().fill,
-    stroke: color().stroke,
-    'stroke-width': 1.2,
+    stroke: (!paint().ring && paint().stroke) || color().stroke,
+    'stroke-width': (!paint().ring && paint().width) || 1.2,
+    ...(paint().dash ? { 'stroke-dasharray': paint().dash! } : {}),
     class: look().shadow ? 'node-shape shadowed' : 'node-shape',
   });
 
@@ -67,6 +70,7 @@ export function NodeView(props: NodeViewProps) {
       data-kind="node"
       data-id={props.id}
       transform={`translate(${props.rect.x},${props.rect.y})`}
+      opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive || props.focusable ? 0 : undefined}
       role={props.interactive || props.focusable ? 'button' : undefined}
       aria-label={
@@ -94,6 +98,16 @@ export function NodeView(props: NodeViewProps) {
           height={props.rect.h + 8}
           rx={ringRadius()}
         />
+      </Show>
+      <Show when={paint().ring && style().shape !== 'text'}>
+        <g transform={`translate(${-RING_GAP},${-RING_GAP})`}>
+          <ShapeOutline
+            shape={style().shape}
+            rect={{ ...props.rect, w: props.rect.w + 2 * RING_GAP, h: props.rect.h + 2 * RING_GAP }}
+            radius={look().radius + RING_GAP}
+            attrs={{ fill: 'none', stroke: paint().stroke!, 'stroke-width': paint().width! }}
+          />
+        </g>
       </Show>
       <ShapeOutline
         shape={style().shape}
@@ -141,6 +155,7 @@ export function NodeView(props: NodeViewProps) {
         lineHeight={label().lineHeight}
         type={look().title}
         fill={label().mode === 'center' && style().shape !== 'text' ? color().ink : look().text}
+        strike={paint().strike}
       />
       <Show when={props.interactive}>
         <PositionBadge

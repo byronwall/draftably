@@ -11,6 +11,8 @@ export function SceneText(props: {
   type: TypeProfile;
   fill: string;
   class?: string;
+  /** Strike the text through, as for a removed object. */
+  strike?: boolean;
 }) {
   const first = () => props.y - ((props.lines.length - 1) * props.lineHeight) / 2;
   return (
@@ -22,6 +24,7 @@ export function SceneText(props: {
       font-weight={String(props.type.weight)}
       font-family={props.type.family}
       fill={props.fill}
+      text-decoration={props.strike ? 'line-through' : undefined}
       text-anchor="middle"
       dominant-baseline="central"
     >

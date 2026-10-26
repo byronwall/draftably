@@ -2,6 +2,7 @@ import { createMemo, Show } from 'solid-js';
 import { descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
+import { statusPaint } from '../../model/status';
 import { truncateText } from '../../model/fonts';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
@@ -27,6 +28,7 @@ export function GroupView(props: GroupViewProps) {
   const group = () => findGroup(props.doc, props.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
   const color = () => drawnSwatch(props.doc, look(), props.id, 'group');
+  const paint = () => statusPaint(look(), props.doc.styles[props.id]?.status);
   const collapsed = () => isCollapsed(props.doc, props.id);
   const shapeCount = createMemo(
     () => descendants(props.doc, props.id).filter(id => findNode(props.doc, id)).length,
@@ -50,6 +52,7 @@ export function GroupView(props: GroupViewProps) {
       data-kind="group"
       data-id={props.id}
       transform={`translate(${props.rect.x},${props.rect.y})`}
+      opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive ? 0 : undefined}
       role={props.interactive ? 'button' : undefined}
       aria-label={
@@ -63,9 +66,10 @@ export function GroupView(props: GroupViewProps) {
         height={props.rect.h}
         rx={Math.min(10, look().radius + 4)}
         fill={color().fill}
-        stroke={color().stroke}
-        stroke-width={GROUP_BORDER.width}
-        stroke-opacity={GROUP_BORDER.opacity}
+        stroke={paint().stroke ?? color().stroke}
+        stroke-width={paint().width ?? GROUP_BORDER.width}
+        stroke-opacity={paint().stroke ? 1 : GROUP_BORDER.opacity}
+        stroke-dasharray={paint().dash}
       />
       <rect
         class="group-header"
@@ -84,6 +88,7 @@ export function GroupView(props: GroupViewProps) {
         font-size={String(look().groupTitle.size)}
         font-weight={String(look().groupTitle.weight)}
         fill={color().ink}
+        text-decoration={paint().strike ? 'line-through' : undefined}
         pointer-events="none"
       >
         {title()}

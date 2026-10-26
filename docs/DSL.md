@@ -73,6 +73,33 @@ title and the `subtitle` line above the drawing, left-aligned with the legend, s
 still says what it shows and why it matters. Like the legend, they never move anything. A file
 without either draws no heading.
 
+## Change marks
+
+To show what changed between two versions, write one file and mark the lines that differ, as in a
+diff. A mark is one character before `node`, `group` or `edge`:
+
+```text
+node api "API gateway"
+~node orders "Orders service" was="Orders"
++node refunds "Refunds"
+-node hook "Legacy webhook"
+.node audit "Audit log"
++edge refund orders -> refunds "refund"
+-edge notify api -> hook "notify"
+```
+
+| Mark | Meaning                      | Drawn as                                       |
+| ---- | ---------------------------- | ---------------------------------------------- |
+| `+`  | Added                        | Green ring around the node; green line         |
+| `~`  | Changed                      | Amber ring; amber line                         |
+| `-`  | Removed                      | Red dashed border, faded, title struck through |
+| `.`  | Unchanged, shown for context | Faded                                          |
+
+Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
+change. Each mark pairs a color with a ring, dash, fade or strike, so it reads in grayscale too,
+and the legend adds a row for every mark the file uses. Marks never move anything: the drawing
+holds both versions at once, so unchanged objects stay where they are.
+
 ## Themes and colors
 
 The file owns the diagram's appearance. A `theme` line picks a preset and may override its
@@ -261,7 +288,7 @@ development, `DIAGRAM_ROOT=folder pnpm dev` serves the same folder from Vite;
 
 ## Examples
 
-`examples/` holds 16 diagrams, from flat flows to five levels of containers. They are bundled
+`examples/` holds the bundled diagrams, from flat flows to five levels of containers. They are bundled
 into the viewer, so they open without a server at `?example=id`. An example is a scratch copy:
 an amber **Example** bar stays across the top, the toolbar reads _Example · not on disk_, and
 nothing is written anywhere. Edits behave exactly as in a file. **Save as file…** writes the
