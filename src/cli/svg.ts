@@ -151,29 +151,44 @@ export function renderSvg(doc: Diagram): string {
     y0 = Math.floor(b.y),
     bw = Math.ceil(b.x + b.w) - x0,
     bh = Math.ceil(b.y + b.h) - y0,
-    // Wide drawings stack their panels; tall ones sit them side by side.
-    stacked = bw > bh * 1.2,
     label = compare ? PANEL_LABEL : 0,
-    // Along the stacking axis each panel takes only the room its own version needs; across it,
-    // the panels share the merged extent, which is what keeps unchanged objects aligned.
-    spans = scenes.map(({ bounds: r }) =>
-      stacked
-        ? { from: Math.floor(r.y), size: Math.ceil(r.y + r.h) - Math.floor(r.y) }
-        : { from: Math.floor(r.x), size: Math.ceil(r.x + r.w) - Math.floor(r.x) },
-    ),
-    starts = spans.map((_, i) =>
-      spans.slice(0, i).reduce((sum, p) => sum + p.size + PANEL_GAP + (stacked ? label : 0), 0),
-    ),
-    total = starts.at(-1)! + spans.at(-1)!.size,
-    areaW = stacked ? bw : total,
-    areaH = stacked ? total + label : bh + label,
     statuses = usedStatuses(doc),
     legend = drawnLegend(doc),
     key = legendSize(look, legend, statuses),
-    head = headingSize(look, doc.appearance.heading),
-    w = Math.max(areaW, key.w + 80, head.w + 80),
-    y1 = y0 - head.h,
-    h = areaH + key.h + head.h;
+    head = headingSize(look, doc.appearance.heading);
+  // Along the stacking axis each panel takes only the room its own version needs; across it, the
+  // panels share the merged extent, which is what keeps unchanged objects aligned: stacked panels
+  // line up left to right, side-by-side panels top to bottom.
+  const arrange = (stacked: boolean) => {
+    const spans = scenes.map(({ bounds: r }) =>
+        stacked
+          ? { from: Math.floor(r.y), size: Math.ceil(r.y + r.h) - Math.floor(r.y) }
+          : { from: Math.floor(r.x), size: Math.ceil(r.x + r.w) - Math.floor(r.x) },
+      ),
+      starts = spans.map((_, i) =>
+        spans.slice(0, i).reduce((sum, p) => sum + p.size + PANEL_GAP + (stacked ? label : 0), 0),
+      ),
+      total = starts.at(-1)! + spans.at(-1)!.size,
+      areaW = stacked ? bw : total,
+      areaH = stacked ? total + label : bh + label;
+    return {
+      stacked,
+      spans,
+      starts,
+      areaH,
+      w: Math.max(areaW, key.w + 80, head.w + 80),
+      h: areaH + key.h + head.h,
+    };
+  };
+  // An explicit direction wins; otherwise take the arrangement whose whole image comes closest to
+  // the target aspect ratio.
+  const target = compare?.aspect ?? 1.6,
+    fit = (a: ReturnType<typeof arrange>) => Math.abs(Math.log(a.w / a.h / target)),
+    options = compare?.direction
+      ? [arrange(compare.direction === 'down')]
+      : [arrange(true), arrange(false)],
+    { stacked, spans, starts, areaH, w, h } = options.reduce((a, b) => (fit(b) < fit(a) ? b : a)),
+    y1 = y0 - head.h;
   const out = [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y1} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title>${esc(doc.title)}</title>`,

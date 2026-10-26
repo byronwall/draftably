@@ -474,15 +474,19 @@ export function parseModel(source: string | SourceDoc): Model {
         num('version', 1, 1, 1);
         if (m.title) (m.appearance.heading ??= {}).title = m.title;
         break;
-      case 'compare':
+      case 'compare': {
         count(0, 2);
-        allow([]);
+        allow(['direction', 'aspect']);
         once('compare');
+        const direction = choice('direction', 'auto', ['auto', 'right', 'down'] as const);
         m.appearance.compare = {
           before: text(args[0]) || 'Before',
           after: text(args[1]) || 'After',
+          ...(direction !== 'auto' ? { direction } : {}),
+          ...(attrs.has('aspect') ? { aspect: num('aspect', 1.6, 0.25, 8) } : {}),
         };
         break;
+      }
       case 'subtitle':
         count(1);
         allow([]);

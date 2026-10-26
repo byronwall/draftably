@@ -90,3 +90,23 @@ describe('links and counts', () => {
     expect(() => parseModel('group g "G" count=3\n')).toThrow(/Unknown group attribute: count/);
   });
 });
+
+describe('panel direction', () => {
+  const size = (source: string) => {
+    const svg = renderSvg(projectScene(checkSource(source)));
+    const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(svg)!.map(Number);
+    return { w, h };
+  };
+  const flow =
+    'node a "A"\nnode b "B"\nnode c "C"\n+node d "D"\nedge x a -> b\nedge y b -> c\n+edge z c -> d\n';
+
+  it('follows direction=, and otherwise picks the arrangement nearest the aspect', () => {
+    const right = size(`compare direction=right\n${flow}layout root flow direction=right\n`),
+      down = size(`compare direction=down\n${flow}layout root flow direction=right\n`),
+      auto = size(`compare\n${flow}layout root flow direction=right\n`);
+    expect(right.w / right.h).toBeGreaterThan(down.w / down.h);
+    expect(auto).toEqual(down);
+    const tall = size(`compare aspect=8\n${flow}layout root flow direction=right\n`);
+    expect(tall).toEqual(right);
+  });
+});

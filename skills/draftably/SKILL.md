@@ -152,7 +152,8 @@ content area.
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
   `draftably compare old.draft new.draft --write diff.draft` writes the marked file. Add
   `compare "main" "PR 123"` when the reader needs each version whole; leave it out for one merged
-  drawing.
+  drawing. `direction=right` (rows align) or `direction=down` (columns align) fixes the
+  arrangement; by default it follows `aspect=` (1.6).
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
 - Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)

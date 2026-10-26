@@ -426,7 +426,12 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
   }
   const c = input.compare;
   if (c && typeof c.before === 'string' && typeof c.after === 'string')
-    out.compare = { before: c.before, after: c.after };
+    out.compare = {
+      before: c.before,
+      after: c.after,
+      ...(c.direction === 'right' || c.direction === 'down' ? { direction: c.direction } : {}),
+      ...(finite(c.aspect) && c.aspect > 0 ? { aspect: c.aspect } : {}),
+    };
   return out;
 }
 
