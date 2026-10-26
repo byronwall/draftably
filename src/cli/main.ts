@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
+import { compareSources } from '../dsl/compare';
 import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { renderSvg } from './svg';
@@ -16,6 +17,9 @@ Commands:
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
+  compare <before> <after>  Print one file holding both versions, with + - ~ change marks.
+       [--write <file>]     Save it instead of printing it.
+       [--svg]              Print it as an SVG drawing instead.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
        [--port N]           Without a file, start on a picker for the folder's diagrams,
                             a new diagram, or an example. --no-open skips the browser.
@@ -65,6 +69,19 @@ export async function main(argv: string[]): Promise<number> {
         const doc = projectScene(await compile(read(file)));
         if (flag('--svg')) process.stdout.write(renderSvg(doc));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
+        return 0;
+      }
+      case 'compare': {
+        const merged = compareSources(read(file), read(rest[0]));
+        const at = rest.indexOf('--write');
+        if (at >= 0) {
+          const out = rest[at + 1];
+          if (!out || out.startsWith('--')) throw new UsageError('--write needs a file.');
+          fs.writeFileSync(path.resolve(out), merged);
+          console.log(`Wrote ${out}.`);
+        } else if (flag('--svg'))
+          process.stdout.write(renderSvg(projectScene(await compile(merged))));
+        else process.stdout.write(merged);
         return 0;
       }
       case 'open': {

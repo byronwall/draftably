@@ -95,6 +95,11 @@ node api "API gateway"
 | `-`  | Removed                      | Pale red fill, dashed red border, title struck through |
 | `.`  | Unchanged, shown for context | Neutral and faded                                      |
 
+`draftably compare before.draft after.draft` writes these marks for you. It matches nodes,
+groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and
+puts each removed declaration back, marked `-`, after the line that preceded it in the older file.
+A tool that generates diagrams only has to write two plain files.
+
 Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
 change.
 
@@ -272,6 +277,7 @@ pnpm draftably check examples/checkout.draft      # errors and diagnostics; exit
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
+pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
