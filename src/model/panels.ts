@@ -2,6 +2,9 @@
  * The two versions inside a document with change marks. Both keep the merged document's
  * positions, so every unchanged object sits at the same place in each panel.
  */
+import { GROUP_INSET, GROUP_TITLE_CHROME } from '../dsl/frame';
+import { resolveAppearance } from './appearance';
+import { measureText } from './fonts';
 import type { Diagram } from './types';
 
 export type PanelSide = 'before' | 'after';
@@ -15,16 +18,64 @@ export function panelDoc(doc: Diagram, side: PanelSide): Diagram {
     .filter(n => keep(n.id))
     .map(n => (old && n.was !== undefined ? { ...n, title: n.was } : n));
   const ids = new Set(nodes.map(n => n.id));
-  return {
-    ...doc,
-    graph: {
-      nodes,
-      groups: doc.graph.groups
-        .filter(g => keep(g.id))
-        .map(g => (old && g.was !== undefined ? { ...g, title: g.was } : g)),
-      edges: doc.graph.edges
-        .filter(e => e.status !== hidden && ids.has(e.from) && ids.has(e.to))
-        .map(e => (old && e.was !== undefined ? { ...e, label: e.was } : e)),
+  const groups = doc.graph.groups
+    .filter(g => keep(g.id))
+    .map(g => (old && g.was !== undefined ? { ...g, title: g.was } : g));
+  return fitFrames(
+    {
+      ...doc,
+      graph: {
+        nodes,
+        groups,
+        edges: doc.graph.edges
+          .filter(e => e.status !== hidden && ids.has(e.from) && ids.has(e.to))
+          .map(e => (old && e.was !== undefined ? { ...e, label: e.was } : e)),
+      },
     },
-  };
+    new Set(
+      doc.graph.groups
+        .filter(g => !keep(g.id))
+        .map(g => g.id)
+        .concat(doc.graph.nodes.filter(n => !keep(n.id)).map(n => n.id)),
+    ),
+    doc,
+  );
+}
+
+/**
+ * Shrink each container that lost members in this panel to fit what is left, keeping its
+ * top-left corner. Nothing else moves, so the panels still line up; the space the other
+ * version's objects needed simply goes away. Innermost containers fit first.
+ */
+function fitFrames(panel: Diagram, gone: Set<string>, merged: Diagram): Diagram {
+  if (!gone.size) return panel;
+  const parent = new Map(
+    [...merged.graph.nodes, ...merged.graph.groups].map(o => [o.id, o.parentId]),
+  );
+  const lost = new Set<string>();
+  for (const id of gone) for (let p = parent.get(id); p; p = parent.get(p)) lost.add(p);
+  const look = resolveAppearance(panel.appearance),
+    layout = { ...panel.layout.nodes },
+    depth = (id: string) => {
+      let d = 0;
+      for (let p = parent.get(id); p; p = parent.get(p)) d++;
+      return d;
+    };
+  const members = [...panel.graph.nodes, ...panel.graph.groups];
+  for (const g of panel.graph.groups
+    .filter(g => lost.has(g.id))
+    .sort((a, b) => depth(b.id) - depth(a.id))) {
+    const frame = layout[g.id],
+      inside = members.filter(o => o.parentId === g.id).map(o => layout[o.id]);
+    if (!frame || !inside.length) continue;
+    const right = Math.max(...inside.map(r => r.x + r.w)) + GROUP_INSET,
+      bottom = Math.max(...inside.map(r => r.y + r.h)) + GROUP_INSET,
+      title = measureText(g.title, look.groupTitle) + GROUP_TITLE_CHROME;
+    layout[g.id] = {
+      ...frame,
+      w: Math.min(frame.w, Math.max(right - frame.x, title)),
+      h: Math.min(frame.h, Math.max(bottom - frame.y, look.groupHeader + GROUP_INSET)),
+    };
+  }
+  return { ...panel, layout: { ...panel.layout, nodes: layout } };
 }

@@ -59,3 +59,19 @@ describe('compare panels', () => {
     expect(svg).toContain('>Orders service</tspan>');
   });
 });
+
+describe('panel fit', () => {
+  it('shrinks a container that lost members, without moving anything', async () => {
+    const { panelDoc } = await import('../src/model/panels');
+    const doc = projectScene(
+      checkSource(
+        'group g "Group"\nnode a "A" in=g\nnode b "B" in=g\n+node c "C" in=g\nedge e a -> b\nedge f b -> c\nlayout g column\n',
+      ),
+    );
+    const before = panelDoc(doc, 'before'),
+      after = panelDoc(doc, 'after');
+    expect(before.layout.nodes.g.h).toBeLessThan(doc.layout.nodes.g.h);
+    expect(after.layout.nodes.g).toEqual(doc.layout.nodes.g);
+    for (const id of ['a', 'b']) expect(before.layout.nodes[id]).toEqual(doc.layout.nodes[id]);
+  });
+});

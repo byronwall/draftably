@@ -136,9 +136,19 @@ export function renderSvg(doc: Diagram): string {
     // Wide drawings stack their panels; tall ones sit them side by side.
     stacked = bw > bh * 1.2,
     label = compare ? PANEL_LABEL : 0,
-    step = stacked ? { x: 0, y: bh + label + PANEL_GAP } : { x: bw + PANEL_GAP, y: 0 },
-    areaW = bw + step.x * (scenes.length - 1),
-    areaH = bh + label + step.y * (scenes.length - 1),
+    // Along the stacking axis each panel takes only the room its own version needs; across it,
+    // the panels share the merged extent, which is what keeps unchanged objects aligned.
+    spans = scenes.map(({ bounds: r }) =>
+      stacked
+        ? { from: Math.floor(r.y), size: Math.ceil(r.y + r.h) - Math.floor(r.y) }
+        : { from: Math.floor(r.x), size: Math.ceil(r.x + r.w) - Math.floor(r.x) },
+    ),
+    starts = spans.map((_, i) =>
+      spans.slice(0, i).reduce((sum, p) => sum + p.size + PANEL_GAP + (stacked ? label : 0), 0),
+    ),
+    total = starts.at(-1)! + spans.at(-1)!.size,
+    areaW = stacked ? bw : total,
+    areaH = stacked ? total + label : bh + label,
     statuses = usedStatuses(doc),
     legend = drawnLegend(doc),
     key = legendSize(look, legend, statuses),
@@ -162,21 +172,24 @@ export function renderSvg(doc: Diagram): string {
     headingMarkup(look, doc.appearance.heading, x0 + 40, y1 + 28),
   ];
   scenes.forEach((scene, i) => {
-    const dx = step.x * i,
-      dy = step.y * i;
+    // Panel i's corner, and the shift that brings its own span to that corner.
+    const px = stacked ? x0 : x0 + starts[i],
+      py = stacked ? y0 + starts[i] : y0,
+      dx = stacked ? 0 : px - spans[i].from,
+      dy = (stacked ? py - spans[i].from : 0) + label;
     if (compare) {
       const name = i ? compare.after : compare.before;
       out.push(
-        `<text x="${x0 + dx + 40}" y="${y0 + dy + 36}" dominant-baseline="central" ${font(look.groupTitle)} fill="${look.text}">${esc(name)}</text>`,
+        `<text x="${px + 40}" y="${py + 36}" dominant-baseline="central" ${font(look.groupTitle)} fill="${look.text}">${esc(name)}</text>`,
       );
       if (i)
         out.push(
           stacked
-            ? `<line x1="${x0 + 40}" x2="${x0 + bw - 40}" y1="${y0 + dy - PANEL_GAP / 2}" y2="${y0 + dy - PANEL_GAP / 2}" stroke="${look.muted}" stroke-opacity="0.35"/>`
-            : `<line x1="${x0 + dx - PANEL_GAP / 2}" x2="${x0 + dx - PANEL_GAP / 2}" y1="${y0}" y2="${y0 + areaH}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
+            ? `<line x1="${x0 + 40}" x2="${x0 + bw - 40}" y1="${py - PANEL_GAP / 2}" y2="${py - PANEL_GAP / 2}" stroke="${look.muted}" stroke-opacity="0.35"/>`
+            : `<line x1="${px - PANEL_GAP / 2}" x2="${px - PANEL_GAP / 2}" y1="${y0}" y2="${y0 + areaH}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
         );
     }
-    out.push(`<g transform="translate(${dx},${dy + label})">`, scene.markup, '</g>');
+    out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
   });
   // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
   out.push(legendMarkup(look, legend, x0 + 40, y0 + areaH - 12, statuses));

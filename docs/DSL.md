@@ -105,7 +105,9 @@ A tool that generates diagrams only has to write two plain files.
 drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
 leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
 use the merged positions, so every unchanged object sits at the same place in each. A drawing
-wider than it is tall stacks its panels; a taller one sets them side by side. The canvas keeps
+wider than it is tall stacks its panels; a taller one sets them side by side. Each panel takes
+only the room its version needs along that axis, and a container that lost members in a panel
+shrinks to fit the rest; no object moves, so the alignment holds. The canvas keeps
 showing the merged drawing, where edits go; `inspect --svg` and exports draw the panels.
 
 Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
