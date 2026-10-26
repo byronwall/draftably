@@ -286,6 +286,7 @@ pnpm draftably format examples/checkout.draft     # print formatted source (--wr
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
+pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
@@ -317,6 +318,10 @@ current source to a new file in the served folder and opens it; on the static si
 
 The file is the source of truth while it is open: browser storage is not read or written, and
 moving the camera never changes the file.
+
+`--png <file>` on `inspect` or `compare` saves a PNG at `--scale` times the SVG's size (2 by
+default). It renders with an installed Chrome, Chromium or Edge in headless mode; set
+`CHROME_PATH` to use another copy.
 
 `inspect` uses the editor's own router and the same font tables, so its geometry matches the
 viewer. `inspect --svg` draws with the file's theme and embeds its fonts.

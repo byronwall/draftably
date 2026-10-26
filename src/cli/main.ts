@@ -17,9 +17,12 @@ Commands:
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
+  inspect <file> --png <out.png> [--scale 2]
+                            Save the drawing as a PNG (needs Chrome or Chromium).
   compare <before> <after>  Print one file holding both versions, with + - ~ change marks.
        [--write <file>]     Save it instead of printing it.
        [--svg]              Print it as an SVG drawing instead.
+       [--png <out.png>]    Save it as a PNG instead; --scale as for inspect.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
        [--port N]           Without a file, start on a picker for the folder's diagrams,
                             a new diagram, or an example. --no-open skips the browser.
@@ -41,6 +44,27 @@ function read(file: string | undefined) {
 }
 
 class UsageError extends Error {}
+
+/** The value after `name` in `args`, if the option is given. */
+function option(args: string[], name: string) {
+  const at = args.indexOf(name);
+  if (at < 0) return undefined;
+  const value = args[at + 1];
+  if (!value || value.startsWith('--')) throw new UsageError(`${name} needs a value.`);
+  return value;
+}
+
+/** Save `svg` as a PNG when `--png` is given; true if it was. */
+async function maybePng(svg: () => string | Promise<string>, args: string[]) {
+  const out = option(args, '--png');
+  if (!out) return false;
+  const scale = Number(option(args, '--scale') ?? 2);
+  if (!(scale > 0 && scale <= 8)) throw new UsageError('--scale must be from 0 to 8.');
+  const { writePng } = await import('./png');
+  writePng(await svg(), out, scale);
+  console.log(`Wrote ${out}.`);
+  return true;
+}
 
 export async function main(argv: string[]): Promise<number> {
   const [command, file, ...rest] = argv;
@@ -67,20 +91,20 @@ export async function main(argv: string[]): Promise<number> {
       }
       case 'inspect': {
         const doc = projectScene(await compile(read(file)));
+        if (await maybePng(() => renderSvg(doc), rest)) return 0;
         if (flag('--svg')) process.stdout.write(renderSvg(doc));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;
       }
       case 'compare': {
         const merged = compareSources(read(file), read(rest[0]));
-        const at = rest.indexOf('--write');
-        if (at >= 0) {
-          const out = rest[at + 1];
-          if (!out || out.startsWith('--')) throw new UsageError('--write needs a file.');
+        const draw = async () => renderSvg(projectScene(await compile(merged)));
+        const out = option(rest, '--write');
+        if (await maybePng(draw, rest)) return 0;
+        if (out) {
           fs.writeFileSync(path.resolve(out), merged);
           console.log(`Wrote ${out}.`);
-        } else if (flag('--svg'))
-          process.stdout.write(renderSvg(projectScene(await compile(merged))));
+        } else if (flag('--svg')) process.stdout.write(await draw());
         else process.stdout.write(merged);
         return 0;
       }
