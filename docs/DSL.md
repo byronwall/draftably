@@ -36,6 +36,7 @@ and groups. References may point to later lines.
 | Statement                          | Meaning                                                                                                                                            |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                    |
+| `compare "before" "after"`         | Draw the change marks as two aligned panels. At most one.                                                                                          |
 | `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                                 |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
@@ -99,6 +100,13 @@ node api "API gateway"
 groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and
 puts each removed declaration back, marked `-`, after the line that preceded it in the older file.
 A tool that generates diagrams only has to write two plain files.
+
+**Side by side.** Add a `compare` line to draw the two versions as panels instead of one merged
+drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
+leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
+use the merged positions, so every unchanged object sits at the same place in each. A drawing
+wider than it is tall stacks its panels; a taller one sets them side by side. The canvas keeps
+showing the merged drawing, where edits go; `inspect --svg` and exports draw the panels.
 
 Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
 change.

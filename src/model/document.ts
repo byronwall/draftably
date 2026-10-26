@@ -157,6 +157,7 @@ export function normalize(input: unknown): Diagram {
     out.graph.nodes.push({
       id: n.id,
       title: n.title,
+      ...(typeof n.was === 'string' ? { was: n.was } : {}),
       ...(n.parentId ? { parentId: n.parentId } : {}),
       ...(n.image ? { image: n.image } : {}),
     });
@@ -166,6 +167,7 @@ export function normalize(input: unknown): Diagram {
     out.graph.groups.push({
       id: g.id,
       title: g.title,
+      ...(typeof g.was === 'string' ? { was: g.was } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
     });
   }
@@ -192,6 +194,7 @@ export function normalize(input: unknown): Diagram {
       from: e.from,
       to: e.to,
       label: e.label || '',
+      ...(typeof e.was === 'string' ? { was: e.was } : {}),
       directed: e.directed !== false,
       emphasis: !!e.emphasis,
       dashed: !!e.dashed || ['dependency', 'annotation'].includes(e.type),
@@ -418,6 +421,9 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
       if (typeof h[key] === 'string' && h[key]) heading[key] = h[key];
     if (heading.title || heading.subtitle) out.heading = heading;
   }
+  const c = input.compare;
+  if (c && typeof c.before === 'string' && typeof c.after === 'string')
+    out.compare = { before: c.before, after: c.after };
   return out;
 }
 

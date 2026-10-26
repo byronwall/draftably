@@ -31,6 +31,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     const entry = {
       id: o.id,
       title: o.label,
+      ...(o.was !== undefined ? { was: o.was } : {}),
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
     };
     if (o.type === 'group') {
@@ -64,6 +65,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       from: e.source,
       to: e.target,
       label: e.label,
+      ...(e.was !== undefined ? { was: e.was } : {}),
       directed: true,
       emphasis: false,
       dashed: e.dashed,

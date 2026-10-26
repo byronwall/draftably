@@ -69,6 +69,7 @@ layout services row gap=56
 | Statement                          | Options                                                                                                            |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                    |
+| `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                          |
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                       |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"` |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`                                           |
@@ -149,7 +150,9 @@ content area.
   differ: `+` added, `-` removed, `~` changed (`was="old label"`), `.` unchanged context. Never
   write two near-identical diagrams for the reader to compare. Marked files draw in change colors
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
-  `draftably compare old.draft new.draft --write diff.draft` writes the marked file.
+  `draftably compare old.draft new.draft --write diff.draft` writes the marked file. Add
+  `compare "main" "PR 123"` when the reader needs each version whole; leave it out for one merged
+  drawing.
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.

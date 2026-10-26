@@ -55,7 +55,9 @@ export function statusPaint(look: ResolvedAppearance, status?: Status): StatusPa
 
 /** Whether the document is a diff: any object or connection carries a change mark. */
 export const isDiff = (doc: Diagram) =>
-  Object.values(doc.styles).some(s => s.status) || doc.graph.edges.some(e => e.status);
+  !!doc.appearance.compare ||
+  Object.values(doc.styles).some(s => s.status) ||
+  doc.graph.edges.some(e => e.status);
 
 /**
  * In a diff, the swatch a status draws a shape with: a pale tint of its hue with a strong border

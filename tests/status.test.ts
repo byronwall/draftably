@@ -45,3 +45,17 @@ describe('change marks', () => {
     expect(at(SOURCE)).toEqual(at(plain));
   });
 });
+
+describe('compare panels', () => {
+  it('draws each version once, at the same positions, with old labels on the left', () => {
+    const svg = renderSvg(projectScene(checkSource('compare "main" "PR 9"\n' + SOURCE)));
+    expect(svg).toContain('>main</text>');
+    expect(svg).toContain('>PR 9</text>');
+    // Refunds is only new, the webhook only old; both versions show the unchanged API.
+    expect(svg.match(/>Refunds</g)).toHaveLength(1);
+    expect(svg.match(/>Webhook</g)).toHaveLength(1);
+    expect(svg.match(/>API</g)).toHaveLength(2);
+    expect(svg).toContain('>Orders</tspan>');
+    expect(svg).toContain('>Orders service</tspan>');
+  });
+});

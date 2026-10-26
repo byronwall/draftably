@@ -470,6 +470,15 @@ export function parseModel(source: string | SourceDoc): Model {
         num('version', 1, 1, 1);
         if (m.title) (m.appearance.heading ??= {}).title = m.title;
         break;
+      case 'compare':
+        count(0, 2);
+        allow([]);
+        once('compare');
+        m.appearance.compare = {
+          before: text(args[0]) || 'Before',
+          after: text(args[1]) || 'After',
+        };
+        break;
       case 'subtitle':
         count(1);
         allow([]);

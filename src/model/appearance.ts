@@ -77,6 +77,8 @@ export interface DiagramAppearance {
   legend?: LegendEntry[];
   /** Title and subtitle drawn above exported images, from `diagram` and `subtitle` statements. */
   heading?: Heading;
+  /** Panel labels from a `compare` statement: draw the old and new versions side by side. */
+  compare?: { before: string; after: string };
 }
 
 export interface Heading {

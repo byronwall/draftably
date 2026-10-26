@@ -6,6 +6,7 @@ import { resolveAppearance } from '../model/appearance';
 import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
 import { drawnLegend, usedStatuses } from '../model/status';
+import { renderSvg } from '../cli/svg';
 import { findNode } from '../model/graph';
 import { fontFaceCss } from '../lib/font-data';
 import {
@@ -123,6 +124,8 @@ export async function openFile(file: File | undefined, replaceImageId: string | 
 /** Editable SVG: the drawing plus the full diagram in a metadata element. */
 export function exportSvg(): string {
   finishInlineEdit(true);
+  // A comparison draws each version as its own panel, which the canvas does not show.
+  if (doc.appearance.compare) return '<?xml version="1.0" encoding="UTF-8"?>\n' + renderSvg(doc);
   const world = sceneElement;
   if (!world) throw Error('The canvas is not ready.');
   const previousSelection = selection(),

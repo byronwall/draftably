@@ -16,6 +16,8 @@ export type LabelMode = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'detach
 export interface DiagramNode {
   id: string;
   title: string;
+  /** Title before a change, from `was=` on a `~` line. */
+  was?: string;
   parentId?: string;
   image?: string;
 }
@@ -23,6 +25,8 @@ export interface DiagramNode {
 export interface DiagramGroup {
   id: string;
   title: string;
+  /** Title before a change, from `was=` on a `~` line. */
+  was?: string;
   parentId?: string;
 }
 
@@ -31,6 +35,8 @@ export interface DiagramEdge {
   from: string;
   to: string;
   label: string;
+  /** Label before a change, from `was=` on a `~` line. */
+  was?: string;
   directed: boolean;
   emphasis: boolean;
   dashed: boolean;

@@ -2,7 +2,8 @@
  * A standalone SVG of a projected diagram for terminal and agent inspection. It draws with the
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
-import { resolveAppearance } from '../model/appearance';
+import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
+import { panelDoc } from '../model/panels';
 import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
 import { drawnSwatch } from '../model/colors';
@@ -43,40 +44,12 @@ function outline(shape: string, r: Rect, radius: number, paint: string) {
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
 }
 
-export function renderSvg(doc: Diagram): string {
-  const look = resolveAppearance(doc.appearance);
+/** One drawing's marks in its own coordinates, and the box they need with a margin. */
+function sceneMarkup(doc: Diagram, look: ResolvedAppearance, arrow: (ink: string) => string) {
   const { vg, rects } = visibleRects(doc);
   const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
-  const b = drawingBounds(doc, vg, rects, routes, 40),
-    x0 = Math.floor(b.x),
-    y0 = Math.floor(b.y),
-    diff = isDiff(doc),
-    statuses = usedStatuses(doc),
-    legend = drawnLegend(doc),
-    key = legendSize(look, legend, statuses),
-    head = headingSize(look, doc.appearance.heading),
-    w = Math.max(Math.ceil(b.x + b.w) - x0, key.w + 80, head.w + 80),
-    drawnH = Math.ceil(b.y + b.h) - y0,
-    y1 = y0 - head.h,
-    h = drawnH + key.h + head.h;
-  // One arrowhead per line color: the theme's connection color, then each status color used.
-  const inks = [...new Set([look.connection, ...doc.graph.edges.map(e => edgeInk(look, e, diff))])];
-  const arrow = (ink: string) => (inks.indexOf(ink) ? `arrow-${inks.indexOf(ink)}` : 'arrow');
-  const out = [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y1} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
-    `<title>${esc(doc.title)}</title>`,
-    `<defs><style>${fontFaceCss(look)}</style>` +
-      inks
-        .map(
-          ink =>
-            `<marker id="${arrow(ink)}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${ink}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`,
-        )
-        .join('') +
-      '</defs>',
-    `<rect x="${x0}" y="${y1}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
-    // The title and subtitle sit above the drawing, left-aligned with the legend under it.
-    headingMarkup(look, doc.appearance.heading, x0 + 40, y1 + 28),
-  ];
+  const out: string[] = [],
+    diff = isDiff(doc);
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,
       c = drawnSwatch(doc, look, g.id, 'group'),
@@ -135,8 +108,84 @@ export function renderSvg(doc: Diagram): string {
       '</g>',
     );
   }
+  return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };
+}
+
+/** Height of a panel's label band in a side-by-side comparison, and the gap between panels. */
+const PANEL_LABEL = 24,
+  PANEL_GAP = 0;
+
+export function renderSvg(doc: Diagram): string {
+  const look = resolveAppearance(doc.appearance),
+    compare = doc.appearance.compare;
+  // One arrowhead per line color: the theme's connection color, then each status color used.
+  const inks = [
+    ...new Set([look.connection, ...doc.graph.edges.map(e => edgeInk(look, e, isDiff(doc)))]),
+  ];
+  const arrow = (ink: string) => (inks.indexOf(ink) ? `arrow-${inks.indexOf(ink)}` : 'arrow');
+  // With `compare`, each version is its own panel drawn from the merged positions, so the panels
+  // share one box and every unchanged object lines up across them.
+  const scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map(d =>
+    sceneMarkup(d, look, arrow),
+  );
+  const b = scenes.map(s => s.bounds).reduce(union),
+    x0 = Math.floor(b.x),
+    y0 = Math.floor(b.y),
+    bw = Math.ceil(b.x + b.w) - x0,
+    bh = Math.ceil(b.y + b.h) - y0,
+    // Wide drawings stack their panels; tall ones sit them side by side.
+    stacked = bw > bh * 1.2,
+    label = compare ? PANEL_LABEL : 0,
+    step = stacked ? { x: 0, y: bh + label + PANEL_GAP } : { x: bw + PANEL_GAP, y: 0 },
+    areaW = bw + step.x * (scenes.length - 1),
+    areaH = bh + label + step.y * (scenes.length - 1),
+    statuses = usedStatuses(doc),
+    legend = drawnLegend(doc),
+    key = legendSize(look, legend, statuses),
+    head = headingSize(look, doc.appearance.heading),
+    w = Math.max(areaW, key.w + 80, head.w + 80),
+    y1 = y0 - head.h,
+    h = areaH + key.h + head.h;
+  const out = [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y1} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
+    `<title>${esc(doc.title)}</title>`,
+    `<defs><style>${fontFaceCss(look)}</style>` +
+      inks
+        .map(
+          ink =>
+            `<marker id="${arrow(ink)}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${ink}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`,
+        )
+        .join('') +
+      '</defs>',
+    `<rect x="${x0}" y="${y1}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
+    // The title and subtitle sit above the drawing, left-aligned with the legend under it.
+    headingMarkup(look, doc.appearance.heading, x0 + 40, y1 + 28),
+  ];
+  scenes.forEach((scene, i) => {
+    const dx = step.x * i,
+      dy = step.y * i;
+    if (compare) {
+      const name = i ? compare.after : compare.before;
+      out.push(
+        `<text x="${x0 + dx + 40}" y="${y0 + dy + 36}" dominant-baseline="central" ${font(look.groupTitle)} fill="${look.text}">${esc(name)}</text>`,
+      );
+      if (i)
+        out.push(
+          stacked
+            ? `<line x1="${x0 + 40}" x2="${x0 + bw - 40}" y1="${y0 + dy - PANEL_GAP / 2}" y2="${y0 + dy - PANEL_GAP / 2}" stroke="${look.muted}" stroke-opacity="0.35"/>`
+            : `<line x1="${x0 + dx - PANEL_GAP / 2}" x2="${x0 + dx - PANEL_GAP / 2}" y1="${y0}" y2="${y0 + areaH}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
+        );
+    }
+    out.push(`<g transform="translate(${dx},${dy + label})">`, scene.markup, '</g>');
+  });
   // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
-  out.push(legendMarkup(look, legend, x0 + 40, y0 + drawnH - 12, statuses));
+  out.push(legendMarkup(look, legend, x0 + 40, y0 + areaH - 12, statuses));
   out.push('</svg>\n');
   return out.join('\n');
 }
+
+const union = (a: Rect, b: Rect): Rect => {
+  const x = Math.min(a.x, b.x),
+    y = Math.min(a.y, b.y);
+  return { x, y, w: Math.max(a.x + a.w, b.x + b.w) - x, h: Math.max(a.y + a.h, b.y + b.h) - y };
+};
