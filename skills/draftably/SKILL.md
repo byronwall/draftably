@@ -147,7 +147,8 @@ content area.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - To show a change, write one file with both versions merged and mark only the lines that
   differ: `+` added, `-` removed, `~` changed (`was="old label"`), `.` unchanged context. Never
-  write two near-identical diagrams for the reader to compare.
+  write two near-identical diagrams for the reader to compare. Marked files draw in change colors
+  only, so don't add colors or legend lines to show the change.
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.

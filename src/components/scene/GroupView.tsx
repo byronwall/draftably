@@ -66,7 +66,7 @@ export function GroupView(props: GroupViewProps) {
         height={props.rect.h}
         rx={Math.min(10, look().radius + 4)}
         fill={color().fill}
-        stroke={paint().stroke ?? color().stroke}
+        stroke={color().stroke}
         stroke-width={paint().width ?? GROUP_BORDER.width}
         stroke-opacity={paint().stroke ? 1 : GROUP_BORDER.opacity}
         stroke-dasharray={paint().dash}

@@ -2,7 +2,7 @@ import { For, Show } from 'solid-js';
 import { findEdge, findNode } from '../../model/graph';
 import type { DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
-import { statusPaint } from '../../model/status';
+import { edgeInk, isDiff, statusPaint } from '../../model/status';
 import type { Diagram } from '../../model/types';
 
 /** Width of the halo under a connection, in drawing units. */
@@ -26,11 +26,9 @@ export function EdgeView(props: EdgeViewProps) {
   const stroke = () =>
     props.route.blocked
       ? swatchFor(look(), 'red', 600).fill
-      : paint().stroke
-        ? paint().stroke!
-        : edge().emphasis && !edge().dashed
-          ? swatchFor(look(), 'primary', 700).fill
-          : look().connection;
+      : edge().emphasis && !edge().dashed && !isDiff(props.doc)
+        ? swatchFor(look(), 'primary', 700).fill
+        : edgeInk(look(), edge(), isDiff(props.doc));
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
   const waypoints = () =>
     props.interactive && props.selected

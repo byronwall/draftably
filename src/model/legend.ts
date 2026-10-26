@@ -1,7 +1,7 @@
 /** The color key drawn under an exported diagram, shared by `inspect --svg` and the editor's export. */
 import { NODE_SHADE, swatchFor, type LegendEntry, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { STATUS_LABELS, statusPaint, type Status } from './status';
+import { STATUS_LABELS, statusPaint, statusSwatch, type Status } from './status';
 
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -49,10 +49,11 @@ export function legendMarkup(
     }),
     // A status row draws a neutral box with that status's border, dash and fade.
     ...statuses.map((s, i) => {
-      const p = statusPaint(look, s);
+      const p = statusPaint(look, s),
+        c = statusSwatch(look, s, 'node');
       return entry(
         legend.length + i,
-        `fill="${p.stroke ? look.canvas : look.muted}" stroke="${p.stroke ?? look.muted}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="3 2"` : ''} opacity="${p.opacity}"`,
+        `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="3 2"` : ''} opacity="${p.opacity}"`,
         STATUS_LABELS[s]!,
       );
     }),

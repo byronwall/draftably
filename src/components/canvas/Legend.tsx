@@ -1,6 +1,12 @@
 import { For, Show } from 'solid-js';
 import { NODE_SHADE, resolveAppearance, swatchFor } from '../../model/appearance';
-import { STATUS_LABELS, statusPaint, usedStatuses } from '../../model/status';
+import {
+  drawnLegend,
+  STATUS_LABELS,
+  statusPaint,
+  statusSwatch,
+  usedStatuses,
+} from '../../model/status';
 import { doc } from '../../state/document';
 
 /**
@@ -9,7 +15,7 @@ import { doc } from '../../state/document';
  */
 export function Legend() {
   const look = () => resolveAppearance(doc.appearance);
-  const entries = () => doc.appearance.legend ?? [];
+  const entries = () => drawnLegend(doc);
   const statuses = () => usedStatuses(doc);
   return (
     <Show when={entries().length || statuses().length}>
@@ -38,14 +44,15 @@ export function Legend() {
         </For>
         <For each={statuses()}>
           {s => {
-            const p = () => statusPaint(look(), s);
+            const p = () => statusPaint(look(), s),
+              c = () => statusSwatch(look(), s, 'node');
             return (
               <div class="diagram-legend-row">
                 <span
                   class="diagram-legend-swatch"
                   style={{
-                    background: p().stroke ? look().canvas : look().muted,
-                    'border-color': p().stroke ?? look().muted,
+                    background: c().fill,
+                    'border-color': c().stroke,
                     'border-width': `${p().width ?? 1}px`,
                     'border-style': p().dash ? 'dashed' : 'solid',
                     opacity: p().opacity,

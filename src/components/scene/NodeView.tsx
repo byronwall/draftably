@@ -4,7 +4,7 @@ import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
-import { RING_GAP, statusPaint } from '../../model/status';
+import { statusPaint } from '../../model/status';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
@@ -44,8 +44,8 @@ export function NodeView(props: NodeViewProps) {
 
   const shapeAttrs = () => ({
     fill: color().fill,
-    stroke: (!paint().ring && paint().stroke) || color().stroke,
-    'stroke-width': (!paint().ring && paint().width) || 1.2,
+    stroke: color().stroke,
+    'stroke-width': paint().width ?? 1.2,
     ...(paint().dash ? { 'stroke-dasharray': paint().dash! } : {}),
     class: look().shadow ? 'node-shape shadowed' : 'node-shape',
   });
@@ -98,16 +98,6 @@ export function NodeView(props: NodeViewProps) {
           height={props.rect.h + 8}
           rx={ringRadius()}
         />
-      </Show>
-      <Show when={paint().ring && style().shape !== 'text'}>
-        <g transform={`translate(${-RING_GAP},${-RING_GAP})`}>
-          <ShapeOutline
-            shape={style().shape}
-            rect={{ ...props.rect, w: props.rect.w + 2 * RING_GAP, h: props.rect.h + 2 * RING_GAP }}
-            radius={look().radius + RING_GAP}
-            attrs={{ fill: 'none', stroke: paint().stroke!, 'stroke-width': paint().width! }}
-          />
-        </g>
       </Show>
       <ShapeOutline
         shape={style().shape}

@@ -88,16 +88,22 @@ node api "API gateway"
 -edge notify api -> hook "notify"
 ```
 
-| Mark | Meaning                      | Drawn as                                       |
-| ---- | ---------------------------- | ---------------------------------------------- |
-| `+`  | Added                        | Green ring around the node; green line         |
-| `~`  | Changed                      | Amber ring; amber line                         |
-| `-`  | Removed                      | Red dashed border, faded, title struck through |
-| `.`  | Unchanged, shown for context | Faded                                          |
+| Mark | Meaning                      | Drawn as                                               |
+| ---- | ---------------------------- | ------------------------------------------------------ |
+| `+`  | Added                        | Pale green fill, strong green border; green line       |
+| `~`  | Changed                      | Pale amber fill, strong amber border; amber line       |
+| `-`  | Removed                      | Pale red fill, dashed red border, title struck through |
+| `.`  | Unchanged, shown for context | Neutral and faded                                      |
 
 Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
-change. Each mark pairs a color with a ring, dash, fade or strike, so it reads in grayscale too,
-and the legend adds a row for every mark the file uses. Marks never move anything: the drawing
+change.
+
+In a file with marks, color means change and nothing else. Unchanged shapes are drawn on the
+theme's neutral surface, containers become quiet outlines, and unchanged lines turn grey, so only
+the marked objects carry a hue. `color=` and `legend` lines are kept but not drawn; remove the
+marks and the file draws in its own colors again. The green, amber and red come from the theme,
+so every theme draws a diff in its own palette. Each mark also has a border weight, dash, fade
+or strike, so it reads in grayscale too, and the legend lists only the marks the file uses. Marks never move anything: the drawing
 holds both versions at once, so unchanged objects stay where they are.
 
 ## Themes and colors
