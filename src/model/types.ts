@@ -18,6 +18,10 @@ export interface DiagramNode {
   title: string;
   /** Title before a change, from `was=` on a `~` line. */
   was?: string;
+  /** A link to open from exported drawings. */
+  href?: string;
+  /** How many things this box stands for; drawn as a stack with a badge. */
+  count?: number;
   parentId?: string;
   image?: string;
 }
@@ -27,6 +31,8 @@ export interface DiagramGroup {
   title: string;
   /** Title before a change, from `was=` on a `~` line. */
   was?: string;
+  /** A link to open from exported drawings. */
+  href?: string;
   parentId?: string;
 }
 

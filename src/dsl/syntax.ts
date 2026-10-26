@@ -198,6 +198,10 @@ export interface ModelObject {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** A link to open from exported drawings, such as a source file or URL. */
+  href?: string;
+  /** Nodes only: how many things this one box stands for, drawn as a stack with a badge. */
+  count?: number;
   line: number;
 }
 
@@ -491,8 +495,19 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? ['in', 'color', 'shade', 'shape', 'was', 'kind', 'detail', 'priority']
-            : ['in', 'color', 'shade', 'was', 'kind', 'detail', 'priority'],
+            ? [
+                'in',
+                'color',
+                'shade',
+                'shape',
+                'was',
+                'href',
+                'count',
+                'kind',
+                'detail',
+                'priority',
+              ]
+            : ['in', 'color', 'shade', 'was', 'href', 'kind', 'detail', 'priority'],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -516,6 +531,8 @@ export function parseModel(source: string | SourceDoc): Model {
           shape: command === 'node' ? choice('shape', 'box', DSL_SHAPES) : 'box',
           ...(s.mark ? { status } : {}),
           ...was(),
+          ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
+          ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
           line,
         });
         break;

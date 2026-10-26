@@ -158,6 +158,8 @@ export function normalize(input: unknown): Diagram {
       id: n.id,
       title: n.title,
       ...(typeof n.was === 'string' ? { was: n.was } : {}),
+      ...(typeof n.href === 'string' ? { href: n.href } : {}),
+      ...(Number.isInteger(n.count) && n.count > 1 ? { count: n.count } : {}),
       ...(n.parentId ? { parentId: n.parentId } : {}),
       ...(n.image ? { image: n.image } : {}),
     });
@@ -168,6 +170,7 @@ export function normalize(input: unknown): Diagram {
       id: g.id,
       title: g.title,
       ...(typeof g.was === 'string' ? { was: g.was } : {}),
+      ...(typeof g.href === 'string' ? { href: g.href } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
     });
   }

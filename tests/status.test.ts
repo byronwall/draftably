@@ -75,3 +75,18 @@ describe('panel fit', () => {
     for (const id of ['a', 'b']) expect(before.layout.nodes[id]).toEqual(doc.layout.nodes[id]);
   });
 });
+
+describe('links and counts', () => {
+  it('links objects with href and draws count as a stack with a badge', () => {
+    const doc = projectScene(
+      checkSource(
+        'node a "A" href="src/a.ts"\nnode many "Consumers" count=1200\nedge e many -> a\n',
+      ),
+    );
+    expect(normalize(JSON.parse(JSON.stringify(doc))).graph.nodes[1].count).toBe(1200);
+    const svg = renderSvg(doc);
+    expect(svg).toContain('<a href="src/a.ts">');
+    expect(svg).toContain('×1.2k');
+    expect(() => parseModel('group g "G" count=3\n')).toThrow(/Unknown group attribute: count/);
+  });
+});

@@ -38,7 +38,7 @@ and groups. References may point to later lines.
 | `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                    |
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. At most one.                                                                                          |
 | `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                                 |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=`, `count=`.                                              |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                          |
@@ -73,6 +73,11 @@ engine keeps one long line. Stays and pins never change what folds.
 title and the `subtitle` line above the drawing, left-aligned with the legend, so a copied image
 still says what it shows and why it matters. Like the legend, they never move anything. A file
 without either draws no heading.
+
+**Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
+and exports, to a source file, a URL or anything else the reader should open. `count=42` on a node
+says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
+hundreds of places is one box rather than hundreds.
 
 ## Change marks
 

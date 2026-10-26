@@ -4,6 +4,8 @@
  */
 import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
 import { panelDoc } from '../model/panels';
+import { countText, STACK_OFFSETS } from '../model/stack';
+import { measureText } from '../model/fonts';
 import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
 import { drawnSwatch } from '../model/colors';
@@ -27,6 +29,10 @@ import { fontFaceCss } from '../lib/font-data';
 
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Wrap marks in a link when the object has one. */
+const linked = (href: string | undefined, marks: string[]) =>
+  href ? [`<a href="${esc(href)}">`, ...marks, '</a>'] : marks;
 
 /** A status's fade, as an attribute on the element that groups an object's marks. */
 const fade = (p: StatusPaint) => (p.opacity < 1 ? ` opacity="${p.opacity}"` : '');
@@ -56,11 +62,13 @@ function sceneMarkup(doc: Diagram, look: ResolvedAppearance, arrow: (ink: string
       p = statusPaint(look, styleOf(doc, g.id).status),
       band = look.groupHeader / 2 - 7;
     out.push(
-      `<g${fade(p)}>`,
-      `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
-      `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
-      `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle))}</text>`,
-      '</g>',
+      ...linked(g.href, [
+        `<g${fade(p)}>`,
+        `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
+        `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
+        `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle))}</text>`,
+        '</g>',
+      ]),
     );
   }
   for (const route of routes) {
@@ -88,24 +96,34 @@ function sceneMarkup(doc: Diagram, look: ResolvedAppearance, arrow: (ink: string
       p = statusPaint(look, style.status),
       label = nodeLabel(doc, n.id, n.title, r),
       first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
-      ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text;
+      ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text,
+      paint = `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1.2}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}`;
+    const badge = n.count ? countText(n.count) : '',
+      bw = measureText(badge, look.annotation) + 12,
+      bh = look.annotation.lineHeight + 4;
     out.push(
-      `<g${fade(p)}>`,
-      outline(
-        style.shape,
-        r,
-        look.radius,
-        `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1.2}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}`,
-      ),
-      `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
-        label.lines
-          .map(
-            (line, i) =>
-              `<tspan x="${r.x + label.x}" dy="${i ? label.lineHeight : 0}">${esc(line)}</tspan>`,
-          )
-          .join('') +
-        '</text>',
-      '</g>',
+      ...linked(n.href, [
+        `<g${fade(p)}>`,
+        ...(n.count && style.shape !== 'text'
+          ? STACK_OFFSETS.map(d =>
+              outline(style.shape, { ...r, x: r.x + d, y: r.y + d }, look.radius, paint),
+            )
+          : []),
+        outline(style.shape, r, look.radius, paint),
+        `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
+          label.lines
+            .map(
+              (line, i) =>
+                `<tspan x="${r.x + label.x}" dy="${i ? label.lineHeight : 0}">${esc(line)}</tspan>`,
+            )
+            .join('') +
+          '</text>',
+        badge
+          ? `<rect x="${r.x + r.w - bw + 6}" y="${r.y - bh / 2}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="${c.stroke}"/>` +
+            `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`
+          : '',
+        '</g>',
+      ]),
     );
   }
   return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };

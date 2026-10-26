@@ -72,7 +72,7 @@ layout services row gap=56
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                          |
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                       |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"` |
-| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`                                           |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=` link, `count=N` stack            |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                                       |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                     |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                              |
@@ -155,6 +155,8 @@ content area.
   drawing.
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
+- Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)
+  instead of drawing each one. Link a node to its source with `href="path/or/url"`.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.
 - When editing an existing file, keep its IDs and any `stay`/`near`/`pin` lines the user's viewer
   edits wrote; add new statements rather than rewriting the file.

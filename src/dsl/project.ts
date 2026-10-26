@@ -32,6 +32,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       id: o.id,
       title: o.label,
       ...(o.was !== undefined ? { was: o.was } : {}),
+      ...(o.href !== undefined ? { href: o.href } : {}),
+      ...(o.count !== undefined ? { count: o.count } : {}),
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
     };
     if (o.type === 'group') {
