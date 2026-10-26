@@ -14,6 +14,7 @@ import {
   type LegendEntry,
 } from './appearance';
 import { FONT_ROLES } from './fonts';
+import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {
   ContainerLayout,
@@ -156,6 +157,9 @@ export function normalize(input: unknown): Diagram {
     out.graph.nodes.push({
       id: n.id,
       title: n.title,
+      ...(typeof n.was === 'string' ? { was: n.was } : {}),
+      ...(typeof n.href === 'string' ? { href: n.href } : {}),
+      ...(Number.isInteger(n.count) && n.count > 1 ? { count: n.count } : {}),
       ...(n.parentId ? { parentId: n.parentId } : {}),
       ...(n.image ? { image: n.image } : {}),
     });
@@ -165,6 +169,8 @@ export function normalize(input: unknown): Diagram {
     out.graph.groups.push({
       id: g.id,
       title: g.title,
+      ...(typeof g.was === 'string' ? { was: g.was } : {}),
+      ...(typeof g.href === 'string' ? { href: g.href } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
     });
   }
@@ -191,9 +197,11 @@ export function normalize(input: unknown): Diagram {
       from: e.from,
       to: e.to,
       label: e.label || '',
+      ...(typeof e.was === 'string' ? { was: e.was } : {}),
       directed: e.directed !== false,
       emphasis: !!e.emphasis,
       dashed: !!e.dashed || ['dependency', 'annotation'].includes(e.type),
+      ...(STATUSES.includes(e.status) && e.status !== 'same' ? { status: e.status } : {}),
     });
   }
 
@@ -236,6 +244,9 @@ export function normalize(input: unknown): Diagram {
       color: style.color || 'auto',
       ...(style.shade !== undefined ? { shade: style.shade } : {}),
       icon: ICONS[style.icon] ? style.icon : '',
+      ...(STATUSES.includes(style.status) && style.status !== 'same'
+        ? { status: style.status }
+        : {}),
     };
     const label = data.layout?.labels?.[n.id];
     if (label) {
@@ -406,6 +417,21 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     });
   }
   if (legend.length) out.legend = legend;
+  const h = input.heading;
+  if (h && typeof h === 'object') {
+    const heading: NonNullable<DiagramAppearance['heading']> = {};
+    for (const key of ['title', 'subtitle'] as const)
+      if (typeof h[key] === 'string' && h[key]) heading[key] = h[key];
+    if (heading.title || heading.subtitle) out.heading = heading;
+  }
+  const c = input.compare;
+  if (c && typeof c.before === 'string' && typeof c.after === 'string')
+    out.compare = {
+      before: c.before,
+      after: c.after,
+      ...(c.direction === 'right' || c.direction === 'down' ? { direction: c.direction } : {}),
+      ...(finite(c.aspect) && c.aspect > 0 ? { aspect: c.aspect } : {}),
+    };
   return out;
 }
 

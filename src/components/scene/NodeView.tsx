@@ -4,6 +4,9 @@ import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
+import { statusPaint } from '../../model/status';
+import { countText, STACK_OFFSETS } from '../../model/stack';
+import { measureText } from '../../model/fonts';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
@@ -32,6 +35,7 @@ export function NodeView(props: NodeViewProps) {
   const style = () => styleOf(props.doc, props.id);
   const look = () => resolveAppearance(props.doc.appearance);
   const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
+  const paint = () => statusPaint(look(), style().status);
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   const ringRadius = () => {
     const { shape } = style(),
@@ -43,7 +47,8 @@ export function NodeView(props: NodeViewProps) {
   const shapeAttrs = () => ({
     fill: color().fill,
     stroke: color().stroke,
-    'stroke-width': 1.2,
+    'stroke-width': paint().width ?? 1.2,
+    ...(paint().dash ? { 'stroke-dasharray': paint().dash! } : {}),
     class: look().shadow ? 'node-shape shadowed' : 'node-shape',
   });
 
@@ -67,6 +72,7 @@ export function NodeView(props: NodeViewProps) {
       data-kind="node"
       data-id={props.id}
       transform={`translate(${props.rect.x},${props.rect.y})`}
+      opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive || props.focusable ? 0 : undefined}
       role={props.interactive || props.focusable ? 'button' : undefined}
       aria-label={
@@ -78,7 +84,7 @@ export function NodeView(props: NodeViewProps) {
       }
       aria-pressed={props.interactive ? !!props.selected : undefined}
     >
-      <title>{node().title}</title>
+      <title>{node().title + (node().href ? `\n${node().href}` : '')}</title>
       <Show when={label().leader && label().mode !== 'center'}>
         <path
           class="leader"
@@ -94,6 +100,20 @@ export function NodeView(props: NodeViewProps) {
           height={props.rect.h + 8}
           rx={ringRadius()}
         />
+      </Show>
+      <Show when={node().count && style().shape !== 'text'}>
+        <For each={STACK_OFFSETS}>
+          {d => (
+            <g transform={`translate(${d},${d})`}>
+              <ShapeOutline
+                shape={style().shape}
+                rect={props.rect}
+                radius={look().radius}
+                attrs={shapeAttrs()}
+              />
+            </g>
+          )}
+        </For>
       </Show>
       <ShapeOutline
         shape={style().shape}
@@ -141,7 +161,39 @@ export function NodeView(props: NodeViewProps) {
         lineHeight={label().lineHeight}
         type={look().title}
         fill={label().mode === 'center' && style().shape !== 'text' ? color().ink : look().text}
+        strike={paint().strike}
       />
+      <Show when={node().count}>
+        {count => {
+          const text = () => countText(count()),
+            w = () => measureText(text(), look().annotation) + 12,
+            h = () => look().annotation.lineHeight + 4;
+          return (
+            <g class="count-badge">
+              <rect
+                x={props.rect.w - w() + 6}
+                y={-h() / 2}
+                width={w()}
+                height={h()}
+                rx={h() / 2}
+                fill={color().stroke}
+              />
+              <text
+                x={props.rect.w - w() / 2 + 6}
+                y={0}
+                text-anchor="middle"
+                dominant-baseline="central"
+                font-family={look().annotation.family}
+                font-size={String(look().annotation.size)}
+                font-weight={String(look().annotation.weight)}
+                fill={look().canvas}
+              >
+                {text()}
+              </text>
+            </g>
+          );
+        }}
+      </Show>
       <Show when={props.interactive}>
         <PositionBadge
           pinned={!!props.rect.pinned}

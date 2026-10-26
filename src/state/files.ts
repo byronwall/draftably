@@ -3,7 +3,10 @@ import { batch } from 'solid-js';
 import { isLegacyDiagram } from '../model/document';
 import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
+import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
+import { drawnLegend, usedStatuses } from '../model/status';
+import { renderSvg } from '../cli/svg';
 import { findNode } from '../model/graph';
 import { fontFaceCss } from '../lib/font-data';
 import {
@@ -121,6 +124,8 @@ export async function openFile(file: File | undefined, replaceImageId: string | 
 /** Editable SVG: the drawing plus the full diagram in a metadata element. */
 export function exportSvg(): string {
   finishInlineEdit(true);
+  // A comparison draws each version as its own panel, which the canvas does not show.
+  if (doc.appearance.compare) return '<?xml version="1.0" encoding="UTF-8"?>\n' + renderSvg(doc);
   const world = sceneElement;
   if (!world) throw Error('The canvas is not ready.');
   const previousSelection = selection(),
@@ -132,12 +137,15 @@ export function exportSvg(): string {
   });
   try {
     const look = resolveAppearance(doc.appearance),
-      key = legendSize(look, doc.appearance.legend),
+      statuses = usedStatuses(doc),
+      legend = drawnLegend(doc),
+      key = legendSize(look, legend, statuses),
+      head = headingSize(look, doc.appearance.heading),
       b = sceneBounds(),
       x = b.x - 28,
-      y = b.y - 28,
-      w = Math.max(b.w + 56, key.w + 56),
-      h = b.h + 56 + key.h;
+      y = b.y - 28 - head.h,
+      w = Math.max(b.w + 56, key.w + 56, head.w + 56),
+      h = b.h + 56 + key.h + head.h;
     const svg = createSvgElement('svg', {
       xmlns: 'http://www.w3.org/2000/svg',
       width: Math.ceil(w),
@@ -162,7 +170,9 @@ export function exportSvg(): string {
     );
     svg.appendChild(materializeSvg(world));
     // The key from the file's legend lines goes under the drawing, as in `inspect --svg`.
-    const markup = legendMarkup(look, doc.appearance.legend, x + 28, y + b.h + 44);
+    const markup =
+      headingMarkup(look, doc.appearance.heading, x + 28, y + 24) +
+      legendMarkup(look, legend, x + 28, y + head.h + b.h + 44, statuses);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,

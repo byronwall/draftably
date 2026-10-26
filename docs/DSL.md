@@ -35,8 +35,10 @@ and groups. References may point to later lines.
 
 | Statement                          | Meaning                                                                                                                                            |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one.                                                                                                                       |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`.                                                                 |
+| `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                    |
+| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                      |
+| `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=`, `count=`.                                              |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                          |
@@ -66,6 +68,70 @@ longest group into rows, one group at a time, so the groups keep their order; on
 can fold do the groups themselves wrap into rows. A group that only receives lines (an upstream
 API, a cache) sits beside the group that calls it rather than past it. `fold=never` on the root
 engine keeps one long line. Stays and pins never change what folds.
+
+**Title and subtitle.** `inspect --svg` and the viewer's SVG and PNG exports draw the `diagram`
+title and the `subtitle` line above the drawing, left-aligned with the legend, so a copied image
+still says what it shows and why it matters. Like the legend, they never move anything. A file
+without either draws no heading.
+
+**Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
+and exports, to a source file, a URL or anything else the reader should open. `count=42` on a node
+says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
+hundreds of places is one box rather than hundreds.
+
+## Change marks
+
+To show what changed between two versions, write one file and mark the lines that differ, as in a
+diff. A mark is one character before `node`, `group` or `edge`:
+
+```text
+node api "API gateway"
+~node orders "Orders service" was="Orders"
++node refunds "Refunds"
+-node hook "Legacy webhook"
+.node audit "Audit log"
++edge refund orders -> refunds "refund"
+-edge notify api -> hook "notify"
+```
+
+| Mark | Meaning                      | Drawn as                                               |
+| ---- | ---------------------------- | ------------------------------------------------------ |
+| `+`  | Added                        | Pale green fill, strong green border; green line       |
+| `~`  | Changed                      | Pale amber fill, strong amber border; amber line       |
+| `-`  | Removed                      | Pale red fill, dashed red border, title struck through |
+| `.`  | Unchanged, shown for context | Neutral and faded                                      |
+
+`draftably compare before.draft after.draft` writes these marks for you. It matches nodes,
+groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and
+puts each removed declaration back, marked `-`, after the line that preceded it in the older file.
+It also prints the size of the change, such as `3 added, 1 changed, 2 removed.`, on stderr, so
+stdout stays the file. An edge that now joins different objects becomes two lines, the old one
+removed under the ID `<id>-was` and the new one added, so each panel draws its own. A node or
+group that moved to another container keeps one position, so both panels draw it in its new
+container; `compare` names those on stderr. A tool that generates diagrams only has to write two
+plain files.
+
+**Side by side.** Add a `compare` line to draw the two versions as panels instead of one merged
+drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
+leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
+use the merged positions and the merged routes, so every unchanged object and line sits at the same place in each. `direction=right` sets the
+panels side by side, so every row lines up across them; `direction=down` stacks them, so every
+column lines up. Without it, the arrangement whose whole image comes closest to `aspect` (width
+over height, 1.6 by default) wins: a wide flow usually stacks and a tall one sits side by side. Each panel takes
+only the room its version needs along that axis, and a container that lost members in a panel
+shrinks to fit the rest; no object moves, so the alignment holds. The canvas keeps
+showing the merged drawing, where edits go; `inspect --svg` and exports draw the panels.
+
+Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
+change.
+
+In a file with marks, color means change and nothing else. Unchanged shapes are drawn on the
+theme's neutral surface, containers become quiet outlines, and unchanged lines turn grey, so only
+the marked objects carry a hue. `color=` and `legend` lines are kept but not drawn; remove the
+marks and the file draws in its own colors again. The green, amber and red come from the theme,
+so every theme draws a diff in its own palette. Each mark also has a border weight, dash, fade
+or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects and lines carry it. Marks never move anything: the drawing
+holds both versions at once, so unchanged objects stay where they are.
 
 ## Themes and colors
 
@@ -233,6 +299,8 @@ pnpm draftably check examples/checkout.draft      # errors and diagnostics; exit
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
+pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
+pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
@@ -255,7 +323,7 @@ development, `DIAGRAM_ROOT=folder pnpm dev` serves the same folder from Vite;
 
 ## Examples
 
-`examples/` holds 16 diagrams, from flat flows to five levels of containers. They are bundled
+`examples/` holds the bundled diagrams, from flat flows to five levels of containers. They are bundled
 into the viewer, so they open without a server at `?example=id`. An example is a scratch copy:
 an amber **Example** bar stays across the top, the toolbar reads _Example · not on disk_, and
 nothing is written anywhere. Edits behave exactly as in a file. **Save as file…** writes the
@@ -264,6 +332,10 @@ current source to a new file in the served folder and opens it; on the static si
 
 The file is the source of truth while it is open: browser storage is not read or written, and
 moving the camera never changes the file.
+
+`--png <file>` on `inspect` or `compare` saves a PNG at `--scale` times the SVG's size (2 by
+default). It renders with an installed Chrome, Chromium or Edge in headless mode; set
+`CHROME_PATH` to use another copy.
 
 `inspect` uses the editor's own router and the same font tables, so its geometry matches the
 viewer. `inspect --svg` draws with the file's theme and embeds its fonts.

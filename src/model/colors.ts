@@ -21,6 +21,7 @@ import {
   type Swatch,
 } from './appearance';
 import { findGroup, findObject, isGroup, styleOf } from './graph';
+import { isDiff, statusSwatch } from './status';
 import type { Diagram } from './types';
 
 /** Steps a nested container keeps from its parent, and a shape from its container. */
@@ -55,6 +56,8 @@ export function drawnSwatch(
   id: string,
   kind: 'node' | 'group',
 ): Swatch {
+  // In a diff, color means change: the status decides the swatch, not the author's family.
+  if (isDiff(doc)) return statusSwatch(look, styleOf(doc, id).status, kind);
   return swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), kind);
 }
 

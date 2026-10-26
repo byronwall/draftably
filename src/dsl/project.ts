@@ -31,6 +31,9 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     const entry = {
       id: o.id,
       title: o.label,
+      ...(o.was !== undefined ? { was: o.was } : {}),
+      ...(o.href !== undefined ? { href: o.href } : {}),
+      ...(o.count !== undefined ? { count: o.count } : {}),
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
     };
     if (o.type === 'group') {
@@ -54,6 +57,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       color: resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
       icon: '',
+      ...(o.status ? { status: o.status } : {}),
     };
   }
   const flow = readingDirections(scene);
@@ -63,9 +67,11 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       from: e.source,
       to: e.target,
       label: e.label,
+      ...(e.was !== undefined ? { was: e.was } : {}),
       directed: true,
       emphasis: false,
       dashed: e.dashed,
+      ...(e.status ? { status: e.status } : {}),
     });
     doc.layout.edges[e.id] = {
       ...(e.from !== 'auto' ? { fromSide: e.from } : {}),

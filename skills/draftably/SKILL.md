@@ -37,6 +37,7 @@ References may point to later lines. Comments start with `#` or `//`.
 
 ```text
 diagram "Checkout architecture" version=1
+subtitle "Orders persist before payment is authorized"
 
 group clients "Customer channels" color=blue
 node web "Web app" in=clients
@@ -65,18 +66,21 @@ layout platform column gap=28
 layout services row gap=56
 ```
 
-| Statement                          | Options                                                                                              |
-| ---------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional, at most one.                                                                               |
-| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`                             |
-| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                         |
-| `theme name`                       | Preset look (see below); optional, at most one                                                       |
-| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                |
-| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family          |
-| `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides |
-| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`   |
-| `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                |
-| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`             |
+| Statement                          | Options                                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                    |
+| `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                          |
+| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                       |
+| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"` |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=` link, `count=N` stack            |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                                       |
+| `theme name`                       | Preset look (see below); optional, at most one                                                                     |
+| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                              |
+| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                        |
+| `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides               |
+| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                 |
+| `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                              |
+| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                           |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
@@ -142,6 +146,19 @@ content area.
   - Color the outer group and let members inherit (`color=auto`); nested groups of one family
     are drawn in stepped shades. Never give a member its container's family at a pale shade.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
+- To show a change, write one file with both versions merged and mark only the lines that
+  differ: `+` added, `-` removed, `~` changed (`was="old label"`), `.` unchanged context. Never
+  write two near-identical diagrams for the reader to compare. Marked files draw in change colors
+  only, so don't add colors or legend lines to show the change. With two plain versions on disk,
+  `draftably compare old.draft new.draft --write diff.draft` writes the marked file and prints
+  the change's size (`3 added, 1 changed, 2 removed.`) on stderr. Add
+  `compare "main" "PR 123"` when the reader needs each version whole; leave it out for one merged
+  drawing. `direction=right` (rows align) or `direction=down` (columns align) fixes the
+  arrangement; by default it follows `aspect=` (1.6).
+- Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
+  `subtitle` stating its takeaway, so the exported picture stands alone.
+- Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)
+  instead of drawing each one. Link a node to its source with `href="path/or/url"`.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.
 - When editing an existing file, keep its IDs and any `stay`/`near`/`pin` lines the user's viewer
   edits wrote; add new statements rather than rewriting the file.

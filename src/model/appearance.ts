@@ -75,6 +75,22 @@ export interface DiagramAppearance {
   colors: ColorDefinition[];
   /** What the colors mean, from `legend` statements, drawn as a key beside the diagram. */
   legend?: LegendEntry[];
+  /** Title and subtitle drawn above exported images, from `diagram` and `subtitle` statements. */
+  heading?: Heading;
+  /** Panel labels from a `compare` statement: draw the old and new versions side by side. */
+  compare?: {
+    before: string;
+    after: string;
+    /** `right` sets the panels side by side, `down` stacks them; chosen by `aspect` when unset. */
+    direction?: 'right' | 'down';
+    /** Width over height the whole image should come closest to; 1.6 when unset. */
+    aspect?: number;
+  };
+}
+
+export interface Heading {
+  title?: string;
+  subtitle?: string;
 }
 
 export interface LegendEntry {

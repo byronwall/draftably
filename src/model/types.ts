@@ -6,6 +6,7 @@ export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
+import type { Status } from './status';
 
 export type ShapeKind = 'box' | 'pill' | 'circle' | 'diamond' | 'text' | 'icon' | 'image';
 /** A color family: a built-in one, one the file defines, or `auto` for the theme's surface. */
@@ -15,6 +16,12 @@ export type LabelMode = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'detach
 export interface DiagramNode {
   id: string;
   title: string;
+  /** Title before a change, from `was=` on a `~` line. */
+  was?: string;
+  /** A link to open from exported drawings. */
+  href?: string;
+  /** How many things this box stands for; drawn as a stack with a badge. */
+  count?: number;
   parentId?: string;
   image?: string;
 }
@@ -22,6 +29,10 @@ export interface DiagramNode {
 export interface DiagramGroup {
   id: string;
   title: string;
+  /** Title before a change, from `was=` on a `~` line. */
+  was?: string;
+  /** A link to open from exported drawings. */
+  href?: string;
   parentId?: string;
 }
 
@@ -30,9 +41,13 @@ export interface DiagramEdge {
   from: string;
   to: string;
   label: string;
+  /** Label before a change, from `was=` on a `~` line. */
+  was?: string;
   directed: boolean;
   emphasis: boolean;
   dashed: boolean;
+  /** How it differs between two versions of the diagram. */
+  status?: Status;
 }
 
 export interface NodeLayout extends Rect {
@@ -108,6 +123,8 @@ export interface NodeStyle {
   /** Numeric shade; omitted means the default for the object (500 for nodes, 100 for groups). */
   shade?: Shade;
   icon: string;
+  /** How it differs between two versions of the diagram. */
+  status?: Status;
 }
 
 export type LayoutAlgorithmId =
