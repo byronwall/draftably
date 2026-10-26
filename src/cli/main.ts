@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
-import { compareSources } from '../dsl/compare';
+import { compareDetailed } from '../dsl/compare';
 import { statusLabel, usedStatuses } from '../model/status';
 import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
@@ -98,13 +98,17 @@ export async function main(argv: string[]): Promise<number> {
         return 0;
       }
       case 'compare': {
-        const merged = compareSources(read(file), read(rest[0]));
+        const { merged, moved } = compareDetailed(read(file), read(rest[0]));
         const doc = projectScene(await compile(merged)),
           draw = async () => renderSvg(doc);
         const out = option(rest, '--write');
         // The size of the change goes to stderr, so stdout stays a clean file or drawing.
         const sizes = usedStatuses(doc).filter(s => s.status !== 'context');
         console.error(sizes.length ? sizes.map(statusLabel).join(', ') + '.' : 'No changes.');
+        if (moved.length)
+          console.error(
+            `Moved to another container: ${moved.join(', ')}. Both panels draw them where they are now.`,
+          );
         if (await maybePng(draw, rest)) return 0;
         if (out) {
           fs.writeFileSync(path.resolve(out), merged);

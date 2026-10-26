@@ -105,7 +105,11 @@ node api "API gateway"
 groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and
 puts each removed declaration back, marked `-`, after the line that preceded it in the older file.
 It also prints the size of the change, such as `3 added, 1 changed, 2 removed.`, on stderr, so
-stdout stays the file. A tool that generates diagrams only has to write two plain files.
+stdout stays the file. An edge that now joins different objects becomes two lines, the old one
+removed under the ID `<id>-was` and the new one added, so each panel draws its own. A node or
+group that moved to another container keeps one position, so both panels draw it in its new
+container; `compare` names those on stderr. A tool that generates diagrams only has to write two
+plain files.
 
 **Side by side.** Add a `compare` line to draw the two versions as panels instead of one merged
 drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel

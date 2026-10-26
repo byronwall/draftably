@@ -24,7 +24,15 @@ const edgeKey = (e: ModelEdge) => [e.source, e.target, e.label, e.dashed, e.from
 
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
 
+/**
+ * Merge two plain versions into one marked file. `moved` lists nodes and groups that changed
+ * container: they share one position, so the older panel draws them in their new container.
+ */
 export function compareSources(before: string, after: string): string {
+  return compareDetailed(before, after).merged;
+}
+
+export function compareDetailed(before: string, after: string) {
   const docs = [readSource(before), readSource(after)];
   for (const doc of docs)
     for (const s of doc.lines)
@@ -40,6 +48,24 @@ export function compareSources(before: string, after: string): string {
     ...next.edges.map(e => ['edge:' + e.id, edgeKey(e)] as const),
   ]);
   const scopes = new Set(next.layouts.map(l => l.scope));
+  // An edge that now joins other objects is a different line: the old one is removed, under a
+  // spare ID, and the new one added, so each panel draws the line its version had.
+  const ends = (e: ModelEdge) => e.source + '\0' + e.target,
+    retargeted = new Set(
+      next.edges
+        .filter(e => old.edges.some(o => o.id === e.id && ends(o) !== ends(e)))
+        .map(e => 'edge:' + e.id),
+    ),
+    taken = new Set([...was.keys(), ...now.keys()]),
+    spare = (id: string) => {
+      let n = `${id}-was`;
+      for (let i = 2; taken.has('edge:' + n); i++) n = `${id}-was${i}`;
+      taken.add('edge:' + n);
+      return n;
+    };
+  const moved = next.objects
+    .filter(o => old.objects.some(p => p.id === o.id && p.parent !== o.parent))
+    .map(o => o.id);
 
   const out: SourceLine[] = [];
   for (const line of docs[1].lines) {
@@ -48,7 +74,7 @@ export function compareSources(before: string, after: string): string {
       continue;
     }
     const prior = was.get(keyOf(line));
-    if (!prior) out.push({ ...line, mark: '+' });
+    if (!prior || retargeted.has(keyOf(line))) out.push({ ...line, mark: '+' });
     else if (prior.key !== now.get(keyOf(line))) {
       const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '';
       out.push({
@@ -76,13 +102,20 @@ export function compareSources(before: string, after: string): string {
     }
     if (!DECLARATIONS.includes(line.command)) continue;
     const key = keyOf(line);
-    if (now.has(key)) {
+    if (now.has(key) && !retargeted.has(key)) {
       anchor = out.findIndex(
         l => l.kind === 'statement' && DECLARATIONS.includes(l.command) && keyOf(l) === key,
       );
       continue;
     }
-    const removed: Statement = { ...line, mark: '-', comment: undefined };
+    const removed: Statement = retargeted.has(key)
+      ? {
+          ...line,
+          mark: '-',
+          comment: undefined,
+          args: [{ ...line.args[0], value: spare(line.args[0].value) }, ...line.args.slice(1)],
+        }
+      : { ...line, mark: '-', comment: undefined };
     if (anchor < 0) {
       const first = out.findIndex(l => l.kind === 'statement' && DECLARATIONS.includes(l.command));
       anchor = (first < 0 ? out.length : first) - 1;
@@ -92,5 +125,5 @@ export function compareSources(before: string, after: string): string {
   }
   const merged = printSource({ lines: out });
   parseModel(merged);
-  return merged;
+  return { merged, moved };
 }
