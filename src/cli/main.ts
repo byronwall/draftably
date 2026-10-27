@@ -32,6 +32,8 @@ Commands:
                             --hints adds how far each refinement moved its target; --quiet
                             leaves out info notes.
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
+       [--drop-stale]       Also remove refinements that no longer hold: ones check warns gave
+                            way, and stays the arrangement outgrew. Lists them on stderr.
   inspect <file> [--json]   Print canonical node and route geometry. --json prints it on one
        [--hints]            line; with --hints it adds the unrefined position (raw) of every
        [--metrics]          node a refinement moved. --metrics adds a metrics object with
@@ -289,7 +291,27 @@ export async function main(argv: string[]): Promise<number> {
         return failed ? 1 : 0;
       }
       case 'format': {
-        const formatted = formatSource(await read(file));
+        let source = await read(file);
+        if (flag('--drop-stale')) {
+          const scene = await compile(source),
+            stays = scene.model.hints.filter(h => h.type === 'stay');
+          // Refinements that gave way past the warning, and stays the arrangement outgrew.
+          const lines = new Set(
+            scene.diagnostics.flatMap(d =>
+              d.code === 'relaxed' && d.level === 'warning' && d.line
+                ? [d.line]
+                : d.code === 'stale-stay'
+                  ? stays.filter(h => d.ids.includes(h.id)).map(h => h.line)
+                  : [],
+            ),
+          );
+          const all = source.split('\n');
+          for (const n of [...lines].sort((a, b) => a - b))
+            console.error(`Dropped line ${n}: ${all[n - 1].trim()}`);
+          if (!lines.size) console.error('No stale refinements.');
+          source = all.filter((_, i) => !lines.has(i + 1)).join('\n');
+        }
+        const formatted = formatSource(source);
         if (flag('--write')) {
           if (isImageName(file!))
             throw new UsageError('format --write rewrites a .draft file only.');

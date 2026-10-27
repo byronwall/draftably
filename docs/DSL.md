@@ -538,7 +538,7 @@ content area, not the whole canvas, so moving a group moves everything inside it
 | `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                                                                                           |
 | `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these.                                                                        |
 | `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                                                                                       |
-| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown.                                                                                            |
+| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown. `height=auto` fits the title at that width, so the line survives label edits.              |
 | `order scope id...`                      | soft     | Preferred order of a scope's children.                                                                                                                        |
 | `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                                                                                                    |
 
@@ -552,6 +552,7 @@ pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflic
 pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
 pnpm draftably check examples/ --quiet            # every .draft in a folder (or several files); no info notes
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
+pnpm draftably format diagram.draft --drop-stale --write  # also drop refinements that no longer hold
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)

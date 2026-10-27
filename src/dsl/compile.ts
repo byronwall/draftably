@@ -628,6 +628,9 @@ function titleFit(title: string, inner: number, look: ResolvedAppearance) {
   return { w: Math.min(w, full), lines: Math.min(lines(), GROUP_TITLE_LINES) };
 }
 
+/** How far a soft refinement may give way before `check` warns that it no longer holds. */
+export const RELAXED_WARNING = 16;
+
 /** Solver budget for engine recipes; the same budget Compare and the timeline use. */
 export const ENGINE_ITERATIONS = 640;
 
@@ -693,14 +696,14 @@ function fitWidth(o: ModelObject, base: { w: number; h: number }, look: Resolved
  */
 export function leafSize(
   o: ModelObject,
-  size: { width: number; height: number } | undefined,
+  size: { width: number; height?: number } | undefined,
   look: ResolvedAppearance,
 ) {
   const base = defaultShapeSize(o.shape);
   const w = size?.width ?? fitWidth(o, base, look);
   const area = titleArea(o.shape, w, size?.height ?? base.h, look),
     lines = wrapTitle(o.label, area.width, look).length;
-  if (size)
+  if (size?.height !== undefined)
     return { w, h: size.height, overflow: lines * look.title.lineHeight > area.maxHeight + 0.5 };
   return {
     w,
@@ -2039,11 +2042,12 @@ function refine(
     if (pins.has(id) || (hint.type === 'near' && hint.strength === 'required')) continue;
     const got = pos.get(id)!,
       moved = Math.round(Math.hypot(got.x - want.x, got.y - want.y));
+    // A few pixels is layout settling; more means the line no longer says where the object is.
     if (moved >= 2)
       diagnostics.push({
-        level: 'info',
+        level: moved >= RELAXED_WARNING ? 'warning' : 'info',
         code: 'relaxed',
-        message: `${hint.type} ${id} gave way by ${moved} px to keep ${scope} clear.`,
+        message: `${hint.type} ${id} gave way by ${moved} px to keep ${scope} clear.${moved >= RELAXED_WARNING ? ` Remove line ${hint.line}, or run format --drop-stale.` : ''}`,
         line: hint.line,
         ids: [id],
       });
