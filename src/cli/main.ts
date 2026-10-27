@@ -47,6 +47,12 @@ Commands:
                             Keys: engine, direction, layout engine and routing settings.
        [--grid]             Try layered, compound-flow, flow (and tree) reading right, down.
        [--scope <group>]    Vary that group's layout line instead of the root's.
+       [--fit <shape>]      Aim for a shape: wide, slide, square, page or tall. Changes what
+                            is tried and what ranks first.
+       [--prefer <goal>]    Break ties toward fewer-crossings (default), compact or stable
+                            (least movement from the current drawing).
+       [--from <id>]        Search around a variant of the last run: its other direction,
+                            ordering, folding, gap steps and router settings.
   vary <file> --apply <id>  Write variant <id> from the last run (or best) into the file,
                             print the lines it changed, then check the file.
   extract <image>           Print the .draft source embedded in a PNG or SVG export.
@@ -227,8 +233,8 @@ export async function main(argv: string[]): Promise<number> {
         const source = await read(file),
           out = option(rest, '--out'),
           pick = option(rest, '--apply');
-        const { applyVariant, runVary } = await import('./vary');
-        const { parseTry } = await import('./variants');
+        const { applyVariant, runVary, savedVariant } = await import('./vary');
+        const { FITS, parseTry } = await import('./variants');
         if (pick) {
           if (isImageName(file!)) throw new UsageError('vary --apply rewrites a .draft file only.');
           const done = applyVariant(file!, source, pick, out);
@@ -243,7 +249,15 @@ export async function main(argv: string[]): Promise<number> {
         }
         const limit = option(rest, '--limit'),
           axes = options(rest, '--try').map(parseTry);
-        if (axes.length && flag('--grid')) throw new UsageError('Use --try or --grid, not both.');
+        const fit = option(rest, '--fit'),
+          prefer = option(rest, '--prefer'),
+          from = option(rest, '--from');
+        if ([axes.length > 0, flag('--grid'), !!from].filter(Boolean).length > 1)
+          throw new UsageError('Use one of --try, --grid and --from.');
+        if (fit !== undefined && !(fit in FITS))
+          throw new UsageError(`--fit must be ${Object.keys(FITS).join(', ')}.`);
+        if (prefer !== undefined && !['fewer-crossings', 'compact', 'stable'].includes(prefer))
+          throw new UsageError('--prefer must be fewer-crossings, compact or stable.');
         if (
           limit !== undefined &&
           !(Number.isInteger(Number(limit)) && +limit >= 1 && +limit <= 12)
@@ -257,6 +271,9 @@ export async function main(argv: string[]): Promise<number> {
           axes,
           grid: flag('--grid'),
           scope: option(rest, '--scope'),
+          fit: fit as keyof typeof FITS | undefined,
+          prefer: prefer as 'fewer-crossings' | 'compact' | 'stable' | undefined,
+          ...(from ? { from: savedVariant(file!, source, from, out) } : {}),
         });
         return 0;
       }

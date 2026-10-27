@@ -614,6 +614,18 @@ Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
 - `--grid` tries `layered`, `compound-flow` and `flow`, plus `tree` for a tree with one start,
   each reading right and then down. Sweeps keep a variant that draws the same picture as an
   earlier one and tag it `same as v1`, so a setting with no effect shows.
+- `--fit wide|slide|square|page|tall` aims for an image shape (aspect 2, 1.78, 1, 0.77, 0.6).
+  It changes what is tried (the matching direction first, and the engine's `aspect` with
+  folding) and what ranks first: closeness to the shape comes right after warnings. A variant
+  then counts as better when it fits the shape better and grows by at most half; more growth
+  is empty space, not a better fit. With `--fit` the
+  table adds an `aspect` column.
+- `--prefer fewer-crossings|compact|stable` sets the order after warnings: crossings then area
+  (the default), area then crossings, or the least movement from the current drawing.
+- `--from <id>` searches around a variant of the last run: that variant as it was, the other
+  direction, the other rank ordering and folding, `rank-gap`, `node-gap` and `group-gap` one
+  step either way, and two router settings. Each keeps the variant's own edits, so the loop is:
+  `vary`, look, `vary --from v2`, look, `vary --apply v1`.
 - `--scope <group>` varies that group's `layout` line instead of the root's. The suggestions
   then use the group's own shape, and routing (which is the whole file's) stays as it is.
 - `--json` prints `variants.json`: for each variant its id, title, reason, the exact lines it

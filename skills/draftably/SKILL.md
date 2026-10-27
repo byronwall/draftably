@@ -36,7 +36,9 @@ inside the Draftably repo). It needs Node 22.21 or later.
    To explore a setting yourself, `--try direction` or `--try engine=layered,flow --try
 rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no effect),
    `--grid` sweeps the main engines in both directions, and `--scope <group>` varies one
-   group's layout line.
+   group's layout line. Say what the drawing is for: `--fit slide` (or `wide`, `square`, `page`,
+   `tall`) ranks by closeness to that shape, and `--prefer compact` or `--prefer stable` changes
+   what wins a tie. When a variant is close, `--from v2` tries small changes around it.
 5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.

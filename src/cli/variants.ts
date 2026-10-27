@@ -13,6 +13,7 @@ import { findConflicts } from '../dsl/conflicts';
 import { projectScene, visibleRects } from '../dsl/project';
 import { layoutStatement, statements } from '../dsl/source-edits';
 import { ExplorerLab } from '../engines/explorer-engine.js';
+import { LayoutLab } from '../engines/layout-engine.js';
 import {
   bare,
   ENGINE_PARAMS,
@@ -70,6 +71,20 @@ export interface Measured {
 }
 
 export type Prefer = 'fewer-crossings' | 'compact' | 'stable';
+
+/** `--fit` targets: the width-to-height ratio the whole image should come close to. */
+export const FITS = { wide: 2, slide: 1.78, square: 1, page: 0.77, tall: 0.6 } as const;
+export type Fit = keyof typeof FITS;
+
+/** What "best" means for a run: the preference, and the target aspect when `--fit` is given. */
+export interface Goal {
+  prefer: Prefer;
+  fit?: Fit;
+}
+
+/** How far an image's shape is from the target, on a log scale: 0 is a perfect fit. */
+export const fitError = (m: Pick<Metrics, 'width' | 'height'>, fit: Fit) =>
+  Math.abs(Math.log(m.width / m.height / FITS[fit]));
 
 // --- Edits -------------------------------------------------------------------------------------
 
@@ -262,6 +277,7 @@ export const titleOf = (edits: Edit[]) =>
 export function suggestions(
   shape: Shape,
   base: Pick<Metrics, 'crossings'>,
+  goal: Goal = { prefer: 'fewer-crossings' },
 ): Array<Pick<Variant, 'edits' | 'why'>> {
   const out: Array<Pick<Variant, 'edits' | 'why'>> = [];
   // A stricter router only helps a drawing that has crossings; routing is the whole file's.
@@ -289,10 +305,26 @@ export function suggestions(
   });
   const engine = defaultEngine(shape),
     because = shape.groups ? `${shape.groups} group${shape.groups > 1 ? 's' : ''}` : 'no groups';
-  for (const direction of ['right', 'down'])
+  // A wide target reads across first, a tall one down; ties keep the reading direction of rows.
+  const tall = goal.fit !== undefined && FITS[goal.fit] < 1.2,
+    lead = tall ? 'down' : 'right';
+  for (const direction of tall ? ['down', 'right'] : ['right', 'down'])
     out.push({ edits: [layout({ engine, direction })], why: `${because}, reading ${direction}` });
+  if (goal.fit) {
+    // Only the spring and grid engines follow `aspect`; the ranked engines keep their bands.
+    const aspect = ENGINE_PARAMS.aspect as { choices: readonly string[] },
+      near = [...aspect.choices].sort(
+        (a, b) =>
+          Math.abs(Math.log(+a / FITS[goal.fit!])) - Math.abs(Math.log(+b / FITS[goal.fit!])),
+      )[0],
+      shaped = shape.groups ? 'compound-spring' : 'grid';
+    out.push({
+      edits: [layout({ engine: shaped, aspect: near })],
+      why: `--fit ${goal.fit}: ${shaped} follows aspect ${near}`,
+    });
+  }
   out.push({
-    edits: [layout({ engine, direction: 'right', ordering: 'crossings' })],
+    edits: [layout({ engine, direction: lead, ordering: 'crossings' })],
     why: 'order each rank to cut crossings',
   });
   if (shape.groups)
@@ -458,6 +490,88 @@ export function grid(shape: Shape): Array<Pick<Variant, 'edits' | 'why'>> {
   );
 }
 
+/** Merge edits: later attributes win on the same statement. */
+function combine(a: Edit[], b: Edit[]): Edit[] {
+  const out = a.map(e => ({ ...e, attrs: { ...e.attrs } }) as Edit);
+  for (const e of b) {
+    const same = out.find(
+      x =>
+        x.kind === e.kind && (x.kind === 'routing' || x.scope === (e as { scope: string }).scope),
+    );
+    if (same) Object.assign(same.attrs, e.attrs);
+    else out.push({ ...e, attrs: { ...e.attrs } } as Edit);
+  }
+  return out;
+}
+
+/** The shared steps just above and below a setting's current value (or the engine default). */
+function nextSteps(key: string, current: string | null | undefined) {
+  const list = steps(key)!.map(Number),
+    now = Number(
+      current ?? LayoutLab.defaults[ENGINE_PARAMS[key].key as keyof typeof LayoutLab.defaults],
+    );
+  return [list.find(x => x > now), [...list].reverse().find(x => x < now)].flatMap(x =>
+    x === undefined ? [] : [String(x)],
+  );
+}
+
+/**
+ * Small changes around a variant from an earlier run (`--from`): the variant itself, the other
+ * direction, the other rank ordering and folding, a gap step either way, and a stricter router.
+ * Each keeps the variant's own edits, so applying one still changes only those lines.
+ */
+export function neighbors(
+  shape: Shape,
+  from: { id: string; edits: Edit[] },
+): Array<Pick<Variant, 'edits' | 'why'>> {
+  const own = from.edits.find(e => e.kind === 'layout') as
+      Extract<Edit, { kind: 'layout' }> | undefined,
+    attrs = own?.attrs ?? {},
+    engine = attrs.engine ?? shape.engine,
+    layout = (set: Record<string, string>) =>
+      combine(from.edits, [
+        {
+          kind: 'layout',
+          scope: shape.scope,
+          attrs: { ...(engine ? {} : { engine: defaultEngine(shape) }), ...set },
+        },
+      ]);
+  // Ids are given again after this run, so name the variant this one came from plainly.
+  const was = `the earlier ${from.id}`;
+  const out: Array<Pick<Variant, 'edits' | 'why'>> = [
+    { edits: from.edits, why: `${was} as it was` },
+  ];
+  if (!shape.fixed) {
+    const direction = attrs.direction ?? shape.direction;
+    out.push({
+      edits: layout({ direction: direction === 'down' ? 'right' : 'down' }),
+      why: `${was}, the other direction`,
+    });
+    out.push({
+      edits: layout({ ordering: attrs.ordering === 'crossings' ? 'stable' : 'crossings' }),
+      why: `${was}, the other rank ordering`,
+    });
+    if (['flow', 'layered', 'compound-flow'].includes(engine ?? defaultEngine(shape)))
+      out.push({
+        edits: layout({ fold: attrs.fold === 'never' ? 'auto' : 'never' }),
+        why: `${was}, ${attrs.fold === 'never' ? 'folding long runs' : 'one line, no folding'}`,
+      });
+    for (const key of ['rank-gap', 'node-gap', ...(shape.groups ? ['group-gap'] : [])])
+      for (const v of nextSteps(key, attrs[key]))
+        out.push({ edits: layout({ [key]: v }), why: `${was}, ${key}=${v}` });
+  }
+  if (shape.scope === 'root')
+    for (const [key, v] of [
+      ['crossing-penalty', '900'],
+      ['edge-gap', '28'],
+    ])
+      out.push({
+        edits: combine(from.edits, [{ kind: 'routing', attrs: { [key]: v } }]),
+        why: `${was}, routing ${key}=${v}`,
+      });
+  return out;
+}
+
 // --- Measuring ---------------------------------------------------------------------------------
 
 const centers = (rects: Map<string, Rect>) => {
@@ -526,10 +640,12 @@ const movedFrom = (base: Drawn['centers'], next: Drawn['centers']) => {
 const area = (m: Metrics) => m.width * m.height;
 
 /** Sort keys for a preference, most important first. Warnings always come first. */
-function keys(m: Metrics, prefer: Prefer): number[] {
-  if (prefer === 'compact') return [m.warnings, area(m), m.crossings, m.bends];
-  if (prefer === 'stable') return [m.warnings, m.moved, m.crossings, area(m)];
-  return [m.warnings, m.crossings, area(m), m.bends];
+function keys(m: Metrics, goal: Goal): number[] {
+  // With --fit, closeness to the target (in steps of 0.1) comes right after warnings.
+  const fit = goal.fit ? [Math.round(fitError(m, goal.fit) * 10)] : [];
+  if (goal.prefer === 'compact') return [m.warnings, ...fit, area(m), m.crossings, m.bends];
+  if (goal.prefer === 'stable') return [m.warnings, ...fit, m.moved, m.crossings, area(m)];
+  return [m.warnings, ...fit, m.crossings, area(m), m.bends];
 }
 
 const compareKeys = (a: number[], b: number[]) => {
@@ -540,15 +656,19 @@ const compareKeys = (a: number[], b: number[]) => {
 /**
  * Whether `m` is at least as good as the current file on warnings, crossings and size, and
  * better on one of them. Only such a variant is recommended over keeping the file as it is.
+ * With `--fit`, size means closeness to the target shape, so a variant may grow to fit it, but
+ * by at most half: reshaping the same content needs little more room, and more is empty space.
  */
-export const improves = (m: Metrics, base: Metrics) =>
-  m.warnings <= base.warnings &&
-  m.crossings <= base.crossings &&
-  area(m) <= area(base) &&
-  (m.warnings < base.warnings || m.crossings < base.crossings || area(m) < area(base));
+export function improves(m: Metrics, base: Metrics, fit?: Fit) {
+  if (m.warnings > base.warnings || m.crossings > base.crossings) return false;
+  const fewer = m.warnings < base.warnings || m.crossings < base.crossings;
+  if (!fit) return area(m) <= area(base) && (fewer || area(m) < area(base));
+  const [now, was] = [fitError(m, fit), fitError(base, fit)];
+  return area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05);
+}
 
 /** Label what stands out in each variant: the fewest crossings, the smallest, the least moved. */
-function tag(list: Variant[]) {
+function tag(list: Variant[], fit?: Fit) {
   const ok = list.filter(v => v.metrics && !v.error);
   const best = (label: string, score: (m: Metrics) => number) => {
     if (ok.length < 2) return;
@@ -561,6 +681,7 @@ function tag(list: Variant[]) {
   best('fewest crossings', m => m.crossings);
   best('smallest', area);
   best('fewest bends', m => m.bends);
+  if (fit) best('best fit', m => Math.round(fitError(m, fit) * 100));
   const others = ok.filter(v => v.id !== 'v0');
   if (others.length > 1) {
     const low = Math.min(...others.map(v => v.metrics!.moved));
@@ -578,11 +699,15 @@ export interface VaryOptions {
   grid?: boolean;
   /** The scope whose `layout` line varies: `root` (default) or a framed group. */
   scope?: string;
+  /** `--fit`: the shape the image should take. */
+  fit?: Fit;
+  /** `--from`: search around this variant of an earlier run. */
+  from?: { id: string; edits: Edit[] };
 }
 
 export interface VaryResult {
   shape: Shape;
-  mode: 'suggest' | 'try' | 'grid';
+  mode: 'suggest' | 'try' | 'grid' | 'from';
   /** `v0` (the file as it is) first, then the kept variants: ranked, or in sweep order. */
   variants: Variant[];
   /** The variant to apply, or `v0` when none improves on the file. */
@@ -614,10 +739,11 @@ function checkScope(scene: Scene, scope: string) {
  * order and tag repeats.
  */
 export async function vary(source: string, opts: VaryOptions = {}): Promise<VaryResult> {
-  const prefer = opts.prefer ?? 'fewer-crossings',
-    scope = opts.scope ?? 'root',
-    mode = opts.axes?.length ? 'try' : opts.grid ? 'grid' : 'suggest',
-    limit = mode === 'suggest' ? (opts.limit ?? 4) : 12;
+  const goal: Goal = { prefer: opts.prefer ?? 'fewer-crossings', fit: opts.fit },
+    scope = opts.scope ?? opts.from?.edits.find(e => e.kind === 'layout')?.scope ?? 'root',
+    mode = opts.axes?.length ? 'try' : opts.grid ? 'grid' : opts.from ? 'from' : 'suggest',
+    ranked = mode === 'suggest' || mode === 'from',
+    limit = ranked ? (opts.limit ?? 4) : 12;
   const scene = await compile(source);
   checkScope(scene, scope);
   const shape = shapeOf(scene, scope),
@@ -641,7 +767,9 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
       ? sweep(shape, opts.axes!)
       : mode === 'grid'
         ? grid(shape)
-        : suggestions(shape, base.metrics);
+        : mode === 'from'
+          ? neighbors(shape, opts.from!)
+          : suggestions(shape, base.metrics, goal);
   for (const c of candidates) {
     const { source: next, changes } = applyEdits(source, c.edits);
     const variant: Variant = {
@@ -652,11 +780,11 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
       lines: changes,
       tags: [],
     };
-    if (!changes.length && mode === 'suggest') continue;
+    if (!changes.length && ranked) continue;
     try {
       const d = await draw(next);
       const same = seen.get(d.key);
-      if (same && mode === 'suggest') continue;
+      if (same && ranked) continue;
       variant.metrics = { ...d.metrics, moved: movedFrom(base.centers, d.centers) };
       found.push({ variant, measured: { variant, source: next, svg: d.svg }, same });
       if (!same) seen.set(d.key, variant);
@@ -667,12 +795,12 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
       });
     }
   }
-  const better = (v: Variant) => improves(v.metrics!, v0.metrics!);
-  if (mode === 'suggest')
+  const better = (v: Variant) => improves(v.metrics!, v0.metrics!, goal.fit);
+  if (ranked)
     found.sort(
       (a, b) =>
         Number(better(b.variant)) - Number(better(a.variant)) ||
-        compareKeys(keys(a.variant.metrics!, prefer), keys(b.variant.metrics!, prefer)),
+        compareKeys(keys(a.variant.metrics!, goal), keys(b.variant.metrics!, goal)),
     );
   const kept = found.slice(0, limit);
   kept.forEach((f, i) => {
@@ -682,11 +810,14 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
   // Sweeps keep repeats in place so the order stays the documented one; say which they repeat.
   for (const f of kept) if (f.same) f.variant.tags.push(`same as ${f.same.id}`);
   const variants = [v0, ...kept.map(f => f.variant)];
-  tag(variants.filter(v => !v.tags.some(t => t.startsWith('same as'))));
+  tag(
+    variants.filter(v => !v.tags.some(t => t.startsWith('same as'))),
+    goal.fit,
+  );
   const pick = kept
     .map(f => f.variant)
     .filter(v => better(v) && !v.tags.some(t => t.startsWith('same as')))
-    .sort((a, b) => compareKeys(keys(a.metrics!, prefer), keys(b.metrics!, prefer)))[0];
+    .sort((a, b) => compareKeys(keys(a.metrics!, goal), keys(b.metrics!, goal)))[0];
   const recommended = pick?.id ?? 'v0';
   variants.find(v => v.id === recommended)!.tags.unshift('recommended');
   return { shape, mode, variants, recommended, tried: candidates.length, failed, drawn };

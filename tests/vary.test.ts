@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { compile } from '../src/dsl/compile';
-import { applyEdits, improves, parseTry, shapeOf, sweep, vary } from '../src/cli/variants';
+import {
+  applyEdits,
+  improves,
+  neighbors,
+  parseTry,
+  shapeOf,
+  sweep,
+  vary,
+  type Metrics,
+} from '../src/cli/variants';
 
 const SOURCE = `diagram "Orders"
 
@@ -76,5 +85,35 @@ describe('vary', () => {
       { kind: 'routing', attrs: { 'crossing-penalty': '900' } },
     ]);
     expect(() => sweep(shape, [parseTry('engine'), parseTry('direction')])).toThrow('12 or fewer');
+  });
+
+  it('lets --fit trade area for the target shape, never crossings', () => {
+    const m = (width: number, height: number, crossings = 0): Metrics => ({
+      width,
+      height,
+      crossings,
+      bends: 0,
+      length: 0,
+      warnings: 0,
+      moved: 0,
+    });
+    const tall = m(700, 1000);
+    expect(improves(m(1200, 700), tall)).toBe(false);
+    expect(improves(m(1200, 700), tall, 'slide')).toBe(true);
+    expect(improves(m(1200, 700, 1), tall, 'slide')).toBe(false);
+    // Sprawl: the right shape, but three times the room.
+    expect(improves(m(1800, 1000), m(900, 600), 'slide')).toBe(false);
+  });
+
+  it('searches around a variant while keeping its own edits', async () => {
+    const shape = shapeOf(await compile(SOURCE));
+    const pick = [
+      { kind: 'layout' as const, scope: 'root', attrs: { engine: 'layered', 'rank-gap': '52' } },
+    ];
+    const list = neighbors(shape, { id: 'v2', edits: pick });
+    expect(list[0]).toEqual({ edits: pick, why: 'the earlier v2 as it was' });
+    expect(list.map(n => n.edits[0].attrs['rank-gap'])).toContain('88');
+    expect(list.map(n => n.edits[0].attrs['rank-gap'])).toContain('28');
+    for (const n of list) expect(n.edits[0].attrs.engine).toBe('layered');
   });
 });

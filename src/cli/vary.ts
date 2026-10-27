@@ -8,6 +8,7 @@ import path from 'node:path';
 import { formatSource } from '../dsl/syntax';
 import {
   applyEdits,
+  FITS,
   vary,
   type Edit,
   type LineChange,
@@ -83,10 +84,21 @@ function contactSheet(result: VaryResult) {
 }
 
 /** The stdout table: one row per variant, with changes from the current file. */
-function table(result: VaryResult, file: string, dir: string) {
-  const base = result.variants[0].metrics!;
+function table(result: VaryResult, file: string, dir: string, opts: RunOptions) {
+  const base = result.variants[0].metrics!,
+    fit = opts.fit;
   const rows = [
-    ['id', 'change', 'crossings', 'bends', 'size', 'warnings', 'moved', 'notes'],
+    [
+      'id',
+      'change',
+      'crossings',
+      'bends',
+      'size',
+      ...(fit ? ['aspect'] : []),
+      'warnings',
+      'moved',
+      'notes',
+    ],
     ...result.variants.map(v => {
       const m = v.metrics!;
       return [
@@ -95,6 +107,7 @@ function table(result: VaryResult, file: string, dir: string) {
         `${m.crossings}${delta(m.crossings, base.crossings)}`,
         `${m.bends}${delta(m.bends, base.bends)}`,
         `${sizeText(m)}${delta(m.width * m.height, base.width * base.height, true)}`,
+        ...(fit ? [(m.width / m.height).toFixed(2)] : []),
         `${m.warnings}${delta(m.warnings, base.warnings)}`,
         v.id === 'v0' ? '' : `${m.moved}px`,
         v.tags.join(', '),
@@ -109,15 +122,22 @@ function table(result: VaryResult, file: string, dir: string) {
       .trimEnd(),
   );
   const rel = path.relative(process.cwd(), dir) || '.';
-  const kept = result.mode === 'suggest' ? `${result.variants.length - 1} kept` : `${result.mode}`;
+  const kept = ['suggest', 'from'].includes(result.mode)
+      ? `${result.variants.length - 1} kept`
+      : `${result.mode}`,
+    goal = [
+      ...(opts.from ? [`around ${opts.from.id}`] : []),
+      ...(fit ? [`fit ${fit} (aspect ${FITS[fit]})`] : []),
+      ...(opts.prefer ? [`prefer ${opts.prefer}`] : []),
+    ];
   lines.unshift(
-    `${result.tried} variants tried (${kept}). Sheet: ${path.join(rel, 'contact-sheet.png')}`,
+    `${result.tried} variants tried (${kept}${goal.length ? '; ' + goal.join(', ') : ''}). Sheet: ${path.join(rel, 'contact-sheet.png')}`,
   );
   for (const v of result.variants.slice(1)) lines.push(`${v.id}: ${v.why}.`);
   for (const f of result.failed) lines.push(`Failed: ${f.title}: ${f.error}`);
   lines.push(
     result.recommended === 'v0'
-      ? 'Recommended: keep the current layout; no variant is as good on warnings, crossings and size.'
+      ? `Recommended: keep the current layout; no variant is as good on warnings, crossings and ${fit ? `fit to ${fit}` : 'size'}.`
       : `Recommended: ${result.recommended}. Apply: draftably vary ${file} --apply ${result.recommended}`,
   );
   return lines.join('\n');
@@ -160,7 +180,23 @@ export async function runVary(file: string, source: string, opts: RunOptions) {
     variants: result.variants.map(v => ({ ...v, png: path.join(dir, `${v.id}.png`) })),
   };
   fs.writeFileSync(path.join(dir, 'variants.json'), JSON.stringify(saved, null, 2) + '\n');
-  console.log(opts.json ? JSON.stringify(saved, null, 2) : table(result, file, dir));
+  console.log(opts.json ? JSON.stringify(saved, null, 2) : table(result, file, dir, opts));
+}
+
+/**
+ * Variant `id` (or `best`) from the last run on `file`. Refuses when the file changed since that
+ * run, since the variant's numbers no longer describe it.
+ */
+export function savedVariant(file: string, source: string, id: string, out?: string) {
+  const at = path.join(outDir(file, out), 'variants.json');
+  if (!fs.existsSync(at)) throw Error(`No variants for ${file}. Run draftably vary ${file} first.`);
+  const saved = JSON.parse(fs.readFileSync(at, 'utf8')) as Saved;
+  if (saved.source !== hash(source))
+    throw Error(`${file} changed since its variants were made. Run draftably vary ${file} again.`);
+  const pick = id === 'best' ? saved.recommended : id,
+    v = saved.variants.find(x => x.id === pick);
+  if (!v) throw Error(`No variant ${pick}. Variants: ${saved.variants.map(x => x.id).join(', ')}.`);
+  return v;
 }
 
 const describe = (c: LineChange) =>
@@ -175,14 +211,8 @@ const describe = (c: LineChange) =>
  * no longer describe it.
  */
 export function applyVariant(file: string, source: string, id: string, out?: string) {
-  const at = path.join(outDir(file, out), 'variants.json');
-  if (!fs.existsSync(at)) throw Error(`No variants for ${file}. Run draftably vary ${file} first.`);
-  const saved = JSON.parse(fs.readFileSync(at, 'utf8')) as Saved;
-  if (saved.source !== hash(source))
-    throw Error(`${file} changed since its variants were made. Run draftably vary ${file} again.`);
-  const pick = id === 'best' ? saved.recommended : id,
-    v = saved.variants.find(x => x.id === pick);
-  if (!v) throw Error(`No variant ${pick}. Variants: ${saved.variants.map(x => x.id).join(', ')}.`);
+  const v = savedVariant(file, source, id, out),
+    pick = v.id;
   if (!v.edits.length)
     return {
       id: pick,
