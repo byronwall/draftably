@@ -229,6 +229,8 @@ export interface ModelEdge {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
+  constraint?: false;
   line: number;
 }
 
@@ -626,7 +628,7 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'importance']);
+        allow(['kind', 'from', 'to', 'was', 'importance', 'constraint']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -643,6 +645,9 @@ export function parseModel(source: string | SourceDoc): Model {
           dashed: choice('kind', 'sync', ['sync', 'async', 'data']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
+          ...(choice('constraint', 'true', ['true', 'false']) === 'false'
+            ? { constraint: false as const }
+            : {}),
           ...(s.mark ? { status } : {}),
           ...was(),
           line,

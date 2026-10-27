@@ -96,24 +96,24 @@ layout platform column gap=28
 layout services row gap=56
 ```
 
-| Statement                          | Options                                                                                                               |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                       |
-| `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                             |
-| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                          |
-| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`    |
-| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N` |
-| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                                 |
-| `theme name`                       | Preset look (see below); optional, at most one                                                                        |
-| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                 |
-| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                           |
-| `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides                  |
-| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                    |
-| `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                 |
-| `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                 |
-| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                              |
-| `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                  |
-| `config key=value ...`             | File settings: `link-base="path"` (where relative links start), `editor=vscode\|cursor\|zed\|...`                     |
+| Statement                          | Options                                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                                                  |
+| `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                        |
+| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                     |
+| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                               |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                            |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                                                            |
+| `theme name`                       | Preset look (see below); optional, at most one                                                                                                   |
+| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                            |
+| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                      |
+| `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout |
+| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                                               |
+| `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                                            |
+| `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                                            |
+| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                                                         |
+| `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                                             |
+| `config key=value ...`             | File settings: `link-base="path"` (where relative links start), `editor=vscode\|cursor\|zed\|...`                                                |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
@@ -241,6 +241,8 @@ content area.
   and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
+- A feedback edge (a refetch, a retry back to the start) pulls the section it points at below its
+  source. Add `constraint=false` to draw it without letting it rank anything.
 - Use color to mean something, not for decoration:
   - Two to four accent families, each for one role (external systems, data stores, the failure
     path), and `slate` or `stone` for everything else. More reads as noise.
