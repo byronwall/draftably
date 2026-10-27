@@ -58,6 +58,9 @@ Commands:
                             (least movement from the current drawing).
        [--from <id>]        Search around a variant of the last run: its other direction,
                             ordering, folding, gap steps and router settings.
+       [--budget <time>]    Stop trying new variants after this long (60s, 2m) and rank the
+                            ones found. Each variant prints a line to stderr as it finishes.
+                            A lanes root stays as v0; --grid and --try engine try engines.
   vary <file> --apply <id>  Write variant <id> from the last run (or best) into the file,
                             print the lines it changed, then check the file.
   extract <image>           Print the .draft source embedded in a PNG or SVG export.
@@ -137,6 +140,14 @@ function option(args: string[], name: string) {
   const value = args[at + 1];
   if (!value || value.startsWith('--')) throw new UsageError(`${name} needs a value.`);
   return value;
+}
+
+/** `--budget 90s`, `2m` or `5000ms` in milliseconds; a bare number is seconds. */
+function parseBudget(value: string | undefined) {
+  if (value === undefined) return undefined;
+  const m = /^(\d+(?:\.\d+)?)(ms|s|m)?$/.exec(value);
+  if (!m) throw new UsageError('--budget must be a time such as 60s, 2m or 5000ms.');
+  return Number(m[1]) * { ms: 1, s: 1000, m: 60_000 }[m[2] ?? 's']!;
 }
 
 /** The document in emphasis state `id`, or as it is without one. */
@@ -332,6 +343,7 @@ export async function main(argv: string[]): Promise<number> {
           grid: flag('--grid'),
           scope: option(rest, '--scope'),
           fit: fit as keyof typeof FITS | undefined,
+          budget: parseBudget(option(rest, '--budget')),
           prefer: prefer as 'fewer-crossings' | 'compact' | 'stable' | undefined,
           ...(from ? { from: savedVariant(file!, source, from, out) } : {}),
         });

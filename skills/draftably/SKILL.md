@@ -37,7 +37,8 @@ inside the Draftably repo). It needs Node 22.21 or later.
    `--apply best`). It rewrites only the layout lines and runs `check`.
    To explore a setting yourself, `--try direction` or `--try engine=layered,flow --try
 rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no effect),
-   `--grid` sweeps the main engines in both directions, and `--scope <group>` varies one
+   `--grid` sweeps the main engines in both directions (on a lanes root too, keeping the lanes
+   as `v0`; add `--budget 120s` on a large diagram), and `--scope <group>` varies one
    group's layout line. Say what the drawing is for: `--fit slide` (or `wide`, `square`, `page`,
    `tall`) ranks by closeness to that shape, and `--prefer compact` or `--prefer stable` changes
    what wins a tie. When a variant is close, `--from v2` tries small changes around it.
