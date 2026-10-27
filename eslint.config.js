@@ -32,8 +32,8 @@ export default tseslint.config(
     languageOptions: { globals: globals.node },
   },
   {
-    // Proof scripts pass callbacks to `page.evaluate`, which run in the browser.
-    files: ['scripts/prove-*.mjs', 'scripts/lib/proof.mjs'],
+    // Proof and bench scripts pass callbacks to `page.evaluate`, which run in the browser.
+    files: ['scripts/prove-*.mjs', 'scripts/lib/proof.mjs', 'scripts/bench/*.mjs'],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 );

@@ -33,7 +33,8 @@
     "prove:themes": "node scripts/prove-themes.mjs",
     "font-metrics": "node scripts/font-metrics.mjs",
     "audit:compare": "node scripts/audit-compare.mjs",
-    "shoot": "node scripts/shoot.mjs"
+    "shoot": "node scripts/shoot.mjs",
+    "bench": "node scripts/bench/run.mjs"
   },
   "dependencies": {
     "solid-js": "^1.9.9"

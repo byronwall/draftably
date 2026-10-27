@@ -215,6 +215,8 @@ try {
   await page.mouse.click(...center(await box(page, 'db')));
   await page.keyboard.press('p');
   await sleep(300);
+  // Routes refined in a worker land a moment later on a slow machine.
+  await waitFor(page, () => !window.diagramStudio.diagnostics().layoutBusy, 'routes');
   check(
     'invalid source keeps the last drawing and is not overwritten',
     same(await browserGeometry(page), added) && read().endsWith('edge broken api -> nowhere\n'),

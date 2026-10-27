@@ -53,3 +53,20 @@ jobs:
           path: |
             tmp/proof/
             tmp/proof-layout/
+
+  bench:
+    # A report, not a gate: times CLI commands and viewer actions against the 200 ms interactive
+    # and 1 s load budgets and writes the table to the job summary.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright-core install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm bench --runs 1
