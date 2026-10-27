@@ -3,7 +3,7 @@ diagram "Decisory: one consultation" version=1
 # expect right-of done more
 # expect near done more 120
 
-theme midnight
+theme blueprint
 theme-color brand shade=300 fill="#7FC8C0" stroke="#4FA79D" ink="#0E2A27"
 theme-color brand shade=700 fill="#1F6F66" stroke="#2F8C81" ink="#FFFFFF"
 

@@ -2,7 +2,7 @@ diagram "Visual Notes: an agent saves a note" version=1
 
 # expect order-x agent_side mcp_side data_side
 
-theme mulberry
+theme ink
 
 group agent_side "Agent session" color=slate
 node user "User asks" in=agent_side shape=pill

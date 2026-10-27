@@ -5,7 +5,7 @@ Source: `~/Projects/coolify-backup-scripts` (`coolify-restic-backup.sh` `main()`
 `check_repo`; the systemd timer from `install-on-server.sh`).
 
 Kind / layout / color strategy / theme: ops runbook with two decisions and a nightly loop, flow
-right with a cycle, accent (`primary` on the timer, backup and done) / midnight.
+right with a cycle, accent (`primary` on the timer, backup and done) / blueprint.
 
 e1 (relabel): "Label the arrows with what each step hands on."
 

@@ -3,7 +3,7 @@ diagram "Draftably: one edit in the viewer" version=1
 # expect above browser server
 # expect near file write 120
 
-theme mulberry
+theme ink
 theme-color brand shade=100 fill="#F3ECF7" stroke="#B9A2C9" ink="#3B2449"
 theme-color brand shade=700 fill="#5B3A73" stroke="#43285A" ink="#FFFFFF"
 

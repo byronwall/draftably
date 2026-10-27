@@ -4,7 +4,7 @@ diagram "Quiet Chess: what the practice screen imports" version=1
 # expect near chessutil chessjs 160
 # expect still *
 
-theme midnight
+theme blueprint
 
 node app "App.tsx" color=teal shade=800
 node practice "PracticeView" color=teal shade=600

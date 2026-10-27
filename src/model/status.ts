@@ -8,7 +8,14 @@
  * a strong border. Each status also has a border weight, dash, fade or strike, so a diff still
  * reads in grayscale.
  */
-import { swatchFor, type LegendEntry, type ResolvedAppearance, type Swatch } from './appearance';
+import {
+  ensureContrast,
+  swatchFor,
+  type LegendEntry,
+  type ResolvedAppearance,
+  type Shade,
+  type Swatch,
+} from './appearance';
 import { descendants, styleOf } from './graph';
 import type { Diagram, DiagramEdge } from './types';
 
@@ -40,6 +47,15 @@ export const statusLabel = ({ status, count }: StatusCount) => `${count} ${STATU
 
 /** The color family each status is drawn in. */
 const HUES: Partial<Record<Status, string>> = { added: 'green', changed: 'amber', removed: 'red' };
+/**
+ * The shade of a status's border in light themes. The marks differ in lightness as well as hue,
+ * so added and removed stay apart for red-green color blindness.
+ */
+const STROKE_SHADES: Partial<Record<Status, Shade>> = { added: 500, changed: 500, removed: 700 };
+const strokeOf = (look: ResolvedAppearance, status: Status) =>
+  look.dark
+    ? swatchFor(look, HUES[status], 400).fill
+    : ensureContrast(swatchFor(look, HUES[status], STROKE_SHADES[status]).fill, look.canvas, 3);
 
 export interface StatusPaint {
   /** Line color for connections; shapes take theirs from `statusSwatch`. */
@@ -58,7 +74,7 @@ export const HALO_GAP = 4;
 
 /** The accent a ringed object or connection is drawn with: the theme's second accent. */
 export const haloInk = (look: ResolvedAppearance) =>
-  swatchFor(look, 'secondary', look.dark ? 300 : 500).fill;
+  ensureContrast(swatchFor(look, 'secondary', look.dark ? 300 : 500).fill, look.canvas, 3);
 
 const PLAIN: StatusPaint = { opacity: 1, strike: false };
 
@@ -77,8 +93,7 @@ export function statusPaint(look: ResolvedAppearance, status?: Status, spot?: Sp
 const CONTEXT_FADE = 0.45;
 
 function changePaint(look: ResolvedAppearance, status?: Status): StatusPaint {
-  const hue = HUES[status ?? 'same'],
-    stroke = hue ? swatchFor(look, hue, look.dark ? 400 : 600).fill : undefined;
+  const stroke = status && HUES[status] ? strokeOf(look, status) : undefined;
   switch (status) {
     case 'added':
     case 'changed':
@@ -113,7 +128,7 @@ export function statusSwatch(
   const tint = swatchFor(look, hue, look.dark ? 900 : kind === 'group' ? 50 : 100);
   return {
     fill: tint.fill,
-    stroke: swatchFor(look, hue, look.dark ? 400 : 600).fill,
+    stroke: strokeOf(look, status!),
     ink: swatchFor(look, hue, look.dark ? 100 : 900).fill,
   };
 }

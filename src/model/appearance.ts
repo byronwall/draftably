@@ -8,9 +8,9 @@
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 import type { FileConfig } from './link';
 
-export type ThemeId = 'graphite' | 'fieldnotes' | 'signal' | 'mulberry' | 'midnight';
-export const THEME_IDS: ThemeId[] = ['graphite', 'fieldnotes', 'signal', 'mulberry', 'midnight'];
-export const DEFAULT_THEME: ThemeId = 'graphite';
+export type ThemeId = 'drafting' | 'fieldnotes' | 'signal' | 'ink' | 'blueprint';
+export const THEME_IDS: ThemeId[] = ['drafting', 'fieldnotes', 'signal', 'ink', 'blueprint'];
+export const DEFAULT_THEME: ThemeId = 'drafting';
 
 /** Shade stops. Lower numbers are lighter and higher numbers darker, in every theme. */
 export const SHADES = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const;
@@ -156,19 +156,21 @@ interface Preset {
   /** Anchor colors for `primary` and `secondary`, at the shade they appear as. */
   primary: [string, Shade];
   secondary: [string, Shade];
+  /** Hue and chroma for built-in families this theme draws in its own way. */
+  hues?: Partial<Record<string, [number, number]>>;
 }
 
 export const PRESETS: Record<ThemeId, Preset> = {
-  graphite: {
-    label: 'Graphite',
-    description: 'Compact and neutral, with deep green and ochre',
+  drafting: {
+    label: 'Drafting',
+    description: 'Navy ink on cool paper, with drafting blue and marker gold',
     dark: false,
-    canvas: '#F5F5F2',
-    text: '#24292B',
-    muted: '#5D6664',
-    connection: '#4B5553',
-    node: { fill: '#FFFFFF', stroke: '#C5CBC8', ink: '#24292B' },
-    group: { fill: '#ECEDE9', stroke: '#D3D7D2', ink: '#3E4745' },
+    canvas: '#F7F7F4',
+    text: '#1B2433',
+    muted: '#586172',
+    connection: '#39414F',
+    node: { fill: '#FFFFFF', stroke: '#C3C8CF', ink: '#1B2433' },
+    group: { fill: '#EEEFEB', stroke: '#D5D8DC', ink: '#363F4D' },
     paddingX: 12,
     paddingY: 20,
     radius: 4,
@@ -178,20 +180,20 @@ export const PRESETS: Record<ThemeId, Preset> = {
     titleSize: 13,
     titleLine: 16,
     annotationSize: 11,
-    chroma: 0.8,
-    primary: ['#334C49', 800],
-    secondary: ['#E8C879', 300],
+    chroma: 0.9,
+    primary: ['#2754A6', 700],
+    secondary: ['#F0B43C', 400],
   },
   fieldnotes: {
     label: 'Fieldnotes',
-    description: 'Editorial serif titles on warm paper, forest and clay',
+    description: 'Editorial serif titles on warm paper, indigo and terracotta',
     dark: false,
-    canvas: '#F7F2E8',
-    text: '#302E28',
+    canvas: '#F6F1E6',
+    text: '#2F2B24',
     muted: '#6B6559',
-    connection: '#5A554A',
-    node: { fill: '#FFFCF5', stroke: '#CFC5B2', ink: '#302E28' },
-    group: { fill: '#EFE8DA', stroke: '#D9CFBC', ink: '#4A4539' },
+    connection: '#57503F',
+    node: { fill: '#FFFCF5', stroke: '#CFC4AF', ink: '#2F2B24' },
+    group: { fill: '#EEE7D8', stroke: '#D8CDB8', ink: '#4A4539' },
     paddingX: 18,
     paddingY: 22,
     radius: 3,
@@ -201,20 +203,21 @@ export const PRESETS: Record<ThemeId, Preset> = {
     titleSize: 15,
     titleLine: 19,
     annotationSize: 11,
-    chroma: 0.7,
-    primary: ['#405D48', 700],
-    secondary: ['#AC543A', 600],
+    chroma: 0.72,
+    primary: ['#34507F', 700],
+    secondary: ['#B5532F', 600],
+    hues: { green: [150, 0.1], amber: [80, 0.12], violet: [320, 0.1] },
   },
   signal: {
     label: 'Signal',
-    description: 'Crisp cobalt on white, with monospace annotations',
+    description: 'Color-blind-safe Okabe–Ito hues on white, with monospace annotations',
     dark: false,
     canvas: '#FFFFFF',
-    text: '#172B4D',
-    muted: '#53627C',
-    connection: '#42526E',
-    node: { fill: '#F1F4F8', stroke: '#C1CAD8', ink: '#172B4D' },
-    group: { fill: '#F7F9FC', stroke: '#D5DCE6', ink: '#2C3E5D' },
+    text: '#16202B',
+    muted: '#4F5B68',
+    connection: '#3B4652',
+    node: { fill: '#F5F7F9', stroke: '#C3CAD3', ink: '#16202B' },
+    group: { fill: '#F6F8FA', stroke: '#D9DEE4', ink: '#2A3644' },
     paddingX: 16,
     paddingY: 20,
     radius: 6,
@@ -224,46 +227,57 @@ export const PRESETS: Record<ThemeId, Preset> = {
     titleSize: 13,
     titleLine: 16,
     annotationSize: 10.5,
-    chroma: 1.05,
-    primary: ['#234BCD', 600],
-    secondary: ['#F1BC75', 300],
+    chroma: 1,
+    primary: ['#0067A5', 600],
+    secondary: ['#E69F00', 500],
+    // After Okabe & Ito's set: blue, sky blue, bluish green, orange, vermilion, reddish purple.
+    hues: {
+      blue: [248, 0.15],
+      sky: [237, 0.11],
+      green: [163, 0.13],
+      mint: [172, 0.1],
+      amber: [72, 0.16],
+      orange: [55, 0.16],
+      red: [36, 0.18],
+      rose: [350, 0.13],
+    },
   },
-  mulberry: {
-    label: 'Mulberry',
-    description: 'Generous berry and lilac for presentations',
+  ink: {
+    label: 'Ink',
+    description: 'Sumi ink tones with indigo and a vermilion seal, generous spacing',
     dark: false,
-    canvas: '#F7F3F6',
-    text: '#352A35',
-    muted: '#6E5F6D',
-    connection: '#5E4E5D',
-    node: { fill: '#FFFCFE', stroke: '#DCCFD9', ink: '#352A35' },
-    group: { fill: '#F0E8EE', stroke: '#E0D3DD', ink: '#4E3D4C' },
+    canvas: '#F8F6F1',
+    text: '#1A1A1A',
+    muted: '#625F5A',
+    connection: '#3B3A38',
+    node: { fill: '#FFFFFF', stroke: '#C8C5BF', ink: '#1A1A1A' },
+    group: { fill: '#EFECE5', stroke: '#D9D5CC', ink: '#3F3D39' },
     paddingX: 22,
     paddingY: 26,
-    radius: 8,
-    shadow: true,
+    radius: 3,
+    shadow: false,
     titleFont: 'sans',
     annotationFont: 'sans',
     titleSize: 14,
     titleLine: 19,
     annotationSize: 11.5,
-    chroma: 0.85,
-    primary: ['#713E61', 700],
-    secondary: ['#D6C5DF', 200],
+    chroma: 0.6,
+    primary: ['#2B3A55', 900],
+    secondary: ['#C23B22', 600],
   },
-  midnight: {
-    label: 'Midnight',
-    description: 'Dark ink with teal and coral, monospace titles',
+  blueprint: {
+    label: 'Blueprint',
+    description: 'White lines on blueprint blue, cyan and yellow, monospace titles',
     dark: true,
-    canvas: '#172428',
-    text: '#EDF3EF',
-    muted: '#A9BAB6',
-    connection: '#9DB1AC',
-    node: { fill: '#24363B', stroke: '#3D555B', ink: '#EDF3EF' },
-    group: { fill: '#1D2E33', stroke: '#33494F', ink: '#C9D8D4' },
+    canvas: '#13233D',
+    text: '#EAF1FB',
+    muted: '#A6B8D2',
+    connection: '#A9C2E6',
+    node: { fill: '#1B3154', stroke: '#45679B', ink: '#EAF1FB' },
+    group: { fill: '#172A48', stroke: '#2F4C78', ink: '#CFDCEF' },
     paddingX: 16,
     paddingY: 20,
-    radius: 5,
+    radius: 3,
     shadow: false,
     titleFont: 'mono',
     annotationFont: 'sans',
@@ -271,8 +285,8 @@ export const PRESETS: Record<ThemeId, Preset> = {
     titleLine: 17,
     annotationSize: 11,
     chroma: 0.85,
-    primary: ['#8BC5B7', 300],
-    secondary: ['#DF9C82', 300],
+    primary: ['#7FC4F2', 300],
+    secondary: ['#F2C14E', 300],
   },
 };
 
@@ -363,6 +377,18 @@ const LIGHTNESS: Record<Shade, number> = {
 };
 const isPale = (s: Shade) => s <= 300;
 
+/**
+ * Warm hues (orange, amber, gold) turn rust and brown when darkened for white text, so their 400
+ * and 500 stay bright and carry dark text instead. 600 and darker carry white text as usual. This
+ * also sets orange apart from red by lightness, which red-green color blindness keeps.
+ */
+const isWarm = (H: number) => H >= 45 && H <= 110;
+const BRIGHT: Partial<Record<Shade, number>> = { 400: 0.8, 500: 0.74 };
+/** Orange sits a step darker than amber, so the two stay apart without hue. */
+const brightAt = (shade: Shade, H: number) =>
+  BRIGHT[shade] === undefined ? undefined : BRIGHT[shade] - (H < 65 ? 0.07 : 0);
+const darkInked = (s: Shade, H: number) => isPale(s) || (isWarm(H) && s in BRIGHT);
+
 /** Contrast targets (WCAG ratios) every generated color meets. */
 export const CONTRAST = {
   /** Dark title text on a pale fill. */
@@ -380,20 +406,23 @@ export const CONTRAST = {
 /** How much of a family's chroma a shade carries: pale and very dark shades are quieter. */
 const chromaAt = (L: number) => Math.max(0.18, 1 - ((L - 0.6) / 0.42) ** 2);
 
-/** Hue and chroma of the built-in families. */
+/**
+ * Hue and chroma of the built-in families. Green leans blue and red leans orange, so the pair
+ * stays apart for red-green color blindness; violet sits away from blue for the same reason.
+ */
 const FAMILY_HUES: Record<string, [number, number]> = {
-  slate: [255, 0.035],
-  stone: [70, 0.022],
-  blue: [258, 0.15],
-  sky: [232, 0.11],
-  teal: [192, 0.09],
-  mint: [165, 0.1],
-  green: [145, 0.12],
-  amber: [78, 0.13],
-  orange: [52, 0.15],
-  red: [27, 0.17],
-  rose: [2, 0.13],
-  violet: [295, 0.15],
+  slate: [255, 0.03],
+  stone: [70, 0.02],
+  blue: [258, 0.14],
+  sky: [232, 0.1],
+  teal: [195, 0.085],
+  mint: [168, 0.09],
+  green: [155, 0.12],
+  amber: [78, 0.14],
+  orange: [50, 0.15],
+  red: [32, 0.17],
+  rose: [358, 0.12],
+  violet: [305, 0.13],
 };
 
 const DARK_INK = (h: number): string => lchToHex([0.24, 0.035, h]);
@@ -426,9 +455,9 @@ function swatchAt(
   dark: boolean,
   fixed?: string,
 ): { swatch: Swatch; L: number } {
-  const pale = isPale(shade),
+  const pale = darkInked(shade, H),
     ink = pale ? DARK_INK(H) : LIGHT_INK,
-    target = pale ? CONTRAST.paleInk : CONTRAST.darkInk;
+    target = isPale(shade) ? CONTRAST.paleInk : CONTRAST.darkInk;
   let L = fixed ? hexToLch(fixed)[0] : start,
     fill = fixed ?? lchToHex([L, C * chromaAt(L), H]);
   while (contrast(fill, ink) < target && L > 0.05 && L < 0.995) {
@@ -450,9 +479,10 @@ function ramp(H: number, C: number, canvas: string, dark: boolean, anchor?: [str
   const out = new Map<Shade, Swatch>();
   let previous = 1;
   for (const shade of SHADES) {
+    const bright = isWarm(H) ? brightAt(shade, H) : undefined;
     const start = isPale(shade)
       ? LIGHTNESS[shade]
-      : Math.min(LIGHTNESS[shade], previous - DARK_STEP);
+      : Math.min(bright ?? LIGHTNESS[shade], previous - DARK_STEP);
     let next = swatchAt(
       shade,
       start,
@@ -491,8 +521,10 @@ export function builtInFamilies(
       ['primary', anchoredRamp(p.primary, canvas, p.dark)],
       ['secondary', anchoredRamp(p.secondary, canvas, p.dark)],
     ]);
-    for (const [name, [h, c]] of Object.entries(FAMILY_HUES))
+    for (const [name, hue] of Object.entries(FAMILY_HUES)) {
+      const [h, c] = p.hues?.[name] ?? hue;
       families.set(name, ramp(h, c * p.chroma, canvas, p.dark));
+    }
     presetFamilies.set(key, families);
   }
   return families;

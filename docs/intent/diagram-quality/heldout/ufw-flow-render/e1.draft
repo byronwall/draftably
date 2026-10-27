@@ -4,7 +4,7 @@ diagram "User Flow Workbench: from .diagram to picture" version=1
 # expect near cli catalog 160
 # expect keeps-order
 
-theme graphite
+theme drafting
 theme-color brand shade=200 fill="#FCE7D6" stroke="#E0A87C" ink="#4A2510"
 theme-color brand shade=600 fill="#C2581C" stroke="#9A4313" ink="#FFFFFF"
 

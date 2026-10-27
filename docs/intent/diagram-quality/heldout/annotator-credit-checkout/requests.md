@@ -6,7 +6,7 @@ Source: `~/Projects/image-annotator` (`app/src/routes/api/billing/checkout.ts`,
 `markCheckoutPaid`, `markCheckoutFailed`, the credit ledger and purchases)).
 
 Kind / layout / color strategy / theme: payment lifecycle with two decisions, default layout (no
-`layout` line), none / mulberry. Added in round 5.
+`layout` line), none / ink. Added in round 5.
 
 e1 (relayout): "Make it read top to bottom."
 

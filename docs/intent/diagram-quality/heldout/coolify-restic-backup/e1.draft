@@ -4,7 +4,7 @@ diagram "Coolify: one nightly Restic backup" version=1
 # expect still-shape *
 # expect keeps-order
 
-theme midnight
+theme blueprint
 
 node timer "systemd timer" shape=pill color=primary
 node env "Load env file"

@@ -4,7 +4,7 @@ diagram "Visual Notes: an agent saves a note" version=1
 # expect near denied auth 60
 # expect right-of denied auth
 
-theme mulberry
+theme ink
 
 group agent_side "Agent session" color=slate
 node user "User asks" in=agent_side shape=pill

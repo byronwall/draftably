@@ -5,7 +5,7 @@ diagram "Image Annotator: buying a credit pack" version=1
 # expect near failed signed 200
 # expect near dup mark 160
 
-theme mulberry
+theme ink
 
 node buy "Buy credits" shape=pill
 node checkout "POST /billing/checkout"

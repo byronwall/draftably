@@ -3,7 +3,7 @@ diagram "PGM: agent context through the CLI" version=1
 # expect near cli contract 200
 # expect near zip server 200
 
-theme mulberry
+theme ink
 
 node agent "Coding agent"
 node cli "pgm CLI"

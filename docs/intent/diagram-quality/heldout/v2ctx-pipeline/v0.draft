@@ -3,7 +3,7 @@ diagram "video-to-context: one recording to a context package" version=1
 # expect reads-y input audio transcript report
 # expect above input report
 
-theme graphite
+theme drafting
 
 node input "Recording or memo" shape=pill color=primary
 node has_video "Has video?" shape=diamond

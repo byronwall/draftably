@@ -5,7 +5,7 @@ diagram "video-to-context: one recording to a context package" version=1
 # expect keeps-order
 # expect below install transcriber
 
-theme graphite
+theme drafting
 
 node input "Recording or memo" shape=pill color=primary
 node has_video "Has video?" shape=diamond

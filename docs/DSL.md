@@ -375,7 +375,7 @@ the viewer takes it out of every state.
 
 The file owns the diagram's appearance. A `theme` line picks a preset and may override its
 diagram-wide values; `theme-color` lines change or add colors. Every value is optional: anything
-not written comes from the preset, and a file with no `theme` line uses Graphite.
+not written comes from the preset, and a file with no `theme` line uses Drafting.
 
 ```text
 theme fieldnotes padding-x=18 padding-y=12 radius=3 title-font=serif annotation-font=sans
@@ -386,20 +386,20 @@ node context "Context" color=brand shade=100
 node focus "Main step" color=brand shade=800
 ```
 
-| Theme        | Character                                               | Titles     | Padding x / y |
-| ------------ | ------------------------------------------------------- | ---------- | ------------- |
-| `graphite`   | Compact and neutral, deep green and ochre. The default. | sans-serif | 12 / 20       |
-| `fieldnotes` | Editorial: serif node and group titles on warm paper.   | serif      | 18 / 22       |
-| `signal`     | Cobalt on white, monospace connection labels.           | sans-serif | 16 / 20       |
-| `mulberry`   | Berry and lilac, generous padding for presentations.    | sans-serif | 22 / 26       |
-| `midnight`   | Dark ink with teal and coral, monospace titles.         | monospace  | 16 / 20       |
+| Theme        | Character                                                                    | Titles     | Padding x / y |
+| ------------ | ---------------------------------------------------------------------------- | ---------- | ------------- |
+| `drafting`   | Navy ink on cool paper, drafting blue and marker gold. Compact. The default. | sans-serif | 12 / 20       |
+| `fieldnotes` | Editorial: serif titles on warm paper, indigo and terracotta.                | serif      | 18 / 22       |
+| `signal`     | Color-blind-safe Okabe–Ito hues on white, monospace connection labels.       | sans-serif | 16 / 20       |
+| `ink`        | Sumi ink tones, indigo and a vermilion seal, generous padding.               | sans-serif | 22 / 26       |
+| `blueprint`  | Dark: white lines on blueprint blue, cyan and yellow, monospace titles.      | monospace  | 16 / 20       |
 
 `theme` attributes: `padding-x` and `padding-y` (4–48, the space between a node's edge and its
 title), `radius` (0–24, rectangle corners), `title-font` and `annotation-font` (`sans`, `serif` or
 `mono`), and `canvas`, `text` and `connection` colors. Colors are hex values in double quotes:
 `#` outside quotes starts a comment.
 
-Switching themes keeps the layout: nodes are placed on slots sized in Graphite (with the file's
+Switching themes keeps the layout: nodes are placed on slots sized in Drafting (with the file's
 own overrides) and drawn at the theme's size in their slot, centred along the reading direction
 with each row keeping its top. A slot grows only where the theme's node is larger than the gap
 around it can absorb, so rows and order always hold.
@@ -409,8 +409,11 @@ around it can absorb, so rows and order always hold.
 `violet`. Each has shades `50 100 200 300 400 500 600 700 800 900 950`; lower numbers are lighter
 and higher numbers darker in every theme, dark ones included. Shades 50–300 are pale fills with
 dark text and 400–950 are fills with white text, each held to WCAG contrast targets (7:1 and
-4.5:1). A node that names a color without a shade uses 500; a group uses a quiet surface shade
-(100, or 900 in Midnight). Shade is chosen per object: `color=auto` inherits a group's family,
+4.5:1). Warm families (`amber`, `orange`, and a theme accent of those hues) keep 400 and 500
+bright with dark text, since a warm fill dark enough for white text turns brown; their 600 and
+darker carry white text. A theme may tune a family's hue: Signal draws `green`, `orange`, `red`
+and `rose` as Okabe–Ito's bluish green, orange, vermilion and reddish purple. A node that names a color without a shade uses 500; a group uses a quiet surface shade
+(100, or 900 in Blueprint). Shade is chosen per object: `color=auto` inherits a group's family,
 never its shade. A node with neither color nor shade uses the theme's neutral surface.
 
 **Legend.** `legend family "meaning"` adds a row to the diagram's color key, in file order: a
@@ -427,7 +430,7 @@ legend violet "Data stores"
 
 Drawing keeps an object apart from a container of its own family. A group inside a same-family
 group steps one shade toward emphasis per level (100, 200, 300 in light themes; 900, 800, 700 in
-Midnight), so nested frames read as layers rather than one fill. A node whose shade is within
+Blueprint), so nested frames read as layers rather than one fill. A node whose shade is within
 two steps of its container's moves three steps past it. `check` notes a file with more than four
 accent families (`many-colors`; `slate` and `stone` don't count) and a member that names its
 container's family (`color-matches-container`).

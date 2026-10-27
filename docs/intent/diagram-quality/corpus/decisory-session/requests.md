@@ -1,6 +1,6 @@
 # Follow-up requests
 
-Color strategy / theme / layout: custom brand (theme-color brand 300/700) + slate jobs + amber store / midnight, flow right with a cycle.
+Color strategy / theme / layout: custom brand (theme-color brand 300/700) + slate jobs + amber store / blueprint, flow right with a cycle.
 
 e1 (drag, viewer): Dragged Copy as Markdown from the top right to beside the Another round? decision.
 

@@ -2,7 +2,7 @@ diagram "Image Annotator: buying a credit pack" version=1
 
 # expect reads-y buy checkout session webhook mark ledger
 
-theme mulberry
+theme ink
 
 node buy "Buy credits" shape=pill
 node checkout "POST /billing/checkout"

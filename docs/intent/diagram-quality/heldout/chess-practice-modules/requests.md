@@ -17,5 +17,5 @@ e1 (grow): "Add GameTrainer: the app opens it, and it uses Board and chess.js."
 
 e2 (recolor + theme): "Make the outside packages slate and switch to the dark theme."
 
-- `theme midnight`; `color=slate` on `chess.js` and `content/*.json`.
+- `theme blueprint`; `color=slate` on `chess.js` and `content/*.json`.
 - expects: still \* (color and theme never move anything).

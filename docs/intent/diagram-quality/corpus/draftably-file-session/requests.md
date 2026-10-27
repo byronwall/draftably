@@ -1,6 +1,6 @@
 # Follow-up requests
 
-Color strategy: custom brand family (theme-color brand 100/700) + accent, theme mulberry. Nested? No, two sibling groups + one root object. Engine layered down, with a cycle.
+Color strategy: custom brand family (theme-color brand 100/700) + accent, theme ink. Nested? No, two sibling groups + one root object. Engine layered down, with a cycle.
 
 e1 (branch): "Invalid source gets a 422 too — add that check after the revision check."
 
