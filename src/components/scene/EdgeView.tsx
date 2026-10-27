@@ -22,7 +22,7 @@ export interface EdgeViewProps {
 export function EdgeView(props: EdgeViewProps) {
   const edge = () => findEdge(props.doc, props.route.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
-  const paint = () => statusPaint(look(), edge().status);
+  const paint = () => statusPaint(look(), edge().status, edge().spot);
   const stroke = () =>
     props.route.blocked
       ? swatchFor(look(), 'red', 600).fill

@@ -385,6 +385,23 @@ input[type='range'] {
   font-size: var(--text-xs);
 }
 
+.link-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.link-target {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .checkbox {
   display: flex;
   align-items: center;

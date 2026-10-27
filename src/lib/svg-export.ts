@@ -23,13 +23,17 @@ const STYLE_PROPS = [
 
 /** Interactive-only parts of a scene that never belong in an exported drawing. */
 const EDITOR_ONLY =
-  '.port,.selection-ring,.resize-handle,.waypoint,.edge-hit,.group-collapse,.group-header,.position-badge,.overlay-layer';
+  '.port,.selection-ring,.resize-handle,.waypoint,.edge-hit,.group-collapse,.group-header,.position-badge,.overlay-layer,.link-hit';
 
 /**
- * Deep-copy an SVG subtree with computed styles inlined and editor-only parts removed.
- * The source element must be attached to the document.
+ * Deep-copy an SVG subtree with computed styles inlined and editor-only parts removed. An object
+ * with a link (`data-href`) is wrapped in `<a>`, its target written by `href`. The source element
+ * must be attached to the document.
  */
-export function materializeSvg<T extends SVGElement>(original: T): T {
+export function materializeSvg<T extends SVGElement>(
+  original: T,
+  href: (href: string) => string = h => h,
+): T {
   const copy = original.cloneNode(true) as T,
     sources = [original, ...original.querySelectorAll('*')],
     copies = [copy, ...copy.querySelectorAll('*')];
@@ -48,6 +52,14 @@ export function materializeSvg<T extends SVGElement>(original: T): T {
         dest.removeAttribute(attr.name);
   });
   original.querySelectorAll(EDITOR_ONLY).forEach(el => copies[sources.indexOf(el)]?.remove());
+  original.querySelectorAll('[data-href]').forEach(el => {
+    const dest = copies[sources.indexOf(el)],
+      link = createSvgElement('a', { href: href(el.getAttribute('data-href')!) });
+    if (/^[a-z][a-z0-9+.-]+:/i.test(link.getAttribute('href')!))
+      link.setAttribute('target', '_blank');
+    dest.replaceWith(link);
+    link.append(dest);
+  });
   copy.removeAttribute('transform');
   return copy;
 }

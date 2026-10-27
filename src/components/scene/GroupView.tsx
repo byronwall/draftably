@@ -2,10 +2,12 @@ import { createMemo, Show } from 'solid-js';
 import { descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
-import { statusPaint } from '../../model/status';
+import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
 import { truncateText } from '../../model/fonts';
+import { groupLinkMark } from '../../model/link';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
+import { LinkMarkView } from './LinkMark';
 import { PositionBadge, ResizeHandles } from './parts';
 
 /** A container's border is quieter than a connection: thinner and partly transparent. */
@@ -28,7 +30,8 @@ export function GroupView(props: GroupViewProps) {
   const group = () => findGroup(props.doc, props.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
   const color = () => drawnSwatch(props.doc, look(), props.id, 'group');
-  const paint = () => statusPaint(look(), props.doc.styles[props.id]?.status);
+  const paint = () =>
+    statusPaint(look(), props.doc.styles[props.id]?.status, props.doc.styles[props.id]?.spot);
   const collapsed = () => isCollapsed(props.doc, props.id);
   const shapeCount = createMemo(
     () => descendants(props.doc, props.id).filter(id => findNode(props.doc, id)).length,
@@ -51,6 +54,7 @@ export function GroupView(props: GroupViewProps) {
       }}
       data-kind="group"
       data-id={props.id}
+      data-href={group().href}
       transform={`translate(${props.rect.x},${props.rect.y})`}
       opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive ? 0 : undefined}
@@ -60,6 +64,18 @@ export function GroupView(props: GroupViewProps) {
       }
       aria-pressed={props.interactive ? !!props.selected : undefined}
     >
+      <Show when={paint().halo}>
+        <rect
+          x={-HALO_GAP}
+          y={-HALO_GAP}
+          width={w() + 2 * HALO_GAP}
+          height={props.rect.h + 2 * HALO_GAP}
+          rx={Math.min(10, look().radius + 4) + HALO_GAP}
+          fill="none"
+          stroke={haloInk(look())}
+          stroke-width={2}
+        />
+      </Show>
       <rect
         class="group-bg"
         width={w()}
@@ -93,6 +109,16 @@ export function GroupView(props: GroupViewProps) {
       >
         {title()}
       </text>
+      <Show when={group().href}>
+        {href => (
+          <LinkMarkView
+            mark={groupLinkMark(title(), look().groupTitle, band())}
+            href={href()}
+            color={color().ink}
+            interactive={props.interactive}
+          />
+        )}
+      </Show>
       <Show when={props.interactive}>
         <g class="group-collapse" data-collapse>
           <rect x={w() - 29} y={5} width={24} height={24} rx={5} fill="transparent" />

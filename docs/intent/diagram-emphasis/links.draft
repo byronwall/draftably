@@ -1,0 +1,19 @@
+diagram "Draftably source map" version=1
+subtitle "Each box links to the code it names"
+
+group dsl "DSL" color=blue href="src/dsl/syntax.ts"
+node syntax "syntax.ts" in=dsl href="src/dsl/syntax.ts:1"
+node compile "compile.ts" in=dsl href="src/dsl/compile.ts"
+group model "Model" color=teal
+node status "status.ts" in=model href="src/model/status.ts:48"
+node link "link.ts" in=model href="src/model/link.ts" count=3
+node svg "CLI SVG" shape=pill href="src/cli/svg.ts"
+node docs "DSL guide" shape=circle href="https://github.com/byronwall/diagram-studio/blob/main/docs/DSL.md#L77"
+node themes "Themes plan" href="examples/theme-proof.draft"
+node plain "No link"
+
+edge parse syntax -> compile
+edge paint compile -> status
+edge draw status -> svg
+edge mark link -> svg
+edge doc svg -> docs

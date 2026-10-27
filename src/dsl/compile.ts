@@ -1704,6 +1704,44 @@ function layoutPass(
     m.edges
       .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
+  /**
+   * A scope's pairs for ranking a packed scope, less the returns of its cycles. Groups lift their
+   * members' edges, so a node that a group's member feeds and that feeds another member forms a
+   * cycle with the group. Breaking it in declaration order can rank the whole group after that
+   * node, and the group's entry edge then runs across the drawing. Instead each sibling enters
+   * where its first member ranks among all the scope's nodes, and a pair in a cycle that runs
+   * back to an earlier entry is the return.
+   */
+  const rankPairsIn = (scope: string, ids: string[], pairs: Array<[string, string]>) => {
+    const within = (id: string) => immediate(id, scope) !== undefined;
+    const inner = m.objects.filter(o => within(o.id)).map(o => o.id),
+      rank = new Map(
+        rankLayers(
+          inner,
+          m.edges.filter(e => within(e.source) && within(e.target)).map(e => [e.source, e.target]),
+        ).flatMap((layer, i) => layer.map(id => [id, i] as const)),
+      );
+    const entry = new Map(ids.map(id => [id, Infinity]));
+    for (const id of inner) {
+      const k = immediate(id, scope)!;
+      entry.set(k, Math.min(entry.get(k)!, rank.get(id)!));
+    }
+    const reaches = (from: string, to: string) => {
+      const seen = new Set([from]),
+        todo = [from];
+      while (todo.length) {
+        const v = todo.pop()!;
+        if (v === to) return true;
+        for (const [a, b] of pairs)
+          if (a === v && !seen.has(b)) {
+            seen.add(b);
+            todo.push(b);
+          }
+      }
+      return false;
+    };
+    return pairs.filter(([a, b]) => !(entry.get(b)! < entry.get(a)! && reaches(b, a)));
+  };
   const packEngine = (scope: string) => {
     const governing = arranged && governingLayout(m, scope),
       kids = children.get(scope) ?? [];
@@ -1833,6 +1871,13 @@ function layoutPass(
     const governing = arranged && governingLayout(m, scope),
       pack = packEngine(scope),
       packGaps = pack ? { node: pack.nodeGap, rank: pack.rankGap, group: groupGap } : undefined,
+      ranked = pack
+        ? rankPairsIn(
+            scope,
+            list.map(n => n.id),
+            pairs,
+          )
+        : undefined,
       engine = governing?.engine && governing.scope === scope ? governing.engine : undefined;
     /**
      * Where each drawn box sits in its slot, and its size. The built-in recipes line a rank's
@@ -1898,7 +1943,7 @@ function layoutPass(
               list,
               arranged!,
               axisOf(governing!),
-              pairs,
+              ranked!,
               with_,
               packGaps,
               scope === 'root',
@@ -2151,6 +2196,7 @@ function layoutPass(
       });
   }
   diagnostics.push(...paletteNotes(m));
+  for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
   objects.sort((a, b) => index.get(a.id)! - index.get(b.id)!);

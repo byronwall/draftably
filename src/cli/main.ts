@@ -7,11 +7,13 @@ import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
 import { compareDetailed } from '../dsl/compare';
 import { hintMoves, sceneConflicts } from '../dsl/conflicts';
-import { statusLabel, usedStatuses } from '../model/status';
+import { statusLabel, usedStatuses, withState } from '../model/status';
+import type { Diagram } from '../model/types';
 import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { renderSvg } from './svg';
+import { linkNotes, svgHref } from './links';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
 
@@ -26,6 +28,8 @@ Commands:
        [--hints]            line; with --hints it adds the unrefined position (raw) of every
                             node a refinement moved.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
+       [--state <id>]       Draw it in one emphasis state (also with --png).
+       [--states]           Draw every emphasis state as its own aligned panel.
   inspect <file> --png <out.png> [--scale 2]
                             Save the drawing as a PNG (needs Chrome or Chromium).
                             PNG and SVG output embed the source; --no-source leaves it out.
@@ -93,6 +97,17 @@ function option(args: string[], name: string) {
   return value;
 }
 
+/** The document in emphasis state `id`, or as it is without one. */
+function drawnState(doc: Diagram, id: string | undefined) {
+  if (id === undefined) return doc;
+  const ids = doc.appearance.states?.map(s => s.id) ?? [];
+  if (!ids.includes(id))
+    throw new UsageError(
+      ids.length ? `No state ${id}. States: ${ids.join(', ')}.` : 'The file has no state lines.',
+    );
+  return withState(doc, id);
+}
+
 /** Save `svg` as a PNG when `--png` is given, with `source` in it; true if it was. */
 async function maybePng(svg: () => string | Promise<string>, args: string[], source?: string) {
   const out = option(args, '--png');
@@ -119,7 +134,11 @@ export async function main(argv: string[]): Promise<number> {
       case 'check': {
         const source = await read(file),
           scene = await compile(source);
-        const diagnostics = [...scene.diagnostics, ...sceneConflicts(scene)];
+        const diagnostics = [
+          ...scene.diagnostics,
+          ...linkNotes(scene, file),
+          ...sceneConflicts(scene),
+        ];
         const errors = diagnostics.filter(d => d.level === 'error'),
           warnings = diagnostics.filter(d => d.level === 'warning');
         for (const d of diagnostics) console.log(describe(d));
@@ -143,9 +162,15 @@ export async function main(argv: string[]): Promise<number> {
       case 'inspect': {
         const source = await read(file),
           scene = await compile(source),
-          doc = projectScene(scene);
-        if (await maybePng(() => renderSvg(doc), rest, embed(source))) return 0;
-        if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc), source));
+          doc = drawnState(projectScene(scene), option(rest, '--state')),
+          opts = { href: svgHref(scene, file), states: flag('--states') };
+        if (opts.states) {
+          if (!doc.appearance.states?.length) throw new UsageError('The file has no state lines.');
+          if (doc.appearance.compare)
+            throw new UsageError('--states draws panels, and so does compare; use one at a time.');
+        }
+        if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
+        if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));
         else if (flag('--json') && flag('--hints')) {
           const geometry = canonicalGeometry(doc),
             { rows, pushed } = await hintMoves(source, scene);

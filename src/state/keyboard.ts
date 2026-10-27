@@ -1,4 +1,5 @@
 /** Global keyboard shortcuts and clipboard handling for the editor. */
+import { stepState } from './emphasis';
 import { setStartOpen, startOpen } from './launch';
 import { findEdge, findNode } from '../model/graph';
 import { isClipboardFragment } from '../model/edits';
@@ -193,6 +194,8 @@ export function handleKeyDown(e: KeyboardEvent) {
     return (e.preventDefault(), runCommand(e.shiftKey ? 'auto-ports' : 'reroute'));
   if (e.altKey && key === 'e') return (e.preventDefault(), runCommand('compare-layouts'));
   if (key === 'b' && !e.altKey) return (e.preventDefault(), runCommand('quick-build'));
+  if ((key === '[' || key === ']') && !e.altKey && stepState(key === ']' ? 1 : -1))
+    return e.preventDefault();
   if (e.key === 'Delete' || e.key === 'Backspace')
     return (e.preventDefault(), runCommand(e.shiftKey ? 'delete-deep' : 'delete'));
 

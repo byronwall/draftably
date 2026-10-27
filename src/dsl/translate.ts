@@ -22,6 +22,7 @@ import {
   layoutStatement,
   num,
   quoted,
+  removeFromStates,
   removeReferences,
   removeWhere,
   setAttr,
@@ -156,7 +157,10 @@ export function translateEdit(input: EditInput): EditResult {
     }
   const afterEdges = new Set(after.graph.edges.map(e => e.id));
   for (const e of before.graph.edges)
-    if (!afterEdges.has(e.id)) removeWhere(source, s => s === edgeStatement(source, e.id));
+    if (!afterEdges.has(e.id)) {
+      removeWhere(source, s => s === edgeStatement(source, e.id));
+      removeFromStates(source, e.id);
+    }
 
   // New containers (outermost first), then new shapes.
   const beforeIds = new Set(objectsOf(before).map(o => o.id));

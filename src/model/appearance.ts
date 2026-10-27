@@ -6,6 +6,7 @@
  * Diagram appearance is separate from the editor's light or dark mode.
  */
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
+import type { FileConfig } from './link';
 
 export type ThemeId = 'graphite' | 'fieldnotes' | 'signal' | 'mulberry' | 'midnight';
 export const THEME_IDS: ThemeId[] = ['graphite', 'fieldnotes', 'signal', 'mulberry', 'midnight'];
@@ -86,6 +87,20 @@ export interface DiagramAppearance {
     /** Width over height the whole image should come closest to; 1.6 when unset. */
     aspect?: number;
   };
+  /** File settings from `config` statements. */
+  config?: FileConfig;
+  /** Named emphasis states from `state` statements, in file order. */
+  states?: EmphasisState[];
+}
+
+/** One way to draw the diagram: these objects and connections in focus, the rest faded or plain. */
+export interface EmphasisState {
+  id: string;
+  label: string;
+  /** Objects (a group brings its members) and connections in focus. */
+  ids: string[];
+  /** How everything else draws: faded like a context line, or as usual. */
+  rest: 'dim' | 'plain';
 }
 
 export interface Heading {

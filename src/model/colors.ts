@@ -58,6 +58,8 @@ export function drawnSwatch(
 ): Swatch {
   // In a diff, color means change: the status decides the swatch, not the author's family.
   if (isDiff(doc)) return statusSwatch(look, styleOf(doc, id).status, kind);
+  // Dimmed by an emphasis state: the neutral surface, so only what is in focus keeps a hue.
+  if (styleOf(doc, id).spot === 'dim') return statusSwatch(look, undefined, kind);
   return swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), kind);
 }
 
