@@ -26,7 +26,7 @@ export interface CellInput {
   /** Columns the cell covers in a grid. */
   span?: number;
   /** From a `size` line. */
-  size?: { width: number; height: number };
+  size?: { width: number; height?: number };
 }
 
 export interface CellBox {
@@ -38,7 +38,14 @@ export interface CellBox {
 
 /** A cell's own size: one line of title when it fits in `MAX_CELL`, wrapped when it does not. */
 export function cellSize(c: CellInput, look: ResolvedAppearance) {
-  if (c.size) return { w: c.size.width, h: c.size.height };
+  if (c.size?.height !== undefined) return { w: c.size.width, h: c.size.height };
+  if (c.size) {
+    const lines = wrapTitle(c.label, c.size.width - 2 * look.paddingX, look).length;
+    return {
+      w: c.size.width,
+      h: lines * look.title.lineHeight + 2 * Math.min(look.paddingY, CELL_PAD_Y),
+    };
+  }
   const pad = 2 * look.paddingX,
     w = Math.min(MAX_CELL, Math.max(MIN_CELL, Math.ceil(measureText(c.label, look.title)) + pad)),
     lines = wrapTitle(c.label, w - pad, look).length;

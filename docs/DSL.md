@@ -527,15 +527,15 @@ only when those are blocked. Connections inside a group with its own recipe are 
 Refinements adjust the automatic layout for one object. Positions are relative to the parent's
 content area, not the whole canvas, so moving a group moves everything inside it.
 
-| Statement                                | Strength | Meaning                                                                                |
-| ---------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling. `strength=required` enforces side and gap.                    |
-| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                    |
-| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these. |
-| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                |
-| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown.                     |
-| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                 |
-| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                             |
+| Statement                                | Strength | Meaning                                                                                                                                          |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling. `strength=required` enforces side and gap.                                                                              |
+| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                                                                              |
+| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these.                                                           |
+| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                                                                          |
+| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown. `height=auto` fits the title at that width, so the line survives label edits. |
+| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                                                                           |
+| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                                                                                       |
 
 Soft rules give way to keep siblings from overlapping. When one does, `check` reports it with its
 line. Pins never move; conflicting pins are reported as errors.
@@ -547,6 +547,7 @@ pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflic
 pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
 pnpm draftably check examples/ --quiet            # every .draft in a folder (or several files); no info notes
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
+pnpm draftably format diagram.draft --drop-stale --write  # also drop refinements that no longer hold
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)

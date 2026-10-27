@@ -275,7 +275,8 @@ export type Hint =
   | { type: 'nudge'; id: string; dx: number; dy: number; line: number }
   | { type: 'stay'; id: string; x: number; y: number; weight: number; line: number }
   | { type: 'pin'; id: string; x: number; y: number; line: number }
-  | { type: 'size'; id: string; width: number; height: number; line: number };
+  /** `height` is unset for `height=auto`: the title's height at that width, as without a size. */
+  | { type: 'size'; id: string; width: number; height?: number; line: number };
 
 export type Strength = 'prefer' | 'required';
 export type NearSide = 'right' | 'left' | 'above' | 'below';
@@ -839,7 +840,9 @@ export function parseModel(source: string | SourceDoc): Model {
             type: 'size',
             id: hid,
             width: num('width', 164, 40, 1200),
-            height: num('height', 56, 24, 1200),
+            ...(attrs.get('height')?.value === 'auto'
+              ? {}
+              : { height: num('height', 56, 24, 1200) }),
             line,
           });
         }

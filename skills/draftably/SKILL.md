@@ -57,7 +57,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    `inspect`, `format`, `compare` and `open` accept the image in place of the `.draft`. Use
    `--no-source` on `--png`/`--svg` exports when the labels must not travel with the picture.
 8. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
-   comments.
+   comments. A `[relaxed]` warning means a `near`, `stay` or `nudge` no longer holds after other
+   edits; `format --drop-stale --write` removes those lines.
 
 ## Syntax
 
@@ -224,7 +225,7 @@ content area.
 | `near id ref side=right\|left\|above\|below gap=28` | Place beside a sibling. `strength=required` enforces it.   |
 | `order scope id1 id2 ...`                           | Preferred order of a scope's children.                     |
 | `align x\|y id1 id2 ...`                            | Align sibling centers. `strength=required` locks them.     |
-| `size id width=164 height=56`                       | Requested node size.                                       |
+| `size id width=164 height=56`                       | Requested node size; `height=auto` fits the title.         |
 | `nudge id dx= dy=`                                  | Offset from the automatic position.                        |
 | `pin id x= y=`                                      | Exact position; layout never moves it. Use sparingly.      |
 | `stay id x= y= weight=8`                            | Soft position. The viewer's tools write these; leave them. |
