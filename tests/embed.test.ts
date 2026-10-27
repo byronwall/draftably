@@ -47,9 +47,12 @@ describe.skipIf(!hasChrome)('source embedded in exported PNGs', () => {
   it('gives back the marked file of a compare export', async () => {
     const before = write(
         'before.draft',
-        'diagram "A" version=1\nnode a "A"\nnode b "B"\nedge a -> b\n',
+        'diagram "A" version=1\nnode a "A"\nnode b "B"\nedge ab a -> b\n',
       ),
-      after = write('after.draft', 'diagram "A" version=1\nnode a "A"\nnode c "C"\nedge a -> c\n'),
+      after = write(
+        'after.draft',
+        'diagram "A" version=1\nnode a "A"\nnode c "C"\nedge ac a -> c\n',
+      ),
       png = path.join(dir, 'compare.png');
     expect((await run('compare', before, after, '--png', png)).code).toBe(0);
     const { merged } = compareDetailed(
