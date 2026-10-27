@@ -123,6 +123,8 @@ Good defaults:
 - A process with roles: `layout root lanes` makes each top-level group a swim lane (bands,
   `direction=down` for columns). Every node must sit in a lane; steps line up in rank columns
   across all lanes.
+- An exchange between participants: `layout root sequence`. Nodes are participants across the
+  top; each `edge` line is one message, in file order; `kind=async` for replies. No groups.
 
 ### Refinements
 

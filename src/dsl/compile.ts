@@ -63,6 +63,8 @@ export interface SceneObject extends ModelObject {
   baseX: number;
   baseY: number;
   depth: number;
+  /** Sequence participants: how far the dashed lifeline runs below the box. */
+  lifeline?: number;
   /** Soft groups: the tint's rectangles, relative to the group's top left; the first holds the label. */
   hull?: Array<{ x: number; y: number; w: number; h: number }>;
 }
@@ -79,6 +81,8 @@ export interface Diagnostic {
 /** A connection as the file declares it, plus the lane a fold's wrap edge returns along. */
 export interface SceneEdge extends ModelEdge {
   lane?: Lane;
+  /** A sequence message: the height of its row; it is drawn straight between lifelines there. */
+  row?: number;
 }
 
 export interface Scene {
@@ -105,7 +109,7 @@ const round = (n: number) => Math.round(n);
 export async function compile(source: string): Promise<Scene> {
   const m = parseModel(source),
     flat = dissolved(m);
-  return withSoftGroups(layoutModel(flat, await engineArrangement(flat)), m);
+  return sequenced(withSoftGroups(layoutModel(flat, await engineArrangement(flat)), m));
 }
 
 /**
@@ -114,7 +118,66 @@ export async function compile(source: string): Promise<Scene> {
  */
 export function checkSource(source: string): Scene {
   const m = parseModel(source);
-  return withSoftGroups(layoutModel(dissolved(m)), m);
+  return sequenced(withSoftGroups(layoutModel(dissolved(m)), m));
+}
+
+/**
+ * Sequence diagrams: room under the last message, least height of a message row (the first row
+ * sits one row under the participants, less `SEQ_LIFT`), a self-message's loop, and the least
+ * gap between participants.
+ */
+const SEQ_TOP = 28,
+  SEQ_LIFT = 12,
+  SEQ_ROW = 44,
+  SEQ_SELF = 22,
+  SEQ_GAP = 48;
+
+/**
+ * A sequence diagram: the participants (every node) in a row across the top, in file order or
+ * the root `order`, and each connection a message on its own row below them, in file order, so
+ * the file reads top to bottom as the exchange does. Participants are spaced so each message's
+ * label fits between them, and each draws a lifeline down to the last row.
+ */
+function sequenced(scene: Scene): Scene {
+  if (!scene.model.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+    return scene;
+  const order = scene.model.hints.find(h => h.type === 'order' && h.scope === 'root'),
+    listed = order?.type === 'order' ? order.ids : [],
+    parts = [
+      ...listed.flatMap(id => scene.objects.filter(o => o.id === id)),
+      ...scene.objects.filter(o => !listed.includes(o.id)),
+    ],
+    at = new Map(parts.map((o, i) => [o.id, i]));
+  // Centres: neighbours keep a gap, and a message between them keeps room for its label.
+  const centre: number[] = [];
+  parts.forEach((o, i) => {
+    if (!i) return void centre.push(o.w / 2);
+    let room = parts[i - 1].w / 2 + SEQ_GAP + o.w / 2;
+    for (const e of scene.edges) {
+      const [a, b] = [at.get(e.source)!, at.get(e.target)!].sort((p, q) => p - q);
+      if (e.label && b === i && a < b)
+        room = Math.max(room, (edgeLabelSize(e.label, scene.look).w + 2 * LABEL_RUN) / (b - a));
+    }
+    centre.push(centre[i - 1] + room);
+  });
+  let y = Math.max(0, ...parts.map(o => o.h)) - SEQ_LIFT;
+  const rows = new Map<string, number>();
+  for (const e of scene.edges) {
+    y += Math.max(SEQ_ROW, e.label ? edgeLabelSize(e.label, scene.look).h + 24 : 0);
+    rows.set(e.id, y);
+    if (e.source === e.target) y += SEQ_SELF;
+  }
+  const end = y + SEQ_TOP;
+  const objects = scene.objects.map(o => {
+    const x = round(centre[at.get(o.id)!] - o.w / 2);
+    return { ...o, x, y: 0, localX: x, localY: 0, baseX: x, baseY: 0, lifeline: end - o.h };
+  });
+  return {
+    ...scene,
+    objects,
+    byId: new Map(objects.map(o => [o.id, o])),
+    edges: scene.edges.map(e => ({ ...e, lane: undefined, row: rows.get(e.id) })),
+  };
 }
 
 /**

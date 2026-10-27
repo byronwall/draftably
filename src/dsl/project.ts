@@ -37,6 +37,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
       ...(o.frame ? { frame: o.frame } : {}),
       ...(o.hull ? { hull: o.hull } : {}),
+      ...(o.lifeline ? { lifeline: o.lifeline } : {}),
     };
     if (o.type === 'group') {
       doc.graph.groups.push(entry);
@@ -80,6 +81,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.to !== 'auto' ? { toSide: e.to } : {}),
       ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
       ...(e.lane ? { lane: e.lane } : {}),
+      ...(e.row !== undefined ? { row: e.row } : {}),
     };
   }
   const groups = new Set(doc.graph.groups.map(g => g.id));

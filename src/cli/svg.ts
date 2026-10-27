@@ -29,7 +29,8 @@ import {
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
-import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
+import { LIFELINE, SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
+
 import { fontFaceCss } from '../lib/font-data';
 
 const esc = (s: string) =>
@@ -154,6 +155,15 @@ function sceneMarkup(
         ],
         opts,
       ),
+    );
+  }
+  // Sequence participants' lifelines, under the message lines.
+  for (const n of vg.nodes) {
+    const r = rects.get(n.id);
+    if (!r || !n.lifeline) continue;
+    const x = r.x + r.w / 2;
+    out.push(
+      `<line x1="${x}" y1="${r.y + r.h}" x2="${x}" y2="${r.y + r.h + n.lifeline}" stroke="${look.muted}" stroke-width="${LIFELINE.width}" stroke-dasharray="${LIFELINE.dash}"/>`,
     );
   }
   for (const route of routes) {

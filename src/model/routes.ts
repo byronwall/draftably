@@ -8,7 +8,7 @@ import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { truncateText, measureText } from './fonts';
 import { edgeLabelSize } from './labels';
-import { isCollapsed, styleOf, type VisibleGraph } from './graph';
+import { isCollapsed, styleOf, type VisibleEdge, type VisibleGraph } from './graph';
 import type { Diagram, EdgeLayout, Lane, Point, Rect, ShapeKind, Side } from './types';
 
 export const SIDE_VECTORS: Record<Side, Point> = {
@@ -447,12 +447,15 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Re
           titleWidth: titleWidth(g.title, r.w, look),
         };
       }),
-    edges: vg.edges.map(e => ({
-      ...e,
-      from: e.a,
-      to: e.b,
-      cfg: laneBends(doc.layout.edges[e.id] || {}, rects.get(e.a)!, rects.get(e.b)!),
-    })),
+    // Sequence messages are drawn straight on their rows (`messageRoute`), not routed.
+    edges: vg.edges
+      .filter(e => doc.layout.edges[e.id]?.row === undefined)
+      .map(e => ({
+        ...e,
+        from: e.a,
+        to: e.b,
+        cfg: laneBends(doc.layout.edges[e.id] || {}, rects.get(e.a)!, rects.get(e.b)!),
+      })),
   };
 }
 
@@ -482,6 +485,16 @@ export function drawRoutes(
   const look = resolveAppearance(doc.appearance),
     byEdge = new Map(vg.edges.map(e => [e.id, e])),
     radius = doc.settings.routing?.cornerRadius ?? 6;
+  result = {
+    ...result,
+    routes: [
+      ...result.routes.filter(r => doc.layout.edges[r.id]?.row === undefined),
+      ...vg.edges.flatMap(e => {
+        const row = doc.layout.edges[e.id]?.row;
+        return row === undefined ? [] : [messageRoute(e, row, rects.get(e.a)!, rects.get(e.b)!)];
+      }),
+    ],
+  };
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
   const labelled = result.routes.filter(route => byEdge.get(route.id)!.label),
     boxes = placeEdgeLabels(
@@ -504,6 +517,42 @@ export function drawRoutes(
     label: labels.get(route) ?? null,
     path: roundedPath(route.points, radius),
   }));
+}
+
+/** Run of a self-message's loop out to the right of its lifeline, and its drop. */
+const SELF_LOOP = { out: 36, down: 22 };
+
+/**
+ * A sequence message: a straight line at its row from the source's lifeline (the middle of the
+ * box) to the target's, or, sent to itself, a short loop out to the right and back.
+ */
+function messageRoute(e: VisibleEdge, row: number, a: Rect, b: Rect): Route {
+  const from = a.x + a.w / 2,
+    to = b.x + b.w / 2,
+    right = to >= from;
+  const points =
+    e.a === e.b
+      ? [
+          { x: from, y: row },
+          { x: from + SELF_LOOP.out, y: row },
+          { x: from + SELF_LOOP.out, y: row + SELF_LOOP.down },
+          { x: from, y: row + SELF_LOOP.down },
+        ]
+      : [
+          { x: from, y: row },
+          { x: to, y: row },
+        ];
+  return {
+    id: e.id,
+    from: e.a,
+    to: e.b,
+    fromSide: right ? 'right' : 'left',
+    toSide: right ? 'left' : 'right',
+    fromOffset: 0,
+    toOffset: 0,
+    points,
+    blocked: false,
+  };
 }
 
 export function computeRoutes(

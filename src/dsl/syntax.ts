@@ -184,7 +184,7 @@ export const formatSource = (source: string) => printSource(readSource(source));
 
 export type DslColor = ColorKey | 'auto';
 export type DslShape = Exclude<ShapeKind, 'icon' | 'image'>;
-export type Algorithm = 'flow' | 'row' | 'column' | 'lanes';
+export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence';
 
 export interface ModelObject {
   id: string;
@@ -651,12 +651,12 @@ export function parseModel(source: string | SourceDoc): Model {
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
-          ['flow', 'row', 'column', 'lanes'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column or lanes, or engine=.`,
+          ['flow', 'row', 'column', 'lanes', 'sequence'].includes(algorithm),
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes or sequence, or engine=.`,
         );
         assert(
-          algorithm !== 'lanes' || scope === 'root',
-          'lanes arranges the whole diagram: write layout root lanes.',
+          !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
+          `${algorithm} arranges the whole diagram: write layout root ${algorithm}.`,
         );
         m.layouts.push({
           scope,
@@ -903,6 +903,14 @@ function validateReferences(m: Model) {
       );
       assert(!o.frame, `${o.id} is a lane, so it needs its frame; remove frame=.`, o.line);
     }
+  // Sequence: participants and messages only.
+  if (m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+    for (const o of m.objects)
+      assert(
+        o.type === 'node',
+        `A sequence diagram has participants and messages, not groups; remove ${o.id} or use another layout.`,
+        o.line,
+      );
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
       exists(end, e.line);

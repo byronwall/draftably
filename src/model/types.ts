@@ -24,6 +24,8 @@ export interface DiagramNode {
   count?: number;
   parentId?: string;
   image?: string;
+  /** A sequence participant: length of the dashed lifeline below the box. */
+  lifeline?: number;
 }
 
 export interface DiagramGroup {
@@ -73,6 +75,8 @@ export interface EdgeLayout {
   lane?: Lane;
   /** From a lane, at route time: where along its target's side the edge arrives, off centre. */
   toOffset?: number;
+  /** A sequence message: drawn straight between the two lifelines at this height, not routed. */
+  row?: number;
 }
 
 /**

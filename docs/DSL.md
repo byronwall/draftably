@@ -46,6 +46,7 @@ and groups. References may point to later lines.
 | `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                                          |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                  |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                         |
+| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                         |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
@@ -163,6 +164,31 @@ long as the drawing. `gap=` sets the least gap between ranks (56 at least).
 A group inside a lane follows its own `frame=`: a boxed group takes one place, and a soft group's
 members rank on their own. Position refinements inside a lane (`near`, `stay`, `nudge`, `pin`)
 do not apply yet. Lines that run back against the order take the long way round the lanes.
+
+## Sequence diagrams
+
+`layout root sequence` draws an exchange between participants. Every node is a participant,
+drawn in a row across the top in file order (or the order an `order root` line gives), with a
+dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
+lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file
+reads top to bottom as the exchange does.
+
+```text
+node user "User" shape=pill
+node app "Web app"
+node auth "Auth service"
+edge m1 user -> app "sign in"
+edge m2 app -> auth "verify"
+edge m3 auth -> auth "check hash"
+edge m4 auth -> app "token" kind=async
+layout root sequence
+```
+
+`kind=async` draws a dashed message, the usual mark of a reply. A message from a participant to
+itself draws a short loop. Participants are spaced so each message's label fits between them.
+Groups are an error in a sequence diagram, and position refinements do not apply. Change marks
+work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`),
+activations and notes are not supported yet.
 
 ## Change marks
 
