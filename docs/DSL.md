@@ -190,7 +190,13 @@ a state only adds the heavier border or the fade.
 `inspect --svg --state write` draws one state; without `--state`, the drawing has none.
 `inspect --svg --states` (or `--png`) draws every state as its own labelled panel, in file
 order, in a grid whose whole image comes closest to 1.6 wide per tall. Every object sits at the
-same place in every panel, so the eye can jump between them. `check`
+same place in every panel, so the eye can jump between them.
+
+In the viewer, a file with states shows a row of chips over the canvas: **All**, each state, and
+**Grid**. A chip draws that state in place, and `[` and `]` step through them in file order.
+**Grid** shows every state side by side, as `--states` draws them; click a panel to draw that
+state. The state is part of the address (`?state=write`), so a link or a reload keeps it, but it
+is never written to the file. Edits work in any state, on faded objects too. `check`
 reports an ID a state lists that the file does not declare. Deleting an object or connection in
 the viewer takes it out of every state.
 
