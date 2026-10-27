@@ -7,7 +7,12 @@ describe('links', () => {
       kind: 'url',
       path: 'https://github.com/o/r/blob/main/a.ts#L4',
     });
-    expect(linkTarget('src/api.ts:42:5')).toEqual({ kind: 'file', path: 'src/api.ts', line: 42, col: 5 });
+    expect(linkTarget('src/api.ts:42:5')).toEqual({
+      kind: 'file',
+      path: 'src/api.ts',
+      line: 42,
+      col: 5,
+    });
     expect(linkTarget('docs/flow.draft')).toEqual({ kind: 'draft', path: 'docs/flow.draft' });
   });
 

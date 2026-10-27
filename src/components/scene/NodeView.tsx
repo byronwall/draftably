@@ -204,7 +204,11 @@ export function NodeView(props: NodeViewProps) {
           <LinkMarkView
             mark={linkMark(style().shape, props.rect.w, props.rect.h, badgeWidth())}
             href={href()}
-            color={linkMark(style().shape, props.rect.w, props.rect.h).inside ? color().ink : look().muted}
+            color={
+              linkMark(style().shape, props.rect.w, props.rect.h).inside
+                ? color().ink
+                : look().muted
+            }
             interactive={props.interactive}
           />
         )}
