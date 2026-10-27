@@ -1,5 +1,6 @@
 import { createMemo, For, Match, Show, Switch } from 'solid-js';
-import { findNode, isCell, styleOf } from '../../model/graph';
+import { findNode, isCell, isOpenCell, styleOf } from '../../model/graph';
+import { brokenRectPath } from '../../model/geometry';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
@@ -144,6 +145,7 @@ export function NodeView(props: NodeViewProps) {
         radius={radius()}
         attrs={shapeAttrs()}
         ink={look().text}
+        open={isOpenCell(props.doc, props.id)}
       />
       <Show when={style().shape === 'image'}>
         <Show
@@ -265,6 +267,8 @@ function ShapeOutline(props: {
   attrs: Record<string, string | number>;
   /** A marker's bar is drawn in the theme's text color, so it reads as a cut. */
   ink?: string;
+  /** A field of variable length: its sides are broken. */
+  open?: boolean;
 }) {
   const w = () => props.rect.w,
     h = () => props.rect.h;
@@ -279,6 +283,9 @@ function ShapeOutline(props: {
         />
       }
     >
+      <Match when={props.open}>
+        <path d={brokenRectPath({ x: 0, y: 0, w: w(), h: h() })} {...props.attrs} />
+      </Match>
       <Match when={props.shape === 'diamond'}>
         <path
           d={`M${w() / 2},0 L${w()},${h() / 2} L${w() / 2},${h()} L0,${h() / 2} Z`}

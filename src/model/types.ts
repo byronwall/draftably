@@ -123,6 +123,18 @@ export interface ContainerLayout {
   manualSize: boolean;
   /** Set for a `cells` group: its members touch, under a title band this tall. */
   cellsBand?: number;
+  /** A byte or bit layout's extra marks, relative to the group's top-left corner. */
+  cellsChrome?: CellsChrome;
+}
+
+/** What a byte or bit layout draws besides its cells. */
+export interface CellsChrome {
+  /** Unit numbers in a strip under the title band. */
+  ruler?: { y: number; h: number; ticks: Array<{ x: number; label: string }> };
+  /** Further pieces of fields that run on past a row's end, by field. */
+  pieces?: Record<string, Rect[]>;
+  /** Fields of variable length, drawn with broken ends. */
+  open?: string[];
 }
 
 export type IntentRole = 'start' | 'end';

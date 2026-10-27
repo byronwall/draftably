@@ -177,6 +177,21 @@ node orgs.id_t "uuid" in=orgs
 edge member users.org_t -> orgs.id
 ```
 
+A byte or bit layout, like a file format or packet header: `unit=byte` or `unit=bit` makes each
+column one unit wide, so `span=N` is the field's size. Rows hold `columns=` units (16 bytes or 32
+bits by default); a long field runs on into the next row; `span=var` is a field of variable
+length with broken sides. A ruler numbers the units (`ruler=off` hides it); `unit-width=` sets a
+unit's width.
+
+```text
+group tcp "TCP header" color=blue
+layout tcp cells unit=bit columns=32 unit-width=26
+node sport "Source Port" in=tcp span=16
+node dport "Destination Port" in=tcp span=16
+node seq "Sequence Number" in=tcp span=32
+node options "Options" in=tcp span=var
+```
+
 Use cells for "is made of"; use separate nodes and edges for "flows to".
 
 ### Refinements

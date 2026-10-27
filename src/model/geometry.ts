@@ -64,3 +64,21 @@ export function roundedPath(points: readonly Point[], radius: number): string {
 }
 
 export const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
+
+/**
+ * A rectangle whose left and right sides are zigzags, for a field of variable length: the reader
+ * sees it continue past what is drawn.
+ */
+export function brokenRectPath(r: Rect, step = 8, depth = 4) {
+  const n = Math.max(2, Math.round(r.h / step)),
+    dy = r.h / n,
+    side = (x: number, down: boolean, out: number) =>
+      Array.from({ length: n }, (_, i) => {
+        const k = down ? i + 1 : n - i - 1;
+        return `L${x + (k % 2 ? out : 0)},${r.y + k * dy}`;
+      }).join(' ');
+  return (
+    `M${r.x},${r.y} L${r.x + r.w},${r.y} ${side(r.x + r.w, true, depth)} ` +
+    `L${r.x},${r.y + r.h} ${side(r.x, false, -depth)} Z`
+  );
+}

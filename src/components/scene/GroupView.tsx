@@ -1,6 +1,6 @@
 import { createMemo, For, Show } from 'solid-js';
 import { cellsBandOf, descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
-import { resolveAppearance } from '../../model/appearance';
+import { resolveAppearance, type ResolvedAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
 import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
 import { truncateText } from '../../model/fonts';
@@ -10,6 +10,10 @@ import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
 import { PositionBadge, ResizeHandles } from './parts';
 import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../../dsl/frame';
+
+/** The rest of a field that runs on into another row: its title after an ellipsis. */
+export const pieceLabel = (title: string, w: number, look: ResolvedAppearance) =>
+  truncateText(`… ${title}`, Math.max(0, w - 8), look.annotation);
 
 /** A container's border is quieter than a connection: thinner and partly transparent. */
 export const GROUP_BORDER = { width: 1, opacity: 0.65 };
@@ -48,6 +52,7 @@ export function GroupView(props: GroupViewProps) {
       Math.max(40, props.rect.w - titleX() - (cells() ? 36 : 64)),
       look().groupTitle,
     );
+  const chrome = () => (cells() ? props.doc.layout.containers[props.id]?.cellsChrome : undefined);
   const w = () => props.rect.w;
   /** Middle of the title band at the top of the frame, the same open or collapsed. */
   const band = () => (cells() ? cells()! / 2 : look().groupHeader / 2 - 7);
@@ -176,6 +181,61 @@ export function GroupView(props: GroupViewProps) {
           />
         )}
       </Show>
+      <Show when={chrome()?.ruler}>
+        {ruler => (
+          <g class="cells-ruler" pointer-events="none">
+            <For each={ruler().ticks}>
+              {t => (
+                <text
+                  x={t.x}
+                  y={ruler().y + ruler().h / 2}
+                  text-anchor="middle"
+                  dominant-baseline="central"
+                  font-family={look().annotation.family}
+                  font-size={String(look().annotation.size)}
+                  fill={color().ink}
+                >
+                  {t.label}
+                </text>
+              )}
+            </For>
+          </g>
+        )}
+      </Show>
+      <For each={Object.entries(chrome()?.pieces ?? {})}>
+        {([id, pieces]) => {
+          const c = () => drawnSwatch(props.doc, look(), id, 'node');
+          return (
+            <For each={pieces}>
+              {r => (
+                <g class="cell-piece" pointer-events="none">
+                  <rect
+                    x={r.x}
+                    y={r.y}
+                    width={r.w}
+                    height={r.h}
+                    fill={c().fill}
+                    stroke={c().stroke}
+                    stroke-width={1.2}
+                  />
+                  <text
+                    x={r.x + r.w / 2}
+                    y={r.y + r.h / 2}
+                    text-anchor="middle"
+                    dominant-baseline="central"
+                    font-family={look().annotation.family}
+                    font-size={String(look().annotation.size)}
+                    fill={c().ink}
+                    opacity={0.75}
+                  >
+                    {pieceLabel(findNode(props.doc, id)?.title ?? '', r.w, look())}
+                  </text>
+                </g>
+              )}
+            </For>
+          );
+        }}
+      </For>
       <Show when={props.interactive}>
         <g class="group-collapse" data-collapse>
           <rect

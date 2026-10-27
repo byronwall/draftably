@@ -47,7 +47,7 @@ and groups. References may point to later lines.
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                  |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                         |
 | `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                         |
-| `layout group cells`               | The group's nodes touch, edge to edge, as one object. See [Cells](#cells).                                                                         |
+| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                           |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
@@ -249,6 +249,32 @@ node invoices.account "account_id" in=invoices
 node invoices.account_t "uuid" in=invoices
 edge invoice_account invoices.account -> accounts.id
 ```
+
+### Byte and bit layouts
+
+`unit=byte` or `unit=bit` on a cells layout draws an on-disk or on-the-wire structure, like the
+figures in the PNG spec or an RFC packet header. Every column is one unit of the same width, so a
+field's width is its size.
+
+```text
+group chunk "PNG chunk" color=teal
+layout chunk cells unit=byte columns=8
+node chunk.length "Length" in=chunk span=4
+node chunk.type "Chunk type" in=chunk span=4
+node chunk.data "Chunk data" in=chunk span=var
+node chunk.crc "CRC" in=chunk span=4
+```
+
+- `columns=` sets the units in each row: 16 by default for bytes, 32 for bits. `span=N` is the
+  field's size in units; a field without one is one unit.
+- A field longer than the rest of its row runs on into the next rows. Its title sits in its
+  longest piece; the other pieces show it after an ellipsis.
+- `span=var` is a field of variable length. It fills the rest of its row, or a whole row, and its
+  sides are drawn broken.
+- A ruler numbers the units between the title band and the first row. `ruler=off` hides it.
+- `unit-width=` sets the width of one unit in pixels: 48 for bytes and 24 for bits by default.
+  Titles wrap to fit their field, so give one-bit flags short titles.
+- Markers do not apply to byte or bit layouts.
 
 ## Change marks
 

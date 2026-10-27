@@ -49,6 +49,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
         padding: GROUP_INSET,
         manualSize: true,
         ...(cells.has(o.id) ? { cellsBand: band } : {}),
+        ...(scene.cells.has(o.id) ? { cellsChrome: clone(scene.cells.get(o.id)!) } : {}),
       };
     } else {
       doc.graph.nodes.push(entry);

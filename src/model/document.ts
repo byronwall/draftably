@@ -277,6 +277,9 @@ export function normalize(input: unknown): Diagram {
         padding: finite(cfg.padding) ? clamp(cfg.padding, 12, 80) : 24,
         manualSize: cfg.manualSize !== false,
         ...(finite(cfg.cellsBand) ? { cellsBand: cfg.cellsBand } : {}),
+        ...(cfg.cellsChrome && typeof cfg.cellsChrome === 'object'
+          ? { cellsChrome: structuredClone(cfg.cellsChrome) }
+          : {}),
       } satisfies ContainerLayout;
     }
   }

@@ -97,4 +97,23 @@ describe('cells', () => {
     expect(out.cross).toBeUndefined();
     expect(out.points[0].x).toBe(f.x + f.w);
   });
+
+  it('sizes byte fields by their length, runs a long field on, and fills a row with var', () => {
+    const scene = checkSource(
+        'group r "Record"\nlayout r cells unit=byte columns=8\nnode magic "Magic" in=r span=6\nnode size "Size" in=r span=4\nnode data "Data" in=r span=var\nnode crc "CRC" in=r span=4',
+      ),
+      at = (id: string) => scene.byId.get(id)!,
+      chrome = scene.cells.get('r')!;
+    expect(at('magic').w).toBe(at('size').w * 3);
+    // Size has 2 bytes in the first row and 2 in the next: its title sits in the first piece.
+    expect(chrome.pieces!.size).toHaveLength(1);
+    expect(chrome.pieces!.size[0].w).toBe(at('size').w);
+    // Data fills the rest of the second row; CRC starts the third.
+    expect(at('data').x + at('data').w).toBe(at('r').x + at('r').w);
+    expect(at('crc').y).toBe(at('data').y + at('data').h);
+    expect(chrome.open).toEqual(['data']);
+    // The ruler numbers each byte between the title band and the first row.
+    expect(chrome.ruler!.ticks.map(t => t.label)).toEqual(['0', '1', '2', '3', '4', '5', '6', '7']);
+    expect(at('magic').y - at('r').y).toBe(chrome.ruler!.y + chrome.ruler!.h);
+  });
 });

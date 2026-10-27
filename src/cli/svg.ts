@@ -11,7 +11,8 @@ import { legendMarkup, legendSize } from '../model/legend';
 import { drawnSwatch } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
-import { cellsBandOf, isCell, styleOf } from '../model/graph';
+import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
+import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
 import { nodeLabel } from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
@@ -92,6 +93,28 @@ const haloMarkup = (shape: string, r: Rect, look: ResolvedAppearance) =>
 
 type Route = ReturnType<typeof computeRoutes>['routes'][number];
 
+/** A byte or bit layout's unit numbers and the run-on pieces of its fields. */
+function cellsChromeMarkup(doc: Diagram, look: ResolvedAppearance, id: string, g: Rect) {
+  const chrome = doc.layout.containers[id]?.cellsChrome,
+    ink = drawnSwatch(doc, look, id, 'group').ink;
+  if (!chrome) return [];
+  return [
+    ...(chrome.ruler?.ticks ?? []).map(
+      t =>
+        `<text x="${g.x + t.x}" y="${g.y + chrome.ruler!.y + chrome.ruler!.h / 2}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${ink}">${esc(t.label)}</text>`,
+    ),
+    ...Object.entries(chrome.pieces ?? {}).flatMap(([cell, pieces]) => {
+      const c = drawnSwatch(doc, look, cell, 'node'),
+        title = doc.graph.nodes.find(n => n.id === cell)?.title ?? '';
+      return pieces.map(
+        r =>
+          `<rect x="${g.x + r.x}" y="${g.y + r.y}" width="${r.w}" height="${r.h}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.2"/>` +
+          `<text x="${g.x + r.x + r.w / 2}" y="${g.y + r.y + r.h / 2}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}" opacity="0.75">${esc(truncateText(`… ${title}`, Math.max(0, r.w - 8), look.annotation))}</text>`,
+      );
+    }),
+  ];
+}
+
 /** The connections' paths and label spots, routed around the document's own shapes. */
 function routesOf(doc: Diagram) {
   const { vg, rects } = visibleRects(doc);
@@ -156,6 +179,7 @@ function sceneMarkup(
           cells
             ? ''
             : `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
+          ...cellsChromeMarkup(doc, look, g.id, r),
           `<text x="${r.x + tx}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
           g.href ? markMarkup(groupLinkMark(title, look.groupTitle, band), r.x, r.y, c.ink) : '',
           '</g>',
@@ -217,7 +241,9 @@ function sceneMarkup(
               )
             : []),
           p.halo ? haloMarkup(style.shape, r, look) : '',
-          outline(style.shape, r, radius, paint, look.text),
+          isOpenCell(doc, n.id)
+            ? `<path d="${brokenRectPath(r)}" ${paint}/>`
+            : outline(style.shape, r, radius, paint, look.text),
           `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
             label.lines
               .map(

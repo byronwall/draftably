@@ -211,8 +211,9 @@ export interface ModelObject {
   frame?: 'soft' | 'none';
   /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
   soft?: string[];
-  /** Cells only: how many columns of its group's grid the cell covers. */
-  span?: number;
+  /** Cells only: how many columns (or units) of its group's grid the cell covers; `var` for a
+   * field of variable length in a byte or bit layout. */
+  span?: number | 'var';
   line: number;
 }
 
@@ -245,6 +246,11 @@ export interface ModelLayout {
   direction: 'auto' | 'right' | 'down';
   /** `cells` only: columns in each row of the grid; one row or column without it. */
   columns?: number;
+  /** `cells` only: a byte or bit layout, where each column is one unit of the same width. */
+  unit?: 'bit' | 'byte';
+  /** With `unit`: the width of one unit, and whether unit numbers run above the first row. */
+  unitWidth?: number;
+  ruler?: boolean;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
   gap: number;
@@ -608,7 +614,12 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(command === 'group' && choice('frame', 'box', FRAMES) !== 'box'
             ? { frame: choice('frame', 'box', FRAMES) as 'soft' | 'none' }
             : {}),
-          ...(attrs.has('span') ? { span: num('span', 1, 1, 512) } : {}),
+          ...(attrs.has('span')
+            ? {
+                span:
+                  attrs.get('span')!.value === 'var' ? ('var' as const) : num('span', 1, 1, 4096),
+              }
+            : {}),
           line,
         });
         break;
@@ -657,7 +668,7 @@ export function parseModel(source: string | SourceDoc): Model {
           const recipe = args[1]?.value;
           allow(
             recipe === 'cells'
-              ? ['columns', ...common]
+              ? ['columns', 'unit', 'unit-width', 'ruler', ...common]
               : ['gap', ...(recipe === 'flow' ? ['fold'] : []), ...common],
           );
         }
@@ -681,6 +692,13 @@ export function parseModel(source: string | SourceDoc): Model {
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
           ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
+          ...(attrs.has('unit')
+            ? {
+                unit: choice('unit', 'byte', ['bit', 'byte'] as const),
+                ruler: choice('ruler', 'on', ['on', 'off'] as const) === 'on',
+                ...(attrs.has('unit-width') ? { unitWidth: num('unit-width', 24, 8, 200) } : {}),
+              }
+            : {}),
           gap: num('gap', 28, 8, 300),
           minWidth: num('min-width', 0, 0, 10_000),
           minHeight: num('min-height', 0, 0, 10_000),
@@ -953,8 +971,15 @@ function validateReferences(m: Model) {
         o.line,
       );
       assert(
-        o.shape !== 'marker' || (grid.columns ?? 0) <= 1,
-        `A marker cuts one row or column of cells; ${o.parent} has ${grid.columns} columns.`,
+        o.shape !== 'marker' || ((grid.columns ?? 0) <= 1 && !grid.unit),
+        grid.unit
+          ? `A marker cuts a sequence of cells; ${o.parent} is a ${grid.unit} layout.`
+          : `A marker cuts one row or column of cells; ${o.parent} has ${grid.columns} columns.`,
+        o.line,
+      );
+      assert(
+        o.span !== 'var' || !!grid.unit,
+        `span=var is for a byte or bit layout; give ${o.parent} unit=byte or unit=bit.`,
         o.line,
       );
     } else {

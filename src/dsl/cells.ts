@@ -124,3 +124,102 @@ export function layoutCells(
   });
   return { boxes, w, h };
 }
+
+/** Width of one unit of a byte or bit layout, and the units in each row, unless the file says. */
+export const UNIT_WIDTH = { bit: 24, byte: 48 } as const;
+export const UNIT_COLUMNS = { bit: 32, byte: 16 } as const;
+
+export interface UnitCells {
+  /** Each field's main box: the longest piece, which holds its title. */
+  boxes: Map<string, CellBox>;
+  /** The other pieces of a field that runs on past a row's end. */
+  pieces: Map<string, CellBox[]>;
+  /** Fields of variable length, drawn with broken ends. */
+  open: string[];
+  /** Unit numbers above the first row: their centres, and the room they take above the cells. */
+  ruler?: { h: number; ticks: Array<{ x: number; label: string }> };
+  w: number;
+  h: number;
+}
+
+/**
+ * A byte or bit layout: every unit has one width, so a field's width is its size. Rows hold
+ * `columns` units. A field longer than the rest of its row runs on into the next rows; a field of
+ * variable length (`span: 'var'`) fills the rest of its row, or a whole row, with broken ends.
+ * Every row has the height of the tallest title.
+ */
+export function layoutUnits(
+  cells: Array<CellInput & { open?: boolean }>,
+  shape: { unit: 'bit' | 'byte'; columns?: number; unitWidth?: number; ruler: boolean },
+  look: ResolvedAppearance,
+): UnitCells {
+  const cols = shape.columns ?? UNIT_COLUMNS[shape.unit],
+    unit = shape.unitWidth ?? UNIT_WIDTH[shape.unit],
+    // Fields can be one unit wide, so their titles keep little room at the sides.
+    pad = 2 * Math.min(look.paddingX, 6);
+  const runs = new Map<string, Array<{ row: number; col: number; span: number }>>();
+  let row = 0,
+    col = 0;
+  for (const c of cells) {
+    const run: Array<{ row: number; col: number; span: number }> = [];
+    if (c.open) {
+      run.push({ row, col, span: cols - col });
+      row++;
+      col = 0;
+    } else
+      for (let left = c.span ?? 1; left > 0;) {
+        const take = Math.min(left, cols - col);
+        run.push({ row, col, span: take });
+        left -= take;
+        col += take;
+        if (col === cols) {
+          row++;
+          col = 0;
+        }
+      }
+    runs.set(c.id, run);
+  }
+  const rows = col ? row + 1 : row,
+    longest = (id: string) => runs.get(id)!.reduce((a, b) => (b.span > a.span ? b : a));
+  // One row height for all, from the tallest title wrapped in its longest piece.
+  const h = Math.max(
+    0,
+    ...cells.map(c => {
+      const lines = wrapTitle(c.label, Math.max(8, longest(c.id).span * unit - pad), look).length;
+      return lines * look.title.lineHeight + 2 * Math.min(look.paddingY, CELL_PAD_Y);
+    }),
+  );
+  const box = (p: { row: number; col: number; span: number }) => ({
+    x: p.col * unit,
+    y: p.row * h,
+    w: p.span * unit,
+    h,
+  });
+  const boxes = new Map<string, CellBox>(),
+    pieces = new Map<string, CellBox[]>();
+  for (const c of cells) {
+    const main = longest(c.id),
+      rest = runs.get(c.id)!.filter(p => p !== main);
+    boxes.set(c.id, box(main));
+    if (rest.length) pieces.set(c.id, rest.map(box));
+  }
+  const rulerH = shape.ruler ? Math.round(look.annotation.lineHeight + 6) : 0;
+  return {
+    boxes,
+    pieces,
+    open: cells.filter(c => c.open).map(c => c.id),
+    ...(shape.ruler
+      ? {
+          ruler: {
+            h: rulerH,
+            ticks: Array.from({ length: cols }, (_, i) => ({
+              x: i * unit + unit / 2,
+              label: String(i),
+            })),
+          },
+        }
+      : {}),
+    w: cols * unit,
+    h: rows * h,
+  };
+}
