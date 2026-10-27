@@ -354,7 +354,7 @@ warning line 13: Edge call (web -> api) runs through cache. Remove the pin on li
 `check --hints` adds a table with one row for each object a refinement names: its id, the
 refinement and line, where layout alone puts it (raw), where it is drawn (final), and the distance
 between them. A last line lists objects that moved only because a refinement pushed them.
-`inspect --json` adds `raw: {x, y}` to every node a refinement moved. Raw positions come from the
+`inspect --json --hints` adds `raw: {x, y}` to every node a refinement moved. Raw positions come from the
 same file compiled without its refinement lines.
 
 `skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which

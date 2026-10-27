@@ -23,7 +23,8 @@ Commands:
                             errors. --hints adds how far each refinement moved its target.
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry. --json prints it on one
-                            line, with the unrefined position (raw) of every node a refinement moved.
+       [--hints]            line; with --hints it adds the unrefined position (raw) of every
+                            node a refinement moved.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
   inspect <file> --png <out.png> [--scale 2]
                             Save the drawing as a PNG (needs Chrome or Chromium).
@@ -145,14 +146,14 @@ export async function main(argv: string[]): Promise<number> {
           doc = projectScene(scene);
         if (await maybePng(() => renderSvg(doc), rest, embed(source))) return 0;
         if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc), source));
-        else if (flag('--json')) {
+        else if (flag('--json') && flag('--hints')) {
           const geometry = canonicalGeometry(doc),
             { rows, pushed } = await hintMoves(source, scene);
           const raw = new Map([...rows, ...pushed].filter(r => r.delta).map(r => [r.id, r.raw]));
           for (const n of geometry.nodes)
             if (raw.has(n.id)) Object.assign(n, { raw: raw.get(n.id) });
           console.log(JSON.stringify(geometry));
-        } else console.log(JSON.stringify(canonicalGeometry(doc), null, 2));
+        } else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;
       }
       case 'compare': {
