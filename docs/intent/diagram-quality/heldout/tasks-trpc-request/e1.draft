@@ -5,7 +5,7 @@ diagram "Tasks: one tRPC request" version=1
 # expect keeps-order
 # expect near github nextauth 160
 
-theme mulberry
+theme ink
 
 group browser "Browser" color=violet
 node page "Workspace page" in=browser color=auto

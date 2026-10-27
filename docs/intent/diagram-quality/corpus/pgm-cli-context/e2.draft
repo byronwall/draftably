@@ -3,7 +3,7 @@ diagram "PGM: agent context through the CLI" version=1
 # expect still-shape *
 # expect keeps-order
 
-theme mulberry
+theme ink
 
 node agent "Coding agent"
 node cli "pgm CLI"

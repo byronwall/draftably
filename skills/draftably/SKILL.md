@@ -94,8 +94,8 @@ group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue
 (darkest); a colored node defaults to `500`. Without `layout` lines, `root` uses `flow gap=48`
 and groups use `column gap=24`.
 
-Themes: `graphite` (the default), `fieldnotes`, `signal`, `mulberry`, `midnight`. A `theme` line
-may also set `padding-x=`, `padding-y=`, `radius=`, `title-font=sans|serif|mono` and
+Themes: `drafting` (the default), `fieldnotes`, `signal` (color-blind-safe), `ink`, `blueprint`
+(dark). A `theme` line may also set `padding-x=`, `padding-y=`, `radius=`, `title-font=sans|serif|mono` and
 `annotation-font=`. Padding and fonts change node sizes and so the layout; colors never move
 anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a comment.
 
@@ -145,6 +145,9 @@ content area.
 - Use color to mean something, not for decoration:
   - Two to four accent families, each for one role (external systems, data stores, the failure
     path), and `slate` or `stone` for everything else. More reads as noise.
+  - Give the most common role a pale shade (100–200) and save strong shades for the few
+    things that should stand out. `amber` and `orange` at 400–500 are bright fills with dark
+    text, good for one highlight.
   - Say what each color means with one `legend family "meaning"` line per color; the viewer and
     exports draw them as a key.
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)

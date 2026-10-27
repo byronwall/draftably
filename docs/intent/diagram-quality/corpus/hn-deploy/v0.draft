@@ -2,7 +2,7 @@ diagram "HN Offline: build and run" version=1
 
 # expect left-of build runtime
 
-theme midnight
+theme blueprint
 
 group source "Repository" color=slate
 node pkg "package.json + lock" in=source

@@ -2,7 +2,7 @@ diagram "Srcly: from merged PR to PyPI" version=1
 
 # expect still *
 
-theme midnight
+theme blueprint
 
 node merge "PR squash-merged" shape=pill color=blue shade=100
 node rp "Release Please" color=blue shade=300

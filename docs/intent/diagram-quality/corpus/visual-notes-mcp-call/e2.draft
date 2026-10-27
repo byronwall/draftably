@@ -2,7 +2,7 @@ diagram "Visual Notes: an agent saves a note" version=1
 
 # expect still *
 
-theme mulberry
+theme ink
 
 group agent_side "Agent session" color=stone
 node user "User asks" in=agent_side color=primary shape=pill

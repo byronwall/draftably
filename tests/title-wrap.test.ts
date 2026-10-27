@@ -4,7 +4,7 @@ import { resolveAppearance, type ThemeId } from '../src/model/appearance';
 import { measureText, wordPieces, wrapLines } from '../src/model/fonts';
 import { titleArea } from '../src/model/labels';
 
-const look = (theme: ThemeId = 'graphite') =>
+const look = (theme: ThemeId = 'drafting') =>
   resolveAppearance({ theme, overrides: {}, colors: [] });
 
 describe('word pieces', () => {

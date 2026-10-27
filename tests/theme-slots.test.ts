@@ -38,7 +38,7 @@ function overlaps(scene: Scene) {
   return out;
 }
 
-// A folded release flow whose titles wrap in some themes' type (midnight's mono, fieldnotes'
+// A folded release flow whose titles wrap in some themes' type (blueprint's mono, fieldnotes'
 // serif) and not in others.
 const release = read('docs/intent/diagram-quality/corpus/srcly-release/v0.draft');
 // A tree engine layout: the engine arranges slots, too.
@@ -47,15 +47,15 @@ const tree = read('docs/intent/diagram-quality/heldout/annotations-modules/v0.dr
 describe('a theme switch holds the layout', () => {
   it('keeps every node within the still tolerance in a folded flow', () => {
     const base = checkSource(withTheme(release, 'signal'));
-    for (const theme of ['graphite', 'fieldnotes', 'midnight']) {
+    for (const theme of ['drafting', 'fieldnotes', 'blueprint']) {
       const scene = checkSource(withTheme(release, theme));
       expect(maxMove(base, scene), theme).toBeLessThanOrEqual(24);
     }
   });
 
   it('keeps rows and order in every theme, with no overlaps', () => {
-    // Mulberry's padding is generous enough that some slots grow; rows and order still hold.
-    const base = centres(checkSource(withTheme(release, 'graphite')));
+    // Ink's padding is generous enough that some slots grow; rows and order still hold.
+    const base = centres(checkSource(withTheme(release, 'drafting')));
     for (const theme of THEME_IDS) {
       const scene = checkSource(withTheme(release, theme)),
         at = centres(scene);
@@ -82,13 +82,13 @@ describe('a theme switch holds the layout', () => {
   });
 
   it('draws each node at its theme size, centred along the reading direction in its slot', () => {
-    const graphite = checkSource(withTheme(release, 'graphite'));
-    const midnight = checkSource(withTheme(release, 'midnight'));
-    // Midnight's mono titles wrap, so some nodes are taller than graphite's, yet stay centred.
-    const taller = midnight.objects.filter(o => o.h > graphite.byId.get(o.id)!.h);
+    const drafting = checkSource(withTheme(release, 'drafting'));
+    const blueprint = checkSource(withTheme(release, 'blueprint'));
+    // Blueprint's mono titles wrap, so some nodes are taller than drafting's, yet stay centred.
+    const taller = blueprint.objects.filter(o => o.h > drafting.byId.get(o.id)!.h);
     expect(taller.length).toBeGreaterThan(0);
     for (const o of taller) {
-      const g = graphite.byId.get(o.id)!;
+      const g = drafting.byId.get(o.id)!;
       expect(Math.abs(o.y + o.h / 2 - (g.y + g.h / 2)), o.id).toBeLessThanOrEqual(2);
     }
   });

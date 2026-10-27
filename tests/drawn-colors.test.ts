@@ -37,7 +37,7 @@ node other "Other" in=verify color=blue shade=100
 
   it('steps toward lighter shades in a dark theme', () => {
     const shade = drawn(`diagram "Dark" version=1
-theme midnight
+theme blueprint
 group outer "Outer" color=teal
 group inner "Inner" in=outer
 `);

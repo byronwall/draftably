@@ -3,7 +3,7 @@ diagram "Tasks: one tRPC request" version=1
 # expect left-of browser server
 # expect left-of server data
 
-theme mulberry
+theme ink
 
 group browser "Browser" color=violet
 node page "Workspace page" in=browser color=auto

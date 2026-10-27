@@ -58,10 +58,10 @@ describe('type metrics', () => {
   it('sizes nodes from the theme padding and title type', () => {
     const height = (theme: string, id = 'quote') =>
       checkSource(withTheme(proof, `theme ${theme}`)).byId.get(id)!.h;
-    // Graphite keeps the original 56px single-line node: 16px line + 2 × 20px padding.
-    expect(height('graphite')).toBe(56);
+    // Drafting keeps the original 56px single-line node: 16px line + 2 × 20px padding.
+    expect(height('drafting')).toBe(56);
     expect(height('fieldnotes')).toBe(19 + 2 * 22);
-    expect(height('mulberry')).toBeGreaterThan(height('fieldnotes'));
+    expect(height('ink')).toBeGreaterThan(height('fieldnotes'));
     // Wider serif titles wrap sooner: two lines here.
     expect(height('fieldnotes', 'request')).toBe(2 * 19 + 2 * 22);
   });
@@ -110,7 +110,7 @@ describe('appearance in the file', () => {
       },
       colors: [],
     });
-    expect(parseModel('node a "A"').appearance.theme).toBe('graphite');
+    expect(parseModel('node a "A"').appearance.theme).toBe('drafting');
   });
 
   it('reports invalid appearance with its line', () => {
@@ -118,7 +118,7 @@ describe('appearance in the file', () => {
       /Line 2: Unknown theme parchment/,
     );
     expect(() => parseModel('theme signal padding-x=200')).toThrow(/padding-x from 4 to 48/);
-    expect(() => parseModel('theme signal\ntheme midnight')).toThrow(
+    expect(() => parseModel('theme signal\ntheme blueprint')).toThrow(
       /Line 2: Duplicate declaration/,
     );
     expect(() => parseModel('theme-color brand fill=#123456')).toThrow(/double quotes/);
@@ -167,16 +167,16 @@ describe('appearance in the file', () => {
   it('projects appearance and shades, and survives JSON normalization', () => {
     const doc = projectScene(
       checkSource(
-        'theme midnight radius=2\ntheme-color brand shade=300 fill="#111111" stroke="#222222" ink="#FFFFFF"\nnode a "A" color=brand shade=300\nnode b "B" color=blue',
+        'theme blueprint radius=2\ntheme-color brand shade=300 fill="#111111" stroke="#222222" ink="#FFFFFF"\nnode a "A" color=brand shade=300\nnode b "B" color=blue',
       ),
     );
-    expect(doc.appearance.theme).toBe('midnight');
+    expect(doc.appearance.theme).toBe('blueprint');
     expect(doc.styles.a).toMatchObject({ color: 'brand', shade: 300 });
     expect(doc.styles.b.shade).toBeUndefined();
     const again = normalize(JSON.parse(JSON.stringify(doc)));
     expect(again.appearance).toEqual(doc.appearance);
     expect(again.styles.a.shade).toBe(300);
-    expect(normalize({ graph: { nodes: [], edges: [] } }).appearance.theme).toBe('graphite');
+    expect(normalize({ graph: { nodes: [], edges: [] } }).appearance.theme).toBe('drafting');
     const bad = JSON.parse(JSON.stringify(doc));
     bad.styles.a.color = 'ocean';
     expect(() => normalize(bad)).toThrow(/unknown color/);
@@ -212,10 +212,13 @@ describe('palettes', () => {
         for (const s of SHADES) {
           const c = swatchFor(look, family, s),
             label = `${theme} ${family} ${s}`;
-          // Pale shades carry dark text; the rest carry white text.
+          // Pale shades carry dark text; the rest carry white text, except bright warm 400–500.
           expect(contrast(c.fill, c.ink), label).toBeGreaterThanOrEqual(
             s <= 300 ? CONTRAST.paleInk : CONTRAST.darkInk,
           );
+          if (s >= 600 || (s >= 400 && ['blue', 'green', 'red'].includes(family)))
+            expect(c.ink, label).toBe('#FFFFFF');
+          if (s === 500 && family === 'amber') expect(c.ink, label).not.toBe('#FFFFFF');
           // Every shape is visible on the canvas, by its fill or by its outline.
           expect(
             Math.max(contrast(c.fill, look.canvas), contrast(c.stroke, look.canvas)),
@@ -225,7 +228,7 @@ describe('palettes', () => {
     }
     // The targets hold on a canvas the file overrides.
     const custom = resolveAppearance({
-      theme: 'graphite',
+      theme: 'drafting',
       overrides: { canvas: '#DDDDDD' },
       colors: [],
     });
@@ -239,7 +242,7 @@ describe('palettes', () => {
     });
     expect(new Set(signatures).size).toBe(5);
     expect(PRESETS.fieldnotes.titleFont).toBe('serif');
-    expect(PRESETS.midnight.titleFont).toBe('mono');
+    expect(PRESETS.blueprint.titleFont).toBe('mono');
   });
 });
 
@@ -260,13 +263,13 @@ describe('appearance edits', () => {
       'diagram "D" version=1\ntheme fieldnotes padding-x=24\n# palette\ntheme-color blue shade=100 fill="#EEEEEE"\ntheme-color brand fill="#123456" stroke="#000000" ink="#FFFFFF"\nnode a "A" color=brand\n';
     const text = edit(source, d => {
       d.appearance = {
-        theme: 'midnight',
+        theme: 'blueprint',
         overrides: {},
         colors: d.appearance.colors.filter(c => c.family === 'brand'),
       };
     });
     expect(text).toBe(
-      'diagram "D" version=1\ntheme midnight\n# palette\ntheme-color brand fill="#123456" stroke="#000000" ink="#FFFFFF"\nnode a "A" color=brand\n',
+      'diagram "D" version=1\ntheme blueprint\n# palette\ntheme-color brand fill="#123456" stroke="#000000" ink="#FFFFFF"\nnode a "A" color=brand\n',
     );
   });
 
@@ -274,7 +277,7 @@ describe('appearance edits', () => {
     const text = edit('diagram "D" version=1\nnode a "A"\n', d => {
       d.appearance.overrides.paddingY = 14;
     });
-    expect(text).toBe('diagram "D" version=1\ntheme graphite padding-y=14\nnode a "A"\n');
+    expect(text).toBe('diagram "D" version=1\ntheme drafting padding-y=14\nnode a "A"\n');
     expect(checkSource(text).byId.get('a')!.h).toBe(16 + 28);
   });
 });
