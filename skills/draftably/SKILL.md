@@ -60,7 +60,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    `npx draftably extract diagram.png` prints it (`--write diagram.draft` saves it), and `check`,
    `inspect`, `format`, `compare` and `open` accept the image in place of the `.draft`. Use
    `--no-source` on `--png`/`--svg` exports when the labels must not travel with the picture.
-8. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
+8. **Edit by id, not by text.** `npx draftably set diagram.draft node.api label="Orders API" color=teal` changes a declaration (`key=` removes an attribute; `edge.x`, `group.x` work too), `rm diagram.draft cache` removes an object with its edges, refinements and state mentions, and `mv diagram.draft cache store` renames an id everywhere. Each rewrites the file and runs `check`. Prefer them to `sed` or string replacement on labels.
+9. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
    comments. A `[relaxed]` warning means a `near`, `stay` or `nudge` no longer holds after other
    edits; `format --drop-stale --write` removes those lines.
 

@@ -561,6 +561,9 @@ pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
 pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
 pnpm draftably extract checkout.png              # print the source embedded in a PNG or SVG export
+pnpm draftably set f.draft node.api label="API" color=teal  # change a declaration by id (key= removes)
+pnpm draftably rm f.draft cache                  # remove it with its edges, refinements and state mentions
+pnpm draftably mv f.draft cache store            # rename an id everywhere
 pnpm draftably vary examples/checkout.draft       # layout variants: contact sheet, metrics, ranking
 pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)

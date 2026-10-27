@@ -70,6 +70,13 @@ Commands:
                             A lanes root stays as v0; --grid and --try engine try engines.
   vary <file> --apply <id>  Write variant <id> from the last run (or best) into the file,
                             print the lines it changed, then check the file.
+  set <file> <id> key=value…  Change a declaration: label="…" replaces its label, color=teal
+                            sets an attribute, color= removes it. <id> may be node.x,
+                            group.x or edge.x when a bare id is ambiguous.
+  rm <file> <id>…           Remove nodes, groups or edges, with their edges, refinements and
+                            state mentions; a group's members move to its container.
+  mv <file> <old> <new>     Rename an id everywhere it is used.
+                            set, rm and mv rewrite the file through the formatter, then check it.
   extract <image>           Print the .draft source embedded in a PNG or SVG export.
        [--write <file>]     Save it instead of printing it.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
@@ -417,6 +424,30 @@ export async function main(argv: string[]): Promise<number> {
           ...(from ? { from: savedVariant(file!, source, from, out) } : {}),
         });
         return 0;
+      }
+      case 'set':
+      case 'rm':
+      case 'mv': {
+        if (!file || isImageName(file)) throw new UsageError(`${command} rewrites a .draft file.`);
+        const { removeIds, renameId, setFields } = await import('./edit');
+        const source = await read(file),
+          args = rest.filter(a => !a.startsWith('--'));
+        let next: string;
+        if (command === 'set') next = setFields(source, args[0] ?? '', args.slice(1));
+        else if (command === 'rm') next = removeIds(source, args);
+        else {
+          if (args.length !== 2) throw new UsageError('mv takes the old id and the new one.');
+          next = renameId(source, args[0], args[1]);
+        }
+        fs.writeFileSync(path.resolve(file), next);
+        console.log(
+          command === 'set'
+            ? `Set ${args.slice(1).join(' ')} on ${args[0]}.`
+            : command === 'rm'
+              ? `Removed ${args.join(', ')} and every line that used ${args.length > 1 ? 'them' : 'it'}.`
+              : `Renamed ${args[0]} to ${args[1]}.`,
+        );
+        return checkFile(file, '', false, flag('--quiet'));
       }
       case 'extract': {
         if (!file || !isImageName(file)) throw new UsageError('extract needs a .png or .svg file.');
