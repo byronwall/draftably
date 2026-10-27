@@ -14,13 +14,7 @@ import { drawingBounds } from '../model/bounds';
 import { styleOf } from '../model/graph';
 import { ICONS } from '../model/icons';
 import { nodeLabel } from '../model/labels';
-import {
-  groupLinkMark,
-  LINK_MARK_PATH,
-  linkMark,
-  linkTarget,
-  type LinkMark,
-} from '../model/link';
+import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
 import { computeRoutes } from '../model/routes';
 import {
   drawnLegend,
@@ -110,14 +104,19 @@ function sceneMarkup(
       band = look.groupHeader / 2 - 7,
       title = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle);
     out.push(
-      ...linked(g.href, g.title, [
-        `<g data-id="${esc(g.id)}"${fade(p)}>`,
-        `<rect class="shape" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
-        `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
-        `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
-        g.href ? markMarkup(groupLinkMark(title, look.groupTitle, band), r.x, r.y, c.ink) : '',
-        '</g>',
-      ], opts),
+      ...linked(
+        g.href,
+        g.title,
+        [
+          `<g data-id="${esc(g.id)}"${fade(p)}>`,
+          `<rect class="shape" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
+          `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
+          `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
+          g.href ? markMarkup(groupLinkMark(title, look.groupTitle, band), r.x, r.y, c.ink) : '',
+          '</g>',
+        ],
+        opts,
+      ),
     );
   }
   for (const route of routes) {
@@ -152,29 +151,34 @@ function sceneMarkup(
       bh = look.annotation.lineHeight + 4;
     const mark = n.href ? linkMark(style.shape, r.w, r.h, badge ? bw : 0) : undefined;
     out.push(
-      ...linked(n.href, n.title, [
-        `<g data-id="${esc(n.id)}"${fade(p)}>`,
-        ...(n.count && style.shape !== 'text'
-          ? STACK_OFFSETS.map(d =>
-              outline(style.shape, { ...r, x: r.x + d, y: r.y + d }, look.radius, paint),
-            )
-          : []),
-        outline(style.shape, r, look.radius, paint),
-        `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
-          label.lines
-            .map(
-              (line, i) =>
-                `<tspan x="${r.x + label.x}" dy="${i ? label.lineHeight : 0}">${esc(line)}</tspan>`,
-            )
-            .join('') +
-          '</text>',
-        badge
-          ? `<rect x="${r.x + r.w - bw + 6}" y="${r.y - bh / 2}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="${c.stroke}"/>` +
-            `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`
-          : '',
-        mark ? markMarkup(mark, r.x, r.y, mark.inside ? c.ink : look.muted) : '',
-        '</g>',
-      ], opts),
+      ...linked(
+        n.href,
+        n.title,
+        [
+          `<g data-id="${esc(n.id)}"${fade(p)}>`,
+          ...(n.count && style.shape !== 'text'
+            ? STACK_OFFSETS.map(d =>
+                outline(style.shape, { ...r, x: r.x + d, y: r.y + d }, look.radius, paint),
+              )
+            : []),
+          outline(style.shape, r, look.radius, paint),
+          `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
+            label.lines
+              .map(
+                (line, i) =>
+                  `<tspan x="${r.x + label.x}" dy="${i ? label.lineHeight : 0}">${esc(line)}</tspan>`,
+              )
+              .join('') +
+            '</text>',
+          badge
+            ? `<rect x="${r.x + r.w - bw + 6}" y="${r.y - bh / 2}" width="${bw}" height="${bh}" rx="${bh / 2}" fill="${c.stroke}"/>` +
+              `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`
+            : '',
+          mark ? markMarkup(mark, r.x, r.y, mark.inside ? c.ink : look.muted) : '',
+          '</g>',
+        ],
+        opts,
+      ),
     );
   }
   return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };
