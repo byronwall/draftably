@@ -44,6 +44,8 @@ draftably check architecture.draft
 draftably format architecture.draft --write
 draftably inspect architecture.draft --json
 draftably inspect architecture.draft --svg > architecture.svg
+draftably vary architecture.draft           # layout variants: contact sheet and ranked metrics
+draftably vary architecture.draft --apply best
 draftably open architecture.draft
 draftably open                              # start page for the current folder
 ```

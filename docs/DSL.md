@@ -544,6 +544,8 @@ pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
 pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
 pnpm draftably extract checkout.png              # print the source embedded in a PNG or SVG export
+pnpm draftably vary examples/checkout.draft       # layout variants: contact sheet, metrics, ranking
+pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
@@ -570,6 +572,77 @@ scratch diagram. The format is stable, so other tools can read it:
   `<svg>`, holding the XML-escaped source.
 
 Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+
+### Layout variants
+
+`vary` tries other `layout` and `routing` lines for a file, draws each one as the CLI does, and
+ranks them against the file as it is. It reads the diagram's shape (groups, the longest chain of
+connections, a tree with one start, long connection labels) and tries the engines and settings
+that suit it: `compound-flow` for groups and `layered` without, in both reading directions,
+`ordering=crossings`, `flow` for a long chain, `tree` for a tree, a wider `rank-gap` for long
+labels, and a router that avoids crossings harder. Files whose root uses `lanes`, `sequence` or
+`cells` get routing variants only.
+
+```text
+$ pnpm draftably vary examples/checkout.draft
+5 variants tried, 2 kept. Sheet: examples/checkout.vary/contact-sheet.png
+id  change               crossings  bends    size            warnings  moved  notes
+v0  current              0          8        1143×462        0                fewest bends
+v1  compound-flow down   0          9 (+1)   598×713 (-19%)  0         349px  recommended, smallest
+v2  compound-flow right  0          11 (+3)  1143×451 (-2%)  0         46px   least moved
+v1: 3 groups, reading down.
+v2: 3 groups, reading right.
+Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
+```
+
+- Output goes to `<name>.vary/` beside the file, or to `--out <folder>`: `contact-sheet.png`
+  with every variant as a labeled tile, `v0.png` (the file as it is), `v1.png` and on, and
+  `variants.json`. Each PNG embeds its variant's source.
+- **Metrics:** crossings, bends, canvas size, the warnings `check` would print (plus `soft-split`
+  notes, since a soft group drawn in pieces no longer reads as one group), and `moved`, the
+  mean distance a box moved from where the file draws it. Changes from `v0` show in brackets.
+- **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
+  counts as better than the file when it has fewer warnings and no more crossings, or when it
+  has no more warnings, crossings or area and less of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
+  N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
+- **Recommended** is the first variant better than the file, or `v0` when none is.
+- **From the file itself**, the suggestions also try:
+  - dropping the refinement lines `check` blames for drawing conflicts, so layout places those
+    objects (`no line 15`);
+  - for a file with change marks or a `compare` line, panels side by side and stacked;
+  - fewer containers: `frame=soft` on leaf groups, then also on groups whose members span more
+    than one rank, never on the group that holds most of the drawing. Only groups with no
+    `layout` or position lines of their own qualify, so applying one changes only `group`
+    lines.
+- `--try key=a,b` tries exactly those values instead of suggesting, in order, and keeps every
+  one. A second `--try` makes a grid (12 variants at most), with the first axis varying fastest.
+  `--try key` alone uses the steps the viewer's Compare offers (`rank-gap` → 28, 52, 88). Keys
+  are `engine`, `direction`, the engine settings in [Layout engines](#layout-engines) and the
+  settings in [Routing](#routing). An engine setting on a scope with a built-in recipe also sets
+  the engine: the scope's own, else `compound-flow` with groups or `layered` without.
+- `--grid` tries `layered`, `compound-flow` and `flow`, plus `tree` for a tree with one start,
+  each reading right and then down. Sweeps keep a variant that draws the same picture as an
+  earlier one and tag it `same as v1`, so a setting with no effect shows.
+- `--fit wide|slide|square|page|tall` aims for an image shape (aspect 2, 1.78, 1, 0.77, 0.6).
+  It changes what is tried (the matching direction first, and the engine's `aspect` with
+  folding) and what ranks first: closeness to the shape comes right after warnings. A variant
+  then counts as better when it fits the shape better and grows by at most half; more growth
+  is empty space, not a better fit. With `--fit` the
+  table adds an `aspect` column.
+- `--prefer fewer-crossings|compact|stable` sets the order after warnings: crossings then area
+  (the default), area then crossings, or the least movement from the current drawing.
+- `--from <id>` searches around a variant of the last run: that variant as it was, the other
+  direction, the other rank ordering and folding, `rank-gap`, `node-gap` and `group-gap` one
+  step either way, and two router settings. Each keeps the variant's own edits, so the loop is:
+  `vary`, look, `vary --from v2`, look, `vary --apply v1`.
+- `--scope <group>` varies that group's `layout` line instead of the root's. The suggestions
+  then use the group's own shape, and routing (which is the whole file's) stays as it is.
+- `--json` prints `variants.json`: for each variant its id, title, reason, the exact lines it
+  changes (`before` and `after`), its edits and metrics.
+- `--apply <id>` writes that variant from the last run into the file and prints the lines it
+  changed; `--apply best` takes the recommended one. It changes only those lines and keeps
+  comments, IDs and refinements. An engine that replaces a built-in recipe drops the recipe and
+  its `gap`. It then checks the file. It refuses when the file changed since the run.
 
 ### Drawing conflicts
 

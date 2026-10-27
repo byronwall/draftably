@@ -2,11 +2,12 @@
  * PNG output for the command line, rasterized by an installed Chrome or Chromium in headless
  * mode, so the CLI keeps no runtime dependencies and draws the embedded fonts exactly.
  */
-import { execFileSync } from 'node:child_process';
+import { execFile, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { promisify } from 'node:util';
 import { embedPngSource } from '../model/embed';
 
 const CANDIDATES = [
@@ -45,7 +46,8 @@ export async function writePng(svg: string, out: string, scale = 2, source?: str
       `<!doctype html><meta charset="utf-8"><style>html,body{margin:0}svg{display:block}</style>${svg}`,
     );
     const shot = path.join(dir, 'shot.png');
-    execFileSync(
+    // Asynchronous, so several drawings can rasterize at once.
+    await promisify(execFile)(
       findChrome(),
       [
         '--headless=new',
@@ -58,7 +60,7 @@ export async function writePng(svg: string, out: string, scale = 2, source?: str
         `--screenshot=${shot}`,
         pathToFileURL(page).href,
       ],
-      { stdio: 'ignore', timeout: 60_000 },
+      { timeout: 60_000 },
     );
     const png = fs.readFileSync(shot);
     fs.writeFileSync(

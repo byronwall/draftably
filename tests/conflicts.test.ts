@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
 import { hintMoves, sceneConflicts } from '../src/dsl/conflicts';
@@ -54,5 +55,13 @@ describe('drawing conflicts', () => {
     expect(rows).toHaveLength(1);
     expect(rows[0]).toMatchObject({ id: 'b', hint: 'pin', line: 5, final: { x: 300, y: 200 } });
     expect(rows[0].delta).toBeGreaterThan(100);
+  });
+
+  it('lets lines cross a soft group, which draws a tint and not a box', async () => {
+    // The connection into cart_1 crosses where cart_deploy's title would sit as a box.
+    const source = fs
+      .readFileSync('examples/kubernetes-cluster.draft', 'utf8')
+      .replace('group cart_deploy "deploy: cart" in=ns_shop', '$& frame=soft');
+    expect(sceneConflicts(await compile(source))).toEqual([]);
   });
 });

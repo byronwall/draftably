@@ -130,7 +130,10 @@ export function findConflicts(
     return list;
   };
   const related = (a: string, b: string) => ancestors(a).includes(b) || ancestors(b).includes(a);
-  const boxes = [...rects].map(([id, r]) => ({ id, r }));
+  // A soft or frameless group draws a tint (or nothing) that lines cross freely; `compile`
+  // reports a tint over other objects as `soft-overlap`. Only boxes are checked here.
+  const tinted = new Set(doc.graph.groups.filter(g => scene.byId.get(g.id)?.frame).map(g => g.id));
+  const boxes = [...rects].filter(([id]) => !tinted.has(id)).map(([id, r]) => ({ id, r }));
   const leaves = boxes.filter(b => !groups.has(b.id));
   const edges = new Map(doc.graph.edges.map(e => [e.id, e]));
   const look = scene.look;
@@ -168,7 +171,7 @@ export function findConflicts(
   // A box outside its group's frame.
   for (const { id, r } of boxes) {
     const p = parent.get(id),
-      frame = p && rects.get(p);
+      frame = p && !tinted.has(p) && rects.get(p);
     if (!frame) continue;
     const out = Math.max(
       frame.x - r.x,
@@ -215,7 +218,7 @@ export function findConflicts(
     // A line through a group's title: its icon and text, as the canvas draws them.
     for (const g of doc.graph.groups) {
       const r = rects.get(g.id);
-      if (!r) continue;
+      if (!r || tinted.has(g.id)) continue;
       const text = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle),
         mid = r.y + look.groupHeader / 2 - 7,
         half = look.groupTitle.size / 2 + 1;

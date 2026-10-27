@@ -27,18 +27,32 @@ inside the Draftably repo). It needs Node 22.21 or later.
    When a box sits in an odd place, `check --hints` shows each refinement's target with its raw
    (layout only) and final position and the distance between them. A large distance means the
    refinement, not layout, put it there.
-4. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
+4. **Let the tool choose the layout.** Don't hand-tune `layout` or `routing` lines.
+   `npx draftably vary diagram.draft` tries the layouts that suit the diagram's shape and writes
+   `diagram.vary/contact-sheet.png` (one image with every variant, `v0` is the file as it is)
+   and a table of crossings, bends, size and warnings. Look at the sheet, pick one (the table
+   marks a `recommended` variant), and run `npx draftably vary diagram.draft --apply v2` (or
+   `--apply best`). It rewrites only the layout lines and runs `check`.
+   To explore a setting yourself, `--try direction` or `--try engine=layered,flow --try
+rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no effect),
+   `--grid` sweeps the main engines in both directions, and `--scope <group>` varies one
+   group's layout line. Say what the drawing is for: `--fit slide` (or `wide`, `square`, `page`,
+   `tall`) ranks by closeness to that shape, and `--prefer compact` or `--prefer stable` changes
+   what wins a tie. When a variant is close, `--from v2` tries small changes around it.
+   `vary` also offers to drop refinements that `check` blames for conflicts, to draw change marks
+   as panels, and to soften groups (`frame=soft`) for fewer containers.
+5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.
-5. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
+6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
    file, and edits to the file show in the viewer at once. Run it in the background; it does not
    exit by itself.
-6. **Recover a diagram from an image.** PNG and SVG exports carry their source.
+7. **Recover a diagram from an image.** PNG and SVG exports carry their source.
    `npx draftably extract diagram.png` prints it (`--write diagram.draft` saves it), and `check`,
    `inspect`, `format`, `compare` and `open` accept the image in place of the `.draft`. Use
    `--no-source` on `--png`/`--svg` exports when the labels must not travel with the picture.
-7. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
+8. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
    comments.
 
 ## Syntax
