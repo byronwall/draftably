@@ -689,6 +689,19 @@ between them. A last line lists objects that moved only because a refinement pus
 `inspect --json --hints` adds `raw: {x, y}` to every node a refinement moved. Raw positions come from the
 same file compiled without its refinement lines.
 
+`check --metrics` measures the drawing as `vary` does and prints one line: size and aspect,
+crossings, bends, total line length and warnings. It also warns on how the drawing reads:
+
+| Rule       | Meaning                                                                                         |
+| ---------- | ----------------------------------------------------------------------------------------------- |
+| `crossing` | Two edges that share no end cross. (The metrics line counts every crossing the router sees.)    |
+| `detour`   | A route is over 2.5 times, and 300px more than, the distance between its ends.                  |
+| `stranded` | A node is over 480px from every node it connects to.                                            |
+| `aspect`   | Wider or taller than 3:1, or with `--fit <shape>`, more than 1.5 times off that shape's aspect. |
+
+`inspect --json --metrics` adds the same numbers as a `metrics` object, so a script can compare
+two versions of a file without drawing an image.
+
 `skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
 teaches coding agents to write and check `.draft` files. `--global` installs it under
 `~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.

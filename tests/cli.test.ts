@@ -68,3 +68,12 @@ describe('cli', () => {
     expect((await run('check', noisy, '--quiet')).out).not.toMatch(/^info/m);
   });
 });
+
+describe('check --metrics', () => {
+  it('prints what vary measures and reads --fit without taking it for a file', async () => {
+    const { code, out } = await run('check', good, '--metrics', '--fit', 'tall');
+    expect(code).toBe(0);
+    expect(out).toMatch(/^Metrics: \d+×\d+ \(aspect [\d.]+\), 0 crossings/m);
+    expect(out).toContain('[aspect]');
+  });
+});

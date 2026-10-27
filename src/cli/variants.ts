@@ -6,7 +6,7 @@
  * comments, IDs and refinements. Everything here is deterministic: the same source gives the same
  * variants, in the same order, with the same numbers.
  */
-import { computeRoutes } from '../model/routes';
+import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from '../dsl/compile';
 import { findConflicts, sceneConflicts } from '../dsl/conflicts';
@@ -684,6 +684,10 @@ const centers = (rects: Map<string, Rect>) => {
 
 interface Drawn {
   metrics: Omit<Metrics, 'moved'>;
+  routes: DrawnRoute[];
+  rects: Map<string, Rect>;
+  /** Node ids, for the per-node checks. */
+  nodes: string[];
   centers: Map<string, { x: number; y: number }>;
   /** Rounded geometry, to spot variants that draw the same picture. */
   key: string;
@@ -715,6 +719,9 @@ export async function draw(source: string): Promise<Drawn> {
       length: Math.round(result.report.length),
       warnings,
     },
+    routes,
+    rects,
+    nodes: doc.graph.nodes.map(n => n.id),
     centers: c,
     // The image size too: compare panels change the picture, not the geometry.
     key: [`${size[1]}x${size[2]}`, ...c]
@@ -729,6 +736,105 @@ export async function draw(source: string): Promise<Drawn> {
       .join('|'),
     svg,
   };
+}
+
+/** A route's length, along its points. */
+const routeLength = (r: DrawnRoute) =>
+  r.points
+    .slice(1)
+    .reduce((n, p, i) => n + Math.abs(p.x - r.points[i].x) + Math.abs(p.y - r.points[i].y), 0);
+
+/** Gap between two boxes, 0 when they touch or overlap. */
+const gapBetween = (a: Rect, b: Rect) =>
+  Math.hypot(
+    Math.max(0, a.x - (b.x + b.w), b.x - (a.x + a.w)),
+    Math.max(0, a.y - (b.y + b.h), b.y - (a.y + a.h)),
+  );
+
+/** A route longer than this many times the distance between its ends, and this much longer, is a detour. */
+const DETOUR_RATIO = 2.5,
+  DETOUR_EXTRA = 300;
+/** A node this far from every node it connects to is stranded. */
+const STRANDED_GAP = 480;
+/** Without `--fit`, an image wider or taller than this many times the other way is extreme. */
+const EXTREME_ASPECT = 3;
+
+/**
+ * Warnings about how a drawing reads, beyond what `check` reports by default: lines that cross,
+ * routes that detour far past the distance between their ends, a node far from everything it
+ * connects to, and an aspect ratio far from `fit` (or extreme without one).
+ */
+export function qualityNotes(d: Drawn, fit?: Fit): Diagnostic[] {
+  const notes: Diagnostic[] = [],
+    warn = (code: string, message: string, ids: string[]) =>
+      notes.push({ level: 'warning', code, message, ids });
+  // Crossings: an upright segment of one route strictly across a level segment of another.
+  const segs = d.routes.map(r => r.points.slice(1).map((p, i) => [r.points[i], p] as const));
+  for (let i = 0; i < d.routes.length; i++)
+    for (let j = i + 1; j < d.routes.length; j++) {
+      const a = d.routes[i],
+        b = d.routes[j];
+      if ([a.from, a.to].some(e => e === b.from || e === b.to)) continue;
+      const hit = segs[i].some(s => segs[j].some(t => crosses(s, t) || crosses(t, s)));
+      if (hit) warn('crossing', `Edges ${a.id} and ${b.id} cross.`, [a.id, b.id]);
+    }
+  for (const r of d.routes) {
+    const p = r.points[0],
+      q = r.points[r.points.length - 1],
+      straight = Math.abs(p.x - q.x) + Math.abs(p.y - q.y),
+      length = routeLength(r);
+    if (length > DETOUR_RATIO * straight && length - straight > DETOUR_EXTRA)
+      warn(
+        'detour',
+        `Edge ${r.id} (${r.from} -> ${r.to}) runs ${Math.round(length)}px to cover ${Math.round(straight)}px.`,
+        [r.id],
+      );
+  }
+  const neighbours = new Map<string, Set<string>>();
+  for (const r of d.routes)
+    for (const [a, b] of [
+      [r.from, r.to],
+      [r.to, r.from],
+    ])
+      neighbours.set(a, (neighbours.get(a) ?? new Set()).add(b));
+  for (const id of d.nodes) {
+    const box = d.rects.get(id),
+      near = [...(neighbours.get(id) ?? [])].flatMap(n =>
+        d.rects.get(n) ? [d.rects.get(n)!] : [],
+      );
+    if (!box || !near.length) continue;
+    const gap = Math.min(...near.map(n => gapBetween(box, n)));
+    if (gap > STRANDED_GAP)
+      warn('stranded', `${id} is ${Math.round(gap)}px from the nearest node it connects to.`, [id]);
+  }
+  const aspect = d.metrics.width / d.metrics.height;
+  if (fit) {
+    const target = FITS[fit],
+      off = Math.max(aspect / target, target / aspect);
+    if (off > 1.5)
+      warn(
+        'aspect',
+        `The drawing is ${d.metrics.width}×${d.metrics.height} (aspect ${aspect.toFixed(2)}); --fit ${fit} wants about ${target}. Try draftably vary --fit ${fit}.`,
+        [],
+      );
+  } else if (aspect > EXTREME_ASPECT || aspect < 1 / EXTREME_ASPECT)
+    warn(
+      'aspect',
+      `The drawing is ${d.metrics.width}×${d.metrics.height} (aspect ${aspect.toFixed(2)}). Try draftably vary --fit slide (or page).`,
+      [],
+    );
+  return notes;
+}
+
+/** Whether level segment `s` and upright segment `t` cross strictly inside both. */
+function crosses(
+  s: readonly [{ x: number; y: number }, { x: number; y: number }],
+  t: readonly [{ x: number; y: number }, { x: number; y: number }],
+) {
+  if (s[0].y !== s[1].y || t[0].x !== t[1].x) return false;
+  const [x0, x1] = [Math.min(s[0].x, s[1].x), Math.max(s[0].x, s[1].x)],
+    [y0, y1] = [Math.min(t[0].y, t[1].y), Math.max(t[0].y, t[1].y)];
+  return t[0].x > x0 && t[0].x < x1 && s[0].y > y0 && s[0].y < y1;
 }
 
 const movedFrom = (base: Drawn['centers'], next: Drawn['centers']) => {
