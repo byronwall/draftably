@@ -565,6 +565,7 @@ pnpm draftably vary examples/checkout.draft       # layout variants: contact she
 pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
+pnpm draftably open --status                     # running viewers: URL, folder, version (open reuses one)
 pnpm draftably vary --help                       # any command's options; --version for the version
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
 ```
