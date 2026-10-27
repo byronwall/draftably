@@ -1,14 +1,22 @@
-import { createSignal, For, Show } from 'solid-js';
-import { fileDiagnostics, movedByChange } from '../state/file-session';
+import { createMemo, createSignal, For, Show } from 'solid-js';
+import { findConflicts } from '../dsl/conflicts';
+import { doc } from '../state/document';
+import { fileDiagnostics, fileScene, movedByChange } from '../state/file-session';
+import { routes, sceneRects } from '../state/scene';
 
 /**
- * Status bar entry for a diagram file: preferences that gave way, unsatisfied pins, and objects
- * an outside change moved. Each note names the source line it came from.
+ * Status bar entry for a diagram file: preferences that gave way, unsatisfied pins, drawing
+ * conflicts as `check` reports them, and objects an outside change moved. Each note names the
+ * source line it came from.
  */
 export function FileNotes() {
   const [open, setOpen] = createSignal(false);
+  const conflicts = createMemo(() => {
+    const scene = fileScene();
+    return scene ? findConflicts(scene, doc, sceneRects(), routes()) : [];
+  });
   const notes = () => [
-    ...fileDiagnostics().map(d => ({
+    ...[...fileDiagnostics(), ...conflicts()].map(d => ({
       level: d.level,
       text: (d.line ? `Line ${d.line} · ` : '') + d.message,
     })),
@@ -21,7 +29,7 @@ export function FileNotes() {
         ]
       : []),
   ];
-  const errors = () => notes().filter(n => n.level === 'error').length;
+  const errors = () => notes().filter(n => n.level !== 'info').length;
   return (
     <span class="file-notes">
       <button
@@ -40,7 +48,7 @@ export function FileNotes() {
         <div class="file-notes-panel floating-panel" role="dialog" aria-label="Layout notes">
           <For each={notes()}>
             {note => (
-              <p classList={{ 'file-note': true, warning: note.level === 'error' }}>{note.text}</p>
+              <p classList={{ 'file-note': true, warning: note.level !== 'info' }}>{note.text}</p>
             )}
           </For>
         </div>

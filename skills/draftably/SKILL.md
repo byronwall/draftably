@@ -18,7 +18,15 @@ inside the Draftably repo). It needs Node 22.21 or later.
    short stable IDs (`api`, `orders_db`) and human labels (`"Orders DB"`).
 2. **Write the file** with declarations first, then edges, then `layout` lines.
 3. **Check it:** `npx draftably check diagram.draft`. Fix every `error`; read every `warning`.
-   Exit code 1 means errors.
+   Exit code 1 means errors. Warnings ending in `[edge-through-node]`, `[edge-through-title]`,
+   `[node-overlap]`, `[label-collision]` or `[outside-group]` are drawing conflicts. Each names
+   the ids, and the refinement line that caused it with a fix ("Remove the pin on line 12, or
+   change it to x=140 y=60"). Apply the fix, or remove the refinement, and run `check` again
+   until no conflict is left. A conflict with no line means layout could not avoid it: move the
+   boxes apart with `near`, or split the group.
+   When a box sits in an odd place, `check --hints` shows each refinement's target with its raw
+   (layout only) and final position and the distance between them. A large distance means the
+   refinement, not layout, put it there.
 4. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.
@@ -77,7 +85,7 @@ layout services row gap=56
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                       |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"` |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=` link, `count=N` stack            |
-| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                                       |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                              |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                     |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                              |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                        |
@@ -120,6 +128,11 @@ Good defaults:
   A long chain of groups folds its longest groups, then wraps into rows, so the drawing stays
   within 5:1; `fold=never` keeps one line. A called-only group sits beside its caller.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
+- A process with roles: `layout root lanes` makes each top-level group a swim lane (bands,
+  `direction=down` for columns). Every node must sit in a lane; steps line up in rank columns
+  across all lanes.
+- An exchange between participants: `layout root sequence`. Nodes are participants across the
+  top; each `edge` line is one message, in file order; `kind=async` for replies. No groups.
 
 ### Refinements
 
@@ -140,6 +153,12 @@ content area.
 
 - Prefer structure over coordinates: groups, `layout` recipes, `order` and `align` survive
   later edits; `pin` and `nudge` do not adapt when content grows.
+- A boxed group pads its members and moves as one block. When a group only says "these belong
+  together" and its frame makes the drawing bigger or pushes lines across it, write
+  `frame=soft`: members lay out with the container around the group and draw on a light tint.
+  `frame=none` keeps the membership (and `color=auto`) but draws nothing. A soft group takes no
+  `layout`, `near` or `pin` of its own. `check` reports `soft-split` when its members end up apart
+  and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
 - Use color to mean something, not for decoration:

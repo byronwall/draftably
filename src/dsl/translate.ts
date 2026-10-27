@@ -10,7 +10,7 @@
 import type { ColorDefinition, DiagramAppearance } from '../model/appearance';
 import { selectionRoots } from '../model/graph';
 import type { ColorKey, Diagram, DiagramEdge, PortSide, Rect } from '../model/types';
-import { contentOrigin, type Scene } from './compile';
+import { contentOrigin, layoutView, type Scene } from './compile';
 import {
   addRefinement,
   bare,
@@ -351,11 +351,34 @@ function nearestSibling(me: Rect, siblings: Array<{ id: string; r: Rect }>): Can
 }
 
 function placeSelection(input: EditInput, sid: (id: string) => string, notes: string[]) {
-  const { source, scene, before, after, label } = input;
-  const roots = new Set(selectionRoots(after, input.selection));
+  const { source, before, after, label } = input;
+  // Positions are written in the containers that lay objects out, so soft groups drop out: a
+  // moved soft group places each of its members instead, with a `stay` at its new position.
+  const scene = layoutView(input.scene),
+    soft = new Set(after.graph.groups.filter(g => g.frame).map(g => g.id)),
+    declared = (id: string) =>
+      [...after.graph.groups, ...after.graph.nodes].find(o => o.id === id)?.parentId ?? 'root';
+  const parentOf = (id: string) => {
+    let p = declared(id);
+    while (soft.has(p)) p = declared(p);
+    return p;
+  };
+  const roots = new Set<string>(),
+    carried = new Set<string>();
+  for (const id of selectionRoots(after, input.selection)) {
+    if (!soft.has(id)) {
+      roots.add(id);
+      continue;
+    }
+    for (const o of scene.objects)
+      for (let p = declared(o.id); p !== 'root'; p = declared(p))
+        if (p === id) {
+          roots.add(o.id);
+          carried.add(o.id);
+          break;
+        }
+  }
   for (const n of after.graph.nodes) if (!scene.byId.has(n.id)) roots.add(n.id);
-  const parentOf = (id: string) =>
-    [...after.graph.groups, ...after.graph.nodes].find(o => o.id === id)?.parentId ?? 'root';
 
   // Positions after the edit, relative to each parent's compiled content origin.
   const local = new Map<string, Rect>();
@@ -424,6 +447,19 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
           ),
         );
         notes.push(`moved the pin on ${sourceId}`);
+      } else if (carried.has(id)) {
+        addRefinement(
+          source,
+          statement(
+            'stay',
+            [bare(sourceId)],
+            [
+              ['x', num(now.x)],
+              ['y', num(now.y)],
+            ],
+          ),
+        );
+        notes.push(`placed ${sourceId}`);
       } else {
         const near = nearOf();
         const createsCycle = (ref: string) => {
@@ -432,7 +468,7 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
           return false;
         };
         const siblings = [...after.graph.groups, ...after.graph.nodes]
-          .filter(o => o.id !== id && parentOf(o.id) === parentOf(id))
+          .filter(o => o.id !== id && !soft.has(o.id) && parentOf(o.id) === parentOf(id))
           .flatMap(o => {
             const c = scene.byId.get(o.id),
               r = local.get(o.id) ?? (c ? { x: c.localX, y: c.localY, w: c.w, h: c.h } : null);
@@ -531,8 +567,9 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
  * additions then move nearby objects instead of rearranging distant ones. Objects that already
  * have a position refinement keep it. Returns the anchored ids.
  */
-export function anchorSurroundings(source: SourceDoc, scene: Scene, edited: string[]): string[] {
+export function anchorSurroundings(source: SourceDoc, drawn: Scene, edited: string[]): string[] {
   if (!edited.length) return [];
+  const scene = layoutView(drawn);
   const hinted = new Set(
     statements(source)
       .filter(s => POSITION_HINTS.includes(s.command as never))

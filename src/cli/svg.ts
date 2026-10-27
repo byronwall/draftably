@@ -29,6 +29,8 @@ import {
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
+import { LIFELINE, SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
+
 import { fontFaceCss } from '../lib/font-data';
 
 const esc = (s: string) =>
@@ -117,6 +119,27 @@ function sceneMarkup(
       p = statusPaint(look, styleOf(doc, g.id).status, styleOf(doc, g.id).spot),
       band = look.groupHeader / 2 - 7,
       title = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle);
+    if (g.frame === 'none') continue;
+    if (g.frame === 'soft') {
+      const hull = g.hull?.length ? g.hull : [{ x: 0, y: 0, w: r.w, h: r.h }];
+      out.push(
+        ...linked(
+          g.href,
+          g.title,
+          [
+            `<g data-id="${esc(g.id)}"${fade(p)}>`,
+            ...hull.map(
+              h =>
+                `<rect x="${r.x + h.x}" y="${r.y + h.y}" width="${h.w}" height="${h.h}" rx="${SOFT_RADIUS}" fill="${c.fill}"/>`,
+            ),
+            `<text x="${r.x + hull[0].x + SOFT_TITLE.x}" y="${r.y + hull[0].y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(truncateText(g.title, Math.max(40, hull[0].w - 2 * SOFT_PAD), look.annotation))}</text>`,
+            '</g>',
+          ],
+          opts,
+        ),
+      );
+      continue;
+    }
     out.push(
       ...linked(
         g.href,
@@ -132,6 +155,15 @@ function sceneMarkup(
         ],
         opts,
       ),
+    );
+  }
+  // Sequence participants' lifelines, under the message lines.
+  for (const n of vg.nodes) {
+    const r = rects.get(n.id);
+    if (!r || !n.lifeline) continue;
+    const x = r.x + r.w / 2;
+    out.push(
+      `<line x1="${x}" y1="${r.y + r.h}" x2="${x}" y2="${r.y + r.h + n.lifeline}" stroke="${look.muted}" stroke-width="${LIFELINE.width}" stroke-dasharray="${LIFELINE.dash}"/>`,
     );
   }
   for (const route of routes) {

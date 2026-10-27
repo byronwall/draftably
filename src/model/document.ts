@@ -164,6 +164,7 @@ export function normalize(input: unknown): Diagram {
       ...(Number.isInteger(n.count) && n.count > 1 ? { count: n.count } : {}),
       ...(n.parentId ? { parentId: n.parentId } : {}),
       ...(n.image ? { image: n.image } : {}),
+      ...(finite(n.lifeline) && n.lifeline > 0 ? { lifeline: n.lifeline } : {}),
     });
   }
   for (const g of data.graph.groups || []) {
@@ -174,6 +175,11 @@ export function normalize(input: unknown): Diagram {
       ...(typeof g.was === 'string' ? { was: g.was } : {}),
       ...(typeof g.href === 'string' ? { href: g.href } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
+      ...(g.frame === 'soft' || g.frame === 'none' ? { frame: g.frame } : {}),
+      ...(Array.isArray(g.hull) &&
+      g.hull.every((r: Raw) => ['x', 'y', 'w', 'h'].every(k => finite(r[k])))
+        ? { hull: g.hull.map((r: Raw) => ({ x: r.x, y: r.y, w: r.w, h: r.h })) }
+        : {}),
     });
   }
 
@@ -308,6 +314,10 @@ export function normalize(input: unknown): Diagram {
         if (!finite(cfg[key])) throw Error(e.id + ': invalid label offset.');
         next[key] = cfg[key];
       }
+    if (cfg.row !== undefined) {
+      if (!finite(cfg.row)) throw Error(e.id + ': invalid message row.');
+      next.row = cfg.row;
+    }
     if (cfg.waypoints) {
       if (
         !Array.isArray(cfg.waypoints) ||

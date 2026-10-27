@@ -48,6 +48,29 @@ describe('translating editor edits', () => {
     expect(db.x).toBe(platform.x + platform.w + 40);
   });
 
+  it('moves a soft group by giving each member a stay', () => {
+    const source = [
+      'node ingress "Ingress"',
+      'group mon "Monitoring" frame=soft',
+      'node prom "Prometheus" in=mon',
+      'node graf "Grafana" in=mon',
+      'edge e1 ingress -> prom',
+      'edge e2 prom -> graf',
+      '',
+    ].join('\n');
+    const was = checkSource(source);
+    const { text, scene } = edit(source, 'Move objects', ['mon'], d => {
+      for (const id of ['mon', 'prom', 'graf']) d.layout.nodes[id].y += 200;
+    });
+    const stays = text.split('\n').filter(l => l.startsWith('stay '));
+    expect(stays.filter(l => /^stay (prom|graf) /.test(l))).toHaveLength(2);
+    expect(text).not.toMatch(/^(stay|near|nudge) mon /m);
+    for (const id of ['prom', 'graf'])
+      expect(scene.byId.get(id)!.y - scene.byId.get('ingress')!.y).toBe(
+        was.byId.get(id)!.y - was.byId.get('ingress')!.y + 200,
+      );
+  });
+
   it('keeps comments and unrelated statements when saving', () => {
     const { text } = edit(checkout, 'Move objects', ['db'], d => {
       d.layout.nodes.db.y += 300;

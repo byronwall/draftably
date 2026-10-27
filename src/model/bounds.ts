@@ -30,6 +30,7 @@ export function drawingBounds(
   for (const n of vg.nodes) {
     const r = rects.get(n.id);
     if (r) boxes.push(visualBounds(doc, n.id, n.title, r));
+    if (r && n.lifeline) boxes.push({ x: r.x + r.w / 2, y: r.y + r.h, w: 1, h: n.lifeline });
   }
   for (const g of vg.groups) {
     const r = rects.get(g.id);

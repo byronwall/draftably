@@ -13,6 +13,17 @@ export const GROUP_HEADER = 48;
  */
 export const GROUP_TITLE_CHROME = 33 + 64;
 
+/** Room a soft group's tint leaves round its members, and above them for its label. */
+export const SOFT_PAD = 10;
+export const SOFT_LABEL = 18;
+/** Where a soft group's label sits in its tint: in the annotation face, at the top left. */
+export const SOFT_TITLE = { x: SOFT_PAD, y: SOFT_PAD + 2 };
+/** Corner radius of each rectangle of a tint; small, so joined rectangles read as one shape. */
+export const SOFT_RADIUS = 6;
+
+/** Dash of a sequence participant's lifeline; quieter than a message line. */
+export const LIFELINE = { dash: '4 5', width: 1 };
+
 /** Top-left of a group's content area, which its children's local positions are relative to. */
 export const contentOrigin = (group: { x: number; y: number }, header = GROUP_HEADER) => ({
   x: group.x + GROUP_INSET,
