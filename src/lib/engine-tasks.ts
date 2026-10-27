@@ -55,7 +55,7 @@ export function runEngineTask(
   task: EngineTask,
 ): Promise<LayoutResult | CandidateResult | Timeline | RoutingResult | SceneResult | Scene> {
   if (task.kind === 'scene') return compileScene(task.source, task.view);
-  if (task.kind === 'compile') return compile(task.source);
+  if (task.kind === 'compile') return compiled(task.source);
   if (task.kind === 'layout') return LayoutLab.compute(task.doc, task.options);
   if (task.kind === 'route') return Promise.resolve(RouteLab.compute(task.input, task.options));
   if (task.kind === 'candidate')
@@ -74,9 +74,25 @@ async function compileCandidate(source: string, spec: CandidateSpec): Promise<Ca
   return { spec, document, report: null, routing };
 }
 
+/**
+ * Recent compiles in this thread. The viewer asks for a file's scene first and then for its
+ * routes; the second task reuses the first one's layout.
+ */
+const recent = new Map<string, Promise<Scene>>();
+function compiled(source: string) {
+  let scene = recent.get(source);
+  if (!scene) {
+    scene = compile(source);
+    scene.catch(() => recent.delete(source));
+    recent.set(source, scene);
+    while (recent.size > 4) recent.delete(recent.keys().next().value!);
+  }
+  return scene;
+}
+
 /** Compile, project and route a file exactly as the viewer's scene state would. */
 async function compileScene(source: string, view: ViewState): Promise<SceneResult> {
-  const scene = await compile(source),
+  const scene = await compiled(source),
     document = projectScene(scene, view),
     vg = visibleGraph(document),
     geometry = makeGeometry(document),
