@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { embedPngSource } from '../model/embed';
 
 const CANDIDATES = [
   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -31,8 +32,8 @@ function findChrome(): string {
   throw Error('PNG output needs Chrome or Chromium. Install one, or set CHROME_PATH to it.');
 }
 
-/** Write `svg` as a PNG at `scale` times its own size. */
-export function writePng(svg: string, out: string, scale = 2) {
+/** Write `svg` as a PNG at `scale` times its own size, with `source` embedded when given. */
+export async function writePng(svg: string, out: string, scale = 2, source?: string) {
   const size = /width="(\d+(?:\.\d+)?)" height="(\d+(?:\.\d+)?)"/.exec(svg);
   if (!size) throw Error('The SVG has no size.');
   const [w, h] = [Math.ceil(Number(size[1])), Math.ceil(Number(size[2]))];
@@ -59,7 +60,11 @@ export function writePng(svg: string, out: string, scale = 2) {
       ],
       { stdio: 'ignore', timeout: 60_000 },
     );
-    fs.copyFileSync(shot, path.resolve(out));
+    const png = fs.readFileSync(shot);
+    fs.writeFileSync(
+      path.resolve(out),
+      source === undefined ? png : await embedPngSource(png, source),
+    );
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }
