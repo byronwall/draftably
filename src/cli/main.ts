@@ -14,7 +14,7 @@ import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { renderSvg } from './svg';
 import { draw, FITS, qualityNotes, type Fit, type Metrics } from './variants';
-import { cliVersion } from './skill';
+import { cliVersion, staleSkills } from './skill';
 import { svgSize } from './png';
 import { linkNotes, svgHref } from './links';
 
@@ -284,6 +284,11 @@ export async function main(argv: string[]): Promise<number> {
             failed++;
           }
         }
+        // On stderr, so a script reading the results is unaffected.
+        for (const stale of staleSkills(process.cwd()))
+          console.error(
+            `note    The draftably skill in ${stale.path} differs from this version (${cliVersion()}). Update it: ${stale.fix}`,
+          );
         if (all.length > 1)
           console.log(
             `${failed ? `${failed} of ${all.length}` : `All ${all.length}`} files ${failed ? 'have errors' : 'passed'}.`,
