@@ -9,7 +9,7 @@ import { groupLinkMark } from '../../model/link';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { PositionBadge, ResizeHandles } from './parts';
+import { PIN_SIZE, PositionBadge, ResizeHandles } from './parts';
 import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../../dsl/frame';
 
 /** The rest of a field that runs on into another row: its title after an ellipsis. */
@@ -265,10 +265,12 @@ export function GroupView(props: GroupViewProps) {
           <title>{collapsed() ? 'Expand' : 'Collapse'} container</title>
         </g>
         <PositionBadge
+          id={props.id}
           pinned={!!props.rect.pinned}
           manual={!!props.rect.manual && props.doc.settings.showManual}
-          x={w() - 26}
-          y={9}
+          x={w() - 26 - 9 - PIN_SIZE}
+          y={band() - PIN_SIZE / 2}
+          color={color().ink}
         />
       </Show>
       <Show when={collapsed()}>
