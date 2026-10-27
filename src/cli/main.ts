@@ -2,7 +2,6 @@
  * Draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
-import { linkNotes } from './links';
 import fs from 'node:fs';
 import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
@@ -12,6 +11,7 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { renderSvg } from './svg';
+import { linkNotes, svgHref } from './links';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
 
@@ -115,9 +115,11 @@ export async function main(argv: string[]): Promise<number> {
       }
       case 'inspect': {
         const source = await read(file),
-          doc = projectScene(await compile(source));
-        if (await maybePng(() => renderSvg(doc), rest, embed(source))) return 0;
-        if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc), source));
+          scene = await compile(source),
+          doc = projectScene(scene),
+          opts = { href: svgHref(scene, file) };
+        if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
+        if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;
       }

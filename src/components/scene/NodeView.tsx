@@ -76,6 +76,7 @@ export function NodeView(props: NodeViewProps) {
       classList={{ selected: props.selected, focused: props.focused, editing: props.editing }}
       data-kind="node"
       data-id={props.id}
+      data-href={node().href}
       transform={`translate(${props.rect.x},${props.rect.y})`}
       opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive || props.focusable ? 0 : undefined}

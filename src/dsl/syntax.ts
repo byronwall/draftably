@@ -5,7 +5,6 @@
  * Source is kept as a list of lines so that edits can change single statements and formatting
  * keeps every comment and unrelated statement.
  */
-import { EDITORS } from '../model/link';
 import {
   BUILT_IN_FAMILIES,
   defaultAppearance,
@@ -21,6 +20,7 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
+import { EDITORS } from '../model/link';
 import type { Status } from '../model/status';
 import type {
   ColorKey,

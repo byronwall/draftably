@@ -53,6 +53,7 @@ export function GroupView(props: GroupViewProps) {
       }}
       data-kind="group"
       data-id={props.id}
+      data-href={group().href}
       transform={`translate(${props.rect.x},${props.rect.y})`}
       opacity={paint().opacity < 1 ? paint().opacity : undefined}
       tabindex={props.interactive ? 0 : undefined}

@@ -43,6 +43,24 @@ export function joinPath(base: string, path: string): string {
   return '/' + parts.join('/');
 }
 
+/** The path from folder `from` to `to`, both absolute with forward slashes. */
+export function relativePath(from: string, to: string): string {
+  const a = from.split('/').filter(Boolean),
+    b = to.split('/').filter(Boolean);
+  let i = 0;
+  while (i < a.length && i < b.length && a[i] === b[i]) i++;
+  return [...a.slice(i).map(() => '..'), ...b.slice(i)].join('/') || '.';
+}
+
+/**
+ * A link as a static SVG carries it. A URL stays as written; a file or `.draft` becomes a path
+ * from the diagram's folder (a first guess at where the SVG is saved), without its line.
+ */
+export function staticHref(href: string, base: string, folder: string): string {
+  const t = linkTarget(href);
+  return t.kind === 'url' ? href : relativePath(folder, joinPath(base, t.path));
+}
+
 /** Editors that open `<scheme>://file/<path>:<line>:<col>`. */
 export const EDITORS = ['vscode', 'vscode-insiders', 'cursor', 'windsurf', 'zed'] as const;
 export type Editor = (typeof EDITORS)[number];

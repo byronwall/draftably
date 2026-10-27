@@ -1,5 +1,4 @@
 import { LayoutLab } from '../engines/layout-engine.js';
-import { EDITORS, type FileConfig } from './link';
 import { RouteLab } from '../engines/routing-engine.js';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
@@ -15,6 +14,7 @@ import {
   type LegendEntry,
 } from './appearance';
 import { FONT_ROLES } from './fonts';
+import { EDITORS, type FileConfig } from './link';
 import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {

@@ -2,7 +2,7 @@
  * Open an object's link from the viewer: a URL in a new tab as written, a `.draft` in the viewer,
  * and a file in the editor at its line.
  */
-import { editorUrl, joinPath, linkTarget } from '../model/link';
+import { editorUrl, joinPath, linkTarget, staticHref } from '../model/link';
 import { doc } from './document';
 import { fileSession } from './file-session';
 import { fileUrl, go, workspace } from './launch';
@@ -37,6 +37,13 @@ function servedPath(file: string): string | null {
   if (!root) return null;
   const prefix = joinPath(root, '.') + '/';
   return file.startsWith(prefix) ? file.slice(prefix.length) : null;
+}
+
+/** A link as an exported SVG carries it: file paths from the diagram's folder, URLs as written. */
+export function exportHref(href: string): string {
+  const base = linkBase(),
+    session = fileSession();
+  return base && session ? staticHref(href, base, joinPath(session.path, '..')) : href;
 }
 
 export function openLink(href: string) {

@@ -5,8 +5,8 @@
  *
  * Diagram appearance is separate from the editor's light or dark mode.
  */
-import type { FileConfig } from './link';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
+import type { FileConfig } from './link';
 
 export type ThemeId = 'graphite' | 'fieldnotes' | 'signal' | 'mulberry' | 'midnight';
 export const THEME_IDS: ThemeId[] = ['graphite', 'fieldnotes', 'signal', 'mulberry', 'midnight'];

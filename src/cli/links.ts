@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Diagnostic, Scene } from '../dsl/compile';
-import { linkTarget } from '../model/link';
+import { linkTarget, staticHref } from '../model/link';
 import { gitRoot } from '../server/file-session';
 
 /** Folders a search for a misplaced link never enters. */
@@ -28,11 +28,25 @@ function filesUnder(root: string): string[] {
   return out;
 }
 
+/** Where relative links in `file` start: `config link-base=` from its folder, else its git root. */
+function linkBase(scene: Scene, file: string) {
+  const dir = path.dirname(path.resolve(file)),
+    setBase = scene.model.appearance.config?.linkBase;
+  return setBase === undefined ? gitRoot(dir) : path.resolve(dir, setBase);
+}
+
+/** File links in an SVG of `file`, as paths from its folder: right when the SVG is saved beside it. */
+export const svgHref = (scene: Scene, file: string) => {
+  const posix = (p: string) => p.split(path.sep).join('/'),
+    base = posix(linkBase(scene, file)),
+    folder = posix(path.dirname(path.resolve(file)));
+  return (href: string) => staticHref(href, base, folder);
+};
+
 export function linkNotes(scene: Scene, file: string): Diagnostic[] {
   const dir = path.dirname(path.resolve(file)),
     repo = gitRoot(dir),
-    setBase = scene.model.appearance.config?.linkBase,
-    base = setBase === undefined ? repo : path.resolve(dir, setBase),
+    base = linkBase(scene, file),
     notes: Diagnostic[] = [];
   let files: string[] | undefined;
   for (const o of scene.objects) {
