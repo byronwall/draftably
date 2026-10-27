@@ -120,6 +120,9 @@ Good defaults:
   A long chain of groups folds its longest groups, then wraps into rows, so the drawing stays
   within 5:1; `fold=never` keeps one line. A called-only group sits beside its caller.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
+- A process with roles: `layout root lanes` makes each top-level group a swim lane (bands,
+  `direction=down` for columns). Every node must sit in a lane; steps line up in rank columns
+  across all lanes.
 
 ### Refinements
 

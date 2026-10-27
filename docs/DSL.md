@@ -45,6 +45,7 @@ and groups. References may point to later lines.
 | `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors). |
 | `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                                          |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                  |
+| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                         |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
@@ -135,6 +136,33 @@ them that cover nothing else; `check` notes `soft-split` when some members canno
 A soft group has no layout or position of its own: `layout`, `order`, `near`, `align`, `nudge`,
 `stay` and `pin` on it are errors. Place its members instead; refinements between a member and
 an object beside the group work, since they share a container.
+
+## Swim lanes
+
+`layout root lanes` draws a process by who does each step. Every top-level group is a lane, and
+every node must sit in one; a node outside every group is an error on its line.
+
+```text
+group customer "Customer"
+group agents "Support agents"
+node opens "Opens a ticket" in=customer
+node triage "Triage" in=agents
+node resolved "Sees it resolved" in=customer
+edge e1 opens -> triage
+edge e2 triage -> resolved
+layout root lanes
+```
+
+Each step takes its rank from the connections of the whole drawing, so one rank is one column
+across every lane, and a step that follows another sits after it even when it is in a different
+lane. Steps of one lane in one rank stack across it. With `direction=right` (the default) lanes
+are bands stacked top to bottom, in file order or the order an `order root` line gives; with
+`direction=down` they are columns side by side and the steps run down the page. Every lane is as
+long as the drawing. `gap=` sets the least gap between ranks (56 at least).
+
+A group inside a lane follows its own `frame=`: a boxed group takes one place, and a soft group's
+members rank on their own. Position refinements inside a lane (`near`, `stay`, `nudge`, `pin`)
+do not apply yet. Lines that run back against the order take the long way round the lanes.
 
 ## Change marks
 

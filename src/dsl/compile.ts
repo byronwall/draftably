@@ -41,6 +41,12 @@ import {
 export const RENDER_CONTEXT = { width: 1100, height: 720 } as const;
 export { GROUP_HEADER, GROUP_INSET, contentOrigin };
 const MIN_GAP = 12;
+/** Swim lanes: the least gap between ranks, between objects stacked in one rank, and between lanes. */
+const LANE_RANK_GAP = 56,
+  LANE_STACK_GAP = 24,
+  LANE_GAP = 0;
+/** Depth of a lane with nothing in it. */
+const EMPTY_LANE = 56;
 /** Size of a group with nothing in it yet; groups with content fit it exactly. */
 const EMPTY_GROUP = { w: 260, h: 110 };
 
@@ -2073,6 +2079,87 @@ function layoutPass(
     return own.algorithm === 'row' ? 'right' : own.algorithm === 'column' ? 'down' : axisOf(own);
   }
 
+  /**
+   * Swim lanes: each top-level group is a band across the reading direction, and everything in a
+   * lane takes its rank from the connections of the whole drawing, so a rank is one column across
+   * every lane. In each lane, a rank's objects stack across it, centred on the lane. Lanes share
+   * one length and sit side by side; refinements inside a lane do not apply.
+   */
+  function swimLanes(list: Item[], layout: ModelLayout) {
+    const right = axisOf(layout) === 'right',
+      rankGap = Math.max(layout.gap, LANE_RANK_GAP);
+    const laneOf = new Map<string, string>();
+    for (const lane of list) for (const k of children.get(lane.id) ?? []) laneOf.set(k.id, lane.id);
+    const ids = [...laneOf.keys()],
+      size = (id: string) => drawn.get(id) ?? items.get(id)!,
+      major = (id: string) => (right ? size(id).w : size(id).h),
+      minor = (id: string) => (right ? size(id).h : size(id).w);
+    const owner = (id: string) => {
+      let o = byId.get(id);
+      while (o && !laneOf.has(o.id)) o = byId.get(o.parent);
+      return o?.id;
+    };
+    const pairs = m.edges
+      .map(e => [owner(e.source), owner(e.target)] as const)
+      .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
+    const layers = ids.length ? byBarycenter(rankLayers(ids, pairs), pairs) : [];
+    const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
+    // Rank columns, each as long as its longest object, with room for the labels between them.
+    const longest = layers.map(layer => Math.max(...layer.map(major))),
+      starts: number[] = [];
+    let at = 0;
+    for (const [i, layer] of layers.entries()) {
+      starts.push(at);
+      let after = rankGap;
+      for (const e of m.edges) {
+        const a = rank.get(owner(e.source) ?? ''),
+          b = rank.get(owner(e.target) ?? '');
+        if (e.label && a !== undefined && b !== undefined && Math.min(a, b) === i && a !== b) {
+          const r = labelRoom('', '', e.label, look);
+          after = Math.max(after, right ? r.w : r.h);
+        }
+      }
+      at += longest[i] + (layer === layers.at(-1) ? 0 : after);
+    }
+    const length = at;
+    const depth = new Map<string, number>();
+    for (const lane of list) {
+      const per = layers.map(layer => layer.filter(id => laneOf.get(id) === lane.id)),
+        stack = (stacked: string[]) =>
+          stacked.reduce((sum, id, j) => sum + minor(id) + (j ? LANE_STACK_GAP : 0), 0),
+        deep = Math.max(EMPTY_LANE, ...per.map(stack));
+      depth.set(lane.id, deep);
+      per.forEach((stacked, r) => {
+        let across = (deep - stack(stacked)) / 2;
+        for (const id of stacked) {
+          const along = starts[r] + (longest[r] - major(id)) / 2,
+            p = right ? { x: along, y: across } : { x: across, y: along };
+          local.set(id, { x: round(p.x), y: round(p.y) });
+          bases.set(id, p);
+          across += minor(id) + LANE_STACK_GAP;
+        }
+      });
+    }
+    // Every lane is as long as the drawing; each one is wide enough for its title.
+    const title = (l: Item) =>
+        Math.ceil(measureText(l.label, look.groupTitle)) + GROUP_TITLE_CHROME,
+      span = Math.max(length + 2 * GROUP_INSET, ...list.map(title));
+    let next = 0;
+    for (const lane of list) {
+      const deep = depth.get(lane.id)!;
+      lane.w = right ? span : Math.max(deep + 2 * GROUP_INSET, title(lane));
+      lane.h = header + (right ? deep : length) + GROUP_INSET;
+      const p = right ? { x: 0, y: next } : { x: next, y: 0 };
+      local.set(lane.id, p);
+      bases.set(lane.id, p);
+      next += (right ? lane.h : lane.w) + LANE_GAP;
+    }
+    const total = Math.max(0, next - LANE_GAP);
+    return right
+      ? { w: list.length ? span : 0, h: total }
+      : { w: total, h: list.length ? header + length + GROUP_INSET : 0 };
+  }
+
   function arrange(scope: string): { w: number; h: number } {
     const layout = layoutFor(m, scope),
       order = m.hints.find(h => h.type === 'order' && h.scope === scope);
@@ -2129,6 +2216,7 @@ function layoutPass(
       items.set(o.id, item);
       return item;
     });
+    if (scope === 'root' && layout.algorithm === 'lanes') return swimLanes(list, layout);
     const pairs = pairsIn(scope);
     // Every line with an end in this scope, for the room the gaps it runs through need.
     // Only a group's gaps widen: the drawing's own gaps are already as wide as a group gap. A
