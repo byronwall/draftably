@@ -8,7 +8,8 @@
  * `hintMoves` compares the drawing with the same file compiled without refinements, so `check
  * --hints` can say how far each refinement moved its target.
  */
-import { measureText, truncateText } from '../model/fonts';
+import { measureText } from '../model/fonts';
+import { groupHeaderFor, groupTitleLines } from '../model/labels';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Diagram, Point, Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from './compile';
@@ -184,7 +185,9 @@ export function findConflicts(
       'outside-group',
       [id, p!],
       `${id} sits ${Math.round(out)}px outside its group ${p}.`,
-      blame(scene, [id, p!], k => (k === id ? into(r, frame, look.groupHeader) : undefined)),
+      blame(scene, [id, p!], k =>
+        k === id ? into(r, frame, groupHeaderFor(look, scene.byId.get(p!)?.titleLines)) : undefined,
+      ),
     );
   }
 
@@ -219,14 +222,14 @@ export function findConflicts(
     for (const g of doc.graph.groups) {
       const r = rects.get(g.id);
       if (!r || tinted.has(g.id)) continue;
-      const text = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle),
+      const lines = groupTitleLines(g.title, r.w, look, g.titleLines),
         mid = r.y + look.groupHeader / 2 - 7,
         half = look.groupTitle.size / 2 + 1;
       const ink = {
         x: r.x + 12,
         y: mid - half,
-        w: 21 + measureText(text, look.groupTitle),
-        h: 2 * half,
+        w: 21 + Math.max(...lines.map(l => measureText(l, look.groupTitle))),
+        h: 2 * half + (lines.length - 1) * look.groupTitle.lineHeight,
       };
       if (!segs.some(s => inside(s, ink) > 1)) continue;
       warn(

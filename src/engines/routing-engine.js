@@ -671,7 +671,7 @@ function compute(input, rawOptions = {}) {
         // The title blocks the header band. Beside it, a line may cross the band
         // straight into the group but not run along it under the border.
         const title = Math.max(1, Math.min(g.w - 6, g.titleWidth ?? Infinity)),
-          band = { y: g.y + 2, h: 28 + s.clearance },
+          band = { y: g.y + 2, h: (g.titleHeight ?? 28) + s.clearance },
           lip = Math.max(s.clearance, s.standoff);
         obstacles.push({ id: id + ':header', x: g.x + 3, w: title, ...band });
         if (titleBands)

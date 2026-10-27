@@ -114,7 +114,9 @@ hundreds of places is one box rather than hundreds.
 ## Soft groups
 
 A boxed group pads its members, reserves a title band and takes one place in its container's
-layout, so its members move as one block. `frame=soft` keeps the group but not the box:
+layout, so its members move as one block. A title wider than the members wraps to their width
+(at least 240px for the frame), up to three lines, and the band grows a line for each; only a
+title that still needs more than three lines widens the frame. `frame=soft` keeps the group but not the box:
 
 ```text
 group monitoring "namespace: monitoring" color=amber frame=soft

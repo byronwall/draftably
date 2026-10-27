@@ -41,6 +41,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
       ...(o.frame ? { frame: o.frame } : {}),
       ...(o.hull ? { hull: o.hull } : {}),
+      ...(o.titleLines ? { titleLines: o.titleLines } : {}),
       ...(o.lifeline ? { lifeline: o.lifeline } : {}),
     };
     if (o.type === 'group') {

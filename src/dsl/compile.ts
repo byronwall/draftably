@@ -11,8 +11,15 @@
  */
 import { LayoutLab } from '../engines/layout-engine.js';
 import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../model/appearance';
-import { measureText, widestPiece } from '../model/fonts';
-import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
+import { measureText, widestPiece, wrapLines } from '../model/fonts';
+import {
+  edgeLabelSize,
+  GROUP_TITLE_LINES,
+  groupHeaderFor,
+  titleArea,
+  titleHeight,
+  wrapTitle,
+} from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
 import { defaultShapeSize } from '../model/styles';
 import type { CellsChrome, Diagram, Direction, Lane } from '../model/types';
@@ -70,6 +77,8 @@ export interface SceneObject extends ModelObject {
   lifeline?: number;
   /** Soft groups: the tint's rectangles, relative to the group's top left; the first holds the label. */
   hull?: Array<{ x: number; y: number; w: number; h: number }>;
+  /** Groups: lines the title wraps to, when more than one. */
+  titleLines?: number;
 }
 
 export interface Diagnostic {
@@ -316,7 +325,6 @@ function withSoftGroups(scene: Scene, m: Model): Scene {
   const soft = m.objects.filter(o => o.frame);
   if (!soft.length) return scene;
   const by = new Map(m.objects.map(o => [o.id, o])),
-    header = scene.look.groupHeader,
     placed = new Map<string, SceneObject>(
       scene.objects.map(o => [o.id, { ...o, parent: by.get(o.id)!.parent, soft: undefined }]),
     ),
@@ -341,7 +349,9 @@ function withSoftGroups(scene: Scene, m: Model): Scene {
   for (const g of [...soft].sort((a, b) => depthOf(b.id) - depthOf(a.id))) {
     const members = [...placed.values()].filter(o => within(o.id, g.id)),
       frame = placed.get(layoutParent(by, g.id)),
-      origin = frame ? contentOrigin(frame, header) : { x: 0, y: 0 },
+      origin = frame
+        ? contentOrigin(frame, groupHeaderFor(scene.look, frame.titleLines))
+        : { x: 0, y: 0 },
       others = [...placed.values()].filter(
         o => !o.frame && !within(o.id, g.id) && !within(g.id, o.id),
       );
@@ -594,6 +604,24 @@ function renamed(doc: Diagram, alias: Map<string, string>): Diagram {
     collapsed: doc.collapsed.map(id),
     settings: { ...doc.settings, rootId: doc.settings.rootId && id(doc.settings.rootId) },
   };
+}
+
+/** Narrowest frame a wrapped group title sets; a narrower group's title wraps to this width. */
+const GROUP_TITLE_WIDTH = 240;
+
+/**
+ * Width a group's title asks of a frame whose content needs `inner`, and its line count. A title
+ * that fits on one line beside the content keeps one line; a longer one wraps to the content
+ * width (at least `GROUP_TITLE_WIDTH`), and the frame widens only as far as it takes to keep the
+ * title to `GROUP_TITLE_LINES` lines. The header grows a line for each extra line instead.
+ */
+function titleFit(title: string, inner: number, look: ResolvedAppearance) {
+  const full = Math.ceil(measureText(title, look.groupTitle)) + GROUP_TITLE_CHROME;
+  let w = Math.max(inner, GROUP_TITLE_WIDTH);
+  if (full <= w) return { w: full, lines: 1 };
+  const lines = () => wrapLines(title, w - GROUP_TITLE_CHROME, look.groupTitle).length;
+  while (lines() > GROUP_TITLE_LINES && w < full) w += 8;
+  return { w: Math.min(w, full), lines: Math.min(lines(), GROUP_TITLE_LINES) };
 }
 
 /** Solver budget for engine recipes; the same budget Compare and the timeline use. */
@@ -2083,6 +2111,8 @@ function layoutPass(
   }
   const look = resolveAppearance(m.appearance),
     header = look.groupHeader,
+    /** Groups whose title wraps, and to how many lines. */
+    titleLines = new Map<string, number>(),
     ref =
       look.theme === DEFAULT_THEME
         ? look
@@ -2323,19 +2353,25 @@ function layoutPass(
                 w: Math.max(sub.w, own.minWidth),
                 h: Math.max(sub.h + band, own.minHeight),
               }
-            : {
-                w: Math.max(
-                  empty ? EMPTY_GROUP.w : 0,
-                  sub.w + GROUP_INSET + (channels?.get(o.id)?.right ?? GROUP_INSET),
-                  Math.ceil(measureText(o.label, look.groupTitle)) + GROUP_TITLE_CHROME,
-                  own.minWidth,
-                ),
-                h: Math.max(
-                  empty ? EMPTY_GROUP.h : 0,
-                  sub.h + header + (channels?.get(o.id)?.bottom ?? GROUP_INSET),
-                  own.minHeight,
-                ),
-              };
+            : (() => {
+                const inner = Math.max(
+                    empty ? EMPTY_GROUP.w : 0,
+                    sub.w + GROUP_INSET + (channels?.get(o.id)?.right ?? GROUP_INSET),
+                    own.minWidth,
+                  ),
+                  title = titleFit(o.label, inner, look);
+                if (title.lines > 1) titleLines.set(o.id, title.lines);
+                return {
+                  w: Math.max(inner, title.w),
+                  h: Math.max(
+                    empty ? EMPTY_GROUP.h : 0,
+                    sub.h +
+                      groupHeaderFor(look, title.lines) +
+                      (channels?.get(o.id)?.bottom ?? GROUP_INSET),
+                    own.minHeight,
+                  ),
+                };
+              })();
       } else {
         const hint = m.hints.find(h => h.type === 'size' && h.id === o.id);
         const leaf = leafSize(o, hint?.type === 'size' ? hint : undefined, look);
@@ -2771,6 +2807,7 @@ function layoutPass(
         baseX: round(b.x),
         baseY: round(b.y),
         depth,
+        ...(titleLines.has(o.id) ? { titleLines: titleLines.get(o.id) } : {}),
       };
       objects.push(box);
       if (o.type === 'group')
@@ -2778,7 +2815,7 @@ function layoutPass(
           o.id,
           cellBands.has(o.id)
             ? { x: box.x, y: box.y + cellBands.get(o.id)! }
-            : contentOrigin(box, header),
+            : contentOrigin(box, groupHeaderFor(look, box.titleLines)),
           depth + 1,
         );
     }

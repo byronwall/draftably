@@ -9,6 +9,7 @@ import { RouteLab } from '../engines/routing-engine.js';
 import type { Diagram, LayoutSettings, Rect, RoutingSettings } from '../model/types';
 import { layoutView, type Scene, type SceneObject } from './compile';
 import { contentOrigin, GROUP_INSET } from './frame';
+import { groupHeaderFor } from '../model/labels';
 import {
   addRefinement,
   clearPosition,
@@ -195,7 +196,7 @@ export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram
   for (const o of scene.objects) children.set(o.parent, [...(children.get(o.parent) ?? []), o]);
   const pinned = new Set(scene.model.hints.flatMap(h => (h.type === 'pin' ? [h.id] : [])));
   const fitted = new Map<string, Rect>(),
-    header = scene.look.groupHeader;
+    header = (o: SceneObject) => groupHeaderFor(scene.look, o.titleLines);
   const fit = (o: SceneObject): Rect => {
     const known = fitted.get(o.id);
     if (known) return known;
@@ -209,9 +210,9 @@ export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram
             y1 = Math.max(...kids.map(k => k.y + k.h));
           return {
             x: x0 - GROUP_INSET,
-            y: y0 - header,
+            y: y0 - header(o),
             w: x1 - x0 + 2 * GROUP_INSET,
-            h: y1 - y0 + header + GROUP_INSET,
+            h: y1 - y0 + header(o) + GROUP_INSET,
           };
         })()
       : { x: r.x, y: r.y, w: o.w, h: o.h };
@@ -224,7 +225,10 @@ export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram
   for (const o of scene.objects) {
     if (pinned.has(o.id)) continue;
     const r = fitted.get(o.id)!,
-      origin = o.parent === 'root' ? { x: 0, y: 0 } : contentOrigin(fitted.get(o.parent)!, header);
+      origin =
+        o.parent === 'root'
+          ? { x: 0, y: 0 }
+          : contentOrigin(fitted.get(o.parent)!, header(scene.byId.get(o.parent)!));
     const x = Math.round(r.x - origin.x),
       y = Math.round(r.y - origin.y);
     if (Math.abs(x - o.localX) < 1 && Math.abs(y - o.localY) < 1) continue;
