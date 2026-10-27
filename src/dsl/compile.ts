@@ -511,7 +511,10 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
   // names; only the file steers layout.
   const alias = new Map(authoredOrder(m).map((id, i) => [id, `o${String(i).padStart(6, '0')}`])),
     original = new Map([...alias].map(([id, a]) => [a, id]));
+  const loose = new Set(m.edges.filter(e => e.constraint === false).map(e => e.id));
   let doc = renamed(projectScene(plain), alias);
+  // `constraint=false` edges are drawn, but the engines neither rank nor pull by them.
+  doc = { ...doc, graph: { ...doc.graph, edges: doc.graph.edges.filter(e => !loose.has(e.id)) } };
   for (const l of engines) {
     const settings = LayoutLab.settings({
       ...doc.settings,
@@ -2075,6 +2078,8 @@ function layoutPass(
   channels?: Map<string, Channel>,
   packFold?: PackFold,
 ): Scene {
+  /** Edges that rank and order objects: all but `constraint=false`, which are only drawn. */
+  const ranking = m.edges.filter(e => e.constraint !== false);
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -2110,7 +2115,7 @@ function layoutPass(
   // A decision: a diamond, or any node whose branches are labelled, with two or more ways out.
   const decisionsIn = (scope: string) => {
     const outs = new Map<string, ModelEdge[]>();
-    for (const e of m.edges) {
+    for (const e of ranking) {
       const a = immediate(e.source, scope);
       if (a && immediate(e.target, scope) !== a) outs.set(a, [...(outs.get(a) ?? []), e]);
     }
@@ -2127,7 +2132,7 @@ function layoutPass(
 
   // Scopes an engine arranges that hold groups, and every group inside one, are packed tight.
   const pairsIn = (scope: string) =>
-    m.edges
+    ranking
       .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
   /**
@@ -2144,7 +2149,7 @@ function layoutPass(
       rank = new Map(
         rankLayers(
           inner,
-          m.edges.filter(e => within(e.source) && within(e.target)).map(e => [e.source, e.target]),
+          ranking.filter(e => within(e.source) && within(e.target)).map(e => [e.source, e.target]),
         ).flatMap((layer, i) => layer.map(id => [id, i] as const)),
       );
     const entry = new Map(ids.map(id => [id, Infinity]));
@@ -2235,7 +2240,7 @@ function layoutPass(
       while (o && !laneOf.has(o.id)) o = byId.get(o.parent);
       return o?.id;
     };
-    const pairs = m.edges
+    const pairs = ranking
       .map(e => [owner(e.source), owner(e.target)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
     const layers = ids.length ? byBarycenter(rankLayers(ids, pairs), pairs) : [];
