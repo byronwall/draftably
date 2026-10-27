@@ -48,10 +48,7 @@ export function linkNotes(scene: Scene, file: string): Diagnostic[] {
       const tail = t.path.replace(/^(\.\.?\/)+/, ''),
         hits = files.filter(f => f === tail || f.endsWith('/' + tail));
       if (hits.length === 1)
-        guess = path
-          .relative(base, path.join(repo, hits[0]))
-          .split(path.sep)
-          .join('/');
+        guess = path.relative(base, path.join(repo, hits[0])).split(path.sep).join('/');
     }
     const line = t.line ? `:${t.line}${t.col ? `:${t.col}` : ''}` : '';
     notes.push({
