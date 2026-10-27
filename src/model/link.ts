@@ -33,6 +33,19 @@ export function linkTarget(href: string): LinkTarget {
   };
 }
 
+/**
+ * A relative `href` against a URL `link-base` (`https://host/org/repo/blob/<sha>/`), as the URL
+ * it opens; null when the base is a folder or unset, or `href` is already a URL.
+ */
+export function baseUrl(href: string, base: string | undefined): string | null {
+  if (!base || !SCHEME.test(base) || linkTarget(href).kind === 'url') return null;
+  try {
+    return new URL(href.replace(/^\/+/, ''), base.endsWith('/') ? base : base + '/').href;
+  } catch {
+    return null;
+  }
+}
+
 /** Join and normalize forward-slash paths; an absolute `path` ignores `base`. */
 export function joinPath(base: string, path: string): string {
   const parts: string[] = [];
@@ -67,7 +80,10 @@ export type Editor = (typeof EDITORS)[number];
 
 /** File settings from `config` statements. */
 export interface FileConfig {
-  /** Where relative links start, relative to the diagram's folder; its git root when unset. */
+  /**
+   * Where relative links start: a folder relative to the diagram's (its git root when unset), or
+   * a URL that relative links are joined to.
+   */
   linkBase?: string;
   /** The editor file links open in; VS Code when unset. */
   editor?: Editor;
