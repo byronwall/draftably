@@ -1,6 +1,8 @@
 diagram "How a request is built" version=1
 subtitle "Everything before the cache point is read from the prompt cache."
 
+# A sequence: the request is one group of touching cells, and a marker shows the cache point.
+
 node client "Agent loop" color=blue
 group req "Request" color=slate
 layout req cells

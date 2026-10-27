@@ -14,8 +14,10 @@ const read = (name: string) => readFileSync(path.join(examples, name), 'utf8');
 
 /** Space between each group's frame and the bounding box of its children. */
 function paddings(scene: Scene) {
+  // A `cells` group has no inset: its cells fill it edge to edge.
+  const cells = new Set(scene.model.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope));
   return scene.objects
-    .filter(o => o.type === 'group')
+    .filter(o => o.type === 'group' && !cells.has(o.id))
     .flatMap(g => {
       const kids = scene.objects.filter(o => o.parent === g.id);
       if (!kids.length) return [];
