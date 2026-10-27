@@ -48,6 +48,10 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    you can open or convert to an image; `--png diagram.png --max-width 2000` saves a PNG sized
    for viewing and prints its pixel size. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.
+   **Review before handing over:** `npx draftably check diagram.draft --metrics --fit slide`
+   (or the shape the drawing is for) prints size, aspect, crossings and bends, and warns on
+   crossings, detours, stranded nodes and an aspect far from the target. Fix what it names, or run
+   `vary --fit slide`, and compare the metrics line before and after.
 6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
    file, and edits to the file show in the viewer at once. Run it in the background; it does not
