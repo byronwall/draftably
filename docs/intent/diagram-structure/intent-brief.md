@@ -49,7 +49,8 @@ ones, because they fix positions on a grid instead of leaving placement to a gen
 
 ## What seems settled
 
-- Soft grouping and swim lanes are worth building; sequence follows if lanes prove the approach.
+- Soft grouping is `frame=soft` on a group, drawn as a tint with a small label.
+- Swim lanes come first, then sequence diagrams with messages only.
 - Nothing new ships as the default: `frame=box` and today's layouts stay.
 
 ## Not in scope now

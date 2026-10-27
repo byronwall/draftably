@@ -8,7 +8,7 @@
     "last_updated": "2026-10-26",
     "summary": "Let groups say 'belongs together' without driving layout (frame=soft), add a lanes layout over root groups, and hold sequence diagrams for a later yes.",
     "status": "planned",
-    "next_action": "Byron answers the product questions; then M1 (soft groups) after the #125 fix lands."
+    "next_action": "Build m1 (soft groups) after the #125 fix lands."
   },
   "artifacts": {
     "intent_brief": {
@@ -93,6 +93,13 @@
       "location": "Mermaid, PlantUML and BPMN 2.0 public docs (agent knowledge, not re-fetched)",
       "anchor": "sequenceDiagram; activity |Lane|; pools and lanes",
       "authority": "inferred"
+    },
+    {
+      "id": "qa-1",
+      "type": "qa",
+      "location": "conversation 2026-10-26",
+      "anchor": "rounds 1-3",
+      "authority": "user"
     }
   ],
   "intent": {
@@ -131,6 +138,27 @@
         "kind": "idea",
         "sources": ["S3"],
         "confidence": "medium"
+      },
+      {
+        "id": "C6",
+        "statement": "Soft grouping is frame=soft on group, drawn as a tint with a small label; box stays default and the skill keeps writing boxes.",
+        "kind": "decision",
+        "sources": ["qa-1"],
+        "confidence": "high"
+      },
+      {
+        "id": "C7",
+        "statement": "Lanes first (horizontal bands, direction=down for columns, strays are a check error, nested groups follow own frame), then sequence with messages only.",
+        "kind": "decision",
+        "sources": ["qa-1"],
+        "confidence": "high"
+      },
+      {
+        "id": "C8",
+        "statement": "vary softens leaf and multi-rank groups; dragging a soft group tint moves members and writes a stay per member.",
+        "kind": "decision",
+        "sources": ["qa-1"],
+        "confidence": "high"
       }
     ],
     "themes": ["soft grouping", "opinionated diagram forms"],
@@ -145,7 +173,7 @@
   },
   "shape": {
     "status": "current",
-    "appetite": "Four to five PRs for soft groups and lanes; sequence is a separate decision.",
+    "appetite": "Six PRs: soft groups, cohesion, viewer drag, lanes, sequence, vary variant.",
     "problem": "A group is the only way to relate nodes, and it pads, adds a header and ranks as one block.",
     "recommended_shape": "frame=box|soft|none on group; soft members use their nearest framed ancestor as layout parent and draw on a tint; then layout root lanes over root groups with global ranks.",
     "options_scored": {
@@ -179,10 +207,7 @@
       "Viewer drag and collapse for soft groups.",
       "Sequence fragments and activations."
     ],
-    "open_decisions": [
-      "Tint look: tint plus label, dotted outline, or nothing.",
-      "Whether the agent skill should prefer soft groups for new files."
-    ]
+    "open_decisions": []
   },
   "implementation": {
     "status": "planned",
@@ -226,59 +251,62 @@
       {
         "id": "m1",
         "title": "Soft groups draw a tint and stop driving layout",
-        "status": "planned",
-        "done_when": "#125 repro with frame=soft matches no-group ranks; frame=box files byte-identical; proof table in PR.",
         "outcome": "Soft groups stop ranking as one block and draw as a tint.",
         "dependencies_introduced": [],
         "proof": "#125 repro ranks match the no-group file; area/overlap table over 16 examples.",
         "valid_intermediate_state": "frame=box files draw byte-identical; soft is opt-in.",
-        "rollback": "Revert the PR; no file uses frame= yet."
+        "rollback": "Revert the PR; no file uses frame= yet.",
+        "status": "planned"
       },
       {
         "id": "m2",
         "title": "Soft members stay together",
-        "status": "planned",
-        "done_when": "No soft-overlap on bundled examples with all groups soft.",
         "outcome": "Soft members stay contiguous and the tint covers only members.",
         "dependencies_introduced": [],
-        "proof": "soft-overlap count is zero on bundled examples with all groups soft.",
+        "proof": "soft-overlap is zero on bundled examples with all groups soft.",
         "valid_intermediate_state": "M1 behavior plus cohesion; box files unchanged.",
-        "rollback": "Revert; M1 tint still works with overlap notes."
+        "rollback": "Revert; M1 tint still works with overlap notes.",
+        "status": "planned"
       },
       {
         "id": "m3",
+        "title": "Soft groups in the viewer",
+        "outcome": "Click a tint to select a soft group; drag it to move members, writing a stay per member.",
+        "dependencies_introduced": [],
+        "proof": "Dragging the monitoring tint writes two stay lines; undo restores.",
+        "valid_intermediate_state": "Compiler behavior unchanged; only viewer edits added.",
+        "rollback": "Revert; soft groups still draw and select as plain groups.",
+        "status": "planned"
+      },
+      {
+        "id": "m4",
         "title": "Swim lanes",
-        "status": "planned",
-        "done_when": "Example lanes file places every node at its global rank in its own band.",
         "outcome": "A process with roles draws as swim lanes at global ranks.",
         "dependencies_introduced": [],
         "proof": "Lanes example screenshot; rank-column test.",
         "valid_intermediate_state": "New recipe only; other layouts unchanged.",
-        "rollback": "Revert; files without lanes are unaffected."
-      },
-      {
-        "id": "m4",
-        "title": "Fewer containers in vary",
-        "status": "planned",
-        "done_when": "vary lists a softened variant for kubernetes-cluster with smaller area and no overlap.",
-        "outcome": "vary offers a fewer-containers variant.",
-        "dependencies_introduced": ["D2"],
-        "proof": "vary on kubernetes-cluster lists a smaller softened variant.",
-        "valid_intermediate_state": "vary works with or without the variant.",
-        "rollback": "Drop the variant from the list.",
-        "note": "Blocked until #124 adds vary."
+        "rollback": "Revert; files without lanes are unaffected.",
+        "status": "planned"
       },
       {
         "id": "m5",
         "title": "Sequence diagrams, messages only",
-        "status": "planned",
-        "done_when": "Six-message login sequence draws in file order with lifelines; +edge shows in place.",
         "outcome": "Interactions draw as sequence diagrams with messages in file order.",
         "dependencies_introduced": [],
         "proof": "Six-message login sequence screenshot; +edge shows in place.",
         "valid_intermediate_state": "New recipe only; other layouts unchanged.",
         "rollback": "Revert; files without sequence are unaffected.",
-        "note": "Needs Byron yes before work starts."
+        "status": "planned"
+      },
+      {
+        "id": "m6",
+        "title": "Fewer containers in vary",
+        "outcome": "vary offers a variant that softens leaf and multi-rank groups.",
+        "dependencies_introduced": ["D2"],
+        "proof": "vary on kubernetes-cluster lists a smaller softened variant.",
+        "valid_intermediate_state": "vary works with or without the variant.",
+        "rollback": "Drop the variant from the list.",
+        "status": "planned"
       }
     ],
     "cut_line": [
@@ -288,13 +316,18 @@
       "sequence fragments, activations, notes",
       "other Mermaid types"
     ],
-    "open_decisions": ["Whether m3 reuses the #125 fix's global ranking."]
+    "open_decisions": ["Whether m4 reuses the #125 fix global ranking."]
   },
   "history": [
     {
       "date": "2026-10-26",
       "event": "Initiative created from voice memo; intent, shape and plan written in one planning run.",
       "evidence": "S1-S8"
+    },
+    {
+      "date": "2026-10-26",
+      "event": "Three question rounds answered; shape and plan updated (viewer drag milestone added, sequence approved after lanes).",
+      "evidence": "qa-1"
     }
   ],
   "closure": null

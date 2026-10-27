@@ -12,9 +12,9 @@ last_updated: '2026-10-26'
 
 Ship soft groups first, in the compiler, with the simplest drawing. They answer the main
 question, whether a group can stop driving layout and still read as a group, in one PR. Then
-add cohesion only if the first proof shows scatter. Lanes come next: they reuse the same
-"members rank on their own" rule, applied across the whole drawing. The `vary` variant waits for
-#124. Sequence diagrams wait for a separate yes.
+add cohesion only if the first proof shows scatter, and the viewer drag. Lanes come next: they
+reuse the same "members rank on their own" rule, applied across the whole drawing. Sequence
+diagrams (messages only) follow lanes. The `vary` variant lands whenever #124 has a command.
 
 Each milestone is one PR, with a changeset, a `docs/DSL.md` edit and a matching
 `skills/draftably/SKILL.md` edit (the skill check fails otherwise).
@@ -41,9 +41,9 @@ Each milestone is one PR, with a changeset, a `docs/DSL.md` edit and a matching
 ## Coordination
 
 The #125 fix and the `fold-small` work both change ranking and packing in `src/dsl/compile.ts`
-(`rankLayers`, `packed`, `layoutPass`). M1 and M3 change the same function. Land the #125 fix
+(`rankLayers`, `packed`, `layoutPass`). M1 and M4 change the same function. Land the #125 fix
 first and build M1 on top of it. If the #125 fix ranks group members globally under `layered`,
-M3 reuses that code instead of writing its own. No open PR touches these files today.
+M4 reuses that code instead of writing its own. No open PR touches these files today.
 
 ## Milestone 1: Soft groups draw a tint and stop driving layout
 
@@ -79,12 +79,29 @@ Only if M1's proof shows overlaps in more than a few files.
 Done when: `soft-overlap` fires on no bundled example with every group soft, and the
 Kubernetes example keeps monitoring beside its scrape target.
 
-## Milestone 3: Swim lanes
+## Milestone 3: Soft groups in the viewer
 
-- `src/dsl/syntax.ts`: `lanes` as a `layout root` algorithm; `direction=right|down`.
+- `src/components/scene/GroupView.tsx`: a soft group is hit-tested on its tint; click selects it
+  and the Inspector shows it as a group.
+- Drag on the tint moves every member by the same offset. On release, write a soft `stay` for
+  each member and anchor the objects around them, through the same path Tidy uses
+  (`src/dsl/layout-edits.ts`).
+- Test in `tests/layout-edits.test.ts`: a tint drag writes one `stay` per member and nothing
+  else.
+
+### Desired end state
+
+Done when: dragging the monitoring tint in the Kubernetes example (with `frame=soft`) moves
+prometheus and grafana together, the file gains two `stay` lines, and undo restores it.
+
+## Milestone 4: Swim lanes
+
+- `src/dsl/syntax.ts`: `lanes` as a `layout root` algorithm. `direction=right` (the default)
+  stacks horizontal bands; `direction=down` sets the lanes side by side as columns.
 - `src/dsl/compile.ts`: rank every leaf across all lanes with `rankLayers`; place each leaf in
   its lane's band at its rank column; stretch every lane to the full length; a lane title strip
-  at the start of each band. Nested groups in a lane rank as one block.
+  at the start of each band. A nested group follows its own `frame=`: a box ranks as one block,
+  a soft group's members rank freely.
 - `check` errors: `lanes` outside root; a node outside every lane.
 - `examples/support-lanes.draft` (from `support-triage.draft`, with roles as lanes).
 - Tests: one lane test for rank columns and band order.
@@ -95,19 +112,7 @@ Done when: every node in the example sits at its global rank column inside its o
 forward edges run straight; return edges use the existing return lanes; `pnpm shoot` image
 attached to the PR.
 
-## Milestone 4: Fewer containers in `vary`
-
-Starts when #124 has a `vary` command.
-
-- Add one variant: soften leaf groups and groups whose members span more than one rank; never
-  the group that holds most of the drawing. Rank it by area and `soft-overlap` like the others.
-
-### Desired end state
-
-Done when: `vary` on `kubernetes-cluster.draft` lists the variant with fewer frames, a
-smaller area, and no `soft-overlap`, and `--apply` changes only `group` lines.
-
-## Milestone 5: Sequence diagrams, messages only (needs a yes)
+## Milestone 5: Sequence diagrams, messages only
 
 - `layout root sequence`: root nodes are participants in file order; each edge is a message, in
   file order, on its own row; `kind=async` draws dashed; a self-message draws a short loop.
@@ -121,6 +126,18 @@ Done when: a login sequence with six messages, one reply and one self-message dr
 participants across the top and messages in file order, and a `+edge` mark shows the new
 message in place.
 
+## Milestone 6: Fewer containers in `vary`
+
+Starts when #124 has a `vary` command.
+
+- Add one variant: soften leaf groups and groups whose members span more than one rank; never
+  the group that holds most of the drawing. Rank it by area and `soft-overlap` like the others.
+
+### Desired end state
+
+Done when: `vary` on `kubernetes-cluster.draft` lists the variant with fewer frames, a
+smaller area, and no `soft-overlap`, and `--apply` changes only `group` lines.
+
 ## Proof script for M1
 
 The planning run measured root bounding boxes from `pnpm draftably inspect` for each grouped
@@ -130,13 +147,10 @@ in place of removal, and add the count of `soft-overlap` notes.
 ## Below the cut line
 
 - `together a b c` as a separate statement.
-- Viewer editing for soft groups and lanes: drag a node across lanes to rewrite `in=`, drag a
-  tint to move members, collapse a soft group.
-- Nested groups that rank freely inside a lane.
+- Viewer editing for lanes: drag a node across lanes to rewrite `in=`; collapse a soft group.
 - Sequence fragments (`loop`, `alt`, `par`), activations, notes, create and destroy.
 - Any other Mermaid diagram type.
 
 ## Open decisions
 
-- Tint look and default (questions for Byron in the report).
-- Whether M3 reuses the #125 fix's global ranking, decided when that PR lands.
+- Whether M4 reuses the #125 fix's global ranking, decided when that PR lands.
