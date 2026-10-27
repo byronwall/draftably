@@ -11,67 +11,71 @@ last_updated: '2026-10-26'
 **Outcome:** Linked objects look and act like links, and one file can draw itself in named emphasis
 states without moving anything.
 
-**Primary flow:** Agent writes `href=` and `state` lines → `inspect --svg --state` or `--states` →
-reader opens links and steps through states in the viewer.
+**Primary flow:** Agent writes `href=` and `state` lines → reader opens links and steps through
+states in the viewer → `inspect --svg --state` or `--states` for static output.
 
 ## Feature scope
 
 ```text
 Links and emphasis
 ├── PLANNED ADDITIONS
-│   ├── Links that look like links
-│   │   ├── Small link mark at the node's top-right corner, in the node's ink
-│   │   ├── CLI SVG: <a>, per-object <title> with the target, CSS hover, data-id
-│   │   ├── Browser SVG export keeps the <a> (it drops it today)
-│   │   └── Viewer: open chip on hover and selection; Inspector "Open link"
-│   ├── Emphasis states in the file
-│   │   ├── state id "label" id id id …  (listed objects are the focus)
-│   │   ├── Focus: own colors, 2px border; edge between two focused nodes is focused too
-│   │   ├── Rest: faded and neutral, like a `.` context line
-│   │   └── `check` errors on unknown IDs and duplicate state IDs
-│   ├── CLI output
-│   │   ├── inspect --svg --state id    one state
-│   │   └── inspect --svg --states      one aligned panel per state (and --png)
-│   └── Viewer
-│       ├── State switcher chips over the canvas; [ and ] step in file order
-│       ├── ?state=id in the URL; the state is view state, never written to the file
-│       └── Grid view: read-only small multiples of every state
+│   ├── Links in the viewer (first)
+│   │   ├── ↗ mark at the node's top-right, in the node's ink; title icon stays left
+│   │   ├── Open chip on hover and selection; Inspector "Open link"
+│   │   ├── URL or GitHub link → browser tab, as written
+│   │   ├── .draft → open in the viewer
+│   │   └── File path → editor, from the git root; path:42 and path:42:5 open at the line
+│   ├── File settings and agent help
+│   │   ├── config link-base=".." editor=cursor  (one line or several; last duplicate wins, warned)
+│   │   ├── check warns on a missing file and suggests a likely path; the link stays as written
+│   │   └── Skill: when to add href, root-relative paths, path:line
+│   ├── Links in static SVG (decent first guess)
+│   │   ├── Same mark; <a>, <title> with the target, CSS hover, data-id
+│   │   └── Browser SVG export keeps <a> (it drops it today)
+│   ├── Emphasis states
+│   │   ├── state id "label" ids…  (listed objects are the focus; repeat the line to append)
+│   │   ├── Focus: own colors, 2px border; an edge between two focused nodes is focused
+│   │   ├── Rest fades like a `.` context line; rest=plain keeps it readable
+│   │   └── check errors on unknown IDs
+│   ├── CLI: inspect --svg --state id; --states draws one aligned panel per state
+│   └── Viewer: state chips top-center (All · states · Grid); [ and ] step in file order
 └── LATER POSSIBILITIES
-    ├── Add or remove the selection from a state in the viewer
-    ├── Overlays (several states in one drawing) and multi-file boards
-    └── Tags, per-state captions, walkthrough playback
+    ├── Multi-file sheets or boards; overlays
+    └── Editing states in the viewer; captions; playback
 ```
 
 ## Behavior
 
-| Situation                                | Expected result                                                                |
-| ---------------------------------------- | ------------------------------------------------------------------------------ |
-| A state lists a group                    | The group and all its members are in focus.                                    |
-| A focused node sits in an unlisted group | The group frame stays plain, not faded, so the context reads.                  |
-| A state lists an edge ID                 | That edge is in focus even when its ends are not.                              |
-| A file has change marks and states       | Hue still means change; the state only adds fade and border weight.            |
-| `--states` on a file with `compare`      | Error for now: one panel axis at a time.                                       |
-| Viewer edit while a state is active      | Edits work on every object; dimmed objects stay selectable.                    |
-| `href` is a URL / a `.draft` / a path    | New tab / open in the viewer / open in the editor (see the questions).         |
-| Static SVG opened from disk              | A relative `href` resolves next to the SVG file, so repo docs link to sources. |
+| Situation                                | Expected result                                                         |
+| ---------------------------------------- | ----------------------------------------------------------------------- |
+| A relative href                          | Resolve from the git root of the `.draft`; outside a repo, its folder.  |
+| `config link-base=".."`                  | Resolve from that folder, relative to the `.draft`.                     |
+| The file is missing at the base          | `check` warns with its line and suggests a unique match. No silent fix. |
+| An href is a URL                         | Open it as written. Never rewrite an agent's URL.                       |
+| A state lists a group                    | The group and all its members are in focus.                             |
+| A focused node sits in an unlisted group | The frame stays plain, so the context reads.                            |
+| A file has change marks and states       | Hue still means change; the state adds fade and border weight only.     |
+| A file has states, no flag               | `inspect --svg` draws the plain diagram.                                |
+| `--states` on a file with `compare`      | Error for now: one panel axis at a time.                                |
+| Viewer edit while a state is active      | Edits work on every object; dimmed objects stay selectable.             |
 
 ## Examples
 
 Proposed syntax; spelling is settled while extending the parser:
 
 ```text
-node api "API gateway" href="src/api/routes.ts"
+config editor=cursor
+node api "API gateway" href="src/api/routes.ts:42"
 node orders "Orders" href="src/orders/service.ts"
+node docs "Runbook" href="https://github.com/org/repo/blob/main/RUNBOOK.md#L10"
 node db "Postgres"
 node cache "Redis"
 edge persist orders -> db "persist"
 
 state write "Write path" api orders db
 state read "Read path" api cache
+state hot "Hot path" api orders rest=plain
 ```
-
-`inspect --svg --state write` fades `cache`. `inspect --svg --states` draws two labelled panels,
-"Write path" and "Read path", at the same positions.
 
 ## DSL shape: consider and contrast
 
@@ -85,36 +89,30 @@ Decision: how an agent declares which objects each state emphasizes.
 | D. CLI flag only (`--focus a,b`)            |                  10 |                 2 |               6 |                 3 |
 | E. Mark characters (`*node api`), one state |                   8 |                 9 |              10 |                 9 |
 
-- **Lines per new state:** A adds one line; B and C touch every member line.
-- **Reads at a glance:** A shows a whole state on one line; C spreads it through the file.
-- **Fits diff layer:** E reuses the parser's mark slot exactly but allows only one state.
-- **Survives ID edits:** A and D break on a rename; `check` catches A, nothing catches D.
-
-**Choice:** A, with E's rule that rendering is a paint layer like the marks. **Why:** one line per
-state keeps agent edits local and reviewable, and lists of IDs already exist (`order`, `align`).
-**Watch:** long states. Repeating `state write ids…` with the same ID appends.
+**Choice:** A, painted like E's marks. One line per state keeps agent edits local, and the parser
+already reads ID lists (`order`, `align`). B and C touch every member line; D is not saved; E allows
+one state only.
 
 ## Decisions and boundaries
 
-**Appetite:** Four or five small PRs. No new renderer, no layout change, no walkthrough.
+**Appetite:** Six small PRs. No new renderer, no layout change, no walkthrough.
 
 **Key decision:** One treatment layer. `status.ts` grows from "change status" to "how an object is
-painted": diff status, focus and dim. `drawnSwatch`, `statusPaint` and `edgeInk` read it, so the
-canvas, the CLI SVG and the legend change together.
+painted": diff status, focus and dim. The canvas, the CLI SVG and the legend change together.
 
-**Key decision:** Multi-state output generalizes the `compare` panel code in `src/cli/svg.ts` from
-two panels to N, laid out in a grid toward `aspect`. A state never changes geometry, so every panel
-shares one set of routes, which is simpler than `compare`.
+**Key decision:** Viewer links get the careful path resolution. Static SVG takes a first guess:
+hrefs relative to the `.draft`'s folder, which is right when the SVG sits beside it.
 
-**Boundary:** The viewer keeps one editable canvas. Grid view is read-only, like comparison
-candidates.
+**Key decision:** `--states` generalizes the `compare` panel code from two panels to N. States
+share geometry, so all panels share one routing pass.
 
-**First proof:** One state drawn from the CLI, before any viewer work.
+**First proof:** Open a root-relative `path:line` link from a `.draft` in a subfolder of this repo.
 
-**Try:** `inspect --svg --state write` on `examples/emphasis.draft`, with and without change marks.
+**Try:** `pnpm draftably open docs/intent/diagram-emphasis/links.draft` and click each link kind.
 
-**Observe:** `canonicalGeometry` equals the plain drawing; only focused objects keep hue.
+**Observe:** The editor opens at the line; URLs and `.draft` links open as written.
 
-**Decide:** If dim reads as "removed" next to a diff, lighten it before building `--states`.
+**Decide:** If the git-root guess is wrong for real nested diagrams, make `config link-base` more
+prominent in the skill before adding SVG rewriting.
 
 See the [implementation plan](implementation-plan.md).

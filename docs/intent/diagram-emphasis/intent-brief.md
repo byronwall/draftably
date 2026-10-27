@@ -57,9 +57,20 @@ covers many states of one file. A multi-file board stays a later question.
 
 ## What seems settled
 
-`href=` already parses, projects and draws as `<a>` in the CLI SVG. The diff look (`status.ts`)
-already holds the paint an emphasis layer needs. Comparison panels already draw several aligned
-versions of one drawing from shared routes.
+Byron answered four question rounds on 26 October.
+
+- Respect the agent's link. URLs and GitHub links open as written; `.draft` opens in the viewer;
+  file paths open in the editor (VS Code by default, `path:42` at the line).
+- Relative paths start at the git root of the `.draft`. A bad base hurts a lot, so a clearly named
+  `config link-base=` setting overrides it; `config editor=` picks the editor.
+- `check` warns on a missing file and suggests a likely path. The link stays as written.
+- The viewer gets careful links first. Static SVG takes a decent first guess.
+- A link shows a corner ↗ mark.
+- A state fades what it does not list, with the `.` context look. `rest=plain` keeps the rest
+  readable for a soft highlight.
+- States step in file order. No captions or playback.
+- `inspect --svg` draws the plain diagram; `--states` draws only the states.
+- Several diagrams at once waits until states of one file ship.
 
 ## Related memo items
 
@@ -70,5 +81,4 @@ title icon without collision.
 
 ## Next step after confirmation
 
-Shape the link cue and the state syntax, then plan five PRs: SVG links, viewer links, states with
-`--state`, CLI small multiples and the viewer switcher.
+Build the six milestones in the plan, starting with links in the viewer.
