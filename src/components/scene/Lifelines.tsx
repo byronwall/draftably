@@ -15,7 +15,7 @@ export function Lifelines(props: {
     <g class="lifelines" pointer-events="none">
       <For each={props.ids}>
         {id => (
-          <Show when={length(id) && props.rect(id)}>
+          <Show when={length(id) ? props.rect(id) : undefined}>
             {r => (
               <line
                 x1={r().x + r().w / 2}
