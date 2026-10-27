@@ -77,16 +77,18 @@ export function EdgeView(props: EdgeViewProps) {
       <Show when={props.interactive}>
         <path class="edge-hit" d={props.route.path} />
       </Show>
-      {/* A canvas-colored halo breaks container borders (and earlier lines) where this line
-          crosses them, so the connection reads as the stronger mark. */}
-      <path
-        class="edge-halo"
-        d={props.route.path}
-        stroke={look().canvas}
-        stroke-width={EDGE_HALO}
-        fill="none"
-        stroke-linejoin="round"
-      />
+      {/* A canvas-colored halo breaks container borders and other lines where this line
+          crosses them, so the connection reads as the stronger mark. Only there: along its whole
+          length it reads as a doubled line, inside a tinted group most of all. */}
+      <Show when={props.route.halo}>
+        <path
+          class="edge-halo"
+          d={props.route.halo}
+          stroke={look().canvas}
+          stroke-width={EDGE_HALO}
+          fill="none"
+        />
+      </Show>
       <path
         class="edge-line"
         d={props.route.path}

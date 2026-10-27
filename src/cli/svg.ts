@@ -220,7 +220,9 @@ function sceneMarkup(
       dash = p.dash ?? (edge.dashed ? '5 5' : '');
     out.push(
       `<g data-id="${esc(edge.id)}"${fade(p)}>`,
-      `<path d="${route.path}" fill="none" stroke="${look.canvas}" stroke-width="8" stroke-linejoin="round"/>`,
+      route.halo
+        ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
+        : '',
       `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''} marker-end="url(#${arrow(ink)})"/>`,
     );
     const l = route.label;
