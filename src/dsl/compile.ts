@@ -443,7 +443,10 @@ export function foldRanks(
   const fits = (length: number, depth: number, slack = 1) =>
     length <= room * slack || length <= aspect * depth * slack;
   const unfolded = (at: Map<string, Pos>) => fits(span(at, along), span(at, across));
-  if (items.length < fewest || (unfolded(plan) && unfolded(positions))) return { positions };
+  // A plan that fits stays unfolded while its labelled run is within `HOLD_SLACK` of the render
+  // context, so edge labels alone don't fold a run that is only a little too long.
+  const held = (at: Map<string, Pos>) => unfolded(at) || span(at, along) <= room * HOLD_SLACK;
+  if (items.length < fewest || (unfolded(plan) && held(positions))) return { positions };
   const block = new Map(blocks.flatMap((b, i) => b.ids.map(id => [id, i] as const)));
   const splits = (cut: number, a: string, b: string) => {
     const [i, j] = [block.get(a), block.get(b)];
