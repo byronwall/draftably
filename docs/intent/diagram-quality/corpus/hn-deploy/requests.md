@@ -1,6 +1,6 @@
 # Follow-up requests
 
-Color strategy / theme / layout: by group / midnight, flow right with grid groups.
+Color strategy / theme / layout: by group / blueprint, flow right with grid groups.
 
 e1 (drag, viewer): Dragged the Coolify host group from the far right to under the Runner stage, to shorten the strip.
 

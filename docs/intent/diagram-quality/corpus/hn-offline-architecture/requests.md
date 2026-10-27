@@ -1,6 +1,6 @@
 # Follow-up requests
 
-Color strategy / theme / layout: semantic (slate upstream, blue server, mint device, amber data) / graphite, compound-flow, nested groups.
+Color strategy / theme / layout: semantic (slate upstream, blue server, mint device, amber data) / drafting, compound-flow, nested groups.
 
 e1 (drag, viewer): Dragged the Upstream APIs group from bottom right to under the Refresh jobs group, next to the jobs that call it.
 

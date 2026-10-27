@@ -5,7 +5,7 @@ sheet, HTML report, optional `--run-llm`, and the yes/no prompt to install a mis
 
 Kind / layout / color strategy / theme: data pipeline with two decisions that rejoin, layered
 down, semantic (primary ends, amber artifacts, slate external tools, red failure path) /
-graphite.
+drafting.
 
 e1 (branch): "Show what happens when the transcriber isn't installed."
 

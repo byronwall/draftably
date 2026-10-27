@@ -6,7 +6,7 @@ Source: `~/Projects/tasks-trpc` (`src/trpc/react.tsx`, `src/middleware.ts`,
 
 Kind / layout / color strategy / theme: request path through nested groups (API routes and
 Routers inside the Next.js server), compound-flow, by group (one family per group, members
-`auto`) / mulberry.
+`auto`) / ink.
 
 e1 (grow): "Show where sign-in goes: NextAuth talks to GitHub and stores accounts in Prisma."
 

@@ -1,6 +1,6 @@
 # Follow-up requests
 
-Color strategy / theme / layout: none / mulberry, force.
+Color strategy / theme / layout: none / ink, force.
 
 e1 (grow): "Add the import/export ZIP path from the landing page."
 

@@ -1,6 +1,6 @@
 # Follow-up requests
 
-Color strategy / theme / layout: shade ramp (teal 900 → 100 by depth) / graphite, tree down.
+Color strategy / theme / layout: shade ramp (teal 900 → 100 by depth) / drafting, tree down.
 
 e1 (grow): "Add a CSS file and its rule scopes under src/."
 
