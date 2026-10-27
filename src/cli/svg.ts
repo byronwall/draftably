@@ -11,7 +11,8 @@ import { legendMarkup, legendSize } from '../model/legend';
 import { drawnSwatch } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
-import { styleOf } from '../model/graph';
+import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
+import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
 import { nodeLabel } from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
@@ -69,12 +70,14 @@ const fade = (p: StatusPaint) => (p.opacity < 1 ? ` opacity="${p.opacity}"` : ''
 const font = (p: { family: string; size: number; weight: number }) =>
   `font-family="${esc(p.family)}" font-size="${p.size}" font-weight="${p.weight}"`;
 
-function outline(shape: string, r: Rect, radius: number, paint: string) {
+function outline(shape: string, r: Rect, radius: number, paint: string, ink = '') {
   if (shape === 'diamond')
     return `<path d="M${r.x + r.w / 2},${r.y} L${r.x + r.w},${r.y + r.h / 2} L${r.x + r.w / 2},${r.y + r.h} L${r.x},${r.y + r.h / 2} Z" ${paint}/>`;
   if (shape === 'circle')
     return `<ellipse cx="${r.x + r.w / 2}" cy="${r.y + r.h / 2}" rx="${r.w / 2}" ry="${r.h / 2}" ${paint}/>`;
   if (shape === 'text') return '';
+  if (shape === 'marker')
+    return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="2" fill="${ink}"/>`;
   const rx = shape === 'pill' ? r.h / 2 : radius;
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
 }
@@ -89,6 +92,28 @@ const haloMarkup = (shape: string, r: Rect, look: ResolvedAppearance) =>
   );
 
 type Route = ReturnType<typeof computeRoutes>['routes'][number];
+
+/** A byte or bit layout's unit numbers and the run-on pieces of its fields. */
+function cellsChromeMarkup(doc: Diagram, look: ResolvedAppearance, id: string, g: Rect) {
+  const chrome = doc.layout.containers[id]?.cellsChrome,
+    ink = drawnSwatch(doc, look, id, 'group').ink;
+  if (!chrome) return [];
+  return [
+    ...(chrome.ruler?.ticks ?? []).map(
+      t =>
+        `<text x="${g.x + t.x}" y="${g.y + chrome.ruler!.y + chrome.ruler!.h / 2}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${ink}">${esc(t.label)}</text>`,
+    ),
+    ...Object.entries(chrome.pieces ?? {}).flatMap(([cell, pieces]) => {
+      const c = drawnSwatch(doc, look, cell, 'node'),
+        title = doc.graph.nodes.find(n => n.id === cell)?.title ?? '';
+      return pieces.map(
+        r =>
+          `<rect x="${g.x + r.x}" y="${g.y + r.y}" width="${r.w}" height="${r.h}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="1.2"/>` +
+          `<text x="${g.x + r.x + r.w / 2}" y="${g.y + r.y + r.h / 2}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}" opacity="0.75">${esc(truncateText(`… ${title}`, Math.max(0, r.w - 8), look.annotation))}</text>`,
+      );
+    }),
+  ];
+}
 
 /** The connections' paths and label spots, routed around the document's own shapes. */
 function routesOf(doc: Diagram) {
@@ -117,8 +142,11 @@ function sceneMarkup(
     const r = rects.get(g.id)!,
       c = drawnSwatch(doc, look, g.id, 'group'),
       p = statusPaint(look, styleOf(doc, g.id).status, styleOf(doc, g.id).spot),
-      band = look.groupHeader / 2 - 7,
-      title = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle);
+      // A `cells` group is a title band over cells drawn edge to edge, with no group glyph.
+      cells = cellsBandOf(doc, g.id),
+      band = cells ? cells / 2 : look.groupHeader / 2 - 7,
+      tx = cells ? 12 : 33,
+      title = truncateText(g.title, Math.max(40, r.w - tx - (cells ? 12 : 64)), look.groupTitle);
     if (g.frame === 'none') continue;
     if (g.frame === 'soft') {
       const hull = g.hull?.length ? g.hull : [{ x: 0, y: 0, w: r.w, h: r.h }];
@@ -147,9 +175,12 @@ function sceneMarkup(
         [
           `<g data-id="${esc(g.id)}"${fade(p)}>`,
           p.halo ? haloMarkup('box', r, { ...look, radius: Math.min(10, look.radius + 4) }) : '',
-          `<rect class="shape" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
-          `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
-          `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
+          `<rect class="shape" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${cells ? Math.min(4, look.radius) : Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
+          cells
+            ? ''
+            : `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
+          ...cellsChromeMarkup(doc, look, g.id, r),
+          `<text x="${r.x + tx}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
           g.href ? markMarkup(groupLinkMark(title, look.groupTitle, band), r.x, r.y, c.ink) : '',
           '</g>',
         ],
@@ -189,6 +220,7 @@ function sceneMarkup(
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),
       p = statusPaint(look, style.status, style.spot),
+      radius = isCell(doc, n.id) ? 0 : look.radius,
       label = nodeLabel(doc, n.id, n.title, r),
       first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
       ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text,
@@ -205,11 +237,13 @@ function sceneMarkup(
           `<g data-id="${esc(n.id)}"${fade(p)}>`,
           ...(n.count && style.shape !== 'text'
             ? STACK_OFFSETS.map(d =>
-                outline(style.shape, { ...r, x: r.x + d, y: r.y + d }, look.radius, paint),
+                outline(style.shape, { ...r, x: r.x + d, y: r.y + d }, radius, paint),
               )
             : []),
           p.halo ? haloMarkup(style.shape, r, look) : '',
-          outline(style.shape, r, look.radius, paint),
+          isOpenCell(doc, n.id)
+            ? `<path d="${brokenRectPath(r)}" ${paint}/>`
+            : outline(style.shape, r, radius, paint, look.text),
           `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
             label.lines
               .map(
@@ -227,6 +261,20 @@ function sceneMarkup(
         ],
         opts,
       ),
+    );
+  }
+  // A line that crosses cells to reach one is drawn over them, ending in a dot.
+  for (const route of routes) {
+    if (!route.cross) continue;
+    const edge = doc.graph.edges.find(e => e.id === route.id)!,
+      p = statusPaint(look, edge.status),
+      ink = edgeInk(look, edge, diff),
+      [a, b] = route.cross;
+    out.push(
+      `<g${fade(p)}>`,
+      `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}"${p.dash || edge.dashed ? ` stroke-dasharray="${p.dash ?? '5 5'}"` : ''}/>`,
+      `<circle cx="${b.x}" cy="${b.y}" r="3.5" fill="${ink}"/>`,
+      '</g>',
     );
   }
   return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };

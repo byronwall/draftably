@@ -184,7 +184,8 @@ export const formatSource = (source: string) => printSource(readSource(source));
 
 export type DslColor = ColorKey | 'auto';
 export type DslShape = Exclude<ShapeKind, 'icon' | 'image'>;
-export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence';
+/** `cells` lays a group's members edge to edge as one object: a sequence, table or byte layout. */
+export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | 'cells';
 
 export interface ModelObject {
   id: string;
@@ -210,6 +211,9 @@ export interface ModelObject {
   frame?: 'soft' | 'none';
   /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
   soft?: string[];
+  /** Cells only: how many columns (or units) of its group's grid the cell covers; `var` for a
+   * field of variable length in a byte or bit layout. */
+  span?: number | 'var';
   line: number;
 }
 
@@ -240,6 +244,13 @@ export interface ModelLayout {
   /** Set when the scope is arranged by a layout engine instead of a built-in recipe. */
   engine?: EngineRecipe;
   direction: 'auto' | 'right' | 'down';
+  /** `cells` only: columns in each row of the grid; one row or column without it. */
+  columns?: number;
+  /** `cells` only: a byte or bit layout, where each column is one unit of the same width. */
+  unit?: 'bit' | 'byte';
+  /** With `unit`: the width of one unit, and whether unit numbers run above the first row. */
+  unitWidth?: number;
+  ruler?: boolean;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
   gap: number;
@@ -373,7 +384,7 @@ export const isIdentifier = (s: string) => ID.test(s);
 
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
-export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text'];
+export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
 const FRAMES = ['box', 'soft', 'none'] as const;
 const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
@@ -569,6 +580,7 @@ export function parseModel(source: string | SourceDoc): Model {
                 'was',
                 'href',
                 'count',
+                'span',
                 'kind',
                 'detail',
                 'priority',
@@ -601,6 +613,12 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
           ...(command === 'group' && choice('frame', 'box', FRAMES) !== 'box'
             ? { frame: choice('frame', 'box', FRAMES) as 'soft' | 'none' }
+            : {}),
+          ...(attrs.has('span')
+            ? {
+                span:
+                  attrs.get('span')!.value === 'var' ? ('var' as const) : num('span', 1, 1, 4096),
+              }
             : {}),
           line,
         });
@@ -647,16 +665,25 @@ export function parseModel(source: string | SourceDoc): Model {
           engine = { algorithm: named, params: readParams(ENGINE_PARAMS) };
         } else {
           count(2);
-          allow(['gap', ...(args[1]?.value === 'flow' ? ['fold'] : []), ...common]);
+          const recipe = args[1]?.value;
+          allow(
+            recipe === 'cells'
+              ? ['columns', 'unit', 'unit-width', 'ruler', ...common]
+              : ['gap', ...(recipe === 'flow' ? ['fold'] : []), ...common],
+          );
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
-          ['flow', 'row', 'column', 'lanes', 'sequence'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes or sequence, or engine=.`,
+          ['flow', 'row', 'column', 'lanes', 'sequence', 'cells'].includes(algorithm),
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence or cells, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
           `${algorithm} arranges the whole diagram: write layout root ${algorithm}.`,
+        );
+        assert(
+          algorithm !== 'cells' || scope !== 'root',
+          'Cells lay out a group; give the cells a group and use layout <group> cells.',
         );
         m.layouts.push({
           scope,
@@ -664,6 +691,14 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(engine ? { engine } : {}),
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
+          ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
+          ...(attrs.has('unit')
+            ? {
+                unit: choice('unit', 'byte', ['bit', 'byte'] as const),
+                ruler: choice('ruler', 'on', ['on', 'off'] as const) === 'on',
+                ...(attrs.has('unit-width') ? { unitWidth: num('unit-width', 24, 8, 200) } : {}),
+              }
+            : {}),
           gap: num('gap', 28, 8, 300),
           minWidth: num('min-width', 0, 0, 10_000),
           minHeight: num('min-height', 0, 0, 10_000),
@@ -926,6 +961,36 @@ function validateReferences(m: Model) {
         line,
       );
     }
+  const cells = new Map(m.layouts.filter(l => l.algorithm === 'cells').map(l => [l.scope, l]));
+  for (const o of m.objects) {
+    const grid = cells.get(o.parent);
+    if (grid) {
+      assert(
+        o.type === 'node',
+        `Cells are nodes; ${o.id} is a group inside cells ${o.parent}.`,
+        o.line,
+      );
+      assert(
+        o.shape !== 'marker' || ((grid.columns ?? 0) <= 1 && !grid.unit),
+        grid.unit
+          ? `A marker cuts a sequence of cells; ${o.parent} is a ${grid.unit} layout.`
+          : `A marker cuts one row or column of cells; ${o.parent} has ${grid.columns} columns.`,
+        o.line,
+      );
+      assert(
+        o.span !== 'var' || !!grid.unit,
+        `span=var is for a byte or bit layout; give ${o.parent} unit=byte or unit=bit.`,
+        o.line,
+      );
+    } else {
+      assert(
+        o.shape !== 'marker',
+        `A marker sits between cells; put ${o.id} in a group with layout cells.`,
+        o.line,
+      );
+      assert(o.span === undefined, `span= is for cells; ${o.parent} has no layout cells.`, o.line);
+    }
+  }
   for (const l of m.layouts) {
     scope(l.scope, l.line);
     framed(l.scope, l.line, 'layout');

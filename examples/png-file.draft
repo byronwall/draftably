@@ -1,0 +1,27 @@
+diagram "PNG file layout" version=1
+subtitle "An 8-byte signature, then chunks until IEND. Widths are bytes."
+
+# A byte layout: each group of cells uses unit=byte, so a field's width is its size.
+
+group sig "Signature" color=slate
+layout sig cells unit=byte columns=8
+node sig.high "89" in=sig
+node sig.p "50 'P'" in=sig
+node sig.n "4E 'N'" in=sig
+node sig.g "47 'G'" in=sig
+node sig.cr "0D" in=sig
+node sig.lf "0A" in=sig
+node sig.eof "1A" in=sig
+node sig.lf2 "0A" in=sig
+
+group chunk "Chunk" color=teal
+layout chunk cells unit=byte columns=8
+node chunk.length "Length" in=chunk span=4
+node chunk.type "Chunk type" in=chunk span=4
+node chunk.data "Chunk data (Length bytes)" in=chunk span=var
+node chunk.crc "CRC of type and data" in=chunk span=4
+
+node types "IHDR first, then PLTE, IDAT…, IEND last" shape=text
+edge kinds chunk.type -> types "one of"
+
+layout root column gap=40

@@ -8,7 +8,14 @@ import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { truncateText, measureText } from './fonts';
 import { edgeLabelSize } from './labels';
-import { isCollapsed, styleOf, type VisibleEdge, type VisibleGraph } from './graph';
+import {
+  findNode,
+  isCell,
+  isCollapsed,
+  styleOf,
+  type VisibleEdge,
+  type VisibleGraph,
+} from './graph';
 import type { Diagram, EdgeLayout, Lane, Point, Rect, ShapeKind, Side } from './types';
 
 export const SIDE_VECTORS: Record<Side, Point> = {
@@ -23,6 +30,8 @@ export function portPoint(shape: ShapeKind, r: Rect, side: Side, offset = 0): Po
   let x = r.x + r.w / 2,
     y = r.y + r.h / 2;
   const round = shape === 'circle' || shape === 'icon';
+  // A marker's bar is too thin to spread ports along: lines meet it in the middle.
+  if (shape === 'marker') offset = 0;
   if (side === 'left' || side === 'right') {
     y += clamp(offset, -r.h / 2 + 12, r.h / 2 - 12);
     let inset = 0;
@@ -326,6 +335,11 @@ function shiftedLabel(
 export interface DrawnRoute extends Route {
   label: EdgeLabelBox | null;
   path: string;
+  /**
+   * For a line to or from a cell with no side on its group's outline: the stretch from the outline
+   * across other cells to that cell's edge. It is drawn over the cells, with a dot at the edge.
+   */
+  cross?: [Point, Point];
 }
 
 export interface SceneRoutes {
@@ -431,10 +445,106 @@ function outLane(rest: EdgeLayout, lane: Lane, a: Rect, b: Rect): EdgeLayout {
 }
 
 /** Engine input for the visible part of a diagram with the given rectangles. */
-export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
-  const look = resolveAppearance(doc.appearance);
+const centre = (r: Rect) => ({ x: r.x + r.w / 2, y: r.y + r.h / 2 });
+
+/** The side among `sides` that faces `toward` most. */
+function facing(r: Rect, sides: Side[], toward: Point) {
+  const c = centre(r),
+    d = { x: toward.x - c.x, y: toward.y - c.y };
+  const score = (s: Side) => SIDE_VECTORS[s].x * d.x + SIDE_VECTORS[s].y * d.y;
+  return sides.reduce((a, b) => (score(b) > score(a) ? b : a));
+}
+
+/** How far outside the outline a line to a cell with no free side ends its routed part. */
+const STUB_GAP = 14;
+
+/** A line's end at a cell whose sides are all inside its group. */
+interface CrossEnd {
+  /** The outline side it enters by, and a thin stub just outside it that the router aims for. */
+  side: Side;
+  stub: Rect;
+  /** From just outside the outline to the cell's edge. */
+  cross: [Point, Point];
+}
+
+/**
+ * Where lines meet cells. A cell can be reached only through the sides it has on its group's
+ * outline (its top faces the title band), so a line ends on the free side facing its other end.
+ * A cell with no free side is reached across the cells in the way, from the outline side facing
+ * the other end: the router aims for a stub outside the outline, and the line runs on from there.
+ */
+function cellEnds(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
+  const sides = new Map<string, { from?: Side; to?: Side }>(),
+    crosses = new Map<string, { from?: CrossEnd; to?: CrossEnd }>();
+  for (const e of vg.edges) {
+    const cfg = doc.layout.edges[e.id] || {};
+    for (const [end, id, other, set] of [
+      ['from', e.a, e.b, cfg.fromSide],
+      ['to', e.b, e.a, cfg.toSide],
+    ] as const) {
+      const r = rects.get(id),
+        g = rects.get(findNode(doc, id)?.parentId ?? ''),
+        o = rects.get(other);
+      if (set || !r || !g || !o || !isCell(doc, id)) continue;
+      const near = (a: number, b: number) => Math.abs(a - b) < 0.5;
+      const free: Side[] = [
+        ...(near(r.x, g.x) ? (['left'] as const) : []),
+        ...(near(r.x + r.w, g.x + g.w) ? (['right'] as const) : []),
+        ...(r.y + r.h > g.y + g.h - 0.5 ? (['bottom'] as const) : []),
+      ];
+      if (free.length) {
+        sides.set(e.id, { ...sides.get(e.id), [end]: facing(r, free, centre(o)) });
+        continue;
+      }
+      const side = facing(g, ['left', 'right', 'top', 'bottom'], centre(o)),
+        c = centre(r),
+        out = SIDE_VECTORS[side],
+        // The stub sits clear of the outline, so the router keeps its distance from the cells.
+        at = {
+          x: (side === 'left' ? g.x : side === 'right' ? g.x + g.w : c.x) + out.x * STUB_GAP,
+          y: (side === 'top' ? g.y : side === 'bottom' ? g.y + g.h : c.y) + out.y * STUB_GAP,
+        },
+        edge = {
+          x: side === 'left' ? r.x : side === 'right' ? r.x + r.w : c.x,
+          y: side === 'top' ? r.y : side === 'bottom' ? r.y + r.h : c.y,
+        },
+        stub = out.y
+          ? { x: at.x - 16, y: out.y < 0 ? at.y - 2 : at.y, w: 32, h: 2 }
+          : { x: out.x < 0 ? at.x - 2 : at.x, y: at.y - 16, w: 2, h: 32 };
+      crosses.set(e.id, {
+        ...crosses.get(e.id),
+        [end]: { side, stub, cross: [at, edge] },
+      });
+      sides.set(e.id, { ...sides.get(e.id), [end]: side });
+    }
+  }
+  return { sides, crosses };
+}
+
+export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect>) {
+  const look = resolveAppearance(doc.appearance),
+    { sides, crosses } = cellEnds(doc, vg, all);
+  // A line to a cell with no free side is routed to its stub outside the outline.
+  const stubs = new Map<string, Rect>();
+  for (const e of vg.edges) {
+    const c = crosses.get(e.id);
+    if (c?.from) stubs.set(`${e.id}:from`, c.from.stub);
+    if (c?.to) stubs.set(`${e.id}:to`, c.to.stub);
+  }
+  const rects = all;
   return {
-    nodes: vg.nodes.map(n => ({ ...n, ...rects.get(n.id)!, shape: styleOf(doc, n.id).shape })),
+    nodes: [
+      ...vg.nodes.map(n => {
+        const r = rects.get(n.id)!,
+          shape = styleOf(doc, n.id).shape;
+        // The router keeps ports 12px in from a corner; a marker's thin bar gets room to meet
+        // lines at its middle.
+        return shape === 'marker' && r.w < 32
+          ? { ...n, ...r, x: r.x + r.w / 2 - 16, w: 32, shape }
+          : { ...n, ...r, shape };
+      }),
+      ...[...stubs].map(([id, r]) => ({ id, title: '', ...r, shape: 'box' as ShapeKind })),
+    ],
     // A soft or frameless group has no border for a line to cross or run along.
     groups: vg.groups
       .filter(g => !g.frame)
@@ -450,12 +560,26 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Re
     // Sequence messages are drawn straight on their rows (`messageRoute`), not routed.
     edges: vg.edges
       .filter(e => doc.layout.edges[e.id]?.row === undefined)
-      .map(e => ({
-        ...e,
-        from: e.a,
-        to: e.b,
-        cfg: laneBends(doc.layout.edges[e.id] || {}, rects.get(e.a)!, rects.get(e.b)!),
-      })),
+      .map(e => {
+        const c = crosses.get(e.id),
+          from = c?.from ? `${e.id}:from` : e.a,
+          to = c?.to ? `${e.id}:to` : e.b,
+          side = sides.get(e.id);
+        return {
+          ...e,
+          from,
+          to,
+          cfg: laneBends(
+            {
+              ...doc.layout.edges[e.id],
+              ...(side?.from ? { fromSide: side.from } : {}),
+              ...(side?.to ? { toSide: side.to } : {}),
+            },
+            stubs.get(from) ?? rects.get(e.a)!,
+            stubs.get(to) ?? rects.get(e.b)!,
+          ),
+        };
+      }),
   };
 }
 
@@ -484,11 +608,26 @@ export function drawRoutes(
   }
   const look = resolveAppearance(doc.appearance),
     byEdge = new Map(vg.edges.map(e => [e.id, e])),
-    radius = doc.settings.routing?.cornerRadius ?? 6;
+    radius = doc.settings.routing?.cornerRadius ?? 6,
+    { crosses } = cellEnds(doc, vg, rects);
+  // A line to a cell with no free side runs on from its stub across the cells to that cell.
   result = {
     ...result,
     routes: [
-      ...result.routes.filter(r => doc.layout.edges[r.id]?.row === undefined),
+      ...result.routes
+        .filter(r => doc.layout.edges[r.id]?.row === undefined)
+        .map(route => {
+          const c = crosses.get(route.id);
+          if (!c) return route;
+          return {
+            ...route,
+            points: [
+              ...(c.from ? [c.from.cross[1], c.from.cross[0]] : []),
+              ...route.points,
+              ...(c.to ? [c.to.cross[0], c.to.cross[1]] : []),
+            ],
+          };
+        }),
       ...vg.edges.flatMap(e => {
         const row = doc.layout.edges[e.id]?.row;
         return row === undefined ? [] : [messageRoute(e, row, rects.get(e.a)!, rects.get(e.b)!)];
@@ -512,11 +651,15 @@ export function drawRoutes(
       look,
     ),
     labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
-  return result.routes.map(route => ({
-    ...route,
-    label: labels.get(route) ?? null,
-    path: roundedPath(route.points, radius),
-  }));
+  return result.routes.map(route => {
+    const c = crosses.get(route.id);
+    return {
+      ...route,
+      label: labels.get(route) ?? null,
+      path: roundedPath(route.points, radius),
+      ...(c?.to ? { cross: c.to.cross } : c?.from ? { cross: c.from.cross } : {}),
+    };
+  });
 }
 
 /** Run of a self-message's loop out to the right of its lifeline, and its drop. */

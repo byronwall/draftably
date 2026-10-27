@@ -8,7 +8,16 @@ export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
 import type { Spot, Status } from './status';
 
-export type ShapeKind = 'box' | 'pill' | 'circle' | 'diamond' | 'text' | 'icon' | 'image';
+export type ShapeKind =
+  | 'box'
+  | 'pill'
+  | 'circle'
+  | 'diamond'
+  | 'text'
+  | 'icon'
+  | 'image'
+  /** A seam between two cells of a `cells` group. */
+  | 'marker';
 /** A color family: a built-in one, one the file defines, or `auto` for the theme's surface. */
 export type ColorKey = string;
 export type LabelMode = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'detached';
@@ -22,6 +31,8 @@ export interface DiagramNode {
   href?: string;
   /** How many things this box stands for; drawn as a stack with a badge. */
   count?: number;
+  /** A cell's columns (or units), or `var` for a field of variable length. */
+  span?: number | 'var';
   parentId?: string;
   image?: string;
   /** A sequence participant: length of the dashed lifeline below the box. */
@@ -112,6 +123,20 @@ export interface ContainerLayout {
   direction: 'inherit' | Direction;
   padding: number;
   manualSize: boolean;
+  /** Set for a `cells` group: its members touch, under a title band this tall. */
+  cellsBand?: number;
+  /** A byte or bit layout's extra marks, relative to the group's top-left corner. */
+  cellsChrome?: CellsChrome;
+}
+
+/** What a byte or bit layout draws besides its cells. */
+export interface CellsChrome {
+  /** Unit numbers in a strip under the title band. */
+  ruler?: { y: number; h: number; ticks: Array<{ x: number; label: string }> };
+  /** Further pieces of fields that run on past a row's end, by field. */
+  pieces?: Record<string, Rect[]>;
+  /** Fields of variable length, drawn with broken ends. */
+  open?: string[];
 }
 
 export type IntentRole = 'start' | 'end';

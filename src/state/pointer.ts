@@ -21,6 +21,7 @@ import {
   descendants,
   findObject,
   frameRect,
+  isCell,
   isGroup,
   makeGeometry,
   objectRect,
@@ -441,7 +442,8 @@ function startObjectDrag(e: PointerEvent, canvas: Element, id: string, doubleCan
     positions,
     frames,
     refRect: clone(objectRect(doc, lookup, id)),
-    keepParent: e.altKey,
+    // A dragged cell stays in its group: dropping it there reorders the cells.
+    keepParent: e.altKey || roots.some(r => isCell(doc, r)),
     doubleCandidate,
   });
 }

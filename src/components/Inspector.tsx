@@ -6,6 +6,7 @@ import {
   findEdge,
   findGroup,
   findNode,
+  isCell,
   isGroup,
   styleOf,
 } from '../model/graph';
@@ -359,6 +360,28 @@ function ObjectInspector(props: { id: string }) {
             options={SHAPES.map(s => [s, SHAPE_LABELS[s]] as const)}
             onChange={shape => edit('Edit shape', d => edits.setStyle(d, props.id, { shape }))}
           />
+        </Show>
+        <Show when={isCell(doc, props.id) && style().shape !== 'marker' && findNode(doc, props.id)}>
+          {node => (
+            <Show
+              when={node().span !== 'var'}
+              fallback={<p class="hint">Variable length: fills the rest of its row.</p>}
+            >
+              <NumberField
+                label="Span"
+                value={typeof node().span === 'number' ? (node().span as number) : 1}
+                min={1}
+                max={4096}
+                onChange={v =>
+                  edit('Edit span', d => {
+                    const n = findNode(d, props.id)!;
+                    if (Math.round(v) > 1) n.span = Math.round(v);
+                    else delete n.span;
+                  })
+                }
+              />
+            </Show>
+          )}
         </Show>
       </Section>
       <Section title="Position">

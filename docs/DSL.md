@@ -38,7 +38,7 @@ and groups. References may point to later lines.
 | `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                    |
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                      |
 | `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=`, `count=`.                                              |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                      |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`. See [Soft groups](#soft-groups).                                             |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                          |
@@ -47,6 +47,7 @@ and groups. References may point to later lines.
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                  |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                         |
 | `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                         |
+| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                           |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
@@ -189,6 +190,94 @@ itself draws a short loop. Participants are spaced so each message's label fits 
 Groups are an error in a sequence diagram, and position refinements do not apply. Change marks
 work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`),
 activations and notes are not supported yet.
+
+## Cells
+
+`layout group cells` draws a group as one object made of parts, like the parts of a request in
+order. The group's nodes are its cells: they touch and share borders, in declaration order (or the
+group's `order` line), under a band that holds the group's title. There is no gap and no inset.
+
+```text
+node client "Agent loop" color=blue
+group req "Request" color=slate
+layout req cells
+node sys "System prompt" in=req
+node tools "Tool definitions" in=req
+node hist "Conversation so far" in=req
+node cp "cache point" in=req shape=marker
+node turn "New user turn" in=req color=amber shade=200
+node cache "Prompt cache" color=violet
+edge build client -> sys "assembles"
+edge hit cache -> cp "cached prefix"
+```
+
+- Cells form one row by default; `direction=down` makes one column. Every cell in a row has the
+  row's height; every cell in a column has the column's width.
+- `columns=N` makes a grid, such as a table: cells fill each row of N columns in order. Each
+  column is as wide as its widest cell. `span=N` on a cell covers N columns; a cell that does not
+  fit the rest of its row starts the next row. A spanning cell wider than its columns widens the
+  last of them.
+- A cell is as wide as its title on one line, from 64 to 240 pixels, and wraps past that. A
+  `size` line sets it exactly. A title band wider than the cells stretches the last cell.
+- A cell has no color of its own unless it names one, so the band carries the group's color.
+- `shape=marker` marks a seam, such as a cache point. It takes no room: a bar in the theme's text
+  color cuts the object, title band included, before the next cell, and its label sits above.
+  Lines reach a marker from below.
+- Lines can start or end at any cell. A line meets a cell on a side that lies on the group's
+  outline, facing the line's other end; a cell's top faces the title band, so it is never used.
+  A cell with no such side, inside a grid, is reached across the cells in the way: the line
+  enters the outline facing its other end, is drawn over the cells, and ends with a dot at the
+  cell. `from=` and `to=` still choose a side.
+- A marker needs one row or one column: it cannot cut a grid.
+- A cell stays in its place. `near`, `nudge`, `stay` and `pin` on a cell are reported and
+  ignored; move the group instead, by its title band. An engine on the root moves the group as
+  one block.
+- In the viewer, dragging a cell and dropping it among the others reorders the group: it writes
+  the group's `order` line. A marker keeps its place before the cell it preceded. The inspector's
+  **Span** field writes `span=`.
+- Cells are nodes, so colors, links, `count=` and change marks work on them.
+
+A table of a database entity, with a line from one row to another table's row:
+
+```text
+group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+edge invoice_account invoices.account -> accounts.id
+```
+
+### Byte and bit layouts
+
+`unit=byte` or `unit=bit` on a cells layout draws an on-disk or on-the-wire structure, like the
+figures in the PNG spec or an RFC packet header. Every column is one unit of the same width, so a
+field's width is its size.
+
+```text
+group chunk "PNG chunk" color=teal
+layout chunk cells unit=byte columns=8
+node chunk.length "Length" in=chunk span=4
+node chunk.type "Chunk type" in=chunk span=4
+node chunk.data "Chunk data" in=chunk span=var
+node chunk.crc "CRC" in=chunk span=4
+```
+
+- `columns=` sets the units in each row: 16 by default for bytes, 32 for bits. `span=N` is the
+  field's size in units; a field without one is one unit.
+- A field longer than the rest of its row runs on into the next rows. Its title sits in its
+  longest piece; the other pieces show it after an ellipsis.
+- `span=var` is a field of variable length. It fills the rest of its row, or a whole row, and its
+  sides are drawn broken.
+- A ruler numbers the units between the title band and the first row. `ruler=off` hides it.
+- `unit-width=` sets the width of one unit in pixels: 48 for bytes and 24 for bits by default.
+  Titles wrap to fit their field, so give one-bit flags short titles.
+- Markers do not apply to byte or bit layouts.
 
 ## Change marks
 
@@ -549,6 +638,7 @@ Edits made in the viewer are written back to the file as readable statements:
 | Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
 | Pin or unpin (**P**)                       | `pin` at its position; unpinning leaves a soft `stay`.              |
 | Resize a shape or container                | `size`, or `min-width`/`min-height` on the container's `layout`.    |
+| Drag a cell among its group's cells        | The group's `order` line. **Span** in Inspector writes `span=`.     |
 | Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.   |
 | Color family or shade in Inspector         | `color=` and `shade=` on the declaration.                           |
 | Theme or padding in **Appearance**         | The `theme` line; preset changes drop built-in `theme-color` lines. |

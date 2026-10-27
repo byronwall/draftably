@@ -142,3 +142,36 @@ export function EdgeView(props: EdgeViewProps) {
     </g>
   );
 }
+
+/**
+ * The stretch of a line that crosses cells to reach a cell with no free side, drawn over the
+ * cells, with a dot where it meets that cell.
+ */
+export function CrossingView(props: { doc: Diagram; route: DrawnRoute; selected?: boolean }) {
+  const edge = () => findEdge(props.doc, props.route.id)!;
+  const look = () => resolveAppearance(props.doc.appearance);
+  const paint = () => statusPaint(look(), edge().status);
+  const ink = () => (props.selected ? 'var(--accent)' : edgeInk(look(), edge(), isDiff(props.doc)));
+  return (
+    <Show when={props.route.cross}>
+      {cross => (
+        <g
+          class="edge-crossing"
+          pointer-events="none"
+          opacity={paint().opacity < 1 ? paint().opacity : undefined}
+        >
+          <line
+            x1={cross()[0].x}
+            y1={cross()[0].y}
+            x2={cross()[1].x}
+            y2={cross()[1].y}
+            stroke={ink()}
+            stroke-width={paint().width ? paint().width! - 0.5 : 1.4}
+            stroke-dasharray={paint().dash ?? (edge().dashed ? '5 5' : undefined)}
+          />
+          <circle cx={cross()[1].x} cy={cross()[1].y} r={3.5} fill={ink()} />
+        </g>
+      )}
+    </Show>
+  );
+}

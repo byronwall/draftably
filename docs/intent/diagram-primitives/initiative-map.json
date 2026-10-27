@@ -1,0 +1,548 @@
+{
+  "schema_version": "0.5.0",
+  "initiative": {
+    "title": "Diagram primitives: cells, tables, byte layouts and images",
+    "slug": "diagram-primitives",
+    "scale": "capability",
+    "current_phase": "execution",
+    "last_updated": "2026-10-26",
+    "summary": "One `cells` layout recipe on groups draws touching sequences, tables and byte layouts; cells are ordinary nodes so lines, colors and marks reach them. Image cells build on PR #28.",
+    "status": "active",
+    "next_action": "Byron reviews stack #136; m4 (image cells) waits for PR #28 image nodes."
+  },
+  "artifacts": {
+    "intent_brief": {
+      "path": "intent-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "brainstorm": {
+      "path": "brainstorm.md",
+      "status": "not-requested",
+      "updated_at": null
+    },
+    "shape_brief": {
+      "path": "shape-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "implementation_plan": {
+      "path": "implementation-plan.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    }
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "type": "transcript",
+      "location": "Byron voice memo, 2026-10-26, relayed by orchestrator session local_5d94cf47",
+      "anchor": "more primitives to recover what Graphviz DOT does",
+      "authority": "user"
+    },
+    {
+      "id": "S2",
+      "type": "doc",
+      "location": "https://github.com/byronwall/diagram-studio/pull/28",
+      "anchor": "docs/intent/rich-node-content/shape-brief.md",
+      "authority": "user"
+    },
+    {
+      "id": "S3",
+      "type": "repo",
+      "location": "src/dsl/syntax.ts",
+      "anchor": "ModelObject, Algorithm, case 'node'",
+      "authority": "repo"
+    },
+    {
+      "id": "S4",
+      "type": "repo",
+      "location": "src/dsl/compile.ts",
+      "anchor": "leafSize, fitWidth",
+      "authority": "repo"
+    },
+    {
+      "id": "S5",
+      "type": "repo",
+      "location": "src/model/labels.ts",
+      "anchor": "titleArea, titleHeight",
+      "authority": "repo"
+    },
+    {
+      "id": "S6",
+      "type": "doc",
+      "location": "https://graphviz.org/doc/info/shapes.html#record",
+      "anchor": "record shapes and HTML-like labels (TABLE, TD PORT, COLSPAN, IMG)",
+      "authority": "inferred"
+    },
+    {
+      "id": "S7",
+      "type": "doc",
+      "location": "https://bytefield-svg.deepsymmetry.org/",
+      "anchor": "draw-box :span, draw-gap, column headers",
+      "authority": "inferred"
+    },
+    {
+      "id": "S8",
+      "type": "doc",
+      "location": "https://mermaid.js.org/syntax/packet.html",
+      "anchor": "packet diagram: 0-15: \"Source Port\"",
+      "authority": "inferred"
+    },
+    {
+      "id": "S9",
+      "type": "doc",
+      "location": "https://d2lang.com/tour/grid-diagrams",
+      "anchor": "grid-columns with grid-gap 0; sql_table shape",
+      "authority": "inferred"
+    },
+    {
+      "id": "qa-round-1",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "1",
+      "authority": "user"
+    },
+    {
+      "id": "qa-round-2",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "2",
+      "authority": "user"
+    },
+    {
+      "id": "qa-round-3",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "3",
+      "authority": "user"
+    },
+    {
+      "id": "qa-round-4",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "4",
+      "authority": "user"
+    }
+  ],
+  "intent": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Draftably should cover what Graphviz DOT draws so it can be a general diagram tool.",
+        "kind": "goal",
+        "sources": ["S1"],
+        "confidence": "high"
+      },
+      {
+        "id": "C2",
+        "statement": "Sequences: touching boxes show one thing's parts in order, such as a request with a cache point.",
+        "kind": "requirement",
+        "sources": ["S1"],
+        "confidence": "high"
+      },
+      {
+        "id": "C3",
+        "statement": "Byte layouts like the PNG and PDF spec figures.",
+        "kind": "requirement",
+        "sources": ["S1"],
+        "confidence": "high"
+      },
+      {
+        "id": "C4",
+        "statement": "Tables on the canvas, like DOT HTML-like table labels.",
+        "kind": "requirement",
+        "sources": ["S1", "S6"],
+        "confidence": "high"
+      },
+      {
+        "id": "C5",
+        "statement": "Images matter most in the viewer; large screenshots scale badly in static exports. Build on PR #28.",
+        "kind": "requirement",
+        "sources": ["S1", "S2"],
+        "confidence": "high"
+      },
+      {
+        "id": "C6",
+        "statement": "Keep the DSL as small as possible.",
+        "kind": "constraint",
+        "sources": ["S1"],
+        "confidence": "medium"
+      },
+      {
+        "id": "C7",
+        "statement": "Order: sequences, tables (entities first), byte layouts, image cells, viewer editing.",
+        "kind": "decision",
+        "sources": ["qa-round-2", "qa-round-3"],
+        "confidence": "high"
+      },
+      {
+        "id": "C8",
+        "statement": "Lines use a cell's own outer side; to reach an inner cell they cross cells, drawn on top, ending with a dot.",
+        "kind": "decision",
+        "sources": ["qa-round-3", "qa-round-4"],
+        "confidence": "high"
+      },
+      {
+        "id": "C9",
+        "statement": "Cell groups show their title in a header band; seams use shape=marker that lines can reach; byte ruler sits under the header.",
+        "kind": "decision",
+        "sources": ["qa-round-2", "qa-round-4"],
+        "confidence": "high"
+      }
+    ],
+    "themes": [
+      "composite objects made of touching parts",
+      "lines to parts of an object",
+      "viewer-first images"
+    ],
+    "conflicts": [],
+    "human_questions": []
+  },
+  "brainstorm": {
+    "status": "not-requested",
+    "requested_count": 7,
+    "options": [],
+    "selected_option": null
+  },
+  "shape": {
+    "status": "current",
+    "appetite": "Three PRs for sequences, tables and bytes; image cells after PR #28 M1; viewer editing optional.",
+    "problem": "Sequences, byte layouts and tables need DOT or hand drawing today; Draftably has only separate boxes.",
+    "recommended_shape": "A `cells` layout recipe on a group. Members touch and share borders; columns=, span=, unit=, ruler= cover tables and byte layouts. Cells are nodes, so edges, colors, marks and compare work unchanged.",
+    "options_scored": [
+      {
+        "option": "cells recipe on a group",
+        "dimensions": {
+          "dot_coverage": 8,
+          "lines_to_parts": 9,
+          "reuse": 9,
+          "learnability": 7,
+          "build_risk": 7
+        },
+        "total": 40
+      },
+      {
+        "option": "three statements: sequence, table, bytes",
+        "dimensions": {
+          "dot_coverage": 8,
+          "lines_to_parts": 8,
+          "reuse": 6,
+          "learnability": 8,
+          "build_risk": 4
+        },
+        "total": 34
+      },
+      {
+        "option": "DOT-style record label string",
+        "dimensions": {
+          "dot_coverage": 7,
+          "lines_to_parts": 6,
+          "reuse": 3,
+          "learnability": 6,
+          "build_risk": 6
+        },
+        "total": 28
+      }
+    ],
+    "success_moves": [
+      "Reuse group, node, in= and layout instead of a new statement type.",
+      "Put cell geometry in one pure function (src/dsl/cells.ts) shared by compile, CLI and viewer.",
+      "Prove routing into a mid-row cell in the first PR, with an outline-attach fallback.",
+      "Keep src/engines untouched; the root engine moves a cell group as one block.",
+      "Ship sequences before tables and bytes; later PRs only change width rules and drawing."
+    ],
+    "first_proof": {
+      "question": "Can the compiler and router draw touching cells and end a line on one cell?",
+      "artifact": "inspect --svg of examples/prompt-request.draft, and the same file in the viewer",
+      "decision_rule": "If a line to a mid-row cell crosses other cells or needs a new router mode, attach lines at the group outline over the cell's span."
+    },
+    "rabbit_holes": ["Row spans", "Rich text in cells", "DOT import", "Viewer cell-grid editing"],
+    "open_decisions": []
+  },
+  "implementation": {
+    "status": "planned",
+    "repository_snapshot": {
+      "root": "/Users/byronwall/Projects/diagram-studio-worktrees/plan-primitives-56d967",
+      "revision": "b39be5b",
+      "worktree_status": "Clean; planning files only.",
+      "subsystems": [
+        "dsl/syntax",
+        "dsl/compile",
+        "dsl/project",
+        "dsl/translate",
+        "model/labels",
+        "model/routes",
+        "scene/GroupView",
+        "scene/NodeView",
+        "cli/svg"
+      ],
+      "test_commands": ["pnpm check:fast", "pnpm check"],
+      "deployment_surfaces": []
+    },
+    "dependencies": [
+      {
+        "id": "router",
+        "name": "Routing engine and ports (src/model/routes.ts, src/engines)",
+        "material": true,
+        "application_seam": "routes.ts port sides and obstacles; engines unchanged",
+        "first_proof_role": {
+          "mode": "real",
+          "rationale": "Only the real router shows whether a line can reach a mid-row cell."
+        },
+        "failure_modes": [
+          "Line crosses sibling cells",
+          "Line enters the group interior",
+          "Engine parity drift"
+        ],
+        "proof_rungs": [
+          "Unit routing case",
+          "inspect --svg picture",
+          "Viewer geometry via window.diagramStudio"
+        ],
+        "local_proof": "pnpm draftably inspect examples/prompt-request.draft --svg",
+        "live_proof": "None needed; no external service.",
+        "rollout": "Fallback: attach at the group outline over the cell's span."
+      },
+      {
+        "id": "pr28",
+        "name": "Rich node content (PR #28) image nodes",
+        "material": true,
+        "application_seam": "shape=image node with size, used as a cell",
+        "first_proof_role": {
+          "mode": "absent",
+          "rationale": "M1-M3 need no images."
+        },
+        "failure_modes": ["PR #28 export decision differs from cells needs"],
+        "proof_rungs": ["PR #28 M1 merged", "Image cell example in CLI and viewer"],
+        "local_proof": "inspect --svg of an image-cell example after PR #28 M1",
+        "live_proof": "None needed.",
+        "rollout": "M4 waits for PR #28 M1."
+      }
+    ],
+    "fast_local_loop": {
+      "command": "pnpm draftably inspect examples/prompt-request.draft --svg > tmp/cells.svg && pnpm shoot tmp/cells.svg tmp/cells.png"
+    },
+    "milestones": [
+      {
+        "id": "m1",
+        "title": "Sequences of touching cells",
+        "status": "active",
+        "done_when": "inspect --svg shows touching cells, a header band, and a line ending at the cp marker; viewer matches; compiles under engine=layered; pnpm check passes.",
+        "outcome": "A group with `layout g cells` draws one strip of touching cells, and a line ends on one cell.",
+        "dependencies_introduced": ["router"],
+        "proof": "Unit cases plus inspect --svg and viewer pictures of examples/prompt-request.draft.",
+        "valid_intermediate_state": "Files without `cells` compile exactly as before.",
+        "rollback": "Revert the PR; no file uses `cells` yet.",
+        "evidence": ["PR #135; tests/cells.test.ts"]
+      },
+      {
+        "id": "m2",
+        "title": "Tables",
+        "status": "active",
+        "done_when": "Schema columns align and foreign-key lines end on rows; a line to the middle of a 3x3 grid crosses one cell and ends with a dot.",
+        "outcome": "Cell groups wrap into grids with shared column widths, spans and one-column entity tables.",
+        "dependencies_introduced": [],
+        "proof": "Schema example picture and a column-width test.",
+        "valid_intermediate_state": "Sequences from m1 unchanged.",
+        "rollback": "Revert; `columns=` and `span=` errors return.",
+        "evidence": ["PR #137"]
+      },
+      {
+        "id": "m3",
+        "title": "Byte layouts",
+        "status": "active",
+        "done_when": "TCP header matches RFC 9293 field for field; PNG chunk shows a variable data field.",
+        "outcome": "Cell groups with `unit=` draw byte and bit layouts with rulers and split fields.",
+        "dependencies_introduced": [],
+        "proof": "TCP and PNG examples compared with their spec figures.",
+        "valid_intermediate_state": "Tables and sequences unchanged.",
+        "rollback": "Revert; `unit=` and `ruler=` become unknown attributes.",
+        "evidence": ["PR #138"]
+      },
+      {
+        "id": "m4",
+        "title": "Image cells",
+        "status": "planned",
+        "done_when": "Two image cells draw the same in CLI and viewer; exports follow PR #28.",
+        "blocked_by": "PR #28 milestone 1",
+        "outcome": "An image node can be a cell.",
+        "dependencies_introduced": ["pr28"],
+        "proof": "Image-cell example in CLI and viewer.",
+        "valid_intermediate_state": "Text cells unchanged; image nodes outside cells follow PR #28.",
+        "rollback": "Revert; image nodes stay outside cell groups."
+      },
+      {
+        "id": "m5",
+        "title": "Viewer editing of cells",
+        "status": "active",
+        "done_when": "Reordering a cell writes one order line and the file reopens the same.",
+        "outcome": "Viewer drag reorders cells and the inspector edits span.",
+        "dependencies_introduced": [],
+        "proof": "Real pointer browser proof; file round-trip.",
+        "valid_intermediate_state": "Cell groups still move as one block.",
+        "rollback": "Revert; cells stay file-edited.",
+        "evidence": ["PR #155"]
+      }
+    ],
+    "cut_line": [
+      "DOT import",
+      "Row spans",
+      "Cell text alignment and header styling",
+      "Rich cell content",
+      "Hex dumps and endianness marks"
+    ],
+    "open_decisions": [
+      "Routing into a mid-row cell",
+      "Engines keeping a cell group's inner positions",
+      "Reversible defaults: span=var and ruler spelling; cache-point seam as a narrow text cell"
+    ]
+  },
+  "history": [
+    {
+      "date": "2026-10-26",
+      "event": "Initiative created by a planning worker session from Byron's voice memo; intent, shape and plan written together."
+    },
+    {
+      "date": "2026-10-26",
+      "event": "Four question rounds answered; shape, plan and intent rewritten. Byron chose crossing lines for inner cells over a check error."
+    },
+    {
+      "date": "2026-10-26",
+      "event": "Implemented m1, m2, m3 and m5 as a gh stack (#134 plan, #135, #137, #138, #155). m4 waits for PR #28. Awaiting Byron review."
+    }
+  ],
+  "closure": null,
+  "question_rounds": {
+    "focus": "DSL shape, scope and order of diagram primitives",
+    "per_round": 4,
+    "planned_rounds": 4,
+    "status": "complete",
+    "rounds": [
+      {
+        "round": 1,
+        "theme": "core shape",
+        "source": "qa-round-1",
+        "questions": [
+          {
+            "n": 1,
+            "question": "How should sequences, tables and byte layouts appear in the DSL?",
+            "answer": "One cells recipe on a group",
+            "effect": "Confirmed the recommended shape."
+          },
+          {
+            "n": 2,
+            "question": "How deep should byte layouts go?",
+            "answer": "RFC-style rows",
+            "effect": "M3 keeps unit, ruler, split and var fields; hex offsets and gap markers below the line."
+          },
+          {
+            "n": 3,
+            "question": "Main job of tables?",
+            "answer": "Both, schema entities first",
+            "effect": "M2 starts with entities, then general grids."
+          },
+          {
+            "n": 4,
+            "question": "Static export of large images?",
+            "answer": "Capped preview",
+            "effect": "M4 follows PR #28 preview plan."
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "theme": "order and appearance",
+        "source": "qa-round-2",
+        "questions": [
+          {
+            "n": 5,
+            "question": "What ships after sequences?",
+            "answer": "Tables, then bytes",
+            "effect": "Milestone order confirmed."
+          },
+          {
+            "n": 6,
+            "question": "How does a cache-point seam show?",
+            "answer": "Marker on the seam",
+            "effect": "Added shape=marker to M1."
+          },
+          {
+            "n": 7,
+            "question": "Schema row name and type?",
+            "answer": "Two grid columns",
+            "effect": "Entities use columns=2; no new text rules."
+          },
+          {
+            "n": 8,
+            "question": "Where does a cell group title go?",
+            "answer": "Header band inside",
+            "effect": "Header band for every cell group."
+          }
+        ]
+      },
+      {
+        "round": 3,
+        "theme": "lines and scope",
+        "source": "qa-round-3",
+        "questions": [
+          {
+            "n": 9,
+            "question": "Line to a cell with no free side?",
+            "answer": "Cross the cells",
+            "effect": "Replaced the check error with a crossing line (not the recommendation)."
+          },
+          {
+            "n": 10,
+            "question": "Keep viewer editing of cells?",
+            "answer": "Keep as last PR",
+            "effect": "M5 stays, no longer optional."
+          },
+          {
+            "n": 11,
+            "question": "Where do image cells live?",
+            "answer": "Here, after PR #28 M1",
+            "effect": "M4 stays blocked on PR #28."
+          },
+          {
+            "n": 12,
+            "question": "A .dot importer?",
+            "answer": "No, cover features",
+            "effect": "Importer below the cut line."
+          }
+        ]
+      },
+      {
+        "round": 4,
+        "theme": "crossing details",
+        "source": "qa-round-4",
+        "questions": [
+          {
+            "n": 13,
+            "question": "Free side or shortest path?",
+            "answer": "Free side first",
+            "effect": "Crossing only for inner cells."
+          },
+          {
+            "n": 14,
+            "question": "How does a crossing line end?",
+            "answer": "Over cells, dot at end",
+            "effect": "Drawn on top, dot at target edge."
+          },
+          {
+            "n": 15,
+            "question": "Can a line end on a marker?",
+            "answer": "Yes",
+            "effect": "Router ends lines at marker labels in M1."
+          },
+          {
+            "n": 16,
+            "question": "Where is the byte ruler?",
+            "answer": "Under the header",
+            "effect": "Ruler between header band and first row."
+          }
+        ]
+      }
+    ]
+  }
+}

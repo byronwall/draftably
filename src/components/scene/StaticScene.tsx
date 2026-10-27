@@ -1,6 +1,6 @@
 import { For } from 'solid-js';
 import type { StaticScene as Scene } from '../../model/static-scene';
-import { EdgeView } from './EdgeView';
+import { CrossingView, EdgeView } from './EdgeView';
 import { GroupView } from './GroupView';
 import { NodeView } from './NodeView';
 import { Lifelines } from './Lifelines';
@@ -43,6 +43,9 @@ export function StaticScene(props: {
             focusable={props.focusable}
           />
         )}
+      </For>
+      <For each={props.scene.routes.filter(r => r.cross)}>
+        {route => <CrossingView doc={props.scene.doc} route={route} />}
       </For>
     </>
   );

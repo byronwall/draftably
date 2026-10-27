@@ -1,0 +1,25 @@
+diagram "TCP header" version=1
+subtitle "RFC 9293, section 3.1. Each row is 32 bits."
+
+# A bit layout: unit=bit with 32 columns, fields sized in bits, and options of variable length.
+
+group tcp "TCP header" color=blue
+layout tcp cells unit=bit columns=32 unit-width=26
+node sport "Source Port" in=tcp span=16
+node dport "Destination Port" in=tcp span=16
+node seq "Sequence Number" in=tcp span=32
+node ack "Acknowledgment Number" in=tcp span=32
+node doff "Data Offset" in=tcp span=4
+node rsrvd "Rsrvd" in=tcp span=4
+node cwr "C" in=tcp
+node ece "E" in=tcp
+node urg "U" in=tcp
+node ackf "A" in=tcp
+node psh "P" in=tcp
+node rst "R" in=tcp
+node syn "S" in=tcp
+node fin "F" in=tcp
+node window "Window" in=tcp span=16
+node checksum "Checksum" in=tcp span=16
+node urgent "Urgent Pointer" in=tcp span=16
+node options "Options" in=tcp span=var color=amber shade=100

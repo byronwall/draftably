@@ -33,6 +33,18 @@ export const styleOf = (doc: Diagram, id: string): NodeStyle => ({
 });
 
 /** Direct children (shapes and containers) of a container, or of the diagram root. */
+/** The title band of a `cells` group; undefined for any other group. */
+export const cellsBandOf = (doc: Diagram, id: string | null | undefined) =>
+  id ? doc.layout.containers[id]?.cellsBand : undefined;
+
+/** Whether a cell is a field of variable length in a byte or bit layout. */
+export const isOpenCell = (doc: Diagram, id: string) =>
+  !!doc.layout.containers[findNode(doc, id)?.parentId ?? '']?.cellsChrome?.open?.includes(id);
+
+/** Whether a node is a cell of a `cells` group, which holds it in place edge to edge. */
+export const isCell = (doc: Diagram, id: string) =>
+  cellsBandOf(doc, findNode(doc, id)?.parentId) !== undefined;
+
 export function childrenOf(doc: Diagram, parentId: string | null | undefined) {
   const parent = parentId || null;
   return [...doc.graph.groups, ...doc.graph.nodes].filter(n => (n.parentId || null) === parent);

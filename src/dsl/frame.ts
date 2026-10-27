@@ -29,3 +29,6 @@ export const contentOrigin = (group: { x: number; y: number }, header = GROUP_HE
   x: group.x + GROUP_INSET,
   y: group.y + header,
 });
+
+/** Horizontal room a `cells` group's title needs besides its text: padding and the collapse control. */
+export const CELLS_TITLE_CHROME = 12 + 36;
