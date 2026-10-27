@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emptyDiagram, normalize } from '../src/model/document';
+import { emptyDiagram, normalize, routingFingerprint } from '../src/model/document';
 import * as edits from '../src/model/edits';
 import { ancestors, descendants, findNode, selectionRoots, visibleGraph } from '../src/model/graph';
 import { fitCamera } from '../src/model/camera';
@@ -26,6 +26,17 @@ describe('samples', () => {
       ids.add(doc.id);
     }
     expect(ids.size).toBe(SAMPLES.length);
+  });
+});
+
+describe('routingFingerprint', () => {
+  // The editor store keeps old key order, so worker routes are adopted only if order is ignored.
+  it('ignores the order of layout keys', () => {
+    const doc = twoBoxes(),
+      reordered = structuredClone(doc);
+    reordered.layout.nodes = Object.fromEntries(Object.entries(doc.layout.nodes).reverse());
+    expect(Object.keys(reordered.layout.nodes)).not.toEqual(Object.keys(doc.layout.nodes));
+    expect(routingFingerprint(reordered)).toBe(routingFingerprint(doc));
   });
 });
 
