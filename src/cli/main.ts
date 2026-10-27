@@ -77,7 +77,7 @@ Commands:
                             a new diagram, or an example. --no-open skips the browser.
                             Uses the first free port from 5180 unless --port is given;
                             --port 0 picks any free port. The Viewer line has the URL.
-       [--replace]          A viewer already serving the folder is reused (its URL printed);
+       [--replace]          Without --port, a viewer already serving the folder is reused;
        [--status]           --replace stops it and starts this version. --status lists the
                             running viewers: URL, folder, version and pid.
   skill install             Install the agent skill for writing .draft files into
@@ -461,8 +461,9 @@ export async function main(argv: string[]): Promise<number> {
           target = draft;
         }
         // Reuse a viewer that already serves this folder; replace it only when asked.
+        // An explicit --port asks for a new viewer there, so only an open without one reuses.
         const served = servedAt(path.resolve(target ?? '.')),
-          same = runningViewers().find(v => v.root === served.root);
+          same = at < 0 ? runningViewers().find(v => v.root === served.root) : undefined;
         if (same && args.includes('--replace')) {
           await stopViewer(same);
           console.log(`Stopped the viewer from draftably ${same.version} (pid ${same.pid}).`);
