@@ -140,8 +140,7 @@ export function withState(doc: Diagram, id: string): Diagram {
   const focus = new Set<string>();
   for (const x of state.ids) {
     focus.add(x);
-    if (doc.graph.groups.some(g => g.id === x))
-      for (const d of descendants(doc, x)) focus.add(d);
+    if (doc.graph.groups.some(g => g.id === x)) for (const d of descendants(doc, x)) focus.add(d);
   }
   const parent = new Map(
     [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId] as const),
@@ -157,8 +156,7 @@ export function withState(doc: Diagram, id: string): Diagram {
     if (spot) styles[o.id] = { ...styleOf(doc, o.id), spot };
   }
   const edges = doc.graph.edges.map(e => {
-    const spot =
-      focus.has(e.id) || (focus.has(e.from) && focus.has(e.to)) ? on : rest;
+    const spot = focus.has(e.id) || (focus.has(e.from) && focus.has(e.to)) ? on : rest;
     return spot ? { ...e, spot } : e;
   });
   return { ...doc, styles, graph: { ...doc.graph, edges } };

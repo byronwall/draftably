@@ -169,8 +169,8 @@ content area.
 - When one diagram answers several questions (the write path, the read path, what a PR touches),
   add a `state` line for each instead of drawing several diagrams:
   `state write "Write path" api orders db`. Listed IDs are in focus and the rest fades; a
-  connection between two listed nodes is in focus too. `draftably inspect f.draft --svg --state
-write` draws one. States never move anything.
+  connection between two listed nodes is in focus too. `draftably inspect f.draft --svg` takes
+  `--state write` to draw one state. States never move anything.
 - When a box names real code, a file or a page, link it: `href="src/orders/service.ts"`. Write
   file paths from the repository root (relative links start at the git root of the `.draft`), and
   add `:42` to open at a line. Use the URL as it is for anything on the web, such as a GitHub link.

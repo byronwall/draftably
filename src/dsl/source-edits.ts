@@ -103,7 +103,8 @@ export function removeReferences(doc: SourceDoc, id: string) {
 /** Take an object or connection out of every `state` line; drop a line left with no IDs. */
 export function removeFromStates(doc: SourceDoc, id: string) {
   for (const s of statements(doc))
-    if (s.command === 'state') s.args = s.args.filter((w, i) => i === 0 || w.quoted || w.value !== id);
+    if (s.command === 'state')
+      s.args = s.args.filter((w, i) => i === 0 || w.quoted || w.value !== id);
   removeWhere(doc, s => s.command === 'state' && !s.args.slice(1).some(w => !w.quoted));
 }
 

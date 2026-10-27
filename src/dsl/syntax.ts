@@ -869,7 +869,11 @@ function validateReferences(m: Model) {
   for (const s of m.appearance.states ?? [])
     for (const x of s.ids) {
       const line = m.stateLines.get(`${s.id}:${x}`)!;
-      assert(by.has(x) || edgeIds.has(x), `Unknown node, group or edge ${x} in state ${s.id}.`, line);
+      assert(
+        by.has(x) || edgeIds.has(x),
+        `Unknown node, group or edge ${x} in state ${s.id}.`,
+        line,
+      );
     }
   for (const l of m.layouts) {
     scope(l.scope, l.line);

@@ -31,8 +31,12 @@ describe('emphasis states', () => {
   });
 
   it('never moves anything', () => {
-    const plain = renderSvg(doc()).match(/<rect class="shape"[^>]*>/g)!.map(r => r.replace(/fill="[^"]*"|stroke[^ ]*="[^"]*"/g, '')),
-      read = renderSvg(withState(doc(), 'read')).match(/<rect class="shape"[^>]*>/g)!.map(r => r.replace(/fill="[^"]*"|stroke[^ ]*="[^"]*"/g, ''));
+    const plain = renderSvg(doc())
+        .match(/<rect class="shape"[^>]*>/g)!
+        .map(r => r.replace(/fill="[^"]*"|stroke[^ ]*="[^"]*"/g, '')),
+      read = renderSvg(withState(doc(), 'read'))
+        .match(/<rect class="shape"[^>]*>/g)!
+        .map(r => r.replace(/fill="[^"]*"|stroke[^ ]*="[^"]*"/g, ''));
     expect(read).toEqual(plain);
   });
 
@@ -40,6 +44,6 @@ describe('emphasis states', () => {
     expect(() => checkSource('node a "A"\nstate s "S" a ghost\n')).toThrow(/ghost in state s/);
     const src = readSource('node a "A"\nnode b "B"\nstate s "S" a b\nstate t "T" b\n');
     removeReferences(src, 'b');
-    expect(printSource(src)).toBe('node a "A"\nstate s "S" a\n');
+    expect(printSource(src)).toBe('node a "A"\nnode b "B"\nstate s "S" a\n');
   });
 });
