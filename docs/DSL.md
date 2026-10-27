@@ -598,7 +598,8 @@ Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
 - Output goes to `<name>.vary/` beside the file, or to `--out <folder>`: `contact-sheet.png`
   with every variant as a labeled tile, `v0.png` (the file as it is), `v1.png` and on, and
   `variants.json`. Each PNG embeds its variant's source.
-- **Metrics:** crossings, bends, canvas size, the warnings `check` would print, and `moved`, the
+- **Metrics:** crossings, bends, canvas size, the warnings `check` would print (plus `soft-split`
+  notes, since a soft group drawn in pieces no longer reads as one group), and `moved`, the
   mean distance a box moved from where the file draws it. Changes from `v0` show in brackets.
 - **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
   counts as better than the file when it has fewer warnings and no more crossings, or when it

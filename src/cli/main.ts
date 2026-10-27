@@ -243,8 +243,9 @@ export async function main(argv: string[]): Promise<number> {
           const scene = await compile(fs.readFileSync(path.resolve(file!), 'utf8'));
           const notes = [...scene.diagnostics, ...sceneConflicts(scene)];
           for (const d of notes) console.log(describe(d));
-          const errors = notes.filter(d => d.level === 'error').length;
-          console.log(`Check: ${errors ? 'Problems' : notes.length ? 'Warnings' : 'OK'}.`);
+          const errors = notes.filter(d => d.level === 'error').length,
+            warnings = notes.filter(d => d.level === 'warning').length;
+          console.log(`Check: ${errors ? 'Problems' : warnings ? 'Warnings' : 'OK'}.`);
           return errors ? 1 : 0;
         }
         const limit = option(rest, '--limit'),

@@ -697,8 +697,10 @@ export async function draw(source: string): Promise<Drawn> {
   const doc = projectScene(scene),
     { vg, rects } = visibleRects(doc),
     { routes, result } = computeRoutes(doc, vg, rects, { previous: [] });
+  // A soft group drawn in pieces no longer reads as one group, so it counts against a variant
+  // even though `check` only notes it.
   const warnings =
-    scene.diagnostics.filter(d => d.level === 'warning').length +
+    scene.diagnostics.filter(d => d.level === 'warning' || d.code === 'soft-split').length +
     findConflicts(scene, doc, rects, routes).length;
   const svg = renderSvg(doc);
   const size = /width="(\d+(?:\.\d+)?)" height="(\d+(?:\.\d+)?)"/.exec(svg)!;
