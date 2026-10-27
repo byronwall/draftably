@@ -175,6 +175,10 @@ export function normalize(input: unknown): Diagram {
       ...(typeof g.href === 'string' ? { href: g.href } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
       ...(g.frame === 'soft' || g.frame === 'none' ? { frame: g.frame } : {}),
+      ...(Array.isArray(g.hull) &&
+      g.hull.every((r: Raw) => ['x', 'y', 'w', 'h'].every(k => finite(r[k])))
+        ? { hull: g.hull.map((r: Raw) => ({ x: r.x, y: r.y, w: r.w, h: r.h })) }
+        : {}),
     });
   }
 
