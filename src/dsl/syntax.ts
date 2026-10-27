@@ -984,10 +984,20 @@ function validateReferences(m: Model) {
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
       exists(end, e.line);
-      const members = m.objects.filter(o => o.type === 'node' && o.parent === end).map(o => o.id);
+      // A line may end on a boxed group's frame, but not on a tint or on a group around its other end.
+      const o = by.get(end)!,
+        other = end === e.source ? e.target : e.source;
       assert(
-        by.get(end)!.type === 'node',
-        `Connections join nodes; ${end} is a group.${members.length ? ` Connect to one of its members instead: ${members.slice(0, 4).join(', ')}.` : ''}`,
+        o.type === 'node' || !o.frame,
+        `${end} is a ${o.frame} group, which has no frame for a line to end on. Connect to one of its members, or use frame=box.`,
+        e.line,
+      );
+      let around = false;
+      for (let p = by.get(other)?.parent; p && p !== 'root'; p = by.get(p)?.parent)
+        if (p === end) around = true;
+      assert(
+        !around,
+        `${other} is inside ${end}, so a line between them has nowhere to go.`,
         e.line,
       );
     }

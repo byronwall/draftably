@@ -530,12 +530,24 @@ function cellEnds(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
 export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect>) {
   const look = resolveAppearance(doc.appearance),
     { sides, crosses } = cellEnds(doc, vg, all);
-  // A line to a cell with no free side is routed to its stub outside the outline.
-  const stubs = new Map<string, Rect>();
+  // A line to a cell with no free side is routed to its stub outside the outline. A line to an
+  // open group ends on the group's frame: a stub the frame's size, inside the group, so the frame
+  // is not an obstacle to its own line.
+  const stubs = new Map<string, Rect>(),
+    stubParent = new Map<string, string>(),
+    framed = new Set(vg.groups.filter(g => !g.frame && !isCollapsed(doc, g.id)).map(g => g.id));
   for (const e of vg.edges) {
     const c = crosses.get(e.id);
     if (c?.from) stubs.set(`${e.id}:from`, c.from.stub);
     if (c?.to) stubs.set(`${e.id}:to`, c.to.stub);
+    for (const [end, id] of [
+      ['from', e.a],
+      ['to', e.b],
+    ] as const)
+      if (framed.has(id) && !c?.[end]) {
+        stubs.set(`${e.id}:${end}`, all.get(id)!);
+        stubParent.set(`${e.id}:${end}`, id);
+      }
   }
   const rects = all;
   return {
@@ -549,7 +561,13 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
           ? { ...n, ...r, x: r.x + r.w / 2 - 16, w: 32, shape }
           : { ...n, ...r, shape };
       }),
-      ...[...stubs].map(([id, r]) => ({ id, title: '', ...r, shape: 'box' as ShapeKind })),
+      ...[...stubs].map(([id, r]) => ({
+        id,
+        title: '',
+        ...r,
+        shape: 'box' as ShapeKind,
+        ...(stubParent.has(id) ? { parentId: stubParent.get(id) } : {}),
+      })),
     ],
     // A soft or frameless group has no border for a line to cross or run along.
     groups: vg.groups
@@ -571,9 +589,8 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
     edges: vg.edges
       .filter(e => doc.layout.edges[e.id]?.row === undefined)
       .map(e => {
-        const c = crosses.get(e.id),
-          from = c?.from ? `${e.id}:from` : e.a,
-          to = c?.to ? `${e.id}:to` : e.b,
+        const from = stubs.has(`${e.id}:from`) ? `${e.id}:from` : e.a,
+          to = stubs.has(`${e.id}:to`) ? `${e.id}:to` : e.b,
           side = sides.get(e.id);
         return {
           ...e,

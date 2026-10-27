@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes } from '../src/model/routes';
 
 const source = (extra: string[]) =>
   [
@@ -36,9 +38,26 @@ describe('near across a group boundary', () => {
     );
   });
 
-  it('names members to connect to instead of a group', async () => {
-    await expect(compile(source(['edge e4 owner -> asks "owes"']))).rejects.toThrow(
-      'Connect to one of its members instead: q1, q2.',
-    );
+  it('routes an edge to a group to its frame', async () => {
+    const doc = projectScene(await compile(source(['edge e4 owner -> asks "owes"']))),
+      { vg, rects } = visibleRects(doc),
+      { routes } = computeRoutes(doc, vg, rects);
+    const end = routes.find(r => r.id === 'e4')!.points.at(-1)!,
+      frame = rects.get('asks')!;
+    const onBorder =
+      ([frame.x, frame.x + frame.w].some(x => Math.abs(end.x - x) < 1) &&
+        end.y >= frame.y &&
+        end.y <= frame.y + frame.h) ||
+      ([frame.y, frame.y + frame.h].some(y => Math.abs(end.y - y) < 1) &&
+        end.x >= frame.x &&
+        end.x <= frame.x + frame.w);
+    expect(onBorder).toBe(true);
+  });
+
+  it('refuses an edge between a group and something inside it, or to a tint', async () => {
+    await expect(compile(source(['edge e4 q1 -> asks']))).rejects.toThrow('q1 is inside asks');
+    await expect(
+      compile(source(['edge e4 owner -> asks']).replace('color=violet', 'color=violet frame=soft')),
+    ).rejects.toThrow('no frame for a line to end on');
   });
 });
