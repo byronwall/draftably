@@ -113,6 +113,36 @@ describe('group packing', () => {
     expect(upstream.x).toBeLessThan(server.x + server.w);
     expect(box(scene, 'device').x).toBeGreaterThan(server.x + server.w);
   });
+
+  it('ranks a group in a cycle with a node by where its members enter (#125)', async () => {
+    // drop is fed by a member of each group and feeds another, so the lifted edges cycle. Broken
+    // in declaration order, present → drop → missing ranked missing past drop.
+    const text = [
+      'node listing "Listing"',
+      'group present "Present"',
+      'node check_a "Check A" in=present',
+      'node a_out "Read A" in=present',
+      'group missing "Missing"',
+      'node check_b "Check B" in=missing',
+      'node fail_b "Fail B" in=missing',
+      'node b_out "Read B" in=missing',
+      'node drop "Drop"',
+      'edge e1 listing -> check_b',
+      'edge e2 check_b -> fail_b',
+      'edge e3 fail_b -> drop',
+      'edge e4 drop -> b_out',
+      'edge e5 listing -> check_a',
+      'edge e6 check_a -> drop',
+      'edge e7 drop -> a_out',
+      'layout root engine=layered direction=right fold=never',
+      '',
+    ].join('\n');
+    const scene = await compile(text),
+      missing = box(scene, 'missing');
+    // The group follows listing, and drop follows the group's check, not the other way round.
+    expect(missing.x).toBeLessThan(box(scene, 'drop').x);
+    expect(box(scene, 'check_b').x).toBeLessThan(box(scene, 'drop').x);
+  });
 });
 
 describe('busy gaps', () => {
