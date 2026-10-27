@@ -1,5 +1,41 @@
 # draftably
 
+## 0.6.0
+
+### Minor Changes
+
+- 143251a: Cells can form a table: `columns=N` fills rows of N cells with shared column widths, and `span=N` covers several columns. Lines meet a cell on its outer side, and reach a cell inside a grid across the cells around it, ending in a dot.
+- bd419ad: Add `layout <group> cells`: a group's nodes touch edge to edge under a title band, for sequences such as the parts of a request. `shape=marker` marks a seam between cells, and lines can end on any cell.
+- e688453: `check` reports drawing conflicts as warnings: a line through a box or a group title, overlapping boxes, a label on a box or another label, and a box outside its group. Each warning names the refinement line that caused it and a fix. `check --hints` shows how far each refinement moved its target, and `inspect --json --hints` adds the unrefined `raw` position of every moved node.
+- c44e1d0: New theme palettes. `drafting` is the new default: navy ink on cool paper with drafting blue and marker gold. `ink` replaces `mulberry`, `blueprint` replaces `midnight`, `fieldnotes` now pairs indigo with terracotta, and `signal` uses Okabe–Ito's color-blind-safe hues. Rename `theme graphite`, `theme mulberry` and `theme midnight` lines to `drafting`, `ink` and `blueprint`. Amber and orange stay bright with dark text at shades 400–500, and change marks differ in lightness so they read for red-green color blindness.
+- 2ff30bc: PNG and SVG exports carry their `.draft` source. `draftably extract` reads it back, the other commands accept an exported image in place of a `.draft` file, and the viewer opens a dropped or pasted export as a diagram. `--no-source` and an export menu checkbox leave the source out.
+- 28a96a0: A `config` line holds file settings: `link-base=` sets where relative links start, and `editor=` picks the editor file links open in (`vscode`, `cursor`, `zed`, …). `check` warns about a file link that does not exist and suggests the path it probably meant.
+- d41d3fe: `inspect --svg --states` (and `--png`) draws every emphasis state as its own labelled panel in one aligned grid.
+- d713423: The viewer shows a file's emphasis states as chips over the canvas. Pick one, or step with `[` and `]`, to draw it in place; **Grid** shows all of them side by side. The chosen state is kept in the URL (`?state=`), never in the file.
+- 2fa4dd6: `state id "label" ids…` lines name emphasis states: the listed nodes, groups and connections draw in focus and the rest fades (`rest=plain` keeps it and rings the focus instead). `inspect --svg --state id` draws one state. States never move anything.
+- 2f58775: `inspect --svg` and the viewer's SVG export draw the link mark, give each link a tooltip and a hover outline, and tag each object with `data-id`. File links become paths from the diagram's folder; the viewer's SVG export now keeps links at all.
+- 51edc02: Linked nodes and containers show a ↗ mark. In the viewer the mark opens the link: a URL in a new tab, a `.draft` in the viewer, or a file path in VS Code, with `path:42` opening at that line. Relative paths start at the diagram's git root.
+- 0d84670: Cells can draw byte and bit layouts: `unit=byte` or `unit=bit` gives every unit one width, so `span=N` is a field's size. A ruler numbers the units, long fields run on into the next row, and `span=var` draws a field of variable length.
+- 8c8f18e: Add sequence diagrams: `layout root sequence` puts every node in a row of participants with dashed lifelines and draws each edge as a message on its own row, in file order. Adds the `login-sequence` example.
+- e9a1f93: Add `frame=soft` and `frame=none` on groups. Members lay out as if the group line were not there, and the group draws as a light tint behind them (soft) or not at all (none). `check` reports `soft-overlap` when a tint covers an object outside its group.
+- 1a86116: Add swim lanes: `layout root lanes` makes each top-level group a lane and ranks every step across the whole drawing, so one rank is one column across all lanes. `direction=down` sets the lanes side by side. Adds the `support-lanes` example.
+- 61405c6: `vary` also suggests dropping refinements that `check` blames for conflicts, drawing change marks as `compare` panels, and softening groups for fewer containers. `check` no longer reports `node-overlap`, `outside-group` or `edge-through-title` for soft and frameless groups, whose tints lines may cross.
+- b5cb444: Add `draftably vary`. It tries layout and routing variants that suit the diagram's shape, measures each one (crossings, bends, size, warnings, movement) and ranks them against the file as it is. It writes a contact sheet, one PNG per variant and `variants.json`. `--apply <id>` (or `--apply best`) writes the chosen variant's lines into the file and checks it.
+
+  `vary --try key=a,b` sweeps exact settings (two `--try` make a grid; `--try key` alone uses the viewer Compare's steps), `--grid` sweeps the main engines in both directions, and `--scope <group>` varies one group's layout line.
+
+  `vary --fit wide|slide|square|page|tall` aims for an image shape, `--prefer compact|stable` changes what ranks first, and `--from <id>` searches around a variant from the last run.
+
+### Patch Changes
+
+- 0441ade: In the viewer, dragging a cell among its group's cells reorders them and writes the group's `order` line, and the inspector has a Span field for cells.
+- cb66113: A layered or flow run that fits the canvas without its edge labels no longer folds when the labels make it slightly longer.
+- 89d4771: Layered and compound-flow layouts no longer rank a group past a node that its members feed and that feeds them back. The group now sits where its first member ranks.
+- 7ded53c: A compare panel now trims each container to its remaining members on every side, so a container that lost its top members no longer keeps an empty band above them.
+- 5738658: Switching between open diagrams no longer routes connections twice, so a file opened before shows at once. A hovered file link starts compiling before the click.
+- 942f8d5: Keep a soft group's members side by side in each rank, leave room for its tint and label, and draw the tint as one rectangle when it covers nothing else, or as the members joined by strips. `check` notes `soft-split` when members cannot be joined.
+- 91675cd: Select a soft group in the viewer by clicking its tint, and drag the tint to move its members; each member gets a `stay` at its new place.
+
 ## 0.5.1
 
 ### Patch Changes
