@@ -155,6 +155,20 @@ function clustered(
     .flatMap(([key, b]) => (key.startsWith('\0') ? b.ids : clustered(b.ids, chainOf, depth + 1)));
 }
 
+/**
+ * The scene as layout sees it, for edits that write positions: soft and frameless groups left
+ * out, and each object under the container that lays it out, which its local position is
+ * relative to.
+ */
+export function layoutView(scene: Scene): Scene {
+  if (!scene.objects.some(o => o.frame)) return scene;
+  const by = new Map(scene.model.objects.map(o => [o.id, o])),
+    objects = scene.objects
+      .filter(o => !o.frame)
+      .map(o => ({ ...o, parent: layoutParent(by, o.id) }));
+  return { ...scene, objects, byId: new Map(objects.map(o => [o.id, o])) };
+}
+
 /** Space kept between two soft tints, or a tint and a box, that would otherwise touch. */
 const SOFT_GAP = 8;
 

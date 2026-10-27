@@ -465,6 +465,7 @@ Edits made in the viewer are written back to the file as readable statements:
 | In the viewer                              | In the file                                                         |
 | ------------------------------------------ | ------------------------------------------------------------------- |
 | Drag an object                             | `near` the closest sibling it does not overlap; `nudge` if none.    |
+| Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
 | Pin or unpin (**P**)                       | `pin` at its position; unpinning leaves a soft `stay`.              |
 | Resize a shape or container                | `size`, or `min-width`/`min-height` on the container's `layout`.    |
 | Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.   |
