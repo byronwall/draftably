@@ -550,6 +550,19 @@ export async function openFileSession(file: string): Promise<boolean> {
   return true;
 }
 
+/**
+ * Start compiling a served file before it is opened, such as while a link to it is hovered.
+ * Opening it then finds the compiled scene ready, unless the file changed meanwhile.
+ */
+export async function prefetchFile(file: string) {
+  try {
+    const res = await fetch(`./api/session?file=${encodeURIComponent(file)}`);
+    if (res.ok) void compileCached((await res.json()).source).catch(() => {});
+  } catch {
+    // Opening the file reports the problem.
+  }
+}
+
 /** Wait for a save in flight, so leaving the file never drops an edit. */
 export async function settleSave() {
   while (saving) await new Promise(resolve => setTimeout(resolve, 20));

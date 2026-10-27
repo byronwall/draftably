@@ -441,7 +441,19 @@ export function documentIdentity(doc: Diagram) {
   return JSON.stringify(meaning);
 }
 
-/** Inputs that affect connection routing. */
+/** Write object keys in sorted order, so key order never changes a fingerprint. */
+const sortedKeys = (_key: string, value: unknown) =>
+  value && typeof value === 'object' && !Array.isArray(value)
+    ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)))
+    : value;
+
+/**
+ * Inputs that affect connection routing. The editor store keeps the key order of the document it
+ * replaced, so the worker's freshly projected copy of the same document lists its keys differently.
+ */
 export function routingFingerprint(doc: Diagram) {
-  return JSON.stringify([doc.graph, doc.layout, doc.styles, doc.collapsed, doc.settings.routing]);
+  return JSON.stringify(
+    [doc.graph, doc.layout, doc.styles, doc.collapsed, doc.settings.routing],
+    sortedKeys,
+  );
 }

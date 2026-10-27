@@ -17,6 +17,7 @@ import {
   fileSession,
   openExampleSession,
   openFileSession,
+  prefetchFile,
   settleSave,
 } from './file-session';
 
@@ -207,9 +208,25 @@ export function navigateInPlace() {
     void go(next.href);
   };
   const onPopState = () => void go(location.href, { push: false });
+  // A file link hovered briefly is compiled meanwhile, so the click usually finds it ready.
+  const prefetched = new Set<string>();
+  let hover: ReturnType<typeof setTimeout> | undefined;
+  const onPointerOver = (e: PointerEvent) => {
+    const link = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+    const file = link && state.workspace() && new URL(link.href).searchParams.get('file');
+    clearTimeout(hover);
+    if (!file || prefetched.has(file) || file === fileSession()?.file) return;
+    hover = setTimeout(() => {
+      prefetched.add(file);
+      void prefetchFile(file);
+    }, 80);
+  };
   document.addEventListener('click', onClick);
+  document.addEventListener('pointerover', onPointerOver);
   window.addEventListener('popstate', onPopState);
   return () => {
+    clearTimeout(hover);
+    document.removeEventListener('pointerover', onPointerOver);
     document.removeEventListener('click', onClick);
     window.removeEventListener('popstate', onPopState);
   };
