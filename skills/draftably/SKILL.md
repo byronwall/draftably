@@ -156,9 +156,18 @@ Good defaults:
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
 - A process with roles: `layout root lanes` makes each top-level group a swim lane (bands,
   `direction=down` for columns). Every node must sit in a lane; steps line up in rank columns
-  across all lanes.
+  across all lanes. **Fits** one flow that passes between roles (a request moving from client
+  to server to storage). **Doesn't fit** several independent flows: each one crosses every lane
+  and the lines tangle. Draw independent flows as groups side by side instead.
 - An exchange between participants: `layout root sequence`. Nodes are participants across the
   top; each `edge` line is one message, in file order; `kind=async` for replies. No groups.
+  **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
+  contains or depends on what) or more than about eight participants; use groups and a flow.
+- One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request
+  body, a record, a schema. **Doesn't fit** steps that happen in order; those are nodes and edges.
+- Several readings of one diagram (a write path, a read path): `state` lines, not separate
+  files. **Fits** paths through the same boxes. **Doesn't fit** different structure; that is a
+  second diagram. States are interactive; for a document use `inspect --states` or `--state`.
 
 ### Cells
 

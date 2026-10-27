@@ -63,3 +63,27 @@ export function installSkill(options: {
   fs.cpSync(skillSource(), target, { recursive: true });
   return target;
 }
+
+/**
+ * Installed copies of the skill that differ from the one this CLI ships: in `./.claude/skills`,
+ * `./.agents/skills` and `~/.claude/skills`. An agent reads the installed copy, so after an
+ * upgrade it keeps following the old one until it is reinstalled.
+ */
+export function staleSkills(cwd: string, home = os.homedir()) {
+  let bundled: string;
+  try {
+    bundled = fs.readFileSync(path.join(skillSource(), 'SKILL.md'), 'utf8');
+  } catch {
+    return [];
+  }
+  return [
+    { dir: path.join(cwd, '.claude/skills'), flag: '' },
+    { dir: path.join(cwd, '.agents/skills'), flag: ' --dir .agents/skills' },
+    { dir: path.join(home, '.claude/skills'), flag: ' --global' },
+  ].flatMap(({ dir, flag }) => {
+    const file = path.join(dir, SKILL_NAME, 'SKILL.md');
+    return fs.existsSync(file) && fs.readFileSync(file, 'utf8') !== bundled
+      ? [{ path: path.dirname(file), fix: `draftably skill install${flag} --force` }]
+      : [];
+  });
+}

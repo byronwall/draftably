@@ -4,7 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { compile } from '../src/dsl/compile';
 import { COLORS, DSL_SHAPES, ENGINE_PARAMS, ENGINES, ROUTING_PARAMS } from '../src/dsl/syntax';
-import { installSkill, skillSource } from '../src/cli/skill';
+import { installSkill, skillSource, staleSkills } from '../src/cli/skill';
 
 const dirs: string[] = [];
 const temp = () => {
@@ -73,5 +73,22 @@ describe('agent skill', () => {
     expect(() => installSkill({ cwd })).toThrow(/--force/);
     installSkill({ cwd, force: true });
     expect(fs.readFileSync(path.join(target, 'SKILL.md'), 'utf8')).toBe(skill);
+  });
+});
+
+describe('stale skill', () => {
+  it('names an installed copy that differs from the bundled skill, with the command to update it', () => {
+    const cwd = fs.mkdtempSync(path.join(os.tmpdir(), 'draftably-stale-')),
+      home = fs.mkdtempSync(path.join(os.tmpdir(), 'draftably-home-'));
+    installSkill({ cwd });
+    installSkill({ cwd, global: true, home });
+    expect(staleSkills(cwd, home)).toEqual([]);
+    fs.writeFileSync(path.join(home, '.claude/skills/draftably/SKILL.md'), 'old copy');
+    expect(staleSkills(cwd, home)).toEqual([
+      {
+        path: path.join(home, '.claude/skills/draftably'),
+        fix: 'draftably skill install --global --force',
+      },
+    ]);
   });
 });
