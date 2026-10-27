@@ -42,7 +42,10 @@ function paddings(scene: Scene) {
 const geometry = (scene: Scene) => scene.objects.map(({ id, x, y, w, h }) => ({ id, x, y, w, h }));
 
 describe('group fit', () => {
-  const files = readdirSync(examples).filter(f => f.endsWith('.draft'));
+  // Swim lanes span the whole drawing by design, so they are not fitted to their content.
+  const files = readdirSync(examples).filter(
+    f => f.endsWith('.draft') && !/^layout root lanes/m.test(read(f)),
+  );
 
   // A routing channel (src/dsl/channels.ts) is two standoffs plus an edge gap per extra line on
   // a side, or one standoff plus the gaps under the title.
