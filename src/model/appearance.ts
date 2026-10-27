@@ -384,6 +384,9 @@ const isPale = (s: Shade) => s <= 300;
  */
 const isWarm = (H: number) => H >= 45 && H <= 110;
 const BRIGHT: Partial<Record<Shade, number>> = { 400: 0.8, 500: 0.74 };
+/** Orange sits a step darker than amber, so the two stay apart without hue. */
+const brightAt = (shade: Shade, H: number) =>
+  BRIGHT[shade] === undefined ? undefined : BRIGHT[shade] - (H < 65 ? 0.07 : 0);
 const darkInked = (s: Shade, H: number) => isPale(s) || (isWarm(H) && s in BRIGHT);
 
 /** Contrast targets (WCAG ratios) every generated color meets. */
@@ -454,7 +457,7 @@ function swatchAt(
 ): { swatch: Swatch; L: number } {
   const pale = darkInked(shade, H),
     ink = pale ? DARK_INK(H) : LIGHT_INK,
-    target = pale ? CONTRAST.paleInk : CONTRAST.darkInk;
+    target = isPale(shade) ? CONTRAST.paleInk : CONTRAST.darkInk;
   let L = fixed ? hexToLch(fixed)[0] : start,
     fill = fixed ?? lchToHex([L, C * chromaAt(L), H]);
   while (contrast(fill, ink) < target && L > 0.05 && L < 0.995) {
@@ -476,7 +479,7 @@ function ramp(H: number, C: number, canvas: string, dark: boolean, anchor?: [str
   const out = new Map<Shade, Swatch>();
   let previous = 1;
   for (const shade of SHADES) {
-    const bright = isWarm(H) ? BRIGHT[shade] : undefined;
+    const bright = isWarm(H) ? brightAt(shade, H) : undefined;
     const start = isPale(shade)
       ? LIGHTNESS[shade]
       : Math.min(bright ?? LIGHTNESS[shade], previous - DARK_STEP);
