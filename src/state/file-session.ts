@@ -34,6 +34,7 @@ import {
 } from '../dsl/layout-edits';
 import type { RoutingResult } from '../engines/routing-engine.js';
 import { runShared } from '../lib/engine-tasks';
+import { cacheScene, cachedScene } from '../lib/scene-cache';
 import { normalize, routingFingerprint } from '../model/document';
 import type { Diagram, LayoutSettings, RoutingSettings } from '../model/types';
 import { clone } from '../model/geometry';
@@ -180,13 +181,18 @@ function compileCached(source: string): Promise<Compiled> {
  * again, which reports the error with its line.
  */
 async function compileOffThread(source: string): Promise<Compiled> {
+  // Opened before, by this build: the routes stand if this view projects the same document.
+  const kept = await cachedScene<Compiled>(source);
+  if (kept) return kept;
   try {
     const { scene, fingerprint, routing } = await runShared({
       kind: 'scene',
       source,
       view: viewState(),
     });
-    return { scene, routes: { fingerprint, result: routing } };
+    const result = { scene, routes: { fingerprint, result: routing } };
+    void cacheScene(source, result);
+    return result;
   } catch {
     return { scene: await compile(source) };
   }
