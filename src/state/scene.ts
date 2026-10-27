@@ -7,10 +7,18 @@ import type { PriorRoute, RoutingResult } from '../engines/routing-engine.js';
 import { routingFingerprint } from '../model/document';
 import { drawingBounds } from '../model/bounds';
 import { frameRect, makeGeometry, styleOf, visibleGraph, type VisibleGraph } from '../model/graph';
-import { computeRoutes, drawRoutes, routeInput, type DrawnRoute } from '../model/routes';
+import { startEngineTask, type RunningTask } from '../lib/engine-tasks';
+import {
+  computeRoutes,
+  drawRoutes,
+  knownRoutes,
+  rememberRoutes,
+  routeInput,
+  type DrawnRoute,
+} from '../model/routes';
 import type { NodeGeometry, NodeLayout, Rect } from '../model/types';
 import { doc } from './document';
-import { fileMode, setRouteSink } from './file-session';
+import { fileCompiling, fileMode, setRouteSink } from './file-session';
 
 const sameIds = (a: readonly string[], b: readonly string[]) =>
   a.length === b.length && a.every((id, i) => id === b[i]);
@@ -53,12 +61,62 @@ const state = createRoot(() => {
   /** Bumped to force routes to be recomputed from scratch. */
   const [epoch, setEpoch] = createSignal(0);
 
+  /** Full routes being drawn in a worker for the document with this fingerprint. */
+  let refining: { fingerprint: string; task: RunningTask<RoutingResult> } | null = null;
+  const [routesPending, setRoutesPending] = createSignal(false);
+  const stopRefining = () => {
+    refining?.task.cancel();
+    refining = null;
+    setRoutesPending(false);
+  };
+  /**
+   * Route the drawing in a worker, as the file would be routed, then show those routes. Not when
+   * an edit is compiling: its compile routes the file in the worker already.
+   */
+  const refine = (fingerprint: string) =>
+    queueMicrotask(() => {
+      if (fileCompiling() || refining?.fingerprint === fingerprint) return;
+      if (routingFingerprint(doc) === fingerprint) startRefining(fingerprint);
+    });
+  function startRefining(fingerprint: string) {
+    stopRefining();
+    const task = startEngineTask({
+      kind: 'route',
+      input: routeInput(doc, visible(), rects()),
+      options: { ...doc.settings.routing, previous: [] },
+    });
+    refining = { fingerprint, task };
+    setRoutesPending(true);
+    const done = () => {
+      if (refining?.task !== task) return false;
+      refining = null;
+      setRoutesPending(false);
+      return true;
+    };
+    task.promise.then(
+      result => {
+        if (done() && routingFingerprint(doc) === fingerprint)
+          setAdoptedRoutes({ fingerprint, result });
+      },
+      () => void done(),
+    );
+  }
+
   const routing = createMemo(() => {
     epoch();
     const vg = visible(),
       map = rects(),
       quick = quickRouting(),
       temporary = !!sculptGeometry() || !!animationGeometry();
+    const adopted = adoptedRoutes(),
+      fingerprint = routingFingerprint(doc),
+      ready = !quick && !temporary && adopted?.fingerprint === fingerprint,
+      // A file's full routes come from the engine worker, with each compiled revision or from
+      // `refine`: routing a large file here would block the page for seconds.
+      known = fileMode() && !quick && !temporary && !ready ? knownRoutes(doc, vg, map) : null,
+      deferred = fileMode() && !quick && !temporary && !ready && !known;
+    if (deferred && !fileCompiling()) refine(fingerprint);
+    else if (!deferred && refining) queueMicrotask(stopRefining);
     const signature = JSON.stringify([
       vg.edges,
       [...map],
@@ -68,14 +126,18 @@ const state = createRoot(() => {
       vg.nodes.map(n => [n.id, n.parentId, styleOf(doc, n.id).shape]),
       quick,
       temporary,
+      deferred,
+      !!known,
     ]);
     if (cache?.signature === signature) return cache.value;
-    const adopted = adoptedRoutes();
     let value;
-    if (!quick && !temporary && adopted?.fingerprint === routingFingerprint(doc)) {
+    if (ready) {
       const result = structuredClone(adopted.result);
+      rememberRoutes(doc, vg, map, result);
       value = { result, routes: drawRoutes(doc, vg, map, result) };
-    } else {
+    } else if (known) value = { result: known, routes: drawRoutes(doc, vg, map, known) };
+    else if (deferred) value = computeRoutes(doc, vg, map, { previous: lastRoutes, quick: true });
+    else {
       value = computeRoutes(doc, vg, map, {
         // A diagram file must draw the same routes as `draftably inspect`, so no earlier routes,
         // except while dragging: quick routes keep each line's sides from the last frame, so a
@@ -110,6 +172,7 @@ const state = createRoot(() => {
     rects,
     routing,
     routesById,
+    routesPending,
     resetRoutes() {
       cache = null;
       lastRoutes = [];
@@ -136,6 +199,7 @@ export const {
   rects: sceneRects,
   routing,
   routesById,
+  routesPending,
   resetRoutes,
   routeInputFor,
 } = state;

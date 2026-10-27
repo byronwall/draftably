@@ -802,16 +802,59 @@ function messageRoute(e: VisibleEdge, row: number, a: Rect, b: Rect): Route {
   };
 }
 
+/**
+ * Recent routings by their exact input. Routing a large drawing takes seconds, and the same
+ * geometry is often routed again: the Grid view's panels, an export, undo back to a shape, or
+ * routes the engine worker already drew.
+ */
+const recent = new Map<string, RoutingResult>();
+
+function routingKey(
+  doc: Diagram,
+  vg: VisibleGraph,
+  rects: Map<string, Rect>,
+  options: { previous?: PriorRoute[]; quick?: boolean },
+) {
+  const input = routeInput(doc, vg, rects),
+    settings = {
+      ...doc.settings.routing,
+      previous: options.previous ?? [],
+      quick: !!options.quick,
+    };
+  return { input, settings, key: JSON.stringify([input, settings]) };
+}
+
+function keep(key: string, result: RoutingResult) {
+  recent.delete(key);
+  recent.set(key, structuredClone(result));
+  while (recent.size > 8) recent.delete(recent.keys().next().value!);
+}
+
+/** Full routes already computed for this drawing, or null. */
+export function knownRoutes(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
+  const hit = recent.get(routingKey(doc, vg, rects, {}).key);
+  return hit ? structuredClone(hit) : null;
+}
+
+/** Record full routes computed elsewhere (the engine worker) for this drawing. */
+export function rememberRoutes(
+  doc: Diagram,
+  vg: VisibleGraph,
+  rects: Map<string, Rect>,
+  result: RoutingResult,
+) {
+  keep(routingKey(doc, vg, rects, {}).key, result);
+}
+
 export function computeRoutes(
   doc: Diagram,
   vg: VisibleGraph,
   rects: Map<string, Rect>,
   options: { previous?: PriorRoute[]; quick?: boolean } = {},
 ): SceneRoutes {
-  const result = RouteLab.compute(routeInput(doc, vg, rects), {
-    ...doc.settings.routing,
-    previous: options.previous ?? [],
-    quick: !!options.quick,
-  });
+  const { input, settings, key } = routingKey(doc, vg, rects, options),
+    hit = recent.get(key),
+    result = hit ? structuredClone(hit) : RouteLab.compute(input, settings);
+  keep(key, result);
   return { result, routes: drawRoutes(doc, vg, rects, result) };
 }

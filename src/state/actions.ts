@@ -13,9 +13,7 @@ import {
   type Shade,
   type ThemeId,
 } from '../model/appearance';
-import type { RoutingResult } from '../engines/routing-engine.js';
-import { startEngineTask, type RunningTask } from '../lib/engine-tasks';
-import { normalize, routingFingerprint } from '../model/document';
+import { normalize } from '../model/document';
 import * as edits from '../model/edits';
 import {
   descendants,
@@ -61,15 +59,7 @@ import {
   type Tool,
 } from './editor';
 import { discardPreview, setDocumentOpener } from './layout';
-import {
-  geometry,
-  resetRoutes,
-  routeInputFor,
-  routesById,
-  routingReport,
-  setAdoptedRoutes,
-  setQuickRouting,
-} from './scene';
+import { geometry, resetRoutes, routesById, routingReport, setAdoptedRoutes } from './scene';
 import { toast } from './toast';
 import { confirmAction } from './ui';
 
@@ -395,42 +385,10 @@ export function toggleCollapse(id = selectionRoots(doc, selection()).find(id => 
   const before = frameRect(doc, geometry, id);
   // A file never stores which containers are collapsed: there it is a view, like the camera,
   // and needs no translation, recompile or save.
-  if (editsGoToFile()) {
-    // Full routing takes 20–25ms a line; draw quick routes now and adopt full ones when ready.
-    batch(() => {
-      setQuickRouting(true);
-      mutate(d => edits.toggleCollapsed(d, id));
-    });
-    refineRoutes();
-  } else transact('Toggle container', d => edits.toggleCollapsed(d, id));
+  // The scene draws quick routes and has the worker route it in full.
+  if (editsGoToFile()) mutate(d => edits.toggleCollapsed(d, id));
+  else transact('Toggle container', d => edits.toggleCollapsed(d, id));
   animateToggle(id, before);
-}
-
-let refining: RunningTask<RoutingResult> | null = null;
-
-/** Route the drawing in the worker, as a file would be routed, then show those routes. */
-function refineRoutes() {
-  refining?.cancel();
-  const fingerprint = routingFingerprint(doc),
-    task = startEngineTask({
-      kind: 'route',
-      input: routeInputFor(),
-      options: { ...doc.settings.routing, previous: [] },
-    });
-  refining = task;
-  task.promise.then(
-    result => {
-      if (refining !== task) return;
-      refining = null;
-      batch(() => {
-        if (routingFingerprint(doc) === fingerprint) setAdoptedRoutes({ fingerprint, result });
-        setQuickRouting(false);
-      });
-    },
-    () => {
-      if (refining === task) setQuickRouting(false);
-    },
-  );
 }
 
 /** Grow or shrink the frame from its old size, and fade in what an expand reveals. */

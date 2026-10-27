@@ -49,7 +49,7 @@ import {
 } from './layout';
 import { measured } from '../dsl/project';
 import { currentSource, fileCompiling, fileDiagnostics, fileStatus } from './file-session';
-import { routes, routingReport, sceneRects, visibleScene } from './scene';
+import { routes, routesPending, routingReport, sceneRects, visibleScene } from './scene';
 import {
   activateBrush,
   brushDab,
@@ -125,7 +125,8 @@ export function installDebugApi() {
       selected: selectedIds(),
       visibleNodes: visibleScene().nodes.length,
       visibleEdges: visibleScene().edges.length,
-      layoutBusy: layoutBusy(),
+      // Full routes still being drawn in a worker count as layout work.
+      layoutBusy: layoutBusy() || routesPending(),
       preview: !!layoutPreview(),
       layoutReport: clone(layoutReport()),
       routingReport: clone(routingReport()),
