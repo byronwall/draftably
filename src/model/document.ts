@@ -174,6 +174,7 @@ export function normalize(input: unknown): Diagram {
       ...(typeof g.was === 'string' ? { was: g.was } : {}),
       ...(typeof g.href === 'string' ? { href: g.href } : {}),
       ...(g.parentId ? { parentId: g.parentId } : {}),
+      ...(g.frame === 'soft' || g.frame === 'none' ? { frame: g.frame } : {}),
     });
   }
 
