@@ -209,6 +209,8 @@ export interface ModelObject {
    * group is not a layout scope: its members are laid out with the nearest framed container's.
    */
   frame?: 'soft' | 'none';
+  /** Groups only: `fold=never` keeps the group's chain in one column even when it is much the tallest. */
+  fold?: 'never';
   /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
   soft?: string[];
   /** Cells only: how many columns (or units) of its group's grid the cell covers; `var` for a
@@ -599,7 +601,18 @@ export function parseModel(source: string | SourceDoc): Model {
                 'detail',
                 'priority',
               ]
-            : ['in', 'color', 'shade', 'was', 'href', 'kind', 'detail', 'priority', 'frame'],
+            : [
+                'in',
+                'color',
+                'shade',
+                'was',
+                'href',
+                'kind',
+                'detail',
+                'priority',
+                'frame',
+                'fold',
+              ],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -625,6 +638,9 @@ export function parseModel(source: string | SourceDoc): Model {
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
           ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
+          ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
+            ? { fold: 'never' as const }
+            : {}),
           ...(command === 'group' && choice('frame', 'box', FRAMES) !== 'box'
             ? { frame: choice('frame', 'box', FRAMES) as 'soft' | 'none' }
             : {}),

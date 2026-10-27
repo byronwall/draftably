@@ -653,6 +653,9 @@ function titleFit(title: string, inner: number, look: ResolvedAppearance) {
 /** How far a soft refinement may give way before `check` warns that it no longer holds. */
 export const RELAXED_WARNING = 16;
 
+/** A group folds when its chain runs this many times as long as the next longest column. */
+const TALL_GROUP = 1.5;
+
 /** Solver budget for engine recipes; the same budget Compare and the timeline use. */
 export const ENGINE_ITERATIONS = 640;
 
@@ -2843,6 +2846,50 @@ function layoutPass(
     /** A group whose content runs more than `FOLD_ASPECT` times its depth. */
     function tooLongRun(o: Size) {
       return along(o) > FOLD_ASPECT * across(o);
+    }
+  }
+
+  // In a drawing that reads down, a group whose chain is much taller than every other column folds
+  // into side-by-side columns, the tallest first, while that makes the whole drawing smaller.
+  // (Reading right, folding a long group turns it into rows, which reads worse; the length check
+  // above covers that case.)
+  if (
+    !packFold &&
+    rootLayout &&
+    axisOf(rootLayout) === 'down' &&
+    rootLayout.engine?.params.fold !== 'never'
+  ) {
+    const along = (o: Size) => o.h,
+      area = (o: Size) => o.w * o.h;
+    for (;;) {
+      const tops = (children.get('root') ?? [])
+          .map(o => items.get(o.id)!)
+          .filter(Boolean)
+          .sort((a, b) => along(b) - along(a)),
+        [tall, next] = tops;
+      if (
+        !tall ||
+        !next ||
+        tall.type !== 'group' ||
+        tall.fold === 'never' ||
+        foldGroups.has(tall.id) ||
+        !packEngine(tall.id) ||
+        along(tall) < TALL_GROUP * along(next)
+      )
+        break;
+      const before = size;
+      foldGroups.add(tall.id);
+      diagnostics.length = diagnosed;
+      folds.length = flows.length = 0;
+      drawn.clear();
+      size = arrange('root');
+      if (area(size) < area(before)) continue;
+      foldGroups.delete(tall.id);
+      diagnostics.length = diagnosed;
+      folds.length = flows.length = 0;
+      drawn.clear();
+      arrange('root');
+      break;
     }
   }
 
