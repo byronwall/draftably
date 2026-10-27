@@ -15,7 +15,7 @@ import { measureText, widestPiece } from '../model/fonts';
 import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
 import { defaultShapeSize } from '../model/styles';
-import type { CellsChrome, Direction, Lane } from '../model/types';
+import type { CellsChrome, Diagram, Direction, Lane } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
 import {
@@ -506,13 +506,19 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
     undefined,
     true,
   );
-  let doc = projectScene(plain);
+  // The engines break ties by id, so a renamed node could land somewhere else. They see ids that
+  // sort in authored order instead: file order, with each scope's `order` line applied. Ids are
+  // names; only the file steers layout.
+  const alias = new Map(authoredOrder(m).map((id, i) => [id, `o${String(i).padStart(6, '0')}`])),
+    original = new Map([...alias].map(([id, a]) => [a, id]));
+  let doc = renamed(projectScene(plain), alias);
   for (const l of engines) {
     const settings = LayoutLab.settings({
       ...doc.settings,
       algorithm: l.engine!.algorithm,
       direction: (axisOf(l) === 'right' ? 'RIGHT' : 'DOWN') as Direction,
       ...l.engine!.params,
+      ...(l.engine!.params.rootId ? { rootId: alias.get(l.engine!.params.rootId) } : {}),
       // The compiler sizes groups to their content afterwards, so frames never constrain it.
       growContainers: true,
     });
@@ -523,12 +529,71 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
       settle: true,
       maxIterations: ENGINE_ITERATIONS,
       scope: l.scope === 'root' ? 'all' : 'container',
-      ...(l.scope === 'root' ? {} : { containerId: l.scope }),
+      ...(l.scope === 'root' ? {} : { containerId: alias.get(l.scope) }),
       viewport: { w: RENDER_CONTEXT.width, h: RENDER_CONTEXT.height },
     });
     doc = result.document;
   }
-  return new Map(Object.entries(doc.layout.nodes).map(([id, r]) => [id, { x: r.x, y: r.y }]));
+  return new Map(
+    Object.entries(doc.layout.nodes).map(([id, r]) => [original.get(id) ?? id, { x: r.x, y: r.y }]),
+  );
+}
+
+/** Object ids in file order, each scope's children reordered by its `order` line. */
+function authoredOrder(m: Model): string[] {
+  const out: string[] = [];
+  const visit = (scope: string) => {
+    let kids = m.objects.filter(o => o.parent === scope);
+    const order = m.hints.find(h => h.type === 'order' && h.scope === scope);
+    if (order?.type === 'order')
+      kids = [
+        ...order.ids.flatMap(id => kids.filter(k => k.id === id)),
+        ...kids.filter(k => !order.ids.includes(k.id)),
+      ];
+    for (const k of kids) {
+      out.push(k.id);
+      visit(k.id);
+    }
+  };
+  visit('root');
+  // Anything the walk missed keeps its file position after the rest.
+  return [...out, ...m.objects.map(o => o.id).filter(id => !out.includes(id))];
+}
+
+/**
+ * A copy of `doc` with object ids replaced by their aliases, and nodes listed in alias order (the
+ * engines read list position as declaration order).
+ */
+function renamed(doc: Diagram, alias: Map<string, string>): Diagram {
+  const id = (k: string) => alias.get(k) ?? k,
+    keys = <T>(r: Record<string, T>) =>
+      Object.fromEntries(Object.entries(r).map(([k, v]) => [id(k), v]));
+  const parent = <T extends { parentId?: string }>(o: T) =>
+    o.parentId === undefined ? o : { ...o, parentId: id(o.parentId) };
+  return {
+    ...doc,
+    graph: {
+      nodes: doc.graph.nodes
+        .map(n => parent({ ...n, id: id(n.id) }))
+        .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
+      groups: doc.graph.groups.map(g => parent({ ...g, id: id(g.id) })),
+      edges: doc.graph.edges.map(e => ({ ...e, from: id(e.from), to: id(e.to) })),
+    },
+    layout: {
+      ...doc.layout,
+      nodes: keys(doc.layout.nodes),
+      containers: keys(doc.layout.containers),
+      intent: Object.fromEntries(
+        Object.entries(doc.layout.intent).map(([role, hint]) => [
+          role,
+          hint && { ...hint, id: id(hint.id) },
+        ]),
+      ),
+    },
+    styles: keys(doc.styles),
+    collapsed: doc.collapsed.map(id),
+    settings: { ...doc.settings, rootId: doc.settings.rootId && id(doc.settings.rootId) },
+  };
 }
 
 /** Solver budget for engine recipes; the same budget Compare and the timeline use. */

@@ -492,6 +492,11 @@ across the drawing: `group-gap`, widened up to 96px when more lines cross a gap,
 
 `min-width` and `min-height` work as they do for the built-in recipes; `gap` does not apply.
 
+Where an engine has no reason from the connections to put one object before another, file order
+decides, and a scope's `order` line overrides file order. Under `layered` without groups, the
+order line holds within each rank unless reordering removes clearly more crossings. Ids never
+matter: renaming an object doesn't move anything.
+
 ## Routing
 
 One `routing` statement sets the router for every connection:
