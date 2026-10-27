@@ -54,6 +54,13 @@ function record(group, action, budget, file, xs) {
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draftably-bench-'));
 const restore = f => fs.copyFileSync(path.join(pristine, f), path.join(dir, f));
+// Edits start from a source never seen before, so no run reuses a layout an earlier run cached.
+let fresh = 0;
+const restoreFresh = f =>
+  fs.writeFileSync(
+    path.join(dir, f),
+    `${fs.readFileSync(path.join(pristine, f), 'utf8')}\n# bench ${process.pid} ${fresh++}\n`,
+  );
 files.forEach(restore);
 
 // Build once so no timed command pays for a rebuild.
@@ -161,6 +168,16 @@ async function viewer() {
       }
       ui('open in a new tab', LOAD, f, cold);
       ui('reload', LOAD, f, warm);
+      // A source the viewer has never compiled, as after an agent writes a new file.
+      const fresh = [];
+      for (let i = 0; i < runs; i++) {
+        fs.appendFileSync(path.join(dir, f), `\n# bench ${Date.now()} ${i}\n`);
+        const tab = await ctx.newPage();
+        fresh.push(await open(f, tab));
+        await tab.close();
+        restore(f);
+      }
+      ui('open a never-seen source', LOAD, f, fresh);
     }
 
     for (const f of files) {
@@ -193,7 +210,7 @@ async function viewer() {
       const gaps = [],
         drops = [];
       for (let i = 0; i < runs; i++) {
-        restore(f);
+        restoreFresh(f);
         await open(f);
         const b = await boxOf(target),
           from = [b.x + b.width / 2, b.y + b.height / 2];
@@ -222,16 +239,16 @@ async function viewer() {
       ui('undo', INTERACTIVE, f, undo);
       ui('redo', INTERACTIVE, f, redo);
 
-      const src = fs.readFileSync(path.join(pristine, f), 'utf8');
+      const src = () => fs.readFileSync(path.join(dir, f), 'utf8');
       xs = [];
       for (let i = 0; i < runs; i++) {
-        restore(f);
+        restoreFresh(f);
         await open(f);
         const count = await page.evaluate(() => window.diagramStudio.fileGeometry().nodes.length);
         const start = await now();
         fs.writeFileSync(
           path.join(dir, f),
-          `${src}\nnode bench_new "Added by bench"\nedge bench_e ${nodes[0]} -> bench_new\n`,
+          `${src()}\nnode bench_new "Added by bench"\nedge bench_e ${nodes[0]} -> bench_new\n`,
         );
         await page.waitForFunction(
           n => window.diagramStudio.fileGeometry().nodes.length > n,
@@ -244,12 +261,12 @@ async function viewer() {
 
       xs = [];
       for (let i = 0; i < runs; i++) {
-        restore(f);
+        restoreFresh(f);
         await open(f);
         const start = await now();
         fs.writeFileSync(
           path.join(dir, f),
-          src.replace(/^(node \S+ ")[^"]*"/m, `$1Relabeled ${i}"`),
+          src().replace(/^(node \S+ ")[^"]*"/m, `$1Relabeled ${i}"`),
         );
         await page.waitForFunction(
           t => window.diagramStudio.fileState().source.includes(t),
@@ -262,7 +279,7 @@ async function viewer() {
 
       xs = [];
       for (let i = 0; i < runs; i++) {
-        restore(f);
+        restoreFresh(f);
         await open(f);
         const start = await now();
         await page.evaluate(() => window.diagramStudio.addNode());
@@ -273,7 +290,7 @@ async function viewer() {
 
       xs = [];
       for (let i = 0; i < runs; i++) {
-        restore(f);
+        restoreFresh(f);
         await open(f);
         const start = await now();
         await page.evaluate(() => window.diagramStudio.layout());
