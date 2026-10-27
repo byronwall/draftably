@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Diagnostic, Scene } from '../dsl/compile';
-import { linkTarget, staticHref } from '../model/link';
+import { baseUrl, linkTarget, staticHref } from '../model/link';
 import { gitRoot } from '../server/file-session';
 
 /** Folders a search for a misplaced link never enters. */
@@ -37,6 +37,8 @@ function linkBase(scene: Scene, file: string) {
 
 /** File links in an SVG of `file`, as paths from its folder: right when the SVG is saved beside it. */
 export const svgHref = (scene: Scene, file: string) => {
+  const url = scene.model.appearance.config?.linkBase;
+  if (url && baseUrl('x', url)) return (href: string) => baseUrl(href, url) ?? href;
   const posix = (p: string) => p.split(path.sep).join('/'),
     base = posix(linkBase(scene, file)),
     folder = posix(path.dirname(path.resolve(file)));
@@ -44,6 +46,8 @@ export const svgHref = (scene: Scene, file: string) => {
 };
 
 export function linkNotes(scene: Scene, file: string): Diagnostic[] {
+  // Links joined to a URL base aren't on disk to check.
+  if (baseUrl('x', scene.model.appearance.config?.linkBase)) return [];
   const dir = path.dirname(path.resolve(file)),
     repo = gitRoot(dir),
     base = linkBase(scene, file),

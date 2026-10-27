@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { parseModel } from '../src/dsl/syntax';
-import { editorUrl, joinPath, linkMark, linkTarget } from '../src/model/link';
+import { linkNotes, svgHref } from '../src/cli/links';
+import { compile } from '../src/dsl/compile';
+import { baseUrl, editorUrl, joinPath, linkMark, linkTarget } from '../src/model/link';
 
 describe('links', () => {
   it('keeps URLs as written and reads a line and column off a file path', () => {
@@ -51,5 +53,24 @@ describe('link mark on round and pointed shapes', () => {
       expect(along).toBeLessThan(1.35);
       expect(m.inside).toBe(false);
     }
+  });
+});
+
+describe('URL link base', () => {
+  const base = 'https://github.com/org/repo/blob/0123456789abcdef0123456789abcdef01234567/';
+  it('joins a relative href to it and leaves absolute URLs and folder bases alone', () => {
+    expect(baseUrl('src/parser.py#L40', base)).toBe(`${base}src/parser.py#L40`);
+    expect(baseUrl('/src/parser.py', base.slice(0, -1))).toBe(`${base}src/parser.py`);
+    expect(baseUrl('https://example.com/a', base)).toBeNull();
+    expect(baseUrl('src/parser.py', '../..')).toBeNull();
+    expect(baseUrl('src/parser.py', undefined)).toBeNull();
+  });
+
+  it('writes the joined URL into SVG links and skips the file check', async () => {
+    const scene = await compile(
+      `diagram "L" version=1\nconfig link-base="${base}"\nnode p "Parser" href="src/parser.py#L40"\n`,
+    );
+    expect(svgHref(scene, 'x.draft')('src/parser.py#L40')).toBe(`${base}src/parser.py#L40`);
+    expect(linkNotes(scene, 'x.draft')).toEqual([]);
   });
 });

@@ -101,7 +101,10 @@ config link-base="../.." editor=cursor
 ```
 
 `link-base` is where relative links start, relative to the `.draft` file's folder, for a
-diagram whose paths don't start at the git root. `editor` is the editor file links open in:
+diagram whose paths don't start at the git root. It may also be a URL, such as source pinned at
+one commit, `config link-base="https://github.com/org/repo/blob/<sha>/"`: then `href="src/parser.py#L40"`
+joins it, opens as a web link and is written that way into SVG and PNG exports. `check` doesn't
+look for those files on disk. `editor` is the editor file links open in:
 `vscode` (the default), `vscode-insiders`, `cursor`, `windsurf` or `zed`. `check` warns about a
 relative link whose file does not exist at the link base, and suggests the path it probably meant:
 the same path from the diagram's folder, or the one file in the repository whose path ends the

@@ -2,7 +2,7 @@
  * Open an object's link from the viewer: a URL in a new tab as written, a `.draft` in the viewer,
  * and a file in the editor at its line.
  */
-import { editorUrl, joinPath, linkTarget, staticHref } from '../model/link';
+import { baseUrl, editorUrl, joinPath, linkTarget, staticHref } from '../model/link';
 import { doc } from './document';
 import { fileSession } from './file-session';
 import { fileUrl, go, workspace } from './launch';
@@ -15,14 +15,18 @@ import { toast } from './toast';
 export function linkBase(): string | null {
   const session = fileSession(),
     base = doc.appearance.config?.linkBase;
-  if (!session?.root) return null;
+  if (!session?.root || baseUrl('x', base)) return null;
   return base === undefined ? session.root : joinPath(joinPath(session.path, '..'), base);
 }
 
 const editor = () => doc.appearance.config?.editor ?? 'vscode';
 
+/** `href` joined to a URL `link-base`, or null. */
+const joined = (href: string) => baseUrl(href, doc.appearance.config?.linkBase);
+
 /** What opening `href` does, for a tooltip or the Inspector. */
 export function describeLink(href: string): string {
+  if (joined(href)) return `Open ${joined(href)}`;
   const t = linkTarget(href),
     base = linkBase();
   if (t.kind === 'url') return `Open ${href}`;
@@ -41,15 +45,17 @@ function servedPath(file: string): string | null {
 
 /** A link as an exported SVG carries it: file paths from the diagram's folder, URLs as written. */
 export function exportHref(href: string): string {
+  if (joined(href)) return joined(href)!;
   const base = linkBase(),
     session = fileSession();
   return base && session ? staticHref(href, base, joinPath(session.path, '..')) : href;
 }
 
 export function openLink(href: string) {
-  const t = linkTarget(href);
-  if (t.kind === 'url') {
-    window.open(href, '_blank', 'noopener');
+  const t = linkTarget(href),
+    url = t.kind === 'url' ? href : joined(href);
+  if (url) {
+    window.open(url, '_blank', 'noopener');
     return;
   }
   const base = linkBase();
