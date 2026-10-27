@@ -645,7 +645,8 @@ export function drawRoutes(
     ],
   };
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
-  const labelled = result.routes.filter(route => byEdge.get(route.id)!.label),
+  const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
+  const labelled = result.routes.filter(route => byEdge.get(route.id)!.label && !message(route)),
     boxes = placeEdgeLabels(
       labelled.map(route => {
         const cfg = doc.layout.edges[route.id] || {};
@@ -661,6 +662,20 @@ export function drawRoutes(
       look,
     ),
     labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
+  // A sequence message's label sits just above its line, centred between the two lifelines, or
+  // beside a self-message's loop, so it never hides the arrow and every row reads the same way.
+  for (const route of result.routes) {
+    const label = byEdge.get(route.id)!.label;
+    if (!label || !message(route)) continue;
+    const { w, h } = edgeLabelSize(label, look, true),
+      [a, b] = [route.points[0], route.points[route.points.length - 1]];
+    labels.set(
+      route,
+      route.from === route.to
+        ? { x: route.points[1].x + 4 + w / 2, y: (route.points[1].y + route.points[2].y) / 2, w, h }
+        : { x: (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
+    );
+  }
   const frames = vg.groups.flatMap(g =>
     g.frame || isCollapsed(doc, g.id) ? [] : [rects.get(g.id)!],
   );

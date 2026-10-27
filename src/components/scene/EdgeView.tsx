@@ -2,6 +2,7 @@ import { For, Show } from 'solid-js';
 import { findEdge, findNode } from '../../model/graph';
 import type { DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
+import { edgeLabelLines, edgeLabelType } from '../../model/labels';
 import { edgeInk, isDiff, statusPaint } from '../../model/status';
 import type { Diagram } from '../../model/types';
 
@@ -29,6 +30,10 @@ export function EdgeView(props: EdgeViewProps) {
       : edge().emphasis && !edge().dashed && !isDiff(props.doc)
         ? swatchFor(look(), 'primary', 700).fill
         : edgeInk(look(), edge(), isDiff(props.doc));
+  /** A sequence message's label wraps and is set a step larger. */
+  const message = () => props.doc.layout.edges[props.route.id]?.row !== undefined;
+  const labelType = () => edgeLabelType(look(), message());
+  const labelLines = () => edgeLabelLines(edge().label, look(), message());
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
   const waypoints = () =>
     props.interactive && props.selected
@@ -114,14 +119,20 @@ export function EdgeView(props: EdgeViewProps) {
             <text
               class="edge-label"
               x={label().x}
-              y={label().y}
+              y={label().y - ((labelLines().length - 1) * labelType().lineHeight) / 2}
               fill={stroke()}
-              font-family={look().annotation.family}
-              font-size={String(look().annotation.size)}
-              font-weight={String(look().annotation.weight)}
+              font-family={labelType().family}
+              font-size={String(labelType().size)}
+              font-weight={String(labelType().weight)}
               text-decoration={paint().strike ? 'line-through' : undefined}
             >
-              {edge().label}
+              <For each={labelLines()}>
+                {(line, i) => (
+                  <tspan x={label().x} dy={i() ? labelType().lineHeight : 0}>
+                    {line}
+                  </tspan>
+                )}
+              </For>
             </text>
           </g>
         )}

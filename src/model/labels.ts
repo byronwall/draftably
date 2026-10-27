@@ -1,6 +1,6 @@
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { GROUP_TITLE_CHROME } from '../dsl/frame';
-import { measureText, truncateText, wrapLines } from './fonts';
+import { measureText, truncateText, wrapLines, type TypeProfile } from './fonts';
 import { rectUnion } from './geometry';
 import type { Diagram, LabelMode, Rect, ShapeKind } from './types';
 import { styleOf } from './graph';
@@ -128,11 +128,33 @@ export function visualBounds(doc: Diagram, id: string, title: string, r: Rect): 
   ]);
 }
 
+/** Text width a sequence message's label wraps to; the gap between participants follows it. */
+export const MESSAGE_WRAP = 168;
+
+/**
+ * The type a connection label is set in: the annotation type, or a step larger for a sequence
+ * message (`message`), whose label is the main thing to read.
+ */
+export const edgeLabelType = (r: ResolvedAppearance, message = false): TypeProfile =>
+  message
+    ? { ...r.annotation, size: r.annotation.size + 1.5, lineHeight: r.annotation.lineHeight + 2 }
+    : r.annotation;
+
+/** A connection label's lines: one, or a sequence message's wrapped to `MESSAGE_WRAP`. */
+export const edgeLabelLines = (label: string, r: ResolvedAppearance, message = false) =>
+  message ? wrapLines(label, MESSAGE_WRAP, edgeLabelType(r, true)) : [label];
+
 /** Box for a connection label in the diagram's annotation type. */
-export function edgeLabelSize(label: string, r: ResolvedAppearance = resolveAppearance()) {
-  const w = measureText(label, r.annotation) + 16;
+export function edgeLabelSize(
+  label: string,
+  r: ResolvedAppearance = resolveAppearance(),
+  message = false,
+) {
+  const type = edgeLabelType(r, message),
+    lines = edgeLabelLines(label, r, message);
+  const w = Math.max(...lines.map(l => measureText(l, type))) + 16;
   return {
     w: Math.round(Math.max(36, w)),
-    h: Math.round(r.annotation.lineHeight + 6),
+    h: Math.round(lines.length * type.lineHeight + 6),
   };
 }
