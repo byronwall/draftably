@@ -39,7 +39,7 @@ and groups. References may point to later lines.
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                                                         |
 | `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                                                     |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                         |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`. See [Soft groups](#soft-groups).                                                                                |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                  |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                          |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                             |
 | `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors).                                    |
@@ -479,6 +479,10 @@ An engine on `root` arranges everything, including the contents of groups. A gro
 `layout` line keeps that recipe instead. An engine on a group arranges only that group. Groups
 are then sized to fit their content, as with the built-in recipes, and `near`, `stay`, `pin` and
 the other refinements apply on top of the engine's arrangement.
+
+Under `compound-flow` or `layered` reading down, a group whose chain is at least 1.5 times as tall
+as every other column folds into side-by-side columns, when that makes the drawing smaller.
+`fold=never` on the `group` line keeps it in one column.
 
 Under `compound-flow` or `layered`, groups are packed tight. Members of a group rank by the
 connections between them, so a chain reads as a straight row or column in the reading direction.

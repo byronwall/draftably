@@ -112,7 +112,7 @@ layout services row gap=56
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                         |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                                                   |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                |
-| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                                                                                |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                       |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                          |
@@ -155,6 +155,8 @@ Good defaults:
   object in its row, so a relabel is safe to make without rechecking the layout.
 - Hierarchies and org charts: `layout root engine=tree root=top direction=down`.
 - Nested architecture (several container levels): `layout root engine=compound-flow`.
+  Reading down, a group much taller than the others folds into columns when that makes the
+  drawing smaller (`fold=never` on the group stops it).
   A long chain of groups folds its longest groups, then wraps into rows, so the drawing stays
   within 5:1; `fold=never` keeps one line. A called-only group sits beside its caller.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.
