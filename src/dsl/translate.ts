@@ -9,6 +9,7 @@
  */
 import type { ColorDefinition, DiagramAppearance } from '../model/appearance';
 import { findNode, isCell, selectionRoots } from '../model/graph';
+import { groupHeaderFor } from '../model/labels';
 import type { ColorKey, Diagram, DiagramEdge, DiagramNode, PortSide, Rect } from '../model/types';
 import { contentOrigin, layoutView, type Scene } from './compile';
 import {
@@ -306,7 +307,7 @@ function localRect(scene: Scene, parent: string, r: Rect): Rect | null {
   if (parent === 'root') return { ...r };
   const p = scene.byId.get(parent);
   if (!p) return null;
-  const o = contentOrigin(p, scene.look.groupHeader);
+  const o = contentOrigin(p, groupHeaderFor(scene.look, p.titleLines));
   return { x: r.x - o.x, y: r.y - o.y, w: r.w, h: r.h };
 }
 

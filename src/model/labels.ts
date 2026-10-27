@@ -1,5 +1,6 @@
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
-import { measureText, wrapLines } from './fonts';
+import { GROUP_TITLE_CHROME } from '../dsl/frame';
+import { measureText, truncateText, wrapLines } from './fonts';
 import { rectUnion } from './geometry';
 import type { Diagram, LabelMode, Rect, ShapeKind } from './types';
 import { styleOf } from './graph';
@@ -44,6 +45,26 @@ export function titleHeight(shape: ShapeKind, lines: number, base: number, r: Re
 
 export const wrapTitle = (text: string, width: number, r: ResolvedAppearance) =>
   wrapLines(text, width, r.title);
+
+/** Most lines a group title wraps to; past that the frame widens instead. */
+export const GROUP_TITLE_LINES = 3;
+
+/** A group's header height when its title takes `lines` lines. */
+export const groupHeaderFor = (r: ResolvedAppearance, lines = 1) =>
+  r.groupHeader + (lines - 1) * r.groupTitle.lineHeight;
+
+/**
+ * A group title as drawn in a frame `w` wide: wrapped to at most `lines` lines (the compiler
+ * reserves that many), the last shortened with an ellipsis if the text runs on.
+ */
+export function groupTitleLines(title: string, w: number, r: ResolvedAppearance, lines = 1) {
+  const width = Math.max(40, w - GROUP_TITLE_CHROME),
+    all = wrapLines(title, width, r.groupTitle);
+  if (all.length <= lines) return all;
+  const kept = all.slice(0, lines);
+  kept[lines - 1] = truncateText(all.slice(lines - 1).join(' '), width, r.groupTitle);
+  return kept;
+}
 
 export interface NodeLabel {
   /** Center of the label, relative to the shape's top-left corner. */

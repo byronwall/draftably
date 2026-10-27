@@ -49,6 +49,8 @@ export interface DiagramGroup {
   parentId?: string;
   /** `soft` draws a tint behind the members instead of a frame; `none` draws nothing. */
   frame?: 'soft' | 'none';
+  /** Lines the title wraps to, when more than one; the header grows by a line for each. */
+  titleLines?: number;
   /** A soft group's tint: rectangles relative to the group's top left; the first holds the label. */
   hull?: Rect[];
 }

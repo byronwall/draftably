@@ -8,6 +8,7 @@ import { writeArrangement } from '../src/dsl/layout-edits';
 import { projectScene } from '../src/dsl/project';
 import { printSource, readSource } from '../src/dsl/syntax';
 import { measureText } from '../src/model/fonts';
+import { GROUP_TITLE_LINES, groupHeaderFor, groupTitleLines } from '../src/model/labels';
 
 const examples = path.join(__dirname, '../examples');
 const read = (name: string) => readFileSync(path.join(examples, name), 'utf8');
@@ -61,11 +62,13 @@ describe('group fit', () => {
       expect(p.bottom === GROUP_INSET || channel(p.bottom), `${p.id} bottom ${p.bottom}`).toBe(
         true,
       );
-      const top = p.top - scene.look.groupHeader;
+      const top = p.top - groupHeaderFor(scene.look, scene.byId.get(p.id)!.titleLines);
       expect(top === 0 || under(top), `${p.id} top ${p.top}`).toBe(true);
       // Only a title wider than the content or a channel may widen the frame.
+      // A wrapped title sets a width of its own, up to the one-line width.
       if (p.right !== GROUP_INSET && !channel(p.right))
-        expect(p.w, `${p.id} right`).toBe(p.titleRoom);
+        if (scene.byId.get(p.id)!.titleLines) expect(p.w).toBeLessThan(p.titleRoom);
+        else expect(p.w, `${p.id} right`).toBe(p.titleRoom);
     }
   });
 
@@ -91,13 +94,26 @@ describe('group fit', () => {
     }
   });
 
-  it('widens a group to fit a title wider than its content', async () => {
-    const title = 'A group whose title is much wider than its one small node';
-    const scene = await compile(`group g "${title}"\nnode a "A" in=g\n`);
+  it('widens a group for a short title wider than its content', async () => {
+    const scene = await compile(`group g "Payments and refunds"\nnode a "A" in=g\n`);
     const [p] = paddings(scene);
     expect(p.w).toBe(p.titleRoom);
     expect(p.w).toBeGreaterThan(scene.byId.get('a')!.w + 2 * GROUP_INSET);
     expect([p.left, p.bottom]).toEqual([24, 24]);
+  });
+
+  it('wraps a long title and grows the header instead of the width', async () => {
+    const title =
+      '1 · Open an order from the dashboard and load its latest shipping status (always on)';
+    const scene = await compile(`group g "${title}"\nnode a "Cached status" in=g\n`);
+    const g = scene.byId.get('g')!,
+      [p] = paddings(scene);
+    expect(g.titleLines).toBeGreaterThan(1);
+    expect(g.titleLines).toBeLessThanOrEqual(GROUP_TITLE_LINES);
+    expect(p.w).toBeLessThan(p.titleRoom / 2);
+    expect(p.top).toBe(groupHeaderFor(scene.look, g.titleLines));
+    const lines = groupTitleLines(title, g.w, scene.look, g.titleLines);
+    expect(lines.join(' ')).toBe(title);
   });
 
   it('keeps an explicit minimum size', async () => {

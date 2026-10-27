@@ -4,6 +4,7 @@ import { resolveAppearance, type ResolvedAppearance } from '../../model/appearan
 import { drawnSwatch } from '../../model/colors';
 import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
 import { truncateText } from '../../model/fonts';
+import { groupTitleLines } from '../../model/labels';
 import { groupLinkMark } from '../../model/link';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
@@ -45,13 +46,16 @@ export function GroupView(props: GroupViewProps) {
   const cells = () => (collapsed() ? undefined : cellsBandOf(props.doc, props.id));
   /** Where the title starts: after the group glyph, or at the band's padding for cells. */
   const titleX = () => (cells() ? 12 : 33);
-  // Titles are shortened to the frame width rather than wrapped, leaving room for the controls.
-  const title = () =>
-    truncateText(
-      group().title,
-      Math.max(40, props.rect.w - titleX() - (cells() ? 36 : 64)),
-      look().groupTitle,
-    );
+  // Titles wrap to the lines the compiler reserved, leaving room for the controls; a cells band
+  // and the last line are shortened to fit.
+  const lines = () =>
+    cells()
+      ? [truncateText(group().title, Math.max(40, props.rect.w - titleX() - 36), look().groupTitle)]
+      : groupTitleLines(group().title, props.rect.w, look(), group().titleLines);
+  const title = () => lines()[lines().length - 1];
+  const lineHeight = () => look().groupTitle.lineHeight;
+  /** Middle of the title's last line. */
+  const lastBand = () => band() + (lines().length - 1) * lineHeight();
   const chrome = () => (cells() ? props.doc.layout.containers[props.id]?.cellsChrome : undefined);
   const w = () => props.rect.w;
   /** Middle of the title band at the top of the frame, the same open or collapsed. */
@@ -151,7 +155,7 @@ export function GroupView(props: GroupViewProps) {
         class="group-header"
         data-group-header
         width={Math.max(0, w() - 30)}
-        height={band() * 2}
+        height={lastBand() + band()}
         fill="transparent"
       />
       <Show when={!cells()}>
@@ -169,12 +173,18 @@ export function GroupView(props: GroupViewProps) {
         text-decoration={paint().strike ? 'line-through' : undefined}
         pointer-events="none"
       >
-        {title()}
+        <For each={lines()}>
+          {(line, i) => (
+            <tspan x={titleX()} y={band() + i() * lineHeight()}>
+              {line}
+            </tspan>
+          )}
+        </For>
       </text>
       <Show when={group().href}>
         {href => (
           <LinkMarkView
-            mark={groupLinkMark(title(), look().groupTitle, band())}
+            mark={groupLinkMark(title(), look().groupTitle, lastBand())}
             href={href()}
             color={color().ink}
             interactive={props.interactive}

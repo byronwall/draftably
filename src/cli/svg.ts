@@ -14,7 +14,7 @@ import { drawingBounds } from '../model/bounds';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
-import { nodeLabel } from '../model/labels';
+import { groupTitleLines, nodeLabel } from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
 import { computeRoutes } from '../model/routes';
 import {
@@ -146,7 +146,9 @@ function sceneMarkup(
       cells = cellsBandOf(doc, g.id),
       band = cells ? cells / 2 : look.groupHeader / 2 - 7,
       tx = cells ? 12 : 33,
-      title = truncateText(g.title, Math.max(40, r.w - tx - (cells ? 12 : 64)), look.groupTitle);
+      title = cells
+        ? [truncateText(g.title, Math.max(40, r.w - tx - 12), look.groupTitle)]
+        : groupTitleLines(g.title, r.w, look, g.titleLines);
     if (g.frame === 'none') continue;
     if (g.frame === 'soft') {
       const hull = g.hull?.length ? g.hull : [{ x: 0, y: 0, w: r.w, h: r.h }];
@@ -180,8 +182,22 @@ function sceneMarkup(
             ? ''
             : `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
           ...cellsChromeMarkup(doc, look, g.id, r),
-          `<text x="${r.x + tx}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
-          g.href ? markMarkup(groupLinkMark(title, look.groupTitle, band), r.x, r.y, c.ink) : '',
+          ...title.map(
+            (line, i) =>
+              `<text x="${r.x + tx}" y="${r.y + band + i * look.groupTitle.lineHeight}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(line)}</text>`,
+          ),
+          g.href
+            ? markMarkup(
+                groupLinkMark(
+                  title[title.length - 1],
+                  look.groupTitle,
+                  band + (title.length - 1) * look.groupTitle.lineHeight,
+                ),
+                r.x,
+                r.y,
+                c.ink,
+              )
+            : '',
           '</g>',
         ],
         opts,

@@ -12,6 +12,8 @@ export interface RouteGroupInput extends Rect {
   collapsed: boolean;
   /** Width of the header's icon and title from the group's left edge; the rest of the band is open. */
   titleWidth?: number;
+  /** Height of the title band the router keeps clear; 28 when unset. */
+  titleHeight?: number;
 }
 
 export interface RouteEdgeInput {

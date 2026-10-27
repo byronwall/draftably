@@ -6,8 +6,8 @@ import {
 } from '../engines/routing-engine.js';
 import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
-import { truncateText, measureText } from './fonts';
-import { edgeLabelSize } from './labels';
+import { measureText } from './fonts';
+import { edgeLabelSize, groupTitleLines } from './labels';
 import {
   findNode,
   isCell,
@@ -348,9 +348,9 @@ export interface SceneRoutes {
 }
 
 /** Room a group's header icon and title take from its left edge, as GroupView draws them. */
-function titleWidth(title: string, w: number, look: ResolvedAppearance) {
-  const text = truncateText(title, Math.max(40, w - 33 - 64), look.groupTitle);
-  return 33 + measureText(text, look.groupTitle) + 8;
+function titleWidth(title: string, w: number, look: ResolvedAppearance, lines?: number) {
+  const text = groupTitleLines(title, w, look, lines);
+  return 33 + Math.max(...text.map(t => measureText(t, look.groupTitle))) + 8;
 }
 
 /** How far inside a box's corner a lane turns. */
@@ -554,7 +554,11 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
           ...g,
           ...r,
           collapsed: isCollapsed(doc, g.id),
-          titleWidth: titleWidth(g.title, r.w, look),
+          titleWidth: titleWidth(g.title, r.w, look, g.titleLines),
+          // A wrapped title makes the band it blocks taller by a line per extra line.
+          ...(g.titleLines
+            ? { titleHeight: 28 + (g.titleLines - 1) * look.groupTitle.lineHeight }
+            : {}),
         };
       }),
     // Sequence messages are drawn straight on their rows (`messageRoute`), not routed.
