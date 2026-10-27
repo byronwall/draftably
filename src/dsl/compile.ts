@@ -136,7 +136,11 @@ function dissolved(m: Model): Model {
  * A rank with the members of each soft group side by side, outermost group first: a group's
  * members take the place of their mean position in the rank, and everything else keeps its order.
  */
-function clustered(layer: string[], chainOf: (id: string) => string[] | undefined, depth = 0) {
+function clustered(
+  layer: string[],
+  chainOf: (id: string) => string[] | undefined,
+  depth = 0,
+): string[] {
   if (!layer.some(id => chainOf(id)?.[depth])) return layer;
   const blocks = new Map<string, { at: number; ids: string[] }>();
   layer.forEach((id, i) => {
