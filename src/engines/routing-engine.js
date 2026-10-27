@@ -304,13 +304,20 @@ const STEPS = [
   [-1, 0, 0],
   [0, -1, 1],
 ];
+const FAR = 100000;
 function search(start, end, obs, used, s, near = [], limit = 16000) {
   const xs = [start.x, end.x],
     ys = [start.y, end.y];
-  for (const r of obs) {
-    xs.push(r.x, r.x + r.w);
-    ys.push(r.y, r.y + r.h);
-  }
+  // A wall's far side (`obsFor`) lies millions of units out: a line there would let a search
+  // escape round the walls instead of failing.
+  for (const r of obs)
+    for (const [list, v] of [
+      [xs, r.x],
+      [xs, r.x + r.w],
+      [ys, r.y],
+      [ys, r.y + r.h],
+    ])
+      if (Math.abs(v) < FAR) list.push(v);
   standoffLines(near, xs, ys);
   for (const p of [start, end]) {
     xs.push(p.x - s.edgeGap, p.x + s.edgeGap);
