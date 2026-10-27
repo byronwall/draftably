@@ -1,14 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { compile } from '../src/dsl/compile';
+import { sceneConflicts } from '../src/dsl/conflicts';
 import {
   applyEdits,
+  autoVariants,
   improves,
   neighbors,
   parseTry,
   shapeOf,
   sweep,
   vary,
+  type Edit,
   type Metrics,
 } from '../src/cli/variants';
 
@@ -31,6 +34,11 @@ edge e api -> db
 layout root flow gap=48 # keep this note
 stay worker x=400 y=0
 `;
+
+const auto = async (lines: string[]) => {
+  const scene = await compile(['diagram "Auto" version=1', ...lines].join('\n'));
+  return autoVariants(scene, sceneConflicts(scene));
+};
 
 describe('vary', () => {
   it('changes only the layout line it names and keeps comments and refinements', () => {
@@ -112,8 +120,58 @@ describe('vary', () => {
     ];
     const list = neighbors(shape, { id: 'v2', edits: pick });
     expect(list[0]).toEqual({ edits: pick, why: 'the earlier v2 as it was' });
-    expect(list.map(n => n.edits[0].attrs['rank-gap'])).toContain('88');
-    expect(list.map(n => n.edits[0].attrs['rank-gap'])).toContain('28');
-    for (const n of list) expect(n.edits[0].attrs.engine).toBe('layered');
+    const attrs = (e: Edit) => ('attrs' in e ? e.attrs : {});
+    expect(list.map(n => attrs(n.edits[0])['rank-gap'])).toContain('88');
+    expect(list.map(n => attrs(n.edits[0])['rank-gap'])).toContain('28');
+    for (const n of list) expect(attrs(n.edits[0]).engine).toBe('layered');
+  });
+
+  it('drops the refinement check blames for a conflict', async () => {
+    const found = await auto([
+      'node src "Source"',
+      'node dst "Target"',
+      'node n "North"',
+      'node s "South"',
+      'node e "East"',
+      'node w "West"',
+      'edge go src -> dst',
+      'pin src x=0 y=200',
+      'pin dst x=400 y=200',
+      'pin n x=400 y=140',
+      'pin s x=400 y=260',
+      'pin w x=230 y=200',
+      'pin e x=570 y=200',
+    ]);
+    expect(found[0].edits).toEqual([{ kind: 'drop', line: 13 }]);
+  });
+
+  it('softens groups that have no layout or position of their own', async () => {
+    const found = await auto([
+      'group big "Platform"',
+      'group a "A" in=big',
+      'node a1 "A1" in=a',
+      'node a2 "A2" in=a',
+      'group b "B" in=big',
+      'node b1 "B1" in=b',
+      'node x "Outside"',
+      'edge e1 a1 -> a2',
+      'edge e2 a2 -> b1',
+      'edge e3 b1 -> x',
+      'layout b column gap=20',
+    ]);
+    // `big` holds most of the drawing and `b` has its own layout line.
+    expect(found.map(f => f.edits)).toEqual([
+      [{ kind: 'group', id: 'a', attrs: { frame: 'soft' } }],
+    ]);
+  });
+
+  it('offers compare panels for a marked file', async () => {
+    const found = await auto(['node a "A"', '+node b "B"', '+edge e a -> b']);
+    expect(found.map(f => f.edits)).toEqual([
+      [{ kind: 'compare', attrs: { direction: 'right' } }],
+      [{ kind: 'compare', attrs: { direction: 'down' } }],
+    ]);
+    const { source } = applyEdits('node a "A"\n+node b "B"\n', found[0].edits);
+    expect(source).toContain('compare direction=right');
   });
 });

@@ -39,6 +39,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    group's layout line. Say what the drawing is for: `--fit slide` (or `wide`, `square`, `page`,
    `tall`) ranks by closeness to that shape, and `--prefer compact` or `--prefer stable` changes
    what wins a tie. When a variant is close, `--from v2` tries small changes around it.
+   `vary` also offers to drop refinements that `check` blames for conflicts, to draw change marks
+   as panels, and to soften groups (`frame=soft`) for fewer containers.
 5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.

@@ -8,10 +8,10 @@
  */
 import { computeRoutes } from '../model/routes';
 import type { Rect } from '../model/types';
-import { compile, type Scene } from '../dsl/compile';
-import { findConflicts } from '../dsl/conflicts';
+import { compile, type Diagnostic, type Scene } from '../dsl/compile';
+import { findConflicts, sceneConflicts } from '../dsl/conflicts';
 import { projectScene, visibleRects } from '../dsl/project';
-import { layoutStatement, statements } from '../dsl/source-edits';
+import { declaration, layoutStatement, statements } from '../dsl/source-edits';
 import { ExplorerLab } from '../engines/explorer-engine.js';
 import { LayoutLab } from '../engines/layout-engine.js';
 import {
@@ -29,7 +29,12 @@ import { renderSvg } from './svg';
 /** One change to the source: attributes to set (a value) or remove (null) on one statement. */
 export type Edit =
   | { kind: 'layout'; scope: string; attrs: Record<string, string | null> }
-  | { kind: 'routing'; attrs: Record<string, string | null> };
+  | { kind: 'routing'; attrs: Record<string, string | null> }
+  | { kind: 'compare'; attrs: Record<string, string | null> }
+  /** Attributes on a group's declaration, such as `frame=soft`. */
+  | { kind: 'group'; id: string; attrs: Record<string, string | null> }
+  /** Remove a line, such as a refinement that `check` blames for a conflict. */
+  | { kind: 'drop'; line: number };
 
 /** A changed line: its number in the original file (0 for an added line), before and after. */
 export interface LineChange {
@@ -136,16 +141,26 @@ export function applyEdits(source: string, edits: Edit[]) {
     texts[s.line - 1] = after;
   };
   for (const edit of edits) {
+    if (edit.kind === 'drop') {
+      const text = texts[edit.line - 1];
+      if (text === undefined || text === null) continue;
+      changes.push({ line: edit.line, before: text });
+      texts[edit.line - 1] = null;
+      continue;
+    }
     const existing =
       edit.kind === 'layout'
         ? layoutStatement(doc, edit.scope)
-        : statements(doc).find(s => s.command === 'routing');
+        : edit.kind === 'group'
+          ? declaration(doc, edit.id)
+          : statements(doc).find(s => s.command === edit.kind);
     if (existing) replace(existing, merged(existing, edit.attrs));
-    else {
+    // A missing group has nothing to change; layout, routing and compare lines are added.
+    else if (edit.kind !== 'group') {
       const next =
         edit.kind === 'layout'
           ? fresh('layout', [bare(edit.scope)], edit.attrs)
-          : fresh('routing', [], edit.attrs);
+          : fresh(edit.kind, [], edit.attrs);
       if (next.attrs.length) added.push(printStatement(next));
     }
   }
@@ -158,7 +173,7 @@ export function applyEdits(source: string, edits: Edit[]) {
     else texts.splice(at, 0, ...block);
     for (const after of added) changes.push({ line: 0, after });
   }
-  return { source: texts.join('\n'), changes };
+  return { source: texts.filter(t => t !== null).join('\n'), changes };
 }
 
 // --- Shape -------------------------------------------------------------------------------------
@@ -197,20 +212,13 @@ function within(scene: Scene, scope: string) {
   return new Set(scene.model.objects.filter(o => scope === 'root' || inside(o.id)).map(o => o.id));
 }
 
-/** The shape of `scope`'s subtree: the whole diagram for `root`. */
-export function shapeOf(scene: Scene, scope = 'root'): Shape {
-  const m = scene.model,
-    members = within(scene, scope),
-    nodes = m.objects.filter(o => o.type === 'node' && members.has(o.id)),
-    ids = new Set(nodes.map(n => n.id)),
-    edges = m.edges.filter(e => ids.has(e.source) && ids.has(e.target) && e.source !== e.target);
-  const out = new Map<string, string[]>(),
-    incoming = new Map<string, number>();
-  for (const e of edges) {
-    out.set(e.source, [...(out.get(e.source) ?? []), e.target]);
-    incoming.set(e.target, (incoming.get(e.target) ?? 0) + 1);
-  }
-  // Longest path by depth-first search; an edge back into the current path is a return.
+/**
+ * Longest chain of connections starting at each node, by depth-first search; an edge back into
+ * the current path is a return and is not followed.
+ */
+function depths(edges: Array<{ source: string; target: string }>) {
+  const out = new Map<string, string[]>();
+  for (const e of edges) out.set(e.source, [...(out.get(e.source) ?? []), e.target]);
   const depth = new Map<string, number>(),
     open = new Set<string>();
   let cyclic = false;
@@ -229,7 +237,21 @@ export function shapeOf(scene: Scene, scope = 'root'): Shape {
     depth.set(id, best);
     return best;
   };
-  const ranks = Math.max(0, ...nodes.map(n => visit(n.id)));
+  for (const e of edges) visit(e.source);
+  return { depth, cyclic };
+}
+
+/** The shape of `scope`'s subtree: the whole diagram for `root`. */
+export function shapeOf(scene: Scene, scope = 'root'): Shape {
+  const m = scene.model,
+    members = within(scene, scope),
+    nodes = m.objects.filter(o => o.type === 'node' && members.has(o.id)),
+    ids = new Set(nodes.map(n => n.id)),
+    edges = m.edges.filter(e => ids.has(e.source) && ids.has(e.target) && e.source !== e.target);
+  const incoming = new Map<string, number>();
+  for (const e of edges) incoming.set(e.target, (incoming.get(e.target) ?? 0) + 1);
+  const { depth, cyclic } = depths(edges);
+  const ranks = Math.max(0, ...nodes.map(n => depth.get(n.id) ?? 1));
   const starts = nodes.filter(n => !incoming.get(n.id)).length;
   const root = m.layouts.find(l => l.scope === scope);
   const labelled = edges.filter(e => e.label);
@@ -261,11 +283,14 @@ const defaultEngine = (shape: Shape) =>
 export const titleOf = (edits: Edit[]) =>
   edits
     .map(e =>
-      Object.entries(e.attrs)
-        .map(([k, v]) =>
-          v === null ? `no ${k}` : k === 'engine' || k === 'direction' ? v : `${k}=${v}`,
-        )
-        .join(' '),
+      e.kind === 'drop'
+        ? `no line ${e.line}`
+        : (e.kind === 'group' ? `${e.id} ` : e.kind === 'compare' ? 'compare ' : '') +
+          Object.entries(e.attrs)
+            .map(([k, v]) =>
+              v === null ? `no ${k}` : k === 'engine' || k === 'direction' ? v : `${k}=${v}`,
+            )
+            .join(' '),
     )
     .join(', ');
 
@@ -490,16 +515,89 @@ export function grid(shape: Shape): Array<Pick<Variant, 'edits' | 'why'>> {
   );
 }
 
+type AttrEdit = Exclude<Edit, { kind: 'drop' }>;
+
+/** The statement an edit changes, as a key: `layout:root`, `group:ns_ops`, `routing:`. */
+const target = (e: AttrEdit) =>
+  `${e.kind}:${e.kind === 'layout' ? e.scope : e.kind === 'group' ? e.id : ''}`;
+
+/**
+ * Variants the file itself calls for, beyond its layout lines:
+ *
+ * - **Conflicting refinements:** when `check` blames refinement lines for drawing conflicts,
+ *   one variant drops those lines and lets layout place the objects.
+ * - **Compare panels:** a file with a `compare` line gets both panel directions.
+ * - **Fewer containers:** soften leaf groups and groups whose members span more than one rank,
+ *   never the group that holds most of the drawing. Only groups with no `layout` or position
+ *   lines of their own qualify, so applying it changes only `group` lines.
+ */
+export function autoVariants(scene: Scene, conflicts: Diagnostic[]) {
+  const m = scene.model,
+    out: Array<Pick<Variant, 'edits' | 'why'>> = [];
+  const hintLines = new Set(m.hints.map(h => h.line)),
+    blamed = [
+      ...new Set(conflicts.flatMap(d => (d.line && hintLines.has(d.line) ? [d.line] : []))),
+    ];
+  if (blamed.length)
+    out.push({
+      edits: blamed.sort((a, b) => a - b).map(line => ({ kind: 'drop', line }) as Edit),
+      why: `drop the refinement${blamed.length > 1 ? 's' : ''} on line${blamed.length > 1 ? 's' : ''} ${blamed.join(', ')} that check blames for ${conflicts.length} conflict${conflicts.length > 1 ? 's' : ''}`,
+    });
+  // A marked file draws one merged picture unless a `compare` line splits it into panels.
+  const compare = m.appearance.compare,
+    marked = [...m.objects, ...m.edges].some(o => o.status);
+  if (compare || marked)
+    for (const direction of ['right', 'down'])
+      if (compare?.direction !== direction)
+        out.push({
+          edits: [{ kind: 'compare', attrs: { direction } }],
+          why: `${compare ? 'compare' : 'change marks as'} panels ${direction === 'right' ? 'side by side' : 'stacked'}`,
+        });
+  const root = m.layouts.find(l => l.scope === 'root');
+  if (root && ['lanes', 'sequence'].includes(root.algorithm)) return out;
+  const groups = m.objects.filter(o => o.type === 'group'),
+    nodes = m.objects.filter(o => o.type === 'node'),
+    parent = new Map(m.objects.map(o => [o.id, o.parent]));
+  const inside = (id: string, g: string) => {
+    for (let p = parent.get(id); p && p !== 'root'; p = parent.get(p)) if (p === g) return true;
+    return false;
+  };
+  const placed = new Set([
+    ...m.layouts.map(l => l.scope),
+    ...m.hints.flatMap(h => [
+      ...('ids' in h ? h.ids : [h.id]),
+      ...('ref' in h ? [h.ref] : []),
+      ...('scope' in h ? [h.scope] : []),
+    ]),
+  ]);
+  const { depth } = depths(m.edges.filter(e => e.source !== e.target));
+  const members = (g: string) => nodes.filter(n => inside(n.id, g));
+  const biggest = [...groups].sort((a, b) => members(b.id).length - members(a.id).length)[0];
+  const open = groups.filter(
+    g =>
+      !g.frame && !placed.has(g.id) && !(g === biggest && members(g.id).length * 2 >= nodes.length),
+  );
+  const leaves = open.filter(g => !groups.some(o => o.parent === g.id)),
+    spanning = open.filter(g => new Set(members(g.id).map(n => depth.get(n.id) ?? 1)).size > 1);
+  // Leaf groups alone first: softening a group that holds boxes moves those boxes too.
+  const sets = [leaves, [...new Set([...leaves, ...spanning])]].filter(
+    (set, i, all) => set.length && (i === 0 || set.length !== all[0].length),
+  );
+  for (const set of sets)
+    out.push({
+      edits: set.map(g => ({ kind: 'group', id: g.id, attrs: { frame: 'soft' } }) as Edit),
+      why: `fewer containers: soften ${set.length > 1 ? 'groups' : 'group'} ${set.map(g => g.id).join(', ')}`,
+    });
+  return out;
+}
+
 /** Merge edits: later attributes win on the same statement. */
-function combine(a: Edit[], b: Edit[]): Edit[] {
-  const out = a.map(e => ({ ...e, attrs: { ...e.attrs } }) as Edit);
+function combine(a: Edit[], b: AttrEdit[]): Edit[] {
+  const out = a.map(e => (e.kind === 'drop' ? e : { ...e, attrs: { ...e.attrs } }));
   for (const e of b) {
-    const same = out.find(
-      x =>
-        x.kind === e.kind && (x.kind === 'routing' || x.scope === (e as { scope: string }).scope),
-    );
+    const same = out.find((x): x is AttrEdit => x.kind !== 'drop' && target(x) === target(e));
     if (same) Object.assign(same.attrs, e.attrs);
-    else out.push({ ...e, attrs: { ...e.attrs } } as Edit);
+    else out.push({ ...e, attrs: { ...e.attrs } });
   }
   return out;
 }
@@ -615,8 +713,11 @@ export async function draw(source: string): Promise<Drawn> {
       warnings,
     },
     centers: c,
-    key: [...c]
-      .map(([id, p]) => `${id}:${Math.round(p.x / 4)},${Math.round(p.y / 4)}`)
+    // The image size too: compare panels change the picture, not the geometry.
+    key: [`${size[1]}x${size[2]}`, ...c]
+      .map(x =>
+        typeof x === 'string' ? x : `${x[0]}:${Math.round(x[1].x / 4)},${Math.round(x[1].y / 4)}`,
+      )
       .concat(
         routes.map(r =>
           r.points.map(p => `${Math.round(p.x / 4)},${Math.round(p.y / 4)}`).join(' '),
@@ -656,12 +757,14 @@ const compareKeys = (a: number[], b: number[]) => {
 /**
  * Whether `m` is at least as good as the current file on warnings, crossings and size, and
  * better on one of them. Only such a variant is recommended over keeping the file as it is.
+ * Fewer warnings with no more crossings is always better: a conflict outweighs room.
  * With `--fit`, size means closeness to the target shape, so a variant may grow to fit it, but
  * by at most half: reshaping the same content needs little more room, and more is empty space.
  */
 export function improves(m: Metrics, base: Metrics, fit?: Fit) {
   if (m.warnings > base.warnings || m.crossings > base.crossings) return false;
-  const fewer = m.warnings < base.warnings || m.crossings < base.crossings;
+  if (m.warnings < base.warnings) return true;
+  const fewer = m.crossings < base.crossings;
   if (!fit) return area(m) <= area(base) && (fewer || area(m) < area(base));
   const [now, was] = [fitError(m, fit), fitError(base, fit)];
   return area(m) <= area(base) * 1.5 && now <= was + 0.01 && (fewer || now < was - 0.05);
@@ -769,7 +872,10 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
         ? grid(shape)
         : mode === 'from'
           ? neighbors(shape, opts.from!)
-          : suggestions(shape, base.metrics, goal);
+          : [
+              ...suggestions(shape, base.metrics, goal),
+              ...(scope === 'root' ? autoVariants(scene, sceneConflicts(scene)) : []),
+            ];
   for (const c of candidates) {
     const { source: next, changes } = applyEdits(source, c.edits);
     const variant: Variant = {

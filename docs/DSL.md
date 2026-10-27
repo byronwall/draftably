@@ -601,10 +601,18 @@ Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
 - **Metrics:** crossings, bends, canvas size, the warnings `check` would print, and `moved`, the
   mean distance a box moved from where the file draws it. Changes from `v0` show in brackets.
 - **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
-  counts as better than the file only when it has no more warnings, crossings or area and less
-  of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
+  counts as better than the file when it has fewer warnings and no more crossings, or when it
+  has no more warnings, crossings or area and less of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
   N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
 - **Recommended** is the first variant better than the file, or `v0` when none is.
+- **From the file itself**, the suggestions also try:
+  - dropping the refinement lines `check` blames for drawing conflicts, so layout places those
+    objects (`no line 15`);
+  - for a file with change marks or a `compare` line, panels side by side and stacked;
+  - fewer containers: `frame=soft` on leaf groups, then also on groups whose members span more
+    than one rank, never on the group that holds most of the drawing. Only groups with no
+    `layout` or position lines of their own qualify, so applying one changes only `group`
+    lines.
 - `--try key=a,b` tries exactly those values instead of suggesting, in order, and keeps every
   one. A second `--try` makes a grid (12 variants at most), with the first axis varying fastest.
   `--try key` alone uses the steps the viewer's Compare offers (`rank-gap` → 28, 52, 88). Keys
