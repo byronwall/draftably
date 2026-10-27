@@ -1,0 +1,415 @@
+{
+  "schema_version": "0.5.0",
+  "initiative": {
+    "title": "Interactive links and emphasis states",
+    "slug": "diagram-emphasis",
+    "scale": "capability",
+    "current_phase": "plan",
+    "last_updated": "2026-10-26",
+    "summary": "Linked objects look and act like links in SVG and the viewer; named emphasis states in the .draft file draw one diagram several ways without moving anything.",
+    "status": "planned",
+    "next_action": "Byron answers the product questions; then start milestone 1 (links look like links in SVG)."
+  },
+  "artifacts": {
+    "intent_brief": {
+      "path": "intent-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "brainstorm": {
+      "path": "brainstorm.md",
+      "status": "not-requested",
+      "updated_at": null
+    },
+    "shape_brief": {
+      "path": "shape-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "implementation_plan": {
+      "path": "implementation-plan.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    }
+  },
+  "sources": [
+    {
+      "id": "memo",
+      "type": "transcript",
+      "location": "Byron voice memo, relayed by the orchestrator session, 2026-10-26",
+      "anchor": "nodes interactive in SVG and viewer with a visual cue; emphasis states; like the diff view but user-defined; not fully sold on Josh's walkthrough; several diagrams at once is the hard part",
+      "authority": "user"
+    },
+    {
+      "id": "dsl-doc",
+      "type": "doc",
+      "location": "docs/DSL.md",
+      "anchor": "Links and counts; Change marks; Side by side",
+      "authority": "repo"
+    },
+    {
+      "id": "feel",
+      "type": "doc",
+      "location": "docs/intent/diagram-quality/FEEL.md",
+      "anchor": "Color carries meaning; Stable; Everything that moves on drag says so on hover",
+      "authority": "user"
+    },
+    {
+      "id": "status-code",
+      "type": "repo",
+      "location": "src/model/status.ts; src/model/colors.ts",
+      "anchor": "statusPaint, statusSwatch, edgeInk, isDiff, drawnSwatch",
+      "authority": "repo"
+    },
+    {
+      "id": "svg-code",
+      "type": "repo",
+      "location": "src/cli/svg.ts; src/model/panels.ts",
+      "anchor": "linked(), sceneMarkup, renderSvg compare panels, panelDoc",
+      "authority": "repo"
+    },
+    {
+      "id": "viewer-code",
+      "type": "repo",
+      "location": "src/components/scene/NodeView.tsx; src/state/pointer.ts; src/state/launch.ts; src/lib/svg-export.ts",
+      "anchor": "<title> with href only; Cmd-drag zooms; navigateInPlace handles ?file= links; materializeSvg clones the DOM without <a>",
+      "authority": "repo"
+    },
+    {
+      "id": "pr-28",
+      "type": "repo",
+      "location": "https://github.com/byronwall/diagram-studio/pull/28",
+      "anchor": "rich node content plan: title icons, images",
+      "authority": "repo"
+    }
+  ],
+  "intent": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Linked objects should be interactive in SVG and the viewer, with a fitting visual cue.",
+        "kind": "outcome",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": ["memo"],
+        "confidence": "high",
+        "notes": ""
+      },
+      {
+        "id": "C2",
+        "statement": "Agents need a way to define links and emphasis that does not get out of control.",
+        "kind": "constraint",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": ["memo"],
+        "confidence": "high",
+        "notes": "Drives the one-line-per-state choice."
+      },
+      {
+        "id": "C3",
+        "statement": "Named states emphasize some objects and de-emphasize others, as a user-defined styling layer like the diff view.",
+        "kind": "outcome",
+        "commitment": "explicit",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": ["memo", "status-code"],
+        "confidence": "high",
+        "notes": ""
+      },
+      {
+        "id": "C4",
+        "statement": "No full step-by-step walkthrough mode.",
+        "kind": "boundary",
+        "commitment": "explicit",
+        "importance": "supporting",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": ["memo"],
+        "confidence": "medium",
+        "notes": "Byron 'doesn't fully buy into' it; question 4 checks how far stepping goes."
+      },
+      {
+        "id": "C5",
+        "statement": "Views of several states or diagrams: single, small multiples, grid or overlays.",
+        "kind": "outcome",
+        "commitment": "exploratory",
+        "importance": "supporting",
+        "status": "active",
+        "time_horizon": "later",
+        "sources": ["memo"],
+        "confidence": "medium",
+        "notes": "Many states of one file are in scope; multi-file boards and overlays are below the cut line."
+      },
+      {
+        "id": "C6",
+        "statement": "States never move anything; all states share one geometry.",
+        "kind": "constraint",
+        "commitment": "inferred",
+        "importance": "core",
+        "status": "active",
+        "time_horizon": "first release",
+        "sources": ["feel", "dsl-doc"],
+        "confidence": "high",
+        "notes": "Same rule as change marks."
+      }
+    ],
+    "themes": ["links", "emphasis states", "multi-state views"],
+    "conflicts": [],
+    "human_questions": [
+      {
+        "id": "Q1",
+        "question": "What happens to objects a state does not list?",
+        "options": [
+          "Fade them (spotlight)",
+          "Leave them plain; fade only a dim= list",
+          "Per-state choice, default fade"
+        ],
+        "recommendation": "Fade them; keep frames of focused members plain."
+      },
+      {
+        "id": "Q2",
+        "question": "What does a relative file href open in the viewer?",
+        "options": [
+          "Editor deep link (vscode://file/...)",
+          "Raw file in a new tab from the open server",
+          "Copy the path"
+        ],
+        "recommendation": "Editor deep link; .draft opens in the viewer, URLs in a new tab."
+      },
+      {
+        "id": "Q3",
+        "question": "What does inspect --svg draw for a file with states and no flag, and does --states include a plain panel?",
+        "options": [
+          "Plain drawing; --states = states only",
+          "Plain drawing; --states = plain + states",
+          "First state"
+        ],
+        "recommendation": "Plain drawing; --states = states only."
+      }
+    ],
+    "provisional_defaults": [
+      {
+        "id": "Q4",
+        "question": "How far toward a walkthrough should states go?",
+        "options": [
+          "Unordered named states only",
+          "File order with [ ] stepping, no captions",
+          "Steps with captions and playback"
+        ],
+        "recommendation": "File order with [ ] stepping, no captions.",
+        "status": "defaulted; asked in report"
+      },
+      {
+        "id": "Q5",
+        "question": "For agents working with several diagrams, what comes after states of one file?",
+        "options": [
+          "Nothing yet",
+          "Multi-file contact sheet (inspect a b c --sheet)",
+          "A board file that lists files and states"
+        ],
+        "recommendation": "Nothing yet; revisit after milestone 4.",
+        "status": "defaulted; asked in report"
+      }
+    ]
+  },
+  "brainstorm": {
+    "status": "not-requested",
+    "requested_count": 7,
+    "options": [],
+    "selected_option": null
+  },
+  "shape": {
+    "status": "current",
+    "appetite": "Four or five small PRs; no new renderer, no layout change, no walkthrough.",
+    "problem": "Links are invisible and the viewer cannot open them; one diagram cannot show several emphases.",
+    "recommended_shape": "Link mark + <a>/<title>/hover in all SVGs and an open chip in the viewer; `state id \"label\" ids\u2026` lines painted through the existing status layer with focus and dim treatments; --state, --states panels, and a viewer switcher.",
+    "dsl_options": [
+      {
+        "id": "A",
+        "name": "state line listing IDs",
+        "selected": true
+      },
+      {
+        "id": "B",
+        "name": "tags on objects + state by tag",
+        "selected": false
+      },
+      {
+        "id": "C",
+        "name": "emphasis= on each object",
+        "selected": false
+      },
+      {
+        "id": "D",
+        "name": "CLI flag only",
+        "selected": false
+      },
+      {
+        "id": "E",
+        "name": "mark character, one state",
+        "selected": false,
+        "notes": "Its paint-layer rule is kept."
+      }
+    ],
+    "success_moves": [
+      "Reuse statusPaint/statusSwatch/drawnSwatch with two new treatments instead of a second renderer.",
+      "Generalize the compare panel code to N panels; states share one routing pass.",
+      "Ship links before states; href already reaches the model.",
+      "Keep the active state as view state (URL param), never written to the file.",
+      "Prove identical canonicalGeometry across states before any viewer work."
+    ],
+    "first_proof": {
+      "question": "Can a state paint layer on the diff styling read clearly without moving anything?",
+      "artifact": "inspect --svg --state write on examples/emphasis.draft, rendered with pnpm shoot",
+      "decision_rule": "Continue to --states when geometry equals the plain drawing and dim does not read as removed; else lighten dim first."
+    },
+    "rabbit_holes": [
+      "Walkthrough playback and captions",
+      "Overlays of several states in one drawing",
+      "Viewer authoring of states before the file form settles"
+    ],
+    "open_decisions": ["Q1", "Q2"]
+  },
+  "implementation": {
+    "status": "planned",
+    "repository_snapshot": {
+      "root": "diagram-studio",
+      "revision": "b39be5b",
+      "worktree_status": "clean",
+      "subsystems": [
+        "src/dsl",
+        "src/model/status.ts",
+        "src/model/colors.ts",
+        "src/cli/svg.ts",
+        "src/components/scene",
+        "src/state"
+      ],
+      "test_commands": ["pnpm check:fast", "pnpm check"],
+      "deployment_surfaces": ["CLI package", "viewer build"]
+    },
+    "dependencies": [],
+    "fast_local_loop": {
+      "command": "pnpm exec vitest run tests/status.test.ts tests/dsl.test.ts && pnpm draftably inspect examples/emphasis.draft --svg > tmp/out.svg && pnpm shoot tmp/out.svg tmp/out.png"
+    },
+    "milestones": [
+      {
+        "id": "m1",
+        "title": "Links look like links in SVG",
+        "status": "planned",
+        "files": [
+          "src/model/link.ts",
+          "src/cli/svg.ts",
+          "src/components/scene/NodeView.tsx",
+          "src/components/scene/GroupView.tsx",
+          "src/lib/svg-export.ts"
+        ],
+        "done_when": "inspect --svg shows mark, tooltip and hover for linked nodes; viewer SVG export keeps <a>.",
+        "outcome": "A linked node shows a mark, tooltip and hover in every SVG.",
+        "dependencies_introduced": [],
+        "proof": "inspect --svg in a browser; viewer export holds <a>",
+        "valid_intermediate_state": "Links visible; viewer unchanged otherwise",
+        "rollback": "Revert the PR; files without the new syntax draw as before."
+      },
+      {
+        "id": "m2",
+        "title": "The viewer opens links",
+        "status": "planned",
+        "files": [
+          "src/components/scene/NodeView.tsx",
+          "src/components/Inspector.tsx",
+          "src/state/launch.ts",
+          "src/components/canvas/canvas.css"
+        ],
+        "done_when": "Each href kind opens from the chip and Inspector; a plain click only selects.",
+        "outcome": "The viewer opens a node link without breaking select.",
+        "dependencies_introduced": [],
+        "proof": "Browser proof on tmp/links.draft for url, .draft and path",
+        "valid_intermediate_state": "Viewer links work; no states yet",
+        "rollback": "Revert the PR; files without the new syntax draw as before."
+      },
+      {
+        "id": "m3",
+        "title": "Emphasis states and --state",
+        "status": "planned",
+        "files": [
+          "src/dsl/syntax.ts",
+          "src/dsl/project.ts",
+          "src/dsl/translate.ts",
+          "src/model/types.ts",
+          "src/model/document.ts",
+          "src/model/status.ts",
+          "src/model/colors.ts",
+          "src/cli/main.ts",
+          "examples/emphasis.draft",
+          "docs/DSL.md",
+          "skills/draftably/SKILL.md"
+        ],
+        "done_when": "Every state has identical canonicalGeometry; check reports bad IDs; skill test passes.",
+        "outcome": "A file declares states; the CLI draws one.",
+        "dependencies_introduced": [],
+        "proof": "canonicalGeometry equal across states; check flags bad IDs",
+        "valid_intermediate_state": "States parse and render in CLI; viewer ignores them",
+        "rollback": "Revert the PR; files without the new syntax draw as before."
+      },
+      {
+        "id": "m4",
+        "title": "All states as small multiples",
+        "status": "planned",
+        "files": ["src/cli/svg.ts", "src/cli/main.ts", "docs/DSL.md", "skills/draftably/SKILL.md"],
+        "done_when": "--states draws aligned panels from one routing pass.",
+        "outcome": "The CLI draws every state as aligned panels.",
+        "dependencies_introduced": [],
+        "proof": "pnpm shoot sheet of a three-state fixture",
+        "valid_intermediate_state": "CLI multi-state output; viewer still single",
+        "rollback": "Revert the PR; files without the new syntax draw as before."
+      },
+      {
+        "id": "m5",
+        "title": "The viewer switches states",
+        "status": "planned",
+        "files": [
+          "src/state/ui.ts",
+          "src/state/launch.ts",
+          "src/state/keyboard.ts",
+          "src/components/canvas/StateBar.tsx",
+          "src/model/static-scene.ts",
+          "src/state/debug-api.ts"
+        ],
+        "done_when": "Switching changes paint only, ?state= survives reload, edits still save.",
+        "outcome": "The viewer switches states and shows a grid.",
+        "dependencies_introduced": [],
+        "proof": "window.diagramStudio shows no moves on switch; ?state= reloads",
+        "valid_intermediate_state": "Full feature; authoring stays in the file",
+        "rollback": "Revert the PR; files without the new syntax draw as before."
+      }
+    ],
+    "cut_line": [
+      "Viewer authoring of states",
+      "Overlays and multi-file boards",
+      "Tags, captions, playback",
+      "Persisting edge.emphasis",
+      "Per-state camera"
+    ],
+    "open_decisions": ["Q1", "Q2", "Q3"],
+    "overlapping_work": [
+      {
+        "pr": 28,
+        "files": ["src/components/scene/NodeView.tsx"],
+        "note": "Title icons on the left; link mark goes top-right."
+      }
+    ]
+  },
+  "history": [
+    {
+      "date": "2026-10-26",
+      "event": "Created intent, shape and plan from the voice memo and a code read; planning only.",
+      "status": "planned"
+    }
+  ],
+  "closure": null
+}
