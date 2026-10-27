@@ -177,7 +177,10 @@ do not apply yet. Lines that run back against the order take the long way round 
 drawn in a row across the top in file order (or the order an `order root` line gives), with a
 dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
 lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file
-reads top to bottom as the exchange does.
+reads top to bottom as the exchange does. A message's label sits just above its arrow, a step
+larger than other labels, and wraps to about 170px; a self-message's label sits beside its loop.
+Participants are spaced for the wrapped labels, and a short participant title gets a box only as
+wide as it needs.
 
 ```text
 node user "User" shape=pill

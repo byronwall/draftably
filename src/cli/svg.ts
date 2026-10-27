@@ -14,7 +14,7 @@ import { drawingBounds } from '../model/bounds';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
 import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
-import { groupTitleLines, nodeLabel } from '../model/labels';
+import { edgeLabelLines, edgeLabelType, groupTitleLines, nodeLabel } from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
 import { computeRoutes } from '../model/routes';
 import {
@@ -225,11 +225,14 @@ function sceneMarkup(
         : '',
       `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''} marker-end="url(#${arrow(ink)})"/>`,
     );
-    const l = route.label;
+    const l = route.label,
+      message = doc.layout.edges[route.id]?.row !== undefined,
+      type = edgeLabelType(look, message),
+      lines = edgeLabelLines(edge.label, look, message);
     if (l)
       out.push(
         `<rect x="${l.x - l.w / 2}" y="${l.y - l.h / 2}" width="${l.w}" height="${l.h}" rx="4" fill="${look.canvas}"/>`,
-        `<text x="${l.x}" y="${l.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(edge.label)}</text>`,
+        `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
       );
     out.push('</g>');
   }

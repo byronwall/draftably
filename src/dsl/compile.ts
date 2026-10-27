@@ -141,11 +141,27 @@ export function checkSource(source: string): Scene {
  * sits one row under the participants, less `SEQ_LIFT`), a self-message's loop, and the least
  * gap between participants.
  */
-const SEQ_TOP = 28,
-  SEQ_LIFT = 12,
-  SEQ_ROW = 44,
+const SEQ_TOP = 24,
+  SEQ_LIFT = 0,
+  SEQ_ROW = 36,
   SEQ_SELF = 22,
-  SEQ_GAP = 48;
+  SEQ_GAP = 40,
+  /** Room beside a message label inside its gap: an arrowhead's worth. */
+  SEQ_LABEL_RUN = 16,
+  /** Narrowest participant box; a short title no longer takes a full default-width box. */
+  SEQ_MIN_W = 104;
+
+/**
+ * A participant box only as wide as its title on one line needs (at least `SEQ_MIN_W`), so short
+ * names don't each take a full default-width box. A title that already wraps keeps its width.
+ */
+function participantWidth(o: SceneObject, look: ResolvedAppearance) {
+  const text = Math.ceil(measureText(o.label, look.title));
+  if (o.label.includes('\n') || titleArea(o.shape, o.w, o.h, look).width < text) return o.w;
+  let w = SEQ_MIN_W;
+  while (w < o.w && titleArea(o.shape, w, o.h, look).width < text) w += 4;
+  return Math.min(w, o.w);
+}
 
 /**
  * A sequence diagram: the participants (every node) in a row across the top, in file order or
@@ -158,10 +174,11 @@ function sequenced(scene: Scene): Scene {
     return scene;
   const order = scene.model.hints.find(h => h.type === 'order' && h.scope === 'root'),
     listed = order?.type === 'order' ? order.ids : [],
+    sized = new Set(scene.model.hints.flatMap(h => (h.type === 'size' ? [h.id] : []))),
     parts = [
       ...listed.flatMap(id => scene.objects.filter(o => o.id === id)),
       ...scene.objects.filter(o => !listed.includes(o.id)),
-    ],
+    ].map(o => (sized.has(o.id) ? o : { ...o, w: participantWidth(o, scene.look) })),
     at = new Map(parts.map((o, i) => [o.id, i]));
   // Centres: neighbours keep a gap, and a message between them keeps room for its label.
   const centre: number[] = [];
@@ -171,21 +188,26 @@ function sequenced(scene: Scene): Scene {
     for (const e of scene.edges) {
       const [a, b] = [at.get(e.source)!, at.get(e.target)!].sort((p, q) => p - q);
       if (e.label && b === i && a < b)
-        room = Math.max(room, (edgeLabelSize(e.label, scene.look).w + 2 * LABEL_RUN) / (b - a));
+        room = Math.max(
+          room,
+          (edgeLabelSize(e.label, scene.look, true).w + SEQ_LABEL_RUN) / (b - a),
+        );
     }
     centre.push(centre[i - 1] + room);
   });
   let y = Math.max(0, ...parts.map(o => o.h)) - SEQ_LIFT;
   const rows = new Map<string, number>();
   for (const e of scene.edges) {
-    y += Math.max(SEQ_ROW, e.label ? edgeLabelSize(e.label, scene.look).h + 24 : 0);
+    // The label sits above its line, so a row is the label's height and a little air.
+    y += Math.max(SEQ_ROW, e.label ? edgeLabelSize(e.label, scene.look, true).h + 8 : 0);
     rows.set(e.id, y);
     if (e.source === e.target) y += SEQ_SELF;
   }
   const end = y + SEQ_TOP;
   const objects = scene.objects.map(o => {
-    const x = round(centre[at.get(o.id)!] - o.w / 2);
-    return { ...o, x, y: 0, localX: x, localY: 0, baseX: x, baseY: 0, lifeline: end - o.h };
+    const w = parts[at.get(o.id)!].w,
+      x = round(centre[at.get(o.id)!] - w / 2);
+    return { ...o, w, x, y: 0, localX: x, localY: 0, baseX: x, baseY: 0, lifeline: end - o.h };
   });
   return {
     ...scene,
