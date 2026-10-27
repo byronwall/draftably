@@ -532,15 +532,15 @@ only when those are blocked. Connections inside a group with its own recipe are 
 Refinements adjust the automatic layout for one object. Positions are relative to the parent's
 content area, not the whole canvas, so moving a group moves everything inside it.
 
-| Statement                                | Strength | Meaning                                                                                |
-| ---------------------------------------- | -------- | -------------------------------------------------------------------------------------- |
-| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling. `strength=required` enforces side and gap.                    |
-| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                    |
-| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these. |
-| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                |
-| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown.                     |
-| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                 |
-| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                             |
+| Statement                                | Strength | Meaning                                                                                                                                                       |
+| ---------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling, or next to something inside a sibling group: then beside that group, lined up with `ref`. `strength=required` enforces side and gap. |
+| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                                                                                           |
+| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these.                                                                        |
+| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                                                                                       |
+| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown.                                                                                            |
+| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                                                                                        |
+| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                                                                                                    |
 
 Soft rules give way to keep siblings from overlapping. When one does, `check` reports it with its
 line. Pins never move; conflicting pins are reported as errors.
