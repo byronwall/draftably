@@ -24,6 +24,7 @@ import {
   isDiff,
   statusPaint,
   usedStatuses,
+  withState,
   type StatusPaint,
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
@@ -36,6 +37,8 @@ const esc = (s: string) =>
 /** How an object's `href` is written into the file; as written unless the caller says. */
 export interface SvgOptions {
   href?: (href: string) => string;
+  /** Draw every emphasis state as its own panel. */
+  states?: boolean;
 }
 
 /** Wrap marks in a link, with a tooltip naming the target, when the object has one. */
@@ -201,14 +204,110 @@ function sceneMarkup(
 const PANEL_LABEL = 24,
   PANEL_GAP = 0;
 
+/** One arrowhead per line color: the theme's connection color, then each other color used. */
+function arrowsFor(look: ResolvedAppearance, docs: Diagram[]) {
+  const inks = [
+    ...new Set([
+      look.connection,
+      ...docs.flatMap(d => d.graph.edges.map(e => edgeInk(look, e, isDiff(d)))),
+    ]),
+  ];
+  return {
+    inks,
+    arrow: (ink: string) => (inks.indexOf(ink) ? `arrow-${inks.indexOf(ink)}` : 'arrow'),
+  };
+}
+
+/** The file's opening: the canvas, fonts, link hover, arrowheads, and the title above it all. */
+function openSvg(
+  doc: Diagram,
+  look: ResolvedAppearance,
+  inks: string[],
+  arrow: (ink: string) => string,
+  { x, y, w, h }: Rect,
+) {
+  return [
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
+    `<title>${esc(doc.title)}</title>`,
+    `<defs><style>${fontFaceCss(look)}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? LINK_CSS : ''}</style>` +
+      inks
+        .map(
+          ink =>
+            `<marker id="${arrow(ink)}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${ink}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`,
+        )
+        .join('') +
+      '</defs>',
+    `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
+    // The title and subtitle sit above the drawing, left-aligned with the legend under it.
+    headingMarkup(look, doc.appearance.heading, x + 40, y + 28),
+  ];
+}
+
+/**
+ * Every emphasis state as its own labelled panel, in file order, in a grid whose whole image
+ * comes closest to the target aspect ratio. States never move anything, so every panel shares one
+ * box and one set of routes, and each object sits at the same place in every panel.
+ */
+function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): string {
+  const states = doc.appearance.states ?? [],
+    docs = states.map(s => withState(doc, s.id)),
+    { inks, arrow } = arrowsFor(look, docs),
+    shared = routesOf(doc),
+    scenes = docs.map(d => sceneMarkup(d, look, arrow, opts, shared));
+  const b = scenes.map(s => s.bounds).reduce(union),
+    x0 = Math.floor(b.x),
+    y0 = Math.floor(b.y),
+    cw = Math.ceil(b.x + b.w) - x0,
+    ch = Math.ceil(b.y + b.h) - y0 + PANEL_LABEL,
+    statuses = usedStatuses(doc),
+    legend = drawnLegend(doc),
+    key = legendSize(look, legend, statuses),
+    head = headingSize(look, doc.appearance.heading);
+  const target = doc.appearance.compare?.aspect ?? 1.6,
+    grid = (cols: number) => {
+      const rows = Math.ceil(states.length / cols),
+        w = Math.max(cols * cw, key.w + 80, head.w + 80);
+      return { cols, rows, w, h: rows * ch + key.h + head.h };
+    },
+    { cols, rows, w, h } = states
+      .map((_, i) => grid(i + 1))
+      .reduce((a, c) =>
+        Math.abs(Math.log(c.w / c.h / target)) < Math.abs(Math.log(a.w / a.h / target)) ? c : a,
+      ),
+    y1 = y0 - head.h,
+    out = openSvg(doc, look, inks, arrow, { x: x0, y: y1, w, h });
+  scenes.forEach((scene, i) => {
+    const col = i % cols,
+      row = Math.floor(i / cols),
+      px = x0 + col * cw,
+      py = y0 + row * ch;
+    out.push(
+      `<text x="${px + 40}" y="${py + 36}" dominant-baseline="central" ${font(look.groupTitle)} fill="${look.text}">${esc(states[i].label)}</text>`,
+    );
+    if (col)
+      out.push(
+        `<line x1="${px}" x2="${px}" y1="${py + 16}" y2="${py + ch - 16}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
+      );
+    if (row && !col)
+      out.push(
+        `<line x1="${x0 + 40}" x2="${x0 + cols * cw - 40}" y1="${py}" y2="${py}" stroke="${look.muted}" stroke-opacity="0.35"/>`,
+      );
+    out.push(
+      `<g data-state="${esc(states[i].id)}" transform="translate(${col * cw},${row * ch + PANEL_LABEL})">`,
+      scene.markup,
+      '</g>',
+    );
+  });
+  out.push(legendMarkup(look, legend, x0 + 40, y0 + rows * ch - 12, statuses));
+  out.push('</svg>\n');
+  return out.join('\n');
+}
+
 export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   const look = resolveAppearance(doc.appearance),
     compare = doc.appearance.compare;
-  // One arrowhead per line color: the theme's connection color, then each status color used.
-  const inks = [
-    ...new Set([look.connection, ...doc.graph.edges.map(e => edgeInk(look, e, isDiff(doc)))]),
-  ];
-  const arrow = (ink: string) => (inks.indexOf(ink) ? `arrow-${inks.indexOf(ink)}` : 'arrow');
+  if (opts.states) return statesSvg(doc, look, opts);
+  const { inks, arrow } = arrowsFor(look, [doc]);
   // With `compare`, each version is its own panel drawn from the merged positions, so the panels
   // share one box and every unchanged object lines up across them.
   const shared = compare ? routesOf(doc) : undefined,
@@ -258,21 +357,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       : [arrange(true), arrange(false)],
     { stacked, spans, starts, areaH, w, h } = options.reduce((a, b) => (fit(b) < fit(a) ? b : a)),
     y1 = y0 - head.h;
-  const out = [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x0} ${y1} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
-    `<title>${esc(doc.title)}</title>`,
-    `<defs><style>${fontFaceCss(look)}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? LINK_CSS : ''}</style>` +
-      inks
-        .map(
-          ink =>
-            `<marker id="${arrow(ink)}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${ink}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`,
-        )
-        .join('') +
-      '</defs>',
-    `<rect x="${x0}" y="${y1}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
-    // The title and subtitle sit above the drawing, left-aligned with the legend under it.
-    headingMarkup(look, doc.appearance.heading, x0 + 40, y1 + 28),
-  ];
+  const out = openSvg(doc, look, inks, arrow, { x: x0, y: y1, w, h });
   scenes.forEach((scene, i) => {
     // Panel i's corner, and the shift that brings its own span to that corner.
     const px = stacked ? x0 : x0 + starts[i],

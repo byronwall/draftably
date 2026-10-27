@@ -187,7 +187,10 @@ and focused connections a line in the theme's `secondary` accent. A state never 
 every state of a file has the same layout. In a file with change marks, hue still means change;
 a state only adds the heavier border or the fade.
 
-`inspect --svg --state write` draws one state; without `--state`, the drawing has none. `check`
+`inspect --svg --state write` draws one state; without `--state`, the drawing has none.
+`inspect --svg --states` (or `--png`) draws every state as its own labelled panel, in file
+order, in a grid whose whole image comes closest to 1.6 wide per tall. Every object sits at the
+same place in every panel, so the eye can jump between them. `check`
 reports an ID a state lists that the file does not declare. Deleting an object or connection in
 the viewer takes it out of every state.
 

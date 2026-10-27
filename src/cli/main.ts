@@ -24,6 +24,7 @@ Commands:
   inspect <file> [--json]   Print canonical node and route geometry.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
        [--state <id>]       Draw it in one emphasis state (also with --png).
+       [--states]           Draw every emphasis state as its own aligned panel.
   inspect <file> --png <out.png> [--scale 2]
                             Save the drawing as a PNG (needs Chrome or Chromium).
                             PNG and SVG output embed the source; --no-source leaves it out.
@@ -130,7 +131,12 @@ export async function main(argv: string[]): Promise<number> {
         const source = await read(file),
           scene = await compile(source),
           doc = drawnState(projectScene(scene), option(rest, '--state')),
-          opts = { href: svgHref(scene, file) };
+          opts = { href: svgHref(scene, file), states: flag('--states') };
+        if (opts.states) {
+          if (!doc.appearance.states?.length) throw new UsageError('The file has no state lines.');
+          if (doc.appearance.compare)
+            throw new UsageError('--states draws panels, and so does compare; use one at a time.');
+        }
         if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
         if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));

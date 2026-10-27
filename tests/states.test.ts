@@ -47,3 +47,13 @@ describe('emphasis states', () => {
     expect(printSource(src)).toBe('node a "A"\nnode b "B"\nstate s "S" a\n');
   });
 });
+
+describe('state panels', () => {
+  it('draws each state once, labelled, from one set of routes', () => {
+    const svg = renderSvg(doc(), { states: true });
+    expect(svg.match(/data-state="/g)).toHaveLength(3);
+    for (const label of ['Write path', 'Read path', 'Events']) expect(svg).toContain(`>${label}</text>`);
+    const paths = (id: string) => [...svg.matchAll(new RegExp(`data-id="${id}"[^>]*>\\s*<path d="([^"]+)"`, 'g'))].map(m => m[1]);
+    expect(new Set(paths('persist')).size).toBe(1);
+  });
+});
