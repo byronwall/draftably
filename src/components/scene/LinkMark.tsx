@@ -20,8 +20,9 @@ export function LinkMarkView(props: {
       data-open-link={props.interactive ? props.href : undefined}
     >
       <Show when={props.interactive}>
-        <rect class="link-hit" x={-5} y={-5} width={m().size + 10} height={m().size + 10} rx={5} />
-        <title>{describeLink(props.href)}</title>
+        <rect class="link-hit" x={-5} y={-5} width={m().size + 10} height={m().size + 10} rx={5}>
+          <title>{describeLink(props.href)}</title>
+        </rect>
       </Show>
       <path
         d={LINK_MARK_PATH}
