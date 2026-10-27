@@ -37,6 +37,13 @@ Commands:
        [--write <file>]     Save it instead of printing it.
        [--svg]              Print it as an SVG drawing instead.
        [--png <out.png>]    Save it as a PNG instead; --scale as for inspect.
+  vary <file>               Try layout variants, measure each one and rank them against the
+       [--out <folder>]     file as it is. Writes contact-sheet.png, v0.png (current), v1.png …
+       [--limit N]          and variants.json to <name>.vary/ beside the file (or --out), and
+       [--json]             prints a table; --json prints variants.json instead. Keeps the
+                            best 4 that differ unless --limit is given (1 to 12).
+  vary <file> --apply <id>  Write variant <id> from the last run (or best) into the file,
+                            print the lines it changed, then check the file.
   extract <image>           Print the .draft source embedded in a PNG or SVG export.
        [--write <file>]     Save it instead of printing it.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
@@ -199,6 +206,37 @@ export async function main(argv: string[]): Promise<number> {
           console.log(`Wrote ${out}.`);
         } else if (flag('--svg')) process.stdout.write(withSource(await draw(), merged));
         else process.stdout.write(merged);
+        return 0;
+      }
+      case 'vary': {
+        const source = await read(file),
+          out = option(rest, '--out'),
+          pick = option(rest, '--apply');
+        const { applyVariant, runVary } = await import('./vary');
+        if (pick) {
+          if (isImageName(file!)) throw new UsageError('vary --apply rewrites a .draft file only.');
+          const done = applyVariant(file!, source, pick, out);
+          console.log(done.changes.length ? `Applied ${done.id}:\n${done.text}` : done.text);
+          if (!done.changes.length) return 0;
+          const scene = await compile(fs.readFileSync(path.resolve(file!), 'utf8'));
+          const notes = [...scene.diagnostics, ...sceneConflicts(scene)];
+          for (const d of notes) console.log(describe(d));
+          const errors = notes.filter(d => d.level === 'error').length;
+          console.log(`Check: ${errors ? 'Problems' : notes.length ? 'Warnings' : 'OK'}.`);
+          return errors ? 1 : 0;
+        }
+        const limit = option(rest, '--limit');
+        if (
+          limit !== undefined &&
+          !(Number.isInteger(Number(limit)) && +limit >= 1 && +limit <= 12)
+        )
+          throw new UsageError('--limit must be a whole number from 1 to 12.');
+        await runVary(file!, source, {
+          out,
+          limit: limit === undefined ? undefined : Number(limit),
+          json: flag('--json'),
+          noSource: flag('--no-source'),
+        });
         return 0;
       }
       case 'extract': {

@@ -544,6 +544,8 @@ pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
 pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
 pnpm draftably extract checkout.png              # print the source embedded in a PNG or SVG export
+pnpm draftably vary examples/checkout.draft       # layout variants: contact sheet, metrics, ranking
+pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
@@ -570,6 +572,45 @@ scratch diagram. The format is stable, so other tools can read it:
   `<svg>`, holding the XML-escaped source.
 
 Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+
+### Layout variants
+
+`vary` tries other `layout` and `routing` lines for a file, draws each one as the CLI does, and
+ranks them against the file as it is. It reads the diagram's shape (groups, the longest chain of
+connections, a tree with one start, long connection labels) and tries the engines and settings
+that suit it: `compound-flow` for groups and `layered` without, in both reading directions,
+`ordering=crossings`, `flow` for a long chain, `tree` for a tree, a wider `rank-gap` for long
+labels, and a router that avoids crossings harder. Files whose root uses `lanes`, `sequence` or
+`cells` get routing variants only.
+
+```text
+$ pnpm draftably vary examples/checkout.draft
+5 variants tried, 2 kept. Sheet: examples/checkout.vary/contact-sheet.png
+id  change               crossings  bends    size            warnings  moved  notes
+v0  current              0          8        1143×462        0                fewest bends
+v1  compound-flow down   0          9 (+1)   598×713 (-19%)  0         349px  recommended, smallest
+v2  compound-flow right  0          11 (+3)  1143×451 (-2%)  0         46px   least moved
+v1: 3 groups, reading down.
+v2: 3 groups, reading right.
+Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
+```
+
+- Output goes to `<name>.vary/` beside the file, or to `--out <folder>`: `contact-sheet.png`
+  with every variant as a labeled tile, `v0.png` (the file as it is), `v1.png` and on, and
+  `variants.json`. Each PNG embeds its variant's source.
+- **Metrics:** crossings, bends, canvas size, the warnings `check` would print, and `moved`, the
+  mean distance a box moved from where the file draws it. Changes from `v0` show in brackets.
+- **Ranking:** variants that draw the same picture as an earlier one are dropped. A variant
+  counts as better than the file only when it has no more warnings, crossings or area and less
+  of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
+  N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
+- **Recommended** is the first variant better than the file, or `v0` when none is.
+- `--json` prints `variants.json`: for each variant its id, title, reason, the exact lines it
+  changes (`before` and `after`), its edits and metrics.
+- `--apply <id>` writes that variant from the last run into the file and prints the lines it
+  changed; `--apply best` takes the recommended one. It changes only those lines and keeps
+  comments, IDs and refinements. An engine that replaces a built-in recipe drops the recipe and
+  its `gap`. It then checks the file. It refuses when the file changed since the run.
 
 ### Drawing conflicts
 
