@@ -27,6 +27,8 @@ export type EngineTask =
   | { kind: 'source'; source: string; spec: CandidateSpec }
   /** Full-quality routes for a drawing shown meanwhile with quick routes. */
   | { kind: 'route'; input: RouteInput; options: RoutingOptions }
+  /** A diagram file compiled: laid out, not routed. */
+  | { kind: 'compile'; source: string }
   /** A diagram file compiled, projected with the editor's view and routed, as the viewer shows it. */
   | { kind: 'scene'; source: string; view: ViewState };
 
@@ -45,12 +47,15 @@ export type EngineResult<T extends EngineTask> = T extends { kind: 'layout' }
       ? RoutingResult
       : T extends { kind: 'scene' }
         ? SceneResult
-        : Timeline;
+        : T extends { kind: 'compile' }
+          ? Scene
+          : Timeline;
 
 export function runEngineTask(
   task: EngineTask,
-): Promise<LayoutResult | CandidateResult | Timeline | RoutingResult | SceneResult> {
+): Promise<LayoutResult | CandidateResult | Timeline | RoutingResult | SceneResult | Scene> {
   if (task.kind === 'scene') return compileScene(task.source, task.view);
+  if (task.kind === 'compile') return compile(task.source);
   if (task.kind === 'layout') return LayoutLab.compute(task.doc, task.options);
   if (task.kind === 'route') return Promise.resolve(RouteLab.compute(task.input, task.options));
   if (task.kind === 'candidate')

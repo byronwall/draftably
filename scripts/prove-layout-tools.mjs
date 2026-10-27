@@ -77,6 +77,7 @@ proof.watch(page);
 try {
   await page.goto(server.url);
   await waitFor(page, () => !!window.diagramStudio?.fileState, 'viewer');
+  await waitFor(page, () => !window.diagramStudio.fileState().compiling, 'laid out');
   await matches(page, 'opened file');
 
   // 1. Compare: apply the layered candidate. The file gets a layout recipe.

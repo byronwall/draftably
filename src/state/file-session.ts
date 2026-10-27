@@ -153,13 +153,16 @@ let showing = 0;
 let routeSink: {
   adopt: (routes: { fingerprint: string; result: RoutingResult }) => void;
   quick: (on: boolean) => void;
-} = { adopt: () => {}, quick: () => {} };
+  /** A shown revision's full routes are still on their way from the worker. */
+  awaiting: (on: boolean) => void;
+} = { adopt: () => {}, quick: () => {}, awaiting: () => {} };
 export const setRouteSink = (sink: typeof routeSink) => (routeSink = sink);
 
+type Routes = { fingerprint: string; result: RoutingResult };
 interface Compiled {
   scene: Scene;
-  /** Routes drawn off the main thread, for the document `fingerprint` describes. */
-  routes?: { fingerprint: string; result: RoutingResult };
+  /** Routes drawn off the main thread, for the document `fingerprint` describes, or on their way. */
+  routes?: Routes | Promise<Routes | undefined>;
 }
 
 /** Recently compiled sources. A preview and the commit that follows compile the same source. */
@@ -176,26 +179,31 @@ function compileCached(source: string): Promise<Compiled> {
 }
 
 /**
- * Layout and routing take hundreds of milliseconds on a mid-sized file, so they run in the
- * engine worker while the drawing stays responsive. A source the worker refuses is compiled here
- * again, which reports the error with its line.
+ * Layout and routing run in the engine worker while the drawing stays responsive. Layout takes
+ * milliseconds and routing seconds on a large file, so the scene comes back first and is drawn
+ * with quick routes; its full routes follow. A source the worker refuses is compiled here again,
+ * which reports the error with its line.
  */
 async function compileOffThread(source: string): Promise<Compiled> {
   // Opened before, by this build: the routes stand if this view projects the same document.
-  const kept = await cachedScene<Compiled>(source);
+  const kept = await cachedScene<{ scene: Scene; routes: Routes }>(source);
   if (kept) return kept;
+  const view = viewState();
+  let scene: Scene;
   try {
-    const { scene, fingerprint, routing } = await runShared({
-      kind: 'scene',
-      source,
-      view: viewState(),
-    });
-    const result = { scene, routes: { fingerprint, result: routing } };
-    void cacheScene(source, result);
-    return result;
+    scene = await runShared({ kind: 'compile', source });
   } catch {
     return { scene: await compile(source) };
   }
+  const routes = runShared({ kind: 'scene', source, view }).then(
+    ({ fingerprint, routing }) => {
+      const routes = { fingerprint, result: routing };
+      void cacheScene(source, { scene, routes });
+      return routes;
+    },
+    () => undefined,
+  );
+  return { scene, routes };
 }
 
 /**
@@ -224,11 +232,24 @@ export async function showSource(
     return null;
   }
   if (ticket !== showing) return null;
+  // The worker's routes stand only if it projected the same document; otherwise the scene routes it.
+  const adopt = (r: Routes | undefined) => {
+    if (r?.fingerprint === routingFingerprint(unwrap(doc))) routeSink.adopt(r);
+  };
+  const pending = routes instanceof Promise ? routes : null;
+  if (pending)
+    void pending.then(r => {
+      if (ticket !== showing) return;
+      batch(() => {
+        adopt(r);
+        routeSink.awaiting(false);
+      });
+    });
   batch(() => {
     mapSourceIds(mapId);
     restoreDocument(projectScene(scene, viewState()), { keepCamera: true });
-    // The worker's routes stand only if it projected the same document; otherwise route here.
-    if (routes?.fingerprint === routingFingerprint(unwrap(doc))) routeSink.adopt(routes);
+    if (!pending) adopt(routes as Routes | undefined);
+    routeSink.awaiting(!!pending);
     // A drag in a file keeps quick routes until its saved version is drawn.
     routeSink.quick(false);
     setSelection(typeof selection === 'function' ? selection() : selection);

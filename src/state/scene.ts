@@ -63,7 +63,10 @@ const state = createRoot(() => {
 
   /** Full routes being drawn in a worker for the document with this fingerprint. */
   let refining: { fingerprint: string; task: RunningTask<RoutingResult> } | null = null;
-  const [routesPending, setRoutesPending] = createSignal(false);
+  const [refinePending, setRoutesPending] = createSignal(false);
+  /** A shown file revision's routes are coming from its compile in the worker. */
+  const [awaiting, setAwaiting] = createSignal(false);
+  const routesPending = () => refinePending() || awaiting();
   const stopRefining = () => {
     refining?.task.cancel();
     refining = null;
@@ -115,7 +118,7 @@ const state = createRoot(() => {
       // `refine`: routing a large file here would block the page for seconds.
       known = fileMode() && !quick && !temporary && !ready ? knownRoutes(doc, vg, map) : null,
       deferred = fileMode() && !quick && !temporary && !ready && !known;
-    if (deferred && !fileCompiling()) refine(fingerprint);
+    if (deferred && !fileCompiling() && !awaiting()) refine(fingerprint);
     else if (!deferred && refining) queueMicrotask(stopRefining);
     const signature = JSON.stringify([
       vg.edges,
@@ -173,6 +176,7 @@ const state = createRoot(() => {
     routing,
     routesById,
     routesPending,
+    setAwaiting,
     resetRoutes() {
       cache = null;
       lastRoutes = [];
@@ -204,7 +208,7 @@ export const {
   routeInputFor,
 } = state;
 
-setRouteSink({ adopt: setAdoptedRoutes, quick: setQuickRouting });
+setRouteSink({ adopt: setAdoptedRoutes, quick: setQuickRouting, awaiting: state.setAwaiting });
 
 export const routes = () => routing().routes;
 export const routingReport = () => routing().result.report;

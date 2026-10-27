@@ -116,7 +116,8 @@ export function installDebugApi() {
     fileGeometry: () => measured(doc, sceneRects(), routes()),
     fileState: () => ({
       status: fileStatus(),
-      compiling: fileCompiling(),
+      // Laid out means routed too: a revision drawn before its full routes is still compiling here.
+      compiling: fileCompiling() || routesPending(),
       source: currentSource(),
       diagnostics: clone(fileDiagnostics()),
     }),

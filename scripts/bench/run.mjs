@@ -239,7 +239,8 @@ async function viewer() {
       ui('undo', INTERACTIVE, f, undo);
       ui('redo', INTERACTIVE, f, redo);
 
-      const src = () => fs.readFileSync(path.join(dir, f), 'utf8');
+      const src = () => fs.readFileSync(path.join(dir, f), 'utf8'),
+        shown = [];
       xs = [];
       for (let i = 0; i < runs; i++) {
         restoreFresh(f);
@@ -255,8 +256,10 @@ async function viewer() {
           count,
           { timeout: 90000 },
         );
+        shown.push((await now()) - start);
         xs.push(await settleFrom(start));
       }
+      ui('file edit: new box drawn', INTERACTIVE, f, shown);
       ui('file edit: add node + edge', INTERACTIVE, f, xs);
 
       xs = [];
