@@ -24,6 +24,7 @@ import { RangeField } from './controls';
 import { Icon } from './Icon';
 import './menus.css';
 import { workspace } from '../state/launch';
+import { embedSource, setEmbedSource } from '../state/files';
 
 /** The open popover menu, positioned under its anchor. */
 export function Menus() {
@@ -277,7 +278,23 @@ function ExportMenu() {
       <MenuItem command="export-json" />
       <MenuItem command="export-svg" />
       <MenuItem command="export-png" />
-      <p class="menu-note">Saved diagrams and exported SVGs remain editable. PNG is image-only.</p>
+      <Show when={fileMode()}>
+        <label class="menu-item menu-check">
+          <span class="menu-icon">
+            <input
+              type="checkbox"
+              checked={embedSource()}
+              onChange={e => setEmbedSource(e.currentTarget.checked)}
+            />
+          </span>
+          <span class="menu-label">Include .draft source in SVG and PNG</span>
+        </label>
+      </Show>
+      <p class="menu-note">
+        {fileMode()
+          ? 'An image with its source opens again as an editable diagram.'
+          : 'Saved diagrams and exported SVGs remain editable. PNG is image-only.'}
+      </p>
     </>
   );
 }

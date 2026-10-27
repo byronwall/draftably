@@ -1,5 +1,5 @@
 /** Opening, importing and exporting diagrams and images. */
-import { batch } from 'solid-js';
+import { batch, createSignal } from 'solid-js';
 import { isLegacyDiagram } from '../model/document';
 import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
@@ -17,14 +17,56 @@ import {
   serializeSvg,
   svgToPng,
 } from '../lib/svg-export';
+import { embedPngSource, readImageSource, embedSvgSource } from '../model/embed';
 import { addNode, finishInlineEdit, openDocument } from './actions';
-import { doc, selection, setSelection, snapshot, transact } from './document';
-import { connectFrom, setConnectFrom } from './editor';
+import {
+  clearSelection,
+  doc,
+  selection,
+  setDoc,
+  setSelection,
+  snapshot,
+  transact,
+} from './document';
+import { connectFrom, fitView, setConnectFrom } from './editor';
+import { currentSource, fileMode, openExampleSession, settleSave } from './file-session';
 import { runLayout } from './layout';
 import { sceneBounds } from './scene';
 import { toast } from './toast';
 
 const IMAGE_TYPES = /^image\/(png|jpeg|webp|gif)$/;
+
+/** Exported PNGs and SVGs carry the open file's source unless this is switched off. */
+const [embedSource, setEmbedSource] = createSignal(true);
+export { embedSource, setEmbedSource };
+
+/** The `.draft` source to put in an export, or undefined when there is none to carry. */
+const exportSource = () => (fileMode() && embedSource() ? currentSource() : undefined);
+
+/**
+ * Open a PNG or SVG export that carries `.draft` source as a new scratch diagram, which the
+ * example bar offers to save as a file. Resolves false when the image carries no source.
+ */
+export async function openImageSource(file: File) {
+  if (!/\.(png|svg)$/i.test(file.name) && !/^image\/(png|svg\+xml)$/.test(file.type)) return false;
+  const source = await readImageSource(new Uint8Array(await file.arrayBuffer()));
+  if (source === null) return false;
+  await settleSave();
+  // Named after the diagram's title, since a pasted image is just "image.png".
+  const title = /^diagram\s+"([^"]*)"/m.exec(source)?.[1] ?? file.name.replace(/\.[^.]+$/, ''),
+    name =
+      title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || 'diagram';
+  history.pushState(null, '', location.pathname);
+  clearSelection();
+  setDoc('collapsed', []);
+  await openExampleSession(name, title || name, source);
+  fitView();
+  toast('Opened the diagram in ' + (file.name || 'the pasted image'));
+  return true;
+}
 
 /** Set by the timeline module: opens a saved layout timeline file. */
 let timelineImporter: ((data: unknown) => void) | null = null;
@@ -73,6 +115,8 @@ export async function importText(text: string, name = '') {
 
 /** Embed an image as a new shape, or replace the image in an existing one. */
 export async function insertImage(file: File, replaceId: string | null = null) {
+  // A Draftably export opens as the diagram it was drawn from.
+  if (!replaceId && (await openImageSource(file))) return;
   if (!IMAGE_TYPES.test(file.type))
     throw Error(
       'Use a PNG, JPEG, WebP, or GIF image. SVG files are imported only as editable diagrams.',
@@ -116,6 +160,7 @@ export async function insertImage(file: File, replaceId: string | null = null) {
 
 export async function openFile(file: File | undefined, replaceImageId: string | null = null) {
   if (!file) return;
+  if (!replaceImageId && (await openImageSource(file))) return;
   if (IMAGE_TYPES.test(file.type)) return insertImage(file, replaceImageId);
   if (file.size > 24 * 1024 * 1024) throw Error('Use a diagram smaller than 24 MB.');
   await importText(await file.text(), file.name);
@@ -125,7 +170,10 @@ export async function openFile(file: File | undefined, replaceImageId: string | 
 export function exportSvg(): string {
   finishInlineEdit(true);
   // A comparison draws each version as its own panel, which the canvas does not show.
-  if (doc.appearance.compare) return '<?xml version="1.0" encoding="UTF-8"?>\n' + renderSvg(doc);
+  const source = exportSource(),
+    carry = (svg: string) => (source === undefined ? svg : embedSvgSource(svg, source));
+  if (doc.appearance.compare)
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' + carry(renderSvg(doc));
   const world = sceneElement;
   if (!world) throw Error('The canvas is not ready.');
   const previousSelection = selection(),
@@ -182,7 +230,7 @@ export function exportSvg(): string {
         ...[...parsed.documentElement.childNodes].map(n => svg.ownerDocument.importNode(n, true)),
       );
     }
-    return '<?xml version="1.0" encoding="UTF-8"?>\n' + serializeSvg(svg);
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' + carry(serializeSvg(svg));
   } finally {
     batch(() => {
       setSelection(previousSelection);
@@ -202,6 +250,20 @@ export async function exportDocument(format: ExportFormat) {
       'application/json',
     );
   else if (format === 'svg') downloadText(exportSvg(), filename('svg'), 'image/svg+xml');
-  else downloadBlob(await svgToPng(exportSvg()), filename('png'));
+  else {
+    const png = await svgToPng(exportSvg()),
+      source = exportSource();
+    downloadBlob(
+      source === undefined
+        ? png
+        : new Blob(
+            [(await embedPngSource(new Uint8Array(await png.arrayBuffer()), source)) as BlobPart],
+            {
+              type: 'image/png',
+            },
+          ),
+      filename('png'),
+    );
+  }
   toast(format.toUpperCase() + ' export created');
 }
