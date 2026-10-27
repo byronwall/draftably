@@ -162,6 +162,7 @@ export function normalize(input: unknown): Diagram {
       ...(typeof n.was === 'string' ? { was: n.was } : {}),
       ...(typeof n.href === 'string' ? { href: n.href } : {}),
       ...(Number.isInteger(n.count) && n.count > 1 ? { count: n.count } : {}),
+      ...((Number.isInteger(n.span) && n.span > 0) || n.span === 'var' ? { span: n.span } : {}),
       ...(n.parentId ? { parentId: n.parentId } : {}),
       ...(n.image ? { image: n.image } : {}),
       ...(finite(n.lifeline) && n.lifeline > 0 ? { lifeline: n.lifeline } : {}),

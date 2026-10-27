@@ -37,6 +37,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.was !== undefined ? { was: o.was } : {}),
       ...(o.href !== undefined ? { href: o.href } : {}),
       ...(o.count !== undefined ? { count: o.count } : {}),
+      ...(o.span !== undefined ? { span: o.span } : {}),
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
       ...(o.frame ? { frame: o.frame } : {}),
       ...(o.hull ? { hull: o.hull } : {}),

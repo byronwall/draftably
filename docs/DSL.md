@@ -230,8 +230,11 @@ edge hit cache -> cp "cached prefix"
   cell. `from=` and `to=` still choose a side.
 - A marker needs one row or one column: it cannot cut a grid.
 - A cell stays in its place. `near`, `nudge`, `stay` and `pin` on a cell are reported and
-  ignored; move the group instead. Dragging a cell in the viewer moves its group. An engine on the
-  root moves the group as one block.
+  ignored; move the group instead, by its title band. An engine on the root moves the group as
+  one block.
+- In the viewer, dragging a cell and dropping it among the others reorders the group: it writes
+  the group's `order` line. A marker keeps its place before the cell it preceded. The inspector's
+  **Span** field writes `span=`.
 - Cells are nodes, so colors, links, `count=` and change marks work on them.
 
 A table of a database entity, with a line from one row to another table's row:
@@ -635,6 +638,7 @@ Edits made in the viewer are written back to the file as readable statements:
 | Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
 | Pin or unpin (**P**)                       | `pin` at its position; unpinning leaves a soft `stay`.              |
 | Resize a shape or container                | `size`, or `min-width`/`min-height` on the container's `layout`.    |
+| Drag a cell among its group's cells        | The group's `order` line. **Span** in Inspector writes `span=`.     |
 | Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.   |
 | Color family or shade in Inspector         | `color=` and `shade=` on the declaration.                           |
 | Theme or padding in **Appearance**         | The `theme` line; preset changes drop built-in `theme-color` lines. |

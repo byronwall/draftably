@@ -19,7 +19,6 @@ import {
 } from '../model/geometry';
 import {
   descendants,
-  findNode,
   findObject,
   frameRect,
   isCell,
@@ -427,11 +426,8 @@ export function onPointerDown(e: PointerEvent) {
   focusCanvas();
 }
 
-function startObjectDrag(e: PointerEvent, canvas: Element, at: string, doubleCandidate: boolean) {
-  // A cell holds its place in its group, so dragging one moves the whole group.
-  const owner = (id: string) => (isCell(doc, id) ? findNode(doc, id)!.parentId! : id),
-    id = owner(at),
-    roots = [...new Set(selectionRoots(doc, selection()).map(owner))],
+function startObjectDrag(e: PointerEvent, canvas: Element, id: string, doubleCandidate: boolean) {
+  const roots = selectionRoots(doc, selection()),
     moving = new Set(roots);
   for (const root of roots)
     if (isGroup(doc, root)) descendants(doc, root).forEach(n => moving.add(n));
@@ -446,7 +442,8 @@ function startObjectDrag(e: PointerEvent, canvas: Element, at: string, doubleCan
     positions,
     frames,
     refRect: clone(objectRect(doc, lookup, id)),
-    keepParent: e.altKey,
+    // A dragged cell stays in its group: dropping it there reorders the cells.
+    keepParent: e.altKey || roots.some(r => isCell(doc, r)),
     doubleCandidate,
   });
 }

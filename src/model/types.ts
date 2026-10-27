@@ -31,6 +31,8 @@ export interface DiagramNode {
   href?: string;
   /** How many things this box stands for; drawn as a stack with a badge. */
   count?: number;
+  /** A cell's columns (or units), or `var` for a field of variable length. */
+  span?: number | 'var';
   parentId?: string;
   image?: string;
   /** A sequence participant: length of the dashed lifeline below the box. */

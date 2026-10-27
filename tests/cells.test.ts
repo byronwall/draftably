@@ -5,6 +5,9 @@ import { checkSource } from '../src/dsl/compile';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { computeRoutes } from '../src/model/routes';
 import { normalize } from '../src/model/document';
+import type { Diagram } from '../src/model/types';
+import { translateEdit } from '../src/dsl/translate';
+import { printSource, readSource } from '../src/dsl/syntax';
 
 const example = (name: string) =>
   readFileSync(path.join(__dirname, `../examples/${name}.draft`), 'utf8');
@@ -115,5 +118,38 @@ describe('cells', () => {
     // The ruler numbers each byte between the title band and the first row.
     expect(chrome.ruler!.ticks.map(t => t.label)).toEqual(['0', '1', '2', '3', '4', '5', '6', '7']);
     expect(at('magic').y - at('r').y).toBe(chrome.ruler!.y + chrome.ruler!.h);
+  });
+
+  it('writes an order line when a cell is dropped among the others, and a span from the inspector', () => {
+    const source = example('prompt-request'),
+      scene = checkSource(source),
+      before = projectScene(scene);
+    const run = (fn: (d: Diagram) => void, selection: string[]) => {
+      const after = structuredClone(before);
+      fn(after);
+      return printSource(
+        translateEdit({
+          source: readSource(source),
+          scene,
+          before,
+          after,
+          label: 'Move',
+          selection,
+        }).source,
+      );
+    };
+    // Drop the new turn between the system prompt and the tools.
+    const moved = run(
+      d => {
+        d.layout.nodes.turn.x = d.layout.nodes.tools.x - d.layout.nodes.turn.w / 2 + 4;
+      },
+      ['turn'],
+    );
+    expect(moved).toContain('order req sys cp turn tools hist');
+    expect(moved).not.toMatch(/^(near|stay|nudge) turn/m);
+    const spanned = run(d => {
+      d.graph.nodes.find(n => n.id === 'tools')!.span = 2;
+    }, []);
+    expect(spanned).toContain('node tools "Tool definitions" in=req span=2');
   });
 });

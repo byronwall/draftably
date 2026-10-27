@@ -9,7 +9,7 @@
  */
 import type { ColorDefinition, DiagramAppearance } from '../model/appearance';
 import { findNode, isCell, selectionRoots } from '../model/graph';
-import type { ColorKey, Diagram, DiagramEdge, PortSide, Rect } from '../model/types';
+import type { ColorKey, Diagram, DiagramEdge, DiagramNode, PortSide, Rect } from '../model/types';
 import { contentOrigin, layoutView, type Scene } from './compile';
 import {
   addRefinement,
@@ -213,6 +213,9 @@ export function translateEdit(input: EditInput): EditResult {
     if (a?.shade !== b?.shade) writeShade(s, b?.shade);
     if (s.command === 'node' && a?.shape !== b?.shape)
       setAttr(s, 'shape', b.shape === 'box' ? undefined : bare(b.shape));
+    const span = (o as DiagramNode).span;
+    if (s.command === 'node' && span !== (old as DiagramNode).span)
+      setAttr(s, 'span', span === undefined || span === 1 ? undefined : bare(span));
   }
 
   // Connections.
@@ -350,6 +353,54 @@ function nearestSibling(me: Rect, siblings: Array<{ id: string; r: Rect }>): Can
   return best && best.gap <= 2000 ? best : null;
 }
 
+/**
+ * Write the order a dragged cell's group reads in after the drop: the cell goes before the first
+ * other cell it now reads before, row by row. Markers stay before the cell they preceded. Returns
+ * whether the order changed.
+ */
+function reorderCells(input: EditInput, sid: (id: string) => string, id: string) {
+  const { source, scene, after } = input,
+    group = sid(findNode(after, id)!.parentId!),
+    kids = scene.objects.filter(o => o.parent === group),
+    markers = kids.filter(o => o.shape === 'marker');
+  // The compiled order: cells row by row, each marker before the cell on its seam.
+  const parts = kids
+    .filter(o => o.shape !== 'marker')
+    .sort((a, b) => a.localY - b.localY || a.localX - b.localX);
+  const following = new Map(
+    markers.map(m => {
+      const across = m.h > m.w,
+        seam = across ? m.localX + m.w / 2 : m.localY + m.h / 2;
+      return [m.id, parts.find(p => (across ? p.localX : p.localY) >= seam - 0.5)?.id];
+    }),
+  );
+  const withMarkers = (list: string[]) => {
+    const out = [...list];
+    for (const m of markers) {
+      const next = following.get(m.id);
+      out.splice(next ? out.indexOf(next) : out.length, 0, m.id);
+    }
+    return out;
+  };
+  const current = withMarkers(parts.map(p => p.id));
+  // Where the dragged cell now reads: before the first other cell it precedes.
+  const at = after.layout.nodes[id],
+    me = { x: at.x + at.w / 2, y: at.y + at.h / 2 };
+  const others = parts.map(p => p.id).filter(p => p !== id),
+    precedes = (o: string) => {
+      const r = after.layout.nodes[o],
+        c = { x: r.x + r.w / 2, y: r.y + r.h / 2 };
+      return Math.abs(c.y - me.y) < Math.min(r.h, at.h) / 2 ? me.x < c.x : me.y < c.y;
+    };
+  const next = others.findIndex(precedes);
+  others.splice(next < 0 ? others.length : next, 0, id);
+  const order = withMarkers(others);
+  if (order.every((c, i) => c === current[i])) return false;
+  removeWhere(source, s => s.command === 'order' && s.args[0]?.value === group);
+  addRefinement(source, statement('order', [bare(group), ...order.map(c => bare(c))]));
+  return true;
+}
+
 function placeSelection(input: EditInput, sid: (id: string) => string, notes: string[]) {
   const { source, before, after, label } = input;
   // Positions are written in the containers that lay objects out, so soft groups drop out: a
@@ -365,9 +416,13 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
   };
   const roots = new Set<string>(),
     carried = new Set<string>();
-  // A dragged cell carries its group: the cell keeps its place in it.
-  const owner = (id: string) => (isCell(after, id) ? findNode(after, id)!.parentId! : id);
-  for (const id of new Set(selectionRoots(after, input.selection).map(owner))) {
+  for (const id of selectionRoots(after, input.selection)) {
+    // A dragged cell is a new order for its group's cells, not a position.
+    if (isCell(after, id)) {
+      if (reorderCells(input, sid, id))
+        notes.push(`reordered ${sid(findNode(after, id)!.parentId!)}`);
+      continue;
+    }
     if (!soft.has(id)) {
       roots.add(id);
       continue;

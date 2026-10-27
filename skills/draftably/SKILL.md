@@ -143,7 +143,7 @@ order (or `order`), under a band that holds the group's title. One row by defaul
 `direction=down` makes one column. `columns=N` makes a grid, such as a table: cells fill rows of N
 columns in order, each column as wide as its widest cell, and `span=N` covers N columns. Lines
 can end on any cell; a cell inside a grid is reached across the cells around it, ending in a dot.
-A cell stays in its place: drag or place the group, not the cell.
+A cell stays in its place: place the group, not the cell. Reorder cells with `order group id...`.
 
 `shape=marker` marks a seam between two cells, such as a cache point. It takes no room: a bar
 cuts the object before the next cell, with its label above. Lines reach it from below.
