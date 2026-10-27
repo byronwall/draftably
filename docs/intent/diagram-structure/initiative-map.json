@@ -4,11 +4,11 @@
     "title": "Diagram structure: soft groups, swim lanes and sequence",
     "slug": "diagram-structure",
     "scale": "capability",
-    "current_phase": "plan",
+    "current_phase": "execution",
     "last_updated": "2026-10-26",
     "summary": "Let groups say 'belongs together' without driving layout (frame=soft), add a lanes layout over root groups, and hold sequence diagrams for a later yes.",
-    "status": "planned",
-    "next_action": "Build m1 (soft groups) after the #125 fix lands."
+    "status": "active",
+    "next_action": "Byron reviews the structure/1-5 stack; m6 waits for #124 (vary)."
   },
   "artifacts": {
     "intent_brief": {
@@ -328,6 +328,11 @@
       "date": "2026-10-26",
       "event": "Three question rounds answered; shape and plan updated (viewer drag milestone added, sequence approved after lanes).",
       "evidence": "qa-1"
+    },
+    {
+      "date": "2026-10-26",
+      "event": "Built m1-m5 as a gh stack (structure/1-soft-groups .. structure/5-sequence). First proof: all-soft bounding-box tints overlapped, so m2 cohesion shipped in the same stack. m6 blocked on #124.",
+      "evidence": "pnpm check:fast passes on structure/5-sequence; screenshots in the PRs"
     }
   ],
   "closure": null
