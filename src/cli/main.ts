@@ -13,6 +13,8 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { renderSvg } from './svg';
+import { cliVersion } from './skill';
+import { svgSize } from './png';
 import { linkNotes, svgHref } from './links';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
@@ -20,9 +22,11 @@ const USAGE = `Usage: draftably <command> <file.draft> [options]
 Any <file> may also be a PNG or SVG that Draftably exported: its embedded source is read.
 
 Commands:
-  check <file>              Report source errors, layout diagnostics and drawing conflicts
+  check <file>…             Report source errors, layout diagnostics and drawing conflicts
        [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
-                            errors. --hints adds how far each refinement moved its target.
+       [--quiet]            errors. Several files or a folder check each .draft in turn.
+                            --hints adds how far each refinement moved its target; --quiet
+                            leaves out info notes.
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry. --json prints it on one
        [--hints]            line; with --hints it adds the unrefined position (raw) of every
@@ -30,8 +34,9 @@ Commands:
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
        [--state <id>]       Draw it in one emphasis state (also with --png).
        [--states]           Draw every emphasis state as its own aligned panel.
-  inspect <file> --png <out.png> [--scale 2]
-                            Save the drawing as a PNG (needs Chrome or Chromium).
+  inspect <file> --png <out.png> [--scale 2] [--max-width <px>]
+                            Save the drawing as a PNG (needs Chrome or Chromium). --max-width
+                            lowers the scale so the image is at most that many pixels wide.
                             PNG and SVG output embed the source; --no-source leaves it out.
   compare <before> <after>  Print one file holding both versions, with + - ~ change marks.
        [--write <file>]     Save it instead of printing it.
@@ -67,7 +72,16 @@ Commands:
        [--dir <folder>]     --dir picks another skills folder (e.g. .agents/skills);
        [--force]            --force replaces an existing copy.
   skill print               Print the skill's SKILL.md.
+  --version                 Print the installed version.
+
+Any command with --help prints its own part of this text.
 `;
+
+/** The usage lines for `command`, or all of them. */
+export function usage(command?: string) {
+  const blocks = USAGE.split(/\n(?= {2}[a-z])/).filter(b => b.startsWith(`  ${command} `));
+  return blocks.length ? `Usage:\n${blocks.join('\n')}` : USAGE;
+}
 
 const describe = (d: Diagnostic) =>
   `${d.level.padEnd(7)} ${d.line ? `line ${d.line}: ` : ''}${d.message}${d.level === 'warning' ? ` [${d.code}]` : ''}`;
@@ -140,16 +154,46 @@ function drawnState(doc: Diagram, id: string | undefined) {
 async function maybePng(svg: () => string | Promise<string>, args: string[], source?: string) {
   const out = option(args, '--png');
   if (!out) return false;
-  const scale = Number(option(args, '--scale') ?? 2);
+  let scale = Number(option(args, '--scale') ?? 2);
   if (!(scale > 0 && scale <= 8)) throw new UsageError('--scale must be from 0 to 8.');
+  const maxWidth = option(args, '--max-width');
+  if (maxWidth !== undefined && !(Number(maxWidth) >= 1))
+    throw new UsageError('--max-width must be a number of pixels.');
+  const drawing = await svg();
+  if (maxWidth !== undefined) scale = Math.min(scale, Number(maxWidth) / svgSize(drawing).w);
   const { writePng } = await import('./png');
-  await writePng(await svg(), out, scale, source);
-  console.log(`Wrote ${out}.`);
+  const { w, h } = await writePng(drawing, out, scale, source);
+  console.log(`Wrote ${out} (${w}×${h}).`);
   return true;
+}
+
+/** Check one file and print its notes, each prefixed by `tag`; 1 if it has errors. */
+async function checkFile(file: string, tag: string, hints: boolean, quiet: boolean) {
+  const source = await read(file),
+    scene = await compile(source);
+  const diagnostics = [...scene.diagnostics, ...linkNotes(scene, file), ...sceneConflicts(scene)];
+  const errors = diagnostics.filter(d => d.level === 'error'),
+    warnings = diagnostics.filter(d => d.level === 'warning');
+  for (const d of diagnostics) if (!quiet || d.level !== 'info') console.log(tag + describe(d));
+  if (hints) console.log(hintTable(await hintMoves(source, scene)));
+  const nodes = scene.objects.filter(o => o.type === 'node').length;
+  console.log(
+    `${tag}${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
+  );
+  return errors.length ? 1 : 0;
 }
 
 export async function main(argv: string[]): Promise<number> {
   const [command, file, ...rest] = argv;
+  if (['--version', '-v', 'version'].includes(command)) {
+    console.log(cliVersion());
+    return 0;
+  }
+  // Before anything runs: `open --help` must not start a server, `vary --help` is not a file.
+  if (argv.includes('--help') || argv.includes('-h') || command === 'help') {
+    console.log(usage(command === 'help' ? file : command));
+    return 0;
+  }
   const flag = (name: string) => rest.includes(name);
   /** The source to embed in an exported image, unless `--no-source` is given. */
   const embed = (source: string) => (flag('--no-source') ? undefined : formatSource(source));
@@ -160,22 +204,36 @@ export async function main(argv: string[]): Promise<number> {
   try {
     switch (command) {
       case 'check': {
-        const source = await read(file),
-          scene = await compile(source);
-        const diagnostics = [
-          ...scene.diagnostics,
-          ...linkNotes(scene, file),
-          ...sceneConflicts(scene),
-        ];
-        const errors = diagnostics.filter(d => d.level === 'error'),
-          warnings = diagnostics.filter(d => d.level === 'warning');
-        for (const d of diagnostics) console.log(describe(d));
-        if (flag('--hints')) console.log(hintTable(await hintMoves(source, scene)));
-        const nodes = scene.objects.filter(o => o.type === 'node').length;
-        console.log(
-          `${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
+        const files = [file, ...rest].filter((a): a is string => !!a && !a.startsWith('--'));
+        if (!files.length) throw new UsageError('A .draft file is required.');
+        const all = files.flatMap(f =>
+          fs.statSync(path.resolve(f), { throwIfNoEntry: false })?.isDirectory()
+            ? fs
+                .readdirSync(path.resolve(f))
+                .filter(n => n.endsWith('.draft'))
+                .sort()
+                .map(n => path.join(f, n))
+            : [f],
         );
-        return errors.length ? 1 : 0;
+        if (!all.length) throw new UsageError(`No .draft files in ${files.join(', ')}.`);
+        let failed = 0;
+        for (const f of all) {
+          // With several files each line names its file, so a loop can't mistake one for all.
+          const tag = all.length > 1 || files[0] !== all[0] ? `${f}: ` : '';
+          try {
+            failed += await checkFile(f, tag, flag('--hints'), flag('--quiet'));
+          } catch (error) {
+            if (!tag) throw error;
+            const message = error instanceof Error ? error.message : String(error);
+            console.log(`${tag}error   ${message}`);
+            failed++;
+          }
+        }
+        if (all.length > 1)
+          console.log(
+            `${failed ? `${failed} of ${all.length}` : `All ${all.length}`} files ${failed ? 'have errors' : 'passed'}.`,
+          );
+        return failed ? 1 : 0;
       }
       case 'format': {
         const formatted = formatSource(await read(file));
@@ -242,7 +300,8 @@ export async function main(argv: string[]): Promise<number> {
           if (!done.changes.length) return 0;
           const scene = await compile(fs.readFileSync(path.resolve(file!), 'utf8'));
           const notes = [...scene.diagnostics, ...sceneConflicts(scene)];
-          for (const d of notes) console.log(describe(d));
+          for (const d of notes)
+            if (!flag('--quiet') || d.level !== 'info') console.log(describe(d));
           const errors = notes.filter(d => d.level === 'error').length,
             warnings = notes.filter(d => d.level === 'warning').length;
           console.log(`Check: ${errors ? 'Problems' : warnings ? 'Warnings' : 'OK'}.`);

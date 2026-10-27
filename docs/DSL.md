@@ -538,6 +538,7 @@ line. Pins never move; conflicting pins are reported as errors.
 ```bash
 pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflicts; exit 1 on errors
 pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
+pnpm draftably check examples/ --quiet            # every .draft in a folder (or several files); no info notes
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
@@ -548,6 +549,7 @@ pnpm draftably vary examples/checkout.draft       # layout variants: contact she
 pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
+pnpm draftably vary --help                       # any command's options; --version for the version
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
 ```
 
@@ -698,7 +700,8 @@ The file is the source of truth while it is open: browser storage is not read or
 moving the camera never changes the file.
 
 `--png <file>` on `inspect` or `compare` saves a PNG at `--scale` times the SVG's size (2 by
-default). It renders with an installed Chrome, Chromium or Edge in headless mode; set
+default) and prints its size in pixels. `--max-width <px>` lowers the scale so the image is at
+most that wide. It renders with an installed Chrome, Chromium or Edge in headless mode; set
 `CHROME_PATH` to use another copy.
 
 `inspect` uses the editor's own router and the same font tables, so its geometry matches the
