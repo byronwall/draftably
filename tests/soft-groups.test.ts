@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkSource, compile, type Scene } from '../src/dsl/compile';
+import { checkSource, compile } from '../src/dsl/compile';
 
 /** Issue #125: a group whose members span several ranks, fed from outside at its middle. */
 const repro = (frame: string) =>
@@ -24,18 +24,36 @@ const repro = (frame: string) =>
     '',
   ].join('\n');
 
-const flat = repro('')
-  .split('\n')
-  .filter(l => !l.startsWith('group '))
-  .map(l => l.replace(/ in=\w+/, ''))
-  .join('\n');
-
-const nodes = (scene: Scene) =>
-  scene.objects.filter(o => o.type === 'node').map(({ id, x, y }) => ({ id, x, y }));
-
 describe('soft groups', () => {
-  it('lay their members out as if the group were not there', async () => {
-    expect(nodes(await compile(repro(' frame=soft')))).toEqual(nodes(await compile(flat)));
+  it('rank each member by its own connections', async () => {
+    const scene = await compile(repro(' frame=soft')),
+      x = (id: string) => scene.byId.get(id)!.x;
+    // Unlike a box, the group is not one block: check_b shares check_a's rank, after listing.
+    expect(x('check_b')).toBe(x('check_a'));
+    expect(x('fail_b')).toBeGreaterThan(x('check_b'));
+    expect(x('drop')).toBeGreaterThan(x('fail_b'));
+    expect(x('b_out')).toBeGreaterThan(x('drop'));
+  });
+
+  it('keep members of one group side by side in a rank', () => {
+    const scene = checkSource(
+      [
+        'node src "Source"',
+        'group a "A" frame=soft',
+        'group b "B" frame=soft',
+        'node a1 "A1" in=a',
+        'node b1 "B1" in=b',
+        'node a2 "A2" in=a',
+        'node b2 "B2" in=b',
+        ...['a1', 'b1', 'a2', 'b2'].map(id => `edge ${id}_in src -> ${id}`),
+        '',
+      ].join('\n'),
+    );
+    const order = ['a1', 'b1', 'a2', 'b2'].sort(
+      (p, q) => scene.byId.get(p)!.y - scene.byId.get(q)!.y,
+    );
+    expect(order.map(id => id[0]).join('')).toMatch(/^(aabb|bbaa)$/);
+    expect(scene.diagnostics.filter(d => d.code.startsWith('soft'))).toEqual([]);
   });
 
   it('keep their members and draw round them', async () => {
@@ -52,7 +70,7 @@ describe('soft groups', () => {
     }
   });
 
-  it('note a tint that covers an object outside the group', () => {
+  it('draw round an object between their members in pieces, and say so', () => {
     const scene = checkSource(
       [
         'group g "G" frame=soft',
@@ -64,7 +82,8 @@ describe('soft groups', () => {
         '',
       ].join('\n'),
     );
-    expect(scene.diagnostics.find(d => d.code === 'soft-overlap')?.ids).toEqual(['g', 'mid']);
+    expect(scene.diagnostics.map(d => d.code)).toEqual(['soft-split']);
+    expect(scene.byId.get('g')!.hull).toHaveLength(2);
   });
 
   it('have no layout or position of their own', () => {

@@ -36,6 +36,8 @@ export interface DiagramGroup {
   parentId?: string;
   /** `soft` draws a tint behind the members instead of a frame; `none` draws nothing. */
   frame?: 'soft' | 'none';
+  /** A soft group's tint: rectangles relative to the group's top left; the first holds the label. */
+  hull?: Rect[];
 }
 
 export interface DiagramEdge {

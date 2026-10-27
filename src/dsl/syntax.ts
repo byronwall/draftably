@@ -208,6 +208,8 @@ export interface ModelObject {
    * group is not a layout scope: its members are laid out with the nearest framed container's.
    */
   frame?: 'soft' | 'none';
+  /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
+  soft?: string[];
   line: number;
 }
 

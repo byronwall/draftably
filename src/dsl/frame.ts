@@ -18,6 +18,8 @@ export const SOFT_PAD = 10;
 export const SOFT_LABEL = 18;
 /** Where a soft group's label sits in its tint: in the annotation face, at the top left. */
 export const SOFT_TITLE = { x: SOFT_PAD, y: SOFT_PAD + 2 };
+/** Corner radius of each rectangle of a tint; small, so joined rectangles read as one shape. */
+export const SOFT_RADIUS = 6;
 
 /** Top-left of a group's content area, which its children's local positions are relative to. */
 export const contentOrigin = (group: { x: number; y: number }, header = GROUP_HEADER) => ({

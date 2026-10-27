@@ -57,6 +57,8 @@ export interface SceneObject extends ModelObject {
   baseX: number;
   baseY: number;
   depth: number;
+  /** Soft groups: the tint's rectangles, relative to the group's top left; the first holds the label. */
+  hull?: Array<{ x: number; y: number; w: number; h: number }>;
 }
 
 export interface Diagnostic {
@@ -116,25 +118,117 @@ export function checkSource(source: string): Scene {
 function dissolved(m: Model): Model {
   if (!m.objects.some(o => o.frame)) return m;
   const by = new Map(m.objects.map(o => [o.id, o]));
+  const chain = (id: string) => {
+    const out: string[] = [];
+    for (let p = by.get(id)!.parent; p !== 'root' && by.get(p)!.frame; p = by.get(p)!.parent)
+      out.unshift(p);
+    return out;
+  };
   return {
     ...m,
-    objects: m.objects.filter(o => !o.frame).map(o => ({ ...o, parent: layoutParent(by, o.id) })),
+    objects: m.objects
+      .filter(o => !o.frame)
+      .map(o => ({ ...o, parent: layoutParent(by, o.id), soft: chain(o.id) })),
   };
 }
 
 /**
+ * A rank with the members of each soft group side by side, outermost group first: a group's
+ * members take the place of their mean position in the rank, and everything else keeps its order.
+ */
+function clustered(layer: string[], chainOf: (id: string) => string[] | undefined, depth = 0) {
+  if (!layer.some(id => chainOf(id)?.[depth])) return layer;
+  const blocks = new Map<string, { at: number; ids: string[] }>();
+  layer.forEach((id, i) => {
+    const key = chainOf(id)?.[depth] ?? `\0${id}`,
+      block = blocks.get(key) ?? { at: 0, ids: [] };
+    block.at += i;
+    block.ids.push(id);
+    blocks.set(key, block);
+  });
+  return [...blocks]
+    .sort(([, a], [, b]) => a.at / a.ids.length - b.at / b.ids.length)
+    .flatMap(([key, b]) => (key.startsWith('\0') ? b.ids : clustered(b.ids, chainOf, depth + 1)));
+}
+
+/** Space kept between two soft tints, or a tint and a box, that would otherwise touch. */
+const SOFT_GAP = 8;
+
+/**
+ * Room two neighbouring boxes need between them for the soft tints round them: a pad for each
+ * tint that ends or starts between them, and the label of each that starts after a gap below.
+ */
+function softRoom(a: string[] = [], b: string[] = [], below: boolean) {
+  const leaving = a.filter(g => !b.includes(g)).length,
+    entering = b.filter(g => !a.includes(g)).length;
+  if (!leaving && !entering) return 0;
+  return (leaving + entering) * SOFT_PAD + (below && entering ? SOFT_LABEL : 0) + SOFT_GAP;
+}
+
+/** Room between two ranks for the tints that end in one or start in the other. */
+function rankRoom(
+  from: string[],
+  to: string[],
+  chainOf: (id: string) => string[] | undefined,
+  below: boolean,
+) {
+  const inFrom = new Set(from.flatMap(id => chainOf(id) ?? [])),
+    across = (id: string, other: Set<string>) => (chainOf(id) ?? []).filter(g => !other.has(g));
+  const inTo = new Set(to.flatMap(id => chainOf(id) ?? []));
+  let room = 0;
+  for (const a of from)
+    for (const b of to) room = Math.max(room, softRoom(across(a, inTo), across(b, inFrom), below));
+  return room;
+}
+
+type Box = { x: number; y: number; w: number; h: number };
+const hits = (a: Box, b: Box) =>
+  a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+const padded = (o: Box, p: number): Box => ({
+  x: o.x - p,
+  y: o.y - p,
+  w: o.w + 2 * p,
+  h: o.h + 2 * p,
+});
+
+/**
+ * The rectangle that joins two boxes: the strip across the gap where they face each other, or,
+ * when they sit diagonally, the box round both.
+ */
+function bridge(a: Box, b: Box): Box {
+  const x0 = Math.max(a.x, b.x),
+    x1 = Math.min(a.x + a.w, b.x + b.w),
+    y0 = Math.max(a.y, b.y),
+    y1 = Math.min(a.y + a.h, b.y + b.h);
+  if (x1 > x0) {
+    const top = Math.min(a.y + a.h, b.y + b.h);
+    return { x: x0, y: top, w: x1 - x0, h: Math.max(a.y, b.y) - top };
+  }
+  if (y1 > y0) {
+    const left = Math.min(a.x + a.w, b.x + b.w);
+    return { x: left, y: y0, w: Math.max(a.x, b.x) - left, h: y1 - y0 };
+  }
+  const x = Math.min(a.x, b.x),
+    y = Math.min(a.y, b.y);
+  return { x, y, w: Math.max(a.x + a.w, b.x + b.w) - x, h: Math.max(a.y + a.h, b.y + b.h) - y };
+}
+
+/**
  * Put soft and frameless groups back into a scene laid out without them. Members keep their
- * place and get their declared parent back; each group is drawn round its members, innermost
- * first, and a soft tint that covers another object is noted.
+ * place and get their declared parent back. A soft group's tint is the members' boxes, padded,
+ * joined along a shortest tree by bridges that cover nothing else, with room for the label above
+ * its top member; innermost groups first, so an outer tint wraps an inner one. A tint that still
+ * covers another object, or that could not join all its members, is noted.
  */
 function withSoftGroups(scene: Scene, m: Model): Scene {
   const soft = m.objects.filter(o => o.frame);
   if (!soft.length) return scene;
   const by = new Map(m.objects.map(o => [o.id, o])),
     header = scene.look.groupHeader,
-    placed = new Map(
-      scene.objects.map(o => [o.id, { ...o, parent: by.get(o.id)!.parent }] as const),
-    );
+    placed = new Map<string, SceneObject>(
+      scene.objects.map(o => [o.id, { ...o, parent: by.get(o.id)!.parent, soft: undefined }]),
+    ),
+    diagnostics = [...scene.diagnostics];
   const within = (id: string, group: string) => {
     for (let p = by.get(id)?.parent; p && p !== 'root'; p = by.get(p)?.parent)
       if (p === group) return true;
@@ -145,16 +239,65 @@ function withSoftGroups(scene: Scene, m: Model): Scene {
     for (let p = by.get(id)!.parent; p !== 'root'; p = by.get(p)!.parent) d++;
     return d;
   };
+  /** What a member adds to a tint: its box, or an inner soft group's whole tint. */
+  const parts = (o: SceneObject): Box[] =>
+    o.frame === 'soft'
+      ? (o.hull ?? []).map(r => ({ ...r, x: r.x + o.x, y: r.y + o.y }))
+      : o.frame
+        ? []
+        : [o];
   for (const g of [...soft].sort((a, b) => depthOf(b.id) - depthOf(a.id))) {
     const members = [...placed.values()].filter(o => within(o.id, g.id)),
       frame = placed.get(layoutParent(by, g.id)),
       origin = frame ? contentOrigin(frame, header) : { x: 0, y: 0 },
-      edge = (f: (o: SceneObject) => number, pick: (...n: number[]) => number, pad: number) =>
-        members.length ? pick(...members.map(f)) + pad : 0;
-    const x0 = members.length ? edge(o => o.x, Math.min, -SOFT_PAD) : origin.x,
-      y0 = members.length ? edge(o => o.y, Math.min, -SOFT_PAD - SOFT_LABEL) : origin.y,
-      x1 = members.length ? edge(o => o.x + o.w, Math.max, SOFT_PAD) : origin.x,
-      y1 = members.length ? edge(o => o.y + o.h, Math.max, SOFT_PAD) : origin.y,
+      others = [...placed.values()].filter(
+        o => !o.frame && !within(o.id, g.id) && !within(g.id, o.id),
+      );
+    const boxes = members.flatMap(o => parts(o).map(b => padded(b, SOFT_PAD)));
+    let rects: Box[] = [],
+      split = 0;
+    if (boxes.length) {
+      // The label sits above the top member (the leftmost of a row).
+      const top = boxes.reduce((t, b) => (b.y < t.y || (b.y === t.y && b.x < t.x) ? b : t));
+      top.y -= SOFT_LABEL;
+      top.h += SOFT_LABEL;
+      rects = [top, ...boxes.filter(b => b !== top)];
+      const x = Math.min(...rects.map(r => r.x)),
+        y = Math.min(...rects.map(r => r.y)),
+        whole = {
+          x,
+          y,
+          w: Math.max(...rects.map(r => r.x + r.w)) - x,
+          h: Math.max(...rects.map(r => r.y + r.h)) - y,
+        };
+      // One rectangle round them all when it covers nothing else; otherwise the boxes themselves,
+      // joined along a shortest tree (Prim) by gap between them.
+      if (!others.some(o => hits(o, whole))) rects = [whole];
+      const gapOf = (a: Box, b: Box) =>
+        Math.max(b.x - (a.x + a.w), a.x - (b.x + b.w), b.y - (a.y + a.h), a.y - (b.y + b.h), 0);
+      const joined = [rects[0]],
+        rest = rects.slice(1),
+        bridges: Box[] = [];
+      while (rest.length) {
+        let best = { gap: Infinity, a: rects[0], i: 0 };
+        for (const a of joined)
+          rest.forEach((b, i) => {
+            const d = gapOf(a, b);
+            if (d < best.gap) best = { gap: d, a, i };
+          });
+        const [b] = rest.splice(best.i, 1);
+        joined.push(b);
+        if (hits(best.a, b)) continue;
+        const r = bridge(best.a, b);
+        if (others.some(o => hits(o, r))) split++;
+        else bridges.push(r);
+      }
+      rects.push(...bridges);
+    }
+    const x0 = rects.length ? Math.min(...rects.map(r => r.x)) : origin.x,
+      y0 = rects.length ? Math.min(...rects.map(r => r.y)) : origin.y,
+      x1 = rects.length ? Math.max(...rects.map(r => r.x + r.w)) : origin.x,
+      y1 = rects.length ? Math.max(...rects.map(r => r.y + r.h)) : origin.y,
       local = { x: x0 - origin.x, y: y0 - origin.y };
     placed.set(g.id, {
       ...g,
@@ -167,23 +310,10 @@ function withSoftGroups(scene: Scene, m: Model): Scene {
       baseX: local.x,
       baseY: local.y,
       depth: depthOf(g.id),
+      hull: rects.map(r => ({ x: r.x - x0, y: r.y - y0, w: r.w, h: r.h })),
     });
-  }
-  const diagnostics = [...scene.diagnostics];
-  for (const g of soft) {
-    const t = placed.get(g.id)!;
-    if (g.frame !== 'soft' || !t.w) continue;
-    const covered = [...placed.values()].filter(
-      o =>
-        o.id !== g.id &&
-        !o.frame &&
-        !within(o.id, g.id) &&
-        !within(g.id, o.id) &&
-        o.x < t.x + t.w &&
-        o.x + o.w > t.x &&
-        o.y < t.y + t.h &&
-        o.y + o.h > t.y,
-    );
+    if (g.frame !== 'soft') continue;
+    const covered = others.filter(o => rects.some(r => hits(o, r)));
     if (covered.length)
       diagnostics.push({
         level: 'warning',
@@ -191,6 +321,14 @@ function withSoftGroups(scene: Scene, m: Model): Scene {
         message: `${g.id}'s tint covers ${covered.map(o => o.id).join(', ')}, which ${covered.length > 1 ? 'are' : 'is'} not in it. Place its members together, or use frame=box.`,
         line: g.line,
         ids: [g.id, ...covered.map(o => o.id)],
+      });
+    if (split)
+      diagnostics.push({
+        level: 'info',
+        code: 'soft-split',
+        message: `${g.id}'s members are apart, so its tint is drawn in ${split + 1} pieces. Place its members together, or use frame=box.`,
+        line: g.line,
+        ids: [g.id],
       });
   }
   const index = new Map(m.objects.map((o, i) => [o.id, i])),
@@ -1106,11 +1244,17 @@ function packed(
     sinks ? group : () => false,
     major,
   ).map(layer =>
-    [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
+    clustered(
+      [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
+      id => by.get(id)!.soft,
+    ),
   );
   const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
   const between = (a: string, b: string) =>
-    roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right);
+    Math.max(
+      roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right),
+      softRoom(by.get(a)!.soft, by.get(b)!.soft, right),
+    );
   const extents = layers.map(layer =>
     layer.reduce((s, id, j) => s + minor(id) + (j ? between(layer[j - 1], id) : 0), 0),
   );
@@ -1152,7 +1296,11 @@ function packed(
     }
     const next = layers[i + 1];
     if (!next) break;
-    let after = Math.max(layer.some(group) || next.some(group) ? gaps.group : gaps.rank, busy[i]);
+    let after = Math.max(
+      layer.some(group) || next.some(group) ? gaps.group : gaps.rank,
+      busy[i],
+      rankRoom(layer, next, id => by.get(id)!.soft, !right),
+    );
     for (const r of rooms)
       if (
         Math.min(rank.get(r.a)!, rank.get(r.b)!) === i &&
@@ -1297,11 +1445,19 @@ function baseLayout(
       const next = items[i + 1]?.id ?? '';
       out.set(n.id, row ? { x: cursor, y: 0 } : { x: 0, y: cursor });
       cursor +=
-        (row ? n.w : n.h) + Math.max(roomBetween(rooms, n.id, next, gap, row), busy[i] ?? 0);
+        (row ? n.w : n.h) +
+        Math.max(
+          roomBetween(rooms, n.id, next, gap, row),
+          busy[i] ?? 0,
+          softRoom(n.soft, items[i + 1]?.soft, !row),
+        );
     }
   } else {
     const ids = items.map(n => n.id);
-    const layers = pairs.length ? byBarycenter(rankLayers(ids, pairs), pairs) : ids.map(id => [id]);
+    const chainOf = (id: string) => by.get(id)!.soft;
+    const layers = pairs.length
+      ? byBarycenter(rankLayers(ids, pairs), pairs, layer => clustered(layer, chainOf))
+      : ids.map(id => [id]);
     const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
     const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
     // A gap between ranks grows to fit the labels on edges that cross it.
@@ -1313,8 +1469,15 @@ function baseLayout(
         after = Math.max(gap, busy[i] ?? 0);
       for (const [j, id] of layer.entries()) {
         out.set(id, axis === 'right' ? { x: at, y: across } : { x: across, y: at });
-        across += minor(id) + roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right');
+        across +=
+          minor(id) +
+          Math.max(
+            roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right'),
+            layer[j + 1] ? softRoom(chainOf(id), chainOf(layer[j + 1]), axis === 'right') : 0,
+          );
       }
+      if (layers[i + 1])
+        after = Math.max(after, rankRoom(layer, layers[i + 1], chainOf, axis === 'down'));
       for (const r of rooms)
         if (
           Math.min(rank.get(r.a)!, rank.get(r.b)!) === i &&
@@ -1334,8 +1497,12 @@ function baseLayout(
  * siblings sit where their connections point). A member with no neighbour in the rank before
  * keeps its place.
  */
-function byBarycenter(layers: string[][], pairs: Array<[string, string]>): string[][] {
-  const out = [layers[0]];
+function byBarycenter(
+  layers: string[][],
+  pairs: Array<[string, string]>,
+  group: (layer: string[]) => string[] = layer => layer,
+): string[][] {
+  const out = [group(layers[0])];
   for (let i = 1; i < layers.length; i++) {
     const before = new Map(out[i - 1].map((id, k) => [id, k]));
     const keyed = layers[i].map((id, k) => {
@@ -1355,7 +1522,7 @@ function byBarycenter(layers: string[][], pairs: Array<[string, string]>): strin
     const slots = free.map(x => x.k);
     const layer = [...layers[i]];
     sorted.forEach((x, j) => (layer[slots[j]] = x.id));
-    out.push(layer);
+    out.push(group(layer));
   }
   return out;
 }
@@ -1845,7 +2012,8 @@ function layoutPass(
     const governing = arranged && governingLayout(m, scope),
       kids = children.get(scope) ?? [];
     if (!governing?.engine || !PACKED_ENGINES.has(governing.engine.algorithm)) return undefined;
-    if (scope === 'root' && !kids.some(k => k.type === 'group')) return undefined;
+    // Soft groups are packed too, so their members can be kept side by side in each rank.
+    if (scope === 'root' && !kids.some(k => k.type === 'group' || k.soft?.length)) return undefined;
     if (!kids.every(k => arranged!.has(k.id))) return undefined;
     return LayoutLab.settings({
       algorithm: governing.engine.algorithm,
@@ -2185,12 +2353,14 @@ function layoutPass(
     // Drawn boxes, in this scope's coordinates. Group content starts at 0,0, so a box that spills
     // past its slot at the top or left moves the content over by that much.
     const boxes = list.map(n => drawnBox(n, laid));
+    // A frame also leaves room inside its border for the soft tints round its members.
+    const nest = scope === 'root' ? 0 : Math.max(0, ...list.map(n => n.soft?.length ?? 0));
     const shift =
       scope === 'root' || !list.length
         ? { x: 0, y: 0 }
         : {
-            x: Math.max(0, -Math.min(...boxes.map(b => b.x))),
-            y: Math.max(0, -Math.min(...boxes.map(b => b.y))),
+            x: Math.max(0, -Math.min(...boxes.map(b => b.x))) + nest * SOFT_PAD,
+            y: Math.max(0, -Math.min(...boxes.map(b => b.y))) + nest * (SOFT_PAD + SOFT_LABEL),
           };
     for (const [i, n] of list.entries()) {
       const b = boxes[i],
@@ -2206,7 +2376,9 @@ function layoutPass(
             ...list.map((n, i) =>
               Math.max(laid.pos.get(n.id)![a] + n[size], boxes[i][a] + boxes[i][size]),
             ),
-          ) + shift[a]
+          ) +
+          shift[a] +
+          nest * SOFT_PAD
         : 0;
     return { w: extent('x', 'w'), h: extent('y', 'h') };
   }

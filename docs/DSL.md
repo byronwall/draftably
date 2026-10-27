@@ -125,11 +125,16 @@ puts a light tint of the group's color behind them, with its title small at the 
 cross a tint freely. `frame=none` lays out the same way and draws nothing; the members still
 belong to the group, so `color=auto` still inherits its family. `frame=box` is the default.
 
+Layout still keeps a soft group's members together where it can: within each rank they sit side
+by side, and the gaps where a tint starts or ends widen to fit its padding and label, as does a
+box that holds soft groups. The tint is one rectangle round the members when that covers nothing
+else. Otherwise it is the members' own padded boxes, joined by strips across the gaps between
+them that cover nothing else; `check` notes `soft-split` when some members cannot be joined, and
+`soft-overlap` when a tint still covers an object outside the group.
+
 A soft group has no layout or position of its own: `layout`, `order`, `near`, `align`, `nudge`,
 `stay` and `pin` on it are errors. Place its members instead; refinements between a member and
-an object beside the group work, since they share a container. The tint fits round wherever the
-members land, so when it covers an object outside the group, `check` reports `soft-overlap` on
-the group's line.
+an object beside the group work, since they share a container.
 
 ## Change marks
 

@@ -36,6 +36,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(o.count !== undefined ? { count: o.count } : {}),
       ...(o.parent !== 'root' ? { parentId: o.parent } : {}),
       ...(o.frame ? { frame: o.frame } : {}),
+      ...(o.hull ? { hull: o.hull } : {}),
     };
     if (o.type === 'group') {
       doc.graph.groups.push(entry);

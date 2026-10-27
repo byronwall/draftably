@@ -144,8 +144,8 @@ content area.
   together" and its frame makes the drawing bigger or pushes lines across it, write
   `frame=soft`: members lay out with the container around the group and draw on a light tint.
   `frame=none` keeps the membership (and `color=auto`) but draws nothing. A soft group takes no
-  `layout`, `near` or `pin` of its own. `check` reports `soft-overlap` when its tint covers an
-  object outside it.
+  `layout`, `near` or `pin` of its own. `check` reports `soft-split` when its members end up apart
+  and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
 - Use color to mean something, not for decoration:
