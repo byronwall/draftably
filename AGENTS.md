@@ -10,6 +10,7 @@ Pointers only. Read the linked doc when the task touches it.
   [docs/CHECKS.md](docs/CHECKS.md) describes.
 - **How diagrams should feel:** [docs/intent/diagram-quality/FEEL.md](docs/intent/diagram-quality/FEEL.md).
   Read it before changing layout, routing, color or viewer interaction.
+- **Performance:** `pnpm bench` times the CLI and viewer against the 200 ms / 1 s budgets ([docs/CHECKS.md](docs/CHECKS.md#performance)).
 - **Screenshots:** `pnpm shoot <url|file.draft|file.svg> tmp/out.png`, `--sheet` for a contact
   sheet, or `--crop x,y,w,h` to zoom in. Don't write one-off Playwright or image scripts.
 - **Releases:** a PR that changes `src/`, `examples/`, `docs/DSL.md` or `packages/cli/` needs a

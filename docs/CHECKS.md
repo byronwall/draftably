@@ -24,6 +24,23 @@ is `check:fast`, the engine suites and the packaged-CLI proof.
 
 Engine reports are written to the ignored `tmp/verification-current/` folder.
 
+## Performance
+
+`pnpm bench` times CLI commands and viewer interactions on the five diagrams in
+`scripts/bench/diagrams/` (6 to 28 boxes, and a sequence) against two budgets: interactive actions
+under 200 ms and document load under 1 s. Viewer times run from the input until the drawing is
+settled: not compiling, layout idle, saved, and geometry unchanged for 250 ms. It prints a Markdown
+table with ✗ on each time over budget and writes the medians to `tmp/bench/latest.json`.
+
+```sh
+pnpm bench                                     # 3 runs each, about 15 minutes on main today
+pnpm bench --only cli --files xl               # one part, some diagrams
+pnpm bench --out tmp/bench/after.json --compare tmp/bench/before.json   # before → after cells
+```
+
+CI runs it once per change as a non-blocking `bench` job and puts the table in the job summary.
+Performance PRs paste a before → after table.
+
 ## File-backed editing
 
 `tests/file-session.test.ts` checks the first title entered after a new shape receives its source

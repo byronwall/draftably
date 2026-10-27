@@ -1,0 +1,39 @@
+diagram "Field limit handler upload schedule" version=1
+subtitle "Job export preview value payment refresh sync payment server summary refresh status output review invoice client status output index"
+
+node n1 "Job sync" shape=pill color=amber
+node n2 "Task sync retry" color=blue href="https://example.com/src/file1.py#L10"
+node n3 "Step notify store" href="https://example.com/src/file2.py#L20"
+node n4 "Task report cache" href="https://example.com/src/file3.py#L30"
+node n5 "Check step" color=teal href="https://example.com/src/file4.py#L40"
+node n6 "Notify" color=violet
+node n7 "Input account"
+
+legend amber "Task"
+legend blue "Import"
+legend teal "Invoice import draft"
+legend violet "Queue"
+
+edge e1 n1 -> n2 "Index value archive token worker"
+edge e2 n2 -> n3 "Job invoice cache index request"
+edge e3 n3 -> n4 "Upload field limit report table step"
+edge e4 n4 -> n7 "Draft request client ledger review"
+edge e5 n4 -> n5 "Job queue server step ledger value sync"
+edge e6 n5 -> n4 "Result refresh record task" kind=async
+edge e7 n3 -> n4 "Value draft index route index output"
+edge e8 n4 -> n6 "Handler record payment review input output apply order task"
+edge e9 n6 -> n4 "Task invoice payment preview queue" kind=async
+edge e10 n3 -> n2 "Export result result task" kind=async
+edge e11 n1 -> n2 "Apply batch retry cache job"
+edge e12 n2 -> n3 "Event server token status invoice queue task"
+edge e13 n3 -> n4 "Schedule check"
+edge e14 n4 -> n7 "Import draft task token check record refresh"
+edge e15 n4 -> n7 "Apply summary preview notify value handler export result job"
+edge e16 n7 -> n2 "Preview review account route" kind=async
+edge e17 n3 -> n2 "Store sync draft archive route" kind=async
+
+state s1 "Job result client" n1 n2 n3 n4 n5 n6 n7 e1 e2 e3 e4 e5 e6 e7 e8 e9 e10
+state s2 "Archive step" n1 n2 n3 n4 n7 e11 e12 e13 e14 e15 e16 e17
+state s3 "Preview handler job" n5 e5 e6 rest=plain
+
+layout root sequence

@@ -1,0 +1,89 @@
+diagram "Table status task record schedule export" version=1
+subtitle "Upload queue archive archive route preview event request server event output store client draft input invoice input sync order apply record account field record report"
+
+group g1 "Handler index server client client draft summary export task step" color=teal
+node n1 "Import cache result apply handler store notify" in=g1 shape=pill href="https://example.com/src/file1.py#L10"
+node n2 "Ledger retry export input ledger account invoice job route queue" in=g1 href="https://example.com/src/file2.py#L20"
+node n3 "Input client output" in=g1 href="https://example.com/src/file3.py#L30"
+node n4 "Archive schedule field invoice server sync batch" in=g1 shape=pill href="https://example.com/src/file4.py#L40"
+node n5 "Worker event queue order status input" in=g1 href="https://example.com/src/file5.py#L50"
+node n6 "Invoice client cache store review record request report limit" in=g1 shape=pill href="https://example.com/src/file6.py#L60"
+node n7 "Status limit handler review task client batch export cache payment job" in=g1 shape=pill href="https://example.com/src/file7.py#L70"
+
+group g2 "Job sync apply queue server job request" color=blue
+node n8 "Archive summary export order job queue request step retry" in=g2 shape=pill href="https://example.com/src/file8.py#L80"
+node n9 "Account export limit event sync worker archive queue route" in=g2 href="https://example.com/src/file9.py#L90"
+node n10 "Draft server account notify step" in=g2 href="https://example.com/src/file10.py#L100"
+node n11 "Output draft request schedule job server status cache check" in=g2 href="https://example.com/src/file11.py#L110"
+node n12 "Result preview client order notify server import" in=g2
+node n13 "Step token" in=g2 shape=pill href="https://example.com/src/file12.py#L120"
+node n14 "Summary retry payment retry preview check cache" in=g2 href="https://example.com/src/file13.py#L130"
+node n15 "Output account payment record report server step report" in=g2 href="https://example.com/src/file14.py#L140"
+
+group g3 "Check retry event apply review" color=amber
+node n16 "Review index apply task ledger archive step" in=g3 shape=pill href="https://example.com/src/file15.py#L150"
+node n17 "Store event server index" in=g3 href="https://example.com/src/file16.py#L160"
+
+group g4 "Task check invoice notify table" color=slate
+node n18 "Import draft summary client event preview queue limit" in=g4 href="https://example.com/src/file17.py#L170"
+node n19 "Export payment record batch index retry handler record task" in=g4 href="https://example.com/src/file18.py#L180"
+
+group g5 "Check payment result table preview" color=violet
+node n20 "Output preview record result import summary invoice client preview" in=g5 href="https://example.com/src/file19.py#L190"
+node n21 "Input table retry output field table retry payment" in=g5 href="https://example.com/src/file20.py#L200"
+node n22 "Account table ledger archive handler input retry" in=g5 href="https://example.com/src/file21.py#L210"
+
+group g6 "Import client queue export" color=slate
+node n23 "Handler preview" in=g6
+node n24 "Preview retry retry account index value summary retry value" in=g6
+
+node n25 "Import index store schedule" shape=pill
+node n26 "Upload summary payment" shape=pill
+node n27 "Status check import job limit field retry notify" color=amber href="https://example.com/src/file22.py#L220"
+node n28 "Draft step summary preview handler import preview index account queue retry"
+
+
+legend teal "Result notify limit payment event report"
+legend blue "Worker result result order apply output job check"
+legend violet "Draft sync batch draft client store"
+legend amber "Preview table result result input account index"
+
+edge e1 n1 -> n2
+edge e2 n2 -> n3 "Record order field payment"
+edge e3 n3 -> n4 "Job"
+edge e4 n3 -> n5 "Client job"
+edge e5 n5 -> n18 "Task value"
+edge e6 n5 -> n6 "Task"
+edge e7 n5 -> n7 "Payment"
+
+edge e8 n8 -> n9
+edge e9 n9 -> n10
+edge e10 n10 -> n18 "Review sync review"
+edge e11 n10 -> n11 "Report report draft draft ledger"
+edge e12 n11 -> n20 "Account sync"
+edge e13 n11 -> n21 "Payment check"
+edge e14 n11 -> n22 "Payment token"
+edge e15 n11 -> n12 "Review request value worker"
+edge e16 n12 -> n13
+edge e17 n13 -> n14
+edge e18 n14 -> n15
+edge e19 n15 -> n23 "Export output"
+edge e20 n15 -> n24 "Import schedule review value result input draft sync"
+
+edge e21 n16 -> n23
+edge e22 n16 -> n17
+edge e23 n17 -> n24 "Record"
+
+edge e24 n18 -> n19 "Worker step"
+edge e25 n23 -> n25 kind=async
+edge e26 n24 -> n25 kind=async
+edge e27 n25 -> n26
+edge e28 n24 -> n27
+edge e29 n27 -> n28
+
+layout root engine=layered direction=down
+
+state s1 "Job apply batch" g1 n1 n2 n3 n4 n5 n6 n7 n18 n19 e1 e2 e3 e4 e5 e6 e7 e24
+state s2 "Queue step sync" g2 n8 n9 n10 n11 n12 n13 n14 n15 n18 n19 n20 n21 n22 n23 n24 n25 n26 e8 e9 e10 e11 e12 e13 e14 e15 e16 e17 e18 e19 e20 e24 e25 e26 e27
+state s3 "Handler input" g3 n16 n17 n23 n24 n25 n26 e21 e22 e23 e25 e26 e27
+state n28 "Cache refresh notify" n24 n27 n28 e28 e29 rest=plain

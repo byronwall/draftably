@@ -1,0 +1,69 @@
+diagram "Check import event job queue server request" version=1
+subtitle "Order status check sync handler cache notify field token limit request token event token cache server cache queue step refresh"
+
+group g1 "Sync invoice record result retry" color=slate
+node n1 "Check output value batch queue ledger record order export limit archive invoice limit queue token event handler record" in=g1
+node n2 "Upload batch step" in=g1 href="https://example.com/src/file1.py#L10"
+node n3 "Schedule ledger ledger sync" in=g1 color=amber
+node n4 "Cache review status retry retry order task request ledger" in=g1 color=amber href="https://example.com/src/file2.py#L20"
+node n5 "Store token output output record apply result token sync field archive record refresh handler preview" in=g1 color=amber href="https://example.com/src/file3.py#L30"
+node n6 "Report invoice event task" in=g1 color=amber
+node n7 "Event server result task preview job field limit check retry field" in=g1
+node n8 "Invoice task check sync" in=g1
+
+group g2 "Draft request step" color=slate
+node n9 "Value task order batch cache payment review" in=g2 href="https://example.com/src/file4.py#L40"
+node n10 "Table input worker review" in=g2
+node n11 "Job check index step client job job" in=g2 color=amber href="https://example.com/src/file5.py#L50"
+node n12 "Import request" in=g2 color=amber
+node n13 "Value limit job event" in=g2 href="https://example.com/src/file6.py#L60"
+node n14 "Field payment order" in=g2
+
+group g3 "Account import upload" color=violet
+node n15 "Schedule" in=g3
+node n16 "Notify payment apply job" in=g3
+node n17 "Archive upload step apply" in=g3
+
+node n18 "Queue queue handler invoice route ledger report event" color=amber href="https://example.com/src/file7.py#L70"
+node n19 "Queue worker record worker task task check step store account event invoice sync" shape=pill
+node n20 "Order route ledger task" shape=pill href="https://example.com/src/file8.py#L80"
+node n21 "Step notify queue import index status request" color=slate
+
+legend amber "Input server table client report table account refresh retry record task apply"
+legend violet "Table batch upload token sync review ledger preview job server"
+legend slate "Apply"
+
+edge e1 n2 -> n3
+edge e2 n3 -> n4
+edge e3 n4 -> n5
+edge e4 n5 -> n6
+edge e5 n6 -> n7
+edge e6 n7 -> n8
+edge e7 n9 -> n10
+edge e8 n10 -> n11
+edge e9 n11 -> n12
+edge e10 n12 -> n13
+edge e11 n13 -> n14
+edge e12 n15 -> n2 "Order"
+edge e13 n16 -> n10 "Summary"
+edge e14 n17 -> n6 "Retry"
+edge e15 n8 -> n18
+edge e16 n14 -> n18
+edge e17 n18 -> n19
+edge e18 n10 -> n20 kind=async
+edge e19 n1 -> n19 "Export" kind=async
+edge e20 n21 -> n9 "Output step route" kind=async
+
+layout root engine=compound-flow
+
+stay g1 x=321 y=0
+stay g2 x=321 y=536
+stay g3 x=0 y=180
+near n18 n20 side=right gap=4 offset=-100
+near n19 n18 side=right gap=34 offset=-9
+near n20 g2 side=above gap=7 offset=287
+
+state s1 "Export notify" g1 n2 n3 n4 n5 n6 n7 n8 n1 e1 e2 e3 e4 e5 e6 e15 e19
+state s2 "Token" g2 n9 n10 n11 n12 n13 n14 n20 e7 e8 e9 e10 e11 e16 e18
+state s3 "Output value invoice" n3 n4 n5 n6 n11 n12 n18 rest=plain
+state s4 "Import task sync retry" g3 n15 n16 n17 e12 e13 e14
