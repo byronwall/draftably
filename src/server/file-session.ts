@@ -18,6 +18,16 @@ export interface SessionInfo {
   path: string;
   source: string;
   revision: string;
+  /** Where the file's relative links start: its git root, or its folder outside a repository. */
+  root: string;
+}
+
+/** The nearest folder at or above `dir` that holds `.git`, or `dir` when there is none. */
+export function gitRoot(dir: string) {
+  for (let d = dir; ; d = path.dirname(d)) {
+    if (fs.existsSync(path.join(d, '.git'))) return d;
+    if (path.dirname(d) === d) return dir;
+  }
 }
 
 export const revisionOf = (source: string) =>
@@ -34,7 +44,8 @@ export function createFileSession(file: string): FileSession {
   file = path.resolve(file);
   if (!fs.existsSync(file)) throw Error(`No such file: ${file}`);
   const dir = path.dirname(file),
-    name = path.basename(file);
+    name = path.basename(file),
+    root = gitRoot(dir);
   let source = fs.readFileSync(file, 'utf8'),
     revision = revisionOf(source);
   const clients = new Set<ServerResponse>();
@@ -113,7 +124,7 @@ export function createFileSession(file: string): FileSession {
       const url = (req.url ?? '').split('?')[0];
       if (url === '/api/session' && req.method === 'GET') {
         check();
-        json(res, 200, { name, path: file, source, revision } satisfies SessionInfo);
+        json(res, 200, { name, path: file, source, revision, root } satisfies SessionInfo);
       } else if (url === '/api/source' && req.method === 'PUT') {
         let body = '';
         req.setEncoding('utf8');

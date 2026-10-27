@@ -48,6 +48,8 @@ and groups. References may point to later lines.
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
+| `config key=value` | File settings. See [Links and counts](#rules). |
+| `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -75,7 +77,34 @@ still says what it shows and why it matters. Like the legend, they never move an
 without either draws no heading.
 
 **Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
-and exports, to a source file, a URL or anything else the reader should open. `count=42` on a node
+and exports, to a source file, a URL or anything else the reader should open. A linked object
+draws a small ↗ mark at its top-right corner (beside a container's title). In the viewer the mark
+is the open button, and the Inspector shows the link with an **Open** button; a click elsewhere on
+the object still selects it. The link opens as written: a URL (`https://…`, a GitHub link) in a
+new tab, a `.draft` in the viewer, and a file path in VS Code. A file path may end in `:42` or
+`:42:5` to open at that line and column. A relative path starts at the diagram's git root, or its
+folder outside a repository.
+
+In `inspect --svg` and the viewer's SVG export, each linked object is an `<a>` with a tooltip
+naming its target, and its outline thickens on hover. A URL stays as written and opens in a new
+tab. A file link is written as a path from the diagram's folder, without its line, so it opens
+when the SVG is saved beside the `.draft`. Each object's group carries `data-id` with its ID.
+
+`config` lines hold file settings. One line may set several keys, or each key may have its own
+line; a key set twice is a warning and the later line wins.
+
+```text
+config link-base="../.." editor=cursor
+```
+
+`link-base` is where relative links start, relative to the `.draft` file's folder, for a
+diagram whose paths don't start at the git root. `editor` is the editor file links open in:
+`vscode` (the default), `vscode-insiders`, `cursor`, `windsurf` or `zed`. `check` warns about a
+relative link whose file does not exist at the link base, and suggests the path it probably meant:
+the same path from the diagram's folder, or the one file in the repository whose path ends the
+same way. It never changes the link.
+
+`count=42` on a node
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds.
 
@@ -133,6 +162,43 @@ marks and the file draws in its own colors again. The green, amber and red come 
 so every theme draws a diff in its own palette. Each mark also has a border weight, dash, fade
 or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects and lines carry it. Marks never move anything: the drawing
 holds both versions at once, so unchanged objects stay where they are.
+
+## Emphasis states
+
+One diagram often answers several questions: what the write path touches, what a request reads.
+A `state` line names a way to draw the diagram: the objects and connections it lists are in
+focus, and everything else fades.
+
+```text
+state write "Write path" web api orders payments db queue
+state read "Read path" web api catalog cache
+state events "Events" queue publish rest=plain
+```
+
+The first word is the state's ID, then an optional label in quotes, then the IDs in focus:
+nodes, groups (a group brings all its members) and connections. A connection between two
+focused nodes is in focus too. A long state may continue on more lines with the same ID.
+
+In focus, an object keeps its colors and draws a heavier border; a connection draws a heavier
+line. Everything else fades to the theme's neutral surface, like a `.` context line, except the
+containers that hold something in focus, so the context still reads. `rest=plain` leaves
+everything else as it is, for a soft highlight; with nothing faded, focused objects take a ring
+and focused connections a line in the theme's `secondary` accent. A state never moves anything:
+every state of a file has the same layout. In a file with change marks, hue still means change;
+a state only adds the heavier border or the fade.
+
+`inspect --svg --state write` draws one state; without `--state`, the drawing has none.
+`inspect --svg --states` (or `--png`) draws every state as its own labelled panel, in file
+order, in a grid whose whole image comes closest to 1.6 wide per tall. Every object sits at the
+same place in every panel, so the eye can jump between them.
+
+In the viewer, a file with states shows a row of chips over the canvas: **All**, each state, and
+**Grid**. A chip draws that state in place, and `[` and `]` step through them in file order.
+**Grid** shows every state side by side, as `--states` draws them; click a panel to draw that
+state. The state is part of the address (`?state=write`), so a link or a reload keeps it, but it
+is never written to the file. Edits work in any state, on faded objects too. `check`
+reports an ID a state lists that the file does not declare. Deleting an object or connection in
+the viewer takes it out of every state.
 
 ## Themes and colors
 

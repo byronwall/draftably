@@ -20,6 +20,7 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
+import { EDITORS } from '../model/link';
 import type { Status } from '../model/status';
 import type {
   ColorKey,
@@ -278,7 +279,14 @@ export interface Model {
   colorLines: Map<string, number>;
   /** Source line of each `legend` entry, in order. */
   legendLines: number[];
+  /** Source line of each ID an emphasis state lists, by `state:id`. */
+  stateLines: Map<string, number>;
+  /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
+  warnings: { code: string; message: string; line: number }[];
 }
+
+/** `config` keys and the setting each sets. */
+export const CONFIG_KEYS = { 'link-base': 'linkBase', editor: 'editor' } as const;
 
 /** Theme attributes in the file and the override each sets. */
 export const THEME_ATTRS = {
@@ -376,7 +384,10 @@ export function parseModel(source: string | SourceDoc): Model {
     themeLine: 0,
     colorLines: new Map(),
     legendLines: [],
+    stateLines: new Map(),
+    warnings: [],
   };
+  const configLines = new Map<string, number>();
   const objectIds = new Set<string>(),
     edgeIds = new Set<string>(),
     unique = new Set<string>();
@@ -485,6 +496,49 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(direction !== 'auto' ? { direction } : {}),
           ...(attrs.has('aspect') ? { aspect: num('aspect', 1.6, 0.25, 8) } : {}),
         };
+        break;
+      }
+      case 'config': {
+        count(0);
+        allow(Object.keys(CONFIG_KEYS));
+        assert(attrs.size, `config needs a setting: ${Object.keys(CONFIG_KEYS).join(', ')}.`);
+        const config = (m.appearance.config ??= {});
+        for (const [key, w] of attrs) {
+          const earlier = configLines.get(key);
+          if (earlier)
+            m.warnings.push({
+              code: 'config-repeated',
+              message: `config ${key} is also set on line ${earlier}; this line wins.`,
+              line,
+            });
+          configLines.set(key, line);
+          if (key === 'editor') config.editor = choice('editor', 'vscode', EDITORS);
+          else {
+            assert(w.quoted, `Expected ${key}="path" in double quotes.`);
+            config.linkBase = w.value;
+          }
+        }
+        break;
+      }
+      case 'state': {
+        assert(args.length >= 1, 'A state needs an ID: state write "Write path" api orders.');
+        allow(['rest']);
+        const sid = id(args[0]),
+          label = args[1]?.quoted ? args[1].value : undefined,
+          ids = args.slice(label === undefined ? 1 : 2).map(w => id(w)),
+          states = (m.appearance.states ??= []);
+        let state = states.find(x => x.id === sid);
+        // A long state continues on more lines with the same ID; its label comes from the first.
+        if (!state) {
+          state = { id: sid, label: label ?? sid, ids: [], rest: 'dim' };
+          states.push(state);
+        }
+        if (attrs.has('rest')) state.rest = choice('rest', 'dim', ['dim', 'plain'] as const);
+        for (const x of ids) {
+          assert(!state.ids.includes(x), `${x} is already in state ${sid}.`);
+          state.ids.push(x);
+          m.stateLines.set(`${sid}:${x}`, line);
+        }
         break;
       }
       case 'subtitle':
@@ -810,6 +864,16 @@ function validateReferences(m: Model) {
     for (const end of [e.source, e.target]) {
       exists(end, e.line);
       assert(by.get(end)!.type === 'node', `Connections join nodes; ${end} is a group.`, e.line);
+    }
+  const edgeIds = new Set(m.edges.map(e => e.id));
+  for (const s of m.appearance.states ?? [])
+    for (const x of s.ids) {
+      const line = m.stateLines.get(`${s.id}:${x}`)!;
+      assert(
+        by.has(x) || edgeIds.has(x),
+        `Unknown node, group or edge ${x} in state ${s.id}.`,
+        line,
+      );
     }
   for (const l of m.layouts) {
     scope(l.scope, l.line);

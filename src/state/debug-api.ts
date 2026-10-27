@@ -60,6 +60,8 @@ import {
   timeline,
 } from './sculpt';
 
+import { activeState, showState } from './emphasis';
+
 export function installDebugApi() {
   const api = {
     get: snapshotDoc,
@@ -93,6 +95,9 @@ export function installDebugApi() {
         reader.readAsDataURL(blob);
       });
     },
+    /** The drawn emphasis state, or null; `showState(id)` draws another. */
+    state: activeState,
+    showState,
     setColor,
     setShade,
     chooseTheme,

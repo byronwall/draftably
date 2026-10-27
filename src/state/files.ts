@@ -18,6 +18,7 @@ import {
   svgToPng,
 } from '../lib/svg-export';
 import { embedPngSource, readImageSource, embedSvgSource } from '../model/embed';
+import { exportHref } from './links';
 import { addNode, finishInlineEdit, openDocument } from './actions';
 import {
   clearSelection,
@@ -216,7 +217,7 @@ export function exportSvg(): string {
       defs,
       createSvgElement('rect', { x, y, width: w, height: h, fill: look.canvas }),
     );
-    svg.appendChild(materializeSvg(world));
+    svg.appendChild(materializeSvg(world, exportHref));
     // The key from the file's legend lines goes under the drawing, as in `inspect --svg`.
     const markup =
       headingMarkup(look, doc.appearance.heading, x + 28, y + 24) +

@@ -2151,6 +2151,7 @@ function layoutPass(
       });
   }
   diagnostics.push(...paletteNotes(m));
+  for (const w of m.warnings) diagnostics.push({ level: 'warning', ...w, ids: [] });
   // Keep declaration order so output is stable regardless of the arrangement order.
   const index = new Map(m.objects.map((o, i) => [o.id, i]));
   objects.sort((a, b) => index.get(a.id)! - index.get(b.id)!);

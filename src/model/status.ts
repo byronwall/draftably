@@ -9,9 +9,17 @@
  * reads in grayscale.
  */
 import { swatchFor, type LegendEntry, type ResolvedAppearance, type Swatch } from './appearance';
+import { descendants, styleOf } from './graph';
 import type { Diagram, DiagramEdge } from './types';
 
 export type Status = 'same' | 'added' | 'removed' | 'changed' | 'context';
+
+/**
+ * How an emphasis state draws an object or connection: in focus (a heavier border or line),
+ * ringed (in focus where nothing else fades, so it also takes an accent ring or line), or dimmed
+ * (faded and neutral, like a `.` context line). Unset means it draws as usual.
+ */
+export type Spot = 'focus' | 'ring' | 'dim';
 export const STATUSES: Status[] = ['same', 'added', 'removed', 'changed', 'context'];
 
 /** Legend order and wording, after a count; `same` needs no entry. */
@@ -41,11 +49,34 @@ export interface StatusPaint {
   opacity: number;
   /** Strike the title through. */
   strike: boolean;
+  /** Draw an accent ring around the shape (`haloInk`). */
+  halo?: boolean;
 }
+
+/** Room between a shape and its focus ring. */
+export const HALO_GAP = 4;
+
+/** The accent a ringed object or connection is drawn with: the theme's second accent. */
+export const haloInk = (look: ResolvedAppearance) =>
+  swatchFor(look, 'secondary', look.dark ? 300 : 500).fill;
 
 const PLAIN: StatusPaint = { opacity: 1, strike: false };
 
-export function statusPaint(look: ResolvedAppearance, status?: Status): StatusPaint {
+/** Focus weight: a node border, and 0.5 more than a connection's line. */
+const FOCUS_WIDTH = 2.4;
+
+/** The paint for a change status, with an emphasis state's weight or fade on top. */
+export function statusPaint(look: ResolvedAppearance, status?: Status, spot?: Spot): StatusPaint {
+  const p = changePaint(look, status);
+  if (spot === 'focus' || spot === 'ring')
+    return { ...p, width: Math.max(p.width ?? 0, FOCUS_WIDTH), halo: spot === 'ring' };
+  if (spot === 'dim') return { ...p, opacity: Math.min(p.opacity, CONTEXT_FADE) };
+  return p;
+}
+
+const CONTEXT_FADE = 0.45;
+
+function changePaint(look: ResolvedAppearance, status?: Status): StatusPaint {
   const hue = HUES[status ?? 'same'],
     stroke = hue ? swatchFor(look, hue, look.dark ? 400 : 600).fill : undefined;
   switch (status) {
@@ -55,7 +86,7 @@ export function statusPaint(look: ResolvedAppearance, status?: Status): StatusPa
     case 'removed':
       return { stroke, width: 2, dash: '6 4', opacity: 0.75, strike: true };
     case 'context':
-      return { ...PLAIN, opacity: 0.45 };
+      return { ...PLAIN, opacity: CONTEXT_FADE };
     default:
       return PLAIN;
   }
@@ -89,7 +120,47 @@ export function statusSwatch(
 
 /** A connection's color: its status hue, or quiet grey for an unchanged line in a diff. */
 export const edgeInk = (look: ResolvedAppearance, edge: DiagramEdge, diff: boolean) =>
-  statusPaint(look, edge.status).stroke ?? (diff ? look.muted : look.connection);
+  statusPaint(look, edge.status).stroke ??
+  (edge.spot === 'ring'
+    ? haloInk(look)
+    : diff || edge.spot === 'dim'
+      ? look.muted
+      : look.connection);
+
+/**
+ * The document drawn in emphasis state `id`. Listed objects (a group with all its members) and
+ * listed connections are in focus, and so is a connection between two focused nodes. With
+ * `rest=dim`, everything else fades, except the containers that hold something in focus, so the
+ * context still reads. With `rest=plain` nothing fades, so focus also takes an accent ring.
+ * Nothing moves.
+ */
+export function withState(doc: Diagram, id: string): Diagram {
+  const state = doc.appearance.states?.find(s => s.id === id);
+  if (!state) return doc;
+  const focus = new Set<string>();
+  for (const x of state.ids) {
+    focus.add(x);
+    if (doc.graph.groups.some(g => g.id === x)) for (const d of descendants(doc, x)) focus.add(d);
+  }
+  const parent = new Map(
+    [...doc.graph.nodes, ...doc.graph.groups].map(o => [o.id, o.parentId] as const),
+  );
+  const frames = new Set<string>();
+  for (const x of focus) for (let p = parent.get(x); p; p = parent.get(p)) frames.add(p);
+  const rest = state.rest === 'dim' ? ('dim' as const) : undefined,
+    on = state.rest === 'dim' ? ('focus' as const) : ('ring' as const),
+    spotOf = (x: string) => (focus.has(x) ? on : frames.has(x) ? undefined : rest),
+    styles = { ...doc.styles };
+  for (const o of [...doc.graph.nodes, ...doc.graph.groups]) {
+    const spot = spotOf(o.id);
+    if (spot) styles[o.id] = { ...styleOf(doc, o.id), spot };
+  }
+  const edges = doc.graph.edges.map(e => {
+    const spot = focus.has(e.id) || (focus.has(e.from) && focus.has(e.to)) ? on : rest;
+    return spot ? { ...e, spot } : e;
+  });
+  return { ...doc, styles, graph: { ...doc.graph, edges } };
+}
 
 /**
  * The marks a document uses that the legend explains, in legend order, each with how many

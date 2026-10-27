@@ -56,6 +56,8 @@ export interface FileSessionInfo {
   path: string;
   source: string;
   revision: string;
+  /** Where the file's relative links start (files only). */
+  root?: string;
   /** Set for an example: its id. The source is never written to disk. */
   example?: string;
   /** The file's path relative to the served folder (files only). */

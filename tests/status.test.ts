@@ -90,7 +90,9 @@ describe('links and counts', () => {
     );
     expect(normalize(JSON.parse(JSON.stringify(doc))).graph.nodes[1].count).toBe(1200);
     const svg = renderSvg(doc);
-    expect(svg).toContain('<a href="src/a.ts">');
+    expect(svg).toContain('<a class="link" href="src/a.ts">');
+    expect(svg).toContain('<title>A\nsrc/a.ts</title>');
+    expect(svg).toContain('class="link-mark"');
     expect(svg).toContain('×1.2k');
     expect(() => parseModel('group g "G" count=3\n')).toThrow(/Unknown group attribute: count/);
   });

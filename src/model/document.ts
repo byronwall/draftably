@@ -11,9 +11,11 @@ import {
   THEME_IDS,
   type AppearanceOverrides,
   type DiagramAppearance,
+  type EmphasisState,
   type LegendEntry,
 } from './appearance';
 import { FONT_ROLES } from './fonts';
+import { EDITORS, type FileConfig } from './link';
 import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {
@@ -424,6 +426,23 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
       if (typeof h[key] === 'string' && h[key]) heading[key] = h[key];
     if (heading.title || heading.subtitle) out.heading = heading;
   }
+  const cfg = input.config;
+  if (cfg && typeof cfg === 'object') {
+    const config: FileConfig = {};
+    if (typeof cfg.linkBase === 'string') config.linkBase = cfg.linkBase;
+    if (EDITORS.includes(cfg.editor)) config.editor = cfg.editor;
+    if (config.linkBase !== undefined || config.editor) out.config = config;
+  }
+  const states: EmphasisState[] = [];
+  for (const st of Array.isArray(input.states) ? input.states : [])
+    if (st && typeof st.id === 'string' && Array.isArray(st.ids))
+      states.push({
+        id: st.id,
+        label: typeof st.label === 'string' ? st.label : st.id,
+        ids: st.ids.filter((x: unknown) => typeof x === 'string'),
+        rest: st.rest === 'plain' ? 'plain' : 'dim',
+      });
+  if (states.length) out.states = states;
   const c = input.compare;
   if (c && typeof c.before === 'string' && typeof c.after === 'string')
     out.compare = {

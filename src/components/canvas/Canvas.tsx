@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup, onMount, Show } from 'solid-js';
+import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { selection } from '../../state/document';
 import { doc } from '../../state/document';
 import {
@@ -24,6 +24,8 @@ import { NodeView } from '../scene/NodeView';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
 import { Legend } from './Legend';
+import { StateBar } from './StateBar';
+import { drawnDoc } from '../../state/emphasis';
 import { ZoomControls } from './ZoomControls';
 import { LayoutPreviewBar } from '../LayoutPreviewBar';
 import { Icon } from '../Icon';
@@ -55,6 +57,8 @@ export function Canvas() {
   });
 
   const camera = () => doc.camera;
+  // The drawing in the chosen emphasis state; edits still go to `doc`.
+  const shown = createMemo(drawnDoc);
   const isSelected = (id: string) => selection().has(id);
   const empty = () => !nodeIds().length && !groupIds().length;
 
@@ -144,7 +148,7 @@ export function Canvas() {
             <For each={groupIds()}>
               {id => (
                 <GroupView
-                  doc={doc}
+                  doc={shown()}
                   id={id}
                   rect={sceneRects().get(id)!}
                   selected={isSelected(id)}
@@ -162,7 +166,7 @@ export function Canvas() {
                 <Show when={routesById().get(id)}>
                   {route => (
                     <EdgeView
-                      doc={doc}
+                      doc={shown()}
                       route={route()}
                       selected={isSelected(id)}
                       editing={inlineEditId() === id}
@@ -177,7 +181,7 @@ export function Canvas() {
             <For each={nodeIds()}>
               {id => (
                 <NodeView
-                  doc={doc}
+                  doc={shown()}
                   id={id}
                   rect={geometry(id)}
                   selected={isSelected(id)}
@@ -205,6 +209,7 @@ export function Canvas() {
       </Show>
       <InlineEditor />
       <Legend />
+      <StateBar />
       <ZoomControls />
       <TimelineDeck />
       <BrushDock />
