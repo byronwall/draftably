@@ -12,7 +12,7 @@ import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { PositionBadge, ResizeHandles, SceneText } from './parts';
+import { pinSpot, PositionBadge, ResizeHandles, SceneText } from './parts';
 
 const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
 
@@ -236,10 +236,11 @@ export function NodeView(props: NodeViewProps) {
       </Show>
       <Show when={props.interactive}>
         <PositionBadge
+          id={props.id}
           pinned={!!props.rect.pinned}
           manual={!!props.rect.manual && props.doc.settings.showManual}
-          x={props.rect.w}
-          y={-18}
+          {...pinSpot(style().shape, props.rect.w, props.rect.h)}
+          color={color().ink}
         />
         <For each={style().shape === 'marker' ? (['bottom'] as Side[]) : SIDES}>
           {side => {

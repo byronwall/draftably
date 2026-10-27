@@ -1,6 +1,8 @@
 import { For, Show } from 'solid-js';
 import type { TypeProfile } from '../../model/fonts';
 import type { Rect } from '../../model/types';
+import { fileScene } from '../../state/file-session';
+import { SceneGlyph } from '../Icon';
 
 /** Multi-line, vertically centered text in one of the diagram's type profiles. */
 export function SceneText(props: {
@@ -39,16 +41,52 @@ export function SceneText(props: {
   );
 }
 
-/** "Pinned" or "Manual" tag in an object's top-right corner. */
-export function PositionBadge(props: { pinned: boolean; manual: boolean; x: number; y: number }) {
-  const width = () => (props.pinned ? 45 : 47);
+/** Size of the pin glyph on a placed object, in diagram px. */
+export const PIN_SIZE = 12;
+
+/** Top left of the pin inside a `w`×`h` shape: its top-left corner, inset to clear a curve or point. */
+export function pinSpot(shape: string, w: number, h: number) {
+  const half = PIN_SIZE / 2;
+  if (shape === 'pill') return { x: h / 2 - half, y: 5 };
+  // On the upper-left side, 30% (ellipse) or 18% (diamond) of the way from centre to corner.
+  const k = shape === 'circle' ? 0.62 : shape === 'diamond' ? 0.36 : 0;
+  if (k) return { x: w / 2 - (w / 2) * k - half, y: h / 2 - (h / 2) * k - half };
+  return { x: 5, y: 5 };
+}
+
+/** The line that places `id` in the open file (`pin`, `near`, `stay` or `nudge`), if any. */
+function placingLine(id: string) {
+  const h = fileScene()?.model.hints.find(
+    h => 'id' in h && h.id === id && ['pin', 'near', 'stay', 'nudge'].includes(h.type),
+  );
+  return h && { type: h.type, line: h.line };
+}
+
+/**
+ * A small pin with its top left at `x`, `y`, inside the object: filled when pinned, outlined when
+ * a softer line placed it. Hovering names the line. Editor chrome, not diagram content, so it
+ * never reads as a label the way a text tag did.
+ */
+export function PositionBadge(props: {
+  id: string;
+  pinned: boolean;
+  manual: boolean;
+  x: number;
+  y: number;
+  /** The object's ink, so the pin reads on its fill. */
+  color: string;
+}) {
+  const tip = () => {
+    const placed = placingLine(props.id);
+    if (placed) return `Placed by line ${placed.line} (${placed.type})`;
+    return props.pinned ? 'Pinned' : 'Moved by hand';
+  };
   return (
     <Show when={props.pinned || props.manual}>
-      <g class="position-badge" classList={{ pinned: props.pinned }}>
-        <rect x={props.x - width() - 9} y={props.y} width={width()} height={16} rx={4} />
-        <text x={props.x - width() / 2 - 9} y={props.y + 11} text-anchor="middle">
-          {props.pinned ? 'Pinned' : 'Manual'}
-        </text>
+      <g class="position-badge" classList={{ pinned: props.pinned }} color={props.color}>
+        <title>{tip()}</title>
+        <rect class="position-hit" x={props.x} y={props.y} width={PIN_SIZE} height={PIN_SIZE} />
+        <SceneGlyph name="pin" x={props.x} y={props.y} size={PIN_SIZE} color="currentColor" />
       </g>
     </Show>
   );
