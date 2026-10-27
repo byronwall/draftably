@@ -84,6 +84,9 @@ Commands:
                             a new diagram, or an example. --no-open skips the browser.
                             Uses the first free port from 5180 unless --port is given;
                             --port 0 picks any free port. The Viewer line has the URL.
+       [--replace]          Without --port, a viewer already serving the folder is reused;
+       [--status]           --replace stops it and starts this version. --status lists the
+                            running viewers: URL, folder, version and pid.
   skill install             Install the agent skill for writing .draft files into
        [--global]           ./.claude/skills/draftably, or ~/.claude/skills with --global.
        [--dir <folder>]     --dir picks another skills folder (e.g. .agents/skills);
@@ -465,8 +468,16 @@ export async function main(argv: string[]): Promise<number> {
         return 0;
       }
       case 'open': {
-        const { openSession } = await import('./open');
+        const { openSession, runningViewers, servedAt, stopViewer, viewerUrl } =
+          await import('./open');
         const args = [file, ...rest].filter((a): a is string => !!a);
+        if (args.includes('--status')) {
+          const viewers = runningViewers();
+          if (!viewers.length) console.log('No viewers running.');
+          for (const v of viewers)
+            console.log(`${viewerUrl(v)}  ${v.root}  draftably ${v.version}  pid ${v.pid}`);
+          return 0;
+        }
         const at = args.indexOf('--port');
         const port = at >= 0 ? Number(args[at + 1]) : 5180;
         if (!Number.isInteger(port) || port < 0 || port > 65535)
@@ -484,6 +495,26 @@ export async function main(argv: string[]): Promise<number> {
               `${draft} already exists with other content. Use extract --write to pick a new name.`,
             );
           target = draft;
+        }
+        // Reuse a viewer that already serves this folder; replace it only when asked.
+        // An explicit --port asks for a new viewer there, so only an open without one reuses.
+        const served = servedAt(path.resolve(target ?? '.')),
+          same = at < 0 ? runningViewers().find(v => v.root === served.root) : undefined;
+        if (same && args.includes('--replace')) {
+          await stopViewer(same);
+          console.log(`Stopped the viewer from draftably ${same.version} (pid ${same.pid}).`);
+        } else if (same) {
+          const url = viewerUrl(same, served.file);
+          console.log(
+            same.version === cliVersion()
+              ? `A viewer already serves ${same.root}.\nViewer: ${url}`
+              : `A viewer from draftably ${same.version} serves ${same.root}; this is ${cliVersion()}. Run open --replace to restart it.\nViewer: ${url}`,
+          );
+          if (!args.includes('--no-open') && process.platform === 'darwin') {
+            const { spawn } = await import('node:child_process');
+            spawn('open', [url], { stdio: 'ignore' });
+          }
+          return 0;
         }
         await openSession(path.resolve(target ?? '.'), {
           port,

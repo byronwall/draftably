@@ -5,7 +5,77 @@ import http from 'node:http';
 import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import os from 'node:os';
 import { createWorkspace } from '../server/workspace';
+import { cliVersion } from './skill';
+
+/** A running viewer, as it registers itself so `open` can find it again. */
+export interface Viewer {
+  pid: number;
+  port: number;
+  /** The folder it serves. */
+  root: string;
+  version: string;
+  started: string;
+}
+
+/** Where running viewers register: `~/.draftably/viewers`, or `$DRAFTABLY_HOME/viewers`. */
+const registry = () =>
+  path.join(process.env.DRAFTABLY_HOME ?? path.join(os.homedir(), '.draftably'), 'viewers');
+
+const alive = (pid: number) => {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (e) {
+    return (e as NodeJS.ErrnoException).code === 'EPERM';
+  }
+};
+
+/** Viewers still running; records of stopped ones are removed. */
+export function runningViewers(): Viewer[] {
+  const dir = registry();
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).flatMap(name => {
+    const file = path.join(dir, name);
+    try {
+      const v = JSON.parse(fs.readFileSync(file, 'utf8')) as Viewer;
+      if (alive(v.pid)) return [v];
+    } catch {
+      // A half-written or foreign file: drop it.
+    }
+    fs.rmSync(file, { force: true });
+    return [];
+  });
+}
+
+export const viewerUrl = (v: Pick<Viewer, 'port'>, file = '') =>
+  `http://127.0.0.1:${v.port}/${file ? `?file=${encodeURIComponent(file)}` : ''}`;
+
+/** Where `target` is served from, and the file to open there (empty for a folder). */
+export function servedAt(target: string) {
+  const stat = fs.statSync(target, { throwIfNoEntry: false });
+  if (!stat) throw Error(`No such file or folder: ${target}`);
+  if (stat.isFile() && !target.endsWith('.draft')) throw Error('Open a .draft file or a folder.');
+  const cwd = process.cwd();
+  // A file inside the current folder keeps that folder as the workspace, so its neighbors show.
+  const root = stat.isDirectory()
+    ? target
+    : target.startsWith(cwd + path.sep)
+      ? cwd
+      : path.dirname(target);
+  return {
+    root: path.resolve(root),
+    file: stat.isFile() ? path.relative(root, target).split(path.sep).join('/') : '',
+  };
+}
+
+/** Stop a registered viewer and wait for it to exit. */
+export async function stopViewer(v: Viewer) {
+  process.kill(v.pid, 'SIGTERM');
+  for (let i = 0; i < 50 && alive(v.pid); i++) await new Promise(r => setTimeout(r, 100));
+  fs.rmSync(path.join(registry(), `${v.pid}.json`), { force: true });
+}
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -69,18 +139,8 @@ export async function openSession(
     throw Error(
       'The viewer assets are missing. Reinstall draftably, or run `pnpm build` in a source checkout.',
     );
-  const stat = fs.statSync(target, { throwIfNoEntry: false });
-  if (!stat) throw Error(`No such file or folder: ${target}`);
-  if (stat.isFile() && !target.endsWith('.draft')) throw Error('Open a .draft file or a folder.');
-  const cwd = process.cwd();
-  // A file inside the current folder keeps that folder as the workspace, so its neighbors show.
-  const rootDir = stat.isDirectory()
-    ? target
-    : target.startsWith(cwd + path.sep)
-      ? cwd
-      : path.dirname(target);
+  const { root: rootDir, file } = servedAt(target);
   const workspace = createWorkspace(rootDir);
-  const file = stat.isFile() ? path.relative(rootDir, target).split(path.sep).join('/') : '';
   const server = http.createServer((req, res) => {
     if (workspace.handle(req, res)) return;
     let url: string;
@@ -111,7 +171,20 @@ export async function openSession(
     workspace.close();
     throw error;
   }
-  const url = `http://127.0.0.1:${port}/${file ? `?file=${encodeURIComponent(file)}` : ''}`;
+  const url = viewerUrl({ port }, file);
+  const record = path.join(registry(), `${process.pid}.json`);
+  fs.mkdirSync(registry(), { recursive: true });
+  fs.writeFileSync(
+    record,
+    JSON.stringify({
+      pid: process.pid,
+      port,
+      root: workspace.root,
+      version: cliVersion(),
+      started: new Date().toISOString(),
+    } satisfies Viewer),
+  );
+  process.on('exit', () => fs.rmSync(record, { force: true }));
   console.log(
     `${file ? `Editing ${file}` : 'Diagrams'} in ${workspace.root}\nViewer: ${url}\nPress Ctrl+C to stop.`,
   );

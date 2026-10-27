@@ -54,7 +54,10 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    `vary --fit slide`, and compare the metrics line before and after.
 6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
-   file, and edits to the file show in the viewer at once. Run it in the background; it does not
+   file, and edits to the file show in the viewer at once. If a viewer already serves the folder,
+   `open` prints its URL and exits instead of starting another; `open --status` lists running
+   viewers, and `open --replace` restarts one left over from an older version. Run a new one in
+   the background; it does not
    exit by itself.
 7. **Recover a diagram from an image.** PNG and SVG exports carry their source.
    `npx draftably extract diagram.png` prints it (`--write diagram.draft` saves it), and `check`,
