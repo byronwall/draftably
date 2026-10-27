@@ -444,7 +444,8 @@ line. Pins never move; conflicting pins are reported as errors.
 ## Command line
 
 ```bash
-pnpm draftably check examples/checkout.draft      # errors and diagnostics; exit 1 on errors
+pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflicts; exit 1 on errors
+pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
@@ -477,6 +478,32 @@ scratch diagram. The format is stable, so other tools can read it:
   `<svg>`, holding the XML-escaped source.
 
 Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+
+### Drawing conflicts
+
+`check` also measures the drawing and reports conflicts as warnings. Layout and routing avoid
+them on their own, so a conflict usually comes from a refinement. Each warning ends with its
+rule:
+
+| Rule                 | Meaning                                                             |
+| -------------------- | ------------------------------------------------------------------- |
+| `edge-through-node`  | A line runs through a box that is not one of its ends.              |
+| `edge-through-title` | A line crosses a group's title.                                     |
+| `node-overlap`       | Two boxes overlap (across scopes; siblings are an `overlap` error). |
+| `label-collision`    | An edge label covers a box or another label.                        |
+| `outside-group`      | A box sits outside its group's frame.                               |
+
+When a refinement on one of the objects caused it, the warning names its line and a fix:
+
+```text
+warning line 13: Edge call (web -> api) runs through cache. Remove the pin on line 13, or change it to x=0 y=-64. [edge-through-node]
+```
+
+`check --hints` adds a table with one row for each object a refinement names: its id, the
+refinement and line, where layout alone puts it (raw), where it is drawn (final), and the distance
+between them. A last line lists objects that moved only because a refinement pushed them.
+`inspect --json --hints` adds `raw: {x, y}` to every node a refinement moved. Raw positions come from the
+same file compiled without its refinement lines.
 
 `skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
 teaches coding agents to write and check `.draft` files. `--global` installs it under

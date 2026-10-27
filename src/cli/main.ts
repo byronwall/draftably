@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
 import { compareDetailed } from '../dsl/compare';
+import { hintMoves, sceneConflicts } from '../dsl/conflicts';
 import { statusLabel, usedStatuses, withState } from '../model/status';
 import type { Diagram } from '../model/types';
 import { canonicalGeometry, projectScene } from '../dsl/project';
@@ -19,9 +20,13 @@ const USAGE = `Usage: draftably <command> <file.draft> [options]
 Any <file> may also be a PNG or SVG that Draftably exported: its embedded source is read.
 
 Commands:
-  check <file>              Report source errors and layout diagnostics. Exits 1 on errors.
+  check <file>              Report source errors, layout diagnostics and drawing conflicts
+       [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
+                            errors. --hints adds how far each refinement moved its target.
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
-  inspect <file> [--json]   Print canonical node and route geometry.
+  inspect <file> [--json]   Print canonical node and route geometry. --json prints it on one
+       [--hints]            line; with --hints it adds the unrefined position (raw) of every
+                            node a refinement moved.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
        [--state <id>]       Draw it in one emphasis state (also with --png).
        [--states]           Draw every emphasis state as its own aligned panel.
@@ -47,7 +52,27 @@ Commands:
 `;
 
 const describe = (d: Diagnostic) =>
-  `${d.level.padEnd(7)} ${d.line ? `line ${d.line}: ` : ''}${d.message}`;
+  `${d.level.padEnd(7)} ${d.line ? `line ${d.line}: ` : ''}${d.message}${d.level === 'warning' ? ` [${d.code}]` : ''}`;
+
+/** `check --hints`: one row per refinement target, then objects pushed by them. */
+function hintTable({ rows, pushed }: Awaited<ReturnType<typeof hintMoves>>) {
+  if (!rows.length) return 'No refinements.';
+  const xy = (p: { x: number; y: number }) => `${Math.round(p.x)},${Math.round(p.y)}`;
+  const table = [
+    ['id', 'refinement', 'raw x,y', 'final x,y', 'delta'],
+    ...rows.map(r => [r.id, `${r.hint} line ${r.line}`, xy(r.raw), xy(r.final), `${r.delta}px`]),
+  ];
+  const widths = table[0].map((_, i) => Math.max(...table.map(row => row[i].length)));
+  const lines = table.map(row =>
+    row
+      .map((c, i) => c.padEnd(widths[i]))
+      .join('  ')
+      .trimEnd(),
+  );
+  if (pushed.length)
+    lines.push(`Also moved by refinements: ${pushed.map(p => `${p.id} ${p.delta}px`).join(', ')}.`);
+  return lines.join('\n');
+}
 
 /** A file's source; a PNG or SVG export gives the source embedded in it. */
 async function read(file: string | undefined) {
@@ -107,13 +132,20 @@ export async function main(argv: string[]): Promise<number> {
   try {
     switch (command) {
       case 'check': {
-        const scene = await compile(await read(file)),
-          diagnostics = [...scene.diagnostics, ...linkNotes(scene, file)];
-        const errors = diagnostics.filter(d => d.level === 'error');
+        const source = await read(file),
+          scene = await compile(source);
+        const diagnostics = [
+          ...scene.diagnostics,
+          ...linkNotes(scene, file),
+          ...sceneConflicts(scene),
+        ];
+        const errors = diagnostics.filter(d => d.level === 'error'),
+          warnings = diagnostics.filter(d => d.level === 'warning');
         for (const d of diagnostics) console.log(describe(d));
+        if (flag('--hints')) console.log(hintTable(await hintMoves(source, scene)));
         const nodes = scene.objects.filter(o => o.type === 'node').length;
         console.log(
-          `${errors.length ? 'Problems' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
+          `${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
         );
         return errors.length ? 1 : 0;
       }
@@ -139,7 +171,14 @@ export async function main(argv: string[]): Promise<number> {
         }
         if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
         if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));
-        else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
+        else if (flag('--json') && flag('--hints')) {
+          const geometry = canonicalGeometry(doc),
+            { rows, pushed } = await hintMoves(source, scene);
+          const raw = new Map([...rows, ...pushed].filter(r => r.delta).map(r => [r.id, r.raw]));
+          for (const n of geometry.nodes)
+            if (raw.has(n.id)) Object.assign(n, { raw: raw.get(n.id) });
+          console.log(JSON.stringify(geometry));
+        } else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;
       }
       case 'compare': {
