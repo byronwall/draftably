@@ -8,7 +8,7 @@
     "last_updated": "2026-10-26",
     "summary": "One `cells` layout recipe on groups draws touching sequences, tables and byte layouts; cells are ordinary nodes so lines, colors and marks reach them. Image cells build on PR #28.",
     "status": "planned",
-    "next_action": "Byron answers the product questions; then start M1 (sequences) after plan-grouping and fold-small land."
+    "next_action": "Start M1 (sequences with markers and header band) after plan-grouping and fold-small land."
   },
   "artifacts": {
     "intent_brief": {
@@ -95,6 +95,34 @@
       "location": "https://d2lang.com/tour/grid-diagrams",
       "anchor": "grid-columns with grid-gap 0; sql_table shape",
       "authority": "inferred"
+    },
+    {
+      "id": "qa-round-1",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "1",
+      "authority": "user"
+    },
+    {
+      "id": "qa-round-2",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "2",
+      "authority": "user"
+    },
+    {
+      "id": "qa-round-3",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "3",
+      "authority": "user"
+    },
+    {
+      "id": "qa-round-4",
+      "type": "qa",
+      "location": "conversation",
+      "anchor": "4",
+      "authority": "user"
     }
   ],
   "intent": {
@@ -140,6 +168,27 @@
         "kind": "constraint",
         "sources": ["S1"],
         "confidence": "medium"
+      },
+      {
+        "id": "C7",
+        "statement": "Order: sequences, tables (entities first), byte layouts, image cells, viewer editing.",
+        "kind": "decision",
+        "sources": ["qa-round-2", "qa-round-3"],
+        "confidence": "high"
+      },
+      {
+        "id": "C8",
+        "statement": "Lines use a cell's own outer side; to reach an inner cell they cross cells, drawn on top, ending with a dot.",
+        "kind": "decision",
+        "sources": ["qa-round-3", "qa-round-4"],
+        "confidence": "high"
+      },
+      {
+        "id": "C9",
+        "statement": "Cell groups show their title in a header band; seams use shape=marker that lines can reach; byte ruler sits under the header.",
+        "kind": "decision",
+        "sources": ["qa-round-2", "qa-round-4"],
+        "confidence": "high"
       }
     ],
     "themes": [
@@ -148,11 +197,7 @@
       "viewer-first images"
     ],
     "conflicts": [],
-    "human_questions": [
-      "One cells recipe or three named statements?",
-      "How deep should byte layouts go?",
-      "What is the main job of tables?"
-    ]
+    "human_questions": []
   },
   "brainstorm": {
     "status": "not-requested",
@@ -213,10 +258,7 @@
       "decision_rule": "If a line to a mid-row cell crosses other cells or needs a new router mode, attach lines at the group outline over the cell's span."
     },
     "rabbit_holes": ["Row spans", "Rich text in cells", "DOT import", "Viewer cell-grid editing"],
-    "open_decisions": [
-      "How should static exports treat large images?",
-      "Which primitive ships first after sequences?"
-    ]
+    "open_decisions": []
   },
   "implementation": {
     "status": "planned",
@@ -286,7 +328,7 @@
         "id": "m1",
         "title": "Sequences of touching cells",
         "status": "planned",
-        "done_when": "inspect --svg shows touching cells and a line ending on the hist cell; viewer matches; compiles under engine=layered; pnpm check passes.",
+        "done_when": "inspect --svg shows touching cells, a header band, and a line ending at the cp marker; viewer matches; compiles under engine=layered; pnpm check passes.",
         "outcome": "A group with `layout g cells` draws one strip of touching cells, and a line ends on one cell.",
         "dependencies_introduced": ["router"],
         "proof": "Unit cases plus inspect --svg and viewer pictures of examples/prompt-request.draft.",
@@ -297,7 +339,7 @@
         "id": "m2",
         "title": "Tables",
         "status": "planned",
-        "done_when": "Schema example has aligned columns and foreign-key lines end on rows; check reports a line to an inner cell.",
+        "done_when": "Schema columns align and foreign-key lines end on rows; a line to the middle of a 3x3 grid crosses one cell and ends with a dot.",
         "outcome": "Cell groups wrap into grids with shared column widths, spans and one-column entity tables.",
         "dependencies_introduced": [],
         "proof": "Schema example picture and a column-width test.",
@@ -356,7 +398,143 @@
     {
       "date": "2026-10-26",
       "event": "Initiative created by a planning worker session from Byron's voice memo; intent, shape and plan written together."
+    },
+    {
+      "date": "2026-10-26",
+      "event": "Four question rounds answered; shape, plan and intent rewritten. Byron chose crossing lines for inner cells over a check error."
     }
   ],
-  "closure": null
+  "closure": null,
+  "question_rounds": {
+    "focus": "DSL shape, scope and order of diagram primitives",
+    "per_round": 4,
+    "planned_rounds": 4,
+    "status": "complete",
+    "rounds": [
+      {
+        "round": 1,
+        "theme": "core shape",
+        "source": "qa-round-1",
+        "questions": [
+          {
+            "n": 1,
+            "question": "How should sequences, tables and byte layouts appear in the DSL?",
+            "answer": "One cells recipe on a group",
+            "effect": "Confirmed the recommended shape."
+          },
+          {
+            "n": 2,
+            "question": "How deep should byte layouts go?",
+            "answer": "RFC-style rows",
+            "effect": "M3 keeps unit, ruler, split and var fields; hex offsets and gap markers below the line."
+          },
+          {
+            "n": 3,
+            "question": "Main job of tables?",
+            "answer": "Both, schema entities first",
+            "effect": "M2 starts with entities, then general grids."
+          },
+          {
+            "n": 4,
+            "question": "Static export of large images?",
+            "answer": "Capped preview",
+            "effect": "M4 follows PR #28 preview plan."
+          }
+        ]
+      },
+      {
+        "round": 2,
+        "theme": "order and appearance",
+        "source": "qa-round-2",
+        "questions": [
+          {
+            "n": 5,
+            "question": "What ships after sequences?",
+            "answer": "Tables, then bytes",
+            "effect": "Milestone order confirmed."
+          },
+          {
+            "n": 6,
+            "question": "How does a cache-point seam show?",
+            "answer": "Marker on the seam",
+            "effect": "Added shape=marker to M1."
+          },
+          {
+            "n": 7,
+            "question": "Schema row name and type?",
+            "answer": "Two grid columns",
+            "effect": "Entities use columns=2; no new text rules."
+          },
+          {
+            "n": 8,
+            "question": "Where does a cell group title go?",
+            "answer": "Header band inside",
+            "effect": "Header band for every cell group."
+          }
+        ]
+      },
+      {
+        "round": 3,
+        "theme": "lines and scope",
+        "source": "qa-round-3",
+        "questions": [
+          {
+            "n": 9,
+            "question": "Line to a cell with no free side?",
+            "answer": "Cross the cells",
+            "effect": "Replaced the check error with a crossing line (not the recommendation)."
+          },
+          {
+            "n": 10,
+            "question": "Keep viewer editing of cells?",
+            "answer": "Keep as last PR",
+            "effect": "M5 stays, no longer optional."
+          },
+          {
+            "n": 11,
+            "question": "Where do image cells live?",
+            "answer": "Here, after PR #28 M1",
+            "effect": "M4 stays blocked on PR #28."
+          },
+          {
+            "n": 12,
+            "question": "A .dot importer?",
+            "answer": "No, cover features",
+            "effect": "Importer below the cut line."
+          }
+        ]
+      },
+      {
+        "round": 4,
+        "theme": "crossing details",
+        "source": "qa-round-4",
+        "questions": [
+          {
+            "n": 13,
+            "question": "Free side or shortest path?",
+            "answer": "Free side first",
+            "effect": "Crossing only for inner cells."
+          },
+          {
+            "n": 14,
+            "question": "How does a crossing line end?",
+            "answer": "Over cells, dot at end",
+            "effect": "Drawn on top, dot at target edge."
+          },
+          {
+            "n": 15,
+            "question": "Can a line end on a marker?",
+            "answer": "Yes",
+            "effect": "Router ends lines at marker labels in M1."
+          },
+          {
+            "n": 16,
+            "question": "Where is the byte ruler?",
+            "answer": "Under the header",
+            "effect": "Ruler between header band and first row."
+          }
+        ]
+      }
+    ]
+  }
 }

@@ -56,11 +56,18 @@ can mix these objects with ordinary nodes and groups, as DOT allows.
 - Sequences, byte layouts and tables are wanted. Images are wanted, viewer first.
 - The DSL stays line-based, readable and diff-friendly.
 - Geometry stays a pure function of the source, the same in the CLI and the viewer.
+- One `cells` recipe on a group covers sequences, tables and byte layouts; cells are nodes.
+- Order: sequences, then tables (schema entities first), then byte layouts, then image cells,
+  then viewer editing of cells.
+- Byte layouts are RFC-style: fixed rows, a ruler, split fields and variable-length fields.
+- A seam such as a cache point is a marker on the seam that lines can reach.
+- Lines use a cell's own outer side; to reach an inner cell they cross cells and end with a dot.
+- Static exports embed image previews capped at the node's size, as PR #28 plans.
+- No `.dot` importer.
 
 ## Next step after confirmation
 
-Byron's reference images for byte layouts live in his notes database. The notes server did not
-respond during planning, so this plan uses the PNG chunk, a TCP header and bytefield-svg as
-stand-ins. The product questions at the top of the report pick the DSL shape, byte layout depth,
-table scope, image export behavior and order. After the answers, start
-milestone 1 (sequences) from the [implementation plan](implementation-plan.md).
+Byron answered three rounds of product questions on 2026-10-26; the answers are above. His
+reference images for byte layouts live in his notes database, which did not respond during
+planning; check milestone 3 against them. Start milestone 1 (sequences) from the
+[implementation plan](implementation-plan.md).
