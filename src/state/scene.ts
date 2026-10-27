@@ -77,8 +77,11 @@ const state = createRoot(() => {
       value = { result, routes: drawRoutes(doc, vg, map, result) };
     } else {
       value = computeRoutes(doc, vg, map, {
-        // A diagram file must draw the same routes as `draftably inspect`, so no earlier routes.
-        previous: fileMode() ? [] : (routePrior() ?? lastRoutes),
+        // A diagram file must draw the same routes as `draftably inspect`, so no earlier routes,
+        // except while dragging: quick routes keep each line's sides from the last frame, so a
+        // drag doesn't search every line from scratch on every pointer move. The drop redraws
+        // without them.
+        previous: fileMode() && !quick ? [] : (routePrior() ?? lastRoutes),
         quick: quick || !!animationGeometry(),
       });
     }

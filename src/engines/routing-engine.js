@@ -297,6 +297,13 @@ class Heap {
     return this.q.length;
   }
 }
+/** A* moves on the grid: right, down, left, up, with the axis each runs along. */
+const STEPS = [
+  [1, 0, 0],
+  [0, 1, 1],
+  [-1, 0, 0],
+  [0, -1, 1],
+];
 function search(start, end, obs, used, s, near = [], limit = 16000) {
   const xs = [start.x, end.x],
     ys = [start.y, end.y];
@@ -336,12 +343,24 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
       id: r.id,
       first: r.points[0],
       last: r.points.at(-1),
+      x0: Math.min(a.x, b.x),
+      x1: Math.max(a.x, b.x),
+      y0: Math.min(a.y, b.y),
+      y1: Math.max(a.y, b.y),
     })),
   );
+  // A segment farther than this from a grid edge can neither cross, share nor run parallel
+  // within the edge gap, so its cost terms are zero; skipping it changes no result.
+  const reach = Math.max(s.edgeGap, EPS) + 1;
   function segmentCost(a, b) {
     let shared = 0;
-    const hits = new Set();
-    for (const t of existing) {
+    const hits = new Set(),
+      x0 = Math.min(a.x, b.x) - reach,
+      x1 = Math.max(a.x, b.x) + reach,
+      y0 = Math.min(a.y, b.y) - reach,
+      y1 = Math.max(a.y, b.y) + reach,
+      close = existing.filter(t => t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1);
+    for (const t of close) {
       const p = intersection(a, b, t.a, t.b);
       if (!p) continue;
       if (p.shared) {
@@ -352,7 +371,7 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
       hits.add(t.id + ':' + p.x + ',' + p.y);
     }
     let lanes = 0;
-    for (const t of existing) {
+    for (const t of close) {
       const q = parallelNear(a, b, t.a, t.b, s.edgeGap);
       if (q) lanes += q.deficit;
     }
@@ -384,19 +403,15 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
     const x = cell % nx,
       y = Math.floor(cell / nx),
       a = { x: X[x], y: Y[y] };
-    for (const [dx, dy, nd] of [
-      [1, 0, 0],
-      [0, 1, 1],
-      [-1, 0, 0],
-      [0, -1, 1],
-    ]) {
+    for (const [dx, dy, nd] of STEPS) {
       const xx = x + dx,
         yy = y + dy;
       if (xx < 0 || yy < 0 || xx >= nx || yy >= ny) continue;
       const nc = yy * nx + xx,
         key = nc * 2 + nd,
         b = { x: X[xx], y: Y[yy] },
-        ck = Math.min(cell, nc) + ':' + Math.max(cell, nc);
+        // The grid edge between two neighbouring cells: the lower cell, and which way it runs.
+        ck = Math.min(cell, nc) * 2 + nd;
       let k = cache.get(ck);
       if (k === undefined) {
         k = blocked(a, b, obs) ? Infinity : segmentCost(a, b);
