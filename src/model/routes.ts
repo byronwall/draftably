@@ -336,6 +336,12 @@ export interface DrawnRoute extends Route {
   label: EdgeLabelBox | null;
   path: string;
   /**
+   * Short pieces of the line where it crosses another line or a group's frame: the only places a
+   * canvas-colored halo is drawn under it, so the crossing reads as a clean break. Empty when the
+   * line crosses nothing.
+   */
+  halo: string;
+  /**
    * For a line to or from a cell with no side on its group's outline: the stretch from the outline
    * across other cells to that cell's edge. It is drawn over the cells, with a dot at the edge.
    */
@@ -655,15 +661,77 @@ export function drawRoutes(
       look,
     ),
     labels = new Map(labelled.map((route, i) => [route, boxes[i]]));
+  const frames = vg.groups.flatMap(g =>
+    g.frame || isCollapsed(doc, g.id) ? [] : [rects.get(g.id)!],
+  );
   return result.routes.map(route => {
     const c = crosses.get(route.id);
     return {
       ...route,
       label: labels.get(route) ?? null,
       path: roundedPath(route.points, radius),
+      halo: haloPath(
+        route.points,
+        result.routes.filter(r => r !== route).map(r => r.points),
+        frames,
+      ),
       ...(c?.to ? { cross: c.to.cross } : c?.from ? { cross: c.from.cross } : {}),
     };
   });
+}
+
+/** How far a halo piece runs each way from a crossing, along the line. */
+export const HALO_REACH = 7;
+
+type Seg = [Point, Point];
+const segsOf = (points: Point[]): Seg[] => points.slice(1).map((p, i) => [points[i], p]);
+
+/** Where upright and level segments `a` and `b` cross, strictly inside both. */
+function crossing(a: Seg, b: Seg): Point | null {
+  const level = (s: Seg) => Math.abs(s[0].y - s[1].y) < 0.5,
+    upright = (s: Seg) => Math.abs(s[0].x - s[1].x) < 0.5;
+  const [h, v] = level(a) && upright(b) ? [a, b] : upright(a) && level(b) ? [b, a] : [null, null];
+  if (!h || !v) return null;
+  const x = v[0].x,
+    y = h[0].y,
+    inside = (t: number, p: number, q: number) =>
+      t > Math.min(p, q) + 0.5 && t < Math.max(p, q) - 0.5;
+  return inside(x, h[0].x, h[1].x) && inside(y, v[0].y, v[1].y) ? { x, y } : null;
+}
+
+/** The pieces of `points` around each place it crosses `others` or a frame's border, as a path. */
+export function haloPath(points: Point[], others: Point[][], frames: Rect[]): string {
+  const cuts = [
+    ...others.flatMap(segsOf),
+    ...frames.flatMap(r =>
+      segsOf([
+        { x: r.x, y: r.y },
+        { x: r.x + r.w, y: r.y },
+        { x: r.x + r.w, y: r.y + r.h },
+        { x: r.x, y: r.y + r.h },
+        { x: r.x, y: r.y },
+      ]),
+    ),
+  ];
+  const out: string[] = [];
+  for (const s of segsOf(points)) {
+    const len = Math.hypot(s[1].x - s[0].x, s[1].y - s[0].y);
+    if (!len) continue;
+    const dx = (s[1].x - s[0].x) / len,
+      dy = (s[1].y - s[0].y) / len;
+    for (const c of cuts) {
+      const p = crossing(s, c);
+      if (!p) continue;
+      const at = Math.hypot(p.x - s[0].x, p.y - s[0].y),
+        from = Math.max(0, at - HALO_REACH),
+        to = Math.min(len, at + HALO_REACH);
+      const r = (n: number) => Math.round(n * 10) / 10;
+      out.push(
+        `M${r(s[0].x + dx * from)} ${r(s[0].y + dy * from)}L${r(s[0].x + dx * to)} ${r(s[0].y + dy * to)}`,
+      );
+    }
+  }
+  return out.join('');
 }
 
 /** Run of a self-message's loop out to the right of its lifeline, and its drop. */
