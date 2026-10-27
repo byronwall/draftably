@@ -24,6 +24,8 @@ inside the Draftably repo). It needs Node 22.21 or later.
    change it to x=140 y=60"). Apply the fix, or remove the refinement, and run `check` again
    until no conflict is left. A conflict with no line means layout could not avoid it: move the
    boxes apart with `near`, or split the group.
+   Check several files at once with `check a.draft b.draft` or a folder (one line per file;
+   exit 1 if any fails), and add `--quiet` to leave out `info` notes. Every command has `--help`.
    When a box sits in an odd place, `check --hints` shows each refinement's target with its raw
    (layout only) and final position and the distance between them. A large distance means the
    refinement, not layout, put it there.
@@ -42,7 +44,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    `vary` also offers to drop refinements that `check` blames for conflicts, to draw change marks
    as panels, and to soften groups (`frame=soft`) for fewer containers.
 5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
-   you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
+   you can open or convert to an image; `--png diagram.png --max-width 2000` saves a PNG sized
+   for viewing and prints its pixel size. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.
 6. **Hand it to the user:** `npx draftably open diagram.draft` serves an editor (default port
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
