@@ -13,6 +13,7 @@ import {
   type LineChange,
   type Metrics,
   type Variant,
+  type VaryOptions,
   type VaryResult,
 } from './variants';
 import { writePng } from './png';
@@ -26,8 +27,10 @@ export const outDir = (file: string, out?: string) =>
 interface Saved {
   file: string;
   source: string;
+  mode: VaryResult['mode'];
   prefer: string;
   recommended: string;
+  failed: VaryResult['failed'];
   tried: number;
   shape: VaryResult['shape'];
   variants: Array<Variant & { png: string }>;
@@ -37,6 +40,7 @@ const esc = (s: string) =>
   s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
 
 const sizeText = (m: Metrics) => `${m.width}×${m.height}`;
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 /** A change from the current file, signed: `+2`, `-8%`. */
 function delta(now: number, base: number, percent = false) {
@@ -70,7 +74,7 @@ function contactSheet(result: VaryResult) {
     out.push(
       `<rect x="${x}" y="${y}" width="${tw}" height="${th + band}" rx="8" fill="#fff" stroke="${chosen ? '#2f6fde' : '#d4d4ce'}" stroke-width="${chosen ? 3 : 1}"/>`,
       `<text x="${x + 14}" y="${y + 22}" font-family="system-ui, sans-serif" font-size="16" font-weight="600" fill="#1d1d1b">${esc(`${v.id} · ${v.title}`)}${chosen ? ' ★' : ''}</text>`,
-      `<text x="${x + 14}" y="${y + 42}" font-family="system-ui, sans-serif" font-size="13" fill="#5d5d58">${esc(`${m.crossings} crossings · ${m.bends} bends · ${sizeText(m)} · ${m.warnings} warnings`)}</text>`,
+      `<text x="${x + 14}" y="${y + 42}" font-family="system-ui, sans-serif" font-size="13" fill="#5d5d58">${esc(`${plural(m.crossings, 'crossing')} · ${plural(m.bends, 'bend')} · ${sizeText(m)} · ${plural(m.warnings, 'warning')}`)}</text>`,
       `<image x="${x + 8}" y="${y + band}" width="${tw - 16}" height="${th - 8}" preserveAspectRatio="xMidYMid meet" href="data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}"/>`,
     );
   });
@@ -105,10 +109,12 @@ function table(result: VaryResult, file: string, dir: string) {
       .trimEnd(),
   );
   const rel = path.relative(process.cwd(), dir) || '.';
+  const kept = result.mode === 'suggest' ? `${result.variants.length - 1} kept` : `${result.mode}`;
   lines.unshift(
-    `${result.tried} variants tried, ${result.variants.length - 1} kept. Sheet: ${path.join(rel, 'contact-sheet.png')}`,
+    `${result.tried} variants tried (${kept}). Sheet: ${path.join(rel, 'contact-sheet.png')}`,
   );
   for (const v of result.variants.slice(1)) lines.push(`${v.id}: ${v.why}.`);
+  for (const f of result.failed) lines.push(`Failed: ${f.title}: ${f.error}`);
   lines.push(
     result.recommended === 'v0'
       ? 'Recommended: keep the current layout; no variant is as good on warnings, crossings and size.'
@@ -117,9 +123,8 @@ function table(result: VaryResult, file: string, dir: string) {
   return lines.join('\n');
 }
 
-export interface RunOptions {
+export interface RunOptions extends VaryOptions {
   out?: string;
-  limit?: number;
   json?: boolean;
   /** Leave the source out of the PNGs. */
   noSource?: boolean;
@@ -127,7 +132,7 @@ export interface RunOptions {
 
 /** Generate, measure and write variants of `file`. */
 export async function runVary(file: string, source: string, opts: RunOptions) {
-  const result = await vary(source, { limit: opts.limit });
+  const result = await vary(source, opts);
   const dir = outDir(file, opts.out);
   fs.mkdirSync(dir, { recursive: true });
   for (const old of fs.readdirSync(dir))
@@ -146,8 +151,10 @@ export async function runVary(file: string, source: string, opts: RunOptions) {
   const saved: Saved = {
     file: path.resolve(file),
     source: hash(source),
-    prefer: 'fewer-crossings',
+    mode: result.mode,
+    prefer: opts.prefer ?? 'fewer-crossings',
     recommended: result.recommended,
+    failed: result.failed,
     tried: result.tried,
     shape: result.shape,
     variants: result.variants.map(v => ({ ...v, png: path.join(dir, `${v.id}.png`) })),

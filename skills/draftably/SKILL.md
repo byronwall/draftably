@@ -33,6 +33,10 @@ inside the Draftably repo). It needs Node 22.21 or later.
    and a table of crossings, bends, size and warnings. Look at the sheet, pick one (the table
    marks a `recommended` variant), and run `npx draftably vary diagram.draft --apply v2` (or
    `--apply best`). It rewrites only the layout lines and runs `check`.
+   To explore a setting yourself, `--try direction` or `--try engine=layered,flow --try
+rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no effect),
+   `--grid` sweeps the main engines in both directions, and `--scope <group>` varies one
+   group's layout line.
 5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.

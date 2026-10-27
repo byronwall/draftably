@@ -42,6 +42,11 @@ Commands:
        [--limit N]          and variants.json to <name>.vary/ beside the file (or --out), and
        [--json]             prints a table; --json prints variants.json instead. Keeps the
                             best 4 that differ unless --limit is given (1 to 12).
+       [--try key=a,b]      Try exactly these values, in order; a second --try makes a grid
+                            (12 at most). --try key alone uses the viewer Compare's steps.
+                            Keys: engine, direction, layout engine and routing settings.
+       [--grid]             Try layered, compound-flow, flow (and tree) reading right, down.
+       [--scope <group>]    Vary that group's layout line instead of the root's.
   vary <file> --apply <id>  Write variant <id> from the last run (or best) into the file,
                             print the lines it changed, then check the file.
   extract <image>           Print the .draft source embedded in a PNG or SVG export.
@@ -94,6 +99,16 @@ async function read(file: string | undefined) {
 }
 
 class UsageError extends Error {}
+
+/** Every value given for a repeatable option, such as `--try a --try b`. */
+function options(args: string[], name: string) {
+  return args.flatMap((a, i) => {
+    if (a !== name) return [];
+    const value = args[i + 1];
+    if (!value || value.startsWith('--')) throw new UsageError(`${name} needs a value.`);
+    return [value];
+  });
+}
 
 /** The value after `name` in `args`, if the option is given. */
 function option(args: string[], name: string) {
@@ -213,6 +228,7 @@ export async function main(argv: string[]): Promise<number> {
           out = option(rest, '--out'),
           pick = option(rest, '--apply');
         const { applyVariant, runVary } = await import('./vary');
+        const { parseTry } = await import('./variants');
         if (pick) {
           if (isImageName(file!)) throw new UsageError('vary --apply rewrites a .draft file only.');
           const done = applyVariant(file!, source, pick, out);
@@ -225,7 +241,9 @@ export async function main(argv: string[]): Promise<number> {
           console.log(`Check: ${errors ? 'Problems' : notes.length ? 'Warnings' : 'OK'}.`);
           return errors ? 1 : 0;
         }
-        const limit = option(rest, '--limit');
+        const limit = option(rest, '--limit'),
+          axes = options(rest, '--try').map(parseTry);
+        if (axes.length && flag('--grid')) throw new UsageError('Use --try or --grid, not both.');
         if (
           limit !== undefined &&
           !(Number.isInteger(Number(limit)) && +limit >= 1 && +limit <= 12)
@@ -236,6 +254,9 @@ export async function main(argv: string[]): Promise<number> {
           limit: limit === undefined ? undefined : Number(limit),
           json: flag('--json'),
           noSource: flag('--no-source'),
+          axes,
+          grid: flag('--grid'),
+          scope: option(rest, '--scope'),
         });
         return 0;
       }

@@ -605,6 +605,17 @@ Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
   of one; those come first, then fewest warnings, crossings, area and bends. `--limit N` keeps
   N (default 4, up to 12). The run is deterministic: the same file gives the same variants.
 - **Recommended** is the first variant better than the file, or `v0` when none is.
+- `--try key=a,b` tries exactly those values instead of suggesting, in order, and keeps every
+  one. A second `--try` makes a grid (12 variants at most), with the first axis varying fastest.
+  `--try key` alone uses the steps the viewer's Compare offers (`rank-gap` → 28, 52, 88). Keys
+  are `engine`, `direction`, the engine settings in [Layout engines](#layout-engines) and the
+  settings in [Routing](#routing). An engine setting on a scope with a built-in recipe also sets
+  the engine: the scope's own, else `compound-flow` with groups or `layered` without.
+- `--grid` tries `layered`, `compound-flow` and `flow`, plus `tree` for a tree with one start,
+  each reading right and then down. Sweeps keep a variant that draws the same picture as an
+  earlier one and tag it `same as v1`, so a setting with no effect shows.
+- `--scope <group>` varies that group's `layout` line instead of the root's. The suggestions
+  then use the group's own shape, and routing (which is the whole file's) stays as it is.
 - `--json` prints `variants.json`: for each variant its id, title, reason, the exact lines it
   changes (`before` and `after`), its edits and metrics.
 - `--apply <id>` writes that variant from the last run into the file and prints the lines it

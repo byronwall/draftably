@@ -12,7 +12,17 @@ import { compile, type Scene } from '../dsl/compile';
 import { findConflicts } from '../dsl/conflicts';
 import { projectScene, visibleRects } from '../dsl/project';
 import { layoutStatement, statements } from '../dsl/source-edits';
-import { bare, printStatement, readSource, type Statement, type Word } from '../dsl/syntax';
+import { ExplorerLab } from '../engines/explorer-engine.js';
+import {
+  bare,
+  ENGINE_PARAMS,
+  ENGINES,
+  printStatement,
+  readSource,
+  ROUTING_PARAMS,
+  type Statement,
+  type Word,
+} from '../dsl/syntax';
 import { renderSvg } from './svg';
 
 /** One change to the source: attributes to set (a value) or remove (null) on one statement. */
@@ -149,16 +159,34 @@ export interface Shape {
   tree: boolean;
   /** Mean edge label length, in characters. */
   labels: number;
-  /** The root's recipe, when it is one an engine cannot replace (lanes, sequence, cells). */
-  fixedRoot?: string;
-  /** The root's current engine, or its recipe name. */
-  rootLayout: string;
-  rootDirection: 'auto' | 'right' | 'down';
+  /** The scope the variants arrange: `root`, or a group given with `--scope`. */
+  scope: string;
+  /** The scope's recipe, when it is one an engine cannot replace (lanes, sequence, cells). */
+  fixed?: string;
+  /** The scope's current engine, or its recipe name. */
+  layout: string;
+  /** The scope's engine, when it has one rather than a built-in recipe. */
+  engine?: string;
+  direction: 'auto' | 'right' | 'down';
 }
 
-export function shapeOf(scene: Scene): Shape {
+/** Ids inside `scope`'s subtree, or every object for `root`. */
+function within(scene: Scene, scope: string) {
+  const inside = (id: string): boolean => {
+    for (let p = scene.byId.get(id)?.parent; p; p = scene.byId.get(p)?.parent) {
+      if (p === scope) return true;
+      if (p === 'root') return false;
+    }
+    return false;
+  };
+  return new Set(scene.model.objects.filter(o => scope === 'root' || inside(o.id)).map(o => o.id));
+}
+
+/** The shape of `scope`'s subtree: the whole diagram for `root`. */
+export function shapeOf(scene: Scene, scope = 'root'): Shape {
   const m = scene.model,
-    nodes = m.objects.filter(o => o.type === 'node'),
+    members = within(scene, scope),
+    nodes = m.objects.filter(o => o.type === 'node' && members.has(o.id)),
     ids = new Set(nodes.map(n => n.id)),
     edges = m.edges.filter(e => ids.has(e.source) && ids.has(e.target) && e.source !== e.target);
   const out = new Map<string, string[]>(),
@@ -188,31 +216,31 @@ export function shapeOf(scene: Scene): Shape {
   };
   const ranks = Math.max(0, ...nodes.map(n => visit(n.id)));
   const starts = nodes.filter(n => !incoming.get(n.id)).length;
-  const root = m.layouts.find(l => l.scope === 'root');
+  const root = m.layouts.find(l => l.scope === scope);
   const labelled = edges.filter(e => e.label);
   return {
     nodes: nodes.length,
-    groups: m.objects.filter(o => o.type === 'group' && !o.frame).length,
+    groups: m.objects.filter(o => o.type === 'group' && !o.frame && members.has(o.id)).length,
     ranks,
     tree: !cyclic && starts === 1 && nodes.every(n => (incoming.get(n.id) ?? 0) <= 1),
     labels: labelled.length
       ? labelled.reduce((sum, e) => sum + e.label.length, 0) / labelled.length
       : 0,
+    scope,
     ...(root && ['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine
-      ? { fixedRoot: root.algorithm }
+      ? { fixed: root.algorithm }
       : {}),
-    rootLayout: root?.engine?.algorithm ?? root?.algorithm ?? 'flow',
-    rootDirection: root?.direction ?? 'auto',
+    layout: root?.engine?.algorithm ?? root?.algorithm ?? (scope === 'root' ? 'flow' : 'column'),
+    ...(root?.engine ? { engine: root.engine.algorithm } : {}),
+    direction: root?.direction ?? 'auto',
   };
 }
 
 // --- Candidates --------------------------------------------------------------------------------
 
-const layout = (attrs: Record<string, string | null>, scope = 'root'): Edit => ({
-  kind: 'layout',
-  scope,
-  attrs,
-});
+/** The engine a scope's sweeps use when they don't name one. */
+const defaultEngine = (shape: Shape) =>
+  shape.engine ?? (shape.groups ? 'compound-flow' : 'layered');
 
 /** Name a variant by the settings it sets. */
 export const titleOf = (edits: Edit[]) =>
@@ -236,23 +264,30 @@ export function suggestions(
   base: Pick<Metrics, 'crossings'>,
 ): Array<Pick<Variant, 'edits' | 'why'>> {
   const out: Array<Pick<Variant, 'edits' | 'why'>> = [];
-  // A stricter router only helps a drawing that has crossings.
-  const router = base.crossings
-    ? [
-        {
-          edits: [{ kind: 'routing', attrs: { 'crossing-penalty': '900' } } as Edit],
-          why: `keep the layout, route around its ${base.crossings} crossing${base.crossings > 1 ? 's' : ''} harder`,
-        },
-      ]
-    : [];
-  if (shape.fixedRoot) {
-    out.push(...router, {
-      edits: [{ kind: 'routing', attrs: { 'edge-gap': '28' } }],
-      why: `a ${shape.fixedRoot} root keeps its layout; more room between parallel lines`,
-    });
+  // A stricter router only helps a drawing that has crossings; routing is the whole file's.
+  const router =
+    base.crossings && shape.scope === 'root'
+      ? [
+          {
+            edits: [{ kind: 'routing', attrs: { 'crossing-penalty': '900' } } as Edit],
+            why: `keep the layout, route around its ${base.crossings} crossing${base.crossings > 1 ? 's' : ''} harder`,
+          },
+        ]
+      : [];
+  if (shape.fixed) {
+    if (shape.scope === 'root')
+      out.push(...router, {
+        edits: [{ kind: 'routing', attrs: { 'edge-gap': '28' } }],
+        why: `a ${shape.fixed} root keeps its layout; more room between parallel lines`,
+      });
     return out;
   }
-  const engine = shape.groups ? 'compound-flow' : 'layered',
+  const layout = (attrs: Record<string, string | null>): Edit => ({
+    kind: 'layout',
+    scope: shape.scope,
+    attrs,
+  });
+  const engine = defaultEngine(shape),
     because = shape.groups ? `${shape.groups} group${shape.groups > 1 ? 's' : ''}` : 'no groups';
   for (const direction of ['right', 'down'])
     out.push({ edits: [layout({ engine, direction })], why: `${because}, reading ${direction}` });
@@ -287,6 +322,140 @@ export function suggestions(
     });
   out.push(...router);
   return out;
+}
+
+/** One `--try` axis: a source setting and the values to try. */
+export interface Axis {
+  key: string;
+  values: string[];
+}
+
+const DIRECTIONS = ['right', 'down'];
+
+/** The shared step values for a setting: the same ones the viewer's Compare sweeps. */
+function steps(key: string): string[] | undefined {
+  if (key === 'engine') return [...ENGINES];
+  if (key === 'direction') return DIRECTIONS;
+  const engine = ENGINE_PARAMS[key],
+    route = ROUTING_PARAMS[key];
+  const def = engine
+    ? ExplorerLab.layoutParams[engine.key]
+    : route && ExplorerLab.routeParams[route.key];
+  if (def) return def.values.map(String);
+  const p = engine ?? route;
+  if (p && 'choices' in p && p.choices.length) return [...p.choices];
+  return undefined;
+}
+
+/**
+ * Read `--try key=a,b`, or `--try key` for the shared steps. Keys are source attribute names:
+ * `engine`, `direction`, a `layout` engine setting or a `routing` setting.
+ */
+export function parseTry(text: string): Axis {
+  const [key, list] = text.split('=', 2);
+  const engine = ENGINE_PARAMS[key],
+    route = ROUTING_PARAMS[key];
+  if (key !== 'engine' && key !== 'direction' && (!engine || key === 'root') && !route)
+    throw Error(
+      `--try ${key}: not a setting. Use engine, direction, ${Object.keys(ENGINE_PARAMS)
+        .filter(k => k !== 'root')
+        .join(', ')}, or a routing setting (${Object.keys(ROUTING_PARAMS).join(', ')}).`,
+    );
+  const values =
+    list === undefined
+      ? steps(key)
+      : list
+          .split(',')
+          .map(v => v.trim())
+          .filter(Boolean);
+  if (!values?.length) throw Error(`--try ${key} needs values: --try ${key}=a,b.`);
+  const p = engine ?? route;
+  for (const v of values) {
+    const ok =
+      key === 'engine'
+        ? ENGINES.includes(v as never)
+        : key === 'direction'
+          ? [...DIRECTIONS, 'auto'].includes(v)
+          : 'choices' in p!
+            ? p.choices.includes(v)
+            : Number.isFinite(Number(v)) && +v >= p!.min && +v <= p!.max;
+    if (!ok)
+      throw Error(
+        `--try ${key}=${v}: ${
+          key === 'engine'
+            ? `use ${ENGINES.join(', ')}`
+            : key === 'direction'
+              ? 'use right, down or auto'
+              : 'choices' in p!
+                ? `use ${p.choices.join(', ')}`
+                : `use ${p!.min} to ${p!.max}`
+        }.`,
+      );
+  }
+  return { key, values: [...new Set(values)] };
+}
+
+/**
+ * Every combination of one or two axes, in order: the first axis varies fastest. A layout
+ * setting on a scope without an engine also sets the scope's engine, since built-in recipes
+ * take no engine settings.
+ */
+export function sweep(shape: Shape, axes: Axis[]): Array<Pick<Variant, 'edits' | 'why'>> {
+  if (axes.length > 2) throw Error('Use at most two --try axes.');
+  if (axes.length === 2 && axes[0].key === axes[1].key)
+    throw Error('Use two different --try settings.');
+  const count = axes.reduce((n, a) => n * a.values.length, 1);
+  if (count > 12) throw Error(`That sweep has ${count} variants. Keep it to 12 or fewer.`);
+  const layoutKeys = axes.filter(a => !ROUTING_PARAMS[a.key]);
+  if (layoutKeys.length && shape.fixed)
+    throw Error(`The ${shape.scope} scope uses ${shape.fixed}; only routing settings vary there.`);
+  const needsEngine =
+    layoutKeys.some(a => a.key !== 'direction') &&
+    !layoutKeys.some(a => a.key === 'engine') &&
+    !shape.engine;
+  const [a, b] = axes;
+  const out: Array<Pick<Variant, 'edits' | 'why'>> = [];
+  for (const bv of b ? b.values : [undefined])
+    for (const av of a.values) {
+      const set: Array<[string, string]> = [
+        [a.key, av],
+        ...(b ? [[b.key, bv!] as [string, string]] : []),
+      ];
+      const layoutAttrs: Record<string, string> = needsEngine
+          ? { engine: defaultEngine(shape) }
+          : {},
+        routingAttrs: Record<string, string> = {};
+      for (const [k, v] of set) (ROUTING_PARAMS[k] ? routingAttrs : layoutAttrs)[k] = v;
+      const edits: Edit[] = [
+        ...(Object.keys(layoutAttrs).length
+          ? [{ kind: 'layout', scope: shape.scope, attrs: layoutAttrs } as Edit]
+          : []),
+        ...(Object.keys(routingAttrs).length
+          ? [{ kind: 'routing', attrs: routingAttrs } as Edit]
+          : []),
+      ];
+      out.push({
+        edits,
+        why: `--try ${set.map(([k, v]) => `${k}=${v}`).join(' ')}${needsEngine ? ` (with engine=${defaultEngine(shape)})` : ''}`,
+      });
+    }
+  return out;
+}
+
+/**
+ * The documented broad sweep: `layered`, `compound-flow` and `flow`, plus `tree` for a tree with
+ * one start, each reading right and then down. Always the same list for the same shape.
+ */
+export function grid(shape: Shape): Array<Pick<Variant, 'edits' | 'why'>> {
+  if (shape.fixed)
+    throw Error(`The ${shape.scope} scope uses ${shape.fixed}; --grid varies engines.`);
+  const engines = ['layered', 'compound-flow', 'flow', ...(shape.tree ? ['tree'] : [])];
+  return engines.flatMap(engine =>
+    DIRECTIONS.map(direction => ({
+      edits: [{ kind: 'layout', scope: shape.scope, attrs: { engine, direction } } as Edit],
+      why: `--grid: ${engine} reading ${direction}`,
+    })),
+  );
 }
 
 // --- Measuring ---------------------------------------------------------------------------------
@@ -400,31 +569,58 @@ function tag(list: Variant[]) {
 }
 
 export interface VaryOptions {
-  /** How many variants to keep besides the current file. */
+  /** How many variants to keep besides the current file (suggestions only). */
   limit?: number;
   prefer?: Prefer;
+  /** `--try` axes: try exactly these settings, in order, instead of suggesting. */
+  axes?: Axis[];
+  /** `--grid`: the documented engine and direction sweep. */
+  grid?: boolean;
+  /** The scope whose `layout` line varies: `root` (default) or a framed group. */
+  scope?: string;
 }
 
 export interface VaryResult {
   shape: Shape;
-  /** `v0` (the file as it is) first, then the kept variants in ranked order. */
+  mode: 'suggest' | 'try' | 'grid';
+  /** `v0` (the file as it is) first, then the kept variants: ranked, or in sweep order. */
   variants: Variant[];
   /** The variant to apply, or `v0` when none improves on the file. */
   recommended: string;
   tried: number;
+  /** Variants that did not compile, with the reason. */
+  failed: Array<{ title: string; error: string }>;
   /** Source and SVG for each listed variant, by id. */
   drawn: Map<string, Measured>;
 }
 
+/** Refuse a `--scope` that is not the root or a framed group. */
+function checkScope(scene: Scene, scope: string) {
+  if (scope === 'root') return;
+  const o = scene.byId.get(scope) ?? scene.model.objects.find(x => x.id === scope);
+  if (!o || o.type !== 'group')
+    throw Error(
+      `--scope ${scope}: not a group. Groups: ${scene.model.objects
+        .filter(x => x.type === 'group')
+        .map(x => x.id)
+        .join(', ')}.`,
+    );
+  if (o.frame) throw Error(`--scope ${scope}: a ${o.frame} group has no layout of its own.`);
+}
+
 /**
- * Try variants of `source`, measure each one, drop failures and duplicates of earlier ones, and
- * rank the rest against the file as it is.
+ * Try variants of `source` and measure each one. Suggestions drop duplicates of earlier drawings
+ * and are ranked against the file as it is; `--try` and `--grid` keep every variant in sweep
+ * order and tag repeats.
  */
 export async function vary(source: string, opts: VaryOptions = {}): Promise<VaryResult> {
   const prefer = opts.prefer ?? 'fewer-crossings',
-    limit = opts.limit ?? 4;
-  const scene = await compile(source),
-    shape = shapeOf(scene),
+    scope = opts.scope ?? 'root',
+    mode = opts.axes?.length ? 'try' : opts.grid ? 'grid' : 'suggest',
+    limit = mode === 'suggest' ? (opts.limit ?? 4) : 12;
+  const scene = await compile(source);
+  checkScope(scene, scope);
+  const shape = shapeOf(scene, scope),
     base = await draw(source);
   const v0: Variant = {
     id: 'v0',
@@ -435,13 +631,19 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
     metrics: { ...base.metrics, moved: 0 },
     tags: [],
   };
-  const seen = new Set([base.key]),
+  // The first variant to draw each picture; ids are given after ranking, so keep the objects.
+  const seen = new Map<string, Variant>([[base.key, v0]]),
     drawn = new Map<string, Measured>([['v0', { variant: v0, source, svg: base.svg }]]),
-    found: Array<{ variant: Variant; measured: Measured }> = [];
-  const candidates = suggestions(shape, base.metrics);
+    found: Array<{ variant: Variant; measured: Measured; same?: Variant }> = [],
+    failed: VaryResult['failed'] = [];
+  const candidates =
+    mode === 'try'
+      ? sweep(shape, opts.axes!)
+      : mode === 'grid'
+        ? grid(shape)
+        : suggestions(shape, base.metrics);
   for (const c of candidates) {
     const { source: next, changes } = applyEdits(source, c.edits);
-    if (!changes.length) continue;
     const variant: Variant = {
       id: '',
       title: titleOf(c.edits),
@@ -450,30 +652,42 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
       lines: changes,
       tags: [],
     };
+    if (!changes.length && mode === 'suggest') continue;
     try {
       const d = await draw(next);
-      if (seen.has(d.key)) continue;
-      seen.add(d.key);
+      const same = seen.get(d.key);
+      if (same && mode === 'suggest') continue;
       variant.metrics = { ...d.metrics, moved: movedFrom(base.centers, d.centers) };
-      found.push({ variant, measured: { variant, source: next, svg: d.svg } });
+      found.push({ variant, measured: { variant, source: next, svg: d.svg }, same });
+      if (!same) seen.set(d.key, variant);
     } catch (error) {
-      variant.error = error instanceof Error ? error.message : String(error);
+      failed.push({
+        title: variant.title,
+        error: error instanceof Error ? error.message : String(error),
+      });
     }
   }
   const better = (v: Variant) => improves(v.metrics!, v0.metrics!);
-  found.sort(
-    (a, b) =>
-      Number(better(b.variant)) - Number(better(a.variant)) ||
-      compareKeys(keys(a.variant.metrics!, prefer), keys(b.variant.metrics!, prefer)),
-  );
+  if (mode === 'suggest')
+    found.sort(
+      (a, b) =>
+        Number(better(b.variant)) - Number(better(a.variant)) ||
+        compareKeys(keys(a.variant.metrics!, prefer), keys(b.variant.metrics!, prefer)),
+    );
   const kept = found.slice(0, limit);
   kept.forEach((f, i) => {
     f.variant.id = `v${i + 1}`;
     drawn.set(f.variant.id, f.measured);
   });
+  // Sweeps keep repeats in place so the order stays the documented one; say which they repeat.
+  for (const f of kept) if (f.same) f.variant.tags.push(`same as ${f.same.id}`);
   const variants = [v0, ...kept.map(f => f.variant)];
-  tag(variants);
-  const recommended = kept.length && better(kept[0].variant) ? kept[0].variant.id : 'v0';
+  tag(variants.filter(v => !v.tags.some(t => t.startsWith('same as'))));
+  const pick = kept
+    .map(f => f.variant)
+    .filter(v => better(v) && !v.tags.some(t => t.startsWith('same as')))
+    .sort((a, b) => compareKeys(keys(a.metrics!, prefer), keys(b.metrics!, prefer)))[0];
+  const recommended = pick?.id ?? 'v0';
   variants.find(v => v.id === recommended)!.tags.unshift('recommended');
-  return { shape, variants, recommended, tried: candidates.length, drawn };
+  return { shape, mode, variants, recommended, tried: candidates.length, failed, drawn };
 }
