@@ -1233,7 +1233,7 @@ function measure(file) {
     hooks,
     backEdges,
     edgeLengthPerEdge: Math.round(totalLen / Math.max(1, routes.length)),
-    theme: source.match(/^theme\s+(\S+)/m)?.[1] ?? 'graphite',
+    theme: source.match(/^theme\s+(\S+)/m)?.[1] ?? 'drafting',
     fills: colors.fills.length,
     minTextContrast: Math.min(...colors.pairs.map(p => p.ratio)),
     groupFill: packing.fills,

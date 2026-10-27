@@ -324,7 +324,7 @@ try {
   await caughtUp(page);
 
   // 4. Every theme from source.
-  for (const theme of ['graphite', 'fieldnotes', 'signal', 'mulberry', 'midnight']) {
+  for (const theme of ['drafting', 'fieldnotes', 'signal', 'ink', 'blueprint']) {
     write(good.replace('theme fieldnotes', `theme ${theme}`));
     await caughtUp(page);
     await page.evaluate(() => document.fonts.ready);
@@ -336,10 +336,10 @@ try {
       same(g, inspect()) && themeFit.by <= 0.5 && themeClear.by < 0,
       `fit ${themeFit.by}px ${themeFit.id}; clearance ${themeClear.by}px`,
     );
-    if (theme === 'midnight') {
+    if (theme === 'blueprint') {
       const f = await titleFont(page);
       check(
-        'midnight titles use the monospace face',
+        'blueprint titles use the monospace face',
         f.node.includes('Draft JetBrains Mono'),
         f.node,
       );
