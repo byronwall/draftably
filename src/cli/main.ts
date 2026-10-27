@@ -2,6 +2,7 @@
  * Draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
+import { linkNotes } from './links';
 import fs from 'node:fs';
 import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
@@ -92,9 +93,10 @@ export async function main(argv: string[]): Promise<number> {
   try {
     switch (command) {
       case 'check': {
-        const scene = await compile(await read(file));
-        const errors = scene.diagnostics.filter(d => d.level === 'error');
-        for (const d of scene.diagnostics) console.log(describe(d));
+        const scene = await compile(await read(file)),
+          diagnostics = [...scene.diagnostics, ...linkNotes(scene, file)];
+        const errors = diagnostics.filter(d => d.level === 'error');
+        for (const d of diagnostics) console.log(describe(d));
         const nodes = scene.objects.filter(o => o.type === 'node').length;
         console.log(
           `${errors.length ? 'Problems' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,

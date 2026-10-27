@@ -48,6 +48,7 @@ and groups. References may point to later lines.
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
+| `config key=value` | File settings. See [Links and counts](#rules). |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -81,7 +82,23 @@ is the open button, and the Inspector shows the link with an **Open** button; a 
 the object still selects it. The link opens as written: a URL (`https://…`, a GitHub link) in a
 new tab, a `.draft` in the viewer, and a file path in VS Code. A file path may end in `:42` or
 `:42:5` to open at that line and column. A relative path starts at the diagram's git root, or its
-folder outside a repository. `count=42` on a node
+folder outside a repository.
+
+`config` lines hold file settings. One line may set several keys, or each key may have its own
+line; a key set twice is a warning and the later line wins.
+
+```text
+config link-base="../.." editor=cursor
+```
+
+`link-base` is where relative links start, relative to the `.draft` file's folder, for a
+diagram whose paths don't start at the git root. `editor` is the editor file links open in:
+`vscode` (the default), `vscode-insiders`, `cursor`, `windsurf` or `zed`. `check` warns about a
+relative link whose file does not exist at the link base, and suggests the path it probably meant:
+the same path from the diagram's folder, or the one file in the repository whose path ends the
+same way. It never changes the link.
+
+`count=42` on a node
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds.
 

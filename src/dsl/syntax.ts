@@ -5,6 +5,7 @@
  * Source is kept as a list of lines so that edits can change single statements and formatting
  * keeps every comment and unrelated statement.
  */
+import { EDITORS } from '../model/link';
 import {
   BUILT_IN_FAMILIES,
   defaultAppearance,
@@ -278,7 +279,12 @@ export interface Model {
   colorLines: Map<string, number>;
   /** Source line of each `legend` entry, in order. */
   legendLines: number[];
+  /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
+  warnings: { code: string; message: string; line: number }[];
 }
+
+/** `config` keys and the setting each sets. */
+export const CONFIG_KEYS = { 'link-base': 'linkBase', editor: 'editor' } as const;
 
 /** Theme attributes in the file and the override each sets. */
 export const THEME_ATTRS = {
@@ -376,7 +382,9 @@ export function parseModel(source: string | SourceDoc): Model {
     themeLine: 0,
     colorLines: new Map(),
     legendLines: [],
+    warnings: [],
   };
+  const configLines = new Map<string, number>();
   const objectIds = new Set<string>(),
     edgeIds = new Set<string>(),
     unique = new Set<string>();
@@ -485,6 +493,28 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(direction !== 'auto' ? { direction } : {}),
           ...(attrs.has('aspect') ? { aspect: num('aspect', 1.6, 0.25, 8) } : {}),
         };
+        break;
+      }
+      case 'config': {
+        count(0);
+        allow(Object.keys(CONFIG_KEYS));
+        assert(attrs.size, `config needs a setting: ${Object.keys(CONFIG_KEYS).join(', ')}.`);
+        const config = (m.appearance.config ??= {});
+        for (const [key, w] of attrs) {
+          const earlier = configLines.get(key);
+          if (earlier)
+            m.warnings.push({
+              code: 'config-repeated',
+              message: `config ${key} is also set on line ${earlier}; this line wins.`,
+              line,
+            });
+          configLines.set(key, line);
+          if (key === 'editor') config.editor = choice('editor', 'vscode', EDITORS);
+          else {
+            assert(w.quoted, `Expected ${key}="path" in double quotes.`);
+            config.linkBase = w.value;
+          }
+        }
         break;
       }
       case 'subtitle':

@@ -1,4 +1,5 @@
 import { LayoutLab } from '../engines/layout-engine.js';
+import { EDITORS, type FileConfig } from './link';
 import { RouteLab } from '../engines/routing-engine.js';
 import { clamp, clone, finite } from './geometry';
 import { ICONS } from './icons';
@@ -423,6 +424,13 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     for (const key of ['title', 'subtitle'] as const)
       if (typeof h[key] === 'string' && h[key]) heading[key] = h[key];
     if (heading.title || heading.subtitle) out.heading = heading;
+  }
+  const cfg = input.config;
+  if (cfg && typeof cfg === 'object') {
+    const config: FileConfig = {};
+    if (typeof cfg.linkBase === 'string') config.linkBase = cfg.linkBase;
+    if (EDITORS.includes(cfg.editor)) config.editor = cfg.editor;
+    if (config.linkBase !== undefined || config.editor) out.config = config;
   }
   const c = input.compare;
   if (c && typeof c.before === 'string' && typeof c.after === 'string')

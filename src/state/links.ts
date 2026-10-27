@@ -2,15 +2,24 @@
  * Open an object's link from the viewer: a URL in a new tab as written, a `.draft` in the viewer,
  * and a file in the editor at its line.
  */
-import { editorUrl, joinPath, linkTarget, type Editor } from '../model/link';
+import { editorUrl, joinPath, linkTarget } from '../model/link';
+import { doc } from './document';
 import { fileSession } from './file-session';
 import { fileUrl, go, workspace } from './launch';
 import { toast } from './toast';
 
-/** Where a relative link starts, or null when no file on disk is open. */
-export const linkBase = () => fileSession()?.root ?? null;
+/**
+ * Where a relative link starts: `config link-base=` from the diagram's folder, else its git root.
+ * Null when no file on disk is open.
+ */
+export function linkBase(): string | null {
+  const session = fileSession(),
+    base = doc.appearance.config?.linkBase;
+  if (!session?.root) return null;
+  return base === undefined ? session.root : joinPath(joinPath(session.path, '..'), base);
+}
 
-const editor = (): Editor => 'vscode';
+const editor = () => doc.appearance.config?.editor ?? 'vscode';
 
 /** What opening `href` does, for a tooltip or the Inspector. */
 export function describeLink(href: string): string {

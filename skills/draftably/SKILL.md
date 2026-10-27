@@ -85,6 +85,7 @@ layout services row gap=56
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                 |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                              |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                           |
+| `config key=value ...`             | File settings: `link-base="path"` (where relative links start), `editor=vscode\|cursor\|zed\|...`                 |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
@@ -163,7 +164,13 @@ content area.
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
 - Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)
-  instead of drawing each one. Link a node to its source with `href="path/or/url"`.
+  instead of drawing each one.
+- When a box names real code, a file or a page, link it: `href="src/orders/service.ts"`. Write
+  file paths from the repository root (relative links start at the git root of the `.draft`), and
+  add `:42` to open at a line. Use the URL as it is for anything on the web, such as a GitHub link.
+  If the diagram's paths start somewhere else, set `config link-base="../.."` (relative to the
+  `.draft`) instead of rewriting every link. `check` warns about a file link that does not exist
+  and suggests the path it probably meant.
 - About 5–30 nodes per diagram reads well. Split very large systems into several files.
 - When editing an existing file, keep its IDs and any `stay`/`near`/`pin` lines the user's viewer
   edits wrote; add new statements rather than rewriting the file.

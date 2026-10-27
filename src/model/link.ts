@@ -47,6 +47,14 @@ export function joinPath(base: string, path: string): string {
 export const EDITORS = ['vscode', 'vscode-insiders', 'cursor', 'windsurf', 'zed'] as const;
 export type Editor = (typeof EDITORS)[number];
 
+/** File settings from `config` statements. */
+export interface FileConfig {
+  /** Where relative links start, relative to the diagram's folder; its git root when unset. */
+  linkBase?: string;
+  /** The editor file links open in; VS Code when unset. */
+  editor?: Editor;
+}
+
 export const editorUrl = (editor: Editor, file: string, line?: number, col?: number) =>
   `${editor}://file${encodeURI(file)}${line ? `:${line}${col ? `:${col}` : ''}` : ''}`;
 

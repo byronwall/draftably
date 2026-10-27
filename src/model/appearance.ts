@@ -5,6 +5,7 @@
  *
  * Diagram appearance is separate from the editor's light or dark mode.
  */
+import type { FileConfig } from './link';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 
 export type ThemeId = 'graphite' | 'fieldnotes' | 'signal' | 'mulberry' | 'midnight';
@@ -86,6 +87,8 @@ export interface DiagramAppearance {
     /** Width over height the whole image should come closest to; 1.6 when unset. */
     aspect?: number;
   };
+  /** File settings from `config` statements. */
+  config?: FileConfig;
 }
 
 export interface Heading {
