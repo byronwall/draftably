@@ -61,7 +61,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    `inspect`, `format`, `compare` and `open` accept the image in place of the `.draft`. Use
    `--no-source` on `--png`/`--svg` exports when the labels must not travel with the picture.
 8. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
-   comments.
+   comments. A `[relaxed]` warning means a `near`, `stay` or `nudge` no longer holds after other
+   edits; `format --drop-stale --write` removes those lines.
 
 ## Syntax
 

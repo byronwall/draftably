@@ -552,6 +552,7 @@ pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflic
 pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
 pnpm draftably check examples/ --quiet            # every .draft in a folder (or several files); no info notes
 pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
+pnpm draftably format diagram.draft --drop-stale --write  # also drop refinements that no longer hold
 pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
