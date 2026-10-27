@@ -96,6 +96,7 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       ...(e.row !== undefined ? { row: e.row } : {}),
     };
   }
+  if (scene.sequence) doc.layout.sequence = clone(scene.sequence);
   const groups = new Set(doc.graph.groups.map(g => g.id));
   doc.collapsed = (view.collapsed ?? []).filter(id => groups.has(id));
   doc.settings = clone(view.settings ?? DEFAULT_SETTINGS);

@@ -22,7 +22,7 @@ import {
 } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
 import { defaultShapeSize } from '../model/styles';
-import type { CellsChrome, Diagram, Direction, Lane } from '../model/types';
+import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
 import {
@@ -109,6 +109,8 @@ export interface Scene {
   look: ResolvedAppearance;
   /** Rulers and run-on pieces of byte and bit layouts, by group. */
   cells: Map<string, CellsChrome>;
+  /** Sequence diagrams: the panel they are drawn on and their phases' row bands. */
+  sequence?: SequenceLayout;
 }
 
 type Item = ModelObject & { w: number; h: number };
@@ -148,6 +150,10 @@ const SEQ_TOP = 24,
   SEQ_GAP = 40,
   /** Room beside a message label inside its gap: an arrowhead's worth. */
   SEQ_LABEL_RUN = 16,
+  /** Room a column band leaves round its participants, and a phase tab round its label. */
+  SEQ_BAND_PAD = 16,
+  /** Room between the panel's border and what it holds. */
+  SEQ_PANEL_PAD = 20,
   /** Narrowest participant box; a short title no longer takes a full default-width box. */
   SEQ_MIN_W = 104;
 
@@ -172,48 +178,119 @@ function participantWidth(o: SceneObject, look: ResolvedAppearance) {
 function sequenced(scene: Scene): Scene {
   if (!scene.model.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
     return scene;
-  const order = scene.model.hints.find(h => h.type === 'order' && h.scope === 'root'),
+  const look = scene.look,
+    order = scene.model.hints.find(h => h.type === 'order' && h.scope === 'root'),
     listed = order?.type === 'order' ? order.ids : [],
     sized = new Set(scene.model.hints.flatMap(h => (h.type === 'size' ? [h.id] : []))),
-    parts = [
-      ...listed.flatMap(id => scene.objects.filter(o => o.id === id)),
-      ...scene.objects.filter(o => !listed.includes(o.id)),
-    ].map(o => (sized.has(o.id) ? o : { ...o, w: participantWidth(o, scene.look) })),
+    nodes = scene.objects.filter(o => o.type === 'node'),
+    groups = scene.objects.filter(o => o.type === 'group');
+  // Participants in file order (or the root `order`), each group's kept together where its first
+  // participant falls, so a group is one band.
+  const byFirst = [
+      ...listed.flatMap(id => nodes.filter(o => o.id === id)),
+      ...nodes.filter(o => !listed.includes(o.id)),
+    ],
+    ordered: SceneObject[] = [];
+  for (const o of byFirst)
+    if (!ordered.includes(o))
+      ordered.push(...(o.parent === 'root' ? [o] : byFirst.filter(x => x.parent === o.parent)));
+  const parts = ordered.map(o => (sized.has(o.id) ? o : { ...o, w: participantWidth(o, look) })),
     at = new Map(parts.map((o, i) => [o.id, i]));
-  // Centres: neighbours keep a gap, and a message between them keeps room for its label.
+  // Phases: a tab on the left holds each label, so the drawing starts past the widest.
+  const tab = scene.model.phases.length
+      ? Math.max(...scene.model.phases.map(p => measureText(p.label, look.annotation))) +
+        2 * SEQ_BAND_PAD
+      : 0,
+    top = groups.length ? look.groupHeader : 0;
+  // Centres: neighbours keep a gap, a message between them keeps room for its label, and two
+  // participants on either side of a band's edge keep room for both bands' padding.
   const centre: number[] = [];
   parts.forEach((o, i) => {
-    if (!i) return void centre.push(o.w / 2);
-    let room = parts[i - 1].w / 2 + SEQ_GAP + o.w / 2;
+    if (!i) return void centre.push(tab + SEQ_BAND_PAD + o.w / 2);
+    const edge = parts[i - 1].parent !== o.parent ? 2 * SEQ_BAND_PAD : 0;
+    let room = parts[i - 1].w / 2 + SEQ_GAP + edge + o.w / 2;
     for (const e of scene.edges) {
       const [a, b] = [at.get(e.source)!, at.get(e.target)!].sort((p, q) => p - q);
       if (e.label && b === i && a < b)
-        room = Math.max(
-          room,
-          (edgeLabelSize(e.label, scene.look, true).w + SEQ_LABEL_RUN) / (b - a),
-        );
+        room = Math.max(room, (edgeLabelSize(e.label, look, true).w + SEQ_LABEL_RUN) / (b - a));
     }
     centre.push(centre[i - 1] + room);
   });
-  let y = Math.max(0, ...parts.map(o => o.h)) - SEQ_LIFT;
-  const rows = new Map<string, number>();
+  let y = top + Math.max(0, ...parts.map(o => o.h)) - SEQ_LIFT;
+  const rows = new Map<string, number>(),
+    spans = new Map<string, { from: number; to: number }>();
   for (const e of scene.edges) {
     // The label sits above its line, so a row is the label's height and a little air.
-    y += Math.max(SEQ_ROW, e.label ? edgeLabelSize(e.label, scene.look, true).h + 8 : 0);
+    const label = e.label ? edgeLabelSize(e.label, look, true).h : 0;
+    y += Math.max(SEQ_ROW, label ? label + 8 : 0);
     rows.set(e.id, y);
-    if (e.source === e.target) y += SEQ_SELF;
+    spans.set(e.id, { from: y - Math.max(label, SEQ_ROW / 2) - 4, to: y + 8 });
+    if (e.source === e.target) {
+      y += SEQ_SELF;
+      spans.get(e.id)!.to = y + 8;
+    }
   }
   const end = y + SEQ_TOP;
+  const placed = new Map(
+    parts.map(o => {
+      const x = round(centre[at.get(o.id)!] - o.w / 2);
+      return [o.id, { x, w: o.w }] as const;
+    }),
+  );
   const objects = scene.objects.map(o => {
-    const w = parts[at.get(o.id)!].w,
-      x = round(centre[at.get(o.id)!] - w / 2);
-    return { ...o, w, x, y: 0, localX: x, localY: 0, baseX: x, baseY: 0, lifeline: end - o.h };
+    if (o.type === 'group') {
+      // A group is a column band behind its participants' lifelines, its title above them.
+      const members = parts.filter(p => p.parent === o.id).map(p => placed.get(p.id)!),
+        x = round(Math.min(...members.map(m => m.x)) - SEQ_BAND_PAD),
+        w = round(Math.max(...members.map(m => m.x + m.w)) + SEQ_BAND_PAD - x);
+      // Paler than a group's usual tint, so the bands stay quieter than the headers' accents.
+      return {
+        ...o,
+        shade: o.shade ?? 50,
+        x,
+        y: 0,
+        w,
+        h: end + SEQ_BAND_PAD,
+        localX: x,
+        localY: 0,
+        baseX: x,
+        baseY: 0,
+      };
+    }
+    const { x, w } = placed.get(o.id)!;
+    return {
+      ...o,
+      w,
+      x,
+      y: top,
+      localX: x,
+      localY: top,
+      baseX: x,
+      baseY: top,
+      lifeline: end - top - o.h,
+    };
+  });
+  const left = Math.min(0, ...objects.map(o => o.x)) - (tab ? 0 : SEQ_BAND_PAD),
+    right = Math.max(...objects.map(o => o.x + o.w)) + SEQ_BAND_PAD,
+    panel = {
+      x: left - SEQ_PANEL_PAD,
+      y: -SEQ_PANEL_PAD,
+      w: right - left + 2 * SEQ_PANEL_PAD,
+      h: end + SEQ_BAND_PAD + 2 * SEQ_PANEL_PAD,
+    };
+  const phases = scene.model.phases.flatMap(p => {
+    const runs = p.ids.flatMap(id => (spans.has(id) ? [spans.get(id)!] : []));
+    if (!runs.length) return [];
+    const from = Math.min(...runs.map(r => r.from)),
+      to = Math.max(...runs.map(r => r.to));
+    return [{ id: p.id, label: p.label, y: round(from), h: round(to - from) }];
   });
   return {
     ...scene,
     objects,
     byId: new Map(objects.map(o => [o.id, o])),
     edges: scene.edges.map(e => ({ ...e, lane: undefined, row: rows.get(e.id) })),
+    sequence: { panel, phases },
   };
 }
 

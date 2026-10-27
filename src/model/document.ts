@@ -24,6 +24,7 @@ import type {
   DiagramSettings,
   EdgeLayout,
   NodeLayout,
+  SequenceLayout,
   ShapeKind,
 } from './types';
 
@@ -352,6 +353,18 @@ export function normalize(input: unknown): Diagram {
   }
 
   out.layout.intent = LayoutLab.normalizeIntent(data.layout?.intent || {}, nodes);
+  const seq = data.layout?.sequence as SequenceLayout | undefined;
+  if (
+    seq &&
+    ['x', 'y', 'w', 'h'].every(k => finite((seq.panel as Raw | undefined)?.[k])) &&
+    Array.isArray(seq.phases)
+  )
+    out.layout.sequence = {
+      panel: { ...seq.panel },
+      phases: seq.phases
+        .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
+        .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h })),
+    };
   out.collapsed = Array.isArray(data.collapsed)
     ? data.collapsed.filter((id: string) => groups.has(id))
     : [];

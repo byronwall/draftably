@@ -2,13 +2,13 @@
  * A standalone SVG of a projected diagram for terminal and agent inspection. It draws with the
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
-import { resolveAppearance, type ResolvedAppearance } from '../model/appearance';
+import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/appearance';
 import { panelDoc } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
 import { headingMarkup, headingSize } from '../model/heading';
 import { legendMarkup, legendSize } from '../model/legend';
-import { drawnSwatch } from '../model/colors';
+import { drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
 import { cellsBandOf, isCell, isOpenCell, styleOf } from '../model/graph';
@@ -138,6 +138,8 @@ function sceneMarkup(
     routes = shared ? shared.filter(r => kept.has(r.id)) : routesOf(doc);
   const out: string[] = [],
     diff = isDiff(doc);
+  const backdrop = sequenceBackdrop(doc, look);
+  out.push(...backdrop.panel);
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,
       c = drawnSwatch(doc, look, g.id, 'group'),
@@ -204,6 +206,8 @@ function sceneMarkup(
       ),
     );
   }
+  // Phases go over the groups' column bands, faint enough that both read where they cross.
+  out.push(...backdrop.phases);
   // Sequence participants' lifelines, under the message lines.
   for (const n of vg.nodes) {
     const r = rects.get(n.id);
@@ -245,7 +249,8 @@ function sceneMarkup(
       label = nodeLabel(doc, n.id, n.title, r),
       first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
       ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text,
-      paint = `class="shape" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1.2}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}`;
+      accent = participantAccent(doc, look, n.id),
+      paint = `class="shape" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? (accent ? 1.5 : 1.2)}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}`;
     const badge = n.count ? countText(n.count) : '',
       bw = measureText(badge, look.annotation) + 12,
       bh = look.annotation.lineHeight + 4;
@@ -265,6 +270,9 @@ function sceneMarkup(
           isOpenCell(doc, n.id)
             ? `<path d="${brokenRectPath(r)}" ${paint}/>`
             : outline(style.shape, r, radius, paint, look.text),
+          accent && style.shape === 'box'
+            ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
+            : '',
           `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
             label.lines
               .map(
@@ -402,6 +410,38 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
   out.push(legendMarkup(look, legend, x0 + 40, y0 + rows * ch - 12, statuses));
   out.push('</svg>\n');
   return out.join('\n');
+}
+
+/**
+ * A sequence diagram's panel, a light surface with a border that bounds the exchange, and a row
+ * band for each phase with its label in a tab at the left edge. Drawn under everything else.
+ */
+export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
+  const seq = doc.layout.sequence;
+  if (!seq) return { panel: [], phases: [] };
+  const { panel } = seq,
+    band = swatchFor(look, 'slate', 100, 'group');
+  return {
+    panel: [
+      `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
+    ],
+    // Alternate phases are tinted, so neighbours read apart even without their divider.
+    phases: seq.phases.flatMap((ph, i) => [
+      `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${i % 2 ? 0.03 : 0.12}"/>`,
+      `<line x1="${panel.x}" x2="${panel.x + panel.w}" y1="${ph.y}" y2="${ph.y}" stroke="${band.stroke}" stroke-opacity="0.5"/>`,
+      `<text x="${panel.x + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
+    ]),
+  };
+}
+
+/** Inset of a phase label from its band's top left corner. */
+const PHASE_TAB = 8;
+
+/** A thin stripe across the top of a box, inside its rounded corners. */
+export function accentPath(r: Rect, radius: number) {
+  const k = Math.min(radius, r.w / 2, 4),
+    t = 4;
+  return `M${r.x} ${r.y + t}V${r.y + k}Q${r.x} ${r.y} ${r.x + k} ${r.y}H${r.x + r.w - k}Q${r.x + r.w} ${r.y} ${r.x + r.w} ${r.y + k}V${r.y + t}Z`;
 }
 
 export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {

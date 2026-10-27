@@ -3,7 +3,7 @@ import type { StaticScene as Scene } from '../../model/static-scene';
 import { CrossingView, EdgeView } from './EdgeView';
 import { GroupView } from './GroupView';
 import { NodeView } from './NodeView';
-import { Lifelines } from './Lifelines';
+import { Lifelines, SequenceBackdrop } from './Lifelines';
 
 /** A read-only drawing, used for comparison candidates. */
 export function StaticScene(props: {
@@ -14,6 +14,7 @@ export function StaticScene(props: {
 }) {
   return (
     <>
+      <SequenceBackdrop doc={props.scene.doc} part="panel" />
       <For each={props.scene.vg.groups}>
         {g => (
           <GroupView
@@ -24,6 +25,7 @@ export function StaticScene(props: {
           />
         )}
       </For>
+      <SequenceBackdrop doc={props.scene.doc} part="phases" />
       <Lifelines
         doc={props.scene.doc}
         ids={props.scene.vg.nodes.map(n => n.id)}

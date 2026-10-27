@@ -246,6 +246,8 @@ export interface Diagram {
     labels: Record<string, LabelLayout>;
     containers: Record<string, ContainerLayout>;
     intent: LayoutIntent;
+    /** A sequence diagram's frame and the row bands of its `phase` statements. */
+    sequence?: SequenceLayout;
   };
   styles: Record<string, NodeStyle>;
   collapsed: string[];
@@ -258,6 +260,12 @@ export interface Diagram {
 }
 
 export type NodeGeometry = Record<string, NodeLayout>;
+
+/** The panel a sequence diagram is drawn on, and a row band for each `phase`. */
+export interface SequenceLayout {
+  panel: Rect;
+  phases: Array<{ id: string; label: string; y: number; h: number }>;
+}
 
 /** Any object that can be selected: a shape, a container, or a connection. */
 export type Entity = DiagramNode | DiagramGroup | DiagramEdge;
