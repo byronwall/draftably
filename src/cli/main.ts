@@ -209,6 +209,8 @@ export async function main(argv: string[]): Promise<number> {
   }
 }
 
-void main(process.argv.slice(2)).then(code => {
-  if (code >= 0) process.exitCode = code;
-});
+// Tests import `main` and call it themselves.
+if (!process.env.VITEST)
+  void main(process.argv.slice(2)).then(code => {
+    if (code >= 0) process.exitCode = code;
+  });
