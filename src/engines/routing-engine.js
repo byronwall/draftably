@@ -331,9 +331,11 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
   const startCell = Y.indexOf(round(start.y)) * nx + X.indexOf(round(start.x)),
     endCell = Y.indexOf(round(end.y)) * nx + X.indexOf(round(end.x));
   const heap = new Heap(),
-    scores = new Map(),
-    prev = new Map(),
-    cache = new Map();
+    // Per grid state (cell * 2 + axis): best cost so far and the state it came from. Per grid
+    // edge (lower cell * 2 + axis): its cost, NaN until computed.
+    scores = new Float64Array(nx * ny * 2).fill(Infinity),
+    prev = new Int32Array(nx * ny * 2).fill(-1),
+    cache = new Float64Array(nx * ny * 2).fill(NaN);
   // Compile route geometry once per search; avoid allocating paths and segment
   // arrays for every grid edge visited by A*. Touching terminals are excluded.
   const existing = used.flatMap(r =>
@@ -352,14 +354,34 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
   // A segment farther than this from a grid edge can neither cross, share nor run parallel
   // within the edge gap, so its cost terms are zero; skipping it changes no result.
   const reach = Math.max(s.edgeGap, EPS) + 1;
-  function segmentCost(a, b) {
+  // Grid edges run along one grid line, so only what lies across that line can block or cost
+  // them. Each line's share of the obstacles, standoff boxes and route segments is gathered once,
+  // in their original order (so sums add up identically), and the exact tests below run on it.
+  const lineCache = [new Map(), new Map()];
+  function onLine(horizontal, at) {
+    const memo = lineCache[horizontal ? 0 : 1];
+    let hit = memo.get(at);
+    if (hit) return hit;
+    const lo = horizontal ? 'y' : 'x',
+      size = horizontal ? 'h' : 'w',
+      t0 = horizontal ? 'y0' : 'x0',
+      t1 = horizontal ? 'y1' : 'x1';
+    hit = {
+      obs: obs.filter(r => r[lo] - 1 < at && r[lo] + r[size] + 1 > at),
+      near: near.filter(r => r[lo] - r.band - 1 <= at && r[lo] + r[size] + r.band + 1 >= at),
+      existing: existing.filter(t => t[t1] >= at - reach && t[t0] <= at + reach),
+    };
+    memo.set(at, hit);
+    return hit;
+  }
+  function segmentCost(a, b, line) {
     let shared = 0;
     const hits = new Set(),
       x0 = Math.min(a.x, b.x) - reach,
       x1 = Math.max(a.x, b.x) + reach,
       y0 = Math.min(a.y, b.y) - reach,
       y1 = Math.max(a.y, b.y) + reach,
-      close = existing.filter(t => t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1);
+      close = line.existing.filter(t => t.x1 >= x0 && t.x0 <= x1 && t.y1 >= y0 && t.y0 <= y1);
     for (const t of close) {
       const p = intersection(a, b, t.a, t.b);
       if (!p) continue;
@@ -377,7 +399,7 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
     }
     return (
       distance(a, b) +
-      (near.length ? standoffCost([a, b], near) : 0) +
+      (near.length ? standoffCost([a, b], line.near) : 0) +
       hits.size * s.crossingPenalty +
       shared * s.sharedPenalty +
       lanes * s.parallelPenalty
@@ -386,14 +408,14 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
 
   for (const dir of [0, 1]) {
     const key = startCell * 2 + dir;
-    scores.set(key, 0);
+    scores[key] = 0;
     heap.push({ key, g: 0, f: distance(start, end) });
   }
   let result = null,
     visits = 0;
   while (heap.length && visits++ < limit) {
     const c = heap.pop();
-    if (c.g !== scores.get(c.key)) continue;
+    if (c.g !== scores[c.key]) continue;
     const cell = Math.floor(c.key / 2),
       dir = c.key % 2;
     if (cell === endCell) {
@@ -401,33 +423,35 @@ function search(start, end, obs, used, s, near = [], limit = 16000) {
       break;
     }
     const x = cell % nx,
-      y = Math.floor(cell / nx),
-      a = { x: X[x], y: Y[y] };
-    for (const [dx, dy, nd] of STEPS) {
-      const xx = x + dx,
+      y = Math.floor(cell / nx);
+    for (let i = 0; i < 4; i++) {
+      const [dx, dy, nd] = STEPS[i],
+        xx = x + dx,
         yy = y + dy;
       if (xx < 0 || yy < 0 || xx >= nx || yy >= ny) continue;
       const nc = yy * nx + xx,
         key = nc * 2 + nd,
-        b = { x: X[xx], y: Y[yy] },
         // The grid edge between two neighbouring cells: the lower cell, and which way it runs.
         ck = Math.min(cell, nc) * 2 + nd;
-      let k = cache.get(ck);
-      if (k === undefined) {
-        k = blocked(a, b, obs) ? Infinity : segmentCost(a, b);
-        cache.set(ck, k);
+      let k = cache[ck];
+      if (k !== k) {
+        const a = { x: X[x], y: Y[y] },
+          b = { x: X[xx], y: Y[yy] },
+          line = nd ? onLine(false, a.x) : onLine(true, a.y);
+        k = blocked(a, b, line.obs) ? Infinity : segmentCost(a, b, line);
+        cache[ck] = k;
       }
-      if (!Number.isFinite(k)) continue;
+      if (k === Infinity) continue;
       const g = c.g + k + (dir !== nd ? s.bendPenalty : 0);
-      if (g >= (scores.get(key) ?? Infinity) - 0.001) continue;
-      scores.set(key, g);
-      prev.set(key, c.key);
-      heap.push({ key, g, f: g + distance(b, end) });
+      if (g >= scores[key] - 0.001) continue;
+      scores[key] = g;
+      prev[key] = c.key;
+      heap.push({ key, g, f: g + Math.abs(X[xx] - end.x) + Math.abs(Y[yy] - end.y) });
     }
   }
   if (result === null) return null;
   const ps = [];
-  for (let k = result; k !== undefined; k = prev.get(k)) {
+  for (let k = result; k !== -1; k = prev[k]) {
     const cell = Math.floor(k / 2);
     ps.push({ x: X[cell % nx], y: Y[Math.floor(cell / nx)] });
   }
@@ -1127,8 +1151,8 @@ function compute(input, rawOptions = {}) {
       for (let i = 1; i < points.length; i++) {
         // The standoff makes some searches wander; a failed one gets a larger budget once.
         const part =
-          search(points[i - 1], points[i], c.obs, used, s, near) ||
-          (near.length ? search(points[i - 1], points[i], c.obs, used, s, near, 64000) : null);
+          // Its first 16000 steps are the smaller search's, so one call returns the same path.
+          search(points[i - 1], points[i], c.obs, used, s, near, near.length ? 64000 : 16000);
         if (!part) {
           ok = false;
           break;
