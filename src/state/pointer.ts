@@ -28,6 +28,7 @@ import {
 } from '../model/graph';
 import type { NodeLayout, Point, Rect, Side } from '../model/types';
 import * as actions from './actions';
+import { openLink } from './links';
 import {
   clearSelection,
   commit,
@@ -288,6 +289,7 @@ export function onPointerDown(e: PointerEvent) {
     kind = object?.kind,
     port = targetData(t, '[data-port]'),
     quickAdd = targetData(t, '[data-quick-add]'),
+    link = targetData(t, '[data-open-link]'),
     collapse = targetData(t, '[data-collapse]'),
     resize = targetData(t, '[data-resize]'),
     waypoint = targetData(t, '[data-waypoint]'),
@@ -304,6 +306,11 @@ export function onPointerDown(e: PointerEvent) {
   if (e.button === 1 || spaceHeld()) {
     e.preventDefault();
     begin('pan', e, canvas);
+    return;
+  }
+  if (link) {
+    e.preventDefault();
+    openLink(link.openLink!);
     return;
   }
   if (quickAdd) {

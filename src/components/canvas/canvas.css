@@ -177,6 +177,23 @@
   cursor: pointer;
 }
 
+/* A link's arrow is its open button: it lifts on hover of the object and fills on its own hover. */
+.link-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.node:hover .link-hit,
+.group:hover .link-hit,
+.node.selected .link-hit,
+.group.selected .link-hit {
+  fill: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.link-mark:hover .link-hit {
+  fill: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
 /* --- Connections ------------------------------------------------------------------------------ */
 
 .edge {

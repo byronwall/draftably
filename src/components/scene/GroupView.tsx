@@ -4,8 +4,10 @@ import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
 import { statusPaint } from '../../model/status';
 import { truncateText } from '../../model/fonts';
+import { groupLinkMark } from '../../model/link';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
+import { LinkMarkView } from './LinkMark';
 import { PositionBadge, ResizeHandles } from './parts';
 
 /** A container's border is quieter than a connection: thinner and partly transparent. */
@@ -93,6 +95,16 @@ export function GroupView(props: GroupViewProps) {
       >
         {title()}
       </text>
+      <Show when={group().href}>
+        {href => (
+          <LinkMarkView
+            mark={groupLinkMark(title(), look().groupTitle, band())}
+            href={href()}
+            color={color().ink}
+            interactive={props.interactive}
+          />
+        )}
+      </Show>
       <Show when={props.interactive}>
         <g class="group-collapse" data-collapse>
           <rect x={w() - 29} y={5} width={24} height={24} rx={5} fill="transparent" />

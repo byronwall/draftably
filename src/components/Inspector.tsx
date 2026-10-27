@@ -28,6 +28,7 @@ import { geometry, routesById } from '../state/scene';
 import { timelineOpen } from '../state/sculpt';
 import { setInspectorOpen } from '../state/ui';
 import { Checkbox, Field, IconButton, NumberField, SelectField } from './controls';
+import { describeLink, openLink } from '../state/links';
 
 /** Properties of the selection, or diagram-wide preferences when nothing is selected. */
 export function Inspector() {
@@ -333,6 +334,21 @@ function ObjectInspector(props: { id: string }) {
           value={object().title}
           onCommit={v => edit('Edit title', d => edits.setTitle(d, props.id, v))}
         />
+        <Show when={object().href}>
+          {href => (
+            <div class="field link-field">
+              <span class="field-label">Link</span>
+              <div class="link-row">
+                <span class="link-target" title={describeLink(href())}>
+                  {href()}
+                </span>
+                <button type="button" class="button small" onClick={() => openLink(href())}>
+                  Open
+                </button>
+              </div>
+            </div>
+          )}
+        </Show>
         <Field label="Color">
           <Swatches selected={style().color} shade={style().shade} group={container()} />
         </Field>

@@ -75,7 +75,13 @@ still says what it shows and why it matters. Like the legend, they never move an
 without either draws no heading.
 
 **Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
-and exports, to a source file, a URL or anything else the reader should open. `count=42` on a node
+and exports, to a source file, a URL or anything else the reader should open. A linked object
+draws a small ↗ mark at its top-right corner (beside a container's title). In the viewer the mark
+is the open button, and the Inspector shows the link with an **Open** button; a click elsewhere on
+the object still selects it. The link opens as written: a URL (`https://…`, a GitHub link) in a
+new tab, a `.draft` in the viewer, and a file path in VS Code. A file path may end in `:42` or
+`:42:5` to open at that line and column. A relative path starts at the diagram's git root, or its
+folder outside a repository. `count=42` on a node
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds.
 

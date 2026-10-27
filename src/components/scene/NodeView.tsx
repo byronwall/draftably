@@ -7,8 +7,10 @@ import { drawnSwatch } from '../../model/colors';
 import { statusPaint } from '../../model/status';
 import { countText, STACK_OFFSETS } from '../../model/stack';
 import { measureText } from '../../model/fonts';
+import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
+import { LinkMarkView } from './LinkMark';
 import { PositionBadge, ResizeHandles, SceneText } from './parts';
 
 const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
@@ -42,6 +44,9 @@ export function NodeView(props: NodeViewProps) {
       r = props.rect;
     return shape === 'icon' || shape === 'circle' ? (r.h + 8) / 2 : shape === 'pill' ? r.h / 2 : 14;
   };
+  /** Width of the `count` badge on the top-right corner, which the link mark steps left of. */
+  const badgeWidth = () =>
+    node().count ? measureText(countText(node().count!), look().annotation) + 12 : 0;
   const clipId = () => `${props.idPrefix ?? ''}image-clip-${props.id}`;
 
   const shapeAttrs = () => ({
@@ -193,6 +198,16 @@ export function NodeView(props: NodeViewProps) {
             </g>
           );
         }}
+      </Show>
+      <Show when={node().href}>
+        {href => (
+          <LinkMarkView
+            mark={linkMark(style().shape, props.rect.w, props.rect.h, badgeWidth())}
+            href={href()}
+            color={linkMark(style().shape, props.rect.w, props.rect.h).inside ? color().ink : look().muted}
+            interactive={props.interactive}
+          />
+        )}
       </Show>
       <Show when={props.interactive}>
         <PositionBadge
