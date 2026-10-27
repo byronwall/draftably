@@ -507,6 +507,27 @@
   cursor: pointer;
 }
 
+/* Scroll zooms and a drag pans every panel together; the page itself never scrolls. */
+.state-grid {
+  touch-action: none;
+  overscroll-behavior: contain;
+  user-select: none;
+}
+
+.state-grid-fit {
+  position: absolute;
+  top: 64px;
+  right: 32px;
+  z-index: 23;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
 .diagram-legend {
   position: absolute;
   bottom: 16px;
