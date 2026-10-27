@@ -1,0 +1,301 @@
+{
+  "schema_version": "0.5.0",
+  "initiative": {
+    "title": "Diagram structure: soft groups, swim lanes and sequence",
+    "slug": "diagram-structure",
+    "scale": "capability",
+    "current_phase": "plan",
+    "last_updated": "2026-10-26",
+    "summary": "Let groups say 'belongs together' without driving layout (frame=soft), add a lanes layout over root groups, and hold sequence diagrams for a later yes.",
+    "status": "planned",
+    "next_action": "Byron answers the product questions; then M1 (soft groups) after the #125 fix lands."
+  },
+  "artifacts": {
+    "intent_brief": {
+      "path": "intent-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "brainstorm": {
+      "path": "brainstorm.md",
+      "status": "not-requested",
+      "updated_at": null
+    },
+    "shape_brief": {
+      "path": "shape-brief.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "implementation_plan": {
+      "path": "implementation-plan.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    },
+    "options": {
+      "path": "options.md",
+      "status": "current",
+      "updated_at": "2026-10-26"
+    }
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "type": "transcript",
+      "location": "Byron voice memo, 2026-10-26, relayed by orchestrator session",
+      "anchor": "containers drive layout; fewer containers; Mermaid types worth recovering: swim lanes, sequence",
+      "authority": "user"
+    },
+    {
+      "id": "S2",
+      "type": "repo",
+      "location": "https://github.com/byronwall/draftably/issues/125",
+      "anchor": "layered layout places a multi-rank group as one block",
+      "authority": "user"
+    },
+    {
+      "id": "S3",
+      "type": "repo",
+      "location": "https://github.com/byronwall/draftably/issues/124",
+      "anchor": "draftably vary to generate, rank and apply layout variants",
+      "authority": "user"
+    },
+    {
+      "id": "S4",
+      "type": "repo",
+      "location": "src/dsl/compile.ts",
+      "anchor": "layoutPass, pairsIn/immediate, packed, rankLayers, engineArrangement",
+      "authority": "repo"
+    },
+    {
+      "id": "S5",
+      "type": "repo",
+      "location": "src/engines/layout-engine.js",
+      "anchor": "arrange(activeIds, parentId): one sibling set per container",
+      "authority": "repo"
+    },
+    {
+      "id": "S6",
+      "type": "doc",
+      "location": "docs/intent/diagram-quality/FEEL.md",
+      "anchor": "Framing; Lines and containers; Placement",
+      "authority": "user"
+    },
+    {
+      "id": "S7",
+      "type": "repo",
+      "location": "tmp/flat/measure.sh (planning run, not committed)",
+      "anchor": "root bounding box with and without groups for 16 grouped examples",
+      "authority": "inferred"
+    },
+    {
+      "id": "S8",
+      "type": "doc",
+      "location": "Mermaid, PlantUML and BPMN 2.0 public docs (agent knowledge, not re-fetched)",
+      "anchor": "sequenceDiagram; activity |Lane|; pools and lanes",
+      "authority": "inferred"
+    }
+  ],
+  "intent": {
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Containers currently drive layout and make diagrams bigger than their content needs.",
+        "kind": "problem",
+        "sources": ["S1", "S2", "S7"],
+        "confidence": "high"
+      },
+      {
+        "id": "C2",
+        "statement": "Byron wants to say nodes belong together without forcing a frame, so layout keeps freedom to move them.",
+        "kind": "goal",
+        "sources": ["S1"],
+        "confidence": "high"
+      },
+      {
+        "id": "C3",
+        "statement": "Removing frames entirely loses meaning (labels, color, clustering); the relation must still read.",
+        "kind": "constraint",
+        "sources": ["S7", "S6"],
+        "confidence": "medium"
+      },
+      {
+        "id": "C4",
+        "statement": "Recover a few Mermaid diagram types, probably swim lanes and sequence, as more opinionated grid forms.",
+        "kind": "goal",
+        "sources": ["S1"],
+        "confidence": "medium"
+      },
+      {
+        "id": "C5",
+        "statement": "vary could offer a fewer-containers variant.",
+        "kind": "idea",
+        "sources": ["S3"],
+        "confidence": "medium"
+      }
+    ],
+    "themes": ["soft grouping", "opinionated diagram forms"],
+    "conflicts": [],
+    "human_questions": []
+  },
+  "brainstorm": {
+    "status": "not-requested",
+    "requested_count": 7,
+    "options": [],
+    "selected_option": null
+  },
+  "shape": {
+    "status": "current",
+    "appetite": "Four to five PRs for soft groups and lanes; sequence is a separate decision.",
+    "problem": "A group is the only way to relate nodes, and it pads, adds a header and ranks as one block.",
+    "recommended_shape": "frame=box|soft|none on group; soft members use their nearest framed ancestor as layout parent and draw on a tint; then layout root lanes over root groups with global ranks.",
+    "options_scored": {
+      "dimensions": [
+        "layout freedom",
+        "keeps reading",
+        "keeps label/color/marks",
+        "one concept",
+        "vary one-line edit",
+        "low risk"
+      ],
+      "A_frame_soft": [8, 8, 9, 9, 10, 6],
+      "B_together": [9, 4, 2, 5, 4, 6],
+      "C_hull_only": [9, 6, 3, 6, 6, 7],
+      "choice": "A with C's drawing"
+    },
+    "success_moves": [
+      "Use a layout-parent map so soft groups need no engine change.",
+      "Keep frame=box the default so every existing file is byte-identical.",
+      "Prove with the #125 repro and the 16 grouped examples before adding cohesion.",
+      "Build lanes on the same global-rank rule instead of a new engine.",
+      "Hold sequence until lanes prove the 'opinionated form as a layout recipe' approach."
+    ],
+    "first_proof": {
+      "question": "Does a soft group shrink drawings without its tint covering non-members?",
+      "artifact": "Area and soft-overlap table for the #125 repro and 16 grouped examples, with every group frame=soft.",
+      "decision_rule": "Most files shrink and few overlap: ship the bounding-box tint. Overlaps common: do M2 cohesion and union hull before the tint ships."
+    },
+    "rabbit_holes": [
+      "Hull shapes (concave, rounded unions) beyond a union of padded boxes.",
+      "Viewer drag and collapse for soft groups.",
+      "Sequence fragments and activations."
+    ],
+    "open_decisions": [
+      "Tint look: tint plus label, dotted outline, or nothing.",
+      "Whether the agent skill should prefer soft groups for new files."
+    ]
+  },
+  "implementation": {
+    "status": "planned",
+    "repository_snapshot": {
+      "root": "diagram-studio",
+      "revision": "b39be5b",
+      "worktree_status": "clean",
+      "subsystems": [
+        "src/dsl/syntax.ts",
+        "src/dsl/compile.ts",
+        "src/dsl/project.ts",
+        "src/engines/layout-engine.js",
+        "src/engines/routing-engine.js",
+        "src/components/scene",
+        "src/cli/svg.ts",
+        "src/lib/svg-export.ts",
+        "skills/draftably/SKILL.md",
+        "docs/DSL.md"
+      ],
+      "test_commands": ["pnpm check:fast", "pnpm test:engines", "pnpm check"],
+      "deployment_surfaces": ["npm package via changesets"]
+    },
+    "dependencies": [
+      {
+        "id": "D1",
+        "name": "#125 fix in compile.ts ranking",
+        "first_proof_role": "absent; M1 builds on it after it lands",
+        "seam": "layoutPass / rankLayers"
+      },
+      {
+        "id": "D2",
+        "name": "#124 vary command",
+        "first_proof_role": "absent; only M4 needs it",
+        "seam": "vary variant list"
+      }
+    ],
+    "fast_local_loop": {
+      "command": "pnpm check:fast && pnpm draftably inspect tmp/repro-125.draft --svg > tmp/repro-125.svg"
+    },
+    "milestones": [
+      {
+        "id": "m1",
+        "title": "Soft groups draw a tint and stop driving layout",
+        "status": "planned",
+        "done_when": "#125 repro with frame=soft matches no-group ranks; frame=box files byte-identical; proof table in PR.",
+        "outcome": "Soft groups stop ranking as one block and draw as a tint.",
+        "dependencies_introduced": [],
+        "proof": "#125 repro ranks match the no-group file; area/overlap table over 16 examples.",
+        "valid_intermediate_state": "frame=box files draw byte-identical; soft is opt-in.",
+        "rollback": "Revert the PR; no file uses frame= yet."
+      },
+      {
+        "id": "m2",
+        "title": "Soft members stay together",
+        "status": "planned",
+        "done_when": "No soft-overlap on bundled examples with all groups soft.",
+        "outcome": "Soft members stay contiguous and the tint covers only members.",
+        "dependencies_introduced": [],
+        "proof": "soft-overlap count is zero on bundled examples with all groups soft.",
+        "valid_intermediate_state": "M1 behavior plus cohesion; box files unchanged.",
+        "rollback": "Revert; M1 tint still works with overlap notes."
+      },
+      {
+        "id": "m3",
+        "title": "Swim lanes",
+        "status": "planned",
+        "done_when": "Example lanes file places every node at its global rank in its own band.",
+        "outcome": "A process with roles draws as swim lanes at global ranks.",
+        "dependencies_introduced": [],
+        "proof": "Lanes example screenshot; rank-column test.",
+        "valid_intermediate_state": "New recipe only; other layouts unchanged.",
+        "rollback": "Revert; files without lanes are unaffected."
+      },
+      {
+        "id": "m4",
+        "title": "Fewer containers in vary",
+        "status": "planned",
+        "done_when": "vary lists a softened variant for kubernetes-cluster with smaller area and no overlap.",
+        "outcome": "vary offers a fewer-containers variant.",
+        "dependencies_introduced": ["D2"],
+        "proof": "vary on kubernetes-cluster lists a smaller softened variant.",
+        "valid_intermediate_state": "vary works with or without the variant.",
+        "rollback": "Drop the variant from the list.",
+        "note": "Blocked until #124 adds vary."
+      },
+      {
+        "id": "m5",
+        "title": "Sequence diagrams, messages only",
+        "status": "planned",
+        "done_when": "Six-message login sequence draws in file order with lifelines; +edge shows in place.",
+        "outcome": "Interactions draw as sequence diagrams with messages in file order.",
+        "dependencies_introduced": [],
+        "proof": "Six-message login sequence screenshot; +edge shows in place.",
+        "valid_intermediate_state": "New recipe only; other layouts unchanged.",
+        "rollback": "Revert; files without sequence are unaffected.",
+        "note": "Needs Byron yes before work starts."
+      }
+    ],
+    "cut_line": [
+      "together statement",
+      "viewer editing for soft groups and lanes",
+      "free nested groups in lanes",
+      "sequence fragments, activations, notes",
+      "other Mermaid types"
+    ],
+    "open_decisions": ["Whether m3 reuses the #125 fix's global ranking."]
+  },
+  "history": [
+    {
+      "date": "2026-10-26",
+      "event": "Initiative created from voice memo; intent, shape and plan written in one planning run.",
+      "evidence": "S1-S8"
+    }
+  ],
+  "closure": null
+}
