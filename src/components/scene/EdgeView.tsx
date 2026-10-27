@@ -1,5 +1,5 @@
 import { For, Show } from 'solid-js';
-import { findEdge, findNode } from '../../model/graph';
+import { findEdge, findObject } from '../../model/graph';
 import type { DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
 import { edgeLabelLines, edgeLabelType } from '../../model/labels';
@@ -41,7 +41,7 @@ export function EdgeView(props: EdgeViewProps) {
       : [];
   const description = () => {
     const e = edge();
-    return `${findNode(props.doc, e.from)?.title} to ${findNode(props.doc, e.to)?.title}${e.label ? ', ' + e.label : ''}`;
+    return `${findObject(props.doc, e.from)?.title} to ${findObject(props.doc, e.to)?.title}${e.label ? ', ' + e.label : ''}`;
   };
 
   return (
