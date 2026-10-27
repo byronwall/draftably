@@ -13,6 +13,12 @@ export const GROUP_HEADER = 48;
  */
 export const GROUP_TITLE_CHROME = 33 + 64;
 
+/** Room a soft group's tint leaves round its members, and above them for its label. */
+export const SOFT_PAD = 10;
+export const SOFT_LABEL = 18;
+/** Where a soft group's label sits in its tint: in the annotation face, at the top left. */
+export const SOFT_TITLE = { x: SOFT_PAD, y: SOFT_PAD + 2 };
+
 /** Top-left of a group's content area, which its children's local positions are relative to. */
 export const contentOrigin = (group: { x: number; y: number }, header = GROUP_HEADER) => ({
   x: group.x + GROUP_INSET,

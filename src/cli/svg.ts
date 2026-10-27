@@ -29,6 +29,7 @@ import {
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
+import { SOFT_PAD, SOFT_TITLE } from '../dsl/frame';
 import { fontFaceCss } from '../lib/font-data';
 
 const esc = (s: string) =>
@@ -117,6 +118,23 @@ function sceneMarkup(
       p = statusPaint(look, styleOf(doc, g.id).status, styleOf(doc, g.id).spot),
       band = look.groupHeader / 2 - 7,
       title = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle);
+    if (g.frame === 'none') continue;
+    if (g.frame === 'soft') {
+      out.push(
+        ...linked(
+          g.href,
+          g.title,
+          [
+            `<g data-id="${esc(g.id)}"${fade(p)}>`,
+            `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}"${p.stroke ? ` stroke="${c.stroke}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}` : ''}/>`,
+            `<text x="${r.x + SOFT_TITLE.x}" y="${r.y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(truncateText(g.title, Math.max(40, r.w - 2 * SOFT_PAD), look.annotation))}</text>`,
+            '</g>',
+          ],
+          opts,
+        ),
+      );
+      continue;
+    }
     out.push(
       ...linked(
         g.href,

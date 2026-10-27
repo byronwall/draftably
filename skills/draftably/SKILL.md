@@ -77,7 +77,7 @@ layout services row gap=56
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                       |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"` |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=` link, `count=N` stack            |
-| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`                                                                       |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                              |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                     |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                              |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                        |
@@ -140,6 +140,12 @@ content area.
 
 - Prefer structure over coordinates: groups, `layout` recipes, `order` and `align` survive
   later edits; `pin` and `nudge` do not adapt when content grows.
+- A boxed group pads its members and moves as one block. When a group only says "these belong
+  together" and its frame makes the drawing bigger or pushes lines across it, write
+  `frame=soft`: members lay out with the container around the group and draw on a light tint.
+  `frame=none` keeps the membership (and `color=auto`) but draws nothing. A soft group takes no
+  `layout`, `near` or `pin` of its own. `check` reports `soft-overlap` when its tint covers an
+  object outside it.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
 - Use color to mean something, not for decoration:

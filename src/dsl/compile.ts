@@ -17,10 +17,18 @@ import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
-import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
+import {
+  GROUP_HEADER,
+  GROUP_INSET,
+  GROUP_TITLE_CHROME,
+  SOFT_LABEL,
+  SOFT_PAD,
+  contentOrigin,
+} from './frame';
 import { projectScene } from './project';
 import {
   DslError,
+  layoutParent,
   parseModel,
   type Hint,
   type Model,
@@ -87,8 +95,9 @@ type Pos = { x: number; y: number };
 const round = (n: number) => Math.round(n);
 
 export async function compile(source: string): Promise<Scene> {
-  const m = parseModel(source);
-  return layoutModel(m, await engineArrangement(m));
+  const m = parseModel(source),
+    flat = dissolved(m);
+  return withSoftGroups(layoutModel(flat, await engineArrangement(flat)), m);
 }
 
 /**
@@ -96,7 +105,97 @@ export async function compile(source: string): Promise<Scene> {
  * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
  */
 export function checkSource(source: string): Scene {
-  return layoutModel(parseModel(source));
+  const m = parseModel(source);
+  return withSoftGroups(layoutModel(dissolved(m)), m);
+}
+
+/**
+ * The model layout sees: soft and frameless groups removed, and their members handed to the
+ * nearest framed container, so each member ranks with its own connections.
+ */
+function dissolved(m: Model): Model {
+  if (!m.objects.some(o => o.frame)) return m;
+  const by = new Map(m.objects.map(o => [o.id, o]));
+  return {
+    ...m,
+    objects: m.objects.filter(o => !o.frame).map(o => ({ ...o, parent: layoutParent(by, o.id) })),
+  };
+}
+
+/**
+ * Put soft and frameless groups back into a scene laid out without them. Members keep their
+ * place and get their declared parent back; each group is drawn round its members, innermost
+ * first, and a soft tint that covers another object is noted.
+ */
+function withSoftGroups(scene: Scene, m: Model): Scene {
+  const soft = m.objects.filter(o => o.frame);
+  if (!soft.length) return scene;
+  const by = new Map(m.objects.map(o => [o.id, o])),
+    header = scene.look.groupHeader,
+    placed = new Map(
+      scene.objects.map(o => [o.id, { ...o, parent: by.get(o.id)!.parent }] as const),
+    );
+  const within = (id: string, group: string) => {
+    for (let p = by.get(id)?.parent; p && p !== 'root'; p = by.get(p)?.parent)
+      if (p === group) return true;
+    return false;
+  };
+  const depthOf = (id: string) => {
+    let d = 0;
+    for (let p = by.get(id)!.parent; p !== 'root'; p = by.get(p)!.parent) d++;
+    return d;
+  };
+  for (const g of [...soft].sort((a, b) => depthOf(b.id) - depthOf(a.id))) {
+    const members = [...placed.values()].filter(o => within(o.id, g.id)),
+      frame = placed.get(layoutParent(by, g.id)),
+      origin = frame ? contentOrigin(frame, header) : { x: 0, y: 0 },
+      edge = (f: (o: SceneObject) => number, pick: (...n: number[]) => number, pad: number) =>
+        members.length ? pick(...members.map(f)) + pad : 0;
+    const x0 = members.length ? edge(o => o.x, Math.min, -SOFT_PAD) : origin.x,
+      y0 = members.length ? edge(o => o.y, Math.min, -SOFT_PAD - SOFT_LABEL) : origin.y,
+      x1 = members.length ? edge(o => o.x + o.w, Math.max, SOFT_PAD) : origin.x,
+      y1 = members.length ? edge(o => o.y + o.h, Math.max, SOFT_PAD) : origin.y,
+      local = { x: x0 - origin.x, y: y0 - origin.y };
+    placed.set(g.id, {
+      ...g,
+      x: x0,
+      y: y0,
+      w: x1 - x0,
+      h: y1 - y0,
+      localX: local.x,
+      localY: local.y,
+      baseX: local.x,
+      baseY: local.y,
+      depth: depthOf(g.id),
+    });
+  }
+  const diagnostics = [...scene.diagnostics];
+  for (const g of soft) {
+    const t = placed.get(g.id)!;
+    if (g.frame !== 'soft' || !t.w) continue;
+    const covered = [...placed.values()].filter(
+      o =>
+        o.id !== g.id &&
+        !o.frame &&
+        !within(o.id, g.id) &&
+        !within(g.id, o.id) &&
+        o.x < t.x + t.w &&
+        o.x + o.w > t.x &&
+        o.y < t.y + t.h &&
+        o.y + o.h > t.y,
+    );
+    if (covered.length)
+      diagnostics.push({
+        level: 'warning',
+        code: 'soft-overlap',
+        message: `${g.id}'s tint covers ${covered.map(o => o.id).join(', ')}, which ${covered.length > 1 ? 'are' : 'is'} not in it. Place its members together, or use frame=box.`,
+        line: g.line,
+        ids: [g.id, ...covered.map(o => o.id)],
+      });
+  }
+  const index = new Map(m.objects.map((o, i) => [o.id, i])),
+    objects = [...placed.values()].sort((a, b) => index.get(a.id)! - index.get(b.id)!);
+  return { ...scene, model: m, objects, byId: new Map(objects.map(o => [o.id, o])), diagnostics };
 }
 
 /** More accent families than this reads as decoration rather than meaning. */

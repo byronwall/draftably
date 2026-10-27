@@ -34,6 +34,8 @@ export interface DiagramGroup {
   /** A link to open from exported drawings. */
   href?: string;
   parentId?: string;
+  /** `soft` draws a tint behind the members instead of a frame; `none` draws nothing. */
+  frame?: 'soft' | 'none';
 }
 
 export interface DiagramEdge {

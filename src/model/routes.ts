@@ -435,15 +435,18 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Re
   const look = resolveAppearance(doc.appearance);
   return {
     nodes: vg.nodes.map(n => ({ ...n, ...rects.get(n.id)!, shape: styleOf(doc, n.id).shape })),
-    groups: vg.groups.map(g => {
-      const r = rects.get(g.id)!;
-      return {
-        ...g,
-        ...r,
-        collapsed: isCollapsed(doc, g.id),
-        titleWidth: titleWidth(g.title, r.w, look),
-      };
-    }),
+    // A soft or frameless group has no border for a line to cross or run along.
+    groups: vg.groups
+      .filter(g => !g.frame)
+      .map(g => {
+        const r = rects.get(g.id)!;
+        return {
+          ...g,
+          ...r,
+          collapsed: isCollapsed(doc, g.id),
+          titleWidth: titleWidth(g.title, r.w, look),
+        };
+      }),
     edges: vg.edges.map(e => ({
       ...e,
       from: e.a,
@@ -464,6 +467,7 @@ export function drawRoutes(
     borders: Rect[] = [];
   for (const g of vg.groups) {
     const r = rects.get(g.id)!;
+    if (g.frame) continue;
     if (isCollapsed(doc, g.id)) {
       obstacles.push(r);
       continue;

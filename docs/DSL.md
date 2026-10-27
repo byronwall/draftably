@@ -39,7 +39,7 @@ and groups. References may point to later lines.
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                      |
 | `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=`, `count=`.                                              |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`. See [Soft groups](#soft-groups).                                             |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                          |
 | `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors). |
@@ -107,6 +107,29 @@ same way. It never changes the link.
 `count=42` on a node
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds.
+
+## Soft groups
+
+A boxed group pads its members, reserves a title band and takes one place in its container's
+layout, so its members move as one block. `frame=soft` keeps the group but not the box:
+
+```text
+group monitoring "namespace: monitoring" color=amber frame=soft
+node prometheus "prometheus" in=monitoring
+node grafana "grafana" in=monitoring
+```
+
+A soft group's members are laid out with the nearest boxed container around the group (or the
+root), each ranked by its own connections, as if the group line were not there. The drawing then
+puts a light tint of the group's color behind them, with its title small at the top left. Lines
+cross a tint freely. `frame=none` lays out the same way and draws nothing; the members still
+belong to the group, so `color=auto` still inherits its family. `frame=box` is the default.
+
+A soft group has no layout or position of its own: `layout`, `order`, `near`, `align`, `nudge`,
+`stay` and `pin` on it are errors. Place its members instead; refinements between a member and
+an object beside the group work, since they share a container. The tint fits round wherever the
+members land, so when it covers an object outside the group, `check` reports `soft-overlap` on
+the group's line.
 
 ## Change marks
 
