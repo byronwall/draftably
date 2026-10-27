@@ -229,6 +229,8 @@ export interface ModelEdge {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
+  constraint?: false;
   line: number;
 }
 
@@ -279,6 +281,17 @@ export type Hint =
   | { type: 'size'; id: string; width: number; height?: number; line: number };
 
 export type Strength = 'prefer' | 'required';
+
+/**
+ * What `near id ref` places against: `ref` itself when it is a sibling of `id`, else the group
+ * around `ref` that is `id`'s sibling. Undefined when `ref` is not inside one.
+ */
+export function nearAnchor(by: Map<string, ModelObject>, id: string, ref: string) {
+  const scope = layoutParent(by, id);
+  for (let at: string | undefined = ref; at && at !== 'root'; at = layoutParent(by, at))
+    if (layoutParent(by, at) === scope) return at === id ? undefined : at;
+  return undefined;
+}
 export type NearSide = 'right' | 'left' | 'above' | 'below';
 export type HintType = Hint['type'];
 export const POSITION_HINTS: HintType[] = ['near', 'nudge', 'stay', 'pin'];
@@ -627,7 +640,7 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'importance']);
+        allow(['kind', 'from', 'to', 'was', 'importance', 'constraint']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -644,6 +657,9 @@ export function parseModel(source: string | SourceDoc): Model {
           dashed: choice('kind', 'sync', ['sync', 'async', 'data']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
+          ...(choice('constraint', 'true', ['true', 'false']) === 'false'
+            ? { constraint: false as const }
+            : {}),
           ...(s.mark ? { status } : {}),
           ...was(),
           line,
@@ -952,7 +968,12 @@ function validateReferences(m: Model) {
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
       exists(end, e.line);
-      assert(by.get(end)!.type === 'node', `Connections join nodes; ${end} is a group.`, e.line);
+      const members = m.objects.filter(o => o.type === 'node' && o.parent === end).map(o => o.id);
+      assert(
+        by.get(end)!.type === 'node',
+        `Connections join nodes; ${end} is a group.${members.length ? ` Connect to one of its members instead: ${members.slice(0, 4).join(', ')}.` : ''}`,
+        e.line,
+      );
     }
   const edgeIds = new Set(m.edges.map(e => e.id));
   for (const s of m.appearance.states ?? [])
@@ -1028,9 +1049,11 @@ function validateReferences(m: Model) {
       if (h.type === 'near') {
         exists(h.ref, h.line);
         framed(h.ref, h.line, 'position');
+        // The reference may sit inside a sibling group: compile places against that group,
+        // lined up with the reference.
         assert(
-          parentOf(h.ref) === parentOf(h.id),
-          'Relative placement is between siblings. Place the containing groups relative to one another instead.',
+          nearAnchor(by, h.id, h.ref) !== undefined,
+          `Relative placement is between siblings, or with something inside a sibling group. ${h.id} is inside ${parentOf(h.id)}; place ${parentOf(h.id)} relative to ${h.ref} instead.`,
           h.line,
         );
       }

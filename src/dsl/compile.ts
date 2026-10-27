@@ -38,6 +38,7 @@ import { projectScene } from './project';
 import {
   DslError,
   layoutParent,
+  nearAnchor,
   parseModel,
   POSITION_HINTS,
   type Hint,
@@ -521,7 +522,10 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
   // names; only the file steers layout.
   const alias = new Map(authoredOrder(m).map((id, i) => [id, `o${String(i).padStart(6, '0')}`])),
     original = new Map([...alias].map(([id, a]) => [a, id]));
+  const loose = new Set(m.edges.filter(e => e.constraint === false).map(e => e.id));
   let doc = renamed(projectScene(plain), alias);
+  // `constraint=false` edges are drawn, but the engines neither rank nor pull by them.
+  doc = { ...doc, graph: { ...doc.graph, edges: doc.graph.edges.filter(e => !loose.has(e.id)) } };
   for (const l of engines) {
     const settings = LayoutLab.settings({
       ...doc.settings,
@@ -2073,6 +2077,30 @@ const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SL
 export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false): Scene {
   // The engines' input (`slots`) has no channels: they are planned on the final arrangement.
   if (slots) return layoutPass(m, arranged, true);
+  // A `near` whose reference sits inside a sibling group places against that group, lined up
+  // with the reference as the drawing without those lines has it.
+  const by = new Map(m.objects.map(o => [o.id, o])),
+    across = m.hints.filter(
+      (h): h is Extract<Hint, { type: 'near' }> =>
+        h.type === 'near' && nearAnchor(by, h.id, h.ref) !== h.ref,
+    );
+  if (across.length) {
+    const first = layoutModel(
+      { ...m, hints: m.hints.filter(h => !across.includes(h as never)) },
+      arranged,
+    );
+    const centre = (id: string, axis: 'x' | 'y') => {
+      const o = first.byId.get(id)!;
+      return axis === 'x' ? o.x + o.w / 2 : o.y + o.h / 2;
+    };
+    const hints = m.hints.map(h => {
+      if (!across.includes(h as never) || h.type !== 'near') return h;
+      const anchor = nearAnchor(by, h.id, h.ref)!,
+        axis = h.side === 'left' || h.side === 'right' ? 'y' : 'x';
+      return { ...h, ref: anchor, offset: h.offset + centre(h.ref, axis) - centre(anchor, axis) };
+    });
+    return layoutModel({ ...m, hints }, arranged);
+  }
   // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
   // changes the room left for lines elsewhere; then lay out with them.
   const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
@@ -2107,6 +2135,8 @@ function layoutPass(
   channels?: Map<string, Channel>,
   packFold?: PackFold,
 ): Scene {
+  /** Edges that rank and order objects: all but `constraint=false`, which are only drawn. */
+  const ranking = m.edges.filter(e => e.constraint !== false);
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
@@ -2144,7 +2174,7 @@ function layoutPass(
   // A decision: a diamond, or any node whose branches are labelled, with two or more ways out.
   const decisionsIn = (scope: string) => {
     const outs = new Map<string, ModelEdge[]>();
-    for (const e of m.edges) {
+    for (const e of ranking) {
       const a = immediate(e.source, scope);
       if (a && immediate(e.target, scope) !== a) outs.set(a, [...(outs.get(a) ?? []), e]);
     }
@@ -2161,7 +2191,7 @@ function layoutPass(
 
   // Scopes an engine arranges that hold groups, and every group inside one, are packed tight.
   const pairsIn = (scope: string) =>
-    m.edges
+    ranking
       .map(e => [immediate(e.source, scope), immediate(e.target, scope)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
   /**
@@ -2178,7 +2208,7 @@ function layoutPass(
       rank = new Map(
         rankLayers(
           inner,
-          m.edges.filter(e => within(e.source) && within(e.target)).map(e => [e.source, e.target]),
+          ranking.filter(e => within(e.source) && within(e.target)).map(e => [e.source, e.target]),
         ).flatMap((layer, i) => layer.map(id => [id, i] as const)),
       );
     const entry = new Map(ids.map(id => [id, Infinity]));
@@ -2269,7 +2299,7 @@ function layoutPass(
       while (o && !laneOf.has(o.id)) o = byId.get(o.parent);
       return o?.id;
     };
-    const pairs = m.edges
+    const pairs = ranking
       .map(e => [owner(e.source), owner(e.target)] as const)
       .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
     const layers = ids.length ? byBarycenter(rankLayers(ids, pairs), pairs) : [];

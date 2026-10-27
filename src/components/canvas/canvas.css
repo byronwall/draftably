@@ -119,25 +119,20 @@
 }
 
 .position-badge {
-  pointer-events: none;
+  opacity: 0.6;
 }
 
-.position-badge rect {
-  fill: var(--surface);
-  stroke: var(--line);
+/* Only the glyph's square takes the pointer, for its tooltip; drags still start on the object. */
+.position-badge .position-hit {
+  fill: transparent;
 }
 
-.position-badge text {
-  fill: var(--muted);
-  font: 600 9px var(--font);
+.position-badge.pinned {
+  opacity: 0.9;
 }
 
-.position-badge.pinned text {
-  fill: var(--accent);
-}
-
-.group .position-badge rect {
-  stroke: none;
+.position-badge.pinned svg {
+  fill: currentColor;
 }
 
 /* --- Containers ------------------------------------------------------------------------------- */

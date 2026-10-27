@@ -13,6 +13,7 @@ import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { renderSvg } from './svg';
+import { draw, FITS, qualityNotes, type Fit, type Metrics } from './variants';
 import { cliVersion } from './skill';
 import { svgSize } from './png';
 import { linkNotes, svgHref } from './links';
@@ -25,6 +26,9 @@ Commands:
   check <file>…             Report source errors, layout diagnostics and drawing conflicts
        [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
        [--quiet]            errors. Several files or a folder check each .draft in turn.
+       [--metrics]          --metrics also measures the drawing as vary does (size, aspect,
+       [--fit <shape>]      crossings, bends, line length) and warns on crossings, detours,
+                            stranded nodes and an extreme aspect, or one far from --fit.
                             --hints adds how far each refinement moved its target; --quiet
                             leaves out info notes.
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
@@ -32,7 +36,8 @@ Commands:
                             way, and stays the arrangement outgrew. Lists them on stderr.
   inspect <file> [--json]   Print canonical node and route geometry. --json prints it on one
        [--hints]            line; with --hints it adds the unrefined position (raw) of every
-                            node a refinement moved.
+       [--metrics]          node a refinement moved. --metrics adds a metrics object with
+                            what vary measures: size, crossings, bends, length, warnings.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
        [--state <id>]       Draw it in one emphasis state (also with --png).
        [--states]           Draw every emphasis state as its own aligned panel.
@@ -152,6 +157,18 @@ function parseBudget(value: string | undefined) {
   return Number(m[1]) * { ms: 1, s: 1000, m: 60_000 }[m[2] ?? 's']!;
 }
 
+/** `--fit <shape>`, checked. */
+function fitOption(args: string[]) {
+  const fit = option(args, '--fit');
+  if (fit !== undefined && !(fit in FITS))
+    throw new UsageError(`--fit must be ${Object.keys(FITS).join(', ')}.`);
+  return fit as Fit | undefined;
+}
+
+/** One line of what `vary` measures: size and aspect, crossings, bends, line length, warnings. */
+const metricsLine = (m: Omit<Metrics, 'moved'>) =>
+  `Metrics: ${m.width}×${m.height} (aspect ${(m.width / m.height).toFixed(2)}), ${m.crossings} crossings, ${m.bends} bends, ${m.length}px of lines, ${m.warnings} warnings.`;
+
 /** The document in emphasis state `id`, or as it is without one. */
 function drawnState(doc: Diagram, id: string | undefined) {
   if (id === undefined) return doc;
@@ -181,14 +198,30 @@ async function maybePng(svg: () => string | Promise<string>, args: string[], sou
 }
 
 /** Check one file and print its notes, each prefixed by `tag`; 1 if it has errors. */
-async function checkFile(file: string, tag: string, hints: boolean, quiet: boolean) {
+/** `check --metrics`: what to measure, and the image shape to hold it to. */
+interface MetricsOption {
+  fit?: Fit;
+}
+
+async function checkFile(
+  file: string,
+  tag: string,
+  hints: boolean,
+  quiet: boolean,
+  metrics?: MetricsOption,
+) {
   const source = await read(file),
     scene = await compile(source);
   const diagnostics = [...scene.diagnostics, ...linkNotes(scene, file), ...sceneConflicts(scene)];
+  // Measure only a file that compiles cleanly; errors come first.
+  const drawn =
+    metrics && !diagnostics.some(d => d.level === 'error') ? await draw(source) : undefined;
+  if (drawn) diagnostics.push(...qualityNotes(drawn, metrics!.fit));
   const errors = diagnostics.filter(d => d.level === 'error'),
     warnings = diagnostics.filter(d => d.level === 'warning');
   for (const d of diagnostics) if (!quiet || d.level !== 'info') console.log(tag + describe(d));
   if (hints) console.log(hintTable(await hintMoves(source, scene)));
+  if (drawn) console.log(tag + metricsLine(drawn.metrics));
   const nodes = scene.objects.filter(o => o.type === 'node').length;
   console.log(
     `${tag}${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
@@ -217,7 +250,10 @@ export async function main(argv: string[]): Promise<number> {
   try {
     switch (command) {
       case 'check': {
-        const files = [file, ...rest].filter((a): a is string => !!a && !a.startsWith('--'));
+        const args = [file, ...rest],
+          files = args.filter(
+            (a, i): a is string => !!a && !a.startsWith('--') && args[i - 1] !== '--fit',
+          );
         if (!files.length) throw new UsageError('A .draft file is required.');
         const all = files.flatMap(f =>
           fs.statSync(path.resolve(f), { throwIfNoEntry: false })?.isDirectory()
@@ -234,7 +270,13 @@ export async function main(argv: string[]): Promise<number> {
           // With several files each line names its file, so a loop can't mistake one for all.
           const tag = all.length > 1 || files[0] !== all[0] ? `${f}: ` : '';
           try {
-            failed += await checkFile(f, tag, flag('--hints'), flag('--quiet'));
+            failed += await checkFile(
+              f,
+              tag,
+              flag('--hints'),
+              flag('--quiet'),
+              flag('--metrics') ? { fit: fitOption(rest) } : undefined,
+            );
           } catch (error) {
             if (!tag) throw error;
             const message = error instanceof Error ? error.message : String(error);
@@ -297,7 +339,12 @@ export async function main(argv: string[]): Promise<number> {
           for (const n of geometry.nodes)
             if (raw.has(n.id)) Object.assign(n, { raw: raw.get(n.id) });
           console.log(JSON.stringify(geometry));
-        } else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
+        } else {
+          const geometry = flag('--metrics')
+            ? { ...canonicalGeometry(doc), metrics: (await draw(source)).metrics }
+            : canonicalGeometry(doc);
+          console.log(JSON.stringify(geometry, null, flag('--json') ? 0 : 2));
+        }
         return 0;
       }
       case 'compare': {
