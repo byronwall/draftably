@@ -219,15 +219,15 @@ Use cells for "is made of"; use separate nodes and edges for "flows to".
 Use these only when automatic layout needs a nudge. Positions are relative to the parent's
 content area.
 
-| Statement                                           | Meaning                                                    |
-| --------------------------------------------------- | ---------------------------------------------------------- |
-| `near id ref side=right\|left\|above\|below gap=28` | Place beside a sibling. `strength=required` enforces it.   |
-| `order scope id1 id2 ...`                           | Preferred order of a scope's children.                     |
-| `align x\|y id1 id2 ...`                            | Align sibling centers. `strength=required` locks them.     |
-| `size id width=164 height=56`                       | Requested node size.                                       |
-| `nudge id dx= dy=`                                  | Offset from the automatic position.                        |
-| `pin id x= y=`                                      | Exact position; layout never moves it. Use sparingly.      |
-| `stay id x= y= weight=8`                            | Soft position. The viewer's tools write these; leave them. |
+| Statement                                           | Meaning                                                                                                                  |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `near id ref side=right\|left\|above\|below gap=28` | Place beside a sibling, or beside the sibling group holding `ref`, lined up with `ref`. `strength=required` enforces it. |
+| `order scope id1 id2 ...`                           | Preferred order of a scope's children.                                                                                   |
+| `align x\|y id1 id2 ...`                            | Align sibling centers. `strength=required` locks them.                                                                   |
+| `size id width=164 height=56`                       | Requested node size.                                                                                                     |
+| `nudge id dx= dy=`                                  | Offset from the automatic position.                                                                                      |
+| `pin id x= y=`                                      | Exact position; layout never moves it. Use sparingly.                                                                    |
+| `stay id x= y= weight=8`                            | Soft position. The viewer's tools write these; leave them.                                                               |
 
 ## Guidance
 

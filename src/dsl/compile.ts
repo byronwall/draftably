@@ -31,6 +31,7 @@ import { projectScene } from './project';
 import {
   DslError,
   layoutParent,
+  nearAnchor,
   parseModel,
   POSITION_HINTS,
   type Hint,
@@ -2041,6 +2042,30 @@ const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SL
 export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false): Scene {
   // The engines' input (`slots`) has no channels: they are planned on the final arrangement.
   if (slots) return layoutPass(m, arranged, true);
+  // A `near` whose reference sits inside a sibling group places against that group, lined up
+  // with the reference as the drawing without those lines has it.
+  const by = new Map(m.objects.map(o => [o.id, o])),
+    across = m.hints.filter(
+      (h): h is Extract<Hint, { type: 'near' }> =>
+        h.type === 'near' && nearAnchor(by, h.id, h.ref) !== h.ref,
+    );
+  if (across.length) {
+    const first = layoutModel(
+      { ...m, hints: m.hints.filter(h => !across.includes(h as never)) },
+      arranged,
+    );
+    const centre = (id: string, axis: 'x' | 'y') => {
+      const o = first.byId.get(id)!;
+      return axis === 'x' ? o.x + o.w / 2 : o.y + o.h / 2;
+    };
+    const hints = m.hints.map(h => {
+      if (!across.includes(h as never) || h.type !== 'near') return h;
+      const anchor = nearAnchor(by, h.id, h.ref)!,
+        axis = h.side === 'left' || h.side === 'right' ? 'y' : 'x';
+      return { ...h, ref: anchor, offset: h.offset + centre(h.ref, axis) - centre(anchor, axis) };
+    });
+    return layoutModel({ ...m, hints }, arranged);
+  }
   // Plan routing channels on the arrangement before refinements, so a pin, drag or nudge never
   // changes the room left for lines elsewhere; then lay out with them.
   const unrefined = { ...m, hints: m.hints.filter(h => h.type === 'size' || h.type === 'order') },
