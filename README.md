@@ -86,10 +86,10 @@ editable diagram. `pnpm draftably extract diagram.png` prints it, and every comm
 and a checkbox in the export menu leave the source out. Hosts that recompress or re-encode an
 upload strip the PNG chunk:
 
-| Destination              | Keeps the source |
-| ------------------------ | ---------------- |
-| GitHub PR (`gh --attach`) | GITHUB_RESULT   |
-| Jira, Slack              | Not tested yet   |
+| Destination               | Keeps the source   |
+| ------------------------- | ------------------ |
+| GitHub PR (`gh --attach`) | Yes, byte for byte |
+| Jira, Slack               | Not tested yet     |
 
 See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
 [Checks](docs/CHECKS.md) for what is tested. [Source record](docs/IMPORT.md) describes where the
