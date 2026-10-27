@@ -1,6 +1,8 @@
 diagram "Billing schema" version=1
 subtitle "Each invoice belongs to one account; each line item belongs to one invoice."
 
+# Tables: each entity is a group of cells in two columns, and foreign keys join rows.
+
 group accounts "accounts" color=blue
 layout accounts cells columns=2
 node accounts.id "id" in=accounts
