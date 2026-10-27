@@ -21,6 +21,7 @@ import { TimelineDeck } from '../sculpt/TimelineDeck';
 import { EdgeView } from '../scene/EdgeView';
 import { GroupView } from '../scene/GroupView';
 import { NodeView } from '../scene/NodeView';
+import { Lifelines } from '../scene/Lifelines';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
 import { Legend } from './Legend';
@@ -160,6 +161,7 @@ export function Canvas() {
               )}
             </For>
           </g>
+          <Lifelines doc={doc} ids={nodeIds()} rect={id => sceneRects().get(id)} />
           <g>
             <For each={edgeIds()}>
               {id => (

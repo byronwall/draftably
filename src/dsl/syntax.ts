@@ -184,7 +184,7 @@ export const formatSource = (source: string) => printSource(readSource(source));
 
 export type DslColor = ColorKey | 'auto';
 export type DslShape = Exclude<ShapeKind, 'icon' | 'image'>;
-export type Algorithm = 'flow' | 'row' | 'column';
+export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence';
 
 export interface ModelObject {
   id: string;
@@ -203,6 +203,13 @@ export interface ModelObject {
   href?: string;
   /** Nodes only: how many things this one box stands for, drawn as a stack with a badge. */
   count?: number;
+  /**
+   * Groups only: `soft` draws a tint behind the members and `none` draws nothing. Either way the
+   * group is not a layout scope: its members are laid out with the nearest framed container's.
+   */
+  frame?: 'soft' | 'none';
+  /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
+  soft?: string[];
   line: number;
 }
 
@@ -367,6 +374,7 @@ export const isIdentifier = (s: string) => ID.test(s);
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text'];
+const FRAMES = ['box', 'soft', 'none'] as const;
 const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
 
@@ -565,7 +573,7 @@ export function parseModel(source: string | SourceDoc): Model {
                 'detail',
                 'priority',
               ]
-            : ['in', 'color', 'shade', 'was', 'href', 'kind', 'detail', 'priority'],
+            : ['in', 'color', 'shade', 'was', 'href', 'kind', 'detail', 'priority', 'frame'],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -591,6 +599,9 @@ export function parseModel(source: string | SourceDoc): Model {
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
           ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
+          ...(command === 'group' && choice('frame', 'box', FRAMES) !== 'box'
+            ? { frame: choice('frame', 'box', FRAMES) as 'soft' | 'none' }
+            : {}),
           line,
         });
         break;
@@ -640,8 +651,12 @@ export function parseModel(source: string | SourceDoc): Model {
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
-          ['flow', 'row', 'column'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row or column, or engine=.`,
+          ['flow', 'row', 'column', 'lanes', 'sequence'].includes(algorithm),
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes or sequence, or engine=.`,
+        );
+        assert(
+          !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
+          `${algorithm} arranges the whole diagram: write layout root ${algorithm}.`,
         );
         m.layouts.push({
           scope,
@@ -811,8 +826,25 @@ export function parseModel(source: string | SourceDoc): Model {
   return m;
 }
 
+/**
+ * The container that lays an object out: its parent, or the nearest framed container above it
+ * when its parent is a soft or frameless group. Soft groups are never layout scopes.
+ */
+export function layoutParent(by: Map<string, ModelObject>, id: string): string {
+  let p = by.get(id)?.parent ?? 'root';
+  while (p !== 'root' && by.get(p)?.frame) p = by.get(p)!.parent;
+  return p;
+}
+
 function validateReferences(m: Model) {
   const by = new Map(m.objects.map(o => [o.id, o]));
+  const framed = (id: string, line: number, what: string) =>
+    assert(
+      !by.get(id)?.frame,
+      `${id} is a ${by.get(id)?.frame} group, so it has no ${what} of its own. Use frame=box, or ${what === 'layout' ? 'set the layout of the container around it' : 'place its members'}.`,
+      line,
+    );
+  const parentOf = (id: string) => layoutParent(by, id);
   const assert = (ok: unknown, message: string, line: number) => {
     if (!ok) throw new DslError(message, line);
   };
@@ -860,6 +892,25 @@ function validateReferences(m: Model) {
       assert(seen.size <= 12, 'Limit: 12 nesting levels.', o.line);
     }
   }
+  // Lanes: every top-level object is a boxed group, so every node sits in a lane.
+  if (m.layouts.some(l => l.scope === 'root' && l.algorithm === 'lanes'))
+    for (const o of m.objects) {
+      if (o.parent !== 'root') continue;
+      assert(
+        o.type === 'group',
+        `In a lanes diagram every node sits in a lane; put ${o.id} in= one of the top-level groups.`,
+        o.line,
+      );
+      assert(!o.frame, `${o.id} is a lane, so it needs its frame; remove frame=.`, o.line);
+    }
+  // Sequence: participants and messages only.
+  if (m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+    for (const o of m.objects)
+      assert(
+        o.type === 'node',
+        `A sequence diagram has participants and messages, not groups; remove ${o.id} or use another layout.`,
+        o.line,
+      );
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
       exists(end, e.line);
@@ -877,6 +928,7 @@ function validateReferences(m: Model) {
     }
   for (const l of m.layouts) {
     scope(l.scope, l.line);
+    framed(l.scope, l.line, 'layout');
     const root = l.engine?.params.rootId;
     if (root) {
       exists(root, l.line);
@@ -886,29 +938,30 @@ function validateReferences(m: Model) {
   for (const h of m.hints) {
     if (h.type === 'order') {
       scope(h.scope, h.line);
+      framed(h.scope, h.line, 'layout');
       for (const id of h.ids) {
         exists(id, h.line);
-        assert(
-          by.get(id)!.parent === h.scope,
-          `${id} is not a direct child of ${h.scope}.`,
-          h.line,
-        );
+        framed(id, h.line, 'position');
+        assert(parentOf(id) === h.scope, `${id} is not a direct child of ${h.scope}.`, h.line);
       }
     } else if (h.type === 'align') {
       h.ids.forEach(id => exists(id, h.line));
+      h.ids.forEach(id => framed(id, h.line, 'position'));
       assert(new Set(h.ids).size === h.ids.length, 'Duplicate member in align.', h.line);
-      const parent = by.get(h.ids[0])!.parent;
+      const parent = parentOf(h.ids[0]);
       assert(
-        h.ids.every(id => by.get(id)!.parent === parent),
+        h.ids.every(id => parentOf(id) === parent),
         'Members of align must be direct siblings.',
         h.line,
       );
     } else {
       exists(h.id, h.line);
+      framed(h.id, h.line, 'position');
       if (h.type === 'near') {
         exists(h.ref, h.line);
+        framed(h.ref, h.line, 'position');
         assert(
-          by.get(h.ref)!.parent === by.get(h.id)!.parent,
+          parentOf(h.ref) === parentOf(h.id),
           'Relative placement is between siblings. Place the containing groups relative to one another instead.',
           h.line,
         );

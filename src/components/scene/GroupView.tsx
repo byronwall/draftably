@@ -1,4 +1,4 @@
-import { createMemo, Show } from 'solid-js';
+import { createMemo, For, Show } from 'solid-js';
 import { descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
@@ -9,6 +9,7 @@ import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
 import { PositionBadge, ResizeHandles } from './parts';
+import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../../dsl/frame';
 
 /** A container's border is quieter than a connection: thinner and partly transparent. */
 export const GROUP_BORDER = { width: 1, opacity: 0.65 };
@@ -43,7 +44,53 @@ export function GroupView(props: GroupViewProps) {
   /** Middle of the title band at the top of the frame, the same open or collapsed. */
   const band = () => look().groupHeader / 2 - 7;
 
-  return (
+  // A frameless group draws nothing; a soft group is a tint with a small label and no controls.
+  const hull = () =>
+    group().hull?.length ? group().hull! : [{ x: 0, y: 0, w: w(), h: props.rect.h }];
+  const soft = () => (
+    <g
+      class="group soft"
+      classList={{ selected: props.selected, focused: props.focused }}
+      data-kind="group"
+      data-id={props.id}
+      transform={`translate(${props.rect.x},${props.rect.y})`}
+      opacity={paint().opacity < 1 ? paint().opacity : undefined}
+      tabindex={props.interactive ? 0 : undefined}
+      role={props.interactive ? 'button' : undefined}
+      aria-label={props.interactive ? `${group().title}, soft group` : undefined}
+      aria-pressed={props.interactive ? !!props.selected : undefined}
+    >
+      <For each={hull()}>
+        {h => (
+          <rect
+            class="group-bg"
+            x={h.x}
+            y={h.y}
+            width={h.w}
+            height={h.h}
+            rx={SOFT_RADIUS}
+            fill={color().fill}
+          />
+        )}
+      </For>
+      <text
+        class="group-title"
+        x={hull()[0].x + SOFT_TITLE.x}
+        y={hull()[0].y + SOFT_TITLE.y}
+        dominant-baseline="central"
+        font-family={look().annotation.family}
+        font-size={String(look().annotation.size)}
+        font-weight={String(look().annotation.weight)}
+        fill={color().ink}
+        text-decoration={paint().strike ? 'line-through' : undefined}
+        pointer-events="none"
+      >
+        {truncateText(group().title, Math.max(40, hull()[0].w - 2 * SOFT_PAD), look().annotation)}
+      </text>
+    </g>
+  );
+
+  const boxed = () => (
     <g
       class="group"
       classList={{
@@ -152,5 +199,13 @@ export function GroupView(props: GroupViewProps) {
         <ResizeHandles rect={props.rect} zoom={props.zoom ?? 1} />
       </Show>
     </g>
+  );
+
+  return (
+    <Show when={group().frame !== 'none'}>
+      <Show when={group().frame === 'soft'} fallback={boxed()}>
+        {soft()}
+      </Show>
+    </Show>
   );
 }

@@ -39,12 +39,14 @@ and groups. References may point to later lines.
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                      |
 | `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                  |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=`, `count=`.                                              |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`.                                                                                                       |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`. See [Soft groups](#soft-groups).                                             |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                       |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                          |
 | `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors). |
 | `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides.                                                          |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                  |
+| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                         |
+| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                         |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
@@ -107,6 +109,86 @@ same way. It never changes the link.
 `count=42` on a node
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
 hundreds of places is one box rather than hundreds.
+
+## Soft groups
+
+A boxed group pads its members, reserves a title band and takes one place in its container's
+layout, so its members move as one block. `frame=soft` keeps the group but not the box:
+
+```text
+group monitoring "namespace: monitoring" color=amber frame=soft
+node prometheus "prometheus" in=monitoring
+node grafana "grafana" in=monitoring
+```
+
+A soft group's members are laid out with the nearest boxed container around the group (or the
+root), each ranked by its own connections, as if the group line were not there. The drawing then
+puts a light tint of the group's color behind them, with its title small at the top left. Lines
+cross a tint freely. `frame=none` lays out the same way and draws nothing; the members still
+belong to the group, so `color=auto` still inherits its family. `frame=box` is the default.
+
+Layout still keeps a soft group's members together where it can: within each rank they sit side
+by side, and the gaps where a tint starts or ends widen to fit its padding and label, as does a
+box that holds soft groups. The tint is one rectangle round the members when that covers nothing
+else. Otherwise it is the members' own padded boxes, joined by strips across the gaps between
+them that cover nothing else; `check` notes `soft-split` when some members cannot be joined, and
+`soft-overlap` when a tint still covers an object outside the group.
+
+A soft group has no layout or position of its own: `layout`, `order`, `near`, `align`, `nudge`,
+`stay` and `pin` on it are errors. Place its members instead; refinements between a member and
+an object beside the group work, since they share a container.
+
+## Swim lanes
+
+`layout root lanes` draws a process by who does each step. Every top-level group is a lane, and
+every node must sit in one; a node outside every group is an error on its line.
+
+```text
+group customer "Customer"
+group agents "Support agents"
+node opens "Opens a ticket" in=customer
+node triage "Triage" in=agents
+node resolved "Sees it resolved" in=customer
+edge e1 opens -> triage
+edge e2 triage -> resolved
+layout root lanes
+```
+
+Each step takes its rank from the connections of the whole drawing, so one rank is one column
+across every lane, and a step that follows another sits after it even when it is in a different
+lane. Steps of one lane in one rank stack across it. With `direction=right` (the default) lanes
+are bands stacked top to bottom, in file order or the order an `order root` line gives; with
+`direction=down` they are columns side by side and the steps run down the page. Every lane is as
+long as the drawing. `gap=` sets the least gap between ranks (56 at least).
+
+A group inside a lane follows its own `frame=`: a boxed group takes one place, and a soft group's
+members rank on their own. Position refinements inside a lane (`near`, `stay`, `nudge`, `pin`)
+do not apply yet. Lines that run back against the order take the long way round the lanes.
+
+## Sequence diagrams
+
+`layout root sequence` draws an exchange between participants. Every node is a participant,
+drawn in a row across the top in file order (or the order an `order root` line gives), with a
+dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
+lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file
+reads top to bottom as the exchange does.
+
+```text
+node user "User" shape=pill
+node app "Web app"
+node auth "Auth service"
+edge m1 user -> app "sign in"
+edge m2 app -> auth "verify"
+edge m3 auth -> auth "check hash"
+edge m4 auth -> app "token" kind=async
+layout root sequence
+```
+
+`kind=async` draws a dashed message, the usual mark of a reply. A message from a participant to
+itself draws a short loop. Participants are spaced so each message's label fits between them.
+Groups are an error in a sequence diagram, and position refinements do not apply. Change marks
+work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`),
+activations and notes are not supported yet.
 
 ## Change marks
 
@@ -437,6 +519,7 @@ Edits made in the viewer are written back to the file as readable statements:
 | In the viewer                              | In the file                                                         |
 | ------------------------------------------ | ------------------------------------------------------------------- |
 | Drag an object                             | `near` the closest sibling it does not overlap; `nudge` if none.    |
+| Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
 | Pin or unpin (**P**)                       | `pin` at its position; unpinning leaves a soft `stay`.              |
 | Resize a shape or container                | `size`, or `min-width`/`min-height` on the container's `layout`.    |
 | Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.   |

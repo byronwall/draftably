@@ -3,6 +3,7 @@ import type { StaticScene as Scene } from '../../model/static-scene';
 import { EdgeView } from './EdgeView';
 import { GroupView } from './GroupView';
 import { NodeView } from './NodeView';
+import { Lifelines } from './Lifelines';
 
 /** A read-only drawing, used for comparison candidates. */
 export function StaticScene(props: {
@@ -23,6 +24,11 @@ export function StaticScene(props: {
           />
         )}
       </For>
+      <Lifelines
+        doc={props.scene.doc}
+        ids={props.scene.vg.nodes.map(n => n.id)}
+        rect={id => props.scene.rects.get(id)}
+      />
       <For each={props.scene.routes}>
         {route => <EdgeView doc={props.scene.doc} route={route} idPrefix={props.idPrefix} />}
       </For>

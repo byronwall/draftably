@@ -7,7 +7,7 @@
 import { LayoutLab } from '../engines/layout-engine.js';
 import { RouteLab } from '../engines/routing-engine.js';
 import type { Diagram, LayoutSettings, Rect, RoutingSettings } from '../model/types';
-import type { Scene, SceneObject } from './compile';
+import { layoutView, type Scene, type SceneObject } from './compile';
 import { contentOrigin, GROUP_INSET } from './frame';
 import {
   addRefinement,
@@ -188,7 +188,9 @@ function setStay(source: SourceDoc, id: string, x: number, y: number) {
  * children moved left or up moves with them instead of clipping them. Pinned objects never move.
  * Returns the ids that were given a position.
  */
-export function writeArrangement(source: SourceDoc, scene: Scene, after: Diagram): string[] {
+export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram): string[] {
+  // Soft groups have no position; their members are placed in the container that lays them out.
+  const scene = layoutView(drawn);
   const children = new Map<string, SceneObject[]>();
   for (const o of scene.objects) children.set(o.parent, [...(children.get(o.parent) ?? []), o]);
   const pinned = new Set(scene.model.hints.flatMap(h => (h.type === 'pin' ? [h.id] : [])));

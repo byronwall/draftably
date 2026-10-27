@@ -17,10 +17,18 @@ import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
-import { GROUP_HEADER, GROUP_INSET, GROUP_TITLE_CHROME, contentOrigin } from './frame';
+import {
+  GROUP_HEADER,
+  GROUP_INSET,
+  GROUP_TITLE_CHROME,
+  SOFT_LABEL,
+  SOFT_PAD,
+  contentOrigin,
+} from './frame';
 import { projectScene } from './project';
 import {
   DslError,
+  layoutParent,
   parseModel,
   type Hint,
   type Model,
@@ -33,6 +41,12 @@ import {
 export const RENDER_CONTEXT = { width: 1100, height: 720 } as const;
 export { GROUP_HEADER, GROUP_INSET, contentOrigin };
 const MIN_GAP = 12;
+/** Swim lanes: the least gap between ranks, between objects stacked in one rank, and between lanes. */
+const LANE_RANK_GAP = 56,
+  LANE_STACK_GAP = 24,
+  LANE_GAP = 0;
+/** Depth of a lane with nothing in it. */
+const EMPTY_LANE = 56;
 /** Size of a group with nothing in it yet; groups with content fit it exactly. */
 const EMPTY_GROUP = { w: 260, h: 110 };
 
@@ -49,6 +63,10 @@ export interface SceneObject extends ModelObject {
   baseX: number;
   baseY: number;
   depth: number;
+  /** Sequence participants: how far the dashed lifeline runs below the box. */
+  lifeline?: number;
+  /** Soft groups: the tint's rectangles, relative to the group's top left; the first holds the label. */
+  hull?: Array<{ x: number; y: number; w: number; h: number }>;
 }
 
 export interface Diagnostic {
@@ -63,6 +81,8 @@ export interface Diagnostic {
 /** A connection as the file declares it, plus the lane a fold's wrap edge returns along. */
 export interface SceneEdge extends ModelEdge {
   lane?: Lane;
+  /** A sequence message: the height of its row; it is drawn straight between lifelines there. */
+  row?: number;
 }
 
 export interface Scene {
@@ -87,8 +107,9 @@ type Pos = { x: number; y: number };
 const round = (n: number) => Math.round(n);
 
 export async function compile(source: string): Promise<Scene> {
-  const m = parseModel(source);
-  return layoutModel(m, await engineArrangement(m));
+  const m = parseModel(source),
+    flat = dissolved(m);
+  return sequenced(withSoftGroups(layoutModel(flat, await engineArrangement(flat)), m));
 }
 
 /**
@@ -96,7 +117,310 @@ export async function compile(source: string): Promise<Scene> {
  * (they never add errors). Engine-governed scopes keep their built-in recipe in the result.
  */
 export function checkSource(source: string): Scene {
-  return layoutModel(parseModel(source));
+  const m = parseModel(source);
+  return sequenced(withSoftGroups(layoutModel(dissolved(m)), m));
+}
+
+/**
+ * Sequence diagrams: room under the last message, least height of a message row (the first row
+ * sits one row under the participants, less `SEQ_LIFT`), a self-message's loop, and the least
+ * gap between participants.
+ */
+const SEQ_TOP = 28,
+  SEQ_LIFT = 12,
+  SEQ_ROW = 44,
+  SEQ_SELF = 22,
+  SEQ_GAP = 48;
+
+/**
+ * A sequence diagram: the participants (every node) in a row across the top, in file order or
+ * the root `order`, and each connection a message on its own row below them, in file order, so
+ * the file reads top to bottom as the exchange does. Participants are spaced so each message's
+ * label fits between them, and each draws a lifeline down to the last row.
+ */
+function sequenced(scene: Scene): Scene {
+  if (!scene.model.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+    return scene;
+  const order = scene.model.hints.find(h => h.type === 'order' && h.scope === 'root'),
+    listed = order?.type === 'order' ? order.ids : [],
+    parts = [
+      ...listed.flatMap(id => scene.objects.filter(o => o.id === id)),
+      ...scene.objects.filter(o => !listed.includes(o.id)),
+    ],
+    at = new Map(parts.map((o, i) => [o.id, i]));
+  // Centres: neighbours keep a gap, and a message between them keeps room for its label.
+  const centre: number[] = [];
+  parts.forEach((o, i) => {
+    if (!i) return void centre.push(o.w / 2);
+    let room = parts[i - 1].w / 2 + SEQ_GAP + o.w / 2;
+    for (const e of scene.edges) {
+      const [a, b] = [at.get(e.source)!, at.get(e.target)!].sort((p, q) => p - q);
+      if (e.label && b === i && a < b)
+        room = Math.max(room, (edgeLabelSize(e.label, scene.look).w + 2 * LABEL_RUN) / (b - a));
+    }
+    centre.push(centre[i - 1] + room);
+  });
+  let y = Math.max(0, ...parts.map(o => o.h)) - SEQ_LIFT;
+  const rows = new Map<string, number>();
+  for (const e of scene.edges) {
+    y += Math.max(SEQ_ROW, e.label ? edgeLabelSize(e.label, scene.look).h + 24 : 0);
+    rows.set(e.id, y);
+    if (e.source === e.target) y += SEQ_SELF;
+  }
+  const end = y + SEQ_TOP;
+  const objects = scene.objects.map(o => {
+    const x = round(centre[at.get(o.id)!] - o.w / 2);
+    return { ...o, x, y: 0, localX: x, localY: 0, baseX: x, baseY: 0, lifeline: end - o.h };
+  });
+  return {
+    ...scene,
+    objects,
+    byId: new Map(objects.map(o => [o.id, o])),
+    edges: scene.edges.map(e => ({ ...e, lane: undefined, row: rows.get(e.id) })),
+  };
+}
+
+/**
+ * The model layout sees: soft and frameless groups removed, and their members handed to the
+ * nearest framed container, so each member ranks with its own connections.
+ */
+function dissolved(m: Model): Model {
+  if (!m.objects.some(o => o.frame)) return m;
+  const by = new Map(m.objects.map(o => [o.id, o]));
+  const chain = (id: string) => {
+    const out: string[] = [];
+    for (let p = by.get(id)!.parent; p !== 'root' && by.get(p)!.frame; p = by.get(p)!.parent)
+      out.unshift(p);
+    return out;
+  };
+  return {
+    ...m,
+    objects: m.objects
+      .filter(o => !o.frame)
+      .map(o => ({ ...o, parent: layoutParent(by, o.id), soft: chain(o.id) })),
+  };
+}
+
+/**
+ * A rank with the members of each soft group side by side, outermost group first: a group's
+ * members take the place of their mean position in the rank, and everything else keeps its order.
+ */
+function clustered(
+  layer: string[],
+  chainOf: (id: string) => string[] | undefined,
+  depth = 0,
+): string[] {
+  if (!layer.some(id => chainOf(id)?.[depth])) return layer;
+  const blocks = new Map<string, { at: number; ids: string[] }>();
+  layer.forEach((id, i) => {
+    const key = chainOf(id)?.[depth] ?? `\0${id}`,
+      block = blocks.get(key) ?? { at: 0, ids: [] };
+    block.at += i;
+    block.ids.push(id);
+    blocks.set(key, block);
+  });
+  return [...blocks]
+    .sort(([, a], [, b]) => a.at / a.ids.length - b.at / b.ids.length)
+    .flatMap(([key, b]) => (key.startsWith('\0') ? b.ids : clustered(b.ids, chainOf, depth + 1)));
+}
+
+/**
+ * The scene as layout sees it, for edits that write positions: soft and frameless groups left
+ * out, and each object under the container that lays it out, which its local position is
+ * relative to.
+ */
+export function layoutView(scene: Scene): Scene {
+  if (!scene.objects.some(o => o.frame)) return scene;
+  const by = new Map(scene.model.objects.map(o => [o.id, o])),
+    objects = scene.objects
+      .filter(o => !o.frame)
+      .map(o => ({ ...o, parent: layoutParent(by, o.id) }));
+  return { ...scene, objects, byId: new Map(objects.map(o => [o.id, o])) };
+}
+
+/** Space kept between two soft tints, or a tint and a box, that would otherwise touch. */
+const SOFT_GAP = 8;
+
+/**
+ * Room two neighbouring boxes need between them for the soft tints round them: a pad for each
+ * tint that ends or starts between them, and the label of each that starts after a gap below.
+ */
+function softRoom(a: string[] = [], b: string[] = [], below: boolean) {
+  const leaving = a.filter(g => !b.includes(g)).length,
+    entering = b.filter(g => !a.includes(g)).length;
+  if (!leaving && !entering) return 0;
+  return (leaving + entering) * SOFT_PAD + (below && entering ? SOFT_LABEL : 0) + SOFT_GAP;
+}
+
+/** Room between two ranks for the tints that end in one or start in the other. */
+function rankRoom(
+  from: string[],
+  to: string[],
+  chainOf: (id: string) => string[] | undefined,
+  below: boolean,
+) {
+  const inFrom = new Set(from.flatMap(id => chainOf(id) ?? [])),
+    across = (id: string, other: Set<string>) => (chainOf(id) ?? []).filter(g => !other.has(g));
+  const inTo = new Set(to.flatMap(id => chainOf(id) ?? []));
+  let room = 0;
+  for (const a of from)
+    for (const b of to) room = Math.max(room, softRoom(across(a, inTo), across(b, inFrom), below));
+  return room;
+}
+
+type Box = { x: number; y: number; w: number; h: number };
+const hits = (a: Box, b: Box) =>
+  a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+const padded = (o: Box, p: number): Box => ({
+  x: o.x - p,
+  y: o.y - p,
+  w: o.w + 2 * p,
+  h: o.h + 2 * p,
+});
+
+/**
+ * The rectangle that joins two boxes: the strip across the gap where they face each other, or,
+ * when they sit diagonally, the box round both.
+ */
+function bridge(a: Box, b: Box): Box {
+  const x0 = Math.max(a.x, b.x),
+    x1 = Math.min(a.x + a.w, b.x + b.w),
+    y0 = Math.max(a.y, b.y),
+    y1 = Math.min(a.y + a.h, b.y + b.h);
+  if (x1 > x0) {
+    const top = Math.min(a.y + a.h, b.y + b.h);
+    return { x: x0, y: top, w: x1 - x0, h: Math.max(a.y, b.y) - top };
+  }
+  if (y1 > y0) {
+    const left = Math.min(a.x + a.w, b.x + b.w);
+    return { x: left, y: y0, w: Math.max(a.x, b.x) - left, h: y1 - y0 };
+  }
+  const x = Math.min(a.x, b.x),
+    y = Math.min(a.y, b.y);
+  return { x, y, w: Math.max(a.x + a.w, b.x + b.w) - x, h: Math.max(a.y + a.h, b.y + b.h) - y };
+}
+
+/**
+ * Put soft and frameless groups back into a scene laid out without them. Members keep their
+ * place and get their declared parent back. A soft group's tint is the members' boxes, padded,
+ * joined along a shortest tree by bridges that cover nothing else, with room for the label above
+ * its top member; innermost groups first, so an outer tint wraps an inner one. A tint that still
+ * covers another object, or that could not join all its members, is noted.
+ */
+function withSoftGroups(scene: Scene, m: Model): Scene {
+  const soft = m.objects.filter(o => o.frame);
+  if (!soft.length) return scene;
+  const by = new Map(m.objects.map(o => [o.id, o])),
+    header = scene.look.groupHeader,
+    placed = new Map<string, SceneObject>(
+      scene.objects.map(o => [o.id, { ...o, parent: by.get(o.id)!.parent, soft: undefined }]),
+    ),
+    diagnostics = [...scene.diagnostics];
+  const within = (id: string, group: string) => {
+    for (let p = by.get(id)?.parent; p && p !== 'root'; p = by.get(p)?.parent)
+      if (p === group) return true;
+    return false;
+  };
+  const depthOf = (id: string) => {
+    let d = 0;
+    for (let p = by.get(id)!.parent; p !== 'root'; p = by.get(p)!.parent) d++;
+    return d;
+  };
+  /** What a member adds to a tint: its box, or an inner soft group's whole tint. */
+  const parts = (o: SceneObject): Box[] =>
+    o.frame === 'soft'
+      ? (o.hull ?? []).map(r => ({ ...r, x: r.x + o.x, y: r.y + o.y }))
+      : o.frame
+        ? []
+        : [o];
+  for (const g of [...soft].sort((a, b) => depthOf(b.id) - depthOf(a.id))) {
+    const members = [...placed.values()].filter(o => within(o.id, g.id)),
+      frame = placed.get(layoutParent(by, g.id)),
+      origin = frame ? contentOrigin(frame, header) : { x: 0, y: 0 },
+      others = [...placed.values()].filter(
+        o => !o.frame && !within(o.id, g.id) && !within(g.id, o.id),
+      );
+    const boxes = members.flatMap(o => parts(o).map(b => padded(b, SOFT_PAD)));
+    let rects: Box[] = [],
+      split = 0;
+    if (boxes.length) {
+      // The label sits above the top member (the leftmost of a row).
+      const top = boxes.reduce((t, b) => (b.y < t.y || (b.y === t.y && b.x < t.x) ? b : t));
+      top.y -= SOFT_LABEL;
+      top.h += SOFT_LABEL;
+      rects = [top, ...boxes.filter(b => b !== top)];
+      const x = Math.min(...rects.map(r => r.x)),
+        y = Math.min(...rects.map(r => r.y)),
+        whole = {
+          x,
+          y,
+          w: Math.max(...rects.map(r => r.x + r.w)) - x,
+          h: Math.max(...rects.map(r => r.y + r.h)) - y,
+        };
+      // One rectangle round them all when it covers nothing else; otherwise the boxes themselves,
+      // joined along a shortest tree (Prim) by gap between them.
+      if (!others.some(o => hits(o, whole))) rects = [whole];
+      const gapOf = (a: Box, b: Box) =>
+        Math.max(b.x - (a.x + a.w), a.x - (b.x + b.w), b.y - (a.y + a.h), a.y - (b.y + b.h), 0);
+      const joined = [rects[0]],
+        rest = rects.slice(1),
+        bridges: Box[] = [];
+      while (rest.length) {
+        let best = { gap: Infinity, a: rects[0], i: 0 };
+        for (const a of joined)
+          rest.forEach((b, i) => {
+            const d = gapOf(a, b);
+            if (d < best.gap) best = { gap: d, a, i };
+          });
+        const [b] = rest.splice(best.i, 1);
+        joined.push(b);
+        if (hits(best.a, b)) continue;
+        const r = bridge(best.a, b);
+        if (others.some(o => hits(o, r))) split++;
+        else bridges.push(r);
+      }
+      rects.push(...bridges);
+    }
+    const x0 = rects.length ? Math.min(...rects.map(r => r.x)) : origin.x,
+      y0 = rects.length ? Math.min(...rects.map(r => r.y)) : origin.y,
+      x1 = rects.length ? Math.max(...rects.map(r => r.x + r.w)) : origin.x,
+      y1 = rects.length ? Math.max(...rects.map(r => r.y + r.h)) : origin.y,
+      local = { x: x0 - origin.x, y: y0 - origin.y };
+    placed.set(g.id, {
+      ...g,
+      x: x0,
+      y: y0,
+      w: x1 - x0,
+      h: y1 - y0,
+      localX: local.x,
+      localY: local.y,
+      baseX: local.x,
+      baseY: local.y,
+      depth: depthOf(g.id),
+      hull: rects.map(r => ({ x: r.x - x0, y: r.y - y0, w: r.w, h: r.h })),
+    });
+    if (g.frame !== 'soft') continue;
+    const covered = others.filter(o => rects.some(r => hits(o, r)));
+    if (covered.length)
+      diagnostics.push({
+        level: 'warning',
+        code: 'soft-overlap',
+        message: `${g.id}'s tint covers ${covered.map(o => o.id).join(', ')}, which ${covered.length > 1 ? 'are' : 'is'} not in it. Place its members together, or use frame=box.`,
+        line: g.line,
+        ids: [g.id, ...covered.map(o => o.id)],
+      });
+    if (split)
+      diagnostics.push({
+        level: 'info',
+        code: 'soft-split',
+        message: `${g.id}'s members are apart, so its tint is drawn in ${split + 1} pieces. Place its members together, or use frame=box.`,
+        line: g.line,
+        ids: [g.id],
+      });
+  }
+  const index = new Map(m.objects.map((o, i) => [o.id, i])),
+    objects = [...placed.values()].sort((a, b) => index.get(a.id)! - index.get(b.id)!);
+  return { ...scene, model: m, objects, byId: new Map(objects.map(o => [o.id, o])), diagnostics };
 }
 
 /** More accent families than this reads as decoration rather than meaning. */
@@ -1007,11 +1331,17 @@ function packed(
     sinks ? group : () => false,
     major,
   ).map(layer =>
-    [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
+    clustered(
+      [...layer].sort((a, b) => across(a) - across(b) || ids.indexOf(a) - ids.indexOf(b)),
+      id => by.get(id)!.soft,
+    ),
   );
   const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
   const between = (a: string, b: string) =>
-    roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right);
+    Math.max(
+      roomBetween(rooms, a, b, group(a) || group(b) ? gaps.group : gaps.node, !right),
+      softRoom(by.get(a)!.soft, by.get(b)!.soft, right),
+    );
   const extents = layers.map(layer =>
     layer.reduce((s, id, j) => s + minor(id) + (j ? between(layer[j - 1], id) : 0), 0),
   );
@@ -1053,7 +1383,11 @@ function packed(
     }
     const next = layers[i + 1];
     if (!next) break;
-    let after = Math.max(layer.some(group) || next.some(group) ? gaps.group : gaps.rank, busy[i]);
+    let after = Math.max(
+      layer.some(group) || next.some(group) ? gaps.group : gaps.rank,
+      busy[i],
+      rankRoom(layer, next, id => by.get(id)!.soft, !right),
+    );
     for (const r of rooms)
       if (
         Math.min(rank.get(r.a)!, rank.get(r.b)!) === i &&
@@ -1198,11 +1532,19 @@ function baseLayout(
       const next = items[i + 1]?.id ?? '';
       out.set(n.id, row ? { x: cursor, y: 0 } : { x: 0, y: cursor });
       cursor +=
-        (row ? n.w : n.h) + Math.max(roomBetween(rooms, n.id, next, gap, row), busy[i] ?? 0);
+        (row ? n.w : n.h) +
+        Math.max(
+          roomBetween(rooms, n.id, next, gap, row),
+          busy[i] ?? 0,
+          softRoom(n.soft, items[i + 1]?.soft, !row),
+        );
     }
   } else {
     const ids = items.map(n => n.id);
-    const layers = pairs.length ? byBarycenter(rankLayers(ids, pairs), pairs) : ids.map(id => [id]);
+    const chainOf = (id: string) => by.get(id)!.soft;
+    const layers = pairs.length
+      ? byBarycenter(rankLayers(ids, pairs), pairs, layer => clustered(layer, chainOf))
+      : ids.map(id => [id]);
     const major = (id: string) => (axis === 'right' ? by.get(id)!.w : by.get(id)!.h);
     const minor = (id: string) => (axis === 'right' ? by.get(id)!.h : by.get(id)!.w);
     // A gap between ranks grows to fit the labels on edges that cross it.
@@ -1214,8 +1556,15 @@ function baseLayout(
         after = Math.max(gap, busy[i] ?? 0);
       for (const [j, id] of layer.entries()) {
         out.set(id, axis === 'right' ? { x: at, y: across } : { x: across, y: at });
-        across += minor(id) + roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right');
+        across +=
+          minor(id) +
+          Math.max(
+            roomBetween(rooms, id, layer[j + 1] ?? '', gap, axis !== 'right'),
+            layer[j + 1] ? softRoom(chainOf(id), chainOf(layer[j + 1]), axis === 'right') : 0,
+          );
       }
+      if (layers[i + 1])
+        after = Math.max(after, rankRoom(layer, layers[i + 1], chainOf, axis === 'down'));
       for (const r of rooms)
         if (
           Math.min(rank.get(r.a)!, rank.get(r.b)!) === i &&
@@ -1235,8 +1584,12 @@ function baseLayout(
  * siblings sit where their connections point). A member with no neighbour in the rank before
  * keeps its place.
  */
-function byBarycenter(layers: string[][], pairs: Array<[string, string]>): string[][] {
-  const out = [layers[0]];
+function byBarycenter(
+  layers: string[][],
+  pairs: Array<[string, string]>,
+  group: (layer: string[]) => string[] = layer => layer,
+): string[][] {
+  const out = [group(layers[0])];
   for (let i = 1; i < layers.length; i++) {
     const before = new Map(out[i - 1].map((id, k) => [id, k]));
     const keyed = layers[i].map((id, k) => {
@@ -1256,7 +1609,7 @@ function byBarycenter(layers: string[][], pairs: Array<[string, string]>): strin
     const slots = free.map(x => x.k);
     const layer = [...layers[i]];
     sorted.forEach((x, j) => (layer[slots[j]] = x.id));
-    out.push(layer);
+    out.push(group(layer));
   }
   return out;
 }
@@ -1746,7 +2099,8 @@ function layoutPass(
     const governing = arranged && governingLayout(m, scope),
       kids = children.get(scope) ?? [];
     if (!governing?.engine || !PACKED_ENGINES.has(governing.engine.algorithm)) return undefined;
-    if (scope === 'root' && !kids.some(k => k.type === 'group')) return undefined;
+    // Soft groups are packed too, so their members can be kept side by side in each rank.
+    if (scope === 'root' && !kids.some(k => k.type === 'group' || k.soft?.length)) return undefined;
     if (!kids.every(k => arranged!.has(k.id))) return undefined;
     return LayoutLab.settings({
       algorithm: governing.engine.algorithm,
@@ -1786,6 +2140,87 @@ function layoutPass(
     if (governing?.engine) return axisOf(governing);
     const own = layoutFor(m, scope);
     return own.algorithm === 'row' ? 'right' : own.algorithm === 'column' ? 'down' : axisOf(own);
+  }
+
+  /**
+   * Swim lanes: each top-level group is a band across the reading direction, and everything in a
+   * lane takes its rank from the connections of the whole drawing, so a rank is one column across
+   * every lane. In each lane, a rank's objects stack across it, centred on the lane. Lanes share
+   * one length and sit side by side; refinements inside a lane do not apply.
+   */
+  function swimLanes(list: Item[], layout: ModelLayout) {
+    const right = axisOf(layout) === 'right',
+      rankGap = Math.max(layout.gap, LANE_RANK_GAP);
+    const laneOf = new Map<string, string>();
+    for (const lane of list) for (const k of children.get(lane.id) ?? []) laneOf.set(k.id, lane.id);
+    const ids = [...laneOf.keys()],
+      size = (id: string) => drawn.get(id) ?? items.get(id)!,
+      major = (id: string) => (right ? size(id).w : size(id).h),
+      minor = (id: string) => (right ? size(id).h : size(id).w);
+    const owner = (id: string) => {
+      let o = byId.get(id);
+      while (o && !laneOf.has(o.id)) o = byId.get(o.parent);
+      return o?.id;
+    };
+    const pairs = m.edges
+      .map(e => [owner(e.source), owner(e.target)] as const)
+      .filter((p): p is [string, string] => !!p[0] && !!p[1] && p[0] !== p[1]);
+    const layers = ids.length ? byBarycenter(rankLayers(ids, pairs), pairs) : [];
+    const rank = new Map(layers.flatMap((layer, i) => layer.map(id => [id, i] as const)));
+    // Rank columns, each as long as its longest object, with room for the labels between them.
+    const longest = layers.map(layer => Math.max(...layer.map(major))),
+      starts: number[] = [];
+    let at = 0;
+    for (const [i, layer] of layers.entries()) {
+      starts.push(at);
+      let after = rankGap;
+      for (const e of m.edges) {
+        const a = rank.get(owner(e.source) ?? ''),
+          b = rank.get(owner(e.target) ?? '');
+        if (e.label && a !== undefined && b !== undefined && Math.min(a, b) === i && a !== b) {
+          const r = labelRoom('', '', e.label, look);
+          after = Math.max(after, right ? r.w : r.h);
+        }
+      }
+      at += longest[i] + (layer === layers.at(-1) ? 0 : after);
+    }
+    const length = at;
+    const depth = new Map<string, number>();
+    for (const lane of list) {
+      const per = layers.map(layer => layer.filter(id => laneOf.get(id) === lane.id)),
+        stack = (stacked: string[]) =>
+          stacked.reduce((sum, id, j) => sum + minor(id) + (j ? LANE_STACK_GAP : 0), 0),
+        deep = Math.max(EMPTY_LANE, ...per.map(stack));
+      depth.set(lane.id, deep);
+      per.forEach((stacked, r) => {
+        let across = (deep - stack(stacked)) / 2;
+        for (const id of stacked) {
+          const along = starts[r] + (longest[r] - major(id)) / 2,
+            p = right ? { x: along, y: across } : { x: across, y: along };
+          local.set(id, { x: round(p.x), y: round(p.y) });
+          bases.set(id, p);
+          across += minor(id) + LANE_STACK_GAP;
+        }
+      });
+    }
+    // Every lane is as long as the drawing; each one is wide enough for its title.
+    const title = (l: Item) =>
+        Math.ceil(measureText(l.label, look.groupTitle)) + GROUP_TITLE_CHROME,
+      span = Math.max(length + 2 * GROUP_INSET, ...list.map(title));
+    let next = 0;
+    for (const lane of list) {
+      const deep = depth.get(lane.id)!;
+      lane.w = right ? span : Math.max(deep + 2 * GROUP_INSET, title(lane));
+      lane.h = header + (right ? deep : length) + GROUP_INSET;
+      const p = right ? { x: 0, y: next } : { x: next, y: 0 };
+      local.set(lane.id, p);
+      bases.set(lane.id, p);
+      next += (right ? lane.h : lane.w) + LANE_GAP;
+    }
+    const total = Math.max(0, next - LANE_GAP);
+    return right
+      ? { w: list.length ? span : 0, h: total }
+      : { w: total, h: list.length ? header + length + GROUP_INSET : 0 };
   }
 
   function arrange(scope: string): { w: number; h: number } {
@@ -1844,6 +2279,7 @@ function layoutPass(
       items.set(o.id, item);
       return item;
     });
+    if (scope === 'root' && layout.algorithm === 'lanes') return swimLanes(list, layout);
     const pairs = pairsIn(scope);
     // Every line with an end in this scope, for the room the gaps it runs through need.
     // Only a group's gaps widen: the drawing's own gaps are already as wide as a group gap. A
@@ -2086,12 +2522,14 @@ function layoutPass(
     // Drawn boxes, in this scope's coordinates. Group content starts at 0,0, so a box that spills
     // past its slot at the top or left moves the content over by that much.
     const boxes = list.map(n => drawnBox(n, laid));
+    // A frame also leaves room inside its border for the soft tints round its members.
+    const nest = scope === 'root' ? 0 : Math.max(0, ...list.map(n => n.soft?.length ?? 0));
     const shift =
       scope === 'root' || !list.length
         ? { x: 0, y: 0 }
         : {
-            x: Math.max(0, -Math.min(...boxes.map(b => b.x))),
-            y: Math.max(0, -Math.min(...boxes.map(b => b.y))),
+            x: Math.max(0, -Math.min(...boxes.map(b => b.x))) + nest * SOFT_PAD,
+            y: Math.max(0, -Math.min(...boxes.map(b => b.y))) + nest * (SOFT_PAD + SOFT_LABEL),
           };
     for (const [i, n] of list.entries()) {
       const b = boxes[i],
@@ -2107,7 +2545,9 @@ function layoutPass(
             ...list.map((n, i) =>
               Math.max(laid.pos.get(n.id)![a] + n[size], boxes[i][a] + boxes[i][size]),
             ),
-          ) + shift[a]
+          ) +
+          shift[a] +
+          nest * SOFT_PAD
         : 0;
     return { w: extent('x', 'w'), h: extent('y', 'h') };
   }
