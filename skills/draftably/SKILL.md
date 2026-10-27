@@ -132,7 +132,9 @@ anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a 
 `layered`, `tree` (`root=nodeId`), `grid`. An engine on `root` arranges everything, except groups
 that have their own `layout` line. Useful settings: `node-gap=4..160`, `rank-gap=12..220`,
 `group-gap=12..180`, `ordering=stable|crossings`, `fold=auto|never`,
-`aspect=1|1.333|1.6|2|0.75`.
+`aspect=1|1.333|1.6|2|0.75`. Where the connections leave a choice, file order decides and an
+`order` line overrides it (`order root start ask rule ctx` puts `rule` left of `ctx` in their
+rank); ids never affect placement.
 
 Good defaults:
 
