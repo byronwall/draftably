@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { renderSvg } from '../src/cli/svg';
 import { compareDetailed, compareSources } from '../src/dsl/compare';
 import { checkSource } from '../src/dsl/compile';
+import { GROUP_INSET } from '../src/dsl/frame';
 import { projectScene } from '../src/dsl/project';
+import { resolveAppearance } from '../src/model/appearance';
+import { panelDoc } from '../src/model/panels';
 
 const BEFORE = `diagram "Checkout" version=1
 node api "API"
@@ -65,6 +68,19 @@ layout root flow gap=48
     expect(compareSources(before, after)).toBe(
       'group g "G"\n-node a-was "A" in=g\n+node a "A"\nnode b "B"\n-edge e-was a-was -> b\n+edge e a -> b\n',
     );
+  });
+
+  it('trims a container to the members a panel keeps, on every side', () => {
+    const doc = projectScene(
+      checkSource(
+        'group g "G"\n-node a "A" in=g\nnode b "B" in=g\nedge e a -> b\nlayout g engine=layered direction=down\n',
+      ),
+    );
+    const after = panelDoc(doc, 'after').layout.nodes,
+      header = resolveAppearance(doc.appearance).groupHeader;
+    expect(after.g.y).toBe(after.b.y - header);
+    expect(after.g.y + after.g.h).toBe(after.b.y + after.b.h + GROUP_INSET);
+    expect(after.b).toEqual(doc.layout.nodes.b);
   });
 
   it('refuses files that already carry marks', () => {
