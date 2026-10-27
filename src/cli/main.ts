@@ -9,9 +9,12 @@ import { compareDetailed } from '../dsl/compare';
 import { statusLabel, usedStatuses } from '../model/status';
 import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
+import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
 import { renderSvg } from './svg';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
+
+Any <file> may also be a PNG or SVG that Draftably exported: its embedded source is read.
 
 Commands:
   check <file>              Report source errors and layout diagnostics. Exits 1 on errors.
@@ -20,10 +23,13 @@ Commands:
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
   inspect <file> --png <out.png> [--scale 2]
                             Save the drawing as a PNG (needs Chrome or Chromium).
+                            PNG and SVG output embed the source; --no-source leaves it out.
   compare <before> <after>  Print one file holding both versions, with + - ~ change marks.
        [--write <file>]     Save it instead of printing it.
        [--svg]              Print it as an SVG drawing instead.
        [--png <out.png>]    Save it as a PNG instead; --scale as for inspect.
+  extract <image>           Print the .draft source embedded in a PNG or SVG export.
+       [--write <file>]     Save it instead of printing it.
   open [file|folder]        Edit diagrams in the viewer; saves go back to the file.
        [--port N]           Without a file, start on a picker for the folder's diagrams,
                             a new diagram, or an example. --no-open skips the browser.
@@ -39,9 +45,16 @@ Commands:
 const describe = (d: Diagnostic) =>
   `${d.level.padEnd(7)} ${d.line ? `line ${d.line}: ` : ''}${d.message}`;
 
-function read(file: string | undefined) {
+/** A file's source; a PNG or SVG export gives the source embedded in it. */
+async function read(file: string | undefined) {
   if (!file) throw new UsageError('A .draft file is required.');
-  return fs.readFileSync(path.resolve(file), 'utf8');
+  if (!isImageName(file)) return fs.readFileSync(path.resolve(file), 'utf8');
+  const source = await readImageSource(fs.readFileSync(path.resolve(file)));
+  if (source === null)
+    throw Error(
+      `${file} has no embedded Draftably source. It was exported with --no-source, by another tool, or recompressed by a host.`,
+    );
+  return source;
 }
 
 class UsageError extends Error {}
@@ -55,14 +68,14 @@ function option(args: string[], name: string) {
   return value;
 }
 
-/** Save `svg` as a PNG when `--png` is given; true if it was. */
-async function maybePng(svg: () => string | Promise<string>, args: string[]) {
+/** Save `svg` as a PNG when `--png` is given, with `source` in it; true if it was. */
+async function maybePng(svg: () => string | Promise<string>, args: string[], source?: string) {
   const out = option(args, '--png');
   if (!out) return false;
   const scale = Number(option(args, '--scale') ?? 2);
   if (!(scale > 0 && scale <= 8)) throw new UsageError('--scale must be from 0 to 8.');
   const { writePng } = await import('./png');
-  writePng(await svg(), out, scale);
+  await writePng(await svg(), out, scale, source);
   console.log(`Wrote ${out}.`);
   return true;
 }
@@ -70,10 +83,16 @@ async function maybePng(svg: () => string | Promise<string>, args: string[]) {
 export async function main(argv: string[]): Promise<number> {
   const [command, file, ...rest] = argv;
   const flag = (name: string) => rest.includes(name);
+  /** The source to embed in an exported image, unless `--no-source` is given. */
+  const embed = (source: string) => (flag('--no-source') ? undefined : formatSource(source));
+  const withSource = (svg: string, source: string) => {
+    const kept = embed(source);
+    return kept === undefined ? svg : embedSvgSource(svg, kept);
+  };
   try {
     switch (command) {
       case 'check': {
-        const scene = await compile(read(file));
+        const scene = await compile(await read(file));
         const errors = scene.diagnostics.filter(d => d.level === 'error');
         for (const d of scene.diagnostics) console.log(describe(d));
         const nodes = scene.objects.filter(o => o.type === 'node').length;
@@ -83,22 +102,25 @@ export async function main(argv: string[]): Promise<number> {
         return errors.length ? 1 : 0;
       }
       case 'format': {
-        const formatted = formatSource(read(file));
+        const formatted = formatSource(await read(file));
         if (flag('--write')) {
+          if (isImageName(file!))
+            throw new UsageError('format --write rewrites a .draft file only.');
           fs.writeFileSync(path.resolve(file), formatted);
           console.log(`Formatted ${file}.`);
         } else process.stdout.write(formatted);
         return 0;
       }
       case 'inspect': {
-        const doc = projectScene(await compile(read(file)));
-        if (await maybePng(() => renderSvg(doc), rest)) return 0;
-        if (flag('--svg')) process.stdout.write(renderSvg(doc));
+        const source = await read(file),
+          doc = projectScene(await compile(source));
+        if (await maybePng(() => renderSvg(doc), rest, embed(source))) return 0;
+        if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc), source));
         else console.log(JSON.stringify(canonicalGeometry(doc), null, flag('--json') ? 0 : 2));
         return 0;
       }
       case 'compare': {
-        const { merged, moved } = compareDetailed(read(file), read(rest[0]));
+        const { merged, moved } = compareDetailed(await read(file), await read(rest[0]));
         const doc = projectScene(await compile(merged)),
           draw = async () => renderSvg(doc);
         const out = option(rest, '--write');
@@ -109,12 +131,22 @@ export async function main(argv: string[]): Promise<number> {
           console.error(
             `Groups moved to another container: ${moved.join(', ')}. Both panels draw them where they are now.`,
           );
-        if (await maybePng(draw, rest)) return 0;
+        if (await maybePng(draw, rest, embed(merged))) return 0;
         if (out) {
           fs.writeFileSync(path.resolve(out), merged);
           console.log(`Wrote ${out}.`);
-        } else if (flag('--svg')) process.stdout.write(await draw());
+        } else if (flag('--svg')) process.stdout.write(withSource(await draw(), merged));
         else process.stdout.write(merged);
+        return 0;
+      }
+      case 'extract': {
+        if (!file || !isImageName(file)) throw new UsageError('extract needs a .png or .svg file.');
+        const source = await read(file),
+          out = option(rest, '--write');
+        if (out) {
+          fs.writeFileSync(path.resolve(out), source);
+          console.log(`Wrote ${out}.`);
+        } else process.stdout.write(source);
         return 0;
       }
       case 'open': {
@@ -124,7 +156,20 @@ export async function main(argv: string[]): Promise<number> {
         const port = at >= 0 ? Number(args[at + 1]) : 5180;
         if (!Number.isInteger(port) || port < 0 || port > 65535)
           throw new UsageError('--port must be an integer from 0 to 65535.');
-        const target = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--port');
+        let target = args.find((a, i) => !a.startsWith('--') && args[i - 1] !== '--port');
+        // An image opens through a .draft beside it, since the viewer saves edits to a file.
+        if (target && isImageName(target)) {
+          const source = await read(target),
+            draft = target.replace(/\.\w+$/, '.draft');
+          if (!fs.existsSync(draft)) {
+            fs.writeFileSync(draft, source);
+            console.log(`Wrote ${draft} from the source in ${target}.`);
+          } else if (fs.readFileSync(draft, 'utf8') !== source)
+            throw Error(
+              `${draft} already exists with other content. Use extract --write to pick a new name.`,
+            );
+          target = draft;
+        }
         await openSession(path.resolve(target ?? '.'), {
           port,
           portGiven: at >= 0,
