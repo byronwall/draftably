@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseModel } from '../src/dsl/syntax';
-import { editorUrl, joinPath, linkTarget } from '../src/model/link';
+import { editorUrl, joinPath, linkMark, linkTarget } from '../src/model/link';
 
 describe('links', () => {
   it('keeps URLs as written and reads a line and column off a file path', () => {
@@ -33,5 +33,23 @@ describe('config', () => {
       { code: 'config-repeated', message: expect.stringContaining('line 1'), line: 2 },
     ]);
     expect(() => parseModel('config editor=notepad\n')).toThrow(/editor=/);
+  });
+});
+
+describe('link mark on round and pointed shapes', () => {
+  it('touches the top-right side of a diamond or circle instead of the bounding-box corner', () => {
+    for (const shape of ['diamond', 'circle']) {
+      const m = linkMark(shape, 120, 80),
+        cx = m.x + m.size / 2,
+        cy = m.y + m.size / 2;
+      // The mark's centre is beside the outline: just past it, never far into the empty corner.
+      const along =
+        shape === 'diamond'
+          ? Math.abs(cx - 60) / 60 + Math.abs(cy - 40) / 40
+          : Math.hypot((cx - 60) / 60, (cy - 40) / 40);
+      expect(along).toBeGreaterThan(1);
+      expect(along).toBeLessThan(1.35);
+      expect(m.inside).toBe(false);
+    }
   });
 });

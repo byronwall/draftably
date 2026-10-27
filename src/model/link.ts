@@ -91,7 +91,19 @@ export const LINK_MARK_SIZE = 10;
 export function linkMark(shape: string, w: number, h: number, badge = 0): LinkMark {
   const size = LINK_MARK_SIZE,
     y = 5;
-  if (shape === 'circle' || shape === 'diamond' || shape === 'text' || shape === 'icon')
+  if (shape === 'circle' || shape === 'diamond') {
+    // Just outside the outline, halfway along its top-right side, so it touches the shape
+    // instead of floating at the empty corner of the bounding box.
+    const [px, py, nx, ny] =
+      shape === 'diamond'
+        ? [0.75 * w, 0.25 * h, h, w]
+        : [w / 2 + (w / 2) * Math.SQRT1_2, h / 2 - (h / 2) * Math.SQRT1_2, h, w];
+    const len = Math.hypot(nx, ny),
+      [ux, uy] = [nx / len, ny / len],
+      away = (size / 2) * (ux + uy) + 2;
+    return { x: px + ux * away - size / 2, y: py - uy * away - size / 2, size, inside: false };
+  }
+  if (shape === 'text' || shape === 'icon')
     return { x: w - size + 2, y: -size + 2, size, inside: false };
   const right = shape === 'pill' ? w - h / 2 + 4 : w - 5;
   return { x: Math.min(right, w - badge + 2) - size, y, size, inside: true };
