@@ -34,7 +34,11 @@ inside the Draftably repo). It needs Node 22.21 or later.
    5180, use the URL on its `Viewer:` line). Edits made in the viewer are written back to the
    file, and edits to the file show in the viewer at once. Run it in the background; it does not
    exit by itself.
-6. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
+6. **Recover a diagram from an image.** PNG and SVG exports carry their source.
+   `npx draftably extract diagram.png` prints it (`--write diagram.draft` saves it), and `check`,
+   `inspect`, `format`, `compare` and `open` accept the image in place of the `.draft`. Use
+   `--no-source` on `--png`/`--svg` exports when the labels must not travel with the picture.
+7. **Tidy:** `npx draftably format diagram.draft --write` normalizes the source and keeps
    comments.
 
 ## Syntax

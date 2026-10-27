@@ -303,10 +303,35 @@ pnpm draftably inspect examples/checkout.draft    # canonical node and route geo
 pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
 pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
 pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
+pnpm draftably extract checkout.png              # print the source embedded in a PNG or SVG export
 pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
 pnpm draftably open                              # start page for the current folder's diagrams
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
 ```
+
+`check`, `format`, `inspect`, `compare` and `open` also take a PNG or SVG export in place of a
+`.draft` file, and read the source embedded in it. `open` writes that source to a `.draft` beside
+the image first. `extract --write file.draft` saves the source instead of printing it. `extract`
+exits 1 when the image carries no source.
+
+### Source in exported images
+
+`inspect --png`, `inspect --svg`, `compare --png` and `compare --svg` embed the formatted source,
+and the viewer's PNG and SVG exports embed the open file's source. A `compare` export embeds the
+marked file, so both versions come back. `--no-source`, or the checkbox in the viewer's export
+menu, leaves it out. Dropping or pasting an image with source into the viewer opens it as a new
+scratch diagram. The format is stable, so other tools can read it:
+
+- **PNG:** an `iTXt` chunk with keyword `draftably`. Its text is the UTF-8 source, with the
+  compression flag set to 1 (zlib) or 0 (none); readers accept both. A `tEXt` chunk with keyword
+  `draftably-version` names the Draftably version that drew it. Both sit before `IEND`. The
+  chunks do not change the pixels.
+- **SVG:** a `<metadata id="draftably-source" data-draftably-version="…">` element inside the root
+  `<svg>`, holding the XML-escaped source.
+
+Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+
+### Drawing conflicts
 
 `check` also measures the drawing and reports conflicts as warnings. Layout and routing avoid
 them on their own, so a conflict usually comes from a refinement. Each warning ends with its
