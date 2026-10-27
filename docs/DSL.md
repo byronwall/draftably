@@ -183,7 +183,7 @@ In focus, an object keeps its colors and draws a heavier border; a connection dr
 line. Everything else fades to the theme's neutral surface, like a `.` context line, except the
 containers that hold something in focus, so the context still reads. `rest=plain` leaves
 everything else as it is, for a soft highlight; with nothing faded, focused objects take a ring
-and focused connections a line in the theme's primary accent. A state never moves anything:
+and focused connections a line in the theme's `secondary` accent. A state never moves anything:
 every state of a file has the same layout. In a file with change marks, hue still means change;
 a state only adds the heavier border or the fade.
 

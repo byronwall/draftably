@@ -1,6 +1,8 @@
 diagram "Order service paths" version=1
 subtitle "Which parts each request path touches"
 
+# Emphasis states: one diagram drawn three ways, for the write path, the read path and events.
+
 group entry "Entry" color=blue
 node web "Web app" in=entry
 node api "API gateway" in=entry

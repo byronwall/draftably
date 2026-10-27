@@ -56,9 +56,9 @@ export interface StatusPaint {
 /** Room between a shape and its focus ring. */
 export const HALO_GAP = 4;
 
-/** The accent a ringed object or connection is drawn with. */
+/** The accent a ringed object or connection is drawn with: the theme's second accent. */
 export const haloInk = (look: ResolvedAppearance) =>
-  swatchFor(look, 'primary', look.dark ? 300 : 600).fill;
+  swatchFor(look, 'secondary', look.dark ? 300 : 500).fill;
 
 const PLAIN: StatusPaint = { opacity: 1, strike: false };
 
