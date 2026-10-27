@@ -7,5 +7,3 @@ Add `draftably vary`. It tries layout and routing variants that suit the diagram
 `vary --try key=a,b` sweeps exact settings (two `--try` make a grid; `--try key` alone uses the viewer Compare's steps), `--grid` sweeps the main engines in both directions, and `--scope <group>` varies one group's layout line.
 
 `vary --fit wide|slide|square|page|tall` aims for an image shape, `--prefer compact|stable` changes what ranks first, and `--from <id>` searches around a variant from the last run.
-
-`vary` also suggests dropping refinements that `check` blames for conflicts, drawing change marks as `compare` panels, and softening groups for fewer containers. `check` no longer reports `node-overlap`, `outside-group` or `edge-through-title` for soft and frameless groups, whose tints lines may cross.
