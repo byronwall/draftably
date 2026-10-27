@@ -43,8 +43,8 @@ export function panelDoc(doc: Diagram, side: PanelSide): Diagram {
 }
 
 /**
- * Shrink each container that lost members in this panel to fit what is left, keeping its
- * top-left corner. Nothing else moves, so the panels still line up; the space the other
+ * Shrink each container that lost members in this panel to fit what is left, on every side.
+ * Only the frame moves, so the panels still line up; the space the other
  * version's objects needed simply goes away. Innermost containers fit first.
  */
 function fitFrames(panel: Diagram, gone: Set<string>, merged: Diagram): Diagram {
@@ -68,13 +68,23 @@ function fitFrames(panel: Diagram, gone: Set<string>, merged: Diagram): Diagram 
     const frame = layout[g.id],
       inside = members.filter(o => o.parentId === g.id).map(o => layout[o.id]);
     if (!frame || !inside.length) continue;
-    const right = Math.max(...inside.map(r => r.x + r.w)) + GROUP_INSET,
-      bottom = Math.max(...inside.map(r => r.y + r.h)) + GROUP_INSET,
-      title = measureText(g.title, look.groupTitle) + GROUP_TITLE_CHROME;
+    const right = Math.min(
+        frame.x + frame.w,
+        Math.max(...inside.map(r => r.x + r.w)) + GROUP_INSET,
+      ),
+      bottom = Math.min(frame.y + frame.h, Math.max(...inside.map(r => r.y + r.h)) + GROUP_INSET),
+      title = measureText(g.title, look.groupTitle) + GROUP_TITLE_CHROME,
+      left = Math.max(frame.x, Math.min(...inside.map(r => r.x)) - GROUP_INSET),
+      top = Math.max(frame.y, Math.min(...inside.map(r => r.y)) - look.groupHeader),
+      // A title wider than what is left keeps the frame's old left edge, as far as it needs.
+      x = Math.max(frame.x, Math.min(left, right - title)),
+      y = Math.max(frame.y, Math.min(top, bottom - look.groupHeader - GROUP_INSET));
     layout[g.id] = {
       ...frame,
-      w: Math.min(frame.w, Math.max(right - frame.x, title)),
-      h: Math.min(frame.h, Math.max(bottom - frame.y, look.groupHeader + GROUP_INSET)),
+      x,
+      y,
+      w: Math.min(frame.x + frame.w, Math.max(right, x + title)) - x,
+      h: bottom - y,
     };
   }
   return { ...panel, layout: { ...panel.layout, nodes: layout } };
