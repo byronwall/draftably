@@ -199,7 +199,8 @@ export function normalize(input: unknown): Diagram {
 
   for (const e of data.graph.edges) {
     check(e, 'Connection');
-    if (!nodes.has(e.from) || !nodes.has(e.to)) throw Error(e.id + ': both endpoints must exist.');
+    if (!(nodes.has(e.from) || groups.has(e.from)) || !(nodes.has(e.to) || groups.has(e.to)))
+      throw Error(e.id + ': both endpoints must exist.');
     if (e.label !== undefined && typeof e.label !== 'string')
       throw Error(e.id + ': label must be text.');
     out.graph.edges.push({

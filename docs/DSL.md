@@ -33,23 +33,24 @@ Write one statement per line. Indentation means nothing; containment comes from 
 use JSON double quotes. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
 and groups. References may point to later lines.
 
-| Statement                          | Meaning                                                                                                                                                                               |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                                                       |
-| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                                                         |
-| `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                                                     |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                         |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`. See [Soft groups](#soft-groups).                                                                                |
-| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                          |
-| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                             |
-| `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors).                                    |
-| `edge id source -> target "label"` | A connection between two nodes. `kind=async` draws it dashed; `from=`/`to=` choose sides; `constraint=false` draws it without letting it rank or order anything (for feedback edges). |
-| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                                                     |
-| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                            |
-| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                            |
-| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                              |
+| Statement                          | Meaning                                                                                                                                                                                                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                                                                                                                         |
+| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                                                                                                                           |
+| `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                                                                                                                       |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                           |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                    |
+| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                            |
+| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                               |
+| `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors).                                                                                                      |
+| `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides; `constraint=false` draws it without letting it rank or order anything (for feedback edges). |
+| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                                                                                                                       |
+| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                              |
+| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                              |
+| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
+| `layout root … fit=slide` | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note. |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
 | `config key=value` | File settings. See [Links and counts](#rules). |
 | `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |
@@ -504,6 +505,10 @@ An engine on `root` arranges everything, including the contents of groups. A gro
 `layout` line keeps that recipe instead. An engine on a group arranges only that group. Groups
 are then sized to fit their content, as with the built-in recipes, and `near`, `stay`, `pin` and
 the other refinements apply on top of the engine's arrangement.
+
+Under `compound-flow` or `layered` reading down, a group whose chain is at least 1.5 times as tall
+as every other column folds into side-by-side columns, when that makes the drawing smaller.
+`fold=never` on the `group` line keeps it in one column.
 
 Under `compound-flow` or `layered`, groups are packed tight. Members of a group rank by the
 connections between them, so a chain reads as a straight row or column in the reading direction.

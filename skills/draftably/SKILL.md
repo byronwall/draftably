@@ -105,25 +105,25 @@ layout platform column gap=28
 layout services row gap=56
 ```
 
-| Statement                          | Options                                                                                                                                                              |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                                                                      |
-| `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                            |
-| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                         |
-| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                                                   |
-| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                |
-| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                                                                                |
-| `theme name`                       | Preset look (see below); optional, at most one                                                                                                                       |
-| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                |
-| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                          |
-| `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout                     |
-| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                                                                   |
-| `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                                                                |
-| `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                                                                |
-| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                                                                             |
-| `phase id "label" ids...`          | Sequence diagrams: listed messages drawn as a labelled row band                                                                                                      |
-| `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                                                                 |
-| `config key=value ...`             | File settings: `link-base="path"` (where relative links start; a URL such as a pinned `…/blob/<sha>/` joins relative hrefs to it), `editor=vscode\|cursor\|zed\|...` |
+| Statement                          | Options                                                                                                                                                                                                         |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                                                                                                                 |
+| `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                       |
+| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                                                                    |
+| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                                                                                              |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                                                           |
+| `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                           |
+| `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                  |
+| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                                                           |
+| `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                                                                     |
+| `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout |
+| `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                                                                                                              |
+| `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                                                                                                           |
+| `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                                                                                                           |
+| `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                                                                                                                        |
+| `phase id "label" ids...`          | Sequence diagrams: listed messages drawn as a labelled row band                                                                                                                                                 |
+| `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                                                                                                            |
+| `config key=value ...`             | File settings: `link-base="path"` (where relative links start; a URL such as a pinned `…/blob/<sha>/` joins relative hrefs to it), `editor=vscode\|cursor\|zed\|...`                                            |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
@@ -143,7 +143,9 @@ anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a 
 `layered`, `tree` (`root=nodeId`), `grid`. An engine on `root` arranges everything, except groups
 that have their own `layout` line. Useful settings: `node-gap=4..160`, `rank-gap=12..220`,
 `group-gap=12..180`, `ordering=stable|crossings`, `fold=auto|never`,
-`aspect=1|1.333|1.6|2|0.75`. Where the connections leave a choice, file order decides and an
+`aspect=1|1.333|1.6|2|0.75`. For a document or slide, add `fit=slide` (or `wide`, `square`,
+`page`, `tall`) to the root layout line: compile tries both directions and folding and keeps the
+shape closest to that, naming the choice in an `info` note. Where the connections leave a choice, file order decides and an
 `order` line overrides it (`order root start ask rule ctx` puts `rule` left of `ctx` in their
 rank); ids never affect placement.
 
@@ -156,6 +158,8 @@ Good defaults:
   object in its row, so a relabel is safe to make without rechecking the layout.
 - Hierarchies and org charts: `layout root engine=tree root=top direction=down`.
 - Nested architecture (several container levels): `layout root engine=compound-flow`.
+  Reading down, a group much taller than the others folds into columns when that makes the
+  drawing smaller (`fold=never` on the group stops it).
   A long chain of groups folds its longest groups, then wraps into rows, so the drawing stays
   within 5:1; `fold=never` keeps one line. A called-only group sits beside its caller.
 - A group of peers: `layout groupId row gap=24` or `layout groupId engine=grid`.

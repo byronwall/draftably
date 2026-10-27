@@ -37,6 +37,7 @@ import {
 import { projectScene } from './project';
 import {
   DslError,
+  FITS,
   layoutParent,
   nearAnchor,
   parseModel,
@@ -125,8 +126,65 @@ const round = (n: number) => Math.round(n);
 
 export async function compile(source: string): Promise<Scene> {
   const m = parseModel(source),
-    flat = dissolved(m);
-  return sequenced(withSoftGroups(layoutModel(flat, await engineArrangement(flat)), m));
+    root = m.layouts.find(l => l.scope === 'root' && l.fit);
+  if (!root?.fit) return compileModel(m);
+  // `fit=`: lay the drawing out each way it can read and fold, and keep the one whose shape is
+  // closest to the target. The file as written goes first, so it wins a tie.
+  const target = FITS[root.fit],
+    tried: Array<{ scene: Scene; label: string; off: number }> = [];
+  for (const variant of fitVariants(root)) {
+    const scene = await compileModel({
+      ...m,
+      layouts: m.layouts.map(l => (l === root ? { ...l, ...variant.layout } : l)),
+    });
+    tried.push({ scene, label: variant.label, off: Math.abs(Math.log(aspectOf(scene) / target)) });
+  }
+  const best = tried.reduce((a, b) => (b.off < a.off - 0.01 ? b : a));
+  best.scene.diagnostics.push({
+    level: 'info',
+    code: 'fit',
+    message: `fit=${root.fit} (aspect ${target}): drawn ${best.label}, aspect ${aspectOf(best.scene).toFixed(2)}; ${tried.length} layouts tried.`,
+    line: root.line,
+    ids: [],
+  });
+  return best.scene;
+}
+
+function compileModel(m: Model) {
+  const flat = dissolved(m);
+  return engineArrangement(flat).then(arranged =>
+    sequenced(withSoftGroups(layoutModel(flat, arranged), m)),
+  );
+}
+
+/** Width over height of a scene's top-level objects. */
+function aspectOf(scene: Scene) {
+  const top = scene.objects.filter(o => o.parent === 'root');
+  return (
+    (Math.max(...top.map(o => o.x + o.w)) - Math.min(...top.map(o => o.x))) /
+    (Math.max(...top.map(o => o.y + o.h)) - Math.min(...top.map(o => o.y)))
+  );
+}
+
+/** The ways `fit=` tries a root layout: as written, then each reading direction, folding or not. */
+function fitVariants(root: ModelLayout) {
+  const reads = (l: Partial<ModelLayout>) =>
+    `reading ${l.direction === 'auto' ? 'as the engine picks' : l.direction}`;
+  const out: Array<{ label: string; layout: Partial<ModelLayout> }> = [
+    { label: `as written (${reads(root)})`, layout: {} },
+  ];
+  if (['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine) return out;
+  for (const direction of ['right', 'down'] as const)
+    for (const fold of ['auto', 'never'] as const) {
+      const layout: Partial<ModelLayout> = root.engine
+        ? {
+            direction,
+            engine: { ...root.engine, params: { ...root.engine.params, fold } },
+          }
+        : { direction, fold };
+      out.push({ label: `${reads({ direction })}${fold === 'never' ? ', unfolded' : ''}`, layout });
+    }
+  return out;
 }
 
 /**
@@ -729,6 +787,9 @@ function titleFit(title: string, inner: number, look: ResolvedAppearance) {
 
 /** How far a soft refinement may give way before `check` warns that it no longer holds. */
 export const RELAXED_WARNING = 16;
+
+/** A group folds when its chain runs this many times as long as the next longest column. */
+const TALL_GROUP = 1.5;
 
 /** Solver budget for engine recipes; the same budget Compare and the timeline use. */
 export const ENGINE_ITERATIONS = 640;
@@ -2920,6 +2981,50 @@ function layoutPass(
     /** A group whose content runs more than `FOLD_ASPECT` times its depth. */
     function tooLongRun(o: Size) {
       return along(o) > FOLD_ASPECT * across(o);
+    }
+  }
+
+  // In a drawing that reads down, a group whose chain is much taller than every other column folds
+  // into side-by-side columns, the tallest first, while that makes the whole drawing smaller.
+  // (Reading right, folding a long group turns it into rows, which reads worse; the length check
+  // above covers that case.)
+  if (
+    !packFold &&
+    rootLayout &&
+    axisOf(rootLayout) === 'down' &&
+    rootLayout.engine?.params.fold !== 'never'
+  ) {
+    const along = (o: Size) => o.h,
+      area = (o: Size) => o.w * o.h;
+    for (;;) {
+      const tops = (children.get('root') ?? [])
+          .map(o => items.get(o.id)!)
+          .filter(Boolean)
+          .sort((a, b) => along(b) - along(a)),
+        [tall, next] = tops;
+      if (
+        !tall ||
+        !next ||
+        tall.type !== 'group' ||
+        tall.fold === 'never' ||
+        foldGroups.has(tall.id) ||
+        !packEngine(tall.id) ||
+        along(tall) < TALL_GROUP * along(next)
+      )
+        break;
+      const before = size;
+      foldGroups.add(tall.id);
+      diagnostics.length = diagnosed;
+      folds.length = flows.length = 0;
+      drawn.clear();
+      size = arrange('root');
+      if (area(size) < area(before)) continue;
+      foldGroups.delete(tall.id);
+      diagnostics.length = diagnosed;
+      folds.length = flows.length = 0;
+      drawn.clear();
+      arrange('root');
+      break;
     }
   }
 

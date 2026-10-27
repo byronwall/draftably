@@ -209,6 +209,8 @@ export interface ModelObject {
    * group is not a layout scope: its members are laid out with the nearest framed container's.
    */
   frame?: 'soft' | 'none';
+  /** Groups only: `fold=never` keeps the group's chain in one column even when it is much the tallest. */
+  fold?: 'never';
   /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
   soft?: string[];
   /** Cells only: how many columns (or units) of its group's grid the cell covers; `var` for a
@@ -240,6 +242,10 @@ export interface EngineRecipe {
   params: Partial<LayoutSettings>;
 }
 
+/** Image shapes a drawing can aim for (`fit=`, `vary --fit`): width over height. */
+export const FITS = { wide: 2, slide: 1.78, square: 1, page: 0.77, tall: 0.6 } as const;
+export type Fit = keyof typeof FITS;
+
 export interface ModelLayout {
   scope: string;
   algorithm: Algorithm;
@@ -255,6 +261,8 @@ export interface ModelLayout {
   ruler?: boolean;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
+  /** Root only: the image shape to aim for; compile tries direction and folding to get closest. */
+  fit?: Fit;
   gap: number;
   minWidth: number;
   minHeight: number;
@@ -613,7 +621,18 @@ export function parseModel(source: string | SourceDoc): Model {
                 'detail',
                 'priority',
               ]
-            : ['in', 'color', 'shade', 'was', 'href', 'kind', 'detail', 'priority', 'frame'],
+            : [
+                'in',
+                'color',
+                'shade',
+                'was',
+                'href',
+                'kind',
+                'detail',
+                'priority',
+                'frame',
+                'fold',
+              ],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -639,6 +658,9 @@ export function parseModel(source: string | SourceDoc): Model {
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
           ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
+          ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
+            ? { fold: 'never' as const }
+            : {}),
           ...(command === 'group' && choice('frame', 'box', FRAMES) !== 'box'
             ? { frame: choice('frame', 'box', FRAMES) as 'soft' | 'none' }
             : {}),
@@ -684,7 +706,12 @@ export function parseModel(source: string | SourceDoc): Model {
         const scope = id(args[0]);
         once('layout:' + scope);
         const named = attrs.get('engine')?.value as LayoutAlgorithmId | undefined;
-        const common = ['direction', 'min-width', 'min-height'];
+        const common = [
+          'direction',
+          'min-width',
+          'min-height',
+          ...(scope === 'root' ? ['fit'] : []),
+        ];
         let engine: EngineRecipe | undefined;
         if (named !== undefined) {
           count(1);
@@ -722,6 +749,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(engine ? { engine } : {}),
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
+          ...(attrs.has('fit') ? { fit: choice('fit', 'slide', Object.keys(FITS) as Fit[]) } : {}),
           ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
           ...(attrs.has('unit')
             ? {
@@ -1001,10 +1029,20 @@ function validateReferences(m: Model) {
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
       exists(end, e.line);
-      const members = m.objects.filter(o => o.type === 'node' && o.parent === end).map(o => o.id);
+      // A line may end on a boxed group's frame, but not on a tint or on a group around its other end.
+      const o = by.get(end)!,
+        other = end === e.source ? e.target : e.source;
       assert(
-        by.get(end)!.type === 'node',
-        `Connections join nodes; ${end} is a group.${members.length ? ` Connect to one of its members instead: ${members.slice(0, 4).join(', ')}.` : ''}`,
+        o.type === 'node' || !o.frame,
+        `${end} is a ${o.frame} group, which has no frame for a line to end on. Connect to one of its members, or use frame=box.`,
+        e.line,
+      );
+      let around = false;
+      for (let p = by.get(other)?.parent; p && p !== 'root'; p = by.get(p)?.parent)
+        if (p === end) around = true;
+      assert(
+        !around,
+        `${other} is inside ${end}, so a line between them has nowhere to go.`,
         e.line,
       );
     }
