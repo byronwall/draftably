@@ -33,11 +33,19 @@ function findChrome(): string {
   throw Error('PNG output needs Chrome or Chromium. Install one, or set CHROME_PATH to it.');
 }
 
-/** Write `svg` as a PNG at `scale` times its own size, with `source` embedded when given. */
-export async function writePng(svg: string, out: string, scale = 2, source?: string) {
+/** The width and height an SVG declares on its root, rounded up. */
+export function svgSize(svg: string) {
   const size = /width="(\d+(?:\.\d+)?)" height="(\d+(?:\.\d+)?)"/.exec(svg);
   if (!size) throw Error('The SVG has no size.');
-  const [w, h] = [Math.ceil(Number(size[1])), Math.ceil(Number(size[2]))];
+  return { w: Math.ceil(Number(size[1])), h: Math.ceil(Number(size[2])) };
+}
+
+/**
+ * Write `svg` as a PNG at `scale` times its own size, with `source` embedded when given. Returns
+ * the image's size in pixels.
+ */
+export async function writePng(svg: string, out: string, scale = 2, source?: string) {
+  const { w, h } = svgSize(svg);
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'draftably-png-'));
   try {
     const page = path.join(dir, 'page.html');
@@ -67,6 +75,7 @@ export async function writePng(svg: string, out: string, scale = 2, source?: str
       path.resolve(out),
       source === undefined ? png : await embedPngSource(png, source),
     );
+    return { w: png.readUInt32BE(16), h: png.readUInt32BE(20) };
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

@@ -10,12 +10,30 @@ import { fileURLToPath } from 'node:url';
 
 export const SKILL_NAME = 'draftably';
 
-/** The bundled skill folder: `skills/draftably` next to the nearest package.json. */
-export function skillSource() {
+/** The folder of the nearest package.json above this module. */
+function packageRoot() {
   let project = path.dirname(fileURLToPath(import.meta.url));
   while (!fs.existsSync(path.join(project, 'package.json')) && path.dirname(project) !== project)
     project = path.dirname(project);
-  const dir = path.join(project, 'skills', SKILL_NAME);
+  return project;
+}
+
+/** The draftably version: the installed package's, or `packages/cli`'s in this repository. */
+export function cliVersion(): string {
+  const root = packageRoot();
+  for (const file of [
+    path.join(root, 'package.json'),
+    path.join(root, 'packages/cli/package.json'),
+  ]) {
+    const pkg = JSON.parse(fs.readFileSync(file, 'utf8')) as { name?: string; version?: string };
+    if (pkg.name === 'draftably' && pkg.version) return pkg.version;
+  }
+  return 'unknown';
+}
+
+/** The bundled skill folder: `skills/draftably` next to the nearest package.json. */
+export function skillSource() {
+  const dir = path.join(packageRoot(), 'skills', SKILL_NAME);
   if (!fs.existsSync(path.join(dir, 'SKILL.md')))
     throw Error('The agent skill is missing. Reinstall draftably.');
   return dir;
