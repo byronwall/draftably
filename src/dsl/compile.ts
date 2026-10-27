@@ -2579,10 +2579,14 @@ function layoutPass(
             id: o.id,
             label: o.label,
             marker: o.shape === 'marker',
+            ...(o.span ? { span: o.span } : {}),
             ...(hint?.type === 'size' ? { size: { width: hint.width, height: hint.height } } : {}),
           };
         }),
-        layout.direction === 'down' ? 'down' : 'right',
+        {
+          direction: layout.direction === 'down' ? 'down' : 'right',
+          ...(layout.columns ? { columns: layout.columns } : {}),
+        },
         look,
         title,
       );

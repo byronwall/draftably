@@ -211,6 +211,8 @@ export interface ModelObject {
   frame?: 'soft' | 'none';
   /** Set by the compiler: the soft groups this object sits in below its layout scope, outermost first. */
   soft?: string[];
+  /** Cells only: how many columns of its group's grid the cell covers. */
+  span?: number;
   line: number;
 }
 
@@ -241,6 +243,8 @@ export interface ModelLayout {
   /** Set when the scope is arranged by a layout engine instead of a built-in recipe. */
   engine?: EngineRecipe;
   direction: 'auto' | 'right' | 'down';
+  /** `cells` only: columns in each row of the grid; one row or column without it. */
+  columns?: number;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
   gap: number;
@@ -570,6 +574,7 @@ export function parseModel(source: string | SourceDoc): Model {
                 'was',
                 'href',
                 'count',
+                'span',
                 'kind',
                 'detail',
                 'priority',
@@ -603,6 +608,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(command === 'group' && choice('frame', 'box', FRAMES) !== 'box'
             ? { frame: choice('frame', 'box', FRAMES) as 'soft' | 'none' }
             : {}),
+          ...(attrs.has('span') ? { span: num('span', 1, 1, 512) } : {}),
           line,
         });
         break;
@@ -651,7 +657,7 @@ export function parseModel(source: string | SourceDoc): Model {
           const recipe = args[1]?.value;
           allow(
             recipe === 'cells'
-              ? common
+              ? ['columns', ...common]
               : ['gap', ...(recipe === 'flow' ? ['fold'] : []), ...common],
           );
         }
@@ -674,6 +680,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(engine ? { engine } : {}),
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
+          ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
           gap: num('gap', 28, 8, 300),
           minWidth: num('min-width', 0, 0, 10_000),
           minHeight: num('min-height', 0, 0, 10_000),
@@ -936,20 +943,28 @@ function validateReferences(m: Model) {
         line,
       );
     }
-  const cellScopes = new Set(m.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope));
+  const cells = new Map(m.layouts.filter(l => l.algorithm === 'cells').map(l => [l.scope, l]));
   for (const o of m.objects) {
-    if (cellScopes.has(o.parent))
+    const grid = cells.get(o.parent);
+    if (grid) {
       assert(
         o.type === 'node',
         `Cells are nodes; ${o.id} is a group inside cells ${o.parent}.`,
         o.line,
       );
-    else
+      assert(
+        o.shape !== 'marker' || (grid.columns ?? 0) <= 1,
+        `A marker cuts one row or column of cells; ${o.parent} has ${grid.columns} columns.`,
+        o.line,
+      );
+    } else {
       assert(
         o.shape !== 'marker',
         `A marker sits between cells; put ${o.id} in a group with layout cells.`,
         o.line,
       );
+      assert(o.span === undefined, `span= is for cells; ${o.parent} has no layout cells.`, o.line);
+    }
   }
   for (const l of m.layouts) {
     scope(l.scope, l.line);

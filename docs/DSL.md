@@ -213,17 +213,42 @@ edge hit cache -> cp "cached prefix"
 
 - Cells form one row by default; `direction=down` makes one column. Every cell in a row has the
   row's height; every cell in a column has the column's width.
+- `columns=N` makes a grid, such as a table: cells fill each row of N columns in order. Each
+  column is as wide as its widest cell. `span=N` on a cell covers N columns; a cell that does not
+  fit the rest of its row starts the next row. A spanning cell wider than its columns widens the
+  last of them.
 - A cell is as wide as its title on one line, from 64 to 240 pixels, and wraps past that. A
   `size` line sets it exactly. A title band wider than the cells stretches the last cell.
 - A cell has no color of its own unless it names one, so the band carries the group's color.
 - `shape=marker` marks a seam, such as a cache point. It takes no room: a bar in the theme's text
   color cuts the object, title band included, before the next cell, and its label sits above.
   Lines reach a marker from below.
-- Lines can start or end at any cell.
+- Lines can start or end at any cell. A line meets a cell on a side that lies on the group's
+  outline, facing the line's other end; a cell's top faces the title band, so it is never used.
+  A cell with no such side, inside a grid, is reached across the cells in the way: the line
+  enters the outline facing its other end, is drawn over the cells, and ends with a dot at the
+  cell. `from=` and `to=` still choose a side.
+- A marker needs one row or one column: it cannot cut a grid.
 - A cell stays in its place. `near`, `nudge`, `stay` and `pin` on a cell are reported and
   ignored; move the group instead. Dragging a cell in the viewer moves its group. An engine on the
   root moves the group as one block.
 - Cells are nodes, so colors, links, `count=` and change marks work on them.
+
+A table of a database entity, with a line from one row to another table's row:
+
+```text
+group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+edge invoice_account invoices.account -> accounts.id
+```
 
 ## Change marks
 

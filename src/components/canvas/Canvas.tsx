@@ -18,7 +18,7 @@ import { toast } from '../../state/toast';
 import { openMenu } from '../../state/ui';
 import { BrushDock } from '../sculpt/BrushDock';
 import { TimelineDeck } from '../sculpt/TimelineDeck';
-import { EdgeView } from '../scene/EdgeView';
+import { CrossingView, EdgeView } from '../scene/EdgeView';
 import { GroupView } from '../scene/GroupView';
 import { NodeView } from '../scene/NodeView';
 import { Lifelines } from '../scene/Lifelines';
@@ -191,6 +191,15 @@ export function Canvas() {
                   interactive
                   zoom={camera().k}
                 />
+              )}
+            </For>
+          </g>
+          <g>
+            <For each={edgeIds()}>
+              {id => (
+                <Show when={routesById().get(id)?.cross && routesById().get(id)}>
+                  {route => <CrossingView doc={doc} route={route()} selected={isSelected(id)} />}
+                </Show>
               )}
             </For>
           </g>

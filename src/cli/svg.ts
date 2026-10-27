@@ -237,6 +237,20 @@ function sceneMarkup(
       ),
     );
   }
+  // A line that crosses cells to reach one is drawn over them, ending in a dot.
+  for (const route of routes) {
+    if (!route.cross) continue;
+    const edge = doc.graph.edges.find(e => e.id === route.id)!,
+      p = statusPaint(look, edge.status),
+      ink = edgeInk(look, edge, diff),
+      [a, b] = route.cross;
+    out.push(
+      `<g${fade(p)}>`,
+      `<line x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}"${p.dash || edge.dashed ? ` stroke-dasharray="${p.dash ?? '5 5'}"` : ''}/>`,
+      `<circle cx="${b.x}" cy="${b.y}" r="3.5" fill="${ink}"/>`,
+      '</g>',
+    );
+  }
   return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };
 }
 

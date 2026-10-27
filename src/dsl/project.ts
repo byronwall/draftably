@@ -85,15 +85,9 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       dashed: e.dashed,
       ...(e.status ? { status: e.status } : {}),
     });
-    // A marker is reached from below: its top runs through the title band.
-    const marker = (id: string) => scene.byId.get(id)?.shape === 'marker' && 'bottom';
     doc.layout.edges[e.id] = {
-      ...(e.from !== 'auto'
-        ? { fromSide: e.from }
-        : marker(e.source)
-          ? { fromSide: 'bottom' }
-          : {}),
-      ...(e.to !== 'auto' ? { toSide: e.to } : marker(e.target) ? { toSide: 'bottom' } : {}),
+      ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
+      ...(e.to !== 'auto' ? { toSide: e.to } : {}),
       ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
       ...(e.lane ? { lane: e.lane } : {}),
       ...(e.row !== undefined ? { row: e.row } : {}),

@@ -58,4 +58,43 @@ describe('cells', () => {
     expect(a.y + a.h).toBe(b.y);
     expect(a.w).toBe(b.w);
   });
+
+  it('fills a grid row by row, sharing column widths, with spans', () => {
+    const scene = checkSource(
+        'group g "G"\nlayout g cells columns=2\nnode a "id" in=g\nnode b "uuid" in=g\nnode c "organisation_id" in=g\nnode d "uuid" in=g\nnode e "A footer wider than both columns" in=g span=2',
+      ),
+      at = (id: string) => scene.byId.get(id)!;
+    expect(at('a').w).toBe(at('c').w);
+    expect(at('b').x).toBe(at('d').x);
+    expect(at('c').y).toBe(at('a').y + at('a').h);
+    expect(at('e').x).toBe(at('a').x);
+    expect(at('e').w).toBe(at('a').w + at('b').w);
+  });
+
+  it('reaches a cell with no free side across the cells, and others by their free side', () => {
+    const doc = projectScene(
+        checkSource(
+          'group g "G"\nlayout g cells columns=3\n' +
+            ['a', 'b', 'c', 'd', 'm', 'f', 'h', 'i', 'j']
+              .map(id => `node ${id} "${id}" in=g`)
+              .join('\n') +
+            '\nnode src "Source"\nnode sink "Sink"\nedge in src -> m\nedge out f -> sink',
+        ),
+      ),
+      { vg, rects } = visibleRects(doc),
+      routes = computeRoutes(doc, vg, rects, { previous: [] }).routes,
+      m = rects.get('m')!,
+      into = routes.find(r => r.id === 'in')!;
+    expect(into.cross).toBeDefined();
+    expect(routes.filter(r => r.blocked).map(r => r.id)).toEqual([]);
+    expect(into.points.at(-1)).toEqual(into.cross![1]);
+    // It ends on the middle cell's edge, at its middle.
+    const end = into.cross![1];
+    expect([m.x, m.x + m.w].includes(end.x) || [m.y, m.y + m.h].includes(end.y)).toBe(true);
+    // f is on the right edge, so its line leaves from its right side.
+    const f = rects.get('f')!,
+      out = routes.find(r => r.id === 'out')!;
+    expect(out.cross).toBeUndefined();
+    expect(out.points[0].x).toBe(f.x + f.w);
+  });
 });
