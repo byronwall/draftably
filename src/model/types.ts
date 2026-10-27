@@ -8,7 +8,16 @@ export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
 import type { Spot, Status } from './status';
 
-export type ShapeKind = 'box' | 'pill' | 'circle' | 'diamond' | 'text' | 'icon' | 'image';
+export type ShapeKind =
+  | 'box'
+  | 'pill'
+  | 'circle'
+  | 'diamond'
+  | 'text'
+  | 'icon'
+  | 'image'
+  /** A seam between two cells of a `cells` group. */
+  | 'marker';
 /** A color family: a built-in one, one the file defines, or `auto` for the theme's surface. */
 export type ColorKey = string;
 export type LabelMode = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'detached';
@@ -112,6 +121,8 @@ export interface ContainerLayout {
   direction: 'inherit' | Direction;
   padding: number;
   manualSize: boolean;
+  /** Set for a `cells` group: its members touch, under a title band this tall. */
+  cellsBand?: number;
 }
 
 export type IntentRole = 'start' | 'end';

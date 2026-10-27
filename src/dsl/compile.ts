@@ -13,11 +13,13 @@ import { LayoutLab } from '../engines/layout-engine.js';
 import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../model/appearance';
 import { measureText, widestPiece } from '../model/fonts';
 import { edgeLabelSize, titleArea, titleHeight, wrapTitle } from '../model/labels';
+import { cellsBandFor, layoutCells } from './cells';
 import { defaultShapeSize } from '../model/styles';
 import type { Direction, Lane } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
 import { returnLanes, type FlowScope } from './lanes';
 import {
+  CELLS_TITLE_CHROME,
   GROUP_HEADER,
   GROUP_INSET,
   GROUP_TITLE_CHROME,
@@ -30,6 +32,7 @@ import {
   DslError,
   layoutParent,
   parseModel,
+  POSITION_HINTS,
   type Hint,
   type Model,
   type ModelEdge,
@@ -2019,6 +2022,8 @@ function layoutPass(
         : resolveAppearance({ ...m.appearance, theme: DEFAULT_THEME });
   /** The size each node is drawn at, where it differs from its slot. */
   const drawn = new Map<string, { w: number; h: number }>();
+  /** The title band of each `cells` group, which holds no inset around its cells. */
+  const cellBands = new Map<string, number>();
   const items = new Map<string, Item>(),
     local = new Map<string, Pos>(),
     bases = new Map<string, Pos>();
@@ -2231,6 +2236,7 @@ function layoutPass(
       const listed = order.ids.flatMap(id => kids.filter(k => k.id === id));
       kids = [...listed, ...kids.filter(k => !order.ids.includes(k.id))];
     }
+    if (layout.algorithm === 'cells') return arrangeCells(scope, kids, layout);
     // Theme size and reference size of each leaf; the slot is chosen below.
     const leaves = new Map<string, { look: Size; ref: Size }>();
     const list: Item[] = kids.map(o => {
@@ -2241,20 +2247,27 @@ function layoutPass(
         // Only the title or an explicit minimum can make it larger.
         const sub = arrange(o.id),
           own = layoutFor(m, o.id),
-          empty = !children.get(o.id)?.length;
-        size = {
-          w: Math.max(
-            empty ? EMPTY_GROUP.w : 0,
-            sub.w + GROUP_INSET + (channels?.get(o.id)?.right ?? GROUP_INSET),
-            Math.ceil(measureText(o.label, look.groupTitle)) + GROUP_TITLE_CHROME,
-            own.minWidth,
-          ),
-          h: Math.max(
-            empty ? EMPTY_GROUP.h : 0,
-            sub.h + header + (channels?.get(o.id)?.bottom ?? GROUP_INSET),
-            own.minHeight,
-          ),
-        };
+          empty = !children.get(o.id)?.length,
+          band = cellBands.get(o.id);
+        size =
+          band !== undefined
+            ? {
+                w: Math.max(sub.w, own.minWidth),
+                h: Math.max(sub.h + band, own.minHeight),
+              }
+            : {
+                w: Math.max(
+                  empty ? EMPTY_GROUP.w : 0,
+                  sub.w + GROUP_INSET + (channels?.get(o.id)?.right ?? GROUP_INSET),
+                  Math.ceil(measureText(o.label, look.groupTitle)) + GROUP_TITLE_CHROME,
+                  own.minWidth,
+                ),
+                h: Math.max(
+                  empty ? EMPTY_GROUP.h : 0,
+                  sub.h + header + (channels?.get(o.id)?.bottom ?? GROUP_INSET),
+                  own.minHeight,
+                ),
+              };
       } else {
         const hint = m.hints.find(h => h.type === 'size' && h.id === o.id);
         const leaf = leafSize(o, hint?.type === 'size' ? hint : undefined, look);
@@ -2551,6 +2564,49 @@ function layoutPass(
         : 0;
     return { w: extent('x', 'w'), h: extent('y', 'h') };
   }
+  /**
+   * A `cells` group's members, edge to edge from its content origin. The cells keep this place:
+   * position refinements on them are reported and ignored, and an engine moves the whole group.
+   */
+  function arrangeCells(scope: string, kids: ModelObject[], layout: ModelLayout) {
+    const title =
+        Math.ceil(measureText(byId.get(scope)!.label, look.groupTitle)) + CELLS_TITLE_CHROME,
+      sizeOf = (id: string) => m.hints.find(h => h.type === 'size' && h.id === id),
+      out = layoutCells(
+        kids.map(o => {
+          const hint = sizeOf(o.id);
+          return {
+            id: o.id,
+            label: o.label,
+            marker: o.shape === 'marker',
+            ...(hint?.type === 'size' ? { size: { width: hint.width, height: hint.height } } : {}),
+          };
+        }),
+        layout.direction === 'down' ? 'down' : 'right',
+        look,
+        title,
+      );
+    for (const o of kids) {
+      const b = out.boxes.get(o.id)!;
+      items.set(o.id, { ...o, w: round(b.w), h: round(b.h) });
+      local.set(o.id, { x: round(b.x), y: round(b.y) });
+      bases.set(o.id, { x: b.x, y: b.y });
+      const moved = m.hints.find(
+        h => POSITION_HINTS.includes(h.type) && 'id' in h && h.id === o.id,
+      );
+      if (moved)
+        diagnostics.push({
+          level: 'warning',
+          code: 'cell-position',
+          message: `${o.id} is a cell of ${scope}, so it stays in its place. Move ${scope} instead, or reorder its cells with order.`,
+          line: moved.line,
+          ids: [o.id],
+        });
+    }
+    cellBands.set(scope, cellsBandFor(look.groupTitle.lineHeight));
+    // A marker's tail is drawn past the frame; the frame holds only the cells.
+    return { w: Math.max(out.w, title), h: out.h };
+  }
   // A packed drawing whose run is more than `PACKED_FOLD_ASPECT` times its depth is laid out
   // again with its longest group folded, one group at a time, so the groups keep their order along
   // the reading direction. Only a drawing still too long once no group can fold wraps its groups
@@ -2602,7 +2658,14 @@ function layoutPass(
         depth,
       };
       objects.push(box);
-      if (o.type === 'group') place(o.id, contentOrigin(box, header), depth + 1);
+      if (o.type === 'group')
+        place(
+          o.id,
+          cellBands.has(o.id)
+            ? { x: box.x, y: box.y + cellBands.get(o.id)! }
+            : contentOrigin(box, header),
+          depth + 1,
+        );
     }
   };
   place('root', { x: 0, y: 0 }, 0);

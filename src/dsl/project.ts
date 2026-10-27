@@ -9,6 +9,7 @@ import { frameRect, makeGeometry, visibleGraph } from '../model/graph';
 import { computeRoutes } from '../model/routes';
 import type { ColorKey, Diagram, Rect } from '../model/types';
 import type { Scene, SceneObject } from './compile';
+import { cellsBandFor } from './cells';
 import { GROUP_INSET } from './frame';
 
 /** Editor state that is not part of the source and survives a reprojection. */
@@ -25,6 +26,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   const doc = emptyDiagram(scene.title);
   doc.id = 'draft-file';
   doc.appearance = clone(scene.model.appearance);
+  const cells = new Set(scene.model.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope)),
+    band = cellsBandFor(scene.look.groupTitle.lineHeight);
   const hinted = (type: string, id: string) =>
     scene.model.hints.some(h => h.type === type && 'id' in h && h.id === id);
   for (const o of scene.objects) {
@@ -45,8 +48,13 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
         direction: 'inherit',
         padding: GROUP_INSET,
         manualSize: true,
+        ...(cells.has(o.id) ? { cellsBand: band } : {}),
       };
-    } else doc.graph.nodes.push(entry);
+    } else {
+      doc.graph.nodes.push(entry);
+      // A marker's label sits above the object it cuts, clear of lines that reach it from below.
+      if (o.shape === 'marker') doc.layout.labels[o.id] = { mode: 'top' };
+    }
     doc.layout.nodes[o.id] = {
       x: o.x,
       y: o.y,
@@ -57,7 +65,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
     };
     doc.styles[o.id] = {
       shape: o.shape,
-      color: resolveColor(scene, o),
+      // A cell is drawn on the neutral surface under its group's band unless it names a color.
+      color: cells.has(o.parent) && o.color === 'auto' ? 'auto' : resolveColor(scene, o),
       ...(o.shade !== undefined ? { shade: o.shade } : {}),
       icon: '',
       ...(o.status ? { status: o.status } : {}),
@@ -76,9 +85,15 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       dashed: e.dashed,
       ...(e.status ? { status: e.status } : {}),
     });
+    // A marker is reached from below: its top runs through the title band.
+    const marker = (id: string) => scene.byId.get(id)?.shape === 'marker' && 'bottom';
     doc.layout.edges[e.id] = {
-      ...(e.from !== 'auto' ? { fromSide: e.from } : {}),
-      ...(e.to !== 'auto' ? { toSide: e.to } : {}),
+      ...(e.from !== 'auto'
+        ? { fromSide: e.from }
+        : marker(e.source)
+          ? { fromSide: 'bottom' }
+          : {}),
+      ...(e.to !== 'auto' ? { toSide: e.to } : marker(e.target) ? { toSide: 'bottom' } : {}),
       ...(flow(e.source, e.target) ? { flow: flow(e.source, e.target) } : {}),
       ...(e.lane ? { lane: e.lane } : {}),
       ...(e.row !== undefined ? { row: e.row } : {}),

@@ -8,7 +8,7 @@
  * file cannot express are rejected outright.
  */
 import type { ColorDefinition, DiagramAppearance } from '../model/appearance';
-import { selectionRoots } from '../model/graph';
+import { findNode, isCell, selectionRoots } from '../model/graph';
 import type { ColorKey, Diagram, DiagramEdge, PortSide, Rect } from '../model/types';
 import { contentOrigin, layoutView, type Scene } from './compile';
 import {
@@ -365,7 +365,9 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
   };
   const roots = new Set<string>(),
     carried = new Set<string>();
-  for (const id of selectionRoots(after, input.selection)) {
+  // A dragged cell carries its group: the cell keeps its place in it.
+  const owner = (id: string) => (isCell(after, id) ? findNode(after, id)!.parentId! : id);
+  for (const id of new Set(selectionRoots(after, input.selection).map(owner))) {
     if (!soft.has(id)) {
       roots.add(id);
       continue;

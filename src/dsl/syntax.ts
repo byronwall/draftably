@@ -184,7 +184,8 @@ export const formatSource = (source: string) => printSource(readSource(source));
 
 export type DslColor = ColorKey | 'auto';
 export type DslShape = Exclude<ShapeKind, 'icon' | 'image'>;
-export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence';
+/** `cells` lays a group's members edge to edge as one object: a sequence, table or byte layout. */
+export type Algorithm = 'flow' | 'row' | 'column' | 'lanes' | 'sequence' | 'cells';
 
 export interface ModelObject {
   id: string;
@@ -373,7 +374,7 @@ export const isIdentifier = (s: string) => ID.test(s);
 
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
-export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text'];
+export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
 const FRAMES = ['box', 'soft', 'none'] as const;
 const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
@@ -647,16 +648,25 @@ export function parseModel(source: string | SourceDoc): Model {
           engine = { algorithm: named, params: readParams(ENGINE_PARAMS) };
         } else {
           count(2);
-          allow(['gap', ...(args[1]?.value === 'flow' ? ['fold'] : []), ...common]);
+          const recipe = args[1]?.value;
+          allow(
+            recipe === 'cells'
+              ? common
+              : ['gap', ...(recipe === 'flow' ? ['fold'] : []), ...common],
+          );
         }
         const algorithm = (named ? 'flow' : args[1]?.value) as Algorithm;
         assert(
-          ['flow', 'row', 'column', 'lanes', 'sequence'].includes(algorithm),
-          `The ${algorithm} recipe is not supported; use flow, row, column, lanes or sequence, or engine=.`,
+          ['flow', 'row', 'column', 'lanes', 'sequence', 'cells'].includes(algorithm),
+          `The ${algorithm} recipe is not supported; use flow, row, column, lanes, sequence or cells, or engine=.`,
         );
         assert(
           !['lanes', 'sequence'].includes(algorithm) || scope === 'root',
           `${algorithm} arranges the whole diagram: write layout root ${algorithm}.`,
+        );
+        assert(
+          algorithm !== 'cells' || scope !== 'root',
+          'Cells lay out a group; give the cells a group and use layout <group> cells.',
         );
         m.layouts.push({
           scope,
@@ -926,6 +936,21 @@ function validateReferences(m: Model) {
         line,
       );
     }
+  const cellScopes = new Set(m.layouts.filter(l => l.algorithm === 'cells').map(l => l.scope));
+  for (const o of m.objects) {
+    if (cellScopes.has(o.parent))
+      assert(
+        o.type === 'node',
+        `Cells are nodes; ${o.id} is a group inside cells ${o.parent}.`,
+        o.line,
+      );
+    else
+      assert(
+        o.shape !== 'marker',
+        `A marker sits between cells; put ${o.id} in a group with layout cells.`,
+        o.line,
+      );
+  }
   for (const l of m.layouts) {
     scope(l.scope, l.line);
     framed(l.scope, l.line, 'layout');

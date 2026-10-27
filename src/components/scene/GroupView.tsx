@@ -1,5 +1,5 @@
 import { createMemo, For, Show } from 'solid-js';
-import { descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
+import { cellsBandOf, descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
 import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
@@ -37,12 +37,20 @@ export function GroupView(props: GroupViewProps) {
   const shapeCount = createMemo(
     () => descendants(props.doc, props.id).filter(id => findNode(props.doc, id)).length,
   );
+  /** A `cells` group's title band; its cells fill the rest of the frame edge to edge. */
+  const cells = () => (collapsed() ? undefined : cellsBandOf(props.doc, props.id));
+  /** Where the title starts: after the group glyph, or at the band's padding for cells. */
+  const titleX = () => (cells() ? 12 : 33);
   // Titles are shortened to the frame width rather than wrapped, leaving room for the controls.
   const title = () =>
-    truncateText(group().title, Math.max(40, props.rect.w - 33 - 64), look().groupTitle);
+    truncateText(
+      group().title,
+      Math.max(40, props.rect.w - titleX() - (cells() ? 36 : 64)),
+      look().groupTitle,
+    );
   const w = () => props.rect.w;
   /** Middle of the title band at the top of the frame, the same open or collapsed. */
-  const band = () => look().groupHeader / 2 - 7;
+  const band = () => (cells() ? cells()! / 2 : look().groupHeader / 2 - 7);
 
   // A frameless group draws nothing; a soft group is a tint with a small label and no controls.
   const hull = () =>
@@ -127,7 +135,7 @@ export function GroupView(props: GroupViewProps) {
         class="group-bg"
         width={w()}
         height={props.rect.h}
-        rx={Math.min(10, look().radius + 4)}
+        rx={cells() ? Math.min(4, look().radius) : Math.min(10, look().radius + 4)}
         fill={color().fill}
         stroke={color().stroke}
         stroke-width={paint().width ?? GROUP_BORDER.width}
@@ -141,10 +149,12 @@ export function GroupView(props: GroupViewProps) {
         height={band() * 2}
         fill="transparent"
       />
-      <SceneGlyph name="group" x={12} y={band() - 6.5} size={13} color={color().ink} />
+      <Show when={!cells()}>
+        <SceneGlyph name="group" x={12} y={band() - 6.5} size={13} color={color().ink} />
+      </Show>
       <text
         class="group-title"
-        x={33}
+        x={titleX()}
         y={band()}
         dominant-baseline="central"
         font-family={look().groupTitle.family}
@@ -168,9 +178,16 @@ export function GroupView(props: GroupViewProps) {
       </Show>
       <Show when={props.interactive}>
         <g class="group-collapse" data-collapse>
-          <rect x={w() - 29} y={5} width={24} height={24} rx={5} fill="transparent" />
+          <rect
+            x={w() - 29}
+            y={cells() ? band() - 12 : 5}
+            width={24}
+            height={24}
+            rx={5}
+            fill="transparent"
+          />
           <path
-            d={`M${w() - 22} 17h10${collapsed() ? 'm-5-5v10' : ''}`}
+            d={`M${w() - 22} ${cells() ? band() : 17}h10${collapsed() ? 'm-5-5v10' : ''}`}
             fill="none"
             stroke={color().ink}
             stroke-width={1.4}

@@ -1,0 +1,17 @@
+diagram "How a request is built" version=1
+subtitle "Everything before the cache point is read from the prompt cache."
+
+node client "Agent loop" color=blue
+group req "Request" color=slate
+layout req cells
+node sys "System prompt" in=req
+node tools "Tool definitions" in=req
+node hist "Conversation so far" in=req
+node cp "cache point" in=req shape=marker
+node turn "New user turn" in=req color=amber shade=200
+node cache "Prompt cache" color=violet
+node model "Model" color=blue
+
+edge build client -> sys "assembles"
+edge hit cache -> cp "cached prefix"
+edge send turn -> model "sends"

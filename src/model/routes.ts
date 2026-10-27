@@ -23,6 +23,8 @@ export function portPoint(shape: ShapeKind, r: Rect, side: Side, offset = 0): Po
   let x = r.x + r.w / 2,
     y = r.y + r.h / 2;
   const round = shape === 'circle' || shape === 'icon';
+  // A marker's bar is too thin to spread ports along: lines meet it in the middle.
+  if (shape === 'marker') offset = 0;
   if (side === 'left' || side === 'right') {
     y += clamp(offset, -r.h / 2 + 12, r.h / 2 - 12);
     let inset = 0;
@@ -434,7 +436,15 @@ function outLane(rest: EdgeLayout, lane: Lane, a: Rect, b: Rect): EdgeLayout {
 export function routeInput(doc: Diagram, vg: VisibleGraph, rects: Map<string, Rect>) {
   const look = resolveAppearance(doc.appearance);
   return {
-    nodes: vg.nodes.map(n => ({ ...n, ...rects.get(n.id)!, shape: styleOf(doc, n.id).shape })),
+    nodes: vg.nodes.map(n => {
+      const r = rects.get(n.id)!,
+        shape = styleOf(doc, n.id).shape;
+      // The router keeps ports 12px in from a corner; a marker's thin bar gets room to meet
+      // lines at its middle.
+      return shape === 'marker' && r.w < 32
+        ? { ...n, ...r, x: r.x + r.w / 2 - 16, w: 32, shape }
+        : { ...n, ...r, shape };
+    }),
     // A soft or frameless group has no border for a line to cross or run along.
     groups: vg.groups
       .filter(g => !g.frame)

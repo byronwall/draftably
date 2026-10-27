@@ -1,5 +1,5 @@
 import { createMemo, For, Match, Show, Switch } from 'solid-js';
-import { findNode, styleOf } from '../../model/graph';
+import { findNode, isCell, styleOf } from '../../model/graph';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
@@ -47,6 +47,9 @@ export function NodeView(props: NodeViewProps) {
   /** Width of the `count` badge on the top-right corner, which the link mark steps left of. */
   const badgeWidth = () =>
     node().count ? measureText(countText(node().count!), look().annotation) + 12 : 0;
+  /** Cells share their borders, so their corners are square and they cast no shadow. */
+  const cell = () => isCell(props.doc, props.id);
+  const radius = () => (cell() ? 0 : look().radius);
   const clipId = () => `${props.idPrefix ?? ''}image-clip-${props.id}`;
 
   const shapeAttrs = () => ({
@@ -54,7 +57,7 @@ export function NodeView(props: NodeViewProps) {
     stroke: color().stroke,
     'stroke-width': paint().width ?? 1.2,
     ...(paint().dash ? { 'stroke-dasharray': paint().dash! } : {}),
-    class: look().shadow ? 'node-shape shadowed' : 'node-shape',
+    class: look().shadow && !cell() ? 'node-shape shadowed' : 'node-shape',
   });
 
   const glyph = () => {
@@ -114,7 +117,7 @@ export function NodeView(props: NodeViewProps) {
               <ShapeOutline
                 shape={style().shape}
                 rect={props.rect}
-                radius={look().radius}
+                radius={radius()}
                 attrs={shapeAttrs()}
               />
             </g>
@@ -138,8 +141,9 @@ export function NodeView(props: NodeViewProps) {
       <ShapeOutline
         shape={style().shape}
         rect={props.rect}
-        radius={look().radius}
+        radius={radius()}
         attrs={shapeAttrs()}
+        ink={look().text}
       />
       <Show when={style().shape === 'image'}>
         <Show
@@ -235,7 +239,7 @@ export function NodeView(props: NodeViewProps) {
           x={props.rect.w}
           y={-18}
         />
-        <For each={SIDES}>
+        <For each={style().shape === 'marker' ? (['bottom'] as Side[]) : SIDES}>
           {side => {
             const p = () =>
               portPoint(style().shape, { x: 0, y: 0, w: props.rect.w, h: props.rect.h }, side);
@@ -259,6 +263,8 @@ function ShapeOutline(props: {
   rect: NodeLayout;
   radius: number;
   attrs: Record<string, string | number>;
+  /** A marker's bar is drawn in the theme's text color, so it reads as a cut. */
+  ink?: string;
 }) {
   const w = () => props.rect.w,
     h = () => props.rect.h;
@@ -287,6 +293,9 @@ function ShapeOutline(props: {
       </Match>
       <Match when={props.shape === 'image'}>
         <rect width={w()} height={h()} rx={10} {...props.attrs} />
+      </Match>
+      <Match when={props.shape === 'marker'}>
+        <rect width={w()} height={h()} rx={2} fill={props.ink} stroke="none" />
       </Match>
     </Switch>
   );

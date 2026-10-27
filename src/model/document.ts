@@ -219,7 +219,10 @@ export function normalize(input: unknown): Diagram {
       for (const key of ['x', 'y', 'w', 'h'])
         if (!finite(p[key]) || Math.abs(p[key]) > 1e6)
           throw Error(n.id + ': ' + key + ' must be a finite coordinate.');
-      if (p.w < 24 || p.h < 20) throw Error(n.id + ': shape dimensions are too small.');
+      // A marker is a thin bar on the seam between two cells.
+      const marker = data.styles?.[n.id]?.shape === 'marker';
+      if ((p.w < 24 && !marker) || (p.h < 20 && !marker) || Math.min(p.w, p.h) < 4)
+        throw Error(n.id + ': shape dimensions are too small.');
       out.layout.nodes[n.id] = {
         x: p.x,
         y: p.y,
@@ -237,7 +240,7 @@ export function normalize(input: unknown): Diagram {
       };
     }
     const style = data.styles?.[n.id] || {};
-    if (style.shape !== undefined && !SHAPES.includes(style.shape))
+    if (style.shape !== undefined && !SHAPES.includes(style.shape) && style.shape !== 'marker')
       throw Error(n.id + ': unknown shape.');
     if (
       style.color !== undefined &&
@@ -273,6 +276,7 @@ export function normalize(input: unknown): Diagram {
         direction: cfg.direction || 'inherit',
         padding: finite(cfg.padding) ? clamp(cfg.padding, 12, 80) : 24,
         manualSize: cfg.manualSize !== false,
+        ...(finite(cfg.cellsBand) ? { cellsBand: cfg.cellsBand } : {}),
       } satisfies ContainerLayout;
     }
   }

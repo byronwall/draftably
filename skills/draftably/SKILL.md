@@ -84,13 +84,14 @@ layout services row gap=56
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                          |
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                       |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"` |
-| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text`, `href=` link, `count=N` stack            |
+| `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=` link, `count=N` stack    |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`                                              |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                     |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                              |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                        |
 | `edge id source -> target "label"` | Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides               |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                 |
+| `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=right\|down`                     |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                              |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                           |
 | `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest               |
@@ -133,6 +134,32 @@ Good defaults:
   across all lanes.
 - An exchange between participants: `layout root sequence`. Nodes are participants across the
   top; each `edge` line is one message, in file order; `kind=async` for replies. No groups.
+
+### Cells
+
+`layout groupId cells` turns a group into one object made of parts: the parts of a message in
+order, the rows of a table. Its nodes are its cells. They touch and share borders, in declaration
+order (or `order`), under a band that holds the group's title. One row by default;
+`direction=down` makes one column. Lines can end on any cell. A cell stays in its place: drag or
+place the group, not the cell.
+
+`shape=marker` marks a seam between two cells, such as a cache point. It takes no room: a bar
+cuts the object before the next cell, with its label above. Lines reach it from below.
+
+```text
+node client "Agent loop" color=blue
+group req "Request" color=slate
+layout req cells
+node sys "System prompt" in=req
+node hist "Conversation so far" in=req
+node cp "cache point" in=req shape=marker
+node turn "New user turn" in=req color=amber shade=200
+node cache "Prompt cache" color=violet
+edge build client -> sys "assembles"
+edge hit cache -> cp "cached prefix"
+```
+
+Use cells for "is made of"; use separate nodes and edges for "flows to".
 
 ### Refinements
 
