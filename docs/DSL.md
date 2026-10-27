@@ -49,6 +49,7 @@ and groups. References may point to later lines.
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
 | `config key=value` | File settings. See [Links and counts](#rules). |
+| `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -161,6 +162,34 @@ marks and the file draws in its own colors again. The green, amber and red come 
 so every theme draws a diff in its own palette. Each mark also has a border weight, dash, fade
 or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects and lines carry it. Marks never move anything: the drawing
 holds both versions at once, so unchanged objects stay where they are.
+
+## Emphasis states
+
+One diagram often answers several questions: what the write path touches, what a request reads.
+A `state` line names a way to draw the diagram: the objects and connections it lists are in
+focus, and everything else fades.
+
+```text
+state write "Write path" web api orders payments db queue
+state read "Read path" web api catalog cache
+state events "Events" queue publish rest=plain
+```
+
+The first word is the state's ID, then an optional label in quotes, then the IDs in focus:
+nodes, groups (a group brings all its members) and connections. A connection between two
+focused nodes is in focus too. A long state may continue on more lines with the same ID.
+
+In focus, an object keeps its colors and draws a heavier border; a connection draws a heavier
+line. Everything else fades to the theme's neutral surface, like a `.` context line, except the
+containers that hold something in focus, so the context still reads. `rest=plain` leaves
+everything else as it is, for a soft highlight; with nothing faded, focused objects take a ring
+and focused connections a line in the theme's primary accent. A state never moves anything:
+every state of a file has the same layout. In a file with change marks, hue still means change;
+a state only adds the heavier border or the fade.
+
+`inspect --svg --state write` draws one state; without `--state`, the drawing has none. `check`
+reports an ID a state lists that the file does not declare. Deleting an object or connection in
+the viewer takes it out of every state.
 
 ## Themes and colors
 

@@ -91,12 +91,20 @@ export function removeReferences(doc: SourceDoc, id: string) {
   for (const s of statements(doc))
     if (s.command === 'order' || s.command === 'align')
       s.args = s.args.filter((w, i) => i === 0 || w.value !== id);
+  removeFromStates(doc, id);
   // An alignment needs at least two members, and an order at least one.
   removeWhere(
     doc,
     s =>
       (s.command === 'align' && s.args.length < 3) || (s.command === 'order' && s.args.length < 2),
   );
+}
+
+/** Take an object or connection out of every `state` line; drop a line left with no IDs. */
+export function removeFromStates(doc: SourceDoc, id: string) {
+  for (const s of statements(doc))
+    if (s.command === 'state') s.args = s.args.filter((w, i) => i === 0 || w.quoted || w.value !== id);
+  removeWhere(doc, s => s.command === 'state' && !s.args.slice(1).some(w => !w.quoted));
 }
 
 export const num = (n: number) => bare(String(Math.round(n)));

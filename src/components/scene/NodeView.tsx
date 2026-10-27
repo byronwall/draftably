@@ -4,7 +4,7 @@ import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
-import { statusPaint } from '../../model/status';
+import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
 import { countText, STACK_OFFSETS } from '../../model/stack';
 import { measureText } from '../../model/fonts';
 import { linkMark } from '../../model/link';
@@ -37,7 +37,7 @@ export function NodeView(props: NodeViewProps) {
   const style = () => styleOf(props.doc, props.id);
   const look = () => resolveAppearance(props.doc.appearance);
   const color = () => drawnSwatch(props.doc, look(), props.id, 'node');
-  const paint = () => statusPaint(look(), style().status);
+  const paint = () => statusPaint(look(), style().status, style().spot);
   const label = createMemo(() => nodeLabel(props.doc, props.id, node().title, props.rect));
   const ringRadius = () => {
     const { shape } = style(),
@@ -120,6 +120,20 @@ export function NodeView(props: NodeViewProps) {
             </g>
           )}
         </For>
+      </Show>
+      <Show when={paint().halo}>
+        <g transform={`translate(${-HALO_GAP},${-HALO_GAP})`}>
+          <ShapeOutline
+            shape={style().shape === 'text' ? 'box' : style().shape}
+            rect={{
+              ...props.rect,
+              w: props.rect.w + 2 * HALO_GAP,
+              h: props.rect.h + 2 * HALO_GAP,
+            }}
+            radius={look().radius + HALO_GAP}
+            attrs={{ fill: 'none', stroke: haloInk(look()), 'stroke-width': 2 }}
+          />
+        </g>
       </Show>
       <ShapeOutline
         shape={style().shape}

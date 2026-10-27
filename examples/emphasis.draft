@@ -1,0 +1,27 @@
+diagram "Order service paths" version=1
+subtitle "Which parts each request path touches"
+
+group entry "Entry" color=blue
+node web "Web app" in=entry
+node api "API gateway" in=entry
+group services "Services" color=teal
+node orders "Orders" in=services
+node payments "Payments" in=services
+node catalog "Catalog" in=services
+group data "Data" color=violet
+node db "Postgres" in=data
+node cache "Redis cache" in=data
+node queue "Event queue" in=data shape=pill
+
+edge request web -> api "HTTPS"
+edge place api -> orders "place order"
+edge browse api -> catalog "browse"
+edge charge orders -> payments "authorize"
+edge persist orders -> db "persist"
+edge publish orders -> queue "order placed" kind=async
+edge read catalog -> cache "read"
+edge fill cache -> db "miss" kind=async
+
+state write "Write path" web api orders payments db queue
+state read "Read path" web api catalog cache
+state events "Events" queue publish rest=plain

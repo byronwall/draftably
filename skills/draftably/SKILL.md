@@ -85,6 +85,7 @@ layout services row gap=56
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                 |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                              |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                           |
+| `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest               |
 | `config key=value ...`             | File settings: `link-base="path"` (where relative links start), `editor=vscode\|cursor\|zed\|...`                  |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
@@ -165,6 +166,11 @@ content area.
   `subtitle` stating its takeaway, so the exported picture stands alone.
 - Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)
   instead of drawing each one.
+- When one diagram answers several questions (the write path, the read path, what a PR touches),
+  add a `state` line for each instead of drawing several diagrams:
+  `state write "Write path" api orders db`. Listed IDs are in focus and the rest fades; a
+  connection between two listed nodes is in focus too. `draftably inspect f.draft --svg --state
+write` draws one. States never move anything.
 - When a box names real code, a file or a page, link it: `href="src/orders/service.ts"`. Write
   file paths from the repository root (relative links start at the git root of the `.draft`), and
   add `:42` to open at a line. Use the URL as it is for anything on the web, such as a GitHub link.

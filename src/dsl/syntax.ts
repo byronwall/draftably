@@ -279,6 +279,8 @@ export interface Model {
   colorLines: Map<string, number>;
   /** Source line of each `legend` entry, in order. */
   legendLines: number[];
+  /** Source line of each ID an emphasis state lists, by `state:id`. */
+  stateLines: Map<string, number>;
   /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
   warnings: { code: string; message: string; line: number }[];
 }
@@ -382,6 +384,7 @@ export function parseModel(source: string | SourceDoc): Model {
     themeLine: 0,
     colorLines: new Map(),
     legendLines: [],
+    stateLines: new Map(),
     warnings: [],
   };
   const configLines = new Map<string, number>();
@@ -514,6 +517,27 @@ export function parseModel(source: string | SourceDoc): Model {
             assert(w.quoted, `Expected ${key}="path" in double quotes.`);
             config.linkBase = w.value;
           }
+        }
+        break;
+      }
+      case 'state': {
+        assert(args.length >= 1, 'A state needs an ID: state write "Write path" api orders.');
+        allow(['rest']);
+        const sid = id(args[0]),
+          label = args[1]?.quoted ? args[1].value : undefined,
+          ids = args.slice(label === undefined ? 1 : 2).map(w => id(w)),
+          states = (m.appearance.states ??= []);
+        let state = states.find(x => x.id === sid);
+        // A long state continues on more lines with the same ID; its label comes from the first.
+        if (!state) {
+          state = { id: sid, label: label ?? sid, ids: [], rest: 'dim' };
+          states.push(state);
+        }
+        if (attrs.has('rest')) state.rest = choice('rest', 'dim', ['dim', 'plain'] as const);
+        for (const x of ids) {
+          assert(!state.ids.includes(x), `${x} is already in state ${sid}.`);
+          state.ids.push(x);
+          m.stateLines.set(`${sid}:${x}`, line);
         }
         break;
       }
@@ -840,6 +864,12 @@ function validateReferences(m: Model) {
     for (const end of [e.source, e.target]) {
       exists(end, e.line);
       assert(by.get(end)!.type === 'node', `Connections join nodes; ${end} is a group.`, e.line);
+    }
+  const edgeIds = new Set(m.edges.map(e => e.id));
+  for (const s of m.appearance.states ?? [])
+    for (const x of s.ids) {
+      const line = m.stateLines.get(`${s.id}:${x}`)!;
+      assert(by.has(x) || edgeIds.has(x), `Unknown node, group or edge ${x} in state ${s.id}.`, line);
     }
   for (const l of m.layouts) {
     scope(l.scope, l.line);

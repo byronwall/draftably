@@ -89,6 +89,18 @@ export interface DiagramAppearance {
   };
   /** File settings from `config` statements. */
   config?: FileConfig;
+  /** Named emphasis states from `state` statements, in file order. */
+  states?: EmphasisState[];
+}
+
+/** One way to draw the diagram: these objects and connections in focus, the rest faded or plain. */
+export interface EmphasisState {
+  id: string;
+  label: string;
+  /** Objects (a group brings its members) and connections in focus. */
+  ids: string[];
+  /** How everything else draws: faded like a context line, or as usual. */
+  rest: 'dim' | 'plain';
 }
 
 export interface Heading {

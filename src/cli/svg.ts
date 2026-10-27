@@ -19,6 +19,8 @@ import { computeRoutes } from '../model/routes';
 import {
   drawnLegend,
   edgeInk,
+  HALO_GAP,
+  haloInk,
   isDiff,
   statusPaint,
   usedStatuses,
@@ -72,6 +74,15 @@ function outline(shape: string, r: Rect, radius: number, paint: string) {
   return `<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${rx}" ${paint}/>`;
 }
 
+/** The accent ring around an object a `rest=plain` state focuses. */
+const haloMarkup = (shape: string, r: Rect, look: ResolvedAppearance) =>
+  outline(
+    shape === 'text' ? 'box' : shape,
+    { x: r.x - HALO_GAP, y: r.y - HALO_GAP, w: r.w + 2 * HALO_GAP, h: r.h + 2 * HALO_GAP },
+    look.radius + HALO_GAP,
+    `fill="none" stroke="${haloInk(look)}" stroke-width="2"`,
+  );
+
 type Route = ReturnType<typeof computeRoutes>['routes'][number];
 
 /** The connections' paths and label spots, routed around the document's own shapes. */
@@ -100,7 +111,7 @@ function sceneMarkup(
   for (const g of vg.groups) {
     const r = rects.get(g.id)!,
       c = drawnSwatch(doc, look, g.id, 'group'),
-      p = statusPaint(look, styleOf(doc, g.id).status),
+      p = statusPaint(look, styleOf(doc, g.id).status, styleOf(doc, g.id).spot),
       band = look.groupHeader / 2 - 7,
       title = truncateText(g.title, Math.max(40, r.w - 33 - 64), look.groupTitle);
     out.push(
@@ -109,6 +120,7 @@ function sceneMarkup(
         g.title,
         [
           `<g data-id="${esc(g.id)}"${fade(p)}>`,
+          p.halo ? haloMarkup('box', r, { ...look, radius: Math.min(10, look.radius + 4) }) : '',
           `<rect class="shape" x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="${Math.min(10, look.radius + 4)}" fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}" stroke-opacity="${p.stroke ? 1 : 0.65}"${p.dash ? ` stroke-dasharray="${p.dash}"` : ''}/>`,
           `<svg x="${r.x + 12}" y="${r.y + band - 6.5}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${c.ink}" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">${ICONS.group}</svg>`,
           `<text x="${r.x + 33}" y="${r.y + band}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(title)}</text>`,
@@ -121,7 +133,7 @@ function sceneMarkup(
   }
   for (const route of routes) {
     const edge = doc.graph.edges.find(e => e.id === route.id)!,
-      p = statusPaint(look, edge.status),
+      p = statusPaint(look, edge.status, edge.spot),
       ink = edgeInk(look, edge, diff),
       dash = p.dash ?? (edge.dashed ? '5 5' : '');
     out.push(
@@ -141,7 +153,7 @@ function sceneMarkup(
     const r = rects.get(n.id)!,
       style = styleOf(doc, n.id),
       c = drawnSwatch(doc, look, n.id, 'node'),
-      p = statusPaint(look, style.status),
+      p = statusPaint(look, style.status, style.spot),
       label = nodeLabel(doc, n.id, n.title, r),
       first = r.y + label.y - ((label.lines.length - 1) * label.lineHeight) / 2,
       ink = label.mode === 'center' && style.shape !== 'text' ? c.ink : look.text,
@@ -161,6 +173,7 @@ function sceneMarkup(
                 outline(style.shape, { ...r, x: r.x + d, y: r.y + d }, look.radius, paint),
               )
             : []),
+          p.halo ? haloMarkup(style.shape, r, look) : '',
           outline(style.shape, r, look.radius, paint),
           `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
             label.lines

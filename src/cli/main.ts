@@ -6,7 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { compile, type Diagnostic } from '../dsl/compile';
 import { compareDetailed } from '../dsl/compare';
-import { statusLabel, usedStatuses } from '../model/status';
+import { statusLabel, usedStatuses, withState } from '../model/status';
+import type { Diagram } from '../model/types';
 import { canonicalGeometry, projectScene } from '../dsl/project';
 import { DslError, formatSource } from '../dsl/syntax';
 import { embedSvgSource, isImageName, readImageSource } from '../model/embed';
@@ -22,6 +23,7 @@ Commands:
   format <file> [--write]   Print the formatted source, or rewrite the file in place.
   inspect <file> [--json]   Print canonical node and route geometry.
   inspect <file> --svg      Print a plain SVG drawing of the compiled diagram.
+       [--state <id>]       Draw it in one emphasis state (also with --png).
   inspect <file> --png <out.png> [--scale 2]
                             Save the drawing as a PNG (needs Chrome or Chromium).
                             PNG and SVG output embed the source; --no-source leaves it out.
@@ -67,6 +69,17 @@ function option(args: string[], name: string) {
   const value = args[at + 1];
   if (!value || value.startsWith('--')) throw new UsageError(`${name} needs a value.`);
   return value;
+}
+
+/** The document in emphasis state `id`, or as it is without one. */
+function drawnState(doc: Diagram, id: string | undefined) {
+  if (id === undefined) return doc;
+  const ids = doc.appearance.states?.map(s => s.id) ?? [];
+  if (!ids.includes(id))
+    throw new UsageError(
+      ids.length ? `No state ${id}. States: ${ids.join(', ')}.` : 'The file has no state lines.',
+    );
+  return withState(doc, id);
 }
 
 /** Save `svg` as a PNG when `--png` is given, with `source` in it; true if it was. */
@@ -116,7 +129,7 @@ export async function main(argv: string[]): Promise<number> {
       case 'inspect': {
         const source = await read(file),
           scene = await compile(source),
-          doc = projectScene(scene),
+          doc = drawnState(projectScene(scene), option(rest, '--state')),
           opts = { href: svgHref(scene, file) };
         if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
         if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));

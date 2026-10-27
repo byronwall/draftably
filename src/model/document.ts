@@ -11,6 +11,7 @@ import {
   THEME_IDS,
   type AppearanceOverrides,
   type DiagramAppearance,
+  type EmphasisState,
   type LegendEntry,
 } from './appearance';
 import { FONT_ROLES } from './fonts';
@@ -432,6 +433,16 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     if (EDITORS.includes(cfg.editor)) config.editor = cfg.editor;
     if (config.linkBase !== undefined || config.editor) out.config = config;
   }
+  const states: EmphasisState[] = [];
+  for (const st of Array.isArray(input.states) ? input.states : [])
+    if (st && typeof st.id === 'string' && Array.isArray(st.ids))
+      states.push({
+        id: st.id,
+        label: typeof st.label === 'string' ? st.label : st.id,
+        ids: st.ids.filter((x: unknown) => typeof x === 'string'),
+        rest: st.rest === 'plain' ? 'plain' : 'dim',
+      });
+  if (states.length) out.states = states;
   const c = input.compare;
   if (c && typeof c.before === 'string' && typeof c.after === 'string')
     out.compare = {
