@@ -54,6 +54,7 @@ and groups. References may point to later lines.
 | `routing` | Router settings for every connection. See [Routing](#routing). |
 | `config key=value` | File settings. See [Links and counts](#rules). |
 | `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |
+| `phase id "label" message ids...` | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams). |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -196,7 +197,31 @@ layout root sequence
 
 `kind=async` draws a dashed message, the usual mark of a reply. A message from a participant to
 itself draws a short loop. Participants are spaced so each message's label fits between them.
-Groups are an error in a sequence diagram, and position refinements do not apply. Change marks
+Position refinements do not apply.
+
+The diagram is drawn on a framed panel, and each participant is outlined in its color with a
+thin stripe of it along the top, so the row of headers stays quiet. A top-level `group` gathers
+participants (`in=group`) into a lightly tinted column band behind their lifelines, with its title
+above them; its participants stay together where its first one falls in the order. A `phase`
+lists messages that belong together and draws them as a row band across the panel, its label in
+a tab at the left; alternate phases are tinted, so neighbours read apart:
+
+```text
+group client "Client" color=blue
+group server "Server" color=teal
+node app "Web app" in=client
+node auth "Auth service" in=server
+node db "Database" in=server
+edge m1 app -> auth "verify"
+edge m2 auth -> db "read user"
+edge m3 auth -> db "write session"
+edge m4 auth -> app "token" kind=async
+phase check "Check: nothing written" m1 m2
+phase commit "Commit" m3 m4
+layout root sequence
+```
+
+A message belongs to at most one phase. Change marks
 work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`),
 activations and notes are not supported yet.
 

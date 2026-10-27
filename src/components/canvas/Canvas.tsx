@@ -21,7 +21,7 @@ import { TimelineDeck } from '../sculpt/TimelineDeck';
 import { CrossingView, EdgeView } from '../scene/EdgeView';
 import { GroupView } from '../scene/GroupView';
 import { NodeView } from '../scene/NodeView';
-import { Lifelines } from '../scene/Lifelines';
+import { Lifelines, SequenceBackdrop } from '../scene/Lifelines';
 import { InlineEditor } from './InlineEditor';
 import { Overlay } from './Overlay';
 import { Legend } from './Legend';
@@ -145,6 +145,7 @@ export function Canvas() {
           classList={{ connecting: tool() === 'connect' }}
           transform={`translate(${camera().x},${camera().y}) scale(${camera().k})`}
         >
+          <SequenceBackdrop doc={shown()} part="panel" />
           <g>
             <For each={groupIds()}>
               {id => (
@@ -161,6 +162,7 @@ export function Canvas() {
               )}
             </For>
           </g>
+          <SequenceBackdrop doc={shown()} part="phases" />
           <Lifelines doc={doc} ids={nodeIds()} rect={id => sceneRects().get(id)} />
           <g>
             <For each={edgeIds()}>

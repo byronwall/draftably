@@ -34,10 +34,10 @@ describe('sequence diagrams', () => {
     expect(routes.find(r => r.id === 'm5')!.points).toHaveLength(4);
   });
 
-  it('has no groups', () => {
-    expect(() => checkSource('group g "G"\nnode a "A" in=g\nlayout root sequence')).toThrow(
-      /participants and messages, not groups/,
-    );
+  it('takes only top-level groups, as bands of participants', () => {
+    expect(() =>
+      checkSource('group g "G"\ngroup h "H" in=g\nnode a "A" in=h\nlayout root sequence'),
+    ).toThrow(/a group is a band of participants/);
   });
 });
 
@@ -70,5 +70,59 @@ describe('sequence messages', () => {
     expect(rects.get('a')!.w).toBeLessThan(164);
     // The first message's label clears the participant row.
     expect(m1.label!.y - m1.label!.h / 2).toBeGreaterThan(rects.get('a')!.y + rects.get('a')!.h);
+  });
+});
+
+describe('sequence groups and phases', () => {
+  const source = [
+    'diagram "Bands" version=1',
+    'group client "Client" color=blue',
+    'group server "Server" color=teal',
+    'node a "Store" shape=pill',
+    'node b "Ledger" in=client',
+    'node d "Archive" in=server',
+    'node c "Handler" in=client',
+    'edge m1 a -> b "load"',
+    'edge m2 b -> c "check"',
+    'edge m3 c -> d "write"',
+    'edge m4 d -> a "done" kind=async',
+    'phase preview "Preview" m1 m2',
+    'phase apply "Apply" m3 m4',
+    'layout root sequence',
+  ].join('\n');
+
+  it("keeps a group's participants together under its column band", async () => {
+    const scene = await compile(source),
+      at = (id: string) => scene.byId.get(id)!;
+    // c is declared after d, but sits next to b inside the client band.
+    expect(at('c').x).toBeLessThan(at('d').x);
+    for (const [g, ids] of [
+      ['client', ['b', 'c']],
+      ['server', ['d']],
+    ] as const)
+      for (const id of ids) {
+        expect(at(id).x).toBeGreaterThan(at(g).x);
+        expect(at(id).x + at(id).w).toBeLessThan(at(g).x + at(g).w);
+      }
+    expect(at('a').x + at('a').w).toBeLessThan(at('client').x);
+  });
+
+  it('draws each phase as a row band over its messages, inside the panel', async () => {
+    const scene = await compile(source),
+      seq = scene.sequence!,
+      row = (id: string) => scene.edges.find(e => e.id === id)!.row!;
+    expect(seq.phases.map(p => p.id)).toEqual(['preview', 'apply']);
+    const [preview, apply] = seq.phases;
+    expect(preview.y).toBeLessThan(row('m1'));
+    expect(preview.y + preview.h).toBeGreaterThan(row('m2'));
+    expect(preview.y + preview.h).toBeLessThanOrEqual(apply.y + 1);
+    for (const p of seq.phases) {
+      expect(p.y).toBeGreaterThanOrEqual(seq.panel.y);
+      expect(p.y + p.h).toBeLessThanOrEqual(seq.panel.y + seq.panel.h);
+    }
+  });
+
+  it('refuses a phase that lists something other than a message', () => {
+    expect(() => checkSource(source.replace('m3 m4', 'm3 nope'))).toThrow(/Unknown message nope/);
   });
 });

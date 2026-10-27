@@ -1,4 +1,5 @@
 import { For, Show } from 'solid-js';
+import { sequenceBackdrop } from '../../cli/svg';
 import { resolveAppearance } from '../../model/appearance';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { LIFELINE } from '../../dsl/frame';
@@ -31,5 +32,23 @@ export function Lifelines(props: {
         )}
       </For>
     </g>
+  );
+}
+
+/**
+ * A sequence diagram's panel (`part="panel"`, under the groups) or its phase bands
+ * (`part="phases"`, over the groups' column bands), as the SVG export draws them.
+ */
+export function SequenceBackdrop(props: { doc: Diagram; part: 'panel' | 'phases' }) {
+  const markup = () =>
+    props.doc.layout.sequence
+      ? sequenceBackdrop(props.doc, resolveAppearance(props.doc.appearance))[props.part].join('')
+      : '';
+  return (
+    <Show when={markup()}>
+      {/* Drawn from the file by the same code as the SVG export, which escapes every label. */}
+      {/* eslint-disable-next-line solid/no-innerhtml */}
+      <g class="sequence-backdrop" pointer-events="none" innerHTML={markup()} />
+    </Show>
   );
 }

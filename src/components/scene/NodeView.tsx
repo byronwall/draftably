@@ -4,7 +4,8 @@ import { brokenRectPath } from '../../model/geometry';
 import { nodeLabel } from '../../model/labels';
 import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
-import { drawnSwatch } from '../../model/colors';
+import { drawnSwatch, participantAccent } from '../../model/colors';
+import { accentPath } from '../../cli/svg';
 import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
 import { countText, STACK_OFFSETS } from '../../model/stack';
 import { measureText } from '../../model/fonts';
@@ -147,6 +148,15 @@ export function NodeView(props: NodeViewProps) {
         ink={look().text}
         open={isOpenCell(props.doc, props.id)}
       />
+      <Show when={style().shape === 'box' && participantAccent(props.doc, look(), props.id)}>
+        {accent => (
+          <path
+            d={accentPath({ x: 0, y: 0, w: props.rect.w, h: props.rect.h }, radius())}
+            fill={accent()}
+            pointer-events="none"
+          />
+        )}
+      </Show>
       <Show when={style().shape === 'image'}>
         <Show
           when={node().image}

@@ -60,7 +60,26 @@ export function drawnSwatch(
   if (isDiff(doc)) return statusSwatch(look, styleOf(doc, id).status, kind);
   // Dimmed by an emphasis state: the neutral surface, so only what is in focus keeps a hue.
   if (styleOf(doc, id).spot === 'dim') return statusSwatch(look, undefined, kind);
-  return swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), kind);
+  const swatch = swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), kind);
+  // A sequence participant is outlined in its color rather than filled, so the row of headers
+  // stays quiet and the color reads as an accent (see `participantAccent`).
+  if (kind === 'node' && participantAccent(doc, look, id))
+    return { fill: look.canvas, stroke: swatch.fill, ink: look.text };
+  return swatch;
+}
+
+/**
+ * A sequence participant's accent: the fill its color would have, drawn as a thin stripe along
+ * its top. Undefined for anything else.
+ */
+export function participantAccent(
+  doc: Diagram,
+  look: ResolvedAppearance,
+  id: string,
+): string | undefined {
+  if (!doc.layout.sequence || !findObject(doc, id) || isGroup(doc, id)) return undefined;
+  if (isDiff(doc) || styleOf(doc, id).spot === 'dim') return undefined;
+  return swatchFor(look, styleOf(doc, id).color, drawnShade(doc, look, id), 'node').fill;
 }
 
 const clampIndex = (i: number) => Math.max(0, Math.min(SHADES.length - 1, i));

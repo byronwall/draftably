@@ -321,6 +321,8 @@ export interface Model {
   legendLines: number[];
   /** Source line of each ID an emphasis state lists, by `state:id`. */
   stateLines: Map<string, number>;
+  /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
+  phases: Array<{ id: string; label: string; ids: string[]; line: number }>;
   /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
   warnings: { code: string; message: string; line: number }[];
 }
@@ -426,6 +428,7 @@ export function parseModel(source: string | SourceDoc): Model {
     colorLines: new Map(),
     legendLines: [],
     stateLines: new Map(),
+    phases: [],
     warnings: [],
   };
   const configLines = new Map<string, number>();
@@ -580,6 +583,17 @@ export function parseModel(source: string | SourceDoc): Model {
           state.ids.push(x);
           m.stateLines.set(`${sid}:${x}`, line);
         }
+        break;
+      }
+      case 'phase': {
+        assert(
+          args.length >= 3 && args[1]?.quoted,
+          'A phase needs an ID, a label and its messages: phase preview "Preview" m1 m2.',
+        );
+        allow([]);
+        const pid = id(args[0]);
+        assert(!m.phases.some(p => p.id === pid), `Duplicate phase ${pid}.`);
+        m.phases.push({ id: pid, label: args[1].value, ids: args.slice(2).map(w => id(w)), line });
         break;
       }
       case 'subtitle':
@@ -987,12 +1001,31 @@ function validateReferences(m: Model) {
     }
   // Sequence: participants and messages only.
   if (m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+    // Groups gather participants into column bands; they hold nodes and sit at the top level.
     for (const o of m.objects)
       assert(
-        o.type === 'node',
-        `A sequence diagram has participants and messages, not groups; remove ${o.id} or use another layout.`,
+        o.type === 'node' ? by.get(o.parent)?.type !== 'node' : o.parent === 'root' && !o.frame,
+        `In a sequence diagram a group is a band of participants: put ${o.id} at the top level and its participants in=${o.id}.`,
         o.line,
       );
+  const messageIds = new Set(m.edges.map(e => e.id)),
+    phased = new Set<string>();
+  for (const p of m.phases) {
+    assert(
+      m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'),
+      'A phase groups messages in a sequence diagram; use layout root sequence.',
+      p.line,
+    );
+    for (const x of p.ids) {
+      assert(
+        messageIds.has(x),
+        `Unknown message ${x} in phase ${p.id}; a phase lists edge IDs.`,
+        p.line,
+      );
+      assert(!phased.has(x), `${x} is already in another phase.`, p.line);
+      phased.add(x);
+    }
+  }
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
       exists(end, e.line);

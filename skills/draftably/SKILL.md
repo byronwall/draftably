@@ -121,6 +121,7 @@ layout services row gap=56
 | `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                                                                                                           |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                                                                                                           |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`                                                                                                                        |
+| `phase id "label" ids...`          | Sequence diagrams: listed messages drawn as a labelled row band                                                                                                                                                 |
 | `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                                                                                                            |
 | `config key=value ...`             | File settings: `link-base="path"` (where relative links start; a URL such as a pinned `…/blob/<sha>/` joins relative hrefs to it), `editor=vscode\|cursor\|zed\|...`                                            |
 
@@ -168,7 +169,9 @@ Good defaults:
   to server to storage). **Doesn't fit** several independent flows: each one crosses every lane
   and the lines tangle. Draw independent flows as groups side by side instead.
 - An exchange between participants: `layout root sequence`. Nodes are participants across the
-  top; each `edge` line is one message, in file order; `kind=async` for replies. No groups.
+  top; each `edge` line is one message, in file order; `kind=async` for replies. A top-level
+  `group` makes a column band of its participants (client, server), and
+  `phase id "label" m1 m2 ...` draws a run of messages as a labelled row band (preview, apply).
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
 - One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request
