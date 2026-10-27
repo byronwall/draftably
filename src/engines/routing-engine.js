@@ -615,8 +615,11 @@ const pathLength = ps => segments(ps).reduce((n, [a, b]) => n + distance(a, b), 
 const PORT_SLACK = 4;
 const FAR_PENALTY = 100,
   OWN_STANDOFF = 1;
-// Crossing pairs the repair pass tries before it stops, to bound its time on busy drawings.
-const MAX_REPAIRS = 24;
+// Crossing pairs the repair pass tries before it stops, to bound its time on busy drawings. Each
+// try routes up to four lines again (most of the router's time on a 30-box file). Across the
+// quality corpus, held-out set and examples every repair that was kept came within the first four
+// tries; later ones only cost time.
+const MAX_REPAIRS = 4;
 // Gate a group's header bands to the terminal lines of a route through a member's top.
 function gate(obs, start, fs, end, ts) {
   if (!obs.some(r => r.gates)) return obs;
