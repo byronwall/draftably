@@ -18,7 +18,15 @@ inside the Draftably repo). It needs Node 22.21 or later.
    short stable IDs (`api`, `orders_db`) and human labels (`"Orders DB"`).
 2. **Write the file** with declarations first, then edges, then `layout` lines.
 3. **Check it:** `npx draftably check diagram.draft`. Fix every `error`; read every `warning`.
-   Exit code 1 means errors.
+   Exit code 1 means errors. Warnings ending in `[edge-through-node]`, `[edge-through-title]`,
+   `[node-overlap]`, `[label-collision]` or `[outside-group]` are drawing conflicts. Each names
+   the ids, and the refinement line that caused it with a fix ("Remove the pin on line 12, or
+   change it to x=140 y=60"). Apply the fix, or remove the refinement, and run `check` again
+   until no conflict is left. A conflict with no line means layout could not avoid it: move the
+   boxes apart with `near`, or split the group.
+   When a box sits in an odd place, `check --hints` shows each refinement's target with its raw
+   (layout only) and final position and the distance between them. A large distance means the
+   refinement, not layout, put it there.
 4. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image. `npx draftably inspect diagram.draft` prints node and
    route geometry as JSON, useful for spotting overlaps or odd placement without an image.
