@@ -37,6 +37,7 @@ import {
 import { projectScene } from './project';
 import {
   DslError,
+  FITS,
   layoutParent,
   nearAnchor,
   parseModel,
@@ -123,8 +124,65 @@ const round = (n: number) => Math.round(n);
 
 export async function compile(source: string): Promise<Scene> {
   const m = parseModel(source),
-    flat = dissolved(m);
-  return sequenced(withSoftGroups(layoutModel(flat, await engineArrangement(flat)), m));
+    root = m.layouts.find(l => l.scope === 'root' && l.fit);
+  if (!root?.fit) return compileModel(m);
+  // `fit=`: lay the drawing out each way it can read and fold, and keep the one whose shape is
+  // closest to the target. The file as written goes first, so it wins a tie.
+  const target = FITS[root.fit],
+    tried: Array<{ scene: Scene; label: string; off: number }> = [];
+  for (const variant of fitVariants(root)) {
+    const scene = await compileModel({
+      ...m,
+      layouts: m.layouts.map(l => (l === root ? { ...l, ...variant.layout } : l)),
+    });
+    tried.push({ scene, label: variant.label, off: Math.abs(Math.log(aspectOf(scene) / target)) });
+  }
+  const best = tried.reduce((a, b) => (b.off < a.off - 0.01 ? b : a));
+  best.scene.diagnostics.push({
+    level: 'info',
+    code: 'fit',
+    message: `fit=${root.fit} (aspect ${target}): drawn ${best.label}, aspect ${aspectOf(best.scene).toFixed(2)}; ${tried.length} layouts tried.`,
+    line: root.line,
+    ids: [],
+  });
+  return best.scene;
+}
+
+function compileModel(m: Model) {
+  const flat = dissolved(m);
+  return engineArrangement(flat).then(arranged =>
+    sequenced(withSoftGroups(layoutModel(flat, arranged), m)),
+  );
+}
+
+/** Width over height of a scene's top-level objects. */
+function aspectOf(scene: Scene) {
+  const top = scene.objects.filter(o => o.parent === 'root');
+  return (
+    (Math.max(...top.map(o => o.x + o.w)) - Math.min(...top.map(o => o.x))) /
+    (Math.max(...top.map(o => o.y + o.h)) - Math.min(...top.map(o => o.y)))
+  );
+}
+
+/** The ways `fit=` tries a root layout: as written, then each reading direction, folding or not. */
+function fitVariants(root: ModelLayout) {
+  const reads = (l: Partial<ModelLayout>) =>
+    `reading ${l.direction === 'auto' ? 'as the engine picks' : l.direction}`;
+  const out: Array<{ label: string; layout: Partial<ModelLayout> }> = [
+    { label: `as written (${reads(root)})`, layout: {} },
+  ];
+  if (['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine) return out;
+  for (const direction of ['right', 'down'] as const)
+    for (const fold of ['auto', 'never'] as const) {
+      const layout: Partial<ModelLayout> = root.engine
+        ? {
+            direction,
+            engine: { ...root.engine, params: { ...root.engine.params, fold } },
+          }
+        : { direction, fold };
+      out.push({ label: `${reads({ direction })}${fold === 'never' ? ', unfolded' : ''}`, layout });
+    }
+  return out;
 }
 
 /**

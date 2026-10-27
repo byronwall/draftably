@@ -142,7 +142,9 @@ anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a 
 `layered`, `tree` (`root=nodeId`), `grid`. An engine on `root` arranges everything, except groups
 that have their own `layout` line. Useful settings: `node-gap=4..160`, `rank-gap=12..220`,
 `group-gap=12..180`, `ordering=stable|crossings`, `fold=auto|never`,
-`aspect=1|1.333|1.6|2|0.75`. Where the connections leave a choice, file order decides and an
+`aspect=1|1.333|1.6|2|0.75`. For a document or slide, add `fit=slide` (or `wide`, `square`,
+`page`, `tall`) to the root layout line: compile tries both directions and folding and keeps the
+shape closest to that, naming the choice in an `info` note. Where the connections leave a choice, file order decides and an
 `order` line overrides it (`order root start ask rule ctx` puts `rule` left of `ctx` in their
 rank); ids never affect placement.
 

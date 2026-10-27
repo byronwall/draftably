@@ -78,8 +78,8 @@ export interface Measured {
 export type Prefer = 'fewer-crossings' | 'compact' | 'stable';
 
 /** `--fit` targets: the width-to-height ratio the whole image should come close to. */
-export const FITS = { wide: 2, slide: 1.78, square: 1, page: 0.77, tall: 0.6 } as const;
-export type Fit = keyof typeof FITS;
+export { FITS, type Fit } from '../dsl/syntax';
+import { FITS, type Fit } from '../dsl/syntax';
 
 /** What "best" means for a run: the preference, and the target aspect when `--fit` is given. */
 export interface Goal {

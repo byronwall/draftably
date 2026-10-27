@@ -50,6 +50,7 @@ and groups. References may point to later lines.
 | `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                              |
 
 | `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
+| `layout root … fit=slide` | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note. |
 | `routing` | Router settings for every connection. See [Routing](#routing). |
 | `config key=value` | File settings. See [Links and counts](#rules). |
 | `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |

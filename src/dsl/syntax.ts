@@ -242,6 +242,10 @@ export interface EngineRecipe {
   params: Partial<LayoutSettings>;
 }
 
+/** Image shapes a drawing can aim for (`fit=`, `vary --fit`): width over height. */
+export const FITS = { wide: 2, slide: 1.78, square: 1, page: 0.77, tall: 0.6 } as const;
+export type Fit = keyof typeof FITS;
+
 export interface ModelLayout {
   scope: string;
   algorithm: Algorithm;
@@ -257,6 +261,8 @@ export interface ModelLayout {
   ruler?: boolean;
   /** `flow` only: whether a long run of ranks folds into bands. Engines take `fold` as a param. */
   fold: 'auto' | 'never';
+  /** Root only: the image shape to aim for; compile tries direction and folding to get closest. */
+  fit?: Fit;
   gap: number;
   minWidth: number;
   minHeight: number;
@@ -686,7 +692,12 @@ export function parseModel(source: string | SourceDoc): Model {
         const scope = id(args[0]);
         once('layout:' + scope);
         const named = attrs.get('engine')?.value as LayoutAlgorithmId | undefined;
-        const common = ['direction', 'min-width', 'min-height'];
+        const common = [
+          'direction',
+          'min-width',
+          'min-height',
+          ...(scope === 'root' ? ['fit'] : []),
+        ];
         let engine: EngineRecipe | undefined;
         if (named !== undefined) {
           count(1);
@@ -724,6 +735,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(engine ? { engine } : {}),
           direction: choice('direction', 'auto', ['auto', 'right', 'down'] as const),
           fold: named ? 'auto' : choice('fold', 'auto', ['auto', 'never'] as const),
+          ...(attrs.has('fit') ? { fit: choice('fit', 'slide', Object.keys(FITS) as Fit[]) } : {}),
           ...(attrs.has('columns') ? { columns: num('columns', 1, 1, 512) } : {}),
           ...(attrs.has('unit')
             ? {
