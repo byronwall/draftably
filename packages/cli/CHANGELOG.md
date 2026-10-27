@@ -1,5 +1,41 @@
 # draftably
 
+## 0.7.0
+
+### Minor Changes
+
+- 79bb1f2: `check --metrics` prints what `vary` measures (size, aspect, crossings, bends, line length, warnings) and warns on crossing edges, detours, stranded nodes and an extreme aspect, or one far from `--fit <shape>`. `inspect --json --metrics` adds the same numbers as a `metrics` object.
+- 4b813f2: Add `draftably set <file> <id> key=value…` (change a declaration: `label=` or any attribute, `key=` removes it), `rm <file> <id>…` (remove nodes, groups or edges with their edges, refinements and state mentions; a group's members move to its container) and `mv <file> <old> <new>` (rename an id everywhere). Each rewrites the file through the formatter and runs `check`.
+- 5e128e4: `check` takes several files or a folder, prints each line with its file, and exits 1 if any file fails (before, it checked only the first file). Every command prints its own help with `--help` instead of running (`open --help` no longer starts a server), and `--version` prints the version. `check --quiet` leaves out info notes. `inspect --png` and `compare --png` print the image size, and `--max-width <px>` caps the image width.
+- 233cee3: `edge … constraint=false` draws and routes an edge without letting it rank or order anything, so a feedback edge no longer pulls its target's section below its source.
+- 52206a5: In a grouped `layered` or `compound-flow` layout reading down, a group whose chain is at least 1.5 times as tall as every other column folds into side-by-side columns when that makes the drawing smaller. `fold=never` on the `group` line keeps it in one column.
+- 53c4885: An edge may end on a boxed group: `edge e owner -> questions "owes"` draws the line to the group's frame and ranks the group like any other end. A soft or frameless group, or a group around the other end, is still refused with a reason.
+- 28303e7: `layout root … fit=wide|slide|square|page|tall` aims the drawing at an image shape: compile also lays it out reading the other way and with folding on and off, keeps the layout closest to that shape (the file as written wins a tie), and names the choice in an `info` note.
+- 9301ac2: `near id ref` accepts a `ref` inside a sibling group: `id` goes beside that group, lined up with `ref`. An edge to a group now names the group's members to connect to instead.
+- 6213217: `draftably open` reuses a viewer that already serves the folder: it prints that viewer's URL and exits instead of starting a second one. `open --status` lists running viewers (URL, folder, version, pid), and `open --replace` stops a viewer, for example one left from an older version, and starts this one. Viewers register in `~/.draftably/viewers`.
+- b839b0e: Sequence diagrams draw on a framed panel with outlined participant headers and a thin color stripe instead of solid fills. A top-level `group` now gathers participants into a light column band (before, groups were an error), and a new `phase id "label" message ids…` statement draws a run of messages as a row band with its label in a tab at the left.
+- 037a92d: Sequence diagrams take about a quarter less room: message labels wrap to about 170px and sit just above their arrow in a slightly larger type, participants are spaced for the wrapped labels, short participant titles get narrower boxes, and rows are tighter. A self-message's label sits beside its loop.
+- be1527d: `check` warns (`[relaxed]`) when a `near`, `stay` or `nudge` gives way by 16 px or more, instead of an `info` note. `format --drop-stale` removes those refinements and stays the arrangement outgrew. `size id width=… height=auto` fits the title's height at that width, so a size line survives label edits.
+- 8ce5b22: `config link-base=` may be a URL, such as source pinned at one commit: relative `href`s join it, open as web links in the viewer and are written that way into SVG and PNG exports.
+- 10c63e1: `vary` prints a line per variant to stderr as it finishes and takes `--budget 60s` to stop trying new variants and rank the ones found. On a `lanes` root, `--grid` and `--try engine=…` now try engines (the lanes stay as `v0`) instead of refusing. `vary --help` prints help instead of reading `--help` as a file.
+- 03d0d78: A long group title wraps to its members' width (up to three lines) and its title band grows taller, instead of the title setting the group's width on one line.
+
+### Patch Changes
+
+- 5cd00ce: Routing a busy diagram is about 40% faster: the crossing repair stops after four tries, where every repair that helped in the test diagrams was found.
+- bd8086f: Opening, reloading or switching back to a diagram you have opened before is near instant: the viewer keeps each compiled file and its routes in the browser across reloads and tabs.
+- afab665: Route connections about 2.8 times faster on large diagrams, with identical lines: one search where a short one used to fail and start over, and each step checks only what lies on its grid line.
+- e908dc6: The viewer no longer routes a large diagram file on the page itself: it draws quick routes at once and shows the full ones from the engine worker, routing each change once. Grid view and returning to a drawing reuse routes already computed.
+- da8dbbf: Dragging a box in a nested group no longer freezes for a second: a quick route could escape round the router's group walls, millions of pixels out, and placing its label along that line stalled the page.
+- 2994cbf: A change to a large diagram file shows in a fraction of a second: the viewer draws the new layout with quick routes as soon as it is laid out, then the full routes.
+- bcc0116: The link mark on a `diamond` or `circle` sits against the shape's top-right side instead of floating at the empty corner of its bounding box.
+- 6b2019e: An edge's canvas-colored halo is drawn only where it crosses another line or a group's frame, not along its whole length, so lines inside tinted groups no longer look doubled. Edge labels keep their own background.
+- 9934574: The viewer's Grid view of emphasis states pans and zooms: the wheel zooms and a drag pans every panel together, so the same region is compared across states. A click without a drag still opens a state, and **Fit** shows the whole panels again.
+- 676e340: Engine layouts no longer depend on how objects are named: where the connections leave a choice, file order decides, so renaming an id no longer moves it (or the groups around it). A scope's `order` line now overrides file order under engines too; before, `order` did nothing under `engine=layered`.
+- b2e1b81: The viewer marks a box placed by a `near`, `stay`, `nudge` or `pin` line with a small pin inside its corner (filled when pinned) instead of a "Manual" or "Pinned" text tag above it. Hovering the pin names the line that placed it.
+- 8176e1b: Routing is about twice as fast with identical results (a 28-shape diagram drops from 9.1 s to 3.8 s in `inspect`), which speeds up `check`, `inspect`, `vary` and the viewer's first draw. While dragging in the viewer, quick routes reuse each line's sides from the previous frame instead of searching every line again.
+- 9356ccf: The agent skill says when lanes, sequence diagrams, cells and emphasis states fit and when they don't. `check` notes on stderr when an installed copy of the skill (in `.claude/skills`, `.agents/skills` or `~/.claude/skills`) differs from the one this version ships, with the command to update it.
+
 ## 0.6.0
 
 ### Minor Changes
