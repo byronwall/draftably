@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { ExplorerLab } from '../src/engines/explorer-engine.js';
 import { compile } from '../src/dsl/compile';
@@ -5,6 +6,7 @@ import { sceneConflicts } from '../src/dsl/conflicts';
 import {
   applyEdits,
   autoVariants,
+  grid,
   improves,
   neighbors,
   parseTry,
@@ -93,6 +95,27 @@ describe('vary', () => {
       { kind: 'routing', attrs: { 'crossing-penalty': '900' } },
     ]);
     expect(() => sweep(shape, [parseTry('engine'), parseTry('direction')])).toThrow('12 or fewer');
+  });
+
+  it('tries engines on a lanes root and keeps the lanes as v0', async () => {
+    const shape = shapeOf(await compile(fs.readFileSync('examples/support-lanes.draft', 'utf8')));
+    expect(shape.fixed).toBe('lanes');
+    expect(grid(shape).length).toBe(6);
+    expect(sweep(shape, [parseTry('engine=layered,flow')]).length).toBe(2);
+    const seq = shapeOf(
+      await compile(
+        'diagram "S"\nnode a "A"\nnode b "B"\nedge e a -> b "go"\nlayout root sequence',
+      ),
+    );
+    expect(() => grid(seq)).toThrow('--grid varies engines');
+  });
+
+  it('stops at --budget, keeps v0 and reports what it skipped', async () => {
+    const seen: string[] = [];
+    const result = await vary(SOURCE, { grid: true, budget: 0, progress: d => seen.push(d.title) });
+    expect(result.variants.map(v => v.id)).toEqual(['v0', 'v1']);
+    expect(result.skipped).toBe(5);
+    expect(seen).toEqual([result.variants[1].title]);
   });
 
   it('lets --fit trade area for the target shape, never crossings', () => {

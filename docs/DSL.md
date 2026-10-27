@@ -624,7 +624,12 @@ Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
   the engine: the scope's own, else `compound-flow` with groups or `layered` without.
 - `--grid` tries `layered`, `compound-flow` and `flow`, plus `tree` for a tree with one start,
   each reading right and then down. Sweeps keep a variant that draws the same picture as an
-  earlier one and tag it `same as v1`, so a setting with no effect shows.
+  earlier one and tag it `same as v1`, so a setting with no effect shows. On a `lanes` root,
+  `--grid` and `--try engine=…` try engines while `v0` keeps the lanes, so lanes are one more
+  option to compare.
+- `--budget 60s` (or `2m`, `5000ms`) stops trying new variants after that long and ranks the
+  ones found; the table says how many were left. Each variant prints a line to stderr as it
+  finishes, with its crossings, size and time, so a long run shows its progress.
 - `--fit wide|slide|square|page|tall` aims for an image shape (aspect 2, 1.78, 1, 0.77, 0.6).
   It changes what is tried (the matching direction first, and the engine's `aspect` with
   folding) and what ranks first: closeness to the shape comes right after warnings. A variant

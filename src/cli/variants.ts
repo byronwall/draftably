@@ -464,7 +464,7 @@ export function sweep(shape: Shape, axes: Axis[]): Array<Pick<Variant, 'edits' |
   const count = axes.reduce((n, a) => n * a.values.length, 1);
   if (count > 12) throw Error(`That sweep has ${count} variants. Keep it to 12 or fewer.`);
   const layoutKeys = axes.filter(a => !ROUTING_PARAMS[a.key]);
-  if (layoutKeys.length && shape.fixed)
+  if (layoutKeys.length && shape.fixed && shape.fixed !== 'lanes')
     throw Error(`The ${shape.scope} scope uses ${shape.fixed}; only routing settings vary there.`);
   const needsEngine =
     layoutKeys.some(a => a.key !== 'direction') &&
@@ -504,7 +504,8 @@ export function sweep(shape: Shape, axes: Axis[]): Array<Pick<Variant, 'edits' |
  * one start, each reading right and then down. Always the same list for the same shape.
  */
 export function grid(shape: Shape): Array<Pick<Variant, 'edits' | 'why'>> {
-  if (shape.fixed)
+  // Lanes are one more option: the file as it is (v0) keeps them, the grid tries engines.
+  if (shape.fixed && shape.fixed !== 'lanes')
     throw Error(`The ${shape.scope} scope uses ${shape.fixed}; --grid varies engines.`);
   const engines = ['layered', 'compound-flow', 'flow', ...(shape.tree ? ['tree'] : [])];
   return engines.flatMap(engine =>
@@ -808,6 +809,13 @@ export interface VaryOptions {
   fit?: Fit;
   /** `--from`: search around this variant of an earlier run. */
   from?: { id: string; edits: Edit[] };
+  /** `--budget`: stop trying new variants after this many milliseconds; keep what was found. */
+  budget?: number;
+  /** Called as each variant finishes: its title, metrics (or error), and how many are left. */
+  progress?: (
+    done: { title: string; metrics?: Metrics; error?: string; ms: number },
+    left: number,
+  ) => void;
 }
 
 export interface VaryResult {
@@ -820,6 +828,8 @@ export interface VaryResult {
   tried: number;
   /** Variants that did not compile, with the reason. */
   failed: Array<{ title: string; error: string }>;
+  /** Candidates left untried when `--budget` ran out. */
+  skipped: number;
   /** Source and SVG for each listed variant, by id. */
   drawn: Map<string, Measured>;
 }
@@ -878,7 +888,15 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
               ...suggestions(shape, base.metrics, goal),
               ...(scope === 'root' ? autoVariants(scene, sceneConflicts(scene)) : []),
             ];
-  for (const c of candidates) {
+  const start = Date.now();
+  let skipped = 0;
+  for (const [i, c] of candidates.entries()) {
+    if (opts.budget !== undefined && Date.now() - start > opts.budget) {
+      skipped = candidates.length - i;
+      break;
+    }
+    const began = Date.now(),
+      left = candidates.length - i - 1;
     const { source: next, changes } = applyEdits(source, c.edits);
     const variant: Variant = {
       id: '',
@@ -892,15 +910,18 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
     try {
       const d = await draw(next);
       const same = seen.get(d.key);
-      if (same && ranked) continue;
       variant.metrics = { ...d.metrics, moved: movedFrom(base.centers, d.centers) };
+      opts.progress?.(
+        { title: variant.title, metrics: variant.metrics, ms: Date.now() - began },
+        left,
+      );
+      if (same && ranked) continue;
       found.push({ variant, measured: { variant, source: next, svg: d.svg }, same });
       if (!same) seen.set(d.key, variant);
     } catch (error) {
-      failed.push({
-        title: variant.title,
-        error: error instanceof Error ? error.message : String(error),
-      });
+      const message = error instanceof Error ? error.message : String(error);
+      opts.progress?.({ title: variant.title, error: message, ms: Date.now() - began }, left);
+      failed.push({ title: variant.title, error: message });
     }
   }
   const better = (v: Variant) => improves(v.metrics!, v0.metrics!, goal.fit);
@@ -928,5 +949,14 @@ export async function vary(source: string, opts: VaryOptions = {}): Promise<Vary
     .sort((a, b) => compareKeys(keys(a.metrics!, goal), keys(b.metrics!, goal)))[0];
   const recommended = pick?.id ?? 'v0';
   variants.find(v => v.id === recommended)!.tags.unshift('recommended');
-  return { shape, mode, variants, recommended, tried: candidates.length, failed, drawn };
+  return {
+    shape,
+    mode,
+    variants,
+    recommended,
+    tried: candidates.length - skipped,
+    failed,
+    skipped,
+    drawn,
+  };
 }

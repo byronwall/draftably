@@ -33,6 +33,7 @@ interface Saved {
   recommended: string;
   failed: VaryResult['failed'];
   tried: number;
+  skipped: number;
   shape: VaryResult['shape'];
   variants: Array<Variant & { png: string }>;
 }
@@ -135,6 +136,10 @@ function table(result: VaryResult, file: string, dir: string, opts: RunOptions) 
   );
   for (const v of result.variants.slice(1)) lines.push(`${v.id}: ${v.why}.`);
   for (const f of result.failed) lines.push(`Failed: ${f.title}: ${f.error}`);
+  if (result.skipped)
+    lines.push(
+      `Budget ran out: ${result.skipped} more variant${result.skipped > 1 ? 's' : ''} not tried. Raise --budget to try them.`,
+    );
   lines.push(
     result.recommended === 'v0'
       ? `Recommended: keep the current layout; no variant is as good on warnings, crossings and ${fit ? `fit to ${fit}` : 'size'}.`
@@ -152,7 +157,15 @@ export interface RunOptions extends VaryOptions {
 
 /** Generate, measure and write variants of `file`. */
 export async function runVary(file: string, source: string, opts: RunOptions) {
-  const result = await vary(source, opts);
+  // One line per variant on stderr as it finishes, so a long run shows it is working and stdout
+  // stays the table (or JSON).
+  const result = await vary(source, {
+    progress: ({ title, metrics: m, error, ms }, left) =>
+      console.error(
+        `  ${title}: ${m ? `${plural(m.crossings, 'crossing')}, ${sizeText(m)}` : `failed (${error})`}, ${(ms / 1000).toFixed(1)}s${left ? `; ${left} to go` : ''}`,
+      ),
+    ...opts,
+  });
   const dir = outDir(file, opts.out);
   fs.mkdirSync(dir, { recursive: true });
   for (const old of fs.readdirSync(dir))
@@ -176,6 +189,7 @@ export async function runVary(file: string, source: string, opts: RunOptions) {
     recommended: result.recommended,
     failed: result.failed,
     tried: result.tried,
+    skipped: result.skipped,
     shape: result.shape,
     variants: result.variants.map(v => ({ ...v, png: path.join(dir, `${v.id}.png`) })),
   };
