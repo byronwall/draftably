@@ -6,7 +6,7 @@
 import { Marked, Renderer, type Token, type Tokens } from 'marked';
 import { THEME_IDS } from '../../src/model/appearance';
 import dsl from '../../docs/DSL.md?raw';
-import { highlightHtml } from '../highlight';
+import { COMMANDS, highlightHtml } from '../highlight';
 
 export const GITHUB = 'https://github.com/byronwall/draftably';
 const BASE = import.meta.env.BASE_URL;
@@ -27,6 +27,8 @@ export interface Page {
   headings: Heading[];
   /** Every `.draft` source the page draws, so it can be drawn before the page shows. */
   drafts: string[];
+  /** The Markdown on GitHub. */
+  source: string;
 }
 
 /** Sidebar groups, in order. A DSL section missing here goes at the end of Language. */
@@ -76,7 +78,7 @@ export const themed = (source: string) =>
 
 const isDraft = (t: Token): t is Tokens.Code => t.type === 'code' && /^draft\b/.test(t.lang ?? '');
 
-function makePage(slug: string, title: string, md: string): Page {
+function makePage(slug: string, title: string, md: string, source: string): Page {
   const tokens = new Marked().lexer(md);
   // A guide starts with `# Title`; a DSL section with `## Title` and `###` below it.
   const top = tokens.find((t): t is Tokens.Heading => t.type === 'heading');
@@ -97,22 +99,24 @@ function makePage(slug: string, title: string, md: string): Page {
     }
     // A short first paragraph is the page's lead; a long one stays body text.
     const first = !lead && t.type === 'paragraph' && !body.some(b => b.type !== 'space');
-    if (first && t.text.length <= 320) lead = t.text;
+    if (first && t.text.length <= 220) lead = t.text;
     else body.push(t);
   }
   const drafts = body
     .filter(isDraft)
     .flatMap(t => (t.lang === 'draft themes' ? themed(t.text).map(v => v.source) : [t.text]));
-  return { slug, title: TITLES[slug] ?? title, group: '', lead, tokens: body, headings, drafts };
+  const name = TITLES[slug] ?? title;
+  return { slug, title: name, group: '', lead, tokens: body, headings, drafts, source };
 }
 
 function dslPages(): Page[] {
   const parts = dsl.split(/^(?=## )/m);
   const intro = parts.shift()!.replace(/^# .*\n/, '');
-  const pages = [makePage('overview', 'Overview', intro)];
+  const file = `${GITHUB}/blob/main/docs/DSL.md`;
+  const pages = [makePage('overview', 'Overview', intro, file)];
   for (const part of parts) {
     const title = plain(part.slice(3, part.indexOf('\n')));
-    pages.push(makePage(slugify(title), title, part));
+    pages.push(makePage(slugify(title), title, part, `${file}#${slugify(title)}`));
   }
   return pages;
 }
@@ -126,7 +130,8 @@ const guides = import.meta.glob<string>('./pages/*.md', {
 function guidePages(): Page[] {
   return Object.entries(guides).map(([file, md]) => {
     const slug = file.replace(/^.*\//, '').replace(/\.md$/, '');
-    return makePage(slug, plain(/^# (.*)$/m.exec(md)?.[1] ?? slug), md);
+    const source = `${GITHUB}/blob/main/site/docs/pages/${slug}.md`;
+    return makePage(slug, plain(/^# (.*)$/m.exec(md)?.[1] ?? slug), md, source);
   });
 }
 
@@ -161,6 +166,9 @@ for (const page of PAGES) {
 }
 for (const page of PAGES) ANCHORS.set(page.slug, docsPath(page.slug));
 
+/** The docs path for a DSL.md heading anchor, such as `byte-and-bit-layouts`. */
+export const anchorPath = (id: string) => ANCHORS.get(id);
+
 function resolveHref(href: string): string {
   if (href.startsWith('#')) {
     const to = ANCHORS.get(href.slice(1));
@@ -173,6 +181,24 @@ function resolveHref(href: string): string {
 }
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+const COMMAND_SET = new Set(COMMANDS);
+
+/** A `text` block of `.draft` lines, as opposed to CLI output or prose. */
+const looksLikeDraft = (text: string) =>
+  text
+    .split('\n')
+    .filter(l => l.trim())
+    .every(
+      l =>
+        /^\s*(#|\/\/)/.test(l) ||
+        COMMAND_SET.has(
+          l
+            .trim()
+            .split(/\s/)[0]
+            .replace(/^[-+~.]/, ''),
+        ),
+    );
 
 /** Shell lines with their `# comments` dimmed. */
 const shellHtml = (text: string) =>
@@ -199,11 +225,12 @@ const md = new Marked({
     },
     code(t) {
       const lang = t.lang ?? '';
-      const body = /^(draft|text)/.test(lang)
-        ? highlightHtml(t.text)
-        : /^(sh|bash)/.test(lang)
-          ? shellHtml(t.text)
-          : esc(t.text);
+      const body =
+        /^draft/.test(lang) || (lang === 'text' && looksLikeDraft(t.text))
+          ? highlightHtml(t.text)
+          : /^(sh|bash)/.test(lang)
+            ? shellHtml(t.text)
+            : esc(t.text);
       return `<div class="doc-code"><button type="button" class="doc-copy" aria-label="Copy">Copy</button><pre><code>${body}</code></pre></div>\n`;
     },
     table(t) {

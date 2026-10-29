@@ -1,7 +1,8 @@
-import { createSignal, For, onCleanup, Show, untrack } from 'solid-js';
+import { createEffect, createSignal, For, onCleanup, Show, untrack } from 'solid-js';
 import { draw, paperOf, type Drawing } from '../draw';
 import { highlightHtml } from '../highlight';
 import { themed } from './content';
+import { playUrl } from './play-link';
 import { Zoom } from './Zoom';
 
 /** Drawings of the docs' examples, kept so a page can draw them all before it shows. */
@@ -26,10 +27,6 @@ export function warm(sources: string[]) {
   };
   requestIdleCallback(next);
 }
-
-// TODO(playground): link to `/play#<hash>` with this source once the playground's share hash
-// (compressed source in the URL hash) lands; until then it opens the playground empty.
-const playUrl = (_source: string) => `${import.meta.env.BASE_URL}play`;
 
 /** A drawing this narrow sits beside its source instead of under it. */
 const SPLIT_WIDTH = 640;
@@ -69,13 +66,22 @@ export function Example(props: { source: string; themes?: boolean }) {
   };
   onCleanup(() => clearTimeout(timer));
 
+  // The playground opens with whatever the source is now.
+  const [play, setPlay] = createSignal(`${import.meta.env.BASE_URL}play`);
+  createEffect(() => {
+    const text = source();
+    void playUrl(text).then(url => source() === text && setPlay(url));
+  });
+
   const lines = () => source().split('\n').length;
   const ids = variants(original).map(v => v.id);
 
   return (
     <figure class="doc-example" classList={{ 'is-split': split }}>
       <div class="doc-example-bar">
-        <span class="doc-example-label">.draft</span>
+        <span class="doc-example-label">
+          .draft <span>· editable</span>
+        </span>
         <Show when={source() !== original}>
           <button type="button" class="doc-link-button" onClick={() => edit(original)}>
             Reset
@@ -87,7 +93,7 @@ export function Example(props: { source: string; themes?: boolean }) {
             Expand
           </button>
         </Show>
-        <a class="doc-example-play" href={playUrl(source())}>
+        <a class="doc-example-play" href={play()}>
           Edit in playground →
         </a>
       </div>
@@ -125,6 +131,9 @@ export function Example(props: { source: string; themes?: boolean }) {
                 <figure class="doc-theme">
                   <figcaption>
                     <code>theme {id}</code>
+                    <Show when={i() === 0}>
+                      <span> · default</span>
+                    </Show>
                   </figcaption>
                   <Svg
                     svg={svgs()[i()]}
@@ -149,8 +158,12 @@ function Svg(props: { svg: string; error?: string; stale?: boolean; onOpen: () =
       class="doc-drawing"
       classList={{ 'is-stale': !!props.error || props.stale }}
       style={{ background: paperOf(props.svg) }}
-      onDblClick={() => props.onOpen()}
-      title="Double-click to expand"
+      role="button"
+      tabIndex={0}
+      aria-label="Expand the drawing"
+      // A link inside the drawing still opens; a click anywhere else expands it.
+      onClick={e => !(e.target as Element).closest('a') && props.onOpen()}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && (e.preventDefault(), props.onOpen())}
     >
       {/* The SVG comes from our own renderer, which escapes every label. */}
       {/* eslint-disable-next-line solid/no-innerhtml */}

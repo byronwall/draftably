@@ -70,7 +70,7 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
     <Portal>
       <div class="zoom" style={{ background: paperOf(props.svg) ?? '#fbfbfd' }}>
         <div class="zoom-bar">
-          <span>Scroll to zoom · drag to pan · 0 to fit</span>
+          <span>Scroll to zoom · drag to pan · 0 to fit · Esc to close</span>
           <button type="button" onClick={fit}>
             Fit
           </button>
