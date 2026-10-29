@@ -1,4 +1,4 @@
-import { createSignal, For, onCleanup, onMount } from 'solid-js';
+import { createSignal, For, onCleanup, onMount, type JSX } from 'solid-js';
 import { findExample } from '../../src/model/examples';
 import { THEME_IDS } from '../../src/model/appearance';
 import { paperOf } from '../draw';
@@ -17,7 +17,7 @@ interface Variant {
 
 interface Point {
   title: string;
-  body: string;
+  body: JSX.Element;
   variants: Variant[];
 }
 
@@ -41,7 +41,12 @@ const states = [...emphasis.matchAll(/^state (\S+) "([^"]+)"/gm)].map(m => ({
 const POINTS: Point[] = [
   {
     title: 'Review a change as a picture',
-    body: 'Mark lines with + − ~ and the drawing shows what a pull request adds, removes and changes.',
+    body: (
+      <>
+        Start lines with <code>+</code>, <code>-</code> or <code>~</code> and the drawing shows what
+        a pull request adds, removes and changes.
+      </>
+    ),
     variants: [
       { label: 'Marked', source: change, lines: linesOf(change, /^[+~-]node/) },
       {
@@ -55,7 +60,7 @@ const POINTS: Point[] = [
     title: 'Restyle with one line',
     body: 'Five themes ship with the language. A theme changes the look and never moves a box.',
     variants: THEME_IDS.map(id => ({
-      label: id,
+      label: id[0].toUpperCase() + id.slice(1),
       source: withLine(themed, `theme ${id}`),
       lines: `theme ${id}`,
     })),
@@ -101,47 +106,61 @@ export function Points() {
   onMount(() => onCleanup(whenSeen(el, () => void show(0))));
 
   return (
-    <section class="points" ref={el} aria-label="What the text gives you">
-      <div class="point-list">
-        <For each={POINTS}>
-          {(p, i) => (
-            <div class="point" classList={{ 'is-active': point() === i() }}>
-              <button type="button" class="point-title" onClick={() => void show(i())}>
-                <h2>{p.title}</h2>
-                <p>{p.body}</p>
-              </button>
-              <div class="point-tabs" role="tablist" aria-label={p.title}>
-                <For each={p.variants}>
-                  {(v, j) => (
-                    <button
-                      type="button"
-                      role="tab"
-                      aria-selected={point() === i() && picks()[i()] === j()}
-                      onClick={() => void show(i(), j())}
-                    >
-                      {v.label}
-                    </button>
-                  )}
-                </For>
-              </div>
-            </div>
-          )}
-        </For>
+    <section class="points" ref={el} aria-labelledby="points-head">
+      <div class="section-head">
+        <h2 id="points-head">More than a picture</h2>
       </div>
-      <div class="point-view">
-        <div
-          class="point-figure"
-          style={{ background: paperOf(svg()) }}
-          // The SVG comes from our own renderer, which escapes every label.
-          // eslint-disable-next-line solid/no-innerhtml
-          innerHTML={svg()}
-        />
-        <pre
-          class="point-source"
-          // Built from escaped tokens by highlightHtml.
-          // eslint-disable-next-line solid/no-innerhtml
-          innerHTML={highlightHtml(variant().lines)}
-        />
+      <div class="points-body">
+        <div class="point-list">
+          <For each={POINTS}>
+            {(p, i) => (
+              // The heading's button is the keyboard path; a click anywhere on the row also works.
+              <div
+                class="point"
+                classList={{ 'is-active': point() === i() }}
+                onClick={e => {
+                  if (!(e.target as Element).closest('.point-tabs')) void show(i());
+                }}
+              >
+                <h3>
+                  <button type="button" aria-pressed={point() === i()}>
+                    {p.title}
+                  </button>
+                </h3>
+                <p>{p.body}</p>
+                <div class="point-tabs" role="group" aria-label={p.title}>
+                  <For each={p.variants}>
+                    {(v, j) => (
+                      <button
+                        type="button"
+                        aria-pressed={picks()[i()] === j()}
+                        onClick={() => void show(i(), j())}
+                      >
+                        {v.label}
+                      </button>
+                    )}
+                  </For>
+                </div>
+              </div>
+            )}
+          </For>
+        </div>
+        <div class="point-view">
+          <div
+            class="point-figure"
+            classList={{ 'is-drawn': !!svg() }}
+            style={{ background: paperOf(svg()) }}
+            // The SVG comes from our own renderer, which escapes every label.
+            // eslint-disable-next-line solid/no-innerhtml
+            innerHTML={svg()}
+          />
+          <pre
+            class="point-source"
+            // Built from escaped tokens by highlightHtml.
+            // eslint-disable-next-line solid/no-innerhtml
+            innerHTML={highlightHtml(variant().lines)}
+          />
+        </div>
       </div>
     </section>
   );
