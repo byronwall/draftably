@@ -127,9 +127,14 @@ Done when `https://byronwall.github.io/draftably/` opens the viewer and `?exampl
 
 - Add `site/`, `vite.site.config.ts`, `@solidjs/router`, `pnpm site:dev` and `pnpm site:build`.
 - Copy `spaFallback()`. Move the viewer to `/app/` in the artifact.
-- Landing page: a hero with a live diagram from `examples/`, the source beside it, `npx draftably`
-  install line, three short "why" points (text source, auto layout, agent skill), a strip of example
-  thumbnails, and links to Playground, Docs and GitHub.
+- Landing page. The hero is a **live diagram above the fold**, not a screenshot: one large editor
+  frame with editable `.draft` source on the left third and the diagram, compiled and drawn in the
+  browser, on the right two thirds (layout from `mockups/landing-b.jpg`). Above it: headline,
+  subline, "Try it in the browser", "Read the docs" and the `npx draftably open` chip. Below it: the
+  three "why" points and the example cards with one-line descriptions from `mockups/landing-a.jpg`.
+  The hero editor shares its code with the playground (step 3), so build that component here.
+- Mockups in `mockups/` set layout, type and spacing only. Their `.draft` source is invented; use
+  real examples.
 - Use the viewer's fonts and CSS tokens. Light and dark.
 - Change the deploy workflow to `pnpm site:build` and upload `dist-site/`.
 - Use the name "Draftably" on the site. The viewer's user-facing name changes from "Diagram Studio"
@@ -138,6 +143,9 @@ Done when `https://byronwall.github.io/draftably/` opens the viewer and `?exampl
 Done when the landing page, `/app/` and a deep link reload all load on Pages.
 
 ### 3. Playground
+
+Layout from `mockups/playground.jpg`. The docs page layout and its "code above, diagram below, Edit
+in playground" card come from `mockups/docs.jpg` (step 4).
 
 - Split view: source on the left, the drawn SVG on the right, diagnostics below the source.
 - Recompile on input with a short debounce. Keep the last good drawing while the source has errors.
