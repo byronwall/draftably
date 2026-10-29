@@ -132,8 +132,8 @@ Done when `https://byronwall.github.io/draftably/` opens the viewer and `?exampl
   thumbnails, and links to Playground, Docs and GitHub.
 - Use the viewer's fonts and CSS tokens. Light and dark.
 - Change the deploy workflow to `pnpm site:build` and upload `dist-site/`.
-- Use the name "Draftably" on the site. The viewer's title still says "Diagram Studio"; rename it in
-  a separate change if wanted.
+- Use the name "Draftably" on the site. The viewer's user-facing name changes from "Diagram Studio"
+  to Draftably in its own PR (decided 2026-10-28).
 
 Done when the landing page, `/app/` and a deep link reload all load on Pages.
 
@@ -203,8 +203,8 @@ Set `SITE_BASE=/`, add `site/public/CNAME`, set the domain in the Pages settings
 - **Diagrams in docs render in the browser.** `compile` and `renderSvg` are fast. If the first load
   is slow, render the SVG at build time in a Vite plugin instead.
 
-## Open questions for Byron
+## Answers from Byron (2026-10-28)
 
-1. Is share-by-URL-hash in the playground wanted, or is Copy and Download enough?
-2. Should the viewer's "Diagram Studio" title change to Draftably now?
-3. Any landing-page sections you want beyond hero, why, examples and install?
+1. Share by URL hash in the playground: yes.
+2. Rename the viewer's "Diagram Studio" title to Draftably now: yes.
+3. More landing-page sections beyond hero, why, examples and install: no.
