@@ -14,12 +14,12 @@
 - Model: Pro, power 5 of 5, verified in live Chrome selector.
 - Account: Byron Wall Pro; Chrome profile `byroni.us`.
 - Submitted: October 27, 2026 at 9:39 PM America/Indiana/Indianapolis (October 28 at 01:39 UTC).
-- Next check: October 27, 2026 around 10:40 PM America/Indiana/Indianapolis, then hourly while running.
-- Phase: submitted; Pro visibly responding. Both attachment names appeared in the sent message.
+- Last check: October 28, 2026 at 9:02 PM America/Indiana/Indianapolis. Pro complete.
+- Phase: collected and reviewed; integrating findings and validating documentation.
 - Follow-up count: 0.
 - Blockers: none.
 - Heartbeat ID: `collect-draftably-diagram-gap-analysis` (ACTIVE, hourly, current chat).
-- Collected files: none.
+- Collected files: `tmp/pro/diagram-library-gaps/collected/{gap-analysis.md,capability-bets.md,diagram-types.csv,features.csv}`.
 - PR: pending.
 
 Use this conversation and branch on continuation. Never duplicate the initial submission.
@@ -36,3 +36,21 @@ Raw Pro downloads belong under ignored `tmp/pro/diagram-library-gaps/`, not in G
   full-process upload authorization. No user approval remains pending.
 - Heartbeat creation returned ACTIVE. The first check collects, verifies, integrates, and opens
   the research PR when Pro finishes. It must disable itself on completion or required user action.
+
+## Collection and review
+
+- Pro completed after 32m 37s. No follow-up was needed.
+- Downloaded all four files from their existing Library previews. The first Markdown download
+  wait timed out, but the file existed in Downloads. CSV generation needed the preview left open.
+  The first diagram CSV attempt was superseded by a successful export of the same asset.
+- Read both reports. Validated 448 diagram-family and 592 feature records: 16 tools, unique pairs,
+  valid codes, and 28/37 capabilities per tool. Recomputed the decisive frequency counts.
+- Raw downloads stay ignored. The committed CSVs remove repeated bookkeeping fields; coverage.md
+  is a new projection with all support cells and counts. Summary and next steps are Codex synthesis.
+- Checked comparison keys, panelDoc old-label restoration, sequence/phase grammar, and DslShape.
+  The CLI reproduced count 2→3 as “No changes” while retaining count=3. No application code changed.
+- Spot-checked Mermaid ER/sequence documentation, D2 SQL rows/TALA announcement, Structurizr
+  filtered views, and the semantic BPMN differ reference. Popularity proxies were not recounted.
+- Rich-node planning PR #28 remains OPEN and unmerged; it changes planning files only.
+- Preparation pnpm check completed successfully. Final documentation checks are pending.
+- Git identities at the preparation checkpoint: Byron Wall <byron@byroni.us>, author and committer.
