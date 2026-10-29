@@ -27,7 +27,7 @@ import { COLORS, DSL_SHAPES } from '../../src/dsl/syntax';
 import type { Diagnostic } from '../../src/dsl/compile';
 import { THEME_IDS } from '../../src/model/appearance';
 import { formatSource } from '../../src/dsl/syntax';
-import { COMMANDS, highlightHtml, tokenizeLine, type TokenKind } from '../highlight';
+import { COMMANDS, highlightHtml, tokenClass, tokenizeLine, type Token } from '../highlight';
 import { HELP } from './reference';
 
 /** What the page can do to the editor. */
@@ -41,10 +41,11 @@ export interface EditorApi {
   format(): boolean;
 }
 
-const marks = new Map<TokenKind, Decoration>();
-const markFor = (kind: TokenKind) => {
-  let m = marks.get(kind);
-  if (!m) marks.set(kind, (m = Decoration.mark({ class: `tok-${kind}` })));
+const marks = new Map<string, Decoration>();
+const markFor = (t: Token) => {
+  const cls = tokenClass(t);
+  let m = marks.get(cls);
+  if (!m) marks.set(cls, (m = Decoration.mark({ class: cls })));
   return m;
 };
 
@@ -65,7 +66,7 @@ const tokens = ViewPlugin.fromClass(
           const line = view.state.doc.lineAt(pos);
           let at = line.from;
           for (const t of tokenizeLine(line.text)) {
-            if (t.kind !== 'space') out.add(at, at + t.text.length, markFor(t.kind));
+            if (t.kind !== 'space') out.add(at, at + t.text.length, markFor(t));
             at += t.text.length;
           }
           pos = line.to + 1;
