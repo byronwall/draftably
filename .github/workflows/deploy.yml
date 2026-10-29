@@ -30,11 +30,11 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # The viewer build uses relative asset paths, so it runs under /draftably/ as is.
-      - run: pnpm build
+      # The site (landing page, playground, docs) with the viewer build in app/.
+      - run: pnpm site:build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: dist-site
       - id: deployment
         uses: actions/deploy-pages@v4

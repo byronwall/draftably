@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@solidjs/router':
+        specifier: ^1.0.0
+        version: 1.0.0(solid-js@1.9.15)
       solid-js:
         specifier: ^1.9.9
         version: 1.9.15
@@ -670,6 +673,11 @@ packages:
     resolution: {integrity: sha512-0RAxO1pS/6lY1mSoD2Apm+6aPyfUlm+OWKgncIdj/eVN9I+pDY3lKgD7xsUNFei1u7MZQETGOo6m8POXMDp53A==}
     cpu: [x64]
     os: [win32]
+
+  '@solidjs/router@1.0.0':
+    resolution: {integrity: sha512-cCSk1hvgCowiMa9bzzYWHiLu1U4E22+DfJe6/rOwAyECKrxc3jrd5QnoW3sDDJtW+e077cz/M67bPl3DqOBw1Q==}
+    peerDependencies:
+      solid-js: ^1.8.6
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -2297,6 +2305,10 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.63.6':
     optional: true
+
+  '@solidjs/router@1.0.0(solid-js@1.9.15)':
+    dependencies:
+      solid-js: 1.9.15
 
   '@types/babel__core@7.20.5':
     dependencies:

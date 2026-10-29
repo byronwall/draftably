@@ -4,11 +4,21 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'dist-cli', 'packages/cli/dist', 'reference', 'tmp', 'src/engines/*.js'] },
+  {
+    ignores: [
+      'dist',
+      'dist-cli',
+      'dist-site',
+      'packages/cli/dist',
+      'reference',
+      'tmp',
+      'src/engines/*.js',
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}', 'site/**/*.{ts,tsx}'],
     ...solid,
     languageOptions: { globals: globals.browser, parserOptions: { project: './tsconfig.json' } },
     rules: {
