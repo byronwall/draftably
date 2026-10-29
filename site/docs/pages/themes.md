@@ -27,13 +27,13 @@ Write the theme first in the file. A file with no `theme` line uses `drafting`.
 theme fieldnotes
 ```
 
-| Theme        | Character                                                      |
-| ------------ | -------------------------------------------------------------- |
+| Theme        | Character                                                       |
+| ------------ | --------------------------------------------------------------- |
 | `drafting`   | Navy ink on cool paper, drafting blue and marker gold. Compact. |
-| `fieldnotes` | Editorial: serif titles on warm paper, indigo and terracotta.  |
-| `signal`     | Color-blind-safe Okabe–Ito hues on white.                      |
-| `ink`        | Sumi ink tones, indigo and a vermilion seal, generous padding. |
-| `blueprint`  | Dark: white lines on blueprint blue, monospace titles.         |
+| `fieldnotes` | Editorial: serif titles on warm paper, indigo and terracotta.   |
+| `signal`     | Color-blind-safe Okabe–Ito hues on white.                       |
+| `ink`        | Sumi ink tones, indigo and a vermilion seal, generous padding.  |
+| `blueprint`  | Dark: white lines on blueprint blue, monospace titles.          |
 
 The `theme` line also takes overrides such as `padding-x=`, `radius=` and `title-font=`, and
 `theme-color` lines change or add color families. [Themes and colors](#themes-and-colors) lists

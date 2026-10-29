@@ -51,7 +51,7 @@ export function Example(props: { source: string; themes?: boolean }) {
   const [error, setError] = createSignal('');
   const [zoomed, setZoomed] = createSignal<string>();
   // Decided once, from the first drawing, so an edit never flips the layout.
-  const split = !props.themes && widthOf(first[0]) <= SPLIT_WIDTH;
+  const split = !untrack(() => props.themes) && widthOf(first[0]) <= SPLIT_WIDTH;
 
   let run = 0;
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -117,9 +117,7 @@ export function Example(props: { source: string; themes?: boolean }) {
         </div>
         <Show
           when={props.themes}
-          fallback={
-            <Svg svg={svgs()[0]} error={error()} onOpen={() => setZoomed(svgs()[0])} />
-          }
+          fallback={<Svg svg={svgs()[0]} error={error()} onOpen={() => setZoomed(svgs()[0])} />}
         >
           <div class="doc-themes">
             <For each={ids}>

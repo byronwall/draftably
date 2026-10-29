@@ -5,7 +5,10 @@ import { marks, search, words, type Hit } from './find';
 const LAST = 'draftably-docs-search';
 
 /** ⌘K search. Arrow keys move, Enter opens, Escape closes. */
-export function SearchDialog(props: { onClose: () => void; onPick: (to: string, query: string) => void }) {
+export function SearchDialog(props: {
+  onClose: () => void;
+  onPick: (to: string, query: string) => void;
+}) {
   const [query, setQuery] = createSignal(readLast());
   const [active, setActive] = createSignal(0);
   const hits = createMemo(() => search(query()));

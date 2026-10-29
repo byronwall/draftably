@@ -51,9 +51,13 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
   const down = (e: PointerEvent) => {
     if (e.button !== 0) return;
     e.preventDefault();
-    const start = { cx: e.clientX, cy: e.clientY, ...view() };
+    const initial = { cx: e.clientX, cy: e.clientY, ...view() };
     const move = (m: PointerEvent) =>
-      setView({ ...start, x: start.x + m.clientX - start.cx, y: start.y + m.clientY - start.cy });
+      setView({
+        k: initial.k,
+        x: initial.x + m.clientX - initial.cx,
+        y: initial.y + m.clientY - initial.cy,
+      });
     const up = () => {
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);

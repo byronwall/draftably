@@ -47,12 +47,12 @@ and groups. References may point to later lines.
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                              |
 | `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                              |
 | `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                |
-| `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
-| `layout root … fit=slide` | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note. |
-| `routing` | Router settings for every connection. See [Routing](#routing). |
-| `config key=value` | File settings. See [Links and counts](#rules). |
-| `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |
-| `phase id "label" message ids...` | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams). |
+| `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                            |
+| `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note.                       |
+| `routing`                          | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                          |
+| `config key=value`                 | File settings. See [Links and counts](#rules).                                                                                                                                                                                                          |
+| `state id "label" ids...`          | A named emphasis state. See [Emphasis states](#emphasis-states).                                                                                                                                                                                        |
+| `phase id "label" message ids...`  | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                  |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups

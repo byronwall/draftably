@@ -23,7 +23,10 @@ describe('docs examples', () => {
         const sources = themes ? THEME_IDS.map(id => `theme ${id}\n${source}`) : [source];
         for (const s of sources) {
           const scene = await compile(s);
-          expect(scene.diagnostics.filter(d => d.level === 'error'), s).toEqual([]);
+          expect(
+            scene.diagnostics.filter(d => d.level === 'error'),
+            s,
+          ).toEqual([]);
         }
       }
     });
