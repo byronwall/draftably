@@ -88,22 +88,29 @@ main {
   max-width: var(--page);
   margin: 0 auto;
   width: 100%;
-  height: 60px;
+  height: 56px;
   padding: 0 var(--gutter);
 }
 
 .nav-links {
   display: flex;
-  gap: 28px;
+  gap: 24px;
+}
+
+.nav-links a,
+.footer-links a,
+.section-head a {
+  text-decoration: none;
+  transition: color 140ms;
 }
 
 .nav-links a {
   color: var(--muted);
-  text-decoration: none;
   font-size: 14px;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.footer-links a:hover {
   color: var(--text);
 }
 
@@ -112,13 +119,21 @@ main {
 .hero {
   max-width: var(--page);
   margin: 0 auto;
-  padding: 28px var(--gutter) 0;
-  text-align: center;
+  padding: 12px var(--gutter) 0;
+}
+
+/* Headline at the left, actions at the right, so the live editor gets the rest of the screen. */
+.hero-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 20px;
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(32px, 4.4vw, 52px);
+  font-size: clamp(30px, 3.4vw, 44px);
   line-height: 1.08;
   font-weight: 800;
   letter-spacing: -0.035em;
@@ -126,21 +141,26 @@ main {
 
 .hero-sub {
   max-width: 640px;
-  margin: 14px auto 0;
+  margin: 10px 0 0;
   color: var(--muted);
-  font-size: 17px;
+  font-size: 16px;
+}
+
+.hero-sub code {
+  color: var(--text);
 }
 
 .hero-actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex: none;
   gap: 10px;
-  margin: 22px 0 28px;
 }
 
-.button,
-.chip {
+.hero .live {
+  height: clamp(440px, calc(100vh - 208px), 780px);
+}
+
+.button {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -154,12 +174,21 @@ main {
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
+  transition:
+    border-color 140ms,
+    background-color 140ms,
+    transform 100ms;
 }
 
-.button:hover,
-.chip:hover {
+.button:hover {
   border-color: var(--muted);
+}
+
+.button:active,
+.copy:active {
+  transform: scale(0.98);
 }
 
 .button.primary {
@@ -172,29 +201,73 @@ main {
   background: var(--accent-hover);
 }
 
-.chip {
+/* Copy command. Without .button it is a light code line with no border. */
+
+.copy {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: var(--radius);
+  background: #eceef3;
+  color: var(--text);
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 140ms,
+    transform 100ms;
+}
+
+.copy:not(.button):hover {
+  background: #e4e7ee;
+}
+
+.copy.button {
   font-weight: 500;
 }
 
-.chip-prompt,
-.chip-note {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.chip-prompt {
-  font-family: var(--mono);
-}
-
-.chip-note {
-  min-width: 44px;
-  text-align: right;
-}
-
-.hero-hint {
-  margin: 10px 0 0;
-  color: var(--muted);
+.copy code {
+  flex: 1;
   font-size: 13px;
+  white-space: nowrap;
+}
+
+.copy-prompt {
+  color: var(--muted);
+  font: 12px var(--mono);
+}
+
+.copy-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.copy.is-copied .copy-icon {
+  stroke: #2d7a5c;
+  stroke-width: 1.8;
+  animation: copied 220ms ease-out;
+}
+
+@keyframes copied {
+  from {
+    transform: scale(0.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy.is-copied .copy-icon {
+    animation: none;
+  }
 }
 
 /* Live editor */
@@ -392,64 +465,135 @@ main {
   opacity: 0.45;
 }
 
-/* Points */
+/* Points: three things the text does that a picture cannot. Pick one and it draws live. */
 
 .points {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 32px;
   max-width: var(--page);
-  margin: 64px auto 0;
-  padding: 28px var(--gutter);
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  margin: 0 auto;
+  padding: 64px var(--gutter) 0;
+}
+
+.point-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .point {
-  display: flex;
-  gap: 16px;
-  padding: 0 28px;
-}
-
-.point + .point {
-  border-left: 1px solid var(--line);
-}
-
-.point:first-child {
-  padding-left: 0;
-}
-
-.point-icon {
-  flex: none;
-  width: 40px;
-  height: 40px;
-  padding: 9px;
+  padding: 12px 14px;
   border-radius: 8px;
-  background: var(--accent-soft);
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1.7;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  transition: background-color 140ms;
+}
+
+.point.is-active {
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.point-title {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .point h2 {
-  margin: 0 0 4px;
-  font-size: 16px;
+  margin: 0;
+  font-size: 17px;
   font-weight: 700;
+  letter-spacing: -0.01em;
+  transition: color 140ms;
+}
+
+.point:not(.is-active) .point-title:hover h2 {
+  color: var(--accent);
 }
 
 .point p {
-  margin: 0;
+  margin: 2px 0 6px;
   color: var(--muted);
   font-size: 14px;
+  line-height: 1.5;
+}
+
+.point-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 14px;
+}
+
+.point-tabs button {
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font: 500 13px var(--font);
+  cursor: pointer;
+  transition:
+    color 140ms,
+    border-color 140ms;
+}
+
+.point-tabs button:hover {
+  color: var(--text);
+}
+
+.point-tabs button[aria-selected='true'] {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.point-view {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.point-figure {
+  display: flex;
+  height: 420px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
+  transition: background-color 200ms;
+}
+
+.point-figure svg {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+}
+
+/* Fixed at three lines, so switching never moves what is below. */
+.point-source {
+  height: calc(3 * 19px);
+  margin: 10px 0 0;
+  padding: 0 2px;
+  overflow: hidden;
+  font: 500 12.5px / 19px var(--mono);
+  font-variant-ligatures: none;
+  white-space: pre;
+  text-overflow: ellipsis;
 }
 
 /* Examples */
 
-.examples {
+.examples,
+.install {
   max-width: var(--page);
   margin: 0 auto;
-  padding: 48px var(--gutter) 64px;
+  padding: 56px var(--gutter) 0;
 }
 
 .section-head {
@@ -457,12 +601,12 @@ main {
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .section-head h2 {
   margin: 0;
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
@@ -471,35 +615,37 @@ main {
   color: var(--accent);
   font-size: 14px;
   font-weight: 600;
-  text-decoration: none;
+  white-space: nowrap;
+}
+
+.section-head a:hover {
+  color: var(--accent-hover);
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px 20px;
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  padding: 10px 10px 16px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--surface);
   text-decoration: none;
 }
 
-.card:hover {
-  border-color: var(--line-strong);
+.card-thumb {
+  height: 190px;
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
+  transition: border-color 140ms;
 }
 
-.card-thumb {
-  height: 160px;
-  margin-bottom: 12px;
-  padding: 10px;
-  border-radius: 4px;
-  background: var(--canvas);
+.card:hover .card-thumb {
+  border-color: var(--accent);
 }
 
 .card-thumb img {
@@ -510,16 +656,65 @@ main {
 }
 
 .card h3 {
-  margin: 0 6px 4px;
+  margin: 0 0 2px;
   font-size: 15px;
   font-weight: 700;
 }
 
+.card:hover h3 {
+  color: var(--accent);
+}
+
 .card p {
-  margin: 0 6px;
+  margin: 0;
   color: var(--muted);
   font-size: 13.5px;
   line-height: 1.45;
+}
+
+/* Install */
+
+.install-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+}
+
+.install h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.install h3 + * {
+  margin-top: 8px;
+}
+
+.install p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.install .copy {
+  width: 100%;
+}
+
+.commands {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 8px 20px;
+  margin: 16px 0 0;
+  font-size: 14px;
+}
+
+.commands dt code {
+  font-size: 12.5px;
+}
+
+.commands dd {
+  margin: 0;
+  color: var(--muted);
 }
 
 /* Footer */
@@ -530,18 +725,13 @@ main {
   gap: 14px;
   max-width: var(--page);
   width: 100%;
-  margin: 0 auto;
-  padding: 22px var(--gutter);
+  margin: 72px auto 0;
+  padding: 20px var(--gutter);
   border-top: 1px solid var(--line);
 }
 
 .footer .wordmark {
   font-size: 16px;
-}
-
-.footer-tag {
-  color: var(--muted);
-  font-size: 13px;
 }
 
 .footer-links {
@@ -553,7 +743,77 @@ main {
 
 .footer-links a {
   color: var(--muted);
-  text-decoration: none;
+}
+
+@media (max-width: 1100px) {
+  .hero-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .points {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* The drawing first, so a tap on a tab below never leaves it off screen. */
+  .point-view {
+    order: -1;
+  }
+
+  .point-figure {
+    height: 340px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .hero .live {
+    height: auto;
+  }
+
+  .install-cols {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-actions {
+    flex-direction: column;
+    align-self: stretch;
+  }
+
+  .point-figure {
+    height: 260px;
+    padding: 10px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .commands {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .commands dd {
+    margin-bottom: 8px;
+  }
+
+  .section-head {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
 }
 
 /* Narrow screens */
@@ -585,43 +845,7 @@ main {
     max-height: 280px;
   }
 
-  .points {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .point,
-  .point:first-child {
-    padding: 0;
-  }
-
-  .point + .point {
-    border-left: 0;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .live-open {
     display: none;
-  }
-}
-
-@media (max-width: 520px) {
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-  }
-
-  .footer-links {
-    margin-left: 0;
-  }
-
-  .nav-links {
-    gap: 18px;
   }
 }

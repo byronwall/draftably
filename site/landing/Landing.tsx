@@ -1,21 +1,31 @@
-import { createSignal, For, onCleanup, onMount, Show, type JSX } from 'solid-js';
+import { createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/examples';
-import { appUrl, draw, paperOf } from '../draw';
+import { appUrl, paperOf } from '../draw';
 import { LiveEditor } from '../live/LiveEditor';
+import { Points } from './Points';
+import { drawSvg, enqueue, whenSeen } from './render';
 
 const GITHUB = 'https://github.com/byronwall/draftably';
-const INSTALL = 'npx draftably open';
+const NPM = 'https://www.npmjs.com/package/draftably';
 
 const HERO_EXAMPLES = ['checkout', 'login-sequence', 'order-lifecycle', 'billing-schema'];
+/** None of these repeat a hero tab, so every example on the page is a new one. */
 const CARD_EXAMPLES = [
-  'checkout',
-  'login-sequence',
-  'order-lifecycle',
   'support-triage',
-  'billing-schema',
-  'ci-cd-pipeline',
+  'incident-response',
+  'data-lakehouse',
+  'aws-vpc-network',
+  'rag-assistant',
+  'order-saga',
   'tcp-header',
   'kubernetes-cluster',
+];
+
+const COMMANDS: [string, string][] = [
+  ['draftably check plan.draft', 'Reports errors by line. Exits 1, so CI can fail on them.'],
+  ['draftably inspect plan.draft --svg', 'Writes an SVG or PNG for docs, READMEs and PRs.'],
+  ['draftably compare old.draft new.draft', 'Marks what changed between two versions.'],
+  ['draftably vary plan.draft', 'Ranks layout variants on one contact sheet.'],
 ];
 
 export function Landing() {
@@ -24,32 +34,32 @@ export function Landing() {
       <Nav />
       <main>
         <section class="hero">
-          <h1>Write the diagram. Skip the dragging.</h1>
-          <p class="hero-sub">
-            A text language and CLI for architecture, sequence and flow diagrams. Draftably lays
-            them out, routes the lines, and keeps the source in git.
-          </p>
-          <div class="hero-actions">
-            <a class="button primary" href={appUrl()}>
-              Open the editor
-            </a>
-            <a class="button" href={GITHUB}>
-              View on GitHub
-            </a>
-            <CopyChip text={INSTALL} />
+          <div class="hero-head">
+            <div>
+              <h1>Write the diagram. Skip the dragging.</h1>
+              <p class="hero-sub">
+                Plain-text <code>.draft</code> files in, clean diagrams out. Draftably lays out the
+                boxes and routes the lines. Edit the source below and watch it redraw.
+              </p>
+            </div>
+            <div class="hero-actions">
+              <a class="button primary" href={appUrl()}>
+                Open the editor
+              </a>
+              <CopyCommand text="npx draftably open" class="button" />
+            </div>
           </div>
           <LiveEditor examples={HERO_EXAMPLES} />
-          <p class="hero-hint">Edit the source. The diagram redraws as you type.</p>
         </section>
         <Points />
         <Examples />
+        <Install />
       </main>
       <footer class="footer">
         <span class="wordmark">Draftably</span>
-        <span class="footer-tag">Diagrams you write as text.</span>
         <span class="footer-links">
           <a href={appUrl()}>Editor</a>
-          <a href="https://www.npmjs.com/package/draftably">npm</a>
+          <a href={NPM}>npm</a>
           <a href={GITHUB}>GitHub</a>
         </span>
       </footer>
@@ -65,6 +75,7 @@ function Nav() {
       </a>
       <nav class="nav-links">
         <a href="#examples">Examples</a>
+        <a href="#install">Install</a>
         <a href={appUrl()}>Editor</a>
         <a href={GITHUB}>GitHub</a>
       </nav>
@@ -72,62 +83,33 @@ function Nav() {
   );
 }
 
-function CopyChip(props: { text: string }) {
+/** A shell command with a copy button. The icon turns to a check for a moment after a copy. */
+function CopyCommand(props: { text: string; class?: string }) {
   const [copied, setCopied] = createSignal(false);
+  let timer: ReturnType<typeof setTimeout> | undefined;
   const copy = async () => {
     await navigator.clipboard.writeText(props.text);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    clearTimeout(timer);
+    timer = setTimeout(() => setCopied(false), 1400);
   };
+  onCleanup(() => clearTimeout(timer));
   return (
-    <button type="button" class="chip" onClick={copy} aria-label={`Copy "${props.text}"`}>
-      <span class="chip-prompt">$</span>
+    <button
+      type="button"
+      class={`copy ${props.class ?? ''}`}
+      classList={{ 'is-copied': copied() }}
+      onClick={copy}
+      aria-label={`Copy "${props.text}"`}
+    >
+      <span class="copy-prompt">$</span>
       <code>{props.text}</code>
-      <span class="chip-note">{copied() ? 'Copied' : 'Copy'}</span>
+      <svg class="copy-icon" viewBox="0 0 16 16" aria-hidden="true">
+        <Show when={copied()} fallback={<path d="M5.5 5.5V3h7.5v7.5h-2.5M3 5.5h7.5V13H3z" />}>
+          <path d="M3.5 8.5l3 3 6-7" />
+        </Show>
+      </svg>
     </button>
-  );
-}
-
-const POINTS: { title: string; body: JSX.Element; icon: JSX.Element }[] = [
-  {
-    title: 'Plain text source',
-    body: (
-      <>
-        Write diagrams in <code>.draft</code> files that live next to your code and diff cleanly in
-        review.
-      </>
-    ),
-    icon: <path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5" />,
-  },
-  {
-    title: 'Automatic layout',
-    body: 'Groups, lanes and routed lines come out tidy without dragging a single box.',
-    icon: <path d="M5 5h5v5H5zM14 14h5v5h-5zM7.5 10v6.5H14M14 5h5v5h-5" />,
-  },
-  {
-    title: 'Built for agents',
-    body: 'A local CLI and an agent skill, so a coding agent can draw, check and revise a diagram.',
-    icon: <path d="M4 6l5 6-5 6M12 18h8" />,
-  },
-];
-
-function Points() {
-  return (
-    <section class="points">
-      <For each={POINTS}>
-        {p => (
-          <div class="point">
-            <svg class="point-icon" viewBox="0 0 24 24" aria-hidden="true">
-              {p.icon}
-            </svg>
-            <div>
-              <h2>{p.title}</h2>
-              <p>{p.body}</p>
-            </div>
-          </div>
-        )}
-      </For>
-    </section>
   );
 }
 
@@ -136,8 +118,8 @@ function Examples() {
   return (
     <section class="examples" id="examples">
       <div class="section-head">
-        <h2>Examples</h2>
-        <a href={appUrl()}>Browse all {EXAMPLES.length} in the editor →</a>
+        <h2>More examples</h2>
+        <a href={appUrl()}>Open all {EXAMPLES.length} in the editor</a>
       </div>
       <div class="cards">
         <For each={cards}>{ex => <ExampleCard example={ex} />}</For>
@@ -146,39 +128,76 @@ function Examples() {
   );
 }
 
-/** Thumbnails draw one at a time, after the hero, so they never hold up the first drawing. */
-let queue = Promise.resolve();
-
 function ExampleCard(props: { example: ExampleInfo }) {
   const [src, setSrc] = createSignal('');
   const [paper, setPaper] = createSignal<string>();
   let card!: HTMLAnchorElement;
   onMount(() => {
-    const seen = new IntersectionObserver(entries => {
-      if (!entries.some(e => e.isIntersecting)) return;
-      seen.disconnect();
-      queue = queue.then(async () => {
-        const { svg } = await draw(props.example.source);
+    const stop = whenSeen(card, () =>
+      enqueue(async () => {
+        const svg = await drawSvg(props.example.source);
         if (!svg) return;
         setPaper(paperOf(svg));
         setSrc(URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' })));
-      });
-    });
-    seen.observe(card);
+      }),
+    );
     onCleanup(() => {
-      seen.disconnect();
+      stop();
       if (src()) URL.revokeObjectURL(src());
     });
   });
+  const ex = () => props.example;
   return (
-    <a class="card" href={appUrl(props.example.id)} ref={card}>
+    <a class="card" href={appUrl(ex().id)} ref={card}>
       <div class="card-thumb" style={{ background: paper() }}>
         <Show when={src()}>
-          <img src={src()} alt="" loading="lazy" />
+          <img src={src()} alt={`${ex().title}, drawn by Draftably`} />
         </Show>
       </div>
-      <h3>{props.example.title}</h3>
-      <p>{props.example.summary}</p>
+      <h3>{ex().title}</h3>
+      <p>{ex().summary}</p>
     </a>
+  );
+}
+
+function Install() {
+  return (
+    <section class="install" id="install">
+      <div class="section-head">
+        <h2>Install</h2>
+      </div>
+      <div class="install-cols">
+        <div>
+          <h3>Run it on your files</h3>
+          <CopyCommand text="npx draftably open plan.draft" />
+          <p>
+            Opens the editor on a local file, and edits save back to it. Needs Node 22.21 or later.
+            Run <code>npm i -g draftably</code> to use the commands below.
+          </p>
+          <dl class="commands">
+            <For each={COMMANDS}>
+              {([cmd, what]) => (
+                <>
+                  <dt>
+                    <code>{cmd}</code>
+                  </dt>
+                  <dd>{what}</dd>
+                </>
+              )}
+            </For>
+          </dl>
+        </div>
+        <div>
+          <h3>Teach your coding agent</h3>
+          <CopyCommand text="npx draftably skill install" />
+          <p>
+            A bundled skill teaches an agent the language, so it can write, check and render{' '}
+            <code>.draft</code> files on its own. It installs to{' '}
+            <code>.claude/skills/draftably</code>. Add <code>--global</code> for every project, or
+            run <code>npx skills add byronwall/draftably</code>.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
