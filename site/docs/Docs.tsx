@@ -1,12 +1,11 @@
 import { A, useLocation, useNavigate, useParams } from '@solidjs/router';
 import { Logo } from '../Logo';
+import { SiteNav } from '../SiteNav';
 import { createEffect, createSignal, For, on, onCleanup, onMount, Show } from 'solid-js';
-import { appUrl } from '../draw';
 import {
   anchorPath,
   docsPath,
   findPage,
-  GITHUB,
   html,
   inlineHtml,
   isDraft,
@@ -83,19 +82,17 @@ export function Docs() {
           <Logo />
           Draftably
         </a>
-        <button type="button" class="docs-search-button" onClick={() => setSearching(true)}>
+        <button
+          type="button"
+          class="docs-search-button"
+          aria-label="Search docs"
+          onClick={() => setSearching(true)}
+        >
           <SearchIcon />
           <span>Search docs</span>
           <kbd>{MAC ? '⌘K' : 'Ctrl K'}</kbd>
         </button>
-        <nav class="docs-top-links">
-          <a href={`${BASE}play`}>Playground</a>
-          <A href="/docs" class="is-active">
-            Docs
-          </A>
-          <a href={appUrl()}>Editor</a>
-          <a href={GITHUB}>GitHub</a>
-        </nav>
+        <SiteNav current="docs" class="docs-top-links" />
         <button
           type="button"
           class="docs-menu-button"
