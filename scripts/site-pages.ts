@@ -84,7 +84,8 @@ const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function page(template: string, meta: Meta) {
-  const url = `${origin}${base}${meta.path}`;
+  // Pages serves each route from its folder and redirects the bare path to it with a slash.
+  const url = `${origin}${base}${meta.path ? `${meta.path}/` : ''}`;
   const image = `${origin}${base}og.png`;
   const tags = [
     `<title>${esc(meta.title)}</title>`,
