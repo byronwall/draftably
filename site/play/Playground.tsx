@@ -1,3 +1,4 @@
+import { Logo } from '../Logo';
 import {
   createEffect,
   createMemo,
@@ -274,6 +275,7 @@ export function Playground() {
       </Show>
       <header class="play-head">
         <a class="wordmark" href={BASE}>
+          <Logo />
           Draftably
         </a>
         <nav class="play-nav">

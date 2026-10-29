@@ -1,4 +1,5 @@
 import { createMemo, createResource, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
+import logo from '../assets/logo.svg';
 import { renderSvg } from '../cli/svg';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
@@ -53,7 +54,10 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
     >
       <div class="start-frame">
         <header class="start-header">
-          <h1>Draftably</h1>
+          <h1>
+            <img src={logo} alt="" width="22" height="22" />
+            Draftably
+          </h1>
           <Show
             when={workspace()}
             fallback={<span class="start-where">Browser copy · saved on this device</span>}

@@ -37,7 +37,8 @@ const html = `<!doctype html>
   .card { display: grid; grid-template-rows: auto 1fr; height: 100%; padding: 52px 56px 48px; gap: 30px; }
   .head { display: flex; align-items: baseline; justify-content: space-between; }
   h1 { margin: 0; font-size: 56px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; }
-  .mark { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: #6650d9; }
+  .mark { display: flex; align-items: center; gap: 12px; font-size: 30px; font-weight: 800;
+    letter-spacing: -0.02em; color: #15171f; } .mark svg { width: 44px; height: 44px; }
   .frame { display: grid; grid-template-columns: 330px 1fr; min-height: 0; border: 1px solid #c9cfda;
     border-radius: 12px; background: #fff; overflow: hidden; box-shadow: 0 12px 40px #25213b14; }
   pre { margin: 0; padding: 22px 0 0 22px; font: 14.5px/24px Mono, monospace; white-space: pre;
@@ -51,7 +52,7 @@ const html = `<!doctype html>
 <div class="card">
   <div class="head">
     <h1>Write the diagram.<br />Skip the dragging.</h1>
-    <span class="mark">Draftably</span>
+    <span class="mark">${fs.readFileSync(path.join(root, 'src/assets/logo.svg'), 'utf8')}Draftably</span>
   </div>
   <div class="frame">
     <pre>${highlightHtml(source)}</pre>

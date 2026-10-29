@@ -1,4 +1,5 @@
 import { A, useLocation, useNavigate, useParams } from '@solidjs/router';
+import { Logo } from '../Logo';
 import { createEffect, createSignal, For, on, onCleanup, onMount, Show } from 'solid-js';
 import { appUrl } from '../draw';
 import {
@@ -79,6 +80,7 @@ export function Docs() {
     <div class="docs">
       <header class="docs-top">
         <a class="wordmark" href={BASE}>
+          <Logo />
           Draftably
         </a>
         <button type="button" class="docs-search-button" onClick={() => setSearching(true)}>

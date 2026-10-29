@@ -1,4 +1,5 @@
 import { createSignal, For, onCleanup, onMount, Show } from 'solid-js';
+import { Logo } from '../Logo';
 import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/examples';
 import { appUrl, paperOf } from '../draw';
 import { useNavigate } from '@solidjs/router';
@@ -59,7 +60,10 @@ export function Landing() {
         <Install />
       </main>
       <footer class="footer">
-        <span class="wordmark">Draftably</span>
+        <span class="wordmark">
+          <Logo size={18} />
+          Draftably
+        </span>
         <span class="footer-links">
           <a href={appUrl()}>Editor</a>
           <a href={NPM}>npm</a>
@@ -74,6 +78,7 @@ function Nav() {
   return (
     <header class="nav">
       <a class="wordmark" href={import.meta.env.BASE_URL}>
+        <Logo />
         Draftably
       </a>
       <nav class="nav-links">
