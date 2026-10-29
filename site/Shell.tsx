@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, type RouteSectionProps } from '@solidjs/router';
-import { createSignal, onCleanup, onMount, Show } from 'solid-js';
+import { createEffect, createSignal, on, onCleanup, onMount, Show } from 'solid-js';
 import { deliver, readDiagramFile, readPastedText, REOPEN_HINT } from './reopen';
 
 const editable = (target: EventTarget | null) =>
@@ -16,6 +16,17 @@ export function Shell(props: RouteSectionProps) {
   const [dragging, setDragging] = createSignal(false);
   const [error, setError] = createSignal('');
   let errorTimer: ReturnType<typeof setTimeout> | undefined;
+
+  // A new page starts at its top; a link to a section scrolls there itself.
+  createEffect(
+    on(
+      () => location.pathname,
+      () => {
+        if (!location.hash) window.scrollTo({ top: 0, behavior: 'instant' });
+      },
+      { defer: true },
+    ),
+  );
 
   const fail = (message: string) => {
     setError(message);

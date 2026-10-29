@@ -1,4 +1,5 @@
 import { Logo } from '../Logo';
+import { SiteNav } from '../SiteNav';
 import {
   createEffect,
   createMemo,
@@ -21,7 +22,6 @@ import { deliver, incoming, readDiagramFile, REOPEN_HINT } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
-const GITHUB = 'https://github.com/byronwall/draftably';
 const SPLIT_KEY = 'draftably.play.split';
 
 const THEME_LINE = /^theme[ \t]+([\w-]+)/m;
@@ -278,14 +278,7 @@ export function Playground() {
           <Logo />
           Draftably
         </a>
-        <nav class="play-nav">
-          <a href={`${BASE}play`} aria-current="page">
-            Playground
-          </a>
-          <a href={`${BASE}docs`}>Docs</a>
-          <a href={`${BASE}#examples`}>Examples</a>
-          <a href={GITHUB}>GitHub</a>
-        </nav>
+        <SiteNav current="play" class="play-nav" />
         <div class="play-actions">
           <button type="button" class="tool" classList={{ 'is-done': copied() }} onClick={copyLink}>
             <svg viewBox="0 0 16 16" aria-hidden="true">
