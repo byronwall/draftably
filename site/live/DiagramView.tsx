@@ -41,7 +41,7 @@ export function DiagramView(props: {
     const { w, h } = svgSize();
     const box = frame.getBoundingClientRect();
     if (!w || !h || !box.width) return;
-    const pad = 32;
+    const pad = box.width < 500 ? 10 : 32;
     const k = clamp(Math.min((box.width - pad * 2) / w, (box.height - pad * 2) / h, 2));
     setView({ k, x: (box.width - w * k) / 2, y: (box.height - h * k) / 2 });
   };

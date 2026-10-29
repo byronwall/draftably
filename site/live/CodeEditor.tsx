@@ -15,6 +15,7 @@ import {
   EditorView,
   highlightActiveLine,
   highlightActiveLineGutter,
+  hoverTooltip,
   keymap,
   lineNumbers,
   ViewPlugin,
@@ -25,7 +26,9 @@ import { createEffect, on, onCleanup, onMount } from 'solid-js';
 import { COLORS, DSL_SHAPES } from '../../src/dsl/syntax';
 import type { Diagnostic } from '../../src/dsl/compile';
 import { THEME_IDS } from '../../src/model/appearance';
-import { COMMANDS, tokenizeLine, type TokenKind } from '../highlight';
+import { formatSource } from '../../src/dsl/syntax';
+import { COMMANDS, highlightHtml, tokenizeLine, type TokenKind } from '../highlight';
+import { HELP } from './reference';
 
 /** What the page can do to the editor. */
 export interface EditorApi {
@@ -34,6 +37,8 @@ export interface EditorApi {
   /** Put the cursor at the start of a line and scroll it into view. */
   goto(line: number): void;
   focus(): void;
+  /** Rewrite the source in the parser's canonical layout; false when it does not parse. */
+  format(): boolean;
 }
 
 const marks = new Map<TokenKind, Decoration>();
@@ -153,6 +158,84 @@ function completions() {
   };
 }
 
+const DOCS = `${import.meta.env.BASE_URL}docs/`;
+
+/** Help from the language reference for the word under the pointer. */
+const help = hoverTooltip(
+  (view, pos) => {
+    const line = view.state.doc.lineAt(pos);
+    let at = line.from;
+    const toks = tokenizeLine(line.text);
+    for (let i = 0; i < toks.length; i++) {
+      const t = toks[i];
+      const end = at + t.text.length;
+      if (pos >= at && pos <= end && t.kind !== 'space') {
+        // An attribute's value or `=` explains the attribute unless the value has its own entry.
+        let key = t.text;
+        if (t.kind === 'attr' && t.text === '=') key = toks[i - 1]?.text ?? '';
+        if ((t.kind === 'value' || t.kind === 'number') && !HELP.has(key))
+          key = toks[i - 2]?.text ?? '';
+        if (t.kind === 'mark') key = toks[i + 1]?.text ?? '';
+        // An attribute without a row of its own is explained by its statement's row.
+        const command = toks.find(x => x.kind === 'command')?.text ?? '';
+        const rows =
+          HELP.get(key) ??
+          (t.kind === 'attr' || t.kind === 'value'
+            ? HELP.get(command)?.filter(r => r.meaning.includes(`${key}=`))
+            : undefined);
+        if (!rows?.length) return null;
+        // A command with several forms (layout) shows the forms this line matches best.
+        const words = line.text
+          .trim()
+          .split(/\s+/)
+          .filter(w => w.length > 2 && w !== key);
+        const score = (r: (typeof rows)[number]) => words.filter(w => r.syntax.includes(w)).length;
+        const best = Math.max(...rows.map(score));
+        const shown = rows.filter(r => score(r) === best).slice(0, 3);
+        return {
+          pos: at,
+          end,
+          above: true,
+          create() {
+            const dom = document.createElement('div');
+            dom.className = 'help';
+            for (const r of shown) {
+              const row = document.createElement('div');
+              row.className = 'help-row';
+              const code = document.createElement('code');
+              // Built from escaped tokens by highlightHtml.
+              code.innerHTML = highlightHtml(r.syntax);
+              const text = document.createElement('p');
+              // `code` spans read as code; everything else is plain text.
+              for (const part of r.meaning.split(/(`[^`]+`)/)) {
+                if (!part.startsWith('`')) {
+                  text.append(part);
+                  continue;
+                }
+                const c = document.createElement('code');
+                c.textContent = part.slice(1, -1);
+                text.append(c);
+              }
+              row.append(code, text);
+              if (r.anchor) {
+                const link = document.createElement('a');
+                link.href = DOCS + r.anchor;
+                link.textContent = 'Read more';
+                row.append(link);
+              }
+              dom.append(row);
+            }
+            return { dom };
+          },
+        };
+      }
+      at = end;
+    }
+    return null;
+  },
+  { hoverTime: 350 },
+);
+
 const theme = EditorView.theme({
   '&': { height: '100%', fontSize: '13px', backgroundColor: 'var(--surface)' },
   '&.cm-focused': { outline: 'none' },
@@ -194,6 +277,19 @@ export function CodeEditor(props: {
   let host!: HTMLDivElement;
   let view: EditorView | undefined;
 
+  const format = () => {
+    if (!view) return false;
+    let text: string;
+    try {
+      text = formatSource(view.state.doc.toString());
+    } catch {
+      return false;
+    }
+    if (text !== view.state.doc.toString())
+      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: text } });
+    return true;
+  };
+
   onMount(() => {
     view = new EditorView({
       parent: host,
@@ -208,6 +304,8 @@ export function CodeEditor(props: {
           closeBrackets(),
           highlightSelectionMatches(),
           lintGutter(),
+          help,
+          EditorView.lineWrapping,
           autocompletion({ override: [completions()], icons: false }),
           keymap.of([
             ...completionKeymap,
@@ -215,6 +313,7 @@ export function CodeEditor(props: {
             ...historyKeymap,
             ...searchKeymap,
             indentWithTab,
+            { key: 'Shift-Alt-f', run: () => (format(), true) },
           ]),
           tokens,
           linked,
@@ -245,6 +344,7 @@ export function CodeEditor(props: {
         view.focus();
       },
       focus: () => view?.focus(),
+      format,
     });
   });
   onCleanup(() => view?.destroy());

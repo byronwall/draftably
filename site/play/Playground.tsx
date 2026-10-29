@@ -14,6 +14,8 @@ import { THEME_IDS } from '../../src/model/appearance';
 import { draw, type Drawing } from '../draw';
 import { CodeEditor, type EditorApi } from '../live/CodeEditor';
 import { DiagramView } from '../live/DiagramView';
+import { readImageSource } from '../../src/model/embed';
+import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
 const GITHUB = 'https://github.com/byronwall/draftably';
@@ -135,11 +137,35 @@ export function Playground() {
   });
 
   const pickExample = (id: string) => {
-    const ex = findExample(id);
-    if (!ex) return;
+    const text = id === 'blank' ? BLANK : findExample(id)?.source;
+    if (text == null) return;
     setExampleId(id);
     setFitKey(`${id}:${Date.now()}`);
-    editor?.replace(ex.source);
+    editor?.replace(text);
+  };
+  const pickerTitle = () => findExample(exampleId())?.title ?? titleOf(source());
+
+  // Name the tab after the diagram.
+  createEffect(() => {
+    if (ready()) document.title = `${titleOf(source())} · Draftably playground`;
+  });
+
+  // Open a dropped .draft file, or the source inside an SVG or PNG that Draftably exported.
+  const [dropping, setDropping] = createSignal(false);
+  const [dropError, setDropError] = createSignal('');
+  const openFile = async (file: File) => {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const text = /\.(svg|png)$/i.test(file.name)
+      ? await readImageSource(bytes)
+      : new TextDecoder().decode(bytes);
+    if (text == null) {
+      setDropError(`${file.name} has no Draftably source in it.`);
+      setTimeout(() => setDropError(''), 3000);
+      return;
+    }
+    setExampleId('shared');
+    setFitKey(`file:${Date.now()}`);
+    editor?.replace(text);
   };
 
   const theme = () => THEME_LINE.exec(source())?.[1] ?? 'drafting';
@@ -170,7 +196,8 @@ export function Playground() {
   };
 
   const problems = () => drawing().diagnostics.filter(d => d.level === 'error');
-  const warnings = () => drawing().diagnostics.filter(d => d.level === 'warning');
+  const allProblems = () => drawing().diagnostics.filter(d => d.level !== 'info');
+  const [listOpen, setListOpen] = createSignal(false);
 
   const copyLink = async () => {
     await writeHash();
@@ -209,7 +236,34 @@ export function Playground() {
   };
 
   return (
-    <div class="play">
+    <div
+      class="play"
+      onDragOver={e => {
+        if (!e.dataTransfer?.types.includes('Files')) return;
+        e.preventDefault();
+        setDropping(true);
+      }}
+      onDragLeave={e => {
+        if (!e.relatedTarget) setDropping(false);
+      }}
+      onDrop={e => {
+        e.preventDefault();
+        setDropping(false);
+        const file = e.dataTransfer?.files[0];
+        if (file) void openFile(file);
+      }}
+      onKeyDown={e => {
+        if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+          e.preventDefault();
+          save(new Blob([source()], { type: 'text/plain' }), fileName(source(), 'draft'));
+        }
+      }}
+    >
+      <Show when={dropping() || dropError()}>
+        <div class="drop-veil" classList={{ 'is-error': !!dropError() }}>
+          {dropError() || 'Drop a .draft file, or an SVG or PNG exported by Draftably'}
+        </div>
+      </Show>
       <header class="play-head">
         <a class="wordmark" href={BASE}>
           Draftably
@@ -285,7 +339,8 @@ export function Playground() {
             </Show>
           </div>
           <button type="button" class="tool primary" onClick={openInEditor}>
-            Open in the editor
+            <span class="long">Open in the editor</span>
+            <span class="short">Open</span>
           </button>
         </div>
       </header>
@@ -293,15 +348,7 @@ export function Playground() {
       <div class="play-body" ref={body} style={{ '--split': `${split() * 100}%` }}>
         <section class="play-source" aria-label="Source">
           <div class="pane-head">
-            <label class="select">
-              <span class="visually-hidden">Example</span>
-              <select value={exampleId()} onChange={e => pickExample(e.currentTarget.value)}>
-                <Show when={exampleId() === 'shared'}>
-                  <option value="shared">Shared diagram</option>
-                </Show>
-                <For each={EXAMPLES}>{ex => <option value={ex.id}>{ex.title}</option>}</For>
-              </select>
-            </label>
+            <ExamplePicker current={exampleId()} title={pickerTitle()} onPick={pickExample} />
             <label class="select">
               <span class="select-label">Theme</span>
               <select value={theme()} onChange={e => setTheme(e.currentTarget.value)}>
@@ -310,6 +357,15 @@ export function Playground() {
                 </For>
               </select>
             </label>
+            <button
+              type="button"
+              class="tool quiet"
+              title="Format (Shift+Alt+F)"
+              disabled={problems().length > 0}
+              onClick={() => editor?.format()}
+            >
+              Format
+            </button>
           </div>
           <Show when={ready()}>
             <CodeEditor
@@ -321,31 +377,53 @@ export function Playground() {
               ref={api => (editor = api)}
             />
           </Show>
-          <button
-            type="button"
-            class="play-status"
-            classList={{ 'is-error': problems().length > 0 }}
-            disabled={!problems().length && !warnings().length}
-            onClick={() => {
-              const d = problems()[0] ?? warnings()[0];
-              if (d?.line) editor?.goto(d.line);
-            }}
-          >
-            <Show
-              when={problems()[0] ?? warnings()[0]}
-              fallback={<span>{svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…'}</span>}
-            >
-              {d => (
-                <span>
-                  {d().line ? `Line ${d().line}: ` : ''}
-                  {d().message}
-                  {problems().length + warnings().length > 1
-                    ? ` (+${problems().length + warnings().length - 1} more)`
-                    : ''}
-                </span>
-              )}
+          <div class="play-status-wrap">
+            <Show when={listOpen() && allProblems().length > 1}>
+              <ul class="problems">
+                <For each={allProblems()}>
+                  {d => (
+                    <li>
+                      <button
+                        type="button"
+                        classList={{ 'is-error': d.level === 'error' }}
+                        onClick={() => {
+                          setListOpen(false);
+                          if (d.line) editor?.goto(d.line);
+                        }}
+                      >
+                        <span class="problem-line">{d.line ? `Line ${d.line}` : 'File'}</span>
+                        {d.message}
+                      </button>
+                    </li>
+                  )}
+                </For>
+              </ul>
             </Show>
-          </button>
+            <button
+              type="button"
+              class="play-status"
+              classList={{ 'is-error': problems().length > 0 }}
+              disabled={!allProblems().length}
+              onClick={() => {
+                if (allProblems().length > 1) setListOpen(o => !o);
+                else if (allProblems()[0]?.line) editor?.goto(allProblems()[0].line!);
+              }}
+            >
+              <Show
+                when={allProblems()[0]}
+                fallback={<span>{svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…'}</span>}
+              >
+                {d => (
+                  <span>
+                    {d().line ? `Line ${d().line}: ` : ''}
+                    {d().message}
+                    {allProblems().length > 1 ? ` · ${allProblems().length - 1} more` : ''}
+                  </span>
+                )}
+              </Show>
+              <span class="play-hint">Click a shape to find its line</span>
+            </button>
+          </div>
         </section>
         <div
           class="play-split"
