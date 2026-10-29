@@ -15,12 +15,12 @@
 - Account: Byron Wall Pro; Chrome profile `byroni.us`.
 - Submitted: October 27, 2026 at 9:39 PM America/Indiana/Indianapolis (October 28 at 01:39 UTC).
 - Last check: October 28, 2026 at 9:02 PM America/Indiana/Indianapolis. Pro complete.
-- Phase: collected and reviewed; integrating findings and validating documentation.
+- Phase: complete. Research PR open and verified; no implementation started.
 - Follow-up count: 0.
 - Blockers: none.
-- Heartbeat ID: `collect-draftably-diagram-gap-analysis` (ACTIVE, hourly, current chat).
+- Heartbeat ID: `collect-draftably-diagram-gap-analysis` (deleted after completion).
 - Collected files: `tmp/pro/diagram-library-gaps/collected/{gap-analysis.md,capability-bets.md,diagram-types.csv,features.csv}`.
-- PR: pending.
+- PR: https://github.com/byronwall/draftably/pull/221 (OPEN, base main, head codex/diagram-library-gap-analysis).
 
 Use this conversation and branch on continuation. Never duplicate the initial submission.
 Raw Pro downloads belong under ignored `tmp/pro/diagram-library-gaps/`, not in Git.
@@ -52,5 +52,14 @@ Raw Pro downloads belong under ignored `tmp/pro/diagram-library-gaps/`, not in G
 - Spot-checked Mermaid ER/sequence documentation, D2 SQL rows/TALA announcement, Structurizr
   filtered views, and the semantic BPMN differ reference. Popularity proxies were not recounted.
 - Rich-node planning PR #28 remains OPEN and unmerged; it changes planning files only.
-- Preparation pnpm check completed successfully. Final documentation checks are pending.
+- Preparation and final `pnpm check` passed, including 345 unit tests, engine suites, and build.
+  Local Markdown links, evidence record uniqueness/counts, and formatting passed.
 - Git identities at the preparation checkpoint: Byron Wall <byron@byroni.us>, author and committer.
+
+## Completion
+
+- PR #221 is attached to this chat. Saved body and all eight documentation/data files verified.
+- No raw downloads, screenshots, application source changes, or dependency changes are in the PR.
+- All 21 recommendations have dispositions; the five top bets have staged next steps.
+- The hourly automation was deleted on completion. No further checks are scheduled.
+- No merge, deployment, or application implementation was performed.
