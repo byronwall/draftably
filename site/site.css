@@ -299,22 +299,62 @@ main {
   user-select: none;
 }
 
-.live-text {
+/* The highlighted copy sits under a transparent textarea with the same metrics. */
+.live-code {
+  position: relative;
   flex: 1;
   min-width: max-content;
+}
+
+.live-hl,
+.live-text {
   margin: 0;
   padding: 0 16px 0 4px;
   border: 0;
-  outline: none;
-  resize: none;
-  overflow: hidden;
-  background: none;
-  color: var(--text);
   font: inherit;
   /* Show `->` as typed, not as an arrow glyph. */
   font-variant-ligatures: none;
   white-space: pre;
   tab-size: 2;
+}
+
+.live-text {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: none;
+  color: transparent;
+  caret-color: var(--text);
+}
+
+.live-text::selection {
+  background: #6650d92e;
+}
+
+/* .draft tokens (site/highlight.ts) */
+.tok-command {
+  color: #6650d9;
+}
+.tok-mark {
+  color: #b13c50;
+  font-weight: 700;
+}
+.tok-string {
+  color: #2d7a5c;
+}
+.tok-attr {
+  color: #8a6420;
+}
+.tok-value,
+.tok-number {
+  color: #2b5fa8;
+}
+.tok-arrow,
+.tok-comment {
+  color: #8c92a4;
 }
 
 .live-status {

@@ -1,6 +1,7 @@
 import { createEffect, createSignal, For, on, onCleanup, Show, untrack } from 'solid-js';
 import { findExample } from '../../src/model/examples';
 import { appUrl, draw, paperOf, type Drawing } from '../draw';
+import { highlightHtml } from '../highlight';
 
 /**
  * Editable `.draft` source beside its drawing. Each edit redraws after a short pause; while the
@@ -75,15 +76,24 @@ export function LiveEditor(props: { examples: string[] }) {
             <pre class="live-gutter" aria-hidden="true">
               {Array.from({ length: lines() }, (_, i) => i + 1).join('\n')}
             </pre>
-            <textarea
-              class="live-text"
-              aria-label="Diagram source"
-              spellcheck={false}
-              autocapitalize="off"
-              rows={lines()}
-              value={source()}
-              onInput={e => setSource(e.currentTarget.value)}
-            />
+            <div class="live-code">
+              <pre
+                class="live-hl"
+                aria-hidden="true"
+                // Built from escaped tokens by highlightHtml.
+                // eslint-disable-next-line solid/no-innerhtml
+                innerHTML={highlightHtml(source()) + '\n'}
+              />
+              <textarea
+                class="live-text"
+                aria-label="Diagram source"
+                spellcheck={false}
+                autocapitalize="off"
+                rows={lines()}
+                value={source()}
+                onInput={e => setSource(e.currentTarget.value)}
+              />
+            </div>
           </div>
           <div class="live-status" classList={{ 'is-error': errors().length > 0 }}>
             <Show
