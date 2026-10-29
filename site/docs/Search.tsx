@@ -3,6 +3,7 @@ import { docsPath } from './content';
 import { marks, search, words, type Hit } from './find';
 
 const LAST = 'draftably-docs-search';
+const SAMPLES = ['swim lanes', 'fold=never', 'vary --apply', 'kind=async'];
 
 /** ⌘K search. Arrow keys move, Enter opens, Escape closes. */
 export function SearchDialog(props: {
@@ -69,7 +70,25 @@ export function SearchDialog(props: {
             when={hits().length}
             fallback={
               <p class="search-empty">
-                {terms().length ? `Nothing matches “${query()}”.` : 'Type to search every page.'}
+                {terms().length ? `Nothing matches “${query()}”. Try ` : 'Try '}
+                <For each={SAMPLES}>
+                  {(sample, i) => (
+                    <>
+                      {i() ? ', ' : ''}
+                      <button
+                        type="button"
+                        class="doc-inline-button"
+                        onClick={() => {
+                          setQuery(sample);
+                          input.focus();
+                        }}
+                      >
+                        {sample}
+                      </button>
+                    </>
+                  )}
+                </For>
+                .
               </p>
             }
           >

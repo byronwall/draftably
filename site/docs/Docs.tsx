@@ -1,13 +1,24 @@
 import { A, useLocation, useNavigate, useParams } from '@solidjs/router';
 import { createEffect, createSignal, For, on, onCleanup, onMount, Show } from 'solid-js';
 import { appUrl } from '../draw';
-import { docsPath, findPage, GITHUB, html, inlineHtml, isDraft, PAGES, type Page } from './content';
+import {
+  anchorPath,
+  docsPath,
+  findPage,
+  GITHUB,
+  html,
+  inlineHtml,
+  isDraft,
+  PAGES,
+  type Page,
+} from './content';
 import { Example, prepare, warm } from './Example';
 import { SearchDialog, SearchIcon } from './Search';
 import { words } from './find';
 
 const BASE = import.meta.env.BASE_URL;
 const GROUPS = [...new Set(PAGES.map(p => p.group))];
+const MAC = /Mac|iPhone|iPad/.test(navigator.platform);
 
 /** `/docs` and `/docs/<topic>`: sidebar, the page, its contents and search. */
 export function Docs() {
@@ -25,7 +36,13 @@ export function Docs() {
     on(slug, s => {
       const next = findPage(s);
       setMenu(false);
-      if (!next) return setMissing(true);
+      // A DSL.md heading anchor, such as the playground's help links, opens its page there.
+      const anchor = !next && anchorPath(s);
+      if (anchor) return navigate(anchor, { replace: true });
+      if (!next) {
+        document.title = 'No such page · Draftably docs';
+        return setMissing(true);
+      }
       void Promise.all(next.drafts.map(prepare)).then(() => {
         if (slug() !== s) return;
         setMissing(false);
@@ -45,6 +62,9 @@ export function Docs() {
       if ((e.key === 'k' && (e.metaKey || e.ctrlKey)) || (e.key === '/' && !typing)) {
         e.preventDefault();
         setSearching(true);
+      } else if (e.key === 'Escape' && !typing && !searching() && location.search) {
+        // Clear what search marked on the page.
+        navigate(`${location.pathname.slice(BASE.length - 1)}${location.hash}`, { replace: true });
       }
     };
     window.addEventListener('keydown', key);
@@ -52,6 +72,8 @@ export function Docs() {
   });
 
   const index = () => PAGES.findIndex(p => p.slug === page()?.slug);
+  createEffect(() => document.body.classList.toggle('docs-menu-open', menu()));
+  onCleanup(() => document.body.classList.remove('docs-menu-open'));
 
   return (
     <div class="docs">
@@ -62,7 +84,7 @@ export function Docs() {
         <button type="button" class="docs-search-button" onClick={() => setSearching(true)}>
           <SearchIcon />
           <span>Search docs</span>
-          <kbd>⌘K</kbd>
+          <kbd>{MAC ? '⌘K' : 'Ctrl K'}</kbd>
         </button>
         <nav class="docs-top-links">
           <a href={`${BASE}play`}>Playground</a>
@@ -82,7 +104,12 @@ export function Docs() {
         </button>
       </header>
       <div class="docs-body">
-        <nav class="docs-side" classList={{ 'is-open': menu() }} aria-label="Docs topics">
+        <nav
+          class="docs-side"
+          classList={{ 'is-open': menu() }}
+          aria-label="Docs topics"
+          onClick={e => (e.target as Element).closest('a') && setMenu(false)}
+        >
           <For each={GROUPS}>
             {group => (
               <section>
@@ -105,8 +132,15 @@ export function Docs() {
               <article class="doc">
                 <h1>No such page</h1>
                 <p class="doc-lead">
-                  There is no docs page at <code>{location.pathname}</code>. Search with ⌘K or pick
-                  a topic from the list.
+                  There is no docs page at <code>{location.pathname}</code>.{' '}
+                  <button
+                    type="button"
+                    class="doc-inline-button"
+                    onClick={() => setSearching(true)}
+                  >
+                    Search the docs
+                  </button>{' '}
+                  or pick a topic from the list.
                 </p>
               </article>
             </main>
@@ -206,9 +240,15 @@ function Article(props: { page: Page; query: string }) {
   return (
     <article class="doc" ref={el} onClick={click}>
       <div class="doc-crumbs">
-        <A href={docsPath(PAGES.find(p => p.group === props.page.group)!.slug)}>
-          {props.page.group}
-        </A>
+        {/* The group links to its first page, unless that is this page. */}
+        <Show
+          when={PAGES.find(p => p.group === props.page.group)!.slug !== props.page.slug}
+          fallback={<span>{props.page.group}</span>}
+        >
+          <A href={docsPath(PAGES.find(p => p.group === props.page.group)!.slug)}>
+            {props.page.group}
+          </A>
+        </Show>
         <span aria-hidden="true">/</span>
         <span>{props.page.title}</span>
       </div>
@@ -259,7 +299,7 @@ function Contents(props: { page: Page }) {
   const [current, setCurrent] = createSignal('');
   onMount(() => {
     const spy = () => {
-      let id = props.page.headings[0]?.id ?? '';
+      let id = '';
       for (const h of props.page.headings) {
         const el = document.getElementById(h.id);
         if (el && el.getBoundingClientRect().top < 120) id = h.id;
@@ -291,6 +331,9 @@ function Contents(props: { page: Page }) {
           )}
         </For>
       </Show>
+      <a class="docs-edit" href={props.page.source} target="_blank" rel="noreferrer">
+        Edit this page on GitHub
+      </a>
     </aside>
   );
 }

@@ -630,6 +630,8 @@ main {
 
 .docs {
   --top: 56px;
+  --side: 248px;
+  --frame: 1480px;
   min-height: 100vh;
   background: var(--surface);
 }
@@ -642,14 +644,15 @@ main {
   align-items: center;
   gap: 28px;
   height: var(--top);
-  padding: 0 24px;
+  /* The bar's content sits in the same frame as the body, so search lines up with the sidebar. */
+  padding: 0 max(24px, calc((100% - var(--frame)) / 2 + 24px));
   border-bottom: 1px solid var(--line);
   background: #fffffff2;
   backdrop-filter: blur(8px);
 }
 
 .docs-top .wordmark {
-  width: 200px;
+  width: calc(var(--side) - 52px);
   flex: none;
 }
 
@@ -724,8 +727,8 @@ kbd {
 
 .docs-body {
   display: grid;
-  grid-template-columns: 248px minmax(0, 1fr) 224px;
-  max-width: 1480px;
+  grid-template-columns: var(--side) minmax(0, 1fr) 224px;
+  max-width: var(--frame);
   margin: 0 auto;
 }
 
@@ -810,6 +813,17 @@ kbd {
   font-weight: 600;
 }
 
+.docs-toc .docs-edit {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+
+.docs-toc h2 ~ .docs-edit {
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
 .docs-main {
   min-width: 0;
   padding: 24px 48px 64px;
@@ -888,7 +902,7 @@ kbd {
 .doc-anchor::after {
   content: '#';
   margin-left: 8px;
-  color: var(--line-strong);
+  color: #a3a8b8;
   opacity: 0;
   transition: opacity 140ms;
 }
@@ -926,7 +940,7 @@ kbd {
 }
 
 .doc :not(pre) > code {
-  padding: 1px 5px;
+  padding: 1px 3px;
   border-radius: 4px;
   background: var(--bg);
   font-size: 0.86em;
@@ -964,8 +978,10 @@ kbd {
   font-weight: 600;
 }
 
-.doc td:first-child code {
+/* Table code never breaks mid-word; a table too wide for the screen scrolls in its box. */
+.doc td code {
   white-space: nowrap;
+  overflow-wrap: normal;
 }
 
 .doc-code {
@@ -986,13 +1002,61 @@ kbd {
 }
 
 .doc-copy,
-.doc-link-button {
+.doc-link-button,
+.doc-inline-button {
   border: 0;
   background: none;
   color: var(--muted);
   font: 600 12px var(--font);
   cursor: pointer;
   transition: color 140ms;
+}
+
+.doc-link-button {
+  height: 24px;
+  padding: 0 6px;
+  border-radius: 4px;
+}
+
+.doc-copy:active,
+.doc-link-button:active,
+.zoom-bar button:active {
+  color: var(--text);
+}
+
+/* A button that reads as a link inside text. */
+.doc-inline-button {
+  padding: 0;
+  color: var(--accent);
+  font: inherit;
+}
+
+.doc-inline-button:hover {
+  color: var(--accent-hover);
+}
+
+/* One focus ring for everything in the docs. The editable source shows focus by its tint. */
+.docs :focus-visible,
+.search :focus-visible,
+.zoom :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.docs .doc-example-text:focus-visible,
+.search-field input:focus-visible {
+  outline: none;
+}
+
+.doc-drawing:focus-visible {
+  outline-offset: -3px;
+}
+
+@media (hover: none) {
+  .doc-copy {
+    opacity: 1;
+  }
 }
 
 .doc-copy {
@@ -1047,7 +1111,7 @@ kbd {
 .doc-example-bar {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 6px;
   height: 34px;
   padding: 0 12px;
   border-bottom: 1px solid var(--line);
@@ -1060,7 +1124,13 @@ kbd {
   font: 500 12px var(--mono);
 }
 
+.doc-example-label span {
+  color: #a3a8b8;
+  font-family: var(--font);
+}
+
 .doc-example-play {
+  margin-left: 6px;
   color: var(--accent);
   font-size: 12.5px;
   font-weight: 600;
@@ -1074,7 +1144,8 @@ kbd {
 
 .doc-example.is-split .doc-example-body {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  /* The source takes the width its longest line needs, up to 60%; the drawing takes the rest. */
+  grid-template-columns: fit-content(60%) minmax(0, 1fr);
 }
 
 .doc-example-source {
@@ -1141,6 +1212,8 @@ kbd {
   justify-content: center;
   padding: 16px;
   background: var(--canvas);
+  cursor: zoom-in;
+  user-select: none;
 }
 
 .doc-example > .doc-example-body > .doc-drawing {
@@ -1216,6 +1289,19 @@ kbd {
   padding: 10px 14px 14px;
 }
 
+/* The default theme leads, across both columns. */
+.doc-theme:first-child {
+  grid-column: 1 / -1;
+}
+
+.doc-theme:first-child .doc-drawing {
+  height: 340px;
+}
+
+.doc-theme figcaption span {
+  color: var(--muted);
+}
+
 .doc-theme .doc-drawing-svg,
 .doc-theme .doc-drawing-svg svg {
   width: 100%;
@@ -1250,11 +1336,18 @@ kbd {
 }
 
 .zoom-bar button {
+  height: 28px;
+  padding: 0 6px;
   border: 0;
   background: none;
   color: var(--accent);
   font: 600 13px var(--font);
   cursor: pointer;
+  transition: color 140ms;
+}
+
+.zoom-bar button:hover {
+  color: var(--accent-hover);
 }
 
 .zoom-stage {
@@ -1285,8 +1378,8 @@ kbd {
 .doc-crumbs,
 .doc h1,
 .doc-lead,
-.doc-md > :not(.doc-table) {
-  max-width: 760px;
+.doc-md > :not(.doc-table, .doc-code) {
+  max-width: 700px;
 }
 
 .doc code,
@@ -1444,8 +1537,12 @@ kbd {
 }
 
 @media (max-width: 1180px) {
+  .docs {
+    --side: 232px;
+  }
+
   .docs-body {
-    grid-template-columns: 232px minmax(0, 1fr);
+    grid-template-columns: var(--side) minmax(0, 1fr);
   }
 
   .docs-toc {
@@ -1500,6 +1597,10 @@ kbd {
     display: block;
   }
 
+  body.docs-menu-open {
+    overflow: hidden;
+  }
+
   .docs-main {
     padding: 16px 16px 48px;
   }
@@ -1510,6 +1611,11 @@ kbd {
 
   .doc-lead {
     font-size: 16px;
+  }
+
+  .doc table {
+    width: max-content;
+    min-width: 100%;
   }
 
   /* Aligned shell comments read better scrolled than wrapped. */
