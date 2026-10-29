@@ -53,7 +53,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
     >
       <div class="start-frame">
         <header class="start-header">
-          <h1>Diagram Studio</h1>
+          <h1>Draftably</h1>
           <Show
             when={workspace()}
             fallback={<span class="start-where">Browser copy · saved on this device</span>}

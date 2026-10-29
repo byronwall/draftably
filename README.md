@@ -1,4 +1,4 @@
-# Diagram Studio
+# Draftably
 
 A diagram editor that runs entirely in the browser. Draw a diagram, improve its layout in small
 undoable passes, compare layout and routing candidates side by side, scrub through recorded layout

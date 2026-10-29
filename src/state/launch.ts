@@ -184,7 +184,7 @@ export async function go(url: string, { push = true } = {}) {
   } else {
     closeFileSession();
     if (push) history.pushState(null, '', next.href);
-    document.title = 'Diagram Studio';
+    document.title = 'Draftably';
     state.setView('start');
     void refreshWorkspace();
   }
