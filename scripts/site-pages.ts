@@ -26,7 +26,7 @@ const SITE: Meta[] = [
     path: '',
     title: 'Draftably: write the diagram, skip the dragging',
     description:
-      'A text language and CLI for architecture, sequence and flow diagrams. Write plain .draft source; Draftably lays out the boxes, routes the lines and keeps it in git.',
+      'A text language and CLI for diagrams. Write plain .draft source; Draftably lays out the boxes, routes the lines and keeps it in git.',
   },
   {
     path: 'play',
@@ -42,11 +42,11 @@ const SITE: Meta[] = [
   },
 ];
 
-/** At most about 160 characters, ending on a word. */
+/** At most about 150 characters, ending on a word: previews cut longer text. */
 const clip = (text: string) => {
   const flat = text.replace(/\s+/g, ' ').trim();
-  if (flat.length <= 160) return flat;
-  return `${flat.slice(0, 157).replace(/\s+\S*$/, '')}…`;
+  if (flat.length <= 150) return flat;
+  return `${flat.slice(0, 147).replace(/\s+\S*$/, '')}…`;
 };
 
 async function docsPages(): Promise<Meta[]> {
@@ -84,7 +84,8 @@ const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 function page(template: string, meta: Meta) {
-  const url = `${origin}${base}${meta.path}`;
+  // Pages serves each route from its folder and redirects the bare path to it with a slash.
+  const url = `${origin}${base}${meta.path ? `${meta.path}/` : ''}`;
   const image = `${origin}${base}og.png`;
   const tags = [
     `<title>${esc(meta.title)}</title>`,
