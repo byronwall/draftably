@@ -32,7 +32,7 @@ async function startingSource() {
   return { id: ex.id, source: ex.source };
 }
 
-const titleOf = (source: string) => /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'diagram';
+const titleOf = (source: string) => /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'Untitled diagram';
 const fileName = (source: string, ext: string) =>
   `${
     titleOf(source)
@@ -178,26 +178,34 @@ export function Playground() {
   };
 
   // Two-way links: the cursor's line lifts its objects; a hovered object lights its line.
+  // The cursor's line lifts its objects while typing; a clicked object stays lifted until a
+  // click on empty canvas or Escape.
+  const [editing, setEditing] = createSignal(false);
+  const [picked, setPicked] = createSignal<string | null>(null);
   const linkedIds = createMemo(() => {
-    const hover = hoverId();
+    const hover = hoverId() ?? picked();
     if (hover) return [hover];
+    if (!editing()) return [];
     return items()
       .filter(i => i.line === cursorLine())
       .map(i => i.id);
   });
   const linkedLines = createMemo(() => {
-    const hover = hoverId();
+    const hover = hoverId() ?? picked();
     const item = hover ? items().find(i => i.id === hover) : undefined;
     return item ? [item.line] : [];
   });
-  const pick = (id: string) => {
-    const item = items().find(i => i.id === id);
+  const pick = (id: string | null) => {
+    setPicked(id);
+    const item = id ? items().find(i => i.id === id) : undefined;
     if (item) editor?.goto(item.line);
   };
 
   const problems = () => drawing().diagnostics.filter(d => d.level === 'error');
   const allProblems = () => drawing().diagnostics.filter(d => d.level !== 'info');
   const [listOpen, setListOpen] = createSignal(false);
+  // An empty file compiles to a blank page; show the empty state instead.
+  const shown = () => (source().trim() ? svg() : '');
 
   const copyLink = async () => {
     await writeHash();
@@ -216,6 +224,13 @@ export function Playground() {
   onMount(() => document.addEventListener('pointerdown', closeMenu));
   onCleanup(() => document.removeEventListener('pointerdown', closeMenu));
 
+  const saveSplit = () => {
+    try {
+      localStorage.setItem(SPLIT_KEY, String(split()));
+    } catch {
+      // Storage can be blocked; the split still works for this visit.
+    }
+  };
   const startResize = (e: PointerEvent) => {
     const handle = e.currentTarget as HTMLElement;
     handle.setPointerCapture(e.pointerId);
@@ -225,11 +240,7 @@ export function Playground() {
     const up = () => {
       handle.removeEventListener('pointermove', move);
       handle.removeEventListener('pointerup', up);
-      try {
-        localStorage.setItem(SPLIT_KEY, String(split()));
-      } catch {
-        // Storage can be blocked; the split still works for this visit.
-      }
+      saveSplit();
     };
     handle.addEventListener('pointermove', move);
     handle.addEventListener('pointerup', up);
@@ -253,6 +264,7 @@ export function Playground() {
         if (file) void openFile(file);
       }}
       onKeyDown={e => {
+        if (e.key === 'Escape') setPicked(null);
         if ((e.metaKey || e.ctrlKey) && e.key === 's') {
           e.preventDefault();
           save(new Blob([source()], { type: 'text/plain' }), fileName(source(), 'draft'));
@@ -260,7 +272,11 @@ export function Playground() {
       }}
     >
       <Show when={dropping() || dropError()}>
-        <div class="drop-veil" classList={{ 'is-error': !!dropError() }}>
+        <div
+          class="drop-veil"
+          classList={{ 'is-error': !!dropError() }}
+          onClick={() => setDropError('')}
+        >
           {dropError() || 'Drop a .draft file, or an SVG or PNG exported by Draftably'}
         </div>
       </Show>
@@ -297,6 +313,9 @@ export function Playground() {
               aria-expanded={menu()}
               disabled={!svg()}
               onClick={() => setMenu(m => !m)}
+              onKeyDown={e => {
+                if (e.key === 'Escape') setMenu(false);
+              }}
             >
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M8 2.5v8M4.5 7.5L8 11l3.5-3.5M3 13.5h10" />
@@ -360,7 +379,11 @@ export function Playground() {
             <button
               type="button"
               class="tool quiet"
-              title="Format (Shift+Alt+F)"
+              title={
+                problems().length
+                  ? 'Fix the errors to format'
+                  : 'Rewrite in the standard layout (Shift+Alt+F)'
+              }
               disabled={problems().length > 0}
               onClick={() => editor?.format()}
             >
@@ -374,12 +397,19 @@ export function Playground() {
               diagnostics={drawing().diagnostics}
               linkedLines={linkedLines()}
               onCursorLine={setCursorLine}
+              onFocusChange={setEditing}
+              onType={() => setPicked(null)}
               ref={api => (editor = api)}
             />
           </Show>
           <div class="play-status-wrap">
             <Show when={listOpen() && allProblems().length > 1}>
-              <ul class="problems">
+              <ul
+                class="problems"
+                onKeyDown={e => {
+                  if (e.key === 'Escape') setListOpen(false);
+                }}
+              >
                 <For each={allProblems()}>
                   {d => (
                     <li>
@@ -402,7 +432,10 @@ export function Playground() {
             <button
               type="button"
               class="play-status"
-              classList={{ 'is-error': problems().length > 0 }}
+              classList={{
+                'is-error': problems().length > 0,
+                'is-warning': !problems().length && allProblems().length > 0,
+              }}
               disabled={!allProblems().length}
               onClick={() => {
                 if (allProblems().length > 1) setListOpen(o => !o);
@@ -411,7 +444,15 @@ export function Playground() {
             >
               <Show
                 when={allProblems()[0]}
-                fallback={<span>{svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…'}</span>}
+                fallback={
+                  <span>
+                    {!source().trim()
+                      ? 'Empty file'
+                      : svg()
+                        ? `No problems · drawn in ${ms()} ms`
+                        : 'Drawing…'}
+                  </span>
+                }
               >
                 {d => (
                   <span>
@@ -421,7 +462,9 @@ export function Playground() {
                   </span>
                 )}
               </Show>
-              <span class="play-hint">Click a shape to find its line</span>
+              <Show when={shown()}>
+                <span class="play-hint">Click a shape to find its line</span>
+              </Show>
             </button>
           </div>
         </section>
@@ -430,17 +473,55 @@ export function Playground() {
           role="separator"
           aria-orientation="vertical"
           aria-label="Resize panes"
+          aria-valuenow={Math.round(split() * 100)}
+          tabIndex={0}
           onPointerDown={startResize}
+          onKeyDown={e => {
+            const step = e.key === 'ArrowLeft' ? -0.02 : e.key === 'ArrowRight' ? 0.02 : 0;
+            if (!step) return;
+            e.preventDefault();
+            setSplit(v => Math.min(0.7, Math.max(0.2, v + step)));
+            saveSplit();
+          }}
         />
         <section class="play-diagram" aria-label="Diagram">
           <DiagramView
-            svg={svg()}
+            svg={shown()}
             stale={!drawing().svg && !!svg()}
             fitKey={fitKey()}
             linkedIds={linkedIds()}
             onHover={setHoverId}
             onPick={pick}
           />
+          <Show when={!shown() && ready()}>
+            <div class="diagram-empty">
+              <Show
+                when={source().trim()}
+                fallback={
+                  <>
+                    <p>Nothing to draw yet.</p>
+                    <div>
+                      <button type="button" class="tool" onClick={() => pickExample('blank')}>
+                        Start from two nodes
+                      </button>
+                      <button type="button" class="tool" onClick={() => pickExample('checkout')}>
+                        Open an example
+                      </button>
+                    </div>
+                  </>
+                }
+              >
+                <Show when={problems()[0]} fallback={<p>Drawing…</p>}>
+                  {d => (
+                    <p>
+                      The drawing appears once {d().line ? `line ${d().line}` : 'the source'} is
+                      fixed.
+                    </p>
+                  )}
+                </Show>
+              </Show>
+            </div>
+          </Show>
         </section>
       </div>
     </div>

@@ -22,7 +22,8 @@ export function DiagramView(props: {
   fitKey: string;
   linkedIds: string[];
   onHover: (id: string | null) => void;
-  onPick: (id: string) => void;
+  /** An object's id, or null for a click on empty canvas. */
+  onPick: (id: string | null) => void;
 }) {
   let frame!: HTMLDivElement;
   let stage!: HTMLDivElement;
@@ -97,11 +98,14 @@ export function DiagramView(props: {
     );
   };
 
-  let drag: { x: number; y: number; vx: number; vy: number; moved: boolean } | undefined;
+  // The object under the pointer is read at pointerdown: pointer capture retargets pointerup to
+  // the frame, so its target is never the shape.
+  let drag:
+    { x: number; y: number; vx: number; vy: number; moved: boolean; id: string | null } | undefined;
   const onDown = (e: PointerEvent) => {
     if (e.button !== 0 || (e.target as Element).closest('.diagram-tools')) return;
     const v = view();
-    drag = { x: e.clientX, y: e.clientY, vx: v.x, vy: v.y, moved: false };
+    drag = { x: e.clientX, y: e.clientY, vx: v.x, vy: v.y, moved: false, id: idAt(e.target) };
     frame.setPointerCapture(e.pointerId);
   };
   const onMove = (e: PointerEvent) => {
@@ -114,11 +118,8 @@ export function DiagramView(props: {
     }
     props.onHover(idAt(e.target));
   };
-  const onUp = (e: PointerEvent) => {
-    if (drag && !drag.moved) {
-      const id = idAt(e.target);
-      if (id) props.onPick(id);
-    }
+  const onUp = () => {
+    if (drag && !drag.moved) props.onPick(drag.id);
     drag = undefined;
   };
   const idAt = (target: EventTarget | null) =>
@@ -162,15 +163,25 @@ export function DiagramView(props: {
         // eslint-disable-next-line solid/no-innerhtml
         innerHTML={props.svg}
       />
-      <div class="diagram-tools">
+      <div class="diagram-tools" hidden={!props.svg}>
         <button type="button" aria-label="Zoom out" onClick={() => zoomCenter(1 / 1.25)}>
-          −
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 8h8" />
+          </svg>
         </button>
-        <button type="button" class="diagram-zoom" aria-label="Fit to view" onClick={fit}>
+        <button
+          type="button"
+          class="diagram-zoom"
+          aria-label="Fit to view"
+          title="Fit to view (or double-click the canvas)"
+          onClick={fit}
+        >
           {Math.round(view().k * 100)}%
         </button>
         <button type="button" aria-label="Zoom in" onClick={() => zoomCenter(1.25)}>
-          +
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M4 8h8M8 4v8" />
+          </svg>
         </button>
         <button type="button" aria-label="Full screen" onClick={fullscreen}>
           <svg viewBox="0 0 16 16" aria-hidden="true">

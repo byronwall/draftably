@@ -241,9 +241,10 @@ const theme = EditorView.theme({
   '&.cm-focused': { outline: 'none' },
   '.cm-scroller': { fontFamily: 'var(--mono)', lineHeight: '20px', fontVariantLigatures: 'none' },
   '.cm-content': { padding: '10px 0' },
-  '.cm-gutters': { backgroundColor: 'var(--surface)', border: 'none', color: '#a3a8b8' },
+  '.cm-gutters': { backgroundColor: 'var(--surface)', border: 'none', color: '#8c92a4' },
   '.cm-lineNumbers .cm-gutterElement': { padding: '0 8px 0 14px', minWidth: '40px' },
-  '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: '#f4f5f9' },
+  '.cm-activeLine, .cm-activeLineGutter': { backgroundColor: 'transparent' },
+  '&.cm-focused .cm-activeLine, &.cm-focused .cm-activeLineGutter': { backgroundColor: '#f4f5f9' },
   '.cm-linked': { backgroundColor: 'var(--accent-soft)' },
   '.cm-selectionBackground, &.cm-focused .cm-selectionBackground': {
     backgroundColor: '#6650d92e !important',
@@ -272,6 +273,9 @@ export function CodeEditor(props: {
   diagnostics: Diagnostic[];
   linkedLines: number[];
   onCursorLine: (line: number) => void;
+  onFocusChange: (focused: boolean) => void;
+  /** The user changed the text (not a replace from the page). */
+  onType: () => void;
   ref: (api: EditorApi) => void;
 }) {
   let host!: HTMLDivElement;
@@ -316,6 +320,11 @@ export function CodeEditor(props: {
             { key: 'Shift-Alt-f', run: () => (format(), true) },
           ]),
           tokens,
+          // DOM focus, not view.hasFocus, which also needs the window focused.
+          EditorView.domEventHandlers({
+            focus: () => props.onFocusChange(true),
+            blur: () => props.onFocusChange(false),
+          }),
           linked,
           theme,
           EditorView.contentAttributes.of({ 'aria-label': 'Diagram source', spellcheck: 'false' }),
@@ -323,6 +332,8 @@ export function CodeEditor(props: {
           // eslint-disable-next-line solid/reactivity
           EditorView.updateListener.of(u => {
             if (u.docChanged) props.onChange(u.state.doc.toString());
+            if (u.transactions.some(t => t.isUserEvent('input') || t.isUserEvent('delete')))
+              props.onType();
             if (u.selectionSet || u.docChanged)
               props.onCursorLine(u.state.doc.lineAt(u.state.selection.main.head).number);
           }),
@@ -341,7 +352,8 @@ export function CodeEditor(props: {
           selection: { anchor: at },
           effects: EditorView.scrollIntoView(at, { y: 'center' }),
         });
-        view.focus();
+        // After the click that asked for it, which would otherwise take focus back.
+        requestAnimationFrame(() => view?.focus());
       },
       focus: () => view?.focus(),
       format,

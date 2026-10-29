@@ -42,6 +42,7 @@ export function ExamplePicker(props: {
   const [query, setQuery] = createSignal('');
   let wrap!: HTMLDivElement;
   let input!: HTMLInputElement;
+  let button!: HTMLButtonElement;
 
   const shown = createMemo(() => {
     const q = query().trim().toLowerCase();
@@ -68,7 +69,13 @@ export function ExamplePicker(props: {
 
   return (
     <div class="picker" ref={wrap}>
-      <button type="button" class="picker-button" aria-expanded={open()} onClick={toggle}>
+      <button
+        ref={button}
+        type="button"
+        class="picker-button"
+        aria-expanded={open()}
+        onClick={toggle}
+      >
         <span>{props.title}</span>
       </button>
       <Show when={open()}>
@@ -77,7 +84,9 @@ export function ExamplePicker(props: {
           role="dialog"
           aria-label="Examples"
           onKeyDown={e => {
-            if (e.key === 'Escape') setOpen(false);
+            if (e.key !== 'Escape') return;
+            setOpen(false);
+            button.focus();
           }}
         >
           <input

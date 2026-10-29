@@ -1727,3 +1727,130 @@ mark {
     display: none;
   }
 }
+
+/* 100x: focus, empty states, warnings, skeletons, splitter, narrow panes */
+
+.tool:focus-visible,
+.picker-button:focus-visible,
+.picker-card:focus-visible,
+.menu button:focus-visible,
+.problems button:focus-visible,
+.play-status:focus-visible,
+.diagram-tools button:focus-visible,
+.play-split:focus-visible,
+.play-nav a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.select:has(select:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.diagram-empty {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.diagram-empty p {
+  margin: 0;
+}
+
+.diagram-empty div {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.diagram-tools[hidden] {
+  display: none;
+}
+
+.play-status.is-warning {
+  color: #8a6420;
+}
+
+.play-hint {
+  color: var(--muted);
+}
+
+@keyframes skeleton {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.picker-thumb:not(:has(img)) {
+  animation: skeleton 1.2s ease-in-out infinite;
+}
+
+.picker-blank .picker-thumb {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .picker-thumb,
+  .tool.is-done svg {
+    animation: none !important;
+  }
+}
+
+.play-body {
+  grid-template-columns: var(--split) 9px 1fr;
+}
+
+.play-split {
+  padding: 0 4px;
+}
+
+.menu button,
+.problems button {
+  transition: background-color 140ms;
+}
+
+/* The source pane's header adapts to the pane's own width, which the splitter changes. */
+.play-source {
+  container-type: inline-size;
+}
+
+@container (max-width: 470px) {
+  .select-label {
+    display: none;
+  }
+}
+
+@container (max-width: 380px) {
+  .tool.quiet {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .diagram-tools button {
+    min-width: 28px;
+    height: 26px;
+  }
+
+  .diagram-zoom {
+    min-width: 46px !important;
+  }
+}
+
+/* The theme select keeps its full name; the example picker gives up width first. */
+.pane-head .select {
+  flex: none;
+}
+
+.pane-head .select select {
+  width: auto;
+}
