@@ -573,7 +573,7 @@ export async function openFileSession(file: string): Promise<boolean> {
   } catch {
     return false;
   }
-  document.title = `${file} · Diagram Studio`;
+  document.title = `${file} · Draftably`;
   await begin(info);
   listen();
   return true;
@@ -607,7 +607,7 @@ export function closeFileSession() {
 
 /** Open an example as a scratch copy. Nothing is read from or written to disk. */
 export function openExampleSession(id: string, title: string, source: string) {
-  document.title = `Example: ${title} · Diagram Studio`;
+  document.title = `Example: ${title} · Draftably`;
   return begin({ name: title, path: '', source, revision: 'example', example: id });
 }
 

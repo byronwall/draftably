@@ -4,10 +4,9 @@ A `.draft` file is a readable diagram source that a person and an agent can both
 model (objects, groups, connections), the automatic layout recipe, and layout refinements. It
 never holds a picture of the final layout: the same file always compiles to the same geometry.
 
-The language is adapted from the Meld 0.1 prototype in `reference/meld/original/DSL.md`. Views and
-checkpoints are not supported yet.
+Views and checkpoints are not supported yet.
 
-```text
+```draft
 diagram "Checkout architecture" version=1
 
 # Comments start with # or // and are kept when the file is formatted.
@@ -48,13 +47,12 @@ and groups. References may point to later lines.
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                              |
 | `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                              |
 | `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                |
-
-| `layout scope engine=name` | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines). |
-| `layout root … fit=slide` | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note. |
-| `routing` | Router settings for every connection. See [Routing](#routing). |
-| `config key=value` | File settings. See [Links and counts](#rules). |
-| `state id "label" ids...` | A named emphasis state. See [Emphasis states](#emphasis-states). |
-| `phase id "label" message ids...` | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams). |
+| `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                            |
+| `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note.                       |
+| `routing`                          | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                          |
+| `config key=value`                 | File settings. See [Links and counts](#rules).                                                                                                                                                                                                          |
+| `state id "label" ids...`          | A named emphasis state. See [Emphasis states](#emphasis-states).                                                                                                                                                                                        |
+| `phase id "label" message ids...`  | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                  |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -123,7 +121,7 @@ layout, so its members move as one block. A title wider than the members wraps t
 (at least 240px for the frame), up to three lines, and the band grows a line for each; only a
 title that still needs more than three lines widens the frame. `frame=soft` keeps the group but not the box:
 
-```text
+```draft
 group monitoring "namespace: monitoring" color=amber frame=soft
 node prometheus "prometheus" in=monitoring
 node grafana "grafana" in=monitoring
@@ -151,7 +149,7 @@ an object beside the group work, since they share a container.
 `layout root lanes` draws a process by who does each step. Every top-level group is a lane, and
 every node must sit in one; a node outside every group is an error on its line.
 
-```text
+```draft
 group customer "Customer"
 group agents "Support agents"
 node opens "Opens a ticket" in=customer
@@ -184,7 +182,7 @@ larger than other labels, and wraps to about 170px; a self-message's label sits 
 Participants are spaced for the wrapped labels, and a short participant title gets a box only as
 wide as it needs.
 
-```text
+```draft
 node user "User" shape=pill
 node app "Web app"
 node auth "Auth service"
@@ -206,7 +204,7 @@ above them; its participants stay together where its first one falls in the orde
 lists messages that belong together and draws them as a row band across the panel, its label in
 a tab at the left; alternate phases are tinted, so neighbours read apart:
 
-```text
+```draft
 group client "Client" color=blue
 group server "Server" color=teal
 node app "Web app" in=client
@@ -231,7 +229,7 @@ activations and notes are not supported yet.
 order. The group's nodes are its cells: they touch and share borders, in declaration order (or the
 group's `order` line), under a band that holds the group's title. There is no gap and no inset.
 
-```text
+```draft
 node client "Agent loop" color=blue
 group req "Request" color=slate
 layout req cells
@@ -273,7 +271,7 @@ edge hit cache -> cp "cached prefix"
 
 A table of a database entity, with a line from one row to another table's row:
 
-```text
+```draft
 group accounts "accounts" color=blue
 layout accounts cells columns=2
 node accounts.id "id" in=accounts
@@ -293,7 +291,7 @@ edge invoice_account invoices.account -> accounts.id
 figures in the PNG spec or an RFC packet header. Every column is one unit of the same width, so a
 field's width is its size.
 
-```text
+```draft
 group chunk "PNG chunk" color=teal
 layout chunk cells unit=byte columns=8
 node chunk.length "Length" in=chunk span=4
@@ -318,7 +316,7 @@ node chunk.crc "CRC" in=chunk span=4
 To show what changed between two versions, write one file and mark the lines that differ, as in a
 diff. A mark is one character before `node`, `group` or `edge`:
 
-```text
+```draft
 node api "API gateway"
 ~node orders "Orders service" was="Orders"
 +node refunds "Refunds"
@@ -411,7 +409,7 @@ The file owns the diagram's appearance. A `theme` line picks a preset and may ov
 diagram-wide values; `theme-color` lines change or add colors. Every value is optional: anything
 not written comes from the preset, and a file with no `theme` line uses Drafting.
 
-```text
+```draft
 theme fieldnotes padding-x=18 padding-y=12 radius=3 title-font=serif annotation-font=sans
 theme-color blue shade=500 fill="#405D48"
 theme-color brand shade=100 fill="#EAF1ED" stroke="#9AB4A4" ink="#244431"
@@ -455,7 +453,7 @@ swatch of that family (`shade=` picks one; 500 by default) and its meaning. The 
 key in the canvas corner, in the diagram's colors; `inspect --svg` and exports draw it under the
 drawing. Each family and shade may appear once. A legend never moves anything.
 
-```text
+```draft
 group edge "Edge" color=blue
 node db "Postgres" color=violet
 legend blue "Public entry points"

@@ -94,7 +94,7 @@ export async function importText(text: string, name = '') {
     if (xml.querySelector('parsererror')) throw Error('This SVG is not valid XML.');
     const metadata = xml.querySelector('metadata#diagram-studio-data');
     if (!metadata)
-      throw Error('Use an SVG exported by Diagram Studio. Other SVGs are not editable diagrams.');
+      throw Error('Use an SVG exported by Draftably. Other SVGs are not editable diagrams.');
     data = JSON.parse(metadata.textContent || '');
   } else if (trimmed.startsWith('{')) data = JSON.parse(trimmed);
   else throw Error('Open a saved JSON diagram or an exported, editable SVG.');

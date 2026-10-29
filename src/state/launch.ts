@@ -3,10 +3,12 @@
  *
  * - `?file=path.draft` with `draftably open`: that file, saved back to disk.
  * - `?example=id`: a scratch copy of a bundled example. Never written to disk.
+ * - `#s=…`: a scratch copy of source shared from the site's playground, opened like an example.
  * - `draftably open` without a file: the start page, showing the folder's diagrams.
  * - The static site: the diagram kept in browser storage, as before.
  */
 import { createRoot, createSignal } from 'solid-js';
+import { decodeSource } from '../lib/source-hash';
 import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
 import { clearSelection, prepareForEdit, setDoc } from './document';
@@ -123,6 +125,12 @@ async function chooseLaunch(): Promise<LaunchMode> {
     }
     state.setLaunchNotice(`There is no example named ${exampleId}.`);
   }
+  const shared = await decodeSource(location.hash);
+  if (shared != null) {
+    const title = /^diagram\s+"([^"]*)"/m.exec(shared)?.[1] || 'Shared diagram';
+    await openExampleSession('shared', title, shared);
+    return 'example';
+  }
   return info ? 'start' : 'static';
 }
 
@@ -184,7 +192,7 @@ export async function go(url: string, { push = true } = {}) {
   } else {
     closeFileSession();
     if (push) history.pushState(null, '', next.href);
-    document.title = 'Diagram Studio';
+    document.title = 'Draftably';
     state.setView('start');
     void refreshWorkspace();
   }

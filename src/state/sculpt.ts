@@ -463,7 +463,7 @@ export function saveTimelineFile() {
 
 export function validateTimeline(input: unknown): Timeline {
   const raw = input as Timeline;
-  if (raw?.kind !== 'diagram-studio-journey') throw Error('Not a Diagram Studio timeline.');
+  if (raw?.kind !== 'diagram-studio-journey') throw Error('Not a Draftably timeline.');
   if (
     raw.schemaVersion !== 1 ||
     !Array.isArray(raw.frames) ||

@@ -3,6 +3,7 @@ tmp/
 dist/
 pnpm-lock.yaml
 dist-cli/
+dist-site/
 packages/cli/dist/
 packages/cli/examples/
 packages/cli/DSL.md
