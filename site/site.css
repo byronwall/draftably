@@ -625,3 +625,905 @@ main {
     gap: 18px;
   }
 }
+
+/* Docs (site/docs) */
+
+.docs {
+  --top: 56px;
+  min-height: 100vh;
+  background: var(--surface);
+}
+
+.docs-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: var(--top);
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: #fffffff2;
+  backdrop-filter: blur(8px);
+}
+
+.docs-top .wordmark {
+  width: 200px;
+  flex: none;
+}
+
+.docs-search-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: min(380px, 100%);
+  height: 34px;
+  padding: 0 8px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--muted);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: border-color 140ms;
+}
+
+.docs-search-button:hover {
+  border-color: var(--line-strong);
+}
+
+.docs-search-button kbd {
+  margin-left: auto;
+}
+
+kbd {
+  display: inline-block;
+  min-width: 20px;
+  padding: 1px 5px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--muted);
+  font: 500 11px / 16px var(--font);
+  text-align: center;
+}
+
+.docs-search-icon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.docs-top-links {
+  display: flex;
+  gap: 24px;
+  margin-left: auto;
+  font-size: 14px;
+}
+
+.docs-top-links a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 140ms;
+}
+
+.docs-top-links a:hover,
+.docs-top-links a.is-active {
+  color: var(--accent);
+}
+
+.docs-menu-button {
+  display: none;
+}
+
+.docs-body {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr) 224px;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.docs-side,
+.docs-toc {
+  position: sticky;
+  top: var(--top);
+  height: calc(100vh - var(--top));
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.docs-side {
+  padding: 20px 12px 40px 24px;
+  border-right: 1px solid var(--line);
+}
+
+.docs-side section + section {
+  margin-top: 18px;
+}
+
+.docs-side h2,
+.docs-toc h2 {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.docs-toc h2 {
+  color: var(--text);
+  font-size: 13px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.docs-side a,
+.docs-toc a {
+  display: block;
+  padding: 3px 10px;
+  margin-left: -10px;
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.45;
+  text-decoration: none;
+  transition:
+    color 140ms,
+    background-color 140ms;
+}
+
+.docs-side a:hover,
+.docs-toc a:hover {
+  color: var(--accent);
+}
+
+.docs-side a.is-current {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.docs-toc {
+  padding: 28px 24px 40px 8px;
+}
+
+.docs-toc a {
+  margin-left: 0;
+  padding: 3px 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.docs-toc a.is-sub {
+  padding-left: 12px;
+}
+
+.docs-toc a.is-current {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.docs-main {
+  min-width: 0;
+  padding: 24px 48px 64px;
+}
+
+/* Article */
+
+.doc {
+  max-width: 920px;
+  margin: 0 auto;
+  font-size: 15.5px;
+  line-height: 1.65;
+}
+
+.doc-crumbs {
+  display: flex;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.doc-crumbs a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.doc-crumbs a:hover {
+  color: var(--accent);
+}
+
+.doc-crumbs span:last-child {
+  color: var(--text);
+}
+
+.doc h1 {
+  margin: 6px 0 0;
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+.doc-lead {
+  margin: 10px 0 8px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.doc h2,
+.doc h3,
+.doc h4 {
+  scroll-margin-top: calc(var(--top) + 16px);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.doc h2 {
+  margin: 36px 0 8px;
+  font-size: 22px;
+  font-weight: 750;
+}
+
+.doc h3 {
+  margin: 28px 0 6px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.doc .doc-anchor {
+  color: inherit;
+  white-space: normal;
+  text-decoration: none;
+}
+
+.doc-anchor::after {
+  content: '#';
+  margin-left: 8px;
+  color: var(--line-strong);
+  opacity: 0;
+  transition: opacity 140ms;
+}
+
+.doc-anchor:hover::after {
+  opacity: 1;
+}
+
+.doc p,
+.doc ul,
+.doc ol {
+  margin: 10px 0;
+}
+
+.doc ul,
+.doc ol {
+  padding-left: 22px;
+}
+
+.doc li + li {
+  margin-top: 4px;
+}
+
+.doc-md a,
+.doc-lead a {
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 140ms;
+}
+
+.doc-md a:hover,
+.doc-lead a:hover {
+  color: var(--accent-hover);
+}
+
+.doc :not(pre) > code {
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--bg);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+
+.doc strong {
+  font-weight: 700;
+}
+
+/* Tables may bleed wider than the text; they scroll when the screen is narrower. */
+.doc-table {
+  margin: 14px 0;
+  overflow-x: auto;
+}
+
+.doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.doc th,
+.doc td {
+  padding: 7px 12px 7px 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc th {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+
+.doc td:first-child code {
+  white-space: nowrap;
+}
+
+.doc-code {
+  position: relative;
+  margin: 14px 0;
+}
+
+.doc-code pre {
+  margin: 0;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--canvas);
+  font: 500 13px / 20px var(--mono);
+  font-variant-ligatures: none;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.doc-copy,
+.doc-link-button {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 600 12px var(--font);
+  cursor: pointer;
+  transition: color 140ms;
+}
+
+.doc-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--canvas);
+  opacity: 0;
+}
+
+.doc-code:hover .doc-copy,
+.doc-copy:focus-visible {
+  opacity: 1;
+}
+
+.doc-copy:hover,
+.doc-link-button:hover {
+  color: var(--accent);
+}
+
+/* A copy confirms with a short pulse on the button itself. */
+.is-copied {
+  animation: copied 700ms ease-out;
+}
+
+@keyframes copied {
+  0% {
+    color: #2d7a5c;
+    transform: scale(1.12);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+::highlight(search) {
+  background: #ffe58a;
+  color: inherit;
+}
+
+/* Live examples. They may run wider than the prose. */
+
+.doc-example {
+  margin: 18px 0 24px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.doc-example-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 34px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.doc-example-label {
+  margin-right: auto;
+  color: var(--muted);
+  font: 500 12px var(--mono);
+}
+
+.doc-example-play {
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.doc-example-play:hover {
+  color: var(--accent-hover);
+}
+
+.doc-example.is-split .doc-example-body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+}
+
+.doc-example-source {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px 0;
+  background: var(--surface);
+  font: 500 13px / 20px var(--mono);
+  overflow-x: auto;
+}
+
+.doc-example-gutter {
+  margin: 0;
+  padding: 0 10px 0 12px;
+  min-width: 38px;
+  color: #a3a8b8;
+  font: inherit;
+  text-align: right;
+  user-select: none;
+}
+
+/* The highlighted copy sits under a transparent textarea with the same metrics. */
+.doc-example-code {
+  position: relative;
+  flex: 1;
+  min-width: max-content;
+}
+
+.doc-example-hl,
+.doc-example-text {
+  margin: 0;
+  padding: 0 16px 0 4px;
+  border: 0;
+  font: inherit;
+  font-variant-ligatures: none;
+  white-space: pre;
+  tab-size: 2;
+}
+
+.doc-example-text {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+  background: none;
+  color: transparent;
+  caret-color: var(--text);
+}
+
+.doc-example-text::selection {
+  background: #6650d92e;
+}
+
+.doc-example-source:focus-within {
+  background: #fdfcff;
+}
+
+.doc-drawing {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--canvas);
+}
+
+.doc-example > .doc-example-body > .doc-drawing {
+  border-top: 1px solid var(--line);
+}
+
+.doc-example.is-split > .doc-example-body > .doc-drawing {
+  border-top: 0;
+  border-left: 1px solid var(--line);
+}
+
+.doc-drawing-svg {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  transition: opacity 120ms;
+}
+
+.doc-drawing-svg svg {
+  display: block;
+  max-width: 100%;
+  max-height: 520px;
+  height: auto;
+}
+
+.doc-drawing.is-stale .doc-drawing-svg {
+  opacity: 0.4;
+}
+
+.doc-drawing-error {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid #ecc5cc;
+  border-radius: 6px;
+  background: #fff7f8;
+  color: var(--danger);
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.doc-themes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border-top: 1px solid var(--line);
+  background: var(--line);
+}
+
+.doc-theme {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background: var(--surface);
+}
+
+.doc-theme figcaption {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.doc-theme figcaption code {
+  padding: 0;
+  background: none;
+}
+
+.doc-theme .doc-drawing {
+  flex: 1;
+  height: 250px;
+  padding: 10px 14px 14px;
+}
+
+.doc-theme .doc-drawing-svg,
+.doc-theme .doc-drawing-svg svg {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+
+/* Full-window drawing */
+
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+}
+
+.zoom-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 44px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.zoom-bar span {
+  margin-right: auto;
+}
+
+.zoom-bar button {
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: 600 13px var(--font);
+  cursor: pointer;
+}
+
+.zoom-stage {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.zoom-stage:active {
+  cursor: grabbing;
+}
+
+.zoom-paper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+
+.zoom-paper svg {
+  display: block;
+}
+
+/* Prose keeps a reading width; examples and tables use the whole column. */
+.doc-crumbs,
+.doc h1,
+.doc-lead,
+.doc-md > :not(.doc-table) {
+  max-width: 760px;
+}
+
+.doc code,
+.doc pre {
+  font-variant-ligatures: none;
+}
+
+/* Previous and next */
+
+.doc-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 920px;
+  margin: 48px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.doc-pager a {
+  display: flex;
+  flex-direction: column;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.doc-pager a:hover {
+  color: var(--accent-hover);
+}
+
+.doc-pager a.is-next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.doc-pager small {
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+/* Search */
+
+.search-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10vh 16px 16px;
+  background: #15171f33;
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+  width: min(640px, 100%);
+  max-height: 70vh;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 18px 50px #25213b29;
+  overflow: hidden;
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.search-field input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+}
+
+.search-results {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 6px;
+}
+
+.search-hit {
+  display: block;
+  padding: 7px 10px;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.search-hit.is-active {
+  background: var(--accent-soft);
+}
+
+.search-hit-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.search-hit-sep {
+  margin: 0 6px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.search-hit-text {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.search mark {
+  border-radius: 2px;
+  background: #ffe58a;
+  color: inherit;
+}
+
+.search-empty {
+  margin: 0;
+  padding: 18px 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.search-foot {
+  display: flex;
+  gap: 16px;
+  padding: 7px 14px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.search-foot kbd + kbd {
+  margin-left: 2px;
+}
+
+.search-count {
+  margin-left: auto;
+}
+
+@media (max-width: 1180px) {
+  .docs-body {
+    grid-template-columns: 232px minmax(0, 1fr);
+  }
+
+  .docs-toc {
+    display: none;
+  }
+}
+
+@media (max-width: 820px) {
+  .docs-top {
+    gap: 12px;
+    padding: 0 16px;
+  }
+
+  .docs-top .wordmark {
+    width: auto;
+  }
+
+  .docs-search-button {
+    width: auto;
+    flex: 1;
+  }
+
+  .docs-search-button kbd,
+  .docs-top-links {
+    display: none;
+  }
+
+  .docs-menu-button {
+    display: block;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: 600 14px var(--font);
+    cursor: pointer;
+  }
+
+  .docs-body {
+    display: block;
+  }
+
+  .docs-side {
+    display: none;
+    position: fixed;
+    inset: var(--top) 0 0;
+    z-index: 9;
+    height: auto;
+    background: var(--surface);
+    border-right: 0;
+  }
+
+  .docs-side.is-open {
+    display: block;
+  }
+
+  .docs-main {
+    padding: 16px 16px 48px;
+  }
+
+  .doc h1 {
+    font-size: 28px;
+  }
+
+  .doc-themes {
+    grid-template-columns: 1fr;
+  }
+
+  .doc-example.is-split .doc-example-body {
+    display: block;
+  }
+
+  .doc-example.is-split > .doc-example-body > .doc-drawing {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-copied {
+    animation: none;
+  }
+}
