@@ -135,3 +135,7 @@ The research did not benchmark competitor rendering quality, latency, or accessi
 Counts are reviewed source/documentation judgments, not 1,040 executed product tests.
 PR [#28](https://github.com/byronwall/draftably/pull/28) is an open rich-node planning PR,
 not proof that its image features have shipped. Coordinate that plan before starting overlapping work.
+
+## Preserved Pro result materials
+
+[Complete original Pro artifacts](../../intent/diagram-library-coverage/assets/pro-results/diagram-library-gaps-2026-10-27/ASSET_INDEX.md) are preserved under the intent entry. ZIP containers remain local.
