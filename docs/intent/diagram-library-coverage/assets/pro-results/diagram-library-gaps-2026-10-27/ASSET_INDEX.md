@@ -6,7 +6,7 @@ Preserved original reports and companions. These are research outputs, not appro
 Original bytes, names, attribution, and relative paths are unchanged. Downloaded code was not executed.
 ZIPs remain in local working storage and are not uploaded. Repackaged input source packets are excluded.
 
-Inventory: 4 result files. Archive contents and available standalone copies were compared byte-for-byte.
+Inventory: 4 result files. Original collected files were copied byte-for-byte. This run supplied no result archive.
 Verified 0 applicable supplied manifest entries.
 
 ## Files
