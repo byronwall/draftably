@@ -12,7 +12,7 @@ export function LiveEditor(props: { examples: string[] }) {
   const first = untrack(() => props.examples[0]);
   const [id, setId] = createSignal(first);
   const [source, setSource] = createSignal(findExample(first)?.source ?? '');
-  const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [] });
+  const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [], items: [] });
   const [lastSvg, setLastSvg] = createSignal('');
   const [ms, setMs] = createSignal(0);
   const edited = () => source() !== findExample(id())?.source;

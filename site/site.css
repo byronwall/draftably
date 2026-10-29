@@ -959,3 +959,424 @@ main {
     display: none;
   }
 }
+
+/* Playground (site/play) and the shared editor and diagram views (site/live) */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.play {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+}
+
+.play-head {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex: none;
+  height: 52px;
+  padding: 0 14px 0 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.play-nav {
+  display: flex;
+  gap: 22px;
+  font-size: 14px;
+}
+
+.play-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 140ms;
+}
+
+.play-nav a:hover,
+.play-nav a[aria-current='page'] {
+  color: var(--text);
+}
+
+.play-nav a[aria-current='page'] {
+  font-weight: 700;
+}
+
+.play-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 140ms,
+    background-color 140ms;
+}
+
+.tool:hover:not(:disabled) {
+  border-color: var(--muted);
+}
+
+.tool:active:not(:disabled) {
+  background: var(--bg);
+}
+
+.tool:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.tool svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tool.is-done svg {
+  color: #2d7a5c;
+  animation: pop 260ms ease-out;
+}
+
+@keyframes pop {
+  40% {
+    transform: scale(1.25);
+  }
+}
+
+.tool.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.tool.primary:hover {
+  background: var(--accent-hover);
+}
+
+.menu-wrap {
+  position: relative;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  padding: 4px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 30px #25213b24;
+}
+
+.menu button {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu button:hover {
+  background: var(--accent-soft);
+}
+
+.menu button span {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.play-body {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: var(--split) 6px 1fr;
+}
+
+.play-source {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--surface);
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  height: 44px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 13.5px;
+  transition: border-color 140ms;
+}
+
+.select:hover {
+  border-color: var(--muted);
+}
+
+.select:first-child {
+  min-width: 0;
+  flex: 1;
+  max-width: 280px;
+}
+
+.select-label {
+  padding-left: 10px;
+  color: var(--muted);
+}
+
+.select select {
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 26px 0 10px;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.select::after {
+  content: '';
+  position: absolute;
+  right: 10px;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid var(--muted);
+  border-bottom: 1.5px solid var(--muted);
+  transform: translateY(-2px) rotate(45deg);
+  pointer-events: none;
+}
+
+.select:focus-within {
+  border-color: var(--accent);
+}
+
+.code-editor {
+  flex: 1;
+  min-height: 0;
+}
+
+.play-status {
+  flex: none;
+  height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 12.5px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.play-status:disabled {
+  cursor: default;
+}
+
+.play-status.is-error {
+  color: var(--danger);
+}
+
+.play-split {
+  cursor: col-resize;
+  background: var(--line);
+  background-clip: content-box;
+  padding: 0 2.5px;
+  touch-action: none;
+  transition: background-color 140ms;
+}
+
+.play-split:hover {
+  background-color: var(--accent);
+}
+
+.play-diagram {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
+.play-diagram:fullscreen {
+  background: var(--canvas);
+}
+
+.diagram-view {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--canvas);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: opacity 120ms;
+}
+
+.diagram-view:active {
+  cursor: grabbing;
+}
+
+.diagram-view.is-stale .diagram-stage {
+  opacity: 0.4;
+}
+
+.diagram-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  transition: opacity 120ms;
+}
+
+.diagram-stage svg {
+  display: block;
+}
+
+.diagram-stage [data-id] {
+  cursor: pointer;
+  transition: opacity 140ms;
+}
+
+.has-linked .diagram-stage [data-id]:not(.is-linked) {
+  opacity: 0.32;
+}
+
+.has-linked .diagram-stage [data-id].is-linked [data-id] {
+  opacity: 1;
+}
+
+.diagram-tools {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 2px 8px #25213b14;
+  cursor: default;
+}
+
+.diagram-tools button {
+  display: grid;
+  place-items: center;
+  min-width: 32px;
+  height: 30px;
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 140ms;
+}
+
+.diagram-tools button + button {
+  border-left: 1px solid var(--line);
+}
+
+.diagram-tools button:hover {
+  background: var(--bg);
+}
+
+.diagram-zoom {
+  min-width: 56px !important;
+  font-variant-numeric: tabular-nums;
+}
+
+.diagram-tools svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+@media (max-width: 900px) {
+  .play-head {
+    gap: 14px;
+    padding: 0 10px;
+  }
+
+  .play-nav {
+    display: none;
+  }
+
+  .play-actions .tool:not(.primary) {
+    padding: 0 9px;
+  }
+
+  .play-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 42% 1fr;
+  }
+
+  .play-diagram {
+    order: -1;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .play-split {
+    display: none;
+  }
+}

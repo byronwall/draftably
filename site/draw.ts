@@ -2,10 +2,19 @@ import { renderSvg } from '../src/cli/svg';
 import { compile, type Diagnostic } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 
+/** A node, group or edge and the source line that declares it. */
+export interface DrawnItem {
+  id: string;
+  type: 'node' | 'group' | 'edge';
+  label: string;
+  line: number;
+}
+
 export interface Drawing {
   /** The SVG, or null when the source has errors. */
   svg: string | null;
   diagnostics: Diagnostic[];
+  items: DrawnItem[];
 }
 
 /** Compile `.draft` source and draw it the way `draftably inspect --svg` does. */
@@ -13,10 +22,32 @@ export async function draw(source: string): Promise<Drawing> {
   try {
     const scene = await compile(source);
     const failed = scene.diagnostics.some(d => d.level === 'error');
-    return { svg: failed ? null : renderSvg(projectScene(scene)), diagnostics: scene.diagnostics };
+    const { objects, edges } = scene.model;
+    const items: DrawnItem[] = [
+      ...objects.map(o => ({ id: o.id, type: o.type, label: o.label, line: o.line })),
+      ...edges.map(e => ({ id: e.id, type: 'edge' as const, label: e.label ?? '', line: e.line })),
+    ];
+    return {
+      svg: failed ? null : renderSvg(projectScene(scene)),
+      diagnostics: scene.diagnostics,
+      items,
+    };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    return { svg: null, diagnostics: [{ level: 'error', code: 'compile', message, ids: [] }] };
+    const line = Number(/^Line (\d+):/.exec(message)?.[1]) || undefined;
+    return {
+      svg: null,
+      diagnostics: [
+        {
+          level: 'error',
+          code: 'compile',
+          message: message.replace(/^Line \d+: /, ''),
+          line,
+          ids: [],
+        },
+      ],
+      items: [],
+    };
   }
 }
 

@@ -1,0 +1,379 @@
+import {
+  createEffect,
+  createMemo,
+  createSignal,
+  For,
+  on,
+  onCleanup,
+  onMount,
+  Show,
+} from 'solid-js';
+import { decodeSource, encodeSource } from '../../src/lib/source-hash';
+import { EXAMPLES, findExample } from '../../src/model/examples';
+import { THEME_IDS } from '../../src/model/appearance';
+import { draw, type Drawing } from '../draw';
+import { CodeEditor, type EditorApi } from '../live/CodeEditor';
+import { DiagramView } from '../live/DiagramView';
+
+const BASE = import.meta.env.BASE_URL;
+const GITHUB = 'https://github.com/byronwall/draftably';
+const SPLIT_KEY = 'draftably.play.split';
+
+const THEME_LINE = /^theme[ \t]+([\w-]+)/m;
+
+/** The source to start from: a shared `#s=` link, then `?example=`, then the checkout example. */
+async function startingSource() {
+  const shared = await decodeSource(location.hash);
+  if (shared != null) return { id: 'shared', source: shared };
+  const asked = findExample(new URLSearchParams(location.search).get('example') ?? '');
+  const ex = asked ?? findExample('checkout') ?? EXAMPLES[0];
+  return { id: ex.id, source: ex.source };
+}
+
+const titleOf = (source: string) => /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'diagram';
+const fileName = (source: string, ext: string) =>
+  `${
+    titleOf(source)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'diagram'
+  }.${ext}`;
+
+function save(blob: Blob, name: string) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+async function savePng(svg: string, name: string) {
+  const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+  const img = new Image();
+  img.src = url;
+  await img.decode();
+  const canvas = document.createElement('canvas');
+  canvas.width = img.naturalWidth * 2;
+  canvas.height = img.naturalHeight * 2;
+  const ctx = canvas.getContext('2d')!;
+  ctx.scale(2, 2);
+  ctx.drawImage(img, 0, 0);
+  URL.revokeObjectURL(url);
+  canvas.toBlob(blob => blob && save(blob, name), 'image/png');
+}
+
+export function Playground() {
+  const [ready, setReady] = createSignal(false);
+  const [exampleId, setExampleId] = createSignal('');
+  const [source, setSource] = createSignal('');
+  const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [], items: [] });
+  const [svg, setSvg] = createSignal('');
+  // Ids for completion and linking, kept from the last source that parsed.
+  const [items, setItems] = createSignal<Drawing['items']>([]);
+  const [ms, setMs] = createSignal(0);
+  const [fitKey, setFitKey] = createSignal('');
+  const [cursorLine, setCursorLine] = createSignal(0);
+  const [hoverId, setHoverId] = createSignal<string | null>(null);
+  const [copied, setCopied] = createSignal(false);
+  const [menu, setMenu] = createSignal(false);
+  const [split, setSplit] = createSignal(readSplit());
+  let editor: EditorApi | undefined;
+  let body!: HTMLDivElement;
+
+  onMount(async () => {
+    const start = await startingSource();
+    setExampleId(start.id);
+    setSource(start.source);
+    setFitKey(`${start.id}:0`);
+    setReady(true);
+  });
+
+  // Redraw after a short pause; a newer edit wins over an older drawing still in flight.
+  let run = 0;
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  createEffect(
+    on([source, ready], ([text]) => {
+      if (!ready()) return;
+      clearTimeout(timer);
+      timer = setTimeout(
+        async () => {
+          const mine = ++run;
+          const t0 = performance.now();
+          const result = await draw(text);
+          if (mine !== run) return;
+          setMs(Math.round(performance.now() - t0));
+          setDrawing(result);
+          if (result.svg) setSvg(result.svg);
+          if (result.items.length) setItems(result.items);
+        },
+        svg() ? 150 : 0,
+      );
+    }),
+  );
+
+  // Keep the URL current, so a refresh or a copied link reopens this source.
+  let hashTimer: ReturnType<typeof setTimeout> | undefined;
+  const writeHash = async () => {
+    const hash = await encodeSource(source());
+    history.replaceState(null, '', `${location.pathname}#${hash}`);
+  };
+  createEffect(
+    on(source, () => {
+      if (!ready()) return;
+      const ex = findExample(exampleId());
+      clearTimeout(hashTimer);
+      if (ex && ex.source === source()) {
+        history.replaceState(null, '', `${location.pathname}?example=${ex.id}`);
+        return;
+      }
+      hashTimer = setTimeout(() => void writeHash(), 400);
+    }),
+  );
+  onCleanup(() => {
+    clearTimeout(timer);
+    clearTimeout(hashTimer);
+  });
+
+  const pickExample = (id: string) => {
+    const ex = findExample(id);
+    if (!ex) return;
+    setExampleId(id);
+    setFitKey(`${id}:${Date.now()}`);
+    editor?.replace(ex.source);
+  };
+
+  const theme = () => THEME_LINE.exec(source())?.[1] ?? 'drafting';
+  const setTheme = (id: string) => {
+    const text = source();
+    const next = THEME_LINE.test(text)
+      ? text.replace(THEME_LINE, `theme ${id}`)
+      : text.replace(/^(diagram[^\n]*\n)?/, m => `${m}theme ${id}\n`);
+    editor?.replace(next);
+  };
+
+  // Two-way links: the cursor's line lifts its objects; a hovered object lights its line.
+  const linkedIds = createMemo(() => {
+    const hover = hoverId();
+    if (hover) return [hover];
+    return items()
+      .filter(i => i.line === cursorLine())
+      .map(i => i.id);
+  });
+  const linkedLines = createMemo(() => {
+    const hover = hoverId();
+    const item = hover ? items().find(i => i.id === hover) : undefined;
+    return item ? [item.line] : [];
+  });
+  const pick = (id: string) => {
+    const item = items().find(i => i.id === id);
+    if (item) editor?.goto(item.line);
+  };
+
+  const problems = () => drawing().diagnostics.filter(d => d.level === 'error');
+  const warnings = () => drawing().diagnostics.filter(d => d.level === 'warning');
+
+  const copyLink = async () => {
+    await writeHash();
+    await navigator.clipboard.writeText(location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1400);
+  };
+  const openInEditor = async () => {
+    location.assign(`${BASE}app/#${await encodeSource(source())}`);
+  };
+
+  // Close the download menu on any outside click.
+  const closeMenu = (e: PointerEvent) => {
+    if (!(e.target as Element).closest('.menu-wrap')) setMenu(false);
+  };
+  onMount(() => document.addEventListener('pointerdown', closeMenu));
+  onCleanup(() => document.removeEventListener('pointerdown', closeMenu));
+
+  const startResize = (e: PointerEvent) => {
+    const handle = e.currentTarget as HTMLElement;
+    handle.setPointerCapture(e.pointerId);
+    const box = body.getBoundingClientRect();
+    const move = (ev: PointerEvent) =>
+      setSplit(Math.min(0.7, Math.max(0.2, (ev.clientX - box.left) / box.width)));
+    const up = () => {
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', up);
+      try {
+        localStorage.setItem(SPLIT_KEY, String(split()));
+      } catch {
+        // Storage can be blocked; the split still works for this visit.
+      }
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', up);
+  };
+
+  return (
+    <div class="play">
+      <header class="play-head">
+        <a class="wordmark" href={BASE}>
+          Draftably
+        </a>
+        <nav class="play-nav">
+          <a href={`${BASE}play`} aria-current="page">
+            Playground
+          </a>
+          <a href={`${BASE}docs`}>Docs</a>
+          <a href={`${BASE}#examples`}>Examples</a>
+          <a href={GITHUB}>GitHub</a>
+        </nav>
+        <div class="play-actions">
+          <button type="button" class="tool" classList={{ 'is-done': copied() }} onClick={copyLink}>
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <Show
+                when={copied()}
+                fallback={
+                  <path d="M6.5 9.5l3-3M7 4.5l1-1a2.8 2.8 0 014 4l-1 1M9 11.5l-1 1a2.8 2.8 0 01-4-4l1-1" />
+                }
+              >
+                <path d="M3.5 8.5l3 3 6-7" />
+              </Show>
+            </svg>
+            Copy link
+          </button>
+          <div class="menu-wrap">
+            <button
+              type="button"
+              class="tool"
+              aria-expanded={menu()}
+              disabled={!svg()}
+              onClick={() => setMenu(m => !m)}
+            >
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M8 2.5v8M4.5 7.5L8 11l3.5-3.5M3 13.5h10" />
+              </svg>
+              Download
+            </button>
+            <Show when={menu()}>
+              <div class="menu" role="menu">
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenu(false);
+                    save(new Blob([svg()], { type: 'image/svg+xml' }), fileName(source(), 'svg'));
+                  }}
+                >
+                  SVG<span>Editable in Draftably</span>
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenu(false);
+                    void savePng(svg(), fileName(source(), 'png'));
+                  }}
+                >
+                  PNG<span>2× resolution</span>
+                </button>
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setMenu(false);
+                    save(new Blob([source()], { type: 'text/plain' }), fileName(source(), 'draft'));
+                  }}
+                >
+                  .draft<span>The source</span>
+                </button>
+              </div>
+            </Show>
+          </div>
+          <button type="button" class="tool primary" onClick={openInEditor}>
+            Open in the editor
+          </button>
+        </div>
+      </header>
+
+      <div class="play-body" ref={body} style={{ '--split': `${split() * 100}%` }}>
+        <section class="play-source" aria-label="Source">
+          <div class="pane-head">
+            <label class="select">
+              <span class="visually-hidden">Example</span>
+              <select value={exampleId()} onChange={e => pickExample(e.currentTarget.value)}>
+                <Show when={exampleId() === 'shared'}>
+                  <option value="shared">Shared diagram</option>
+                </Show>
+                <For each={EXAMPLES}>{ex => <option value={ex.id}>{ex.title}</option>}</For>
+              </select>
+            </label>
+            <label class="select">
+              <span class="select-label">Theme</span>
+              <select value={theme()} onChange={e => setTheme(e.currentTarget.value)}>
+                <For each={THEME_IDS}>
+                  {id => <option value={id}>{id[0].toUpperCase() + id.slice(1)}</option>}
+                </For>
+              </select>
+            </label>
+          </div>
+          <Show when={ready()}>
+            <CodeEditor
+              value={source()}
+              onChange={setSource}
+              diagnostics={drawing().diagnostics}
+              linkedLines={linkedLines()}
+              onCursorLine={setCursorLine}
+              ref={api => (editor = api)}
+            />
+          </Show>
+          <button
+            type="button"
+            class="play-status"
+            classList={{ 'is-error': problems().length > 0 }}
+            disabled={!problems().length && !warnings().length}
+            onClick={() => {
+              const d = problems()[0] ?? warnings()[0];
+              if (d?.line) editor?.goto(d.line);
+            }}
+          >
+            <Show
+              when={problems()[0] ?? warnings()[0]}
+              fallback={<span>{svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…'}</span>}
+            >
+              {d => (
+                <span>
+                  {d().line ? `Line ${d().line}: ` : ''}
+                  {d().message}
+                  {problems().length + warnings().length > 1
+                    ? ` (+${problems().length + warnings().length - 1} more)`
+                    : ''}
+                </span>
+              )}
+            </Show>
+          </button>
+        </section>
+        <div
+          class="play-split"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize panes"
+          onPointerDown={startResize}
+        />
+        <section class="play-diagram" aria-label="Diagram">
+          <DiagramView
+            svg={svg()}
+            stale={!drawing().svg && !!svg()}
+            fitKey={fitKey()}
+            linkedIds={linkedIds()}
+            onHover={setHoverId}
+            onPick={pick}
+          />
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function readSplit() {
+  try {
+    const n = Number(localStorage.getItem(SPLIT_KEY));
+    return n >= 0.2 && n <= 0.7 ? n : 0.38;
+  } catch {
+    return 0.38;
+  }
+}

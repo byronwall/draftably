@@ -1,11 +1,16 @@
 import { Route, Router } from '@solidjs/router';
+import { lazy } from 'solid-js';
 import { render } from 'solid-js/web';
 import { Landing } from './landing/Landing';
 import './site.css';
 
+// The playground brings the code editor; the landing page never loads it.
+const Playground = lazy(() => import('./play/Playground').then(m => ({ default: m.Playground })));
+
 render(
   () => (
     <Router base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+      <Route path="/play" component={Playground} />
       <Route path="*" component={Landing} />
     </Router>
   ),
