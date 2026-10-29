@@ -102,6 +102,17 @@ export function tokenizeLine(text: string): Token[] {
   return out;
 }
 
+const MARK_NAMES: Record<string, string> = {
+  '+': 'added',
+  '-': 'removed',
+  '~': 'changed',
+  '.': 'context',
+};
+
+/** The CSS classes for a token; change marks also name their kind of change. */
+export const tokenClass = (t: Token) =>
+  t.kind === 'mark' ? `tok-mark tok-mark-${MARK_NAMES[t.text]}` : `tok-${t.kind}`;
+
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 /** Highlighted HTML for source, one `<span class="tok-…">` per token and `\n` between lines. */
@@ -111,7 +122,7 @@ export function highlightHtml(source: string): string {
     .map(line =>
       tokenizeLine(line)
         .map(t =>
-          t.kind === 'space' ? esc(t.text) : `<span class="tok-${t.kind}">${esc(t.text)}</span>`,
+          t.kind === 'space' ? esc(t.text) : `<span class="${tokenClass(t)}">${esc(t.text)}</span>`,
         )
         .join(''),
     )

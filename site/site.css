@@ -388,7 +388,7 @@ main {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(300px, 36%) 1fr;
+  grid-template-columns: minmax(300px, 32%) minmax(0, 1fr);
 }
 
 .live-source {
@@ -458,8 +458,20 @@ main {
   color: #6650d9;
 }
 .tok-mark {
-  color: #b13c50;
   font-weight: 700;
+}
+/* Change marks match the diff drawing: added green, removed red, changed amber. */
+.tok-mark-added {
+  color: #2d7a5c;
+}
+.tok-mark-removed {
+  color: #b13c50;
+}
+.tok-mark-changed {
+  color: #a2611a;
+}
+.tok-mark-context {
+  color: #8c92a4;
 }
 .tok-string {
   color: #2d7a5c;
@@ -861,11 +873,6 @@ main {
     height: auto;
   }
 
-  /* The shared 1fr track grows to fit long source lines; hold it to the frame's width. */
-  .hero .live-body {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
   .install-cols {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -931,7 +938,7 @@ main {
   }
 
   .live-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .live-diagram {
