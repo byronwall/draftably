@@ -105,8 +105,8 @@ export function Docs() {
               <article class="doc">
                 <h1>No such page</h1>
                 <p class="doc-lead">
-                  There is no docs page at <code>{location.pathname}</code>. Search with ⌘K or pick a
-                  topic from the list.
+                  There is no docs page at <code>{location.pathname}</code>. Search with ⌘K or pick
+                  a topic from the list.
                 </p>
               </article>
             </main>
@@ -130,7 +130,9 @@ export function Docs() {
           onClose={() => setSearching(false)}
           onPick={(to, query) => {
             setSearching(false);
-            navigate(`${to.split('#')[0]}?q=${encodeURIComponent(query)}${to.includes('#') ? `#${to.split('#')[1]}` : ''}`);
+            navigate(
+              `${to.split('#')[0]}?q=${encodeURIComponent(query)}${to.includes('#') ? `#${to.split('#')[1]}` : ''}`,
+            );
           }}
         />
       </Show>
@@ -266,7 +268,12 @@ function Contents(props: { page: Page }) {
       setCurrent(end ? (props.page.headings.at(-1)?.id ?? id) : id);
     };
     window.addEventListener('scroll', spy, { passive: true });
-    createEffect(on(() => props.page, () => requestAnimationFrame(spy)));
+    createEffect(
+      on(
+        () => props.page,
+        () => requestAnimationFrame(spy),
+      ),
+    );
     onCleanup(() => window.removeEventListener('scroll', spy));
   });
   return (

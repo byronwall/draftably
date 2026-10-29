@@ -18,12 +18,12 @@ Serves the editor and opens the browser. Saves in the editor go back to the file
 made to the file elsewhere show at once. Without a file, it starts on a page that lists the
 folder's `.draft` files, makes a new one, or opens an example.
 
-| Option        | Effect                                                                    |
-| ------------- | ------------------------------------------------------------------------- |
-| `--port N`    | Serve on port N. The default is the first free port from 5180; 0 picks any. |
-| `--no-open`   | Don't open the browser. Use the URL on the `Viewer:` line.                |
-| `--replace`   | Stop an editor already serving this folder and start this version.        |
-| `--status`    | List the running editors: URL, folder, version and process ID.            |
+| Option      | Effect                                                                      |
+| ----------- | --------------------------------------------------------------------------- |
+| `--port N`  | Serve on port N. The default is the first free port from 5180; 0 picks any. |
+| `--no-open` | Don't open the browser. Use the URL on the `Viewer:` line.                  |
+| `--replace` | Stop an editor already serving this folder and start this version.          |
+| `--status`  | List the running editors: URL, folder, version and process ID.              |
 
 Without `--port`, an editor already serving the folder is reused.
 
@@ -37,12 +37,12 @@ draftably check diagrams/ --quiet
 Reports source errors, layout diagnostics and drawing conflicts, such as a line through a box or
 overlapping labels. Exits 1 on errors. Several files or a folder check each `.draft` in turn.
 
-| Option          | Effect                                                                  |
-| --------------- | ----------------------------------------------------------------------- |
-| `--hints`       | Add how far each refinement moved its target from where layout put it. |
-| `--quiet`       | Leave out `info` notes.                                                 |
+| Option          | Effect                                                                                                                        |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `--hints`       | Add how far each refinement moved its target from where layout put it.                                                        |
+| `--quiet`       | Leave out `info` notes.                                                                                                       |
 | `--metrics`     | Measure size, aspect, crossings, bends and line length, and warn on crossings, detours, stranded nodes and an extreme aspect. |
-| `--fit <shape>` | With `--metrics`, warn when the drawing is far from `wide`, `slide`, `square`, `page` or `tall`. |
+| `--fit <shape>` | With `--metrics`, warn when the drawing is far from `wide`, `slide`, `square`, `page` or `tall`.                              |
 
 ## format
 
@@ -68,18 +68,18 @@ draftably inspect architecture.draft --png architecture.png --scale 2
 Prints the canonical geometry of every node and route, or draws the diagram. SVG and PNG output
 embed the source.
 
-| Option              | Effect                                                         |
-| ------------------- | -------------------------------------------------------------- |
-| `--json`            | Print the geometry on one line.                                |
-| `--hints`           | With `--json`, add the raw position of every node a refinement moved. |
-| `--metrics`         | Add the measurements `vary` uses.                              |
-| `--svg`             | Print an SVG drawing.                                          |
-| `--png <out.png>`   | Save a PNG. Needs Chrome, Chromium or Edge.                    |
-| `--scale N`         | PNG scale, 2 by default.                                       |
-| `--max-width <px>`  | Lower the scale so the PNG is at most this wide.               |
-| `--state <id>`      | Draw one [emphasis state](#emphasis-states).                   |
-| `--states`          | Draw every state as its own aligned panel.                     |
-| `--no-source`       | Don't embed the source.                                        |
+| Option             | Effect                                                                |
+| ------------------ | --------------------------------------------------------------------- |
+| `--json`           | Print the geometry on one line.                                       |
+| `--hints`          | With `--json`, add the raw position of every node a refinement moved. |
+| `--metrics`        | Add the measurements `vary` uses.                                     |
+| `--svg`            | Print an SVG drawing.                                                 |
+| `--png <out.png>`  | Save a PNG. Needs Chrome, Chromium or Edge.                           |
+| `--scale N`        | PNG scale, 2 by default.                                              |
+| `--max-width <px>` | Lower the scale so the PNG is at most this wide.                      |
+| `--state <id>`     | Draw one [emphasis state](#emphasis-states).                          |
+| `--states`         | Draw every state as its own aligned panel.                            |
+| `--no-source`      | Don't embed the source.                                               |
 
 ## compare
 
@@ -102,19 +102,19 @@ Tries other layouts for the file, measures each one, and ranks them against the 
 It writes a contact sheet and one PNG per variant to `<name>.vary/`, and prints a table of
 crossings, bends, size and warnings. `--apply <id>` writes a variant into the file.
 
-| Option             | Effect                                                              |
-| ------------------ | ------------------------------------------------------------------- |
-| `--apply <id>`     | Write variant `id` (or `best`) from the last run, then check.       |
-| `--limit N`        | Keep N variants, 4 by default, up to 12.                            |
-| `--try key=a,b`    | Try exactly these values. A second `--try` makes a grid.            |
-| `--grid`           | Try the main engines reading right and down.                        |
-| `--fit <shape>`    | Aim for `wide`, `slide`, `square`, `page` or `tall`.                |
-| `--prefer <goal>`  | Break ties toward `fewer-crossings`, `compact` or `stable`.         |
-| `--from <id>`      | Search around a variant of the last run.                            |
-| `--scope <group>`  | Vary that group's layout line instead of the root's.                |
-| `--budget <time>`  | Stop trying new variants after this long, such as `60s` or `2m`.    |
-| `--out <folder>`   | Write the images somewhere else.                                    |
-| `--json`           | Print `variants.json` instead of the table.                         |
+| Option            | Effect                                                           |
+| ----------------- | ---------------------------------------------------------------- |
+| `--apply <id>`    | Write variant `id` (or `best`) from the last run, then check.    |
+| `--limit N`       | Keep N variants, 4 by default, up to 12.                         |
+| `--try key=a,b`   | Try exactly these values. A second `--try` makes a grid.         |
+| `--grid`          | Try the main engines reading right and down.                     |
+| `--fit <shape>`   | Aim for `wide`, `slide`, `square`, `page` or `tall`.             |
+| `--prefer <goal>` | Break ties toward `fewer-crossings`, `compact` or `stable`.      |
+| `--from <id>`     | Search around a variant of the last run.                         |
+| `--scope <group>` | Vary that group's layout line instead of the root's.             |
+| `--budget <time>` | Stop trying new variants after this long, such as `60s` or `2m`. |
+| `--out <folder>`  | Write the images somewhere else.                                 |
+| `--json`          | Print `variants.json` instead of the table.                      |
 
 [Layout variants](#layout-variants) explains how variants are chosen and ranked.
 

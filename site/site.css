@@ -2732,6 +2732,16 @@ kbd {
     font-size: 28px;
   }
 
+  .doc-lead {
+    font-size: 16px;
+  }
+
+  /* Aligned shell comments read better scrolled than wrapped. */
+  .doc-code pre {
+    white-space: pre;
+    overflow-x: auto;
+  }
+
   .doc-themes {
     grid-template-columns: 1fr;
   }
