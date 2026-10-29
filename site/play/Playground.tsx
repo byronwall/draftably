@@ -7,6 +7,7 @@ import {
   onCleanup,
   onMount,
   Show,
+  untrack,
 } from 'solid-js';
 import { decodeSource, encodeSource } from '../../src/lib/source-hash';
 import { EXAMPLES, findExample } from '../../src/model/examples';
@@ -14,7 +15,8 @@ import { THEME_IDS } from '../../src/model/appearance';
 import { draw, type Drawing } from '../draw';
 import { CodeEditor, type EditorApi } from '../live/CodeEditor';
 import { DiagramView } from '../live/DiagramView';
-import { readImageSource } from '../../src/model/embed';
+import { embedPngSource, embedSvgSource } from '../../src/model/embed';
+import { deliver, incoming, readDiagramFile, REOPEN_HINT } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
@@ -25,6 +27,9 @@ const THEME_LINE = /^theme[ \t]+([\w-]+)/m;
 
 /** The source to start from: a shared `#s=` link, then `?example=`, then the checkout example. */
 async function startingSource() {
+  // A file dropped or pasted on another page, handed over by the site shell.
+  const handed = incoming();
+  if (handed) return { id: 'shared', source: handed.source };
   const shared = await decodeSource(location.hash);
   if (shared != null) return { id: 'shared', source: shared };
   const asked = findExample(new URLSearchParams(location.search).get('example') ?? '');
@@ -49,7 +54,8 @@ function save(blob: Blob, name: string) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-async function savePng(svg: string, name: string) {
+/** A PNG of the drawing at 2x, carrying its source so it opens again. */
+async function savePng(svg: string, source: string, name: string) {
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
   const img = new Image();
   img.src = url;
@@ -61,7 +67,10 @@ async function savePng(svg: string, name: string) {
   ctx.scale(2, 2);
   ctx.drawImage(img, 0, 0);
   URL.revokeObjectURL(url);
-  canvas.toBlob(blob => blob && save(blob, name), 'image/png');
+  const png = await new Promise<Blob | null>(done => canvas.toBlob(done, 'image/png'));
+  if (!png) return;
+  const bytes = await embedPngSource(new Uint8Array(await png.arrayBuffer()), source);
+  save(new Blob([bytes], { type: 'image/png' }), name);
 }
 
 export function Playground() {
@@ -150,22 +159,23 @@ export function Playground() {
     if (ready()) document.title = `${titleOf(source())} · Draftably playground`;
   });
 
-  // Open a dropped .draft file, or the source inside an SVG or PNG that Draftably exported.
-  const [dropping, setDropping] = createSignal(false);
-  const [dropError, setDropError] = createSignal('');
-  const openFile = async (file: File) => {
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    const text = /\.(svg|png)$/i.test(file.name)
-      ? await readImageSource(bytes)
-      : new TextDecoder().decode(bytes);
-    if (text == null) {
-      setDropError(`${file.name} has no Draftably source in it.`);
-      setTimeout(() => setDropError(''), 3000);
-      return;
-    }
+  // Source the site shell hands over (a dropped or pasted file) replaces what is open.
+  let seen = untrack(incoming)?.at ?? 0;
+  createEffect(() => {
+    const handed = incoming();
+    if (!handed || handed.at === seen || !ready()) return;
+    seen = handed.at;
     setExampleId('shared');
-    setFitKey(`file:${Date.now()}`);
-    editor?.replace(text);
+    setFitKey(`file:${handed.at}`);
+    editor?.replace(handed.source);
+  });
+  const [fileError, setFileError] = createSignal('');
+  const openFile = async (file: File) => {
+    const text = await readDiagramFile(file);
+    if (text == null) {
+      setFileError(`${file.name} has no Draftably source in it.`);
+      setTimeout(() => setFileError(''), 3500);
+    } else deliver(text);
   };
 
   const theme = () => THEME_LINE.exec(source())?.[1] ?? 'drafting';
@@ -249,20 +259,6 @@ export function Playground() {
   return (
     <div
       class="play"
-      onDragOver={e => {
-        if (!e.dataTransfer?.types.includes('Files')) return;
-        e.preventDefault();
-        setDropping(true);
-      }}
-      onDragLeave={e => {
-        if (!e.relatedTarget) setDropping(false);
-      }}
-      onDrop={e => {
-        e.preventDefault();
-        setDropping(false);
-        const file = e.dataTransfer?.files[0];
-        if (file) void openFile(file);
-      }}
       onKeyDown={e => {
         if (e.key === 'Escape') setPicked(null);
         if ((e.metaKey || e.ctrlKey) && e.key === 's') {
@@ -271,13 +267,9 @@ export function Playground() {
         }
       }}
     >
-      <Show when={dropping() || dropError()}>
-        <div
-          class="drop-veil"
-          classList={{ 'is-error': !!dropError() }}
-          onClick={() => setDropError('')}
-        >
-          {dropError() || 'Drop a .draft file, or an SVG or PNG exported by Draftably'}
+      <Show when={fileError()}>
+        <div class="drop-veil is-error" onClick={() => setFileError('')}>
+          {fileError()}
         </div>
       </Show>
       <header class="play-head">
@@ -329,20 +321,23 @@ export function Playground() {
                   role="menuitem"
                   onClick={() => {
                     setMenu(false);
-                    save(new Blob([svg()], { type: 'image/svg+xml' }), fileName(source(), 'svg'));
+                    save(
+                      new Blob([embedSvgSource(svg(), source())], { type: 'image/svg+xml' }),
+                      fileName(source(), 'svg'),
+                    );
                   }}
                 >
-                  SVG<span>Editable in Draftably</span>
+                  SVG<span>Opens again here</span>
                 </button>
                 <button
                   type="button"
                   role="menuitem"
                   onClick={() => {
                     setMenu(false);
-                    void savePng(svg(), fileName(source(), 'png'));
+                    void savePng(svg(), source(), fileName(source(), 'png'));
                   }}
                 >
-                  PNG<span>2× resolution</span>
+                  PNG<span>2×, opens again here</span>
                 </button>
                 <button
                   type="button"
@@ -367,7 +362,12 @@ export function Playground() {
       <div class="play-body" ref={body} style={{ '--split': `${split() * 100}%` }}>
         <section class="play-source" aria-label="Source">
           <div class="pane-head">
-            <ExamplePicker current={exampleId()} title={pickerTitle()} onPick={pickExample} />
+            <ExamplePicker
+              current={exampleId()}
+              title={pickerTitle()}
+              onPick={pickExample}
+              onOpenFile={file => void openFile(file)}
+            />
             <label class="select">
               <span class="select-label">Theme</span>
               <select value={theme()} onChange={e => setTheme(e.currentTarget.value)}>
@@ -499,7 +499,7 @@ export function Playground() {
                 when={source().trim()}
                 fallback={
                   <>
-                    <p>Nothing to draw yet.</p>
+                    <p>Nothing to draw yet. {REOPEN_HINT}, or start here.</p>
                     <div>
                       <button type="button" class="tool" onClick={() => pickExample('blank')}>
                         Start from two nodes

@@ -1,7 +1,9 @@
 import { createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/examples';
 import { appUrl, paperOf } from '../draw';
+import { useNavigate } from '@solidjs/router';
 import { LiveEditor } from '../live/LiveEditor';
+import { deliver, readDiagramFile } from '../reopen';
 import { Points } from './Points';
 import { drawSvg, enqueue, whenSeen } from './render';
 
@@ -41,6 +43,7 @@ export function Landing() {
                 Plain-text <code>.draft</code> files in, clean diagrams out. Draftably lays out the
                 boxes and routes the lines. Edit the source below and watch it redraw.
               </p>
+              <ReopenLine />
             </div>
             <div class="hero-actions">
               <a class="button primary" href={appUrl()}>
@@ -220,5 +223,38 @@ function Install() {
         </div>
       </div>
     </section>
+  );
+}
+
+/** Someone with an exported diagram goes straight back to editing it. */
+function ReopenLine() {
+  const navigate = useNavigate();
+  const [error, setError] = createSignal('');
+  const choose = async (file: File) => {
+    const source = await readDiagramFile(file);
+    if (source == null) return setError(`${file.name} has no Draftably source in it.`);
+    deliver(source);
+    navigate('/play');
+  };
+  return (
+    <p class="hero-reopen" classList={{ 'is-error': !!error() }}>
+      {error() || 'Have a Draftably PNG or SVG? Drop or paste it anywhere, or '}
+      <Show when={!error()}>
+        <label class="hero-reopen-pick">
+          choose a file
+          <input
+            type="file"
+            accept=".draft,.png,.svg,text/plain,image/png,image/svg+xml"
+            class="sr-only"
+            onChange={e => {
+              const file = e.currentTarget.files?.[0];
+              e.currentTarget.value = '';
+              if (file) void choose(file);
+            }}
+          />
+        </label>
+        , to keep editing.
+      </Show>
+    </p>
   );
 }

@@ -1,6 +1,7 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { EXAMPLES, type ExampleInfo } from '../../src/model/examples';
 import { thumbnail, type Thumbnail } from '../live/thumbnail';
+import { REOPEN_HINT } from '../reopen';
 
 export const BLANK = `diagram "Untitled" version=1
 
@@ -37,6 +38,7 @@ export function ExamplePicker(props: {
   current: string;
   title: string;
   onPick: (id: string) => void;
+  onOpenFile: (file: File) => void;
 }) {
   const [open, setOpen] = createSignal(false);
   const [query, setQuery] = createSignal('');
@@ -89,17 +91,34 @@ export function ExamplePicker(props: {
             button.focus();
           }}
         >
-          <input
-            ref={input}
-            class="picker-search"
-            type="search"
-            placeholder={`Search ${EXAMPLES.length} examples`}
-            value={query()}
-            onInput={e => setQuery(e.currentTarget.value)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && shown()[0]) pick(shown()[0].id);
-            }}
-          />
+          <div class="picker-top">
+            <input
+              ref={input}
+              class="picker-search"
+              type="search"
+              placeholder={`Search ${EXAMPLES.length} examples`}
+              value={query()}
+              onInput={e => setQuery(e.currentTarget.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && shown()[0]) pick(shown()[0].id);
+              }}
+            />
+            <label class="tool picker-file" title={REOPEN_HINT}>
+              Open a file…
+              <input
+                type="file"
+                accept=".draft,.png,.svg,text/plain,image/png,image/svg+xml"
+                class="visually-hidden"
+                onChange={e => {
+                  const file = e.currentTarget.files?.[0];
+                  e.currentTarget.value = '';
+                  if (!file) return;
+                  setOpen(false);
+                  props.onOpenFile(file);
+                }}
+              />
+            </label>
+          </div>
           <div class="picker-grid">
             <Show when={!query()}>
               <button type="button" class="picker-card picker-blank" onClick={() => pick('blank')}>
