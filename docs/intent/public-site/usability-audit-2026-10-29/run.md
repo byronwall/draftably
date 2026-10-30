@@ -14,15 +14,15 @@
 - Submitted: 2026-10-29 about 21:36 EDT (2026-10-30 01:36 UTC).
 - Collection check: 2026-10-29 23:39 EDT; Pro had completed (34m 7s displayed).
 - Checked at 22:41 EDT: Pro is still processing, with live browser tasks and source review visible. Stop control remains present. No resend or follow-up was sent.
-- Phase: collected, integrated, and validated; opening review PR.
+- Phase: complete; audit-only review PR open, verified, and attached to this chat.
 - Follow-ups: 0.
-- Heartbeat: `complete-draftably-deep-usability-audit`, ACTIVE, hourly at minute 37, attached to this chat.
+- Heartbeat: `complete-draftably-deep-usability-audit`, deleted after successful completion.
 - Evidence working folder: `tmp/evals/website-experience-audit/2026-10-29/` (ignored).
 - Collected Pro results: 127 original files at `../assets/pro-results/2026-10-29-usability/`; all 125 manifest hashes and sizes verified. README and manifest are the two unlisted files. ZIP inspected before extraction and retained only in ignored tmp.
 - Outputs: [summary.md](summary.md), [repair-plan.md](repair-plan.md), [assets-index.md](assets-index.md), and [issues.md](issues.md).
 - Pro additions: five new issues #304–#308 after open/closed duplicate review; Search evidence added to #254.
 - Current-state check: Pages redirects to `draftably.dev`; ordinary Editor entry succeeded. New retention and Space activation defects reproduced. Current main `d6f359d` contains several other repairs; do not duplicate them. No follow-up needed.
-- PR: pending final integration.
+- PR: https://github.com/byronwall/draftably/pull/319. Saved body verified: three GitHub screenshot URLs, no local image references. Paginated file list verified: 136 files including all 127 original assets; no ZIP or tmp files.
 
 ## Continuation rules
 
@@ -57,4 +57,6 @@ Site user tab: `2011000539`. Pro agent tab: `2011000542`. Rebind from fresh inve
 
 ## Final validation
 
-Full `pnpm check` passed: typecheck, lint, format, 61 test files (353 tests), 195 layout assertions, 55 sculpt checks, 320 parity comparisons, and production build. Vite reported its existing large-chunk advisory. Original hashes, local report links, staged inventory (127 assets), and `git diff --check` passed. No ZIP or tmp screenshot is staged.
+Full `pnpm check` passed: typecheck, lint, format, 61 test files (353 tests), 195 layout assertions, 55 sculpt checks, 320 parity comparisons, and production build. Vite reported its existing large-chunk advisory. Original hashes, local report links, and staged inventory (127 assets) passed. The whitespace check passed for authored reports. Supplied originals contain trailing whitespace and blank lines; these remain unchanged to preserve their hashes. No ZIP or tmp screenshot is staged.
+
+Completed on 2026-10-30 UTC (2026-10-29 EDT). No implementation, merge, or deployment was performed. Stop for review.
