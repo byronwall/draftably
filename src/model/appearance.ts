@@ -106,6 +106,8 @@ export interface EmphasisState {
 export interface Heading {
   title?: string;
   subtitle?: string;
+  /** Width of the frame round the drawing, from `diagram width=`; never narrower than its content. */
+  width?: number;
 }
 
 export interface LegendEntry {

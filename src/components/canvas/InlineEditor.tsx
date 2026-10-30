@@ -5,14 +5,17 @@ import { drawnSwatch } from '../../model/colors';
 import { findEdge, findGroup, findNode, objectRect, styleOf } from '../../model/graph';
 import {
   finishInlineEdit,
+  HEADING_EDIT,
   inlineDraft,
+  startInlineEdit,
   quickExtend,
   setInlineDraft,
   setTool,
 } from '../../state/actions';
 import { doc, setSelection } from '../../state/document';
 import { focusCanvas, inlineEditId, stageSize } from '../../state/editor';
-import { geometry, routesById } from '../../state/scene';
+import { geometry, routesById, viewerFrame } from '../../state/scene';
+import { headingSlot } from './Frame';
 
 /** A text box over the canvas for editing a shape, container or connection label in place. */
 export function InlineEditor() {
@@ -37,7 +40,19 @@ function Editor(props: { id: string }) {
       ink = look().text,
       align: 'center' | 'left' = 'center',
       radius = 4;
-    if (findEdge(doc, props.id)) {
+    const key =
+        props.id === HEADING_EDIT.title
+          ? 'title'
+          : props.id === HEADING_EDIT.subtitle
+            ? 'subtitle'
+            : undefined,
+      slot = key && headingSlot(viewerFrame(), key);
+    if (slot) {
+      type = slot.type;
+      ink = key === 'title' ? look().text : look().muted;
+      align = 'left';
+      world = slot;
+    } else if (findEdge(doc, props.id)) {
       const route = routesById().get(props.id),
         at = route?.label ?? route?.points[Math.floor(route.points.length / 2)] ?? { x: 0, y: 0 };
       const w = Math.max(route?.label?.w ?? 0, 120),
@@ -90,11 +105,15 @@ function Editor(props: { id: string }) {
   };
 
   const label = () =>
-    findEdge(doc, props.id)
-      ? 'Edit connection label'
-      : findGroup(doc, props.id)
-        ? 'Edit container title'
-        : 'Edit node title';
+    props.id === HEADING_EDIT.title
+      ? 'Edit diagram title'
+      : props.id === HEADING_EDIT.subtitle
+        ? 'Edit diagram subtitle'
+        : findEdge(doc, props.id)
+          ? 'Edit connection label'
+          : findGroup(doc, props.id)
+            ? 'Edit container title'
+            : 'Edit node title';
 
   onMount(() => {
     input.focus();
@@ -111,6 +130,10 @@ function Editor(props: { id: string }) {
       e.preventDefault();
       const id = props.id;
       finishInlineEdit(true);
+      // Tab from the title goes on to the subtitle.
+      if (id === HEADING_EDIT.title && doc.appearance.heading?.title)
+        return startInlineEdit(HEADING_EDIT.subtitle);
+      if (id.startsWith('@')) return focusCanvas();
       setSelection([id]);
       if (findNode(doc, id) || findEdge(doc, id)) quickExtend({ sibling: e.shiftKey });
       else focusCanvas();

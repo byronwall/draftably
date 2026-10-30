@@ -456,7 +456,8 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     const heading: NonNullable<DiagramAppearance['heading']> = {};
     for (const key of ['title', 'subtitle'] as const)
       if (typeof h[key] === 'string' && h[key]) heading[key] = h[key];
-    if (heading.title || heading.subtitle) out.heading = heading;
+    if (typeof h.width === 'number' && h.width > 0) heading.width = h.width;
+    if (heading.title || heading.subtitle || heading.width) out.heading = heading;
   }
   const cfg = input.config;
   if (cfg && typeof cfg === 'object') {
