@@ -1128,8 +1128,19 @@ main {
   cursor: pointer;
 }
 
-.menu button:hover {
+.menu button:hover:not(:disabled) {
   background: var(--accent-soft);
+}
+
+.menu button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.menu-note {
+  margin: 2px 10px 6px;
+  color: var(--muted);
+  font-size: 12.5px;
 }
 
 .menu button span {

@@ -79,6 +79,8 @@ export function Playground() {
   const [exampleId, setExampleId] = createSignal('');
   const [source, setSource] = createSignal('');
   const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [], items: [] });
+  // The source that `drawing` was drawn from; it lags `source` while a redraw is pending.
+  const [drawn, setDrawn] = createSignal('');
   const [svg, setSvg] = createSignal('');
   // Ids for completion and linking, kept from the last source that parsed.
   const [items, setItems] = createSignal<Drawing['items']>([]);
@@ -115,6 +117,7 @@ export function Playground() {
           if (mine !== run) return;
           setMs(Math.round(performance.now() - t0));
           setDrawing(result);
+          setDrawn(text);
           if (result.svg) setSvg(result.svg);
           if (result.items.length) setItems(result.items);
         },
@@ -217,6 +220,17 @@ export function Playground() {
   const [listOpen, setListOpen] = createSignal(false);
   // An empty file compiles to a blank page; show the empty state instead.
   const shown = () => (source().trim() ? svg() : '');
+  // An image export must show the current source, not the last drawing that worked.
+  const imageBlocked = () => {
+    const err = problems()[0];
+    if (err)
+      return err.line
+        ? `Fix line ${err.line} to export the image`
+        : 'Fix the source to export the image';
+    if (!source().trim()) return 'Nothing to draw yet';
+    if (drawn() !== source() || !drawing().svg) return 'Drawing…';
+    return '';
+  };
 
   const copyLink = async () => {
     await writeHash();
@@ -298,7 +312,7 @@ export function Playground() {
               type="button"
               class="tool"
               aria-expanded={menu()}
-              disabled={!svg()}
+              disabled={!ready()}
               onClick={() => setMenu(m => !m)}
               onKeyDown={e => {
                 if (e.key === 'Escape') setMenu(false);
@@ -314,6 +328,8 @@ export function Playground() {
                 <button
                   type="button"
                   role="menuitem"
+                  disabled={!!imageBlocked()}
+                  aria-describedby={imageBlocked() ? 'export-note' : undefined}
                   onClick={() => {
                     setMenu(false);
                     save(
@@ -327,6 +343,8 @@ export function Playground() {
                 <button
                   type="button"
                   role="menuitem"
+                  disabled={!!imageBlocked()}
+                  aria-describedby={imageBlocked() ? 'export-note' : undefined}
                   onClick={() => {
                     setMenu(false);
                     void savePng(svg(), source(), fileName(source(), 'png'));
@@ -334,6 +352,11 @@ export function Playground() {
                 >
                   PNG<span>2×, opens again here</span>
                 </button>
+                <Show when={imageBlocked()}>
+                  <p class="menu-note" id="export-note">
+                    {imageBlocked()}
+                  </p>
+                </Show>
                 <button
                   type="button"
                   role="menuitem"
