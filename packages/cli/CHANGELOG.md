@@ -1,5 +1,35 @@
 # draftably
 
+## 0.8.0
+
+### Minor Changes
+
+- 304a7b2: The viewer draws the export frame: the title and subtitle above the drawing and the legend under it. Double-click the title or subtitle to edit it, and drag the frame's right edge to widen it; the width saves as diagram width=N. A first open in a small window now fits the diagram.
+- 51dd609: The viewer copies a diagram to the clipboard: Copy image (⇧⌘C, the export menu and the canvas right-click menu) writes PNG, SVG, HTML and SVG text in one copy, falling back to what the browser accepts, and the toast names the formats. With something selected it copies only the selection. Copy as gives SVG markup, the .draft source or a link. One export dialog for PNG, SVG, PDF and Copy shows a preview and remembers scale, background and heading. `inspect --clipboard` puts a PNG and the SVG text on the macOS clipboard.
+- ce5b6ae: Viewers from draftably open stop after 2 hours with no open tab or when their folder is deleted, and the CLI notes on stderr when npm has a newer version (checked once a day; DRAFTABLY_NO_UPDATE_CHECK=1 skips it).
+- 1ea8aca: draftably docs prints the language guide that ships with the CLI: its contents, one section (docs legend), or all of it.
+- 4393e15: New `draftably pdf <files|folder> -o out.pdf` writes one vector PDF of a diagram set: a page per diagram (or per state with `--states`) with its heading and key, `--page fit|letter|a4|slide`, `--order given|name|title`, a cover and contents with `--title`, bookmarks, and each file's source attached. `check`, `extract` and `open` read a PDF's sources back (`out.pdf#name.draft` names one). The viewer has Export PDF… in the export menu and a PDF button in the files panel to pick, order and export several diagrams.
+- 59d0134: New `note "…"` statement: a sentence on the diagram that never moves the layout. Without `near=` it sits in the frame under the subtitle; `note "…" near=id side=below|above|left|right` places it beside an object in free space after layout. Notes wrap at 280px (`width=` changes that) and draw in the viewer, `inspect --svg` and exports. `check` warns `note-overlap` when an anchored note has no clear spot.
+
+### Patch Changes
+
+- 666998f: The viewer shows the Draftably mark on its start screen and in the browser tab.
+- 337c0c7: The editor keeps unsaved edits to an example or a Playground diagram in browser storage. A reload brings them back and says so.
+- cc8fcb7: A layout preview that does not fit the visible canvas is now fitted, so the whole result shows next to the layout panel.
+- 74994ef: The viewer opens source shared from the playground in a #s= link as a scratch copy.
+- 15cd3ac: The editor's File menu starts with New diagram and lists the same curated examples as the Playground. The layout test cases move to a closed section at the bottom.
+- 93ffbae: The language guide's Rules table renders as one table, and its full examples are tagged `draft` so the site draws them.
+- ec1bff2: `count=` takes a short symbol as well as a number: `count=N` draws a `×N` badge on the stack, for "one per item" when no real number fits.
+- bb573bf: Routing is about twice as fast on large diagrams: each line searches near its two boxes first and the whole drawing only when that fails. Some lines take slightly different paths.
+- bcae043: A node dropped in the viewer keeps the place it was dropped. It is saved `near` a neighbour it lines up with, and a node under another in a layout that reads down is saved below it, not beside the node across the gap. When that `near` would draw it somewhere else, the drop saves a `stay` at the exact point instead, and the saved message offers "Keep exact position".
+- c064b52: The viewer now calls itself Draftably in the page title and start screen.
+- 60d4b2b: The viewer's debug API waits for the canvas before exporting, and adds ready().
+- a2760db: The editor's File menu and shortcuts dialog link to the Docs and open the current source in the Playground. An example opened from the Playground offers Back to Playground.
+- 432ceea: check warns when a legend swatch's shade matches none of its family's nodes, and names the shade to add (legend-shade).
+- 80485f5: In a compound-flow layout, a group member with no edge to another member now sits across where its outside neighbours are. Two outcomes fed by one node in another group sit together on that node's side, and their return lines run side by side.
+- 698b1e9: A bare quote inside a quoted string now fails with its line and column and suggests `\"`. The language guide and agent skill list the escapes: `\"`, `\\` and `\n`.
+- be079ef: Diamonds are always square. A long question grows the square and wraps wider, a `size` line keeps the larger side, and `check` notes a diamond much larger than the shapes around it.
+
 ## 0.7.0
 
 ### Minor Changes
