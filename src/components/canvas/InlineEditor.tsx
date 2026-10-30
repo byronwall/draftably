@@ -7,7 +7,6 @@ import {
   finishInlineEdit,
   HEADING_EDIT,
   inlineDraft,
-  startInlineEdit,
   quickExtend,
   setInlineDraft,
   setTool,
@@ -130,9 +129,6 @@ function Editor(props: { id: string }) {
       e.preventDefault();
       const id = props.id;
       finishInlineEdit(true);
-      // Tab from the title goes on to the subtitle.
-      if (id === HEADING_EDIT.title && doc.appearance.heading?.title)
-        return startInlineEdit(HEADING_EDIT.subtitle);
       if (id.startsWith('@')) return focusCanvas();
       setSelection([id]);
       if (findNode(doc, id) || findEdge(doc, id)) quickExtend({ sibling: e.shiftKey });
