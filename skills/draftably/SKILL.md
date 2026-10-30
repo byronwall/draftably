@@ -295,8 +295,9 @@ content area.
   arrangement; by default it follows `aspect=` (1.6).
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
-- Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)
-  instead of drawing each one.
+- Collapse many similar things into one node with `count=42` (drawn as a stack with a `×42` badge)
+  instead of drawing each one. For "one per item" with no real number, use a symbol: `count=N`
+  draws `×N` (also `count=many`), so no one asks where a made-up number came from.
 - When one diagram answers several questions (the write path, the read path, what a PR touches),
   add a `state` line for each instead of drawing several diagrams:
   `state write "Write path" api orders db`. Listed IDs are in focus and the rest fades; a

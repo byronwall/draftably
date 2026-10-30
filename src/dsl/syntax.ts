@@ -235,8 +235,11 @@ export interface ModelObject {
   was?: string;
   /** A link to open from exported drawings, such as a source file or URL. */
   href?: string;
-  /** Nodes only: how many things this one box stands for, drawn as a stack with a badge. */
-  count?: number;
+  /**
+   * Nodes only: how many things this one box stands for, drawn as a stack with a badge. A short
+   * symbol such as `N` or `many` stands for an unknown number.
+   */
+  count?: number | string;
   /**
    * Groups only: `soft` draws a tint behind the members and `none` draws nothing. Either way the
    * group is not a layout scope: its members are laid out with the nearest framed container's.
@@ -443,6 +446,8 @@ export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
 const FRAMES = ['box', 'soft', 'none'] as const;
+/** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
+const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
 const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
 
@@ -504,6 +509,10 @@ export function parseModel(source: string | SourceDoc): Model {
         `Expected ${key} from ${min} to ${max}; got ${w.value}.`,
       );
       return n;
+    };
+    const countOf = () => {
+      const w = attrs.get('count')!;
+      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num('count', 2, 2, 1_000_000);
     };
     const choice = <T extends string>(key: string, fallback: T, choices: readonly T[]): T => {
       const value = (attrs.get(key)?.value ?? fallback) as T;
@@ -691,7 +700,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
-          ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
+          ...(attrs.has('count') ? { count: countOf() } : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
             : {}),

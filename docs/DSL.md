@@ -116,7 +116,8 @@ same way. It never changes the link.
 
 `count=42` on a node
 says the box stands for 42 things: it draws as a stack with a `×42` badge, so a component used in
-hundreds of places is one box rather than hundreds.
+hundreds of places is one box rather than hundreds. When there is no real number to show, give a
+letter or short word instead: `count=N` draws `×N`, and `count=many` draws `×many`.
 
 ## Soft groups
 

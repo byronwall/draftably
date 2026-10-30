@@ -29,8 +29,8 @@ export interface DiagramNode {
   was?: string;
   /** A link to open from exported drawings. */
   href?: string;
-  /** How many things this box stands for; drawn as a stack with a badge. */
-  count?: number;
+  /** How many things this box stands for, or a symbol such as `N`; drawn as a stack with a badge. */
+  count?: number | string;
   /** A cell's columns (or units), or `var` for a field of variable length. */
   span?: number | 'var';
   parentId?: string;
