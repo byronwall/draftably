@@ -2,10 +2,13 @@ import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } 
 import { findGroup, findNode } from '../model/graph';
 import type { BuildMode } from '../model/edits';
 import { buildFromList, setTool } from '../state/actions';
+import { commandEnabled, runCommand } from '../state/commands';
 import { doc, selectedIds } from '../state/document';
+import { siteUrl } from '../state/launch';
 import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
 import { IconButton } from './controls';
 import { ExportDialog } from './ExportDialog';
+import { Icon } from './Icon';
 import './dialogs.css';
 
 /** The single modal dialog that is open, if any. */
@@ -143,6 +146,21 @@ const SHORTCUTS: [string, string][] = [
 function HelpDialog() {
   return (
     <Modal title="Keyboard shortcuts" class="wide">
+      <div class="help-links">
+        <a class="button small" href={siteUrl('docs')} target="_blank" rel="noopener">
+          <Icon name="globe" />
+          Docs
+        </a>
+        <button
+          type="button"
+          class="button small"
+          disabled={!commandEnabled('open-playground')}
+          onClick={() => runCommand('open-playground')}
+        >
+          <Icon name="code" />
+          Open in Playground
+        </button>
+      </div>
       <div class="shortcuts">
         <For each={SHORTCUTS}>
           {([action, keys]) => (

@@ -123,6 +123,10 @@ export const fileMode = () => !!state.info();
 export const exampleMode = () => !!state.info()?.example;
 /** The example has edits that are not in any file. */
 export const exampleEdited = () => exampleMode() && state.undoStack().length > 0;
+/** The user already agreed to leave the page, so the browser need not ask again. */
+let leaving = false;
+export const leaveAgreed = () => leaving;
+export const agreeToLeave = () => void (leaving = true);
 export const fileStatus = state.status;
 export const sourceError = state.sourceError;
 export const fileScene = state.scene;

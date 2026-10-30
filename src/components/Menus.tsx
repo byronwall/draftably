@@ -241,6 +241,8 @@ function FileMenu() {
       <hr />
       <MenuItem command="theme" />
       <MenuItem command="help" />
+      <MenuItem command="docs" />
+      <MenuItem command="open-playground" />
     </>
   );
 }

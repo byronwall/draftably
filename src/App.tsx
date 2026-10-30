@@ -21,7 +21,7 @@ import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
-import { exampleEdited, exampleMode, fileMode } from './state/file-session';
+import { exampleEdited, exampleMode, fileMode, leaveAgreed } from './state/file-session';
 import { openFile } from './state/files';
 import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
@@ -107,7 +107,7 @@ export default function App() {
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       finishInlineEdit(true);
       (document.activeElement as HTMLElement | null)?.blur?.();
-      if (!exampleEdited()) return;
+      if (!exampleEdited() || leaveAgreed()) return;
       e.preventDefault();
       // Older Chrome and Safari show the prompt only when returnValue is set.
       e.returnValue = '';
