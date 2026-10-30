@@ -23,20 +23,34 @@ import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
 const SPLIT_KEY = 'draftably.play.split';
+const DRAFT_KEY = 'draftably.play.draft';
 
 const THEME_LINE = /^theme[ \t]+([\w-]+)/m;
 
-/** The source to start from: a shared `#s=` link, then `?example=`, then the checkout example. */
+/** The source the URL names: a shared `#s=` link, then `?example=`. */
+async function urlSource() {
+  const shared = await decodeSource(location.hash);
+  if (shared != null) return { id: 'shared', source: shared };
+  const ex = findExample(new URLSearchParams(location.search).get('example') ?? '');
+  return ex ? { id: ex.id, source: ex.source } : null;
+}
+
+/** The source to start from: a handed-over file, the URL, the saved draft, then checkout. */
 async function startingSource() {
   // A file dropped or pasted on another page, handed over by the site shell.
   const handed = incoming();
   if (handed) return { id: 'shared', source: handed.source };
-  const shared = await decodeSource(location.hash);
-  if (shared != null) return { id: 'shared', source: shared };
-  const asked = findExample(new URLSearchParams(location.search).get('example') ?? '');
-  const ex = asked ?? findExample('checkout') ?? EXAMPLES[0];
+  const fromUrl = await urlSource();
+  if (fromUrl) return fromUrl;
+  const draft = readDraft();
+  if (draft) return { id: 'draft', source: draft };
+  const ex = findExample('checkout') ?? EXAMPLES[0];
   return { id: ex.id, source: ex.source };
 }
+
+/** Source the visitor wrote or changed, as opposed to an example as it ships. */
+const isCustom = (text: string) =>
+  !!text.trim() && text !== BLANK && !EXAMPLES.some(e => e.source === text);
 
 const titleOf = (source: string) => /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'Untitled diagram';
 const fileName = (source: string, ext: string) =>
@@ -94,13 +108,35 @@ export function Playground() {
   let editor: EditorApi | undefined;
   let body!: HTMLDivElement;
 
+  // A shared link is someone else's work: it becomes the saved draft only once it is typed in.
+  let fromLink = false;
   onMount(async () => {
     const start = await startingSource();
+    fromLink = start.id === 'shared' && !untrack(incoming);
     setExampleId(start.id);
     setSource(start.source);
     setFitKey(`${start.id}:0`);
     setReady(true);
   });
+
+  // Keep the last custom draft, so a bare /play (a nav link, a new tab) resumes it.
+  const saveDraft = () => {
+    if (ready() && !fromLink && isCustom(source())) writeDraft(source());
+  };
+  createEffect(on(source, saveDraft));
+
+  // Back and Forward move between a draft and the example that replaced it.
+  const onPop = async () => {
+    const next = await urlSource();
+    if (!next || next.source === source()) return;
+    setReplaced(null);
+    fromLink = next.id === 'shared';
+    setExampleId(next.id);
+    setFitKey(`${next.id}:${Date.now()}`);
+    editor?.replace(next.source);
+  };
+  onMount(() => window.addEventListener('popstate', onPop));
+  onCleanup(() => window.removeEventListener('popstate', onPop));
 
   // Redraw after a short pause; a newer edit wins over an older drawing still in flight.
   let run = 0;
@@ -149,14 +185,30 @@ export function Playground() {
     clearTimeout(hashTimer);
   });
 
-  const pickExample = (id: string) => {
+  // Picking an example over custom work is a new history entry, so Back (or Restore) returns
+  // to the draft.
+  const [replaced, setReplaced] = createSignal<string | null>(null);
+  const pickExample = async (id: string) => {
     const text = id === 'blank' ? BLANK : findExample(id)?.source;
-    if (text == null) return;
+    const prev = source();
+    if (text == null || text === prev) return;
+    if (isCustom(prev)) {
+      clearTimeout(hashTimer);
+      await writeHash();
+      saveDraft();
+      history.pushState(null, '', location.href);
+      setReplaced(prev);
+    } else setReplaced(null);
     setExampleId(id);
     setFitKey(`${id}:${Date.now()}`);
     editor?.replace(text);
   };
-  const pickerTitle = () => findExample(exampleId())?.title ?? titleOf(source());
+  // The picker names an example only while the source is that example as it ships.
+  const shownExample = () => {
+    const ex = findExample(exampleId());
+    return ex && ex.source === source() ? ex : undefined;
+  };
+  const pickerTitle = () => shownExample()?.title ?? titleOf(source());
 
   // Name the tab after the diagram.
   createEffect(() => {
@@ -447,9 +499,9 @@ export function Playground() {
         <section class="play-source" aria-label="Source">
           <div class="pane-head">
             <ExamplePicker
-              current={exampleId()}
+              current={shownExample()?.id ?? ''}
               title={pickerTitle()}
-              onPick={pickExample}
+              onPick={id => void pickExample(id)}
               onOpenFile={file => void openFile(file)}
             />
             <label class="select">
@@ -478,6 +530,24 @@ export function Playground() {
               Format
             </button>
           </div>
+          <Show when={replaced()}>
+            {draft => (
+              <div class="play-notice" role="status">
+                <span>Replaced “{titleOf(draft())}”</span>
+                <button type="button" class="tool" onClick={() => history.back()}>
+                  Restore your draft
+                </button>
+                <button
+                  type="button"
+                  class="play-notice-close"
+                  aria-label="Dismiss"
+                  onClick={() => setReplaced(null)}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+          </Show>
           <Show when={ready()}>
             <CodeEditor
               value={source()}
@@ -486,7 +556,12 @@ export function Playground() {
               linkedLines={linkedLines()}
               onCursorLine={setCursorLine}
               onFocusChange={setEditing}
-              onType={() => setPicked(null)}
+              onType={() => {
+                setPicked(null);
+                setReplaced(null);
+                fromLink = false;
+                saveDraft();
+              }}
               ref={api => (editor = api)}
             />
           </Show>
@@ -614,6 +689,22 @@ export function Playground() {
       </div>
     </div>
   );
+}
+
+function readDraft() {
+  try {
+    return localStorage.getItem(DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeDraft(text: string) {
+  try {
+    localStorage.setItem(DRAFT_KEY, text);
+  } catch {
+    // Storage can be blocked; the URL still carries the draft.
+  }
 }
 
 function readSplit() {

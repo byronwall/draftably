@@ -3039,3 +3039,49 @@ kbd {
     display: none;
   }
 }
+
+/* After an example replaces custom work: name what was replaced and offer it back. */
+.play-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  padding: 6px 6px 6px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--accent-soft);
+  font-size: 13px;
+}
+
+.play-notice > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-notice .tool {
+  height: 28px;
+  margin-left: auto;
+  flex: none;
+}
+
+.play-notice-close {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: var(--radius);
+  background: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.play-notice-close:hover {
+  color: var(--text);
+}
+
+.play-notice-close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
