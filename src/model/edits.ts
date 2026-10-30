@@ -615,8 +615,7 @@ export function setStyle(doc: Diagram, id: string, patch: Partial<NodeStyle>) {
     p.h = 80;
   }
   if (patch.shape === 'diamond') {
-    p.w = Math.max(p.w, 132);
-    p.h = Math.max(p.h, 100);
+    p.w = p.h = Math.max(p.w, p.h, 112);
   }
 }
 
