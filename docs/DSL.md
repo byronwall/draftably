@@ -191,6 +191,22 @@ do not apply yet. Lines that run back against the order take the long way round 
 
 ## Sequence diagrams
 
+A sequence diagram shows the messages between participants in time order, from top to bottom.
+
+```draft
+node user "User"
+node app "Web app"
+edge m1 user -> app "sign in"
+edge m2 app -> user "welcome" kind=async
+layout root sequence
+```
+
+**Try it:** add `edge m3 app -> app "load profile"` between the `m1` and `m2` lines. A loop with
+the label appears on the Web app's lifeline, between the two arrows. Messages draw in the order of
+their `edge` lines.
+
+### Sequence reference
+
 `layout root sequence` draws an exchange between participants. Every node is a participant,
 drawn in a row across the top in file order (or the order an `order root` line gives), with a
 dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
@@ -242,6 +258,22 @@ work as anywhere else: a `+edge` line shows a new message in place. Fragments (`
 activations and notes are not supported yet.
 
 ## Cells
+
+Cells draw a group as one object made of parts that touch, such as the fields of a record or the
+parts of a request.
+
+```draft
+group req "Request" color=slate
+layout req cells
+node method "Method" in=req
+node path "Path" in=req
+node body "Body" in=req
+```
+
+**Try it:** change the layout line to `layout req cells columns=2`. The cells become a grid with two
+columns, and Body starts a second row.
+
+### Cells reference
 
 `layout group cells` draws a group as one object made of parts, like the parts of a request in
 order. The group's nodes are its cells: they touch and share borders, in declaration order (or the
@@ -904,6 +936,22 @@ most that wide. It renders with an installed Chrome, Chromium or Edge in headles
 viewer. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ## Editing in the viewer
+
+When you edit a diagram in the viewer, the viewer writes each change into the `.draft` file as a
+readable line, so the file stays the source.
+
+```draft
+node api "API"
+node cache "Cache"
+edge read api -> cache "read"
+```
+
+**Try it:** save these lines as `cache.draft` and run `npx draftably open cache.draft`. Select
+Cache and choose teal as its color in the Inspector. The box turns teal, and the file's
+`node cache` line gets `color=teal`. Then drag Cache below API: the file gets a `near` line for
+Cache. Undo returns the file to its earlier version.
+
+### Viewer edits reference
 
 Edits made in the viewer are written back to the file as readable statements:
 
