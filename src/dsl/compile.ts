@@ -1571,9 +1571,11 @@ function besideCallers(
  * Pack an engine-arranged scope tight. Members take local ranks from the edges between them, so a
  * chain reads as a straight row or column in the reading direction instead of stepping across the
  * engine's global rank columns. Each rank keeps the engine's order across it, and every rank is
- * centred on one line. A gap next to a group is the drawing's one group gap. A member with no edge
- * to another member has nothing here to order it by, so it sits across where its `outside`
- * neighbours are: two outcomes fed by one node outside the group sit together on that node's side.
+ * centred on one line. A gap next to a group is the drawing's one group gap. Where members are
+ * linked, a member with no edge to another member has nothing here to order it by: the engine
+ * centres it under the linked ones. It sits across where its `outside` neighbours are instead, so
+ * two outcomes fed by one node outside the group sit together on that node's side. In a scope with
+ * no inner edges the engine's order already follows the outside neighbours, and it stays.
  */
 function packed(
   items: Item[],
@@ -1595,7 +1597,10 @@ function packed(
   const centre = (p: Pos & Size) => (right ? p.y + p.h / 2 : p.x + p.w / 2),
     linked = new Set(pairs.flat());
   const across = (id: string) => {
-    const ns = linked.has(id) ? [] : (outside.get(id) ?? []).flatMap(o => arranged.get(o) ?? []);
+    const ns =
+      !linked.size || linked.has(id)
+        ? []
+        : (outside.get(id) ?? []).flatMap(o => arranged.get(o) ?? []);
     if (ns.length) return ns.reduce((s, p) => s + centre(p), 0) / ns.length;
     const p = arranged.get(id)!;
     return right ? p.y + by.get(id)!.h / 2 : p.x + by.get(id)!.w / 2;
