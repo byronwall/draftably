@@ -32,6 +32,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       # The site (landing page, playground, docs) with the viewer build in app/.
       - run: pnpm site:build
+        env:
+          SITE_BASE: /
+          SITE_ORIGIN: https://draftably.dev
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
