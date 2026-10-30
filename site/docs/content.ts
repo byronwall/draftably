@@ -33,7 +33,7 @@ export interface Page {
 
 /** Sidebar groups, in order. A DSL section missing here goes at the end of Language. */
 const GROUPS: [string, string[]][] = [
-  ['Start here', ['get-started', 'cli', 'themes', 'agent-skill']],
+  ['Start here', ['get-started', 'saving', 'cli', 'themes', 'agent-skill']],
   [
     'Language',
     [
@@ -174,7 +174,9 @@ function resolveHref(href: string): string {
     const to = ANCHORS.get(href.slice(1));
     return to ? BASE + to.slice(1) : href;
   }
-  if (/^[a-z]+:/.test(href) || href.startsWith('/')) return href;
+  if (/^[a-z]+:/.test(href)) return href;
+  // A page of this site, such as `/play`.
+  if (href.startsWith('/')) return BASE + href.slice(1);
   // A repository path, relative to docs/.
   const path = new URL(href, 'https://x/docs/').pathname.slice(1);
   return `${GITHUB}/blob/main/${path}`;

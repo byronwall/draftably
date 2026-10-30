@@ -29,6 +29,9 @@ export const words = (query: string) =>
     .split(/\s+/)
     .filter(w => w.length > 0);
 
+/** Words a visitor types for the verb a task heading starts with. */
+const VERBS: Record<string, string[]> = { save: ['export', 'download'], download: ['export'] };
+
 export interface Hit {
   entry: Entry;
   snippet: string;
@@ -38,6 +41,7 @@ export function search(query: string, limit = 40): Hit[] {
   const terms = words(query);
   if (!terms.length) return [];
   const hits: { hit: Hit; score: number }[] = [];
+  const verbs = new Set(terms.flatMap(t => [t, ...(VERBS[t] ?? [])]));
   for (const entry of ENTRIES) {
     const title = `${entry.page.title} ${entry.heading ?? ''}`.toLowerCase();
     const text = entry.text.toLowerCase();
@@ -54,6 +58,8 @@ export function search(query: string, limit = 40): Hit[] {
       if (at >= 0) score += 1 + Math.min(3, text.split(term).length - 2);
     }
     if (score < 0) continue;
+    // A heading that starts with the query's verb, such as "Export a PNG", is the task itself.
+    if (verbs.has(entry.heading?.toLowerCase().split(/\W/)[0] ?? '')) score += 10;
     hits.push({ hit: { entry, snippet: snippet(entry.text, terms) }, score });
   }
   return hits

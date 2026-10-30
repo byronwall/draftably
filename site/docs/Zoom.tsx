@@ -4,12 +4,15 @@ import { paperOf } from '../draw';
 
 /**
  * A drawing over the whole window: it opens fitted, the wheel zooms about the cursor, a drag
- * pans, and Escape or the close button leaves.
+ * pans, and Escape or the close button leaves. It is a modal dialog: focus moves to Close, Tab
+ * stays on its buttons, and focus goes back to the opener when it closes.
  */
 export function Zoom(props: { svg: string; onClose: () => void }) {
   const [view, setView] = createSignal({ x: 0, y: 0, k: 1 });
   let stage!: HTMLDivElement;
   let paper!: HTMLDivElement;
+  let dialog!: HTMLDivElement;
+  let close!: HTMLButtonElement;
 
   const fit = () => {
     const svg = paper.querySelector('svg');
@@ -23,10 +26,17 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
 
   onMount(() => {
     fit();
+    const opener = document.activeElement as HTMLElement | null;
+    close.focus();
     const key = (e: KeyboardEvent) => {
       if (e.key === 'Escape') props.onClose();
       else if (e.key === '0') fit();
-      else return;
+      else if (e.key === 'Tab') {
+        const buttons = [...dialog.querySelectorAll('button')];
+        const i = buttons.indexOf(document.activeElement as HTMLButtonElement);
+        const step = e.shiftKey ? -1 : 1;
+        buttons[(i + step + buttons.length) % buttons.length]?.focus();
+      } else return;
       e.preventDefault();
       e.stopPropagation();
     };
@@ -35,6 +45,7 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
     onCleanup(() => {
       window.removeEventListener('keydown', key, true);
       document.body.style.overflow = '';
+      opener?.focus();
     });
   });
 
@@ -68,13 +79,20 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
 
   return (
     <Portal>
-      <div class="zoom" style={{ background: paperOf(props.svg) ?? '#fbfbfd' }}>
+      <div
+        ref={dialog}
+        class="zoom"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Expanded drawing"
+        style={{ background: paperOf(props.svg) ?? '#fbfbfd' }}
+      >
         <div class="zoom-bar">
           <span>Scroll to zoom · drag to pan · 0 to fit · Esc to close</span>
           <button type="button" onClick={fit}>
             Fit
           </button>
-          <button type="button" onClick={() => props.onClose()}>
+          <button ref={close} type="button" onClick={() => props.onClose()}>
             Close
           </button>
         </div>
