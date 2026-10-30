@@ -1,0 +1,285 @@
+Browser tab: 9, Title: "Themes · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/themes".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 121-122, 132-440, 442-450
+~0 AXWebArea Themes · Draftably docs, URL: byronwall.github.io/draftably/docs/themes
+~			130 text Themes
+~			51 heading Themes, Value: 1
+~				52 text Themes
++				442 text A  theme  line picks one of five presets. The layout stays the same in every theme: only type, padding and color change. Here is one file drawn in each of them.
++			443 container
++				444 text .draft  · editable
++				445 button Copy
++				446 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=TZDLagQhEEX3_RWF-yzy2HYgkECySsMMZF2thSNxVEp7Gv8-PkY6G1_3VHlvafZbAFKaQHyUVYD01vO82o0m5xXBTiuIn7JgCAKMmyvcJb2DeFu-QGOiHfOh6tZVei5dT8Q3IymOzlfjUi_3rIgjiO-2t-pa0sWAGcSC-UouHRrECwaag7G2Y6qYW3xMmo8fbsZbSlMLRY8twMNrM_t5Pi8ncVee6lMRhg3JVHL062Ceh1q45khekOuUfo1TM8bs5J18-UdWU6GcTUxisqTJKagDLVa31RoJJRNnCN7UbIPotkG8Y0KIyddEfw
++				447 text entry area (settable) Description: Diagram source, Value: group edge "Edge" color=blue
+node web "Web app" in=edge
+node gw "API gateway" in=edge
+group core "Services" color=mint
+node orders "Orders" in=core
+node pay "Payments" in=core shape=pill
+node db "Postgres" color=violet
+edge e1 web -> gw "HTTPS"
+edge e2 gw -> orders "create order"
+edge e3 orders -> pay "charge" kind=async
+edge e4 orders -> db "persist"
+legend blue "Public entry points"
+legend violet "Data stores"
++				448 container
++					449 text theme  drafting  · default
++				450 button Expand the drawing
++					451 image Untitled diagram
++						452 text Edge
++						453 text Services
++						454 text HTTPS
++						455 text create order
++						456 text charge
++						457 text persist
++						458 text Web app
++						459 text API gateway
++						460 text Orders
++						461 text Payments
++						462 text Postgres
++						463 text Public entry points
++						464 text Data stores
++				465 container
++					466 text theme  fieldnotes
++				467 button Expand the drawing
++					468 image Untitled diagram
++						469 text Edge
++						470 text Services
++						471 text HTTPS
++						472 text create order
++						473 text charge
++						474 text persist
++						475 text Web app
++						476 text API gateway
++						477 text Orders
++						478 text Payments
++						479 text Postgres
++						480 text Public entry points
++						481 text Data stores
++				482 container
++					483 text theme  signal
++				484 button Expand the drawing
++					485 image Untitled diagram
++						486 text Edge
++						487 text Services
++						488 text HTTPS
++						489 text create order
++						490 text charge
++						491 text persist
++						492 text Web app
++						493 text API gateway
++						494 text Orders
++						495 text Payments
++						496 text Postgres
++						497 text Public entry points
++						498 text Data stores
++				499 container
++					500 text theme  ink
++				501 button Expand the drawing
++					502 image Untitled diagram
++						503 text Edge
++						504 text Services
++						505 text HTTPS
++						506 text create order
++						507 text charge
++						508 text persist
++						509 text Web app
++						510 text API gateway
++						511 text Orders
++						512 text Payments
++						513 text Postgres
++						514 text Public entry points
++						515 text Data stores
++				516 container
++					517 text theme  blueprint
++				518 button Expand the drawing
++					519 image Untitled diagram
++						520 text Edge
++						521 text Services
++						522 text HTTPS
++						523 text create order
++						524 text charge
++						525 text persist
++						526 text Web app
++						527 text API gateway
++						528 text Orders
++						529 text Payments
++						530 text Postgres
++						531 text Public entry points
++						532 text Data stores
++			533 heading Pick a theme#, Value: 2, ID: pick-a-theme
++				534 link Description: Pick a theme#, Value: byronwall.github.io/draftably/docs/themes#pick-a-theme
++			535 container
++				536 text Write the theme first in the file. A file with no  theme  line uses  drafting .
++			537 container
++				538 button Copy
++				539 container
++					540 text theme fieldnotes
++			541 table
++				542 row
++					543 cell
++						544 text Theme
++					545 cell
++						546 text Character
++				547 row
++					548 cell
++						549 text drafting
++					550 cell
++						551 text Navy ink on cool paper, drafting blue and marker gold. Compact.
++				552 row
++					553 cell
++						554 text fieldnotes
++					555 cell
++						556 text Editorial: serif titles on warm paper, indigo and terracotta.
++				557 row
++					558 cell
++						559 text signal
++					560 cell
++						561 text Color-blind-safe Okabe–Ito hues on white.
++				562 row
++					563 cell
++						564 text ink
++					565 cell
++						566 text Sumi ink tones, indigo and a vermilion seal, generous padding.
++				567 row
++					568 cell
++						569 text blueprint
++					570 cell
++						571 text Dark: white lines on blueprint blue, monospace titles.
++			572 container
++				573 text The  theme  line also takes overrides such as  padding-x= ,  radius=  and  title-font= , and  theme-color  lines change or add color families. 
++				574 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
++				575 text  lists them all.
+~				441 link Description: ← Previous CLI, Value: byronwall.github.io/draftably/docs/cli
+~				119 link Description: Next → Agent skill, Value: byronwall.github.io/draftably/docs/agent-skill
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/site/docs/pages/themes.md
+The focused UI element is 19 link Description: Themes, URL: byronwall.github.io/draftably/docs/themes
+
+VISIBLE MAIN TEXT
+Start here
+/
+Themes
+Themes
+
+A theme line picks one of five presets. The layout stays the same in every theme: only type, padding and color change. Here is one file drawn in each of them.
+
+.draft · editable
+Copy
+Edit in playground →
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+group edge "Edge" color=blue
+node web "Web app" in=edge
+node gw "API gateway" in=edge
+group core "Services" color=mint
+node orders "Orders" in=core
+node pay "Payments" in=core shape=pill
+node db "Postgres" color=violet
+edge e1 web -> gw "HTTPS"
+edge e2 gw -> orders "create order"
+edge e3 orders -> pay "charge" kind=async
+edge e4 orders -> db "persist"
+legend blue "Public entry points"
+legend violet "Data stores"
+
+theme drafting · default
+Edge
+Services
+HTTPS
+create order
+charge
+persist
+Web app
+API gateway
+Orders
+Payments
+Postgres
+Public entry points
+Data stores
+theme fieldnotes
+Edge
+Services
+HTTPS
+create order
+charge
+persist
+Web app
+API gateway
+Orders
+Payments
+Postgres
+Public entry points
+Data stores
+theme signal
+Edge
+Services
+HTTPS
+create order
+charge
+persist
+Web app
+API gateway
+Orders
+Payments
+Postgres
+Public entry points
+Data stores
+theme ink
+Edge
+Services
+HTTPS
+create order
+charge
+persist
+Web app
+API gateway
+Orders
+Payments
+Postgres
+Public entry points
+Data stores
+theme blueprint
+Edge
+Services
+HTTPS
+create order
+charge
+persist
+Web app
+API gateway
+Orders
+Payments
+Postgres
+Public entry points
+Data stores
+Pick a theme
+
+Write the theme first in the file. A file with no theme line uses drafting.
+
+Copy
+theme fieldnotes
+Theme	Character
+drafting	Navy ink on cool paper, drafting blue and marker gold. Compact.
+fieldnotes	Editorial: serif titles on warm paper, indigo and terracotta.
+signal	Color-blind-safe Okabe–Ito hues on white.
+ink	Sumi ink tones, indigo and a vermilion seal, generous padding.
+blueprint	Dark: white lines on blueprint blue, monospace titles.
+
+The theme line also takes overrides such as padding-x=, radius= and title-font=, and theme-color lines change or add color families. Themes and colors lists them all.
+
+← Previous
+CLI
+Next →
+Agent skill

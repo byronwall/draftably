@@ -1,0 +1,118 @@
+Browser tab: 6, Title: "Draftably", URL: "https://byronwall.github.io/draftably/app/".
+0 AXWebArea Draftably, URL: byronwall.github.io/draftably/app/
+	1 container root
+		2 container
+			3 pop up button (collapsed) Description: File and examples, Secondary Actions: Expand
+			4 text field (settable) Description: Diagram title, Value: Automatic ports — review flow
+			5 text Saved
+			6 toolbar Drawing tools
+				7 checkbox Description: Edit / select, Help: Edit / select · V, Value: 1
+				8 checkbox Description: Navigate, Help: Navigate · H, Value: 0
+				9 checkbox Description: Rectangle, Help: Rectangle · R, Value: 0
+				10 checkbox Description: Diamond, Help: Diamond · D, Value: 0
+				11 checkbox Description: Ellipse, Help: Ellipse · O, Value: 0
+				12 checkbox Description: Text, Help: Text · T, Value: 0
+				13 checkbox Description: Container, Help: Container · G, Value: 0
+				14 checkbox Description: Connect, Help: Connect · C, Value: 0
+			15 button (disabled) Description: Undo, Help: Undo · ⌘Z
+			16 button (disabled) Description: Redo, Help: Redo · ⇧⌘Z
+			17 pop up button (collapsed) Edit, Help: Duplicate, group, align, pin, delete, Secondary Actions: Expand
+			18 button Description: Build from a list, Help: Build from a list · B
+			19 button Tidy positions, Help: Tidy current positions · L
+			20 button (collapsed) Description: Layout options, Help: Layout options · ⌥L, Secondary Actions: Expand
+			21 button (collapsed) Automatic layout…, Help: Set automatic layout, Secondary Actions: Expand
+			22 checkbox Description: Layout timeline · ⌥T, Value: 0
+			23 checkbox Description: Layout brush, Help: Layout brush · W, Value: 0
+			24 button Compare layouts and routing parameters · ⌥E
+			25 button Description: Reroute connections, Help: Reroute connections · ⌥R
+			26 pop up button (collapsed) Description: Routing options, Secondary Actions: Expand
+			27 pop up button (collapsed) Description: Appearance, Secondary Actions: Expand
+			28 checkbox Description: Objects, Help: Objects · [, Value: 0
+			29 checkbox Description: Inspector, Help: Inspector · ], Value: 0
+			30 button Description: Keyboard shortcuts, Help: Keyboard shortcuts · ?
+			31 pop up button (expanded) Description: Save and export, Secondary Actions: Collapse
+		32 container Diagram workspace
+			33 container Diagram canvas. N adds a box. Enter edits. C connects. Drag nodes to edit; drag background to pan. Escape returns to Edit. Shift drag selects. The wheel zooms; Shift + wheel pans. Question mark opens shortcuts.
+				34 text Double-click to add a title
+				35 splitter Frame width. Drag to widen the frame.
+				36 checkbox Description: Review, container, 3 shapes, Value: 0
+					37 text Review
+					38 container Collapse container
+				39 button Description: Request to Check details, Help: Connection
+				40 button Description: Request to New thing, Help: Connection
+				41 button Description: Check details to Ready?, Help: Connection
+				42 button Description: Ready? to Request changes, Not yet, Help: Not yet
+					43 text Not yet
+				44 button Description: Request changes to Check details, Updated, Help: Updated
+					45 text Updated
+				46 button Description: Ready? to Publish, Yes, Help: Yes
+					47 text Yes
+				48 button Description: New thing to Publish, Help: Connection
+				49 button Description: Publish to Done, Help: Connection
+				50 checkbox Description: Request, pill, Help: Request, Value: 0
+					51 text Request
+					52 image Connect from left
+					53 image Connect from right
+					54 image Connect from top
+					55 image Connect from bottom
+				56 checkbox Description: New thing, box, Help: New thing, Value: 0
+					57 text New thing
+					58 image Connect from left
+					59 image Connect from right
+					60 image Connect from top
+					61 image Connect from bottom
+				62 checkbox Description: Check details, box, Help: Check details, Value: 0
+					63 text Check details
+					64 image Connect from left
+					65 image Connect from right
+					66 image Connect from top
+					67 image Connect from bottom
+				68 checkbox Description: Ready?, diamond, Help: Ready?, Value: 0
+					69 text Ready?
+					70 image Connect from left
+					71 image Connect from right
+					72 image Connect from top
+					73 image Connect from bottom
+				74 checkbox Description: Request changes, box, Help: Request changes, Value: 0
+					75 text Request changes
+					76 image Connect from left
+					77 image Connect from right
+					78 image Connect from top
+					79 image Connect from bottom
+				80 checkbox Description: Publish, box, Help: Publish, Value: 0
+					81 text Publish
+					82 image Connect from left
+					83 image Connect from right
+					84 image Connect from top
+					85 image Connect from bottom
+				86 checkbox Description: Done, pill, Help: Done, Value: 0
+					87 text Done
+					88 image Connect from left
+					89 image Connect from right
+					90 image Connect from top
+					91 image Connect from bottom
+			92 toolbar Zoom
+				93 button Description: Fit diagram, Help: Fit diagram · 1
+				94 button Description: Zoom out, Help: Zoom out · −
+				95 button 100%, Help: Zoom to 100% · 0
+					96 text 100
+					97 text %
+				98 button Description: Zoom in, Help: Zoom in · +
+		99 container
+			100 text 7 shapes · 8 connections Drag shapes to edit · background pans · Shift drag selects Tab extends · L improves · Alt R reroutes
+			101 button ?, Help: Keyboard shortcuts
+		103 menu
+			104 Save diagram ⌘S
+				105 text Save diagram
+				106 text ⌘S
+			107 Copy image ⇧⌘C
+				108 text Copy image
+				109 text ⇧⌘C
+			110 text COPY AS
+			111 SVG markup
+			112 Export PNG…
+			113 Export SVG…
+			114 text Copy takes the selection when something is selected. Saved diagrams and exported SVGs remain editable.
+		102 text SVG export created
+
+The focused UI element is 104 Save diagram ⌘S

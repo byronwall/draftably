@@ -12,12 +12,16 @@
 - Model: Pro, effort 5 of 5, checked in live model menu.
 - Chrome: extension browser 2, profile `byroni.us`.
 - Submitted: 2026-10-29 about 21:36 EDT (2026-10-30 01:36 UTC).
-- Next check: about 2026-10-29 22:37 EDT.
-- Phase: Pro processing; initial independent audit saved with 13 findings.
+- Collection check: 2026-10-29 23:39 EDT; Pro had completed (34m 7s displayed).
+- Checked at 22:41 EDT: Pro is still processing, with live browser tasks and source review visible. Stop control remains present. No resend or follow-up was sent.
+- Phase: collected, integrated, and validated; opening review PR.
 - Follow-ups: 0.
 - Heartbeat: `complete-draftably-deep-usability-audit`, ACTIVE, hourly at minute 37, attached to this chat.
 - Evidence working folder: `tmp/evals/website-experience-audit/2026-10-29/` (ignored).
-- Collected Pro results: none yet.
+- Collected Pro results: 127 original files at `../assets/pro-results/2026-10-29-usability/`; all 125 manifest hashes and sizes verified. README and manifest are the two unlisted files. ZIP inspected before extraction and retained only in ignored tmp.
+- Outputs: [summary.md](summary.md), [repair-plan.md](repair-plan.md), [assets-index.md](assets-index.md), and [issues.md](issues.md).
+- Pro additions: five new issues #304–#308 after open/closed duplicate review; Search evidence added to #254.
+- Current-state check: Pages redirects to `draftably.dev`; ordinary Editor entry succeeded. New retention and Space activation defects reproduced. Current main `d6f359d` contains several other repairs; do not duplicate them. No follow-up needed.
 - PR: pending final integration.
 
 ## Continuation rules
@@ -30,7 +34,7 @@ The existing browser-saved editor diagram is personal state. Do not modify it. A
 
 ## Independent observations so far
 
-- At 1440×900, clicking the landing primary `Open the editor` changed the URL to `/draftably/app/` but kept the landing UI. This repeated the same result from the Docs header Editor link. Reloading `/app/` loaded the real editor. Screenshots: `editor-link-shows-landing.jpg`, `landing-desktop.jpg`.
+- At 1512×697, clicking the landing primary `Open the editor` changed the URL to `/draftably/app/` but kept the landing UI. This repeated the same result from the Docs header Editor link. Reloading `/app/` loaded the real editor. Screenshots: `editor-link-shows-landing.jpg`, `landing-desktop.jpg`.
 - The real editor initially restored an existing browser-saved `Automatic ports — review flow` diagram. It was inspected without changes.
 - Playground source entry successfully compiled a two-node `Usability audit` diagram. Its `Open in the editor` button performed a full navigation and correctly opened `/app/#s=...` with a scratch-copy banner.
 - Docs have 20 visible topics in five groups. Get started begins with Node/CLI installation despite browser-only use being available.
@@ -50,3 +54,7 @@ Site user tab: `2011000539`. Pro agent tab: `2011000542`. Rebind from fresh inve
 - Dependencies installed from the locked pnpm file after sandbox network access failed. No dependency files changed.
 - Checkpoint validation: typecheck, lint, format, and 58 test files passed under `pnpm check:fast`. Three test files failed because sandbox restrictions blocked local listeners and browser export. Their bounded rerun outside the sandbox passed: `pnpm exec vitest run tests/embed.test.ts tests/open-port.test.ts tests/workspace.test.ts` (13/13 tests). `git diff --check` passed. Full `pnpm check` remains required before the final push.
 - Keep generated screenshots in ignored tmp and attach them with gh. Preserve actual Pro originals in the skill's committed asset location later.
+
+## Final validation
+
+Full `pnpm check` passed: typecheck, lint, format, 61 test files (353 tests), 195 layout assertions, 55 sculpt checks, 320 parity comparisons, and production build. Vite reported its existing large-chunk advisory. Original hashes, local report links, staged inventory (127 assets), and `git diff --check` passed. No ZIP or tmp screenshot is staged.

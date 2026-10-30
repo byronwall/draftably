@@ -1,0 +1,175 @@
+Browser tab: 4, Title: "Support ticket triage · Draftably playground", URL: "https://byronwall.github.io/draftably/play/#s=jVNNb9QwEL3nV4zMtUXdUqAgBVSkigMcUPkFjj2bHa3jCbaz1f57Jms7yaFSe0nG8-bj5b3Yku6DHkD9ncaRQ4JE5ojyCgKgghOGSOzbXdO8gwfYO53AoqE5KSd-_gqewbBPmrzUXq2oJT2wt5LS3oLTHTq00AXtzQHj-8azRSBpPCKoh8lSXa4gHvSI7UjOyWjHoe3chLnBOB0j7c9zS-Lr5Zh4JKNyDU9JyIP65fnZl9P3OrXQKoP10GHIXY78EdTv-ZlYiBmy6IVMLgwcC4NOaJHvQf0owb8JY5Ivfn3Fnrx8vTB7ElI4r6nDEuqhsD_RCOrRJwxjoIgwOv2G0VLLgZLo8qdGwmvCyv9E7DDl2h7FKu1A_SxBrsxgwMjuJE6ppxK94McgvjUNWlEZd9XE62-LOwW6Xe0SMBtRoA_VJQGy8meMqoB3G3CR23OFPy5JwRdNN_2ftgUXPdfmz5eE5FfFNp33FV00Wju_ZKICLhodydtWx7M3VYybhdCmroK7dekL6O2ydAs2Tp9FDQjM6XLjoNdje3cj9yugmf-7NlB_SM1_".
+1 AXWebArea Support ticket triage · Draftably playground, URL: byronwall.github.io/draftably/play/#s=jVNNb9QwEL3nV4zMtUXdUqAgBVSkigMcUPkFjj2bHa3jCbaz1f57Jms7yaFSe0nG8-bj5b3Yku6DHkD9ncaRQ4JE5ojyCgKgghOGSOzbXdO8gwfYO53AoqE5KSd-_gqewbBPmrzUXq2oJT2wt5LS3oLTHTq00AXtzQHj-8azRSBpPCKoh8lSXa4gHvSI7UjOyWjHoe3chLnBOB0j7c9zS-Lr5Zh4JKNyDU9JyIP65fnZl9P3OrXQKoP10GHIXY78EdTv-ZlYiBmy6IVMLgwcC4NOaJHvQf0owb8JY5Ivfn3Fnrx8vTB7ElI4r6nDEuqhsD_RCOrRJwxjoIgwOv2G0VLLgZLo8qdGwmvCyv9E7DDl2h7FKu1A_SxBrsxgwMjuJE6ppxK94McgvjUNWlEZd9XE62-LOwW6Xe0SMBtRoA_VJQGy8meMqoB3G3CR23OFPy5JwRdNN_2ftgUXPdfmz5eE5FfFNp33FV00Wju_ZKICLhodydtWx7M3VYybhdCmroK7dekL6O2ydAs2Tp9FDQjM6XLjoNdje3cj9yugmf-7NlB_SM1_
+	2 container root
+		3 container
+			4 link Description: Draftably, Value: byronwall.github.io/draftably/
+			5 container Site
+				6 link Description: Playground, Value: byronwall.github.io/draftably/play
+				7 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				8 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				9 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				10 link Description: GitHub, Value: github.com/byronwall/draftably
+			11 button Copy link
+			12 button (collapsed) Download, Secondary Actions: Expand
+			13 button Open in the editor
+		14 container Source
+			110 button (collapsed) Sign-in sequence, Secondary Actions: Expand
+				111 text Sign-in sequence
+			17 container
+				18 text Theme
+				19 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					20 menu
+						21 (selected) Drafting
+						22 Fieldnotes
+						23 Signal
+						24 Ink
+						25 Blueprint
+			26 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			27 container
+				28 text entry area (settable) Description: Diagram source, Value: diagram "Support ticket triage" version=1
+
+
+# A flat decision flow: no containers, decision diamonds, and labeled branches.
+node intake "Audit ticket" shape=pill color=blue
+node classify "Auto-classify topic"
+node outage "Known outage?" shape=diamond color=amber
+node link "Link to incident" color=rose
+node billing "Billing question?" shape=diamond color=amber
+node finance "Route to billing team"
+node vip "Enterprise plan?" shape=diamond color=amber
+node priority "Priority queue" color=violet
+node general "General queue"
+node resolved "Resolved" shape=pill color=mint
+
+
+edge e1 intake -> classify
+edge e2 classify -> outage
+edge e3 outage -> link "yes"
+edge e4 outage -> billing "no"
+edge e5 billing -> finance "yes"
+edge e6 billing -> vip "no"
+edge e7 vip -> priority "yes"
+edge e8 vip -> general "no"
+edge e9 link -> resolved kind=async
+edge e10 finance -> resolved
+edge e11 priority -> resolved
+edge e12 general -> resolved
+
+
+layout root flow gap=40 direction=right
+
+
+					29 container
+						30 text diagram "Support ticket triage" version = 1
+					112 text # A flat decision flow: no containers, decision diamonds, and labeled branches.
+					113 container
+						114 text node intake "Audit ticket" shape = pill color = blue
+					115 container
+						116 text node classify "Auto-classify topic"
+					117 container
+						118 text node outage "Known outage?" shape = diamond color = amber
+					119 container
+						120 text node link "Link to incident" color = rose
+					121 container
+						122 text node billing "Billing question?" shape = diamond color = amber
+					123 container
+						124 text node finance "Route to billing team"
+					125 container
+						126 text node vip "Enterprise plan?" shape = diamond color = amber
+					127 container
+						128 text node priority "Priority queue" color = violet
+					129 container
+						130 text node general "General queue"
+					131 container
+						132 text node resolved "Resolved" shape = pill color = mint
+					133 container
+						134 text edge e1 intake -> classify
+					135 container
+						136 text edge e2 classify -> outage
+					137 container
+						138 text edge e3 outage -> link "yes"
+					139 container
+						140 text edge e4 outage -> billing "no"
+					141 container
+						142 text edge e5 billing -> finance "yes"
+					143 container
+						144 text edge e6 billing -> vip "no"
+					145 container
+						146 text edge e7 vip -> priority "yes"
+					147 container
+						148 text edge e8 vip -> general "no"
+					149 container
+						150 text edge e9 link -> resolved kind = async
+					151 container
+						152 text edge e10 finance -> resolved
+					153 container
+						154 text edge e11 priority -> resolved
+					155 container
+						156 text edge e12 general -> resolved
+					157 container
+						158 text layout root flow gap = 40 direction = right
+			78 button (disabled) No problems · drawn in 263 ms Click a shape to find its line
+				79 text No problems · drawn in 263 ms Click a shape to find its line
+		80 splitter Description: Resize panes, Value: 38
+		81 container Diagram
+			82 container
+				159 image Support ticket triage
+					160 text Support ticket triage
+					161 text yes
+					162 text no
+					163 text yes
+					164 text no
+					165 text yes
+					166 text no
+					167 text Audit ticket
+					168 text Auto-classify topic
+					169 container
+						170 text Known outage?
+					171 text Link to incident
+					172 container
+						173 text Billing question?
+					174 text Route to billing team
+					175 container
+						176 text Enterprise plan?
+					177 text Priority queue
+					178 text General queue
+					179 text Resolved
+				104 button Zoom out
+				105 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					106 text 71
+					107 text %
+				108 button Zoom in
+				109 button Full screen
+
+The focused UI element is 28 text entry area (settable) Description: Diagram source, Value: diagram "Support ticket triage" version=1
+
+
+# A flat decision flow: no containers, decision diamonds, and labeled branches.
+node intake "Audit ticket" shape=pill color=blue
+node classify "Auto-classify topic"
+node outage "Known outage?" shape=diamond color=amber
+node link "Link to incident" color=rose
+node billing "Billing question?" shape=diamond color=amber
+node finance "Route to billing team"
+node vip "Enterprise plan?" shape=diamond color=amber
+node priority "Priority queue" color=violet
+node general "General queue"
+node resolved "Resolved" shape=pill color=mint
+
+
+edge e1 intake -> classify
+edge e2 classify -> outage
+edge e3 outage -> link "yes"
+edge e4 outage -> billing "no"
+edge e5 billing -> finance "yes"
+edge e6 billing -> vip "no"
+edge e7 vip -> priority "yes"
+edge e8 vip -> general "no"
+edge e9 link -> resolved kind=async
+edge e10 finance -> resolved
+edge e11 priority -> resolved
+edge e12 general -> resolved
+
+
+layout root flow gap=40 direction=right
+

@@ -20,4 +20,30 @@ Checked open and closed repository issues before filing. All 13 independent brow
 
 Issue bodies preserve the audit's severity, observations, uncertainty, suggested changes, and acceptance checks. Existing screenshot evidence remains on the matching issues. Generated audit screenshots remain in ignored storage for the report PR.
 
-Pro results are pending. Reconcile later findings against this register and current GitHub issues before creating additional issues.
+## Pro reconciliation and current status
+
+Checked all open and closed issues again during collection. Five additional issues cover distinct Pro findings. Search focus evidence was added to #254. No duplicate issue was created for a closed repair.
+
+| Pro finding                                 | Tracking                                                  | Collection status                                                     |
+| ------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------------------------- |
+| F01 / U01: Editor entry                     | #250                                                      | Closed; ordinary current-site navigation succeeded                    |
+| F02: Failed Playground lazy load            | [#304](https://github.com/byronwall/draftably/issues/304) | New; intermittent historical evidence, current recurrence unconfirmed |
+| F03: New promises retention in example mode | [#305](https://github.com/byronwall/draftably/issues/305) | New; reproduced on active deployment                                  |
+| F04: Invalid-source image export            | #256                                                      | Closed; current source contains repair                                |
+| F05 / U03: Landing source transfer          | #251                                                      | Closed; current source contains repair                                |
+| F06 / U05: Search and drawing focus         | #254                                                      | Open; added Search evidence to existing issue                         |
+| F07: Space activation                       | [#306](https://github.com/byronwall/draftably/issues/306) | New; reproduced on active deployment                                  |
+| F08 / U02 / U08: Narrow layout and names    | #249 / #259                                               | Closed; current source contains repairs                               |
+| F09 / U13: Storage explanation              | #264                                                      | Open; distinct from scratch-reload warning #265                       |
+| F10 / U07: Browser-first onboarding         | #258                                                      | Open                                                                  |
+| F11 / U10: Reopen search                    | #261                                                      | Open                                                                  |
+| F12: Layout tool progression                | [#307](https://github.com/byronwall/draftably/issues/307) | New; expert assessment, broader grouping needs exploration            |
+| F13: Expanded stale drawing context         | [#308](https://github.com/byronwall/draftably/issues/308) | New; separate from export and focus defects                           |
+| F14 / U06: Example identity after Undo      | #248                                                      | Closed; source now derives identity from current text                 |
+| F15: Copy-link clipboard                    | No defect issue                                           | Inconclusive tooling result; Explore only                             |
+| U04: Example fitting                        | #257                                                      | Closed                                                                |
+| U09: Editor return routes                   | #260                                                      | Open                                                                  |
+| U11: Example catalog and blank start        | #262                                                      | Open                                                                  |
+| U12: Teaching sequence                      | #263                                                      | Closed                                                                |
+
+Status was checked during collection, against `origin/main` at `d6f359d`. It can change after this report. See [summary.md](summary.md) for evidence limits and dispositions. Issues contain acceptance checks. This audit PR does not close them.

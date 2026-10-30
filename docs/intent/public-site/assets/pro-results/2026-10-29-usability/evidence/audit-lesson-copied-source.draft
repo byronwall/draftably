@@ -1,0 +1,11 @@
+diagram "Audit lesson" version=1
+node app "Audit visual edit"
+node api "API"
+node new-box "Receipt"
+edge request app -> api
+edge new-box-api new-box -> api
+
+# Layout refinements
+stay new-box x=106 y=0
+stay app x=0 y=0
+stay api x=258 y=-46

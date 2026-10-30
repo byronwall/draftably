@@ -2,7 +2,7 @@
 
 Audit date: October 29, 2026, EDT. Target: https://byronwall.github.io/draftably/
 
-Status: independent audit in progress. The separate Pro review is processing. This report preserves direct observations for later integration. It is not the completed Pro deliverable.
+Status: historical independent browser evidence. The completed Pro review and current issue dispositions are reconciled in [summary.md](summary.md). Original observations remain unchanged below; several fixes landed during the audit.
 
 ## Assessment
 

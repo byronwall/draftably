@@ -1,0 +1,392 @@
+Browser tab: 9, Title: "CLI · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/cli".
+0 AXWebArea CLI · Draftably docs, URL: byronwall.github.io/draftably/docs/cli
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 button Search docs
+				5 text Search docs
+				6 text Ctrl K
+			7 container Site
+				8 link Description: Playground, Value: byronwall.github.io/draftably/play
+				9 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				10 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				11 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				12 link Description: GitHub, Value: github.com/byronwall/draftably
+		13 container Docs topics
+			14 container
+				15 heading START HERE, Value: 2
+					16 text START HERE
+				17 link Description: Get started, Value: byronwall.github.io/draftably/docs/get-started
+				18 link Description: CLI, Value: byronwall.github.io/draftably/docs/cli
+				19 link Description: Themes, Value: byronwall.github.io/draftably/docs/themes
+				20 link Description: Agent skill, Value: byronwall.github.io/draftably/docs/agent-skill
+			21 container
+				22 heading LANGUAGE, Value: 2
+					23 text LANGUAGE
+				24 link Description: Overview, Value: byronwall.github.io/draftably/docs/overview
+				25 link Description: Rules, Value: byronwall.github.io/draftably/docs/rules
+				26 link Description: Refinements, Value: byronwall.github.io/draftably/docs/refinements
+				27 link Description: Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+				28 link Description: Soft groups, Value: byronwall.github.io/draftably/docs/soft-groups
+				29 link Description: Change marks, Value: byronwall.github.io/draftably/docs/change-marks
+				30 link Description: Emphasis states, Value: byronwall.github.io/draftably/docs/emphasis-states
+			31 container
+				32 heading DIAGRAM KINDS, Value: 2
+					33 text DIAGRAM KINDS
+				34 link Description: Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+				35 link Description: Sequence diagrams, Value: byronwall.github.io/draftably/docs/sequence-diagrams
+				36 link Description: Cells, Value: byronwall.github.io/draftably/docs/cells
+			37 container
+				38 heading LAYOUT, Value: 2
+					39 text LAYOUT
+				40 link Description: Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+				41 link Description: Routing, Value: byronwall.github.io/draftably/docs/routing
+				42 link Description: Layout tools, Value: byronwall.github.io/draftably/docs/layout-tools
+			43 container
+				44 heading TOOLS, Value: 2
+					45 text TOOLS
+				46 link Description: CLI details, Value: byronwall.github.io/draftably/docs/command-line
+				47 link Description: Editing in the viewer, Value: byronwall.github.io/draftably/docs/editing-in-the-viewer
+				48 link Description: Examples, Value: byronwall.github.io/draftably/docs/examples
+		49 container
+			129 link Description: Start here, Value: byronwall.github.io/draftably/docs/get-started
+			130 text CLI
+			51 heading CLI, Value: 1
+				52 text CLI
+			131 container
+				132 text draftably  checks, formats, draws and edits  .draft  files, and serves the editor. Run any command with  --help  for its own options, and  draftably --version  for the version.
+			133 text Any file argument may also be a PNG or SVG that Draftably exported. The command reads the source embedded in it.
+			134 heading open#, Value: 2, ID: open
+				135 link Description: open#, Value: byronwall.github.io/draftably/docs/cli#open
+			136 container
+				137 button Copy
+				138 container
+					139 text draftably open                       # a start page for this folder's diagrams 
+draftably open architecture.draft    # edit one file 
+draftably open --status              # list running editors
+			140 container
+				141 text Serves the editor and opens the browser. Saves in the editor go back to the file, and changes made to the file elsewhere show at once. Without a file, it starts on a page that lists the folder's  .draft  files, makes a new one, or opens an example.
+			142 table
+				143 row
+					144 cell
+						145 text Option
+					146 cell
+						147 text Effect
+				148 row
+					149 cell
+						150 text --port N
+					151 cell
+						152 text Serve on port N. The default is the first free port from 5180; 0 picks any.
+				153 row
+					154 cell
+						155 text --no-open
+					156 cell
+						157 text Don't open the browser. Use the URL on the 
+						158 text Viewer:
+						159 text  line.
+				160 row
+					161 cell
+						162 text --replace
+					163 cell
+						164 text Stop an editor already serving this folder and start this version.
+				165 row
+					166 cell
+						167 text --status
+					168 cell
+						169 text List the running editors: URL, folder, version and process ID.
+			170 container
+				171 text Without  --port , an editor already serving the folder is reused.
+			172 heading check#, Value: 2, ID: check
+				173 link Description: check#, Value: byronwall.github.io/draftably/docs/cli#check
+			174 container
+				175 button Copy
+				176 text draftably check architecture.draft
+draftably check diagrams/ --quiet
+			177 container
+				178 text Reports source errors, layout diagnostics and drawing conflicts, such as a line through a box or overlapping labels. Exits 1 on errors. Several files or a folder check each  .draft  in turn.
+			179 table
+				180 row
+					181 cell
+						182 text Option
+					183 cell
+						184 text Effect
+				185 row
+					186 cell
+						187 text --hints
+					188 cell
+						189 text Add how far each refinement moved its target from where layout put it.
+				190 row
+					191 cell
+						192 text --quiet
+					193 cell
+						194 text Leave out 
+						195 text info
+						196 text  notes.
+				197 row
+					198 cell
+						199 text --metrics
+					200 cell
+						201 text Measure size, aspect, crossings, bends and line length, and warn on crossings, detours, stranded nodes and an extreme aspect.
+				202 row
+					203 cell
+						204 text --fit <shape>
+					205 cell
+						206 text With 
+						207 text --metrics
+						208 text , warn when the drawing is far from 
+						209 text wide
+						210 text , 
+						211 text slide
+						212 text , 
+						213 text square
+						214 text , 
+						215 text page
+						216 text  or 
+						217 text tall
+						218 text .
+			219 heading format#, Value: 2, ID: format
+				220 link Description: format#, Value: byronwall.github.io/draftably/docs/cli#format
+			221 container
+				222 button Copy
+				223 text draftably format architecture.draft --write
+			224 text Prints the formatted source. Comments and unrelated lines are kept.
+			225 table
+				226 row
+					227 cell
+						228 text Option
+					229 cell
+						230 text Effect
+				231 row
+					232 cell
+						233 text --write
+					234 cell
+						235 text Rewrite the file in place.
+				236 row
+					237 cell
+						238 text --drop-stale
+					239 cell
+						240 text Also remove refinements that no longer hold, and list them on stderr.
+			241 heading inspect#, Value: 2, ID: inspect
+				242 link Description: inspect#, Value: byronwall.github.io/draftably/docs/cli#inspect
+			243 container
+				244 button Copy
+				245 container
+					246 text draftably inspect architecture.draft                         # node and route geometry 
+draftably inspect architecture.draft --svg > architecture.svg
+draftably inspect architecture.draft --png architecture.png --scale 2
+			247 text Prints the canonical geometry of every node and route, or draws the diagram. SVG and PNG output embed the source.
+			248 table
+				249 row
+					250 cell
+						251 text Option
+					252 cell
+						253 text Effect
+				254 row
+					255 cell
+						256 text --json
+					257 cell
+						258 text Print the geometry on one line.
+				259 row
+					260 cell
+						261 text --hints
+					262 cell
+						263 text With 
+						264 text --json
+						265 text , add the raw position of every node a refinement moved.
+				266 row
+					267 cell
+						268 text --metrics
+					269 cell
+						270 text Add the measurements 
+						271 text vary
+						272 text  uses.
+				273 row
+					274 cell
+						275 text --svg
+					276 cell
+						277 text Print an SVG drawing.
+				278 row
+					279 cell
+						280 text --png <out.png>
+					281 cell
+						282 text Save a PNG. Needs Chrome, Chromium or Edge.
+				283 row
+					284 cell
+						285 text --scale N
+					286 cell
+						287 text PNG scale, 2 by default.
+				288 row
+					289 cell
+						290 text --max-width <px>
+					291 cell
+						292 text Lower the scale so the PNG is at most this wide.
+				293 row
+					294 cell
+						295 text --state <id>
+					296 cell
+						297 text Draw one 
+						298 link Description: emphasis state, Value: byronwall.github.io/draftably/docs/emphasis-states
+						299 text .
+				300 row
+					301 cell
+						302 text --states
+					303 cell
+						304 text Draw every state as its own aligned panel.
+				305 row
+					306 cell
+						307 text --no-source
+					308 cell
+						309 text Don't embed the source.
+			310 heading compare#, Value: 2, ID: compare
+				311 link Description: compare#, Value: byronwall.github.io/draftably/docs/cli#compare
+			312 container
+				313 button Copy
+				314 text draftably compare before.draft after.draft --svg > diff.svg
+			315 container
+				316 text Prints one file that holds both versions, with  + ,  -  and  ~
+				317 link Description: change marks, Value: byronwall.github.io/draftably/docs/change-marks
+				318 text  on the lines that differ.  --write <file>  saves it,  --svg  draws it, and  --png <out.png>  saves an image.
+			319 heading vary#, Value: 2, ID: vary
+				320 link Description: vary#, Value: byronwall.github.io/draftably/docs/cli#vary
+			321 container
+				322 button Copy
+				323 text draftably vary architecture.draft
+draftably vary architecture.draft --apply best
+			324 container
+				325 text Tries other layouts for the file, measures each one, and ranks them against the file as it is. It writes a contact sheet and one PNG per variant to  <name>.vary/ , and prints a table of crossings, bends, size and warnings.  --apply <id>  writes a variant into the file.
+			326 table
+				327 row
+					328 cell
+						329 text Option
+					330 cell
+						331 text Effect
+				332 row
+					333 cell
+						334 text --apply <id>
+					335 cell
+						336 text Write variant 
+						337 text id
+						338 text  (or 
+						339 text best
+						340 text ) from the last run, then check.
+				341 row
+					342 cell
+						343 text --limit N
+					344 cell
+						345 text Keep N variants, 4 by default, up to 12.
+				346 row
+					347 cell
+						348 text --try key=a,b
+					349 cell
+						350 text Try exactly these values. A second 
+						351 text --try
+						352 text  makes a grid.
+				353 row
+					354 cell
+						355 text --grid
+					356 cell
+						357 text Try the main engines reading right and down.
+				358 row
+					359 cell
+						360 text --fit <shape>
+					361 cell
+						362 text Aim for 
+						363 text wide
+						364 text , 
+						365 text slide
+						366 text , 
+						367 text square
+						368 text , 
+						369 text page
+						370 text  or 
+						371 text tall
+						372 text .
+				373 row
+					374 cell
+						375 text --prefer <goal>
+					376 cell
+						377 text Break ties toward 
+						378 text fewer-crossings
+						379 text , 
+						380 text compact
+						381 text  or 
+						382 text stable
+						383 text .
+				384 row
+					385 cell
+						386 text --from <id>
+					387 cell
+						388 text Search around a variant of the last run.
+				389 row
+					390 cell
+						391 text --scope <group>
+					392 cell
+						393 text Vary that group's layout line instead of the root's.
+				394 row
+					395 cell
+						396 text --budget <time>
+					397 cell
+						398 text Stop trying new variants after this long, such as 
+						399 text 60s
+						400 text  or 
+						401 text 2m
+						402 text .
+				403 row
+					404 cell
+						405 text --out <folder>
+					406 cell
+						407 text Write the images somewhere else.
+				408 row
+					409 cell
+						410 text --json
+					411 cell
+						412 text Print 
+						413 text variants.json
+						414 text  instead of the table.
+			415 container
+				416 link Description: Layout variants, Value: byronwall.github.io/draftably/docs/command-line#layout-variants
+				417 text  explains how variants are chosen and ranked.
+			418 heading set, rm and mv#, Value: 2, ID: set-rm-and-mv
+				419 link Description: set, rm and mv#, Value: byronwall.github.io/draftably/docs/cli#set-rm-and-mv
+			420 container
+				421 button Copy
+				422 text draftably set architecture.draft api label="Public API" color=teal
+draftably rm architecture.draft cache
+draftably mv architecture.draft db orders_db
+			423 container
+				424 text Edit a file by ID.  set  changes a declaration:  label="…"  replaces its label and  color=  with no value removes the attribute. Write  node.x ,  group.x  or  edge.x  when a bare ID is ambiguous.  rm  removes nodes, groups or edges with their edges, refinements and state mentions; a removed group's members move to its container.  mv  renames an ID everywhere. All three rewrite the file through the formatter, then check it.
+			425 heading extract#, Value: 2, ID: extract
+				426 link Description: extract#, Value: byronwall.github.io/draftably/docs/cli#extract
+			427 container
+				428 button Copy
+				429 text draftably extract architecture.png --write architecture.draft
+			430 container
+				431 text Prints the  .draft  source embedded in a PNG or SVG export, or saves it with  --write . Exits 1 when the image has no source.
+			432 heading skill#, Value: 2, ID: skill
+				433 link Description: skill#, Value: byronwall.github.io/draftably/docs/cli#skill
+			434 container
+				435 button Copy
+				436 text draftably skill install
+draftably skill print
+			437 container
+				438 text Installs the 
+				439 link Description: agent skill, Value: byronwall.github.io/draftably/docs/agent-skill
+				440 text  into  ./.claude/skills/draftably .  --global  uses  ~/.claude/skills ,  --dir <folder>  picks another skills folder, and  --force  replaces an existing copy.  skill print  prints its  SKILL.md .
+			118 container Previous and next
+				441 link Description: ← Previous Get started, Value: byronwall.github.io/draftably/docs/get-started
+				119 link Description: Next → Themes, Value: byronwall.github.io/draftably/docs/themes
+		120 container On this page
+			121 heading On this page, Value: 2
+				122 text On this page
+			442 link Description: open, Value: byronwall.github.io/draftably/docs/cli#open
+			443 link Description: check, Value: byronwall.github.io/draftably/docs/cli#check
+			444 link Description: format, Value: byronwall.github.io/draftably/docs/cli#format
+			445 link Description: inspect, Value: byronwall.github.io/draftably/docs/cli#inspect
+			446 link Description: compare, Value: byronwall.github.io/draftably/docs/cli#compare
+			447 link Description: vary, Value: byronwall.github.io/draftably/docs/cli#vary
+			448 link Description: set, rm and mv, Value: byronwall.github.io/draftably/docs/cli#set-rm-and-mv
+			449 link Description: extract, Value: byronwall.github.io/draftably/docs/cli#extract
+			450 link Description: skill, Value: byronwall.github.io/draftably/docs/cli#skill
+			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/site/docs/pages/cli.md
+
+The focused UI element is 119 link Description: Next → Themes, URL: byronwall.github.io/draftably/docs/themes

@@ -1,0 +1,8 @@
+[
+  {
+    "level": "error",
+    "message": "TypeError: Failed to fetch dynamically imported module: https://byronwall.github.io/draftably/assets/Playground-BU2uUc6A.js",
+    "timestamp": "2026-10-30T02:39:14.709Z",
+    "url": "https://byronwall.github.io/draftably/play#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA"
+  }
+]
