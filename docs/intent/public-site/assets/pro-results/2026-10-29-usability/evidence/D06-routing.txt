@@ -1,0 +1,46 @@
+Browser tab: 9, Title: "Routing · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/routing".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 443-509
+~0 AXWebArea Routing · Draftably docs, URL: byronwall.github.io/draftably/docs/routing
+~			129 link Description: Layout, Value: byronwall.github.io/draftably/docs/layout-engines
+~			130 text Routing
+~			51 heading Routing, Value: 1
+~				52 text Routing
+~			442 container
++				443 text One  routing  statement sets the router for every connection:
++			444 container
++				445 button Copy
++				446 container
++					447 text routing edge-gap = 24 clearance = 12 corner-radius = 0
++			448 container
++				449 text Settings:  clearance ,  standoff ,  port-gap ,  edge-gap ,  bend-penalty ,  crossing-penalty ,  shared-penalty ,  parallel-penalty ,  port-stability ,  fanout-penalty ,  passes  and  corner-radius , with the router's own ranges. Without it, the router's defaults apply.
++			450 container
++				451 text clearance  (default 10) is the hard distance a line keeps from boxes.  standoff  (default 20, 0 to 40) is the distance the router prefers for a line running alongside a box or a group border, inside or outside it. A line comes closer only when no clearer route exists. Only a group's title blocks its header band, so a line can enter a group straight down beside the title.  standoff=0  turns the preference off.
++			452 container
++				453 text When the root  layout  line declares  direction=right  or  direction=down , a forward connection between objects that layout places leaves its source's trailing side and enters its target's leading side (bottom to top going down), turning in the gap between ranks. It uses another side only when those are blocked. Connections inside a group with its own recipe are left to that recipe.
+~				441 link Description: ← Previous Layout engines, Value: byronwall.github.io/draftably/docs/layout-engines
+~				119 link Description: Next → Layout tools, Value: byronwall.github.io/draftably/docs/layout-tools
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#routing
+The focused UI element is 41 link Description: Routing, URL: byronwall.github.io/draftably/docs/routing
+
+VISIBLE MAIN TEXT
+Layout
+/
+Routing
+Routing
+
+One routing statement sets the router for every connection:
+
+Copy
+routing edge-gap=24 clearance=12 corner-radius=0
+
+Settings: clearance, standoff, port-gap, edge-gap, bend-penalty, crossing-penalty, shared-penalty, parallel-penalty, port-stability, fanout-penalty, passes and corner-radius, with the router's own ranges. Without it, the router's defaults apply.
+
+clearance (default 10) is the hard distance a line keeps from boxes. standoff (default 20, 0 to 40) is the distance the router prefers for a line running alongside a box or a group border, inside or outside it. A line comes closer only when no clearer route exists. Only a group's title blocks its header band, so a line can enter a group straight down beside the title. standoff=0 turns the preference off.
+
+When the root layout line declares direction=right or direction=down, a forward connection between objects that layout places leaves its source's trailing side and enters its target's leading side (bottom to top going down), turning in the gap between ranks. It uses another side only when those are blocked. Connections inside a group with its own recipe are left to that recipe.
+
+← Previous
+Layout engines
+Next →
+Layout tools

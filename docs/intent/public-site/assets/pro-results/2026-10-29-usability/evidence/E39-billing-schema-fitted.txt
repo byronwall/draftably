@@ -1,0 +1,176 @@
+Browser tab: 4, Title: "Billing schema · Draftably playground", URL: "https://byronwall.github.io/draftably/play/?example=billing-schema".
+0 AXWebArea Billing schema · Draftably playground, URL: byronwall.github.io/draftably/play/?example=billing-schema
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 container Site
+				5 link Description: Playground, Value: byronwall.github.io/draftably/play
+				6 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				7 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				8 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				9 link Description: GitHub, Value: github.com/byronwall/draftably
+			10 button Copy link
+			11 button (collapsed) Download, Secondary Actions: Expand
+			16 button Open in the editor
+		17 container Source
+			354 button (collapsed) Billing schema, Secondary Actions: Expand
+				355 text Billing schema
+			20 container
+				21 text Theme
+				22 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					23 menu
+						24 (selected) Drafting
+						25 Fieldnotes
+						26 Signal
+						27 Ink
+						28 Blueprint
+			29 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			30 container
+				31 text entry area (settable) Description: Diagram source, Value: diagram "Billing schema" version=1
+subtitle "Each invoice belongs to one account; each line item belongs to one invoice."
+
+
+# Tables: each entity is a group of cells in two columns, and foreign keys join rows.
+
+
+group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+node accounts.name "name" in=accounts
+node accounts.name_t "text" in=accounts
+node accounts.plan "plan" in=accounts
+node accounts.plan_t "text" in=accounts
+
+
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+node invoices.total "total_cents" in=invoices
+node invoices.total_t "bigint" in=invoices
+node invoices.due "due_on" in=invoices
+node invoices.due_t "date" in=invoices
+
+
+group items "line_items" color=violet
+layout items cells columns=2
+node items.id "id" in=items
+node items.id_t "uuid" in=items
+node items.invoice "invoice_id" in=items
+node items.invoice_t "uuid" in=items
+node items.amount "amount_cents" in=items
+node items.amount_t "bigint" in=items
+
+
+edge invoice_account invoices.account -> accounts.id
+edge item_invoice items.invoice -> invoices.id
+
+
+layout root flow direction=right gap=96
+
+
+					32 container
+						33 text diagram "Billing schema" version = 1
+					356 container
+						357 text subtitle "Each invoice belongs to one account; each line item belongs to one invoice."
+					358 text # Tables: each entity is a group of cells in two columns, and foreign keys join rows.
+					359 container
+						360 text group accounts "accounts" color = blue
+					361 container
+						362 text layout accounts cells columns = 2
+					363 container
+						364 text node accounts.id "id" in = accounts
+					365 container
+						366 text node accounts.id_t "uuid" in = accounts
+					367 container
+						368 text node accounts.name "name" in = accounts
+					369 container
+						370 text node accounts.name_t "text" in = accounts
+					371 container
+						372 text node accounts.plan "plan" in = accounts
+					373 container
+						374 text node accounts.plan_t "text" in = accounts
+					375 container
+						376 text group invoices "invoices" color = teal
+					377 container
+						378 text layout invoices cells columns = 2
+					379 container
+						380 text node invoices.id "id" in = invoices
+					381 container
+						382 text node invoices.id_t "uuid" in = invoices
+					383 container
+						384 text node invoices.account "account_id" in = invoices
+					385 container
+						386 text node invoices.account_t "uuid" in = invoices
+					387 container
+						388 text node invoices.total "total_cents" in = invoices
+					389 container
+						390 text node invoices.total_t "bigint" in = invoices
+					391 container
+						392 text node invoices.due "due_on" in = invoices
+					393 container
+						394 text node invoices.due_t "date" in = invoices
+					395 container
+						396 text group items "line_items" color = violet
+					397 container
+						398 text layout items cells columns = 2
+					399 container
+						400 text node items.id "id" in = items
+					401 container
+						402 text node items.id_t "uuid" in = items
+					403 container
+						404 text node items.invoice "invoice_id" in = items
+					405 container
+						406 text node items.invoice_t "uuid" in = items
+					407 container
+						408 text node items.amount "amount_cents" in = items
+					409 container
+						410 text node items.amount_t "bigint" in = items
+					411 container
+						412 text edge invoice_account invoices.account -> accounts.id
+					413 container
+						414 text edge item_invoice items.invoice -> invoices.id
+					415 container
+						416 text layout root flow direction = right gap = 96
+			40 button (disabled) No problems · drawn in 37 ms Click a shape to find its line
+				152 text No problems · drawn in 37 ms Click a shape to find its line
+		43 splitter Description: Resize panes, Value: 38
+		44 container Diagram
+			45 container
+				417 image Billing schema
+					418 text Billing schema
+					419 text Each invoice belongs to one account; each line item belongs to one invoice.
+					420 text accounts
+					421 text invoices
+					422 text line_items
+					423 text id
+					424 text uuid
+					425 text name
+					426 text text
+					427 text plan
+					428 text text
+					429 text id
+					430 text uuid
+					431 text account_id
+					432 text uuid
+					433 text total_cents
+					434 text bigint
+					435 text due_on
+					436 text date
+					437 text id
+					438 text uuid
+					439 text invoice_id
+					440 text uuid
+					441 text amount_cents
+					442 text bigint
+				50 button Zoom out
+				51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					52 text 103
+					53 text %
+				54 button Zoom in
+				55 button Full screen
+
+The focused UI element is 51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)

@@ -1,0 +1,103 @@
+Browser tab: 9, Title: "Refinements · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/refinements".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 443-677
+~0 AXWebArea Refinements · Draftably docs, URL: byronwall.github.io/draftably/docs/refinements
+~			130 text Refinements
+~			51 heading Refinements, Value: 1
+~				52 text Refinements
+~			442 text Refinements adjust the automatic layout for one object. Positions are relative to the parent's content area, not the whole canvas, so moving a group moves everything inside it.
++			443 table
++				444 row
++					445 cell
++						446 text Statement
++					447 cell
++						448 text Strength
++					449 cell
++						450 text Meaning
++				451 row
++					452 cell
++						453 text near id ref side=right gap=28 offset=0
++					454 cell
++						455 text soft
++					456 cell
++						457 text Place next to a sibling, or next to something inside a sibling group: then beside that group, lined up with 
++						458 text ref
++						459 text . 
++						460 text strength=required
++						461 text  enforces side and gap.
++				462 row
++					463 cell
++						464 text nudge id dx=0 dy=0
++					465 cell
++						466 text soft
++					467 cell
++						468 text Offset from the automatic position.
++				469 row
++					470 cell
++						471 text stay id x= y= weight=8
++					472 cell
++						473 text soft
++					474 cell
++						475 text Prefer this position; resists movement when content changes. Layout tools write these.
++				476 row
++					477 cell
++						478 text pin id x= y=
++					479 cell
++						480 text hard
++					481 cell
++						482 text Exactly this position. Automatic layout never moves it.
++				483 row
++					484 cell
++						485 text size id width= height=
++					486 cell
++						487 text —
++					488 cell
++						489 text Exact node size. A title that does not fit is reported, not grown. A diamond stays square at the larger side. 
++						490 text height=auto
++						491 text  fits the title at that width, so the line survives label edits.
++				492 row
++					493 cell
++						494 text order scope id...
++					495 cell
++						496 text soft
++					497 cell
++						498 text Preferred order of a scope's children.
++				499 row
++					500 cell
++						501 text align x|y id...
++					502 cell
++						503 text soft
++					504 cell
++						505 text Align centers of siblings. 
++						506 text strength=required
++						507 text  locks them.
++			508 container
++				509 text Soft rules give way to keep siblings from overlapping. When one does,  check  reports it with its line. Pins never move; conflicting pins are reported as errors.
+~				441 link Description: ← Previous Rules, Value: byronwall.github.io/draftably/docs/rules
+~				119 link Description: Next → Themes and colors, Value: byronwall.github.io/draftably/docs/themes-and-colors
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#refinements
+The focused UI element is 26 link Description: Refinements, URL: byronwall.github.io/draftably/docs/refinements
+
+VISIBLE MAIN TEXT
+Language
+/
+Refinements
+Refinements
+
+Refinements adjust the automatic layout for one object. Positions are relative to the parent's content area, not the whole canvas, so moving a group moves everything inside it.
+
+Statement	Strength	Meaning
+near id ref side=right gap=28 offset=0	soft	Place next to a sibling, or next to something inside a sibling group: then beside that group, lined up with ref. strength=required enforces side and gap.
+nudge id dx=0 dy=0	soft	Offset from the automatic position.
+stay id x= y= weight=8	soft	Prefer this position; resists movement when content changes. Layout tools write these.
+pin id x= y=	hard	Exactly this position. Automatic layout never moves it.
+size id width= height=	—	Exact node size. A title that does not fit is reported, not grown. A diamond stays square at the larger side. height=auto fits the title at that width, so the line survives label edits.
+order scope id...	soft	Preferred order of a scope's children.
+align x|y id...	soft	Align centers of siblings. strength=required locks them.
+
+Soft rules give way to keep siblings from overlapping. When one does, check reports it with its line. Pins never move; conflicting pins are reported as errors.
+
+← Previous
+Rules
+Next →
+Themes and colors

@@ -1,0 +1,25 @@
+Browser tab: 5, Title: "Example: Audit lesson · Draftably", URL: "https://byronwall.github.io/draftably/app/#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA".
+1 AXWebArea Example: Audit lesson · Draftably, URL: byronwall.github.io/draftably/app/#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA
+	2 container Export
+		3 container
+			4 heading Export, Value: 2
+				5 text Export
+			6 button Close dialog
+		7 container Format
+			8 checkbox PNG, Value: 0
+			9 checkbox SVG, Value: 1
+			10 checkbox Copy, Value: 0
+		11 image Preview of the export
+		12 text Background
+		13 container Background
+			14 checkbox Canvas, Help: The theme’s canvas color, Value: 1
+			15 checkbox Transparent, Value: 0
+		16 checkbox (disabled, settable, integer) Description: Title, subtitle and key, Value: 1
+		17 checkbox (settable, integer) Description: Only the selection (1 object), Value: 1
+		18 checkbox (settable, integer) Description: Include .draft source, Value: 1
+		19 text 212 × 104 px
+		20 container
+			21 button Cancel
+			22 button Export SVG
+
+The focused UI element is 6 button Close dialog

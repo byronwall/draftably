@@ -191,6 +191,22 @@ do not apply yet. Lines that run back against the order take the long way round 
 
 ## Sequence diagrams
 
+A sequence diagram shows the messages between participants in time order, from top to bottom.
+
+```draft
+node user "User"
+node app "Web app"
+edge m1 user -> app "sign in"
+edge m2 app -> user "welcome" kind=async
+layout root sequence
+```
+
+**Try it:** add `edge m3 app -> app "load profile"` between the `m1` and `m2` lines. A loop with
+the label appears on the Web app's lifeline, between the two arrows. Messages draw in the order of
+their `edge` lines.
+
+### Sequence reference
+
 `layout root sequence` draws an exchange between participants. Every node is a participant,
 drawn in a row across the top in file order (or the order an `order root` line gives), with a
 dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
@@ -242,6 +258,22 @@ work as anywhere else: a `+edge` line shows a new message in place. Fragments (`
 activations and notes are not supported yet.
 
 ## Cells
+
+Cells draw a group as one object made of parts that touch, such as the fields of a record or the
+parts of a request.
+
+```draft
+group req "Request" color=slate
+layout req cells
+node method "Method" in=req
+node path "Path" in=req
+node body "Body" in=req
+```
+
+**Try it:** change the layout line to `layout req cells columns=2`. The cells become a grid with two
+columns, and Body starts a second row.
+
+### Cells reference
 
 `layout group cells` draws a group as one object made of parts, like the parts of a request in
 order. The group's nodes are its cells: they touch and share borders, in declaration order (or the
@@ -566,20 +598,121 @@ One `routing` statement sets the router for every connection:
 routing edge-gap=24 clearance=12 corner-radius=0
 ```
 
-Settings: `clearance`, `standoff`, `port-gap`, `edge-gap`, `bend-penalty`, `crossing-penalty`,
-`shared-penalty`, `parallel-penalty`, `port-stability`, `fanout-penalty`, `passes` and
-`corner-radius`, with the router's own ranges. Without it, the router's defaults apply.
+Without a `routing` line, the router's defaults apply. A setting outside its range is an error
+with the line number, such as `Expected crossing-penalty from 0 to 1200; got 2000.`
 
-`clearance` (default 10) is the hard distance a line keeps from boxes. `standoff` (default 20,
-0 to 40) is the distance the router prefers for a line running alongside a box or a group border,
-inside or outside it. A line comes closer only when no clearer route exists. Only a group's title
-blocks its header band, so a line can enter a group straight down beside the title. `standoff=0` turns the
-preference off.
+| Setting            | What it does                                                                                               | Default | Range  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------- | ------ |
+| `clearance`        | The hard distance in pixels a line keeps from boxes and from groups it does not enter.                     | 10      | 4–30   |
+| `standoff`         | The distance a line prefers when it runs alongside a box or a group border. `0` turns it off.              | 20      | 0–40   |
+| `port-gap`         | The least space the router prefers between two line ends on one side of a box.                             | 16      | 6–28   |
+| `edge-gap`         | The space the router prefers between two parallel lines. Gaps next to groups widen by this step.           | 16      | 4–48   |
+| `bend-penalty`     | The cost of each bend. Higher values give simpler routes with fewer bends.                                 | 32      | 0–100  |
+| `crossing-penalty` | The cost of each crossing. Higher values take a longer way round instead of a crossing.                    | 360     | 0–1200 |
+| `shared-penalty`   | The cost of each pixel of a segment that another line also uses.                                           | 8       | 0–20   |
+| `parallel-penalty` | The cost of two parallel lines closer than `edge-gap`. Higher values keep lines apart.                     | 18      | 0–60   |
+| `port-stability`   | The cost of moving a line's end to another side than the earlier drawing used. It never locks a side.      | 20      | 0–150  |
+| `fanout-penalty`   | The cost of each extra line on a side that other lines use. Higher values spread branches over more sides. | 50      | 0–160  |
+| `passes`           | Routing passes: one first pass, then up to four passes that repair crossings and shared segments.          | 3       | 1–5    |
+| `corner-radius`    | The radius of the rounded corners in pixels. `0` gives square corners.                                     | 6       | 0–16   |
+
+The router adds the costs to the route length in pixels and keeps the cheapest route. So
+`bend-penalty=32` means the router accepts a route up to 32 pixels longer to remove one bend, and
+`crossing-penalty=360` a route up to 360 pixels longer to remove one crossing.
+
+`clearance` is a hard limit. `standoff` is a preference: a line comes closer only when no clearer
+route exists. Only a group's title blocks its header band, so a line can enter a group straight
+down beside the title.
+
+Which setting to change for a problem:
+
+- **Too many bends:** raise `bend-penalty`, for example to 64.
+- **Lines cross:** raise `crossing-penalty`, for example to 900. See also
+  [Fixing line crossings](#fixing-line-crossings). The viewer's **Fewer crossings**
+  preset writes `crossing-penalty=900 shared-penalty=9 port-stability=10`.
+- **Parallel lines too close together:** raise `edge-gap`, then `parallel-penalty`.
+- **Lines too close to boxes:** raise `clearance` (a hard limit) or `standoff` (a preference).
+- **Line ends bunched on one side of a box:** raise `port-gap`, then `fanout-penalty`.
+- **Rounded corners not wanted:** set `corner-radius=0`.
+
+This file asks for fewer bends and square corners. Remove the `routing` line to see the defaults:
+
+```draft
+node client "Client"
+node gateway "Gateway"
+node orders "Orders"
+node billing "Billing"
+edge e1 client -> gateway "request"
+edge e2 gateway -> orders
+edge e3 gateway -> billing
+edge e4 client -> billing "invoice"
+routing bend-penalty=64 crossing-penalty=900 corner-radius=0
+```
+
+The viewer's **Routing** menu has a slider for each setting except `standoff`, and shows the
+crossings, close lane pairs and bends of the current drawing. A change there writes the `routing`
+line.
 
 When the root `layout` line declares `direction=right` or `direction=down`, a forward connection
 between objects that layout places leaves its source's trailing side and enters its target's
 leading side (bottom to top going down), turning in the gap between ranks. It uses another side
 only when those are blocked. Connections inside a group with its own recipe are left to that recipe.
+
+### Fixing line crossings
+
+Layout and routing are heuristics: they remove most crossings but do not promise none. To fix a
+crossing, change the source first, then compare the results. In this file, `web` connects to
+`orders` and `mobile` to `accounts`, but the `services` group lists them the other way round, so
+the two lines cross:
+
+```draft
+group apps "Apps"
+group services "Services"
+node web "Web" in=apps
+node mobile "Mobile" in=apps
+node accounts "Accounts" in=services
+node orders "Orders" in=services
+edge e1 web -> orders
+edge e2 mobile -> accounts
+layout root row
+```
+
+`draftably check --metrics` warns `Edges e1 and e2 cross.` and counts the crossings. Add
+`order services orders accounts` to remove the crossing. The two lines then run straight.
+
+Try these steps in order, and stop when the drawing reads well:
+
+1. **Change the order.** The order of `node` lines, or a scope's `order` line, decides where a box
+   goes when nothing else does. Put boxes in the same order as the boxes they connect to.
+2. **Let the engine reorder.** On a `compound-flow` or `layered` engine, add `ordering=crossings`:
+   `layout root engine=layered ordering=crossings`. In the viewer, the same setting is
+   **Within-rank ordering** → **Reorder to reduce crossings** in Layout options.
+3. **Move one box.** A `near` line with `side=` puts a box on the other side of its neighbor. A
+   `pin` holds a box at an exact place. See [Refinements](#refinements).
+4. **Choose the sides.** `from=` and `to=` on an `edge` line choose the sides a line leaves and
+   enters.
+5. **Route around it.** Raise `crossing-penalty` on the `routing` line, for example to 900. In the
+   viewer, **Routing** → **Fewer crossings** writes that line.
+
+To compare more than one result at once:
+
+- **In the viewer:** **Routing** shows the crossings in the current drawing. **Compare ports &
+  routes** draws routing candidates side by side, and **Compare layouts** (**Alt E**) does the same
+  for layout recipes. **Apply** writes the candidate's `routing` or `layout` line into the file.
+  **Reroute now** (**Alt R**) routes every line again without moving shapes. Undo steps back
+  through the file's versions. See [Layout tools](#layout-tools).
+- **From the command line:** `draftably vary diagram.draft` tries layouts and a router that avoids
+  crossings harder. Its table has a `crossings` column and its contact sheet draws each variant.
+  `--try crossing-penalty=360,900` or `--try ordering=stable,crossings` compares exact values.
+  `--apply v1` writes the variant you chose. The `recommended` variant also weighs size, so read
+  the `crossings` column. See [Layout variants](#layout-variants).
+
+When a crossing remains:
+
+- Some sets of connections cannot be drawn without a crossing. Keep the result with the fewest.
+- A feedback line, such as a retry back to the start, can pull boxes out of order. Add
+  `constraint=false` to its `edge` line so layout ignores it.
+- The file cannot store the bends of one line yet, so a hand-drawn route is not kept.
 
 ## Refinements
 
@@ -804,6 +937,22 @@ viewer. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ## Editing in the viewer
 
+When you edit a diagram in the viewer, the viewer writes each change into the `.draft` file as a
+readable line, so the file stays the source.
+
+```draft
+node api "API"
+node cache "Cache"
+edge read api -> cache "read"
+```
+
+**Try it:** save these lines as `cache.draft` and run `npx draftably open cache.draft`. Select
+Cache and choose teal as its color in the Inspector. The box turns teal, and the file's
+`node cache` line gets `color=teal`. Then drag Cache below API: the file gets a `near` line for
+Cache. Undo returns the file to its earlier version.
+
+### Viewer edits reference
+
 Edits made in the viewer are written back to the file as readable statements:
 
 | In the viewer                              | In the file                                                         |
@@ -853,6 +1002,8 @@ new position relative to its parent (an existing `stay` is updated in place), an
 around them are anchored as for a drag. Groups follow their contents, so a group whose children
 moved left or up moves with them. Pins never move. A root-level `stay` may be negative, because
 the root has no frame.
+
+For a step-by-step way to remove a crossing, see [Fixing line crossings](#fixing-line-crossings).
 
 Checkpoints are unavailable while a file is open, because undo steps through the file's versions.
 Connection bends, label positions, start/end preferences and images are unavailable because the

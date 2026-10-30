@@ -28,12 +28,23 @@ import {
   toggleBrush,
 } from './sculpt';
 import { fileMode, reflowSelectedGroup } from './file-session';
-import { go, setStartOpen, startUrl, workspace } from './launch';
+import { encodeSource } from '../lib/source-hash';
+import {
+  go,
+  newDiagramSource,
+  openInPlayground,
+  playgroundNote,
+  setStartOpen,
+  siteUrl,
+  startUrl,
+  workspace,
+} from './launch';
 import { toast } from './toast';
 import {
   filesShown,
   inspectorOpen,
   objectsOpen,
+  confirmAction,
   openDialog,
   openQuickBuild,
   setFilesOpen,
@@ -103,6 +114,19 @@ function findFile() {
   requestAnimationFrame(() =>
     document.querySelector<HTMLInputElement>('.files-panel .panel-search input')?.select(),
   );
+}
+
+/**
+ * A served folder makes the new diagram a file, from its start page. The static site replaces the
+ * browser copy; from an example there, a blank scratch copy opens instead, like the Playground's.
+ */
+async function newDiagram() {
+  if (!fileMode()) return actions.newDocument();
+  if (workspace()) return openStart();
+  // `?new` makes this a page load even from a shared copy, whose URL differs only in the hash.
+  // The time keeps each blank's stored edits apart (see `openExampleSession`).
+  const hash = await encodeSource(newDiagramSource(''));
+  location.assign(`${startUrl()}?new#${hash}&t=${Date.now()}`);
 }
 
 function openStart() {
@@ -338,7 +362,7 @@ export const commands = {
   'new-diagram': {
     label: 'New diagram',
     icon: 'plus',
-    run: () => (fileMode() ? openStart() : actions.newDocument()),
+    run: newDiagram,
   },
   open: {
     label: 'Open diagram…',
@@ -370,6 +394,26 @@ export const commands = {
   'copy-source': { label: 'Draftably source', icon: 'file', run: () => copyCommand('source') },
   'copy-link': { label: 'Link to this diagram', icon: 'globe', run: () => copyCommand('link') },
   theme: { label: 'Toggle light / dark', icon: 'sun', run: actions.toggleTheme },
+  docs: {
+    label: 'Docs',
+    icon: 'globe',
+    // A new tab, so the diagram here stays as it is.
+    run: () => window.open(siteUrl('docs'), '_blank', 'noopener'),
+    duringTimeline: true,
+  },
+  'open-playground': {
+    label: 'Open in Playground',
+    icon: 'code',
+    // Only a file or an example has source to carry.
+    enabled: fileMode,
+    run: () =>
+      confirmAction({
+        title: 'Open in the Playground?',
+        message: playgroundNote(),
+        confirmLabel: 'Open Playground',
+        onConfirm: () => void openInPlayground(),
+      }),
+  },
 } satisfies Record<string, Command>;
 
 export type CommandId = keyof typeof commands;

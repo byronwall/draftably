@@ -216,3 +216,7 @@ Set `SITE_BASE=/`, add `site/public/CNAME`, set the domain in the Pages settings
 1. Share by URL hash in the playground: yes.
 2. Rename the viewer's "Diagram Studio" title to Draftably now: yes.
 3. More landing-page sections beyond hero, why, examples and install: no.
+
+## Deep usability audit (2026-10-29)
+
+The completed browser and Pro review is preserved with its original evidence. Read the [reviewed summary](usability-audit-2026-10-29/summary.md), [staged repair plan](usability-audit-2026-10-29/repair-plan.md), [issue register](usability-audit-2026-10-29/issues.md), and [complete original asset index](usability-audit-2026-10-29/assets-index.md). Several historical defects were fixed during collection. The reviewed plan distinguishes those repairs from remaining work. This report does not authorize implementation.

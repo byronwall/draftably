@@ -4,17 +4,20 @@
  * - `?file=path.draft` with `draftably open`: that file, saved back to disk.
  * - `?example=id`: a scratch copy of a bundled example. Never written to disk.
  * - `#s=…`: a scratch copy of source shared from the site's playground, opened like an example.
+ *   Unsaved edits to either kind of scratch copy come back after a reload.
  * - `draftably open` without a file: the start page, showing the folder's diagrams.
  * - The static site: the diagram kept in browser storage, as before.
  */
 import { createRoot, createSignal } from 'solid-js';
-import { decodeSource } from '../lib/source-hash';
+import { decodeSource, encodeSource } from '../lib/source-hash';
 import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
 import { clearSelection, prepareForEdit, setDoc } from './document';
 import { fitView } from './editor';
 import {
+  agreeToLeave,
   closeFileSession,
+  currentSource,
   exampleMode,
   fileSession,
   openExampleSession,
@@ -55,6 +58,47 @@ export const launchView = state.view;
 export const fileUrl = (path: string) => `${location.pathname}?file=${encodeURIComponent(path)}`;
 export const exampleUrl = (id: string) => `${location.pathname}?example=${encodeURIComponent(id)}`;
 export const startUrl = () => location.pathname;
+
+/**
+ * A page of the public site (docs, the Playground). The editor is served at `<site>/app/` there;
+ * `draftably open` and the dev server have no site, so their links go to draftably.dev.
+ */
+export const siteUrl = (path = '') =>
+  new URL(
+    path,
+    !state.workspace() && /\/app\/(index\.html)?$/.test(location.pathname)
+      ? new URL('..', location.href)
+      : 'https://draftably.dev/',
+  ).href;
+
+/** The editor was opened from the Playground, as its "Open in the editor" does. */
+export const cameFromPlayground = () => {
+  try {
+    return /\/play\/?$/.test(new URL(document.referrer).pathname);
+  } catch {
+    return false;
+  }
+};
+
+/** What happens to the source when it goes to the Playground, said before it goes. */
+export function playgroundNote(): string {
+  const file = fileSession();
+  if (!file) return '';
+  return file.example
+    ? 'The Playground opens in this tab with this source. Your edits here stay in this browser, and Back returns to them.'
+    : `The Playground opens in a new tab with a copy of this source. Edits there are not saved to ${file.file}.`;
+}
+
+/**
+ * Show the current source in the Playground. A file stays open here and the Playground opens in
+ * a new tab; an example goes in this tab, since its source is all it has.
+ */
+export async function openInPlayground() {
+  const url = `${siteUrl('play')}#${await encodeSource(currentSource())}`;
+  if (!exampleMode()) return void window.open(url, '_blank', 'noopener');
+  agreeToLeave();
+  location.assign(url);
+}
 
 async function fetchWorkspace(): Promise<WorkspaceInfo | null> {
   try {
@@ -128,7 +172,7 @@ async function chooseLaunch(): Promise<LaunchMode> {
   const shared = await decodeSource(location.hash);
   if (shared != null) {
     const title = /^diagram\s+"([^"]*)"/m.exec(shared)?.[1] || 'Shared diagram';
-    await openExampleSession('shared', title, shared);
+    await openExampleSession('shared', title, shared, location.hash.slice(1));
     return 'example';
   }
   return info ? 'start' : 'static';

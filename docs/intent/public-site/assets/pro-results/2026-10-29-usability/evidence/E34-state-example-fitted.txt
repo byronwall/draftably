@@ -1,0 +1,139 @@
+Browser tab: 4, Title: "Order lifecycle · Draftably playground", URL: "https://byronwall.github.io/draftably/play/?example=order-lifecycle".
+0 AXWebArea Order lifecycle · Draftably playground, URL: byronwall.github.io/draftably/play/?example=order-lifecycle
+	1 container root
+		2 container
+			3 link Description: Draftably, Value: byronwall.github.io/draftably/
+			4 container Site
+				5 link Description: Playground, Value: byronwall.github.io/draftably/play
+				6 link Description: Docs, Value: byronwall.github.io/draftably/docs
+				7 link Description: Examples, Value: byronwall.github.io/draftably/#examples
+				8 link Description: Editor, Value: byronwall.github.io/draftably/app/
+				9 link Description: GitHub, Value: github.com/byronwall/draftably
+			10 button Copy link
+			11 button (collapsed) Download, Secondary Actions: Expand
+			16 button Open in the editor
+		17 container Source
+			196 button (collapsed) Order lifecycle, Secondary Actions: Expand
+				197 text Order lifecycle
+			20 container
+				21 text Theme
+				22 pop up button (collapsed, settable) Theme, Value: Drafting, Secondary Actions: Expand
+					23 menu
+						24 (selected) Drafting
+						25 Fieldnotes
+						26 Signal
+						27 Ink
+						28 Blueprint
+			29 button Format, Help: Rewrite in the standard layout (Shift+Alt+F)
+			30 container
+				31 text entry area (settable) Description: Diagram source, Value: diagram "Order lifecycle" version=1
+
+
+# A state machine with loops back to earlier states and two terminal states.
+node draft "Draft" shape=pill color=slate
+node placed "Placed" shape=pill color=blue
+node paid "Paid" shape=pill color=blue
+node packed "Packed" shape=pill color=violet
+node shipped "Shipped" shape=pill color=violet
+node delivered "Delivered" shape=pill color=mint
+node returned "Return requested" shape=pill color=amber
+node refunded "Refunded" shape=pill color=rose
+node cancelled "Cancelled" shape=pill color=rose
+
+
+edge submit draft -> placed "submit"
+edge pay placed -> paid "payment captured"
+edge decline placed -> draft "payment declined"
+edge pick paid -> packed "pick & pack"
+edge ship packed -> shipped "hand to carrier"
+edge deliver shipped -> delivered "scan at door"
+edge lost shipped -> packed "lost in transit"
+edge ret delivered -> returned "within 30 days"
+edge refund returned -> refunded "item received"
+edge cancel1 placed -> cancelled "customer cancels"
+edge cancel2 paid -> cancelled "customer cancels"
+
+
+layout root flow gap=44 direction=right
+
+
+					32 container
+						33 text diagram "Order lifecycle" version = 1
+					198 text # A state machine with loops back to earlier states and two terminal states.
+					199 container
+						200 text node draft "Draft" shape = pill color = slate
+					201 container
+						202 text node placed "Placed" shape = pill color = blue
+					203 container
+						204 text node paid "Paid" shape = pill color = blue
+					205 container
+						206 text node packed "Packed" shape = pill color = violet
+					207 container
+						208 text node shipped "Shipped" shape = pill color = violet
+					209 container
+						210 text node delivered "Delivered" shape = pill color = mint
+					211 container
+						212 text node returned "Return requested" shape = pill color = amber
+					213 container
+						214 text node refunded "Refunded" shape = pill color = rose
+					215 container
+						216 text node cancelled "Cancelled" shape = pill color = rose
+					217 container
+						218 text edge submit draft -> placed "submit"
+					219 container
+						220 text edge pay placed -> paid "payment captured"
+					221 container
+						222 text edge decline placed -> draft "payment declined"
+					223 container
+						224 text edge pick paid -> packed "pick & pack"
+					225 container
+						226 text edge ship packed -> shipped "hand to carrier"
+					227 container
+						228 text edge deliver shipped -> delivered "scan at door"
+					229 container
+						230 text edge lost shipped -> packed "lost in transit"
+					231 container
+						232 text edge ret delivered -> returned "within 30 days"
+					233 container
+						234 text edge refund returned -> refunded "item received"
+					235 container
+						236 text edge cancel1 placed -> cancelled "customer cancels"
+					237 container
+						238 text edge cancel2 paid -> cancelled "customer cancels"
+					239 container
+						240 text layout root flow gap = 44 direction = right
+			40 button (disabled) No problems · drawn in 398 ms Click a shape to find its line
+				152 text No problems · drawn in 398 ms Click a shape to find its line
+		43 splitter Description: Resize panes, Value: 38
+		44 container Diagram
+			45 container
+				241 image Order lifecycle
+					242 text Order lifecycle
+					243 text customer cancels
+					244 text customer cancels
+					245 text payment declined
+					246 text scan at door
+					247 text lost in transit
+					248 text payment captured
+					249 text pick & pack
+					250 text item received
+					251 text within 30 days
+					252 text hand to carrier
+					253 text submit
+					254 text Draft
+					255 text Placed
+					256 text Paid
+					257 text Packed
+					258 text Shipped
+					259 text Delivered
+					260 text Return requested
+					261 text Refunded
+					262 text Cancelled
+				50 button Zoom out
+				51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)
+					52 text 69
+					53 text %
+				54 button Zoom in
+				55 button Full screen
+
+The focused UI element is 51 button Description: Fit to view, Help: Fit to view (or double-click the canvas)

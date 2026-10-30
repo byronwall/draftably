@@ -25,20 +25,34 @@ import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
 const SPLIT_KEY = 'draftably.play.split';
+const DRAFT_KEY = 'draftably.play.draft';
 
 const THEME_LINE = /^theme[ \t]+([\w-]+)/m;
 
-/** The source to start from: a shared `#s=` link, then `?example=`, then the checkout example. */
+/** The source the URL names: a shared `#s=` link, then `?example=`. */
+async function urlSource() {
+  const shared = await decodeSource(location.hash);
+  if (shared != null) return { id: 'shared', source: shared };
+  const ex = findExample(new URLSearchParams(location.search).get('example') ?? '');
+  return ex ? { id: ex.id, source: ex.source } : null;
+}
+
+/** The source to start from: a handed-over file, the URL, the saved draft, then checkout. */
 async function startingSource() {
   // A file dropped or pasted on another page, handed over by the site shell.
   const handed = incoming();
   if (handed) return { id: 'shared', source: handed.source };
-  const shared = await decodeSource(location.hash);
-  if (shared != null) return { id: 'shared', source: shared };
-  const asked = findExample(new URLSearchParams(location.search).get('example') ?? '');
-  const ex = asked ?? findExample('checkout') ?? EXAMPLES[0];
+  const fromUrl = await urlSource();
+  if (fromUrl) return fromUrl;
+  const draft = readDraft();
+  if (draft) return { id: 'draft', source: draft };
+  const ex = findExample('checkout') ?? EXAMPLES[0];
   return { id: ex.id, source: ex.source };
 }
+
+/** Source the visitor wrote or changed, as opposed to an example as it ships. */
+const isCustom = (text: string) =>
+  !!text.trim() && text !== BLANK && !EXAMPLES.some(e => e.source === text);
 
 const titleOf = (source: string) => /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'Untitled diagram';
 const fileName = (source: string, ext: string) =>
@@ -81,6 +95,8 @@ export function Playground() {
   const [exampleId, setExampleId] = createSignal('');
   const [source, setSource] = createSignal('');
   const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [], items: [] });
+  // The source that `drawing` was drawn from; it lags `source` while a redraw is pending.
+  const [drawn, setDrawn] = createSignal('');
   const [svg, setSvg] = createSignal('');
   // Ids for completion and linking, kept from the last source that parsed.
   const [items, setItems] = createSignal<Drawing['items']>([]);
@@ -96,16 +112,41 @@ export function Playground() {
   const [copied, setCopied] = createSignal(false);
   const [menu, setMenu] = createSignal(false);
   const [split, setSplit] = createSignal(readSplit());
+  // Narrow screens show one pane at a time; wide ones ignore this.
+  const [tab, setTab] = createSignal<'source' | 'diagram'>('diagram');
   let editor: EditorApi | undefined;
   let body!: HTMLDivElement;
 
+  // A shared link is someone else's work: it becomes the saved draft only once it is typed in.
+  let fromLink = false;
   onMount(async () => {
     const start = await startingSource();
+    fromLink = start.id === 'shared' && !untrack(incoming);
     setExampleId(start.id);
     setSource(start.source);
     setFitKey(`${start.id}:0`);
+    setTab(isCustom(start.source) ? 'source' : 'diagram');
     setReady(true);
   });
+
+  // Keep the last custom draft, so a bare /play (a nav link, a new tab) resumes it.
+  const saveDraft = () => {
+    if (ready() && !fromLink && isCustom(source())) writeDraft(source());
+  };
+  createEffect(on(source, saveDraft));
+
+  // Back and Forward move between a draft and the example that replaced it.
+  const onPop = async () => {
+    const next = await urlSource();
+    if (!next || next.source === source()) return;
+    setReplaced(null);
+    fromLink = next.id === 'shared';
+    setExampleId(next.id);
+    setFitKey(`${next.id}:${Date.now()}`);
+    editor?.replace(next.source);
+  };
+  onMount(() => window.addEventListener('popstate', onPop));
+  onCleanup(() => window.removeEventListener('popstate', onPop));
 
   // Redraw after a short pause; a newer edit wins over an older drawing still in flight.
   let run = 0;
@@ -122,6 +163,7 @@ export function Playground() {
           if (mine !== run) return;
           setMs(Math.round(performance.now() - t0));
           setDrawing(result);
+          setDrawn(text);
           if (result.svg) setSvg(result.svg);
           if (result.svg && result.scene) setGood({ source: text, scene: result.scene });
           if (result.items.length) setItems(result.items);
@@ -154,14 +196,30 @@ export function Playground() {
     clearTimeout(hashTimer);
   });
 
-  const pickExample = (id: string) => {
+  // Picking an example over custom work is a new history entry, so Back (or Restore) returns
+  // to the draft.
+  const [replaced, setReplaced] = createSignal<string | null>(null);
+  const pickExample = async (id: string) => {
     const text = id === 'blank' ? BLANK : findExample(id)?.source;
-    if (text == null) return;
+    const prev = source();
+    if (text == null || text === prev) return;
+    if (isCustom(prev)) {
+      clearTimeout(hashTimer);
+      await writeHash();
+      saveDraft();
+      history.pushState(null, '', location.href);
+      setReplaced(prev);
+    } else setReplaced(null);
     setExampleId(id);
     setFitKey(`${id}:${Date.now()}`);
     editor?.replace(text);
   };
-  const pickerTitle = () => findExample(exampleId())?.title ?? titleOf(source());
+  // The picker names an example only while the source is that example as it ships.
+  const shownExample = () => {
+    const ex = findExample(exampleId());
+    return ex && ex.source === source() ? ex : undefined;
+  };
+  const pickerTitle = () => shownExample()?.title ?? titleOf(source());
 
   // Name the tab after the diagram.
   createEffect(() => {
@@ -250,11 +308,46 @@ export function Playground() {
     if (item) editor?.goto(item.line);
   };
 
+  // A text outline of the drawing: screen readers always have it; Outline shows it on screen.
+  // Each entry finds its line, as a click on the shape does.
+  const [outline, setOutline] = createSignal(false);
+  let outlineToggle!: HTMLButtonElement;
+  const shapes = () => items().filter(i => i.type !== 'edge');
+  const connections = () => items().filter(i => i.type === 'edge');
+  const nameOf = (id?: string) => items().find(i => i.id === id)?.label || id || '';
+  const pickEntry = (id: string) => {
+    setTab('source');
+    pick(id);
+  };
+  const onOutlineKey = (e: KeyboardEvent) => {
+    const list = [...(e.currentTarget as HTMLElement).querySelectorAll('button')];
+    const at = list.indexOf(document.activeElement as HTMLButtonElement);
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      setOutline(false);
+      outlineToggle.focus();
+    } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && at >= 0) {
+      e.preventDefault();
+      list.at((at + (e.key === 'ArrowDown' ? 1 : -1)) % list.length)?.focus();
+    }
+  };
+
   const problems = () => drawing().diagnostics.filter(d => d.level === 'error');
   const allProblems = () => drawing().diagnostics.filter(d => d.level !== 'info');
   const [listOpen, setListOpen] = createSignal(false);
   // An empty file compiles to a blank page; show the empty state instead.
   const shown = () => (source().trim() ? svg() : '');
+  // An image export must show the current source, not the last drawing that worked.
+  const imageBlocked = () => {
+    const err = problems()[0];
+    if (err)
+      return err.line
+        ? `Fix line ${err.line} to export the image`
+        : 'Fix the source to export the image';
+    if (!source().trim()) return 'Nothing to draw yet';
+    if (drawn() !== source() || !drawing().svg) return 'Drawing…';
+    return '';
+  };
 
   const copyLink = async () => {
     await writeHash();
@@ -272,6 +365,56 @@ export function Playground() {
   };
   onMount(() => document.addEventListener('pointerdown', closeMenu));
   onCleanup(() => document.removeEventListener('pointerdown', closeMenu));
+
+  // The download menu follows the menu-button pattern: arrows move between items, and Escape or
+  // focus leaving it closes it.
+  let menuButton!: HTMLButtonElement;
+  const menuItems = () => [
+    ...menuButton.parentElement!.querySelectorAll<HTMLButtonElement>(
+      '[role="menuitem"]:not(:disabled)',
+    ),
+  ];
+  const openMenu = (at: 'first' | 'last') => {
+    setMenu(true);
+    const items = menuItems();
+    (at === 'first' ? items[0] : items.at(-1))?.focus();
+  };
+  const choose = (action: () => void) => {
+    setMenu(false);
+    menuButton.focus();
+    action();
+  };
+  const onMenuKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && menu()) {
+      e.preventDefault();
+      e.stopPropagation();
+      setMenu(false);
+      menuButton.focus();
+      return;
+    }
+    const items = menuItems();
+    const at = items.indexOf(document.activeElement as HTMLButtonElement);
+    if (at < 0) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        openMenu(e.key === 'ArrowDown' ? 'first' : 'last');
+      }
+      return;
+    }
+    const next =
+      e.key === 'ArrowDown'
+        ? at + 1
+        : e.key === 'ArrowUp'
+          ? at - 1
+          : e.key === 'Home'
+            ? 0
+            : e.key === 'End'
+              ? -1
+              : null;
+    if (next == null) return;
+    e.preventDefault();
+    items.at(next % items.length)?.focus();
+  };
 
   const saveSplit = () => {
     try {
@@ -331,16 +474,25 @@ export function Playground() {
             </svg>
             Copy link
           </button>
-          <div class="menu-wrap">
+          <div
+            class="menu-wrap"
+            onKeyDown={onMenuKey}
+            onFocusOut={e => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setMenu(false);
+            }}
+          >
             <button
               type="button"
               class="tool"
+              ref={menuButton}
+              aria-haspopup="menu"
               aria-expanded={menu()}
-              disabled={!svg()}
-              onClick={() => setMenu(m => !m)}
-              onKeyDown={e => {
-                if (e.key === 'Escape') setMenu(false);
-              }}
+              aria-controls="download-menu"
+              disabled={!ready()}
+              // A keyboard press (detail 0) opens onto the first item, as a menu button should.
+              onClick={e =>
+                menu() ? setMenu(false) : e.detail ? setMenu(true) : openMenu('first')
+              }
             >
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M8 2.5v8M4.5 7.5L8 11l3.5-3.5M3 13.5h10" />
@@ -348,37 +500,53 @@ export function Playground() {
               Download
             </button>
             <Show when={menu()}>
-              <div class="menu" role="menu">
+              <div class="menu" id="download-menu" role="menu" aria-label="Download">
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => {
-                    setMenu(false);
-                    save(
-                      new Blob([embedSvgSource(svg(), source())], { type: 'image/svg+xml' }),
-                      fileName(source(), 'svg'),
-                    );
-                  }}
+                  disabled={!!imageBlocked()}
+                  aria-describedby={imageBlocked() ? 'export-note' : undefined}
+                  tabIndex={-1}
+                  onClick={() =>
+                    choose(() =>
+                      save(
+                        new Blob([embedSvgSource(svg(), source())], { type: 'image/svg+xml' }),
+                        fileName(source(), 'svg'),
+                      ),
+                    )
+                  }
                 >
                   SVG<span>Opens again here</span>
                 </button>
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => {
-                    setMenu(false);
-                    void savePng(svg(), source(), fileName(source(), 'png'));
-                  }}
+                  disabled={!!imageBlocked()}
+                  aria-describedby={imageBlocked() ? 'export-note' : undefined}
+                  tabIndex={-1}
+                  onClick={() =>
+                    choose(() => void savePng(svg(), source(), fileName(source(), 'png')))
+                  }
                 >
                   PNG<span>2×, opens again here</span>
                 </button>
+                <Show when={imageBlocked()}>
+                  <p class="menu-note" id="export-note">
+                    {imageBlocked()}
+                  </p>
+                </Show>
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => {
-                    setMenu(false);
-                    save(new Blob([source()], { type: 'text/plain' }), fileName(source(), 'draft'));
-                  }}
+                  tabIndex={-1}
+                  onClick={() =>
+                    choose(() =>
+                      save(
+                        new Blob([source()], { type: 'text/plain' }),
+                        fileName(source(), 'draft'),
+                      ),
+                    )
+                  }
                 >
                   .draft<span>The source</span>
                 </button>
@@ -392,18 +560,50 @@ export function Playground() {
         </div>
       </header>
 
-      <div class="play-body" ref={body} style={{ '--split': `${split() * 100}%` }}>
-        <section class="play-source" aria-label="Source">
+      <div
+        class="play-tabs"
+        role="tablist"
+        aria-label="Panes"
+        onKeyDown={e => {
+          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+          e.preventDefault();
+          const next = tab() === 'source' ? 'diagram' : 'source';
+          setTab(next);
+          document.getElementById(`play-tab-${next}`)?.focus();
+        }}
+      >
+        <For each={['source', 'diagram'] as const}>
+          {id => (
+            <button
+              type="button"
+              role="tab"
+              id={`play-tab-${id}`}
+              aria-selected={tab() === id}
+              aria-controls={`play-${id}`}
+              tabIndex={tab() === id ? 0 : -1}
+              onClick={() => setTab(id)}
+            >
+              {id === 'source' ? 'Source' : 'Diagram'}
+            </button>
+          )}
+        </For>
+      </div>
+      <div class="play-body" ref={body} data-tab={tab()} style={{ '--split': `${split() * 100}%` }}>
+        <section class="play-source" id="play-source" aria-label="Source">
           <div class="pane-head">
             <ExamplePicker
-              current={exampleId()}
+              current={shownExample()?.id ?? ''}
               title={pickerTitle()}
-              onPick={pickExample}
+              onPick={id => void pickExample(id)}
               onOpenFile={file => void openFile(file)}
             />
             <label class="select">
               <span class="select-label">Theme</span>
-              <select value={theme()} onChange={e => setTheme(e.currentTarget.value)}>
+              <select
+                aria-label="Theme"
+                value={theme()}
+                onChange={e => setTheme(e.currentTarget.value)}
+              >
                 <For each={THEME_IDS}>
                   {id => <option value={id}>{id[0].toUpperCase() + id.slice(1)}</option>}
                 </For>
@@ -423,6 +623,24 @@ export function Playground() {
               Format
             </button>
           </div>
+          <Show when={replaced()}>
+            {draft => (
+              <div class="play-notice" role="status">
+                <span>Replaced “{titleOf(draft())}”</span>
+                <button type="button" class="tool" onClick={() => history.back()}>
+                  Restore your draft
+                </button>
+                <button
+                  type="button"
+                  class="play-notice-close"
+                  aria-label="Dismiss"
+                  onClick={() => setReplaced(null)}
+                >
+                  ×
+                </button>
+              </div>
+            )}
+          </Show>
           <Show when={ready()}>
             <CodeEditor
               value={source()}
@@ -431,7 +649,12 @@ export function Playground() {
               linkedLines={linkedLines()}
               onCursorLine={setCursorLine}
               onFocusChange={setEditing}
-              onType={() => setPicked(null)}
+              onType={() => {
+                setPicked(null);
+                setReplaced(null);
+                fromLink = false;
+                saveDraft();
+              }}
               ref={api => (editor = api)}
             />
           </Show>
@@ -494,7 +717,9 @@ export function Playground() {
                 )}
               </Show>
               <Show when={shown() && !note()}>
-                <span class="play-hint">Drag a shape to move it, or click to find its line</span>
+                <span class="play-hint">
+                  Drag a shape to move it. Click it or use Outline to find its line.
+                </span>
               </Show>
             </button>
           </div>
@@ -515,7 +740,74 @@ export function Playground() {
             saveSplit();
           }}
         />
-        <section class="play-diagram" aria-label="Diagram">
+        <section class="play-diagram" id="play-diagram" aria-label="Diagram">
+          <Show when={shown()}>
+            <button
+              type="button"
+              class="tool diagram-outline-toggle"
+              ref={outlineToggle}
+              aria-expanded={outline()}
+              aria-controls="diagram-outline"
+              onClick={() => {
+                const open = !outline();
+                setOutline(open);
+                if (open)
+                  queueMicrotask(() =>
+                    document.querySelector<HTMLButtonElement>('#diagram-outline button')?.focus(),
+                  );
+              }}
+            >
+              Outline
+            </button>
+            <nav
+              class="diagram-outline"
+              id="diagram-outline"
+              classList={{ 'is-open': outline() }}
+              aria-label="Diagram outline"
+              onKeyDown={onOutlineKey}
+            >
+              <h2>{titleOf(source())}</h2>
+              <p>Choose an entry to find its source line.</p>
+              <Show when={shapes().length}>
+                <h3>Shapes</h3>
+                <ul>
+                  <For each={shapes()}>
+                    {i => (
+                      <li>
+                        <button
+                          type="button"
+                          tabIndex={outline() ? 0 : -1}
+                          onClick={() => pickEntry(i.id)}
+                        >
+                          {i.label || i.id}
+                          {i.type === 'group' ? ' (group)' : ''}
+                        </button>
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              </Show>
+              <Show when={connections().length}>
+                <h3>Connections</h3>
+                <ul>
+                  <For each={connections()}>
+                    {i => (
+                      <li>
+                        <button
+                          type="button"
+                          tabIndex={outline() ? 0 : -1}
+                          onClick={() => pickEntry(i.id)}
+                        >
+                          {nameOf(i.from)} → {nameOf(i.to)}
+                          {i.label ? `: ${i.label}` : ''}
+                        </button>
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              </Show>
+            </nav>
+          </Show>
           <DiagramView
             svg={shown()}
             stale={!drawing().svg && !!svg()}
@@ -560,6 +852,22 @@ export function Playground() {
       </div>
     </div>
   );
+}
+
+function readDraft() {
+  try {
+    return localStorage.getItem(DRAFT_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeDraft(text: string) {
+  try {
+    localStorage.setItem(DRAFT_KEY, text);
+  } catch {
+    // Storage can be blocked; the URL still carries the draft.
+  }
 }
 
 function readSplit() {

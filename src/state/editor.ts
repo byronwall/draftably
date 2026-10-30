@@ -168,6 +168,16 @@ export function fitView() {
   setCamera({ x: (w - b.w * k) / 2 - b.x * k, y: (h - bottom + pad - b.h * k) / 2 - b.y * k, k });
 }
 
+/** Some of the diagram lies outside the canvas, or under the zoom controls. */
+export function diagramClipped() {
+  const b = viewerFrame(),
+    c = doc.camera,
+    { width: w, height: h } = stageSize(),
+    left = b.x * c.k + c.x,
+    top = b.y * c.k + c.y;
+  return left < 0 || top < 0 || left + b.w * c.k > w || top + b.h * c.k > h - 60;
+}
+
 /** Fit an arbitrary set of rectangles, e.g. every frame of a timeline. */
 export function fitRects(rects: Rect[], reservedBottom = 0) {
   const b = rectUnion(rects, 40),

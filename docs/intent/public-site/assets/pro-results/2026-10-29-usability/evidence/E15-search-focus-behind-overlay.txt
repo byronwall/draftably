@@ -1,0 +1,3 @@
+Browser tab: 5, Title: "Get started · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/".
+There has been no change in the accessibility tree.
+The focused UI element is 128 link Description: Edit this page on GitHub, URL: github.com/byronwall/draftably/blob/main/site/docs/pages/get-started.md

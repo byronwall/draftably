@@ -1,0 +1,4 @@
+Browser tab: 5, Title: "Get started · Draftably docs", URL: "https://byronwall.github.io/draftably/play#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA".
+0 AXWebArea Get started · Draftably docs, URL: byronwall.github.io/draftably/play#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA
+
+The focused UI element is 0 AXWebArea Get started · Draftably docs, URL: byronwall.github.io/draftably/play#s=S8lMTC9KzFVQcixNySxRyEktLs7PU1IoSy0qzszPszXkystPSVVILChAqEgsykstUoJJZAIlAjyVuFJT0lMVilILS1OLS8Dqde1AslwA

@@ -9,6 +9,7 @@ import {
   untrack,
 } from 'solid-js';
 import type { Scene } from '../../src/dsl/compile';
+import { encodeSource } from '../../src/lib/source-hash';
 import { downloadBlob, downloadText, svgToPng } from '../../src/lib/svg-export';
 import { embedPngSource, embedSvgSource } from '../../src/model/embed';
 import { findExample } from '../../src/model/examples';
@@ -32,11 +33,16 @@ const kb = (text: string) => `${Math.max(1, Math.round(new Blob([text]).size / 1
  * The landing page hero: `.draft` source beside its drawing, with the two ways out of a file.
  * Live: drag a box and the move is written into the source, or edit the source and it redraws.
  * Static: the same drawing as an SVG image that cannot move, with SVG and PNG downloads.
+ * Each example's edits are saved in the browser, so leaving the page and coming back resumes them
+ * on the tab that was open.
  */
 export function LiveEditor(props: { examples: string[]; hints?: Record<string, string> }) {
-  const first = untrack(() => props.examples[0]);
+  const saved = read(TAB);
+  const first = untrack(() =>
+    saved && props.examples.includes(saved) ? saved : props.examples[0],
+  );
   const [id, setId] = createSignal(first);
-  const [source, setSource] = createSignal(findExample(first)?.source ?? '');
+  const [source, setSource] = createSignal(read(DRAFT + first) ?? findExample(first)?.source ?? '');
   const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [], items: [] });
   const [good, setGood] = createSignal<Good>();
   const [ms, setMs] = createSignal(0);
@@ -82,15 +88,6 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
     }
   };
 
-  const pick = (next: string) => {
-    setId(next);
-    setUndo([]);
-    setChanged([]);
-    setNote('');
-    now = true;
-    setSource(findExample(next)?.source ?? '');
-  };
-
   const preview = async (oid: string, dx: number, dy: number) => {
     const g = good();
     const next = g && (await moveObject(g.source, g.scene, oid, dx, dy, true));
@@ -112,6 +109,54 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
     setChanged([]);
   };
 
+  const clearMarks = () => {
+    setUndo([]);
+    setChanged([]);
+    setNote('');
+    now = true;
+  };
+
+  // Save the draft after a short pause, and at once on a tab switch or when the page goes away.
+  let pending: ReturnType<typeof setTimeout> | undefined;
+  const save = () => {
+    if (pending === undefined) return;
+    clearTimeout(pending);
+    pending = undefined;
+    write(DRAFT + id(), edited() ? source() : null);
+  };
+  createEffect(
+    on(
+      source,
+      () => {
+        clearTimeout(pending);
+        pending = setTimeout(save, 300);
+      },
+      { defer: true },
+    ),
+  );
+  onCleanup(save);
+
+  // The editor opens the example, or once it is edited, the edited source in a share hash.
+  const [editorUrl, setEditorUrl] = createSignal(appUrl(first));
+  createEffect(() => {
+    const text = source();
+    if (!edited()) return setEditorUrl(appUrl(id()));
+    void encodeSource(text).then(
+      hash => source() === text && setEditorUrl(`${import.meta.env.BASE_URL}app/#${hash}`),
+    );
+  });
+
+  const pick = (next: string) => {
+    save();
+    setId(next);
+    write(TAB, next);
+    clearMarks();
+    setSource(read(DRAFT + next) ?? findExample(next)?.source ?? '');
+  };
+  const reset = () => {
+    clearMarks();
+    setSource(findExample(id())?.source ?? '');
+  };
   const lines = () => source().split('\n').length;
   const errors = () => drawing().diagnostics.filter(d => d.level === 'error');
   const stale = () => !drawing().svg && !!good();
@@ -161,11 +206,11 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
             </button>
           </Show>
           <Show when={edited()}>
-            <button type="button" class="live-reset" onClick={() => pick(id())}>
+            <button type="button" class="live-reset" onClick={reset}>
               Reset
             </button>
           </Show>
-          <a class="live-open" href={appUrl(id())}>
+          <a class="live-open" href={editorUrl()} rel="external">
             Open in the editor
           </a>
         </span>
@@ -281,4 +326,25 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
       </div>
     </div>
   );
+}
+
+const DRAFT = 'draftably.landing.draft.';
+const TAB = 'draftably.landing.tab';
+
+// Storage can be blocked or full; the demo then just starts from the example.
+function read(key: string) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function write(key: string, value: string | null) {
+  try {
+    if (value === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch {
+    // See read.
+  }
 }

@@ -3,11 +3,19 @@ import { downloadText } from '../lib/svg-export';
 import {
   currentSource,
   exampleEdited,
+  exampleRestored,
   fileSession,
   markExampleSaved,
   resetExample,
 } from '../state/file-session';
-import { createDiagramFile, fileUrl, startUrl, workspace } from '../state/launch';
+import {
+  cameFromPlayground,
+  createDiagramFile,
+  fileUrl,
+  siteUrl,
+  startUrl,
+  workspace,
+} from '../state/launch';
 import { Icon } from './Icon';
 
 /**
@@ -19,6 +27,7 @@ export function ExampleBar() {
   const [path, setPath] = createSignal('');
   const [error, setError] = createSignal('');
   const id = () => fileSession()?.example ?? 'example';
+  const fromPlay = cameFromPlayground();
 
   const startSave = () => {
     setPath(`${id()}.draft`);
@@ -51,10 +60,15 @@ export function ExampleBar() {
             <span class="example-text">
               <strong>{fileSession()?.name}</strong>
               <span class="example-note">
-                {exampleEdited()
-                  ? 'Your edits are only in this tab. Save as a file to keep them.'
-                  : 'A scratch copy. Edits stay in this tab and are not written to disk.'}
+                {exampleRestored() && exampleEdited()
+                  ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
+                  : exampleEdited()
+                    ? 'Your edits are kept in this browser only. Save as a file to keep them.'
+                    : 'A scratch copy. Edits stay in this browser and are not written to disk.'}
               </span>
+              <a class="example-help" href={siteUrl('docs/saving')} target="_blank" rel="noopener">
+                Where is my work saved?
+              </a>
             </span>
             <span class="example-actions">
               <Show
@@ -83,9 +97,27 @@ export function ExampleBar() {
               >
                 Reset
               </button>
-              <a class="button small ghost" href={startUrl()}>
-                Close example
-              </a>
+              <Show
+                when={fromPlay}
+                fallback={
+                  <a class="button small ghost" href={startUrl()}>
+                    Close example
+                  </a>
+                }
+              >
+                {/* Back keeps the Playground as it was left; the link covers a reloaded tab. */}
+                <a
+                  class="button small ghost"
+                  href={siteUrl('play')}
+                  onClick={e => {
+                    if (history.length < 2) return;
+                    e.preventDefault();
+                    history.back();
+                  }}
+                >
+                  Back to Playground
+                </a>
+              </Show>
             </span>
           </>
         }

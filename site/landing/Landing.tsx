@@ -74,7 +74,7 @@ export function Landing() {
               </p>
             </div>
             <div class="hero-actions">
-              <a class="button primary" href={appUrl()}>
+              <a class="button primary" href={appUrl()} rel="external">
                 Open the editor
               </a>
               <CopyCommand text="npx draftably open" class="button" />
@@ -93,7 +93,9 @@ export function Landing() {
           Draftably
         </span>
         <span class="footer-links">
-          <a href={appUrl()}>Editor</a>
+          <a href={appUrl()} rel="external">
+            Editor
+          </a>
           <a href={NPM}>npm</a>
           <a href={GITHUB}>GitHub</a>
         </span>
@@ -162,7 +164,9 @@ function Examples() {
     <section class="examples" id="examples">
       <div class="section-head">
         <h2>More examples</h2>
-        <a href={appUrl()}>Open all {EXAMPLES.length} in the editor</a>
+        <a href={appUrl()} rel="external">
+          Open all {EXAMPLES.length} in the editor
+        </a>
       </div>
       <div class="cards">
         <For each={cards}>{ex => <ExampleCard example={ex} />}</For>
@@ -191,7 +195,7 @@ function ExampleCard(props: { example: ExampleInfo }) {
   });
   const ex = () => props.example;
   return (
-    <a class="card" href={appUrl(ex().id)} ref={card}>
+    <a class="card" href={appUrl(ex().id)} rel="external" ref={card}>
       <div class="card-thumb" style={{ background: paper() }}>
         <Show when={src()}>
           <img src={src()} alt="" onLoad={e => e.currentTarget.classList.add('is-loaded')} />

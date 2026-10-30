@@ -1,0 +1,48 @@
+Browser tab: 9, Title: "Emphasis states · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/emphasis-states".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 449-508
+~0 AXWebArea Emphasis states · Draftably docs, URL: byronwall.github.io/draftably/docs/emphasis-states
+~			443 text Emphasis states
+~			51 heading Emphasis states, Value: 1
+~				52 text Emphasis states
+~				445 text One diagram often answers several questions: what the write path touches, what a request reads. A  state  line names a way to draw the diagram: the objects and connections it lists are in focus, and everything else fades.
+~				447 button Copy
+~				448 container
++					449 text state write "Write path" web api orders payments db queue state read "Read path" web api catalog cache state events "Events" queue publish rest = plain
++			450 text The first word is the state's ID, then an optional label in quotes, then the IDs in focus: nodes, groups (a group brings all its members) and connections. A connection between two focused nodes is in focus too. A long state may continue on more lines with the same ID.
++			451 container
++				452 text In focus, an object keeps its colors and draws a heavier border; a connection draws a heavier line. Everything else fades to the theme's neutral surface, like a  .  context line, except the containers that hold something in focus, so the context still reads.  rest=plain  leaves everything else as it is, for a soft highlight; with nothing faded, focused objects take a ring and focused connections a line in the theme's  secondary  accent. A state never moves anything: every state of a file has the same layout. In a file with change marks, hue still means change; a state only adds the heavier border or the fade.
++			453 container
++				454 text inspect --svg --state write  draws one state; without  --state , the drawing has none.  inspect --svg --states  (or  --png ) draws every state as its own labelled panel, in file order, in a grid whose whole image comes closest to 1.6 wide per tall. Every object sits at the same place in every panel, so the eye can jump between them.
++			455 container
++				456 text In the viewer, a file with states shows a row of chips over the canvas:  All , each state, and  Grid . A chip draws that state in place, and  [  and  ]  step through them in file order.  Grid  shows every state side by side, as  --states  draws them; click a panel to draw that state. The state is part of the address ( ?state=write ), so a link or a reload keeps it, but it is never written to the file. Edits work in any state, on faded objects too.  check  reports an ID a state lists that the file does not declare. Deleting an object or connection in the viewer takes it out of every state.
+~				441 link Description: ← Previous Change marks, Value: byronwall.github.io/draftably/docs/change-marks
+~				119 link Description: Next → Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#emphasis-states
+The focused UI element is 30 link Description: Emphasis states, URL: byronwall.github.io/draftably/docs/emphasis-states
+
+VISIBLE MAIN TEXT
+Language
+/
+Emphasis states
+Emphasis states
+
+One diagram often answers several questions: what the write path touches, what a request reads. A state line names a way to draw the diagram: the objects and connections it lists are in focus, and everything else fades.
+
+Copy
+state write "Write path" web api orders payments db queue
+state read "Read path" web api catalog cache
+state events "Events" queue publish rest=plain
+
+The first word is the state's ID, then an optional label in quotes, then the IDs in focus: nodes, groups (a group brings all its members) and connections. A connection between two focused nodes is in focus too. A long state may continue on more lines with the same ID.
+
+In focus, an object keeps its colors and draws a heavier border; a connection draws a heavier line. Everything else fades to the theme's neutral surface, like a . context line, except the containers that hold something in focus, so the context still reads. rest=plain leaves everything else as it is, for a soft highlight; with nothing faded, focused objects take a ring and focused connections a line in the theme's secondary accent. A state never moves anything: every state of a file has the same layout. In a file with change marks, hue still means change; a state only adds the heavier border or the fade.
+
+inspect --svg --state write draws one state; without --state, the drawing has none. inspect --svg --states (or --png) draws every state as its own labelled panel, in file order, in a grid whose whole image comes closest to 1.6 wide per tall. Every object sits at the same place in every panel, so the eye can jump between them.
+
+In the viewer, a file with states shows a row of chips over the canvas: All, each state, and Grid. A chip draws that state in place, and [ and ] step through them in file order. Grid shows every state side by side, as --states draws them; click a panel to draw that state. The state is part of the address (?state=write), so a link or a reload keeps it, but it is never written to the file. Edits work in any state, on faded objects too. check reports an ID a state lists that the file does not declare. Deleting an object or connection in the viewer takes it out of every state.
+
+← Previous
+Change marks
+Next →
+Swim lanes
