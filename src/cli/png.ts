@@ -19,7 +19,7 @@ const CANDIDATES = [
 ];
 const ON_PATH = ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'];
 
-function findChrome(): string {
+export function findChrome(): string {
   const env = process.env.CHROME_PATH;
   if (env) return env;
   const found = CANDIDATES.find(p => fs.existsSync(p));
@@ -30,7 +30,7 @@ function findChrome(): string {
     } catch {
       // Not installed under this name.
     }
-  throw Error('PNG output needs Chrome or Chromium. Install one, or set CHROME_PATH to it.');
+  throw Error('PNG and PDF output need Chrome or Chromium. Install one, or set CHROME_PATH to it.');
 }
 
 /** The width and height an SVG declares on its root, rounded up. */
