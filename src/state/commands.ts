@@ -28,8 +28,10 @@ import {
   toggleBrush,
 } from './sculpt';
 import { fileMode, reflowSelectedGroup } from './file-session';
+import { encodeSource } from '../lib/source-hash';
 import {
   go,
+  newDiagramSource,
   openInPlayground,
   playgroundNote,
   setStartOpen,
@@ -112,6 +114,19 @@ function findFile() {
   requestAnimationFrame(() =>
     document.querySelector<HTMLInputElement>('.files-panel .panel-search input')?.select(),
   );
+}
+
+/**
+ * A served folder makes the new diagram a file, from its start page. The static site replaces the
+ * browser copy; from an example there, a blank scratch copy opens instead, like the Playground's.
+ */
+async function newDiagram() {
+  if (!fileMode()) return actions.newDocument();
+  if (workspace()) return openStart();
+  // `?new` makes this a page load even from a shared copy, whose URL differs only in the hash.
+  // The time keeps each blank's stored edits apart (see `openExampleSession`).
+  const hash = await encodeSource(newDiagramSource(''));
+  location.assign(`${startUrl()}?new#${hash}&t=${Date.now()}`);
 }
 
 function openStart() {
@@ -347,7 +362,7 @@ export const commands = {
   'new-diagram': {
     label: 'New diagram',
     icon: 'plus',
-    run: () => (fileMode() ? openStart() : actions.newDocument()),
+    run: newDiagram,
   },
   open: {
     label: 'Open diagram…',

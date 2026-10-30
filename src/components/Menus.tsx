@@ -1,6 +1,7 @@
-import { For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
+import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
 import { RouteLab } from '../engines/routing-engine.js';
 import { clamp } from '../model/geometry';
+import { EXAMPLES } from '../model/examples';
 import { SAMPLES } from '../model/samples';
 import type { RoutingSettings } from '../model/types';
 import {
@@ -16,14 +17,20 @@ import type { Tool } from '../state/editor';
 import { timelineOpen } from '../state/sculpt';
 import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
 import { commit, doc, setDoc, snapshot } from '../state/document';
-import { commitSource, fileBlocked, fileMode, sourceWithRouting } from '../state/file-session';
+import {
+  commitSource,
+  fileBlocked,
+  fileMode,
+  fileSession,
+  sourceWithRouting,
+} from '../state/file-session';
 import { resetRoutes, routingReport } from '../state/scene';
 import { toast } from '../state/toast';
 import { closeMenu, menu, openMenu, type MenuState } from '../state/ui';
 import { RangeField } from './controls';
 import { Icon } from './Icon';
 import './menus.css';
-import { workspace } from '../state/launch';
+import { exampleUrl, workspace } from '../state/launch';
 
 /** The open popover menu, positioned under its anchor. */
 export function Menus() {
@@ -54,7 +61,10 @@ function Popover(props: { state: MenuState }) {
       top = anchor.y;
     }
     el.style.left = clamp(left, 8, innerWidth - width - 8) + 'px';
-    el.style.top = clamp(top, 8, innerHeight - height - 8) + 'px';
+    top = clamp(top, 8, innerHeight - height - 8);
+    el.style.top = top + 'px';
+    // A section opened later (the layout test cases) scrolls inside the menu, not off screen.
+    el.style.maxHeight = innerHeight - top - 8 + 'px';
     el.querySelector<HTMLElement>('button,input,select')?.focus({ preventScroll: true });
     const outside = (e: PointerEvent) => {
       const target = e.target as Node;
@@ -202,14 +212,19 @@ const Heading = (props: { children: JSX.Element }) => (
   <div class="menu-heading">{props.children}</div>
 );
 
+/**
+ * New and open first, then the same curated examples the Playground lists. The layout test cases
+ * exercise the engines rather than show the product, so they sit closed at the bottom.
+ */
 function FileMenu() {
+  const [testsOpen, setTestsOpen] = createSignal(false);
   return (
     <>
+      <MenuItem command="new-diagram" />
       <MenuItem command="start" />
       <Show when={workspace()}>
         <MenuItem command="find-file" />
       </Show>
-      <MenuItem command="new-diagram" />
       <MenuItem command="quick-build" />
       <MenuItem command="open" />
       <MenuItem command="insert-image" />
@@ -217,23 +232,25 @@ function FileMenu() {
       <MenuItem command="timeline-reopen" />
       <MenuItem command="timeline-save" />
       <hr />
-      <Heading>Layout test cases</Heading>
+      <Heading>Examples</Heading>
       <div class="menu-scroll">
-        <For each={SAMPLES}>
-          {sample => (
+        <For each={EXAMPLES}>
+          {example => (
             <button
               type="button"
               class="menu-item"
               role="menuitem"
+              aria-current={fileSession()?.example === example.id || undefined}
+              title={example.summary}
               onClick={() => {
                 closeMenu();
-                openSample(sample.id);
+                location.assign(exampleUrl(example.id));
               }}
             >
               <span class="menu-icon">
-                <Icon name={sample.icon} />
+                <Icon name="spark" />
               </span>
-              <span class="menu-label">{sample.title}</span>
+              <span class="menu-label">{example.title}</span>
             </button>
           )}
         </For>
@@ -243,6 +260,45 @@ function FileMenu() {
       <MenuItem command="help" />
       <MenuItem command="docs" />
       <MenuItem command="open-playground" />
+      <hr />
+      <button
+        type="button"
+        class="menu-item"
+        role="menuitem"
+        aria-expanded={testsOpen()}
+        onClick={e => {
+          const item = e.currentTarget;
+          setTestsOpen(open => !open);
+          item.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        }}
+      >
+        <span class="menu-icon">
+          <Icon name={testsOpen() ? 'chevron' : 'chevron-right'} />
+        </span>
+        <span class="menu-label">Layout test cases</span>
+      </button>
+      <Show when={testsOpen()}>
+        <div class="menu-scroll">
+          <For each={SAMPLES}>
+            {sample => (
+              <button
+                type="button"
+                class="menu-item"
+                role="menuitem"
+                onClick={() => {
+                  closeMenu();
+                  openSample(sample.id);
+                }}
+              >
+                <span class="menu-icon">
+                  <Icon name={sample.icon} />
+                </span>
+                <span class="menu-label">{sample.title}</span>
+              </button>
+            )}
+          </For>
+        </div>
+      </Show>
     </>
   );
 }
