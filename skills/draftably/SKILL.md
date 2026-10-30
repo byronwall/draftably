@@ -70,7 +70,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
 
 ## Syntax
 
-One statement per line. Indentation means nothing. Strings use JSON double quotes. IDs match
+One statement per line. Indentation means nothing. Strings use JSON double quotes; escape an
+inner quote as `\"` (`node n "Says \"hi\""`), a backslash as `\\`, and a line break as `\n`. IDs match
 `[A-Za-z_][A-Za-z0-9_.-]*` and are unique across nodes and groups (edges have their own IDs).
 References may point to later lines. Comments start with `#` or `//`.
 

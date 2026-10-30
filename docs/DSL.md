@@ -29,7 +29,9 @@ pin db x=900 y=40
 ## Rules
 
 Write one statement per line. Indentation means nothing; containment comes from `in=`. Strings
-use JSON double quotes. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
+use JSON double quotes. Inside a string, write `\"` for a quote, `\\` for a backslash and `\n` for
+a line break: `node n "Says \"hi\""`. A bare quote inside a string is an error that names its
+column. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
 and groups. References may point to later lines.
 
 | Statement                          | Meaning                                                                                                                                                                                                                                                 |
