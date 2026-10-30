@@ -87,6 +87,9 @@ Commands:
        [--replace]          Without --port, a viewer already serving the folder is reused;
        [--status]           --replace stops it and starts this version. --status lists the
                             running viewers: URL, folder, version and pid.
+  docs [topic]              Print the language guide (DSL.md) for this version: its contents,
+                            the sections whose heading matches topic (docs legend, docs
+                            count), or all of it with docs all.
   skill install             Install the agent skill for writing .draft files into
        [--global]           ./.claude/skills/draftably, or ~/.claude/skills with --global.
        [--dir <folder>]     --dir picks another skills folder (e.g. .agents/skills);
@@ -522,6 +525,11 @@ export async function main(argv: string[]): Promise<number> {
           launch: !args.includes('--no-open'),
         });
         return -1;
+      }
+      case 'docs': {
+        const { docs } = await import('./docs');
+        console.log(docs(file).trimEnd());
+        return 0;
       }
       case 'skill': {
         const { installSkill, skillSource } = await import('./skill');

@@ -604,6 +604,7 @@ pnpm draftably open                              # start page for the current fo
 pnpm draftably open --status                     # running viewers: URL, folder, version (open reuses one)
 pnpm draftably vary --help                       # any command's options; --version for the version
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
+pnpm draftably docs legend                       # one section of this guide; docs alone lists them
 ```
 
 `check`, `format`, `inspect`, `compare` and `open` also take a PNG or SVG export in place of a

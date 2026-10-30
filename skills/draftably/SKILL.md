@@ -314,5 +314,6 @@ content area.
 - Not supported yet: views, checkpoints, edge bends, label positions and images. `view`,
   `snapshot` and `box` statements are errors.
 
-The full language guide ships with the CLI package as `DSL.md`, and the package's `examples/`
-folder holds sixteen diagrams to copy from.
+The full language guide ships with the CLI package as `DSL.md`: `draftably docs` lists its
+sections and `draftably docs legend` prints one. The package's `examples/` folder holds sixteen
+diagrams to copy from.
