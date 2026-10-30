@@ -636,7 +636,7 @@ export async function openFileSession(file: string): Promise<boolean> {
   } catch {
     return false;
   }
-  document.title = `${file} · Draftably`;
+  document.title = `${file} · draftably`;
   await begin(info);
   listen();
   return true;
@@ -678,7 +678,7 @@ export async function openExampleSession(
   source: string,
   key = `example:${id}`,
 ) {
-  document.title = `Example: ${title} · Draftably`;
+  document.title = `Example: ${title} · draftably`;
   scratchKey = key;
   const kept = readScratch()[key]?.source;
   const restored = kept != null && kept !== source;

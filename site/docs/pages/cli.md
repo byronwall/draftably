@@ -3,7 +3,7 @@
 `draftably` checks, formats, draws and edits `.draft` files, and serves the editor. Run any
 command with `--help` for its own options, and `draftably --version` for the version.
 
-Any file argument may also be a PNG or SVG that Draftably exported. The command reads the source
+Any file argument may also be a PNG or SVG that draftably exported. The command reads the source
 embedded in it.
 
 ## open

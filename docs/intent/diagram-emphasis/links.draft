@@ -1,4 +1,4 @@
-diagram "Draftably source map" version=1
+diagram "draftably source map" version=1
 subtitle "Each box links to the code it names"
 
 group dsl "DSL" color=blue href="src/dsl/syntax.ts"

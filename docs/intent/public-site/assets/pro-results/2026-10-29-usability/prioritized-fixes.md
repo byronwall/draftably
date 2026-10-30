@@ -1,4 +1,4 @@
-# Draftably — prioritized fixes
+# draftably — prioritized fixes
 
 **Audit date:** 30 October 2026 UTC. **Published target:** <https://byronwall.github.io/draftably/>. **Repository baseline:** [`ca96d3babd05041aaa206509090d023b02b61b5b`](https://github.com/byronwall/draftably/tree/ca96d3babd05041aaa206509090d023b02b61b5b).
 
@@ -12,7 +12,7 @@
 
 ## Priority decision
 
-Repair the paths between surfaces and the meaning of retained work first. Draftably can render, teach, visually edit, and reopen a useful diagram. The audit successfully carried a three-node, two-edge source diagram through Editor SVG export and back through the landing import into Playground. That working path is worth preserving. It coexists with four primary failures: ordinary Editor links can leave the wrong surface displayed; Playground transfers can become blank; New from an example makes a false saving promise and loses new work on refresh; and an error-state SVG can combine a previous drawing with invalid current source.
+Repair the paths between surfaces and the meaning of retained work first. draftably can render, teach, visually edit, and reopen a useful diagram. The audit successfully carried a three-node, two-edge source diagram through Editor SVG export and back through the landing import into Playground. That working path is worth preserving. It coexists with four primary failures: ordinary Editor links can leave the wrong surface displayed; Playground transfers can become blank; New from an example makes a false saving promise and loses new work on refresh; and an error-state SVG can combine a previous drawing with invalid current source.
 
 Treat those as release-blocking repairs for the advertised journey. Make small keyboard and focus fixes alongside them. Publish browser-first teaching after the behavior it describes is dependable. Explore broad Editor reorganization with concrete tasks; do not hide useful layout capabilities merely because there are many controls.
 

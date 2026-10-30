@@ -38,7 +38,7 @@ const COMMANDS: [string, string][] = [
   ['draftably vary plan.draft', 'Ranks layout variants on one contact sheet.'],
 ];
 
-const TITLE = 'Draftably: manual diagrams are a drag';
+const TITLE = 'draftably: manual diagrams are a drag';
 
 export function Landing() {
   // Arriving from another page keeps that page's title; name this one.
@@ -69,7 +69,7 @@ export function Landing() {
             <div>
               <p class="hero-kicker">Write yours. Drag only if you want to.</p>
               <p class="hero-sub">
-                Draftably lays out a plain-text <code>.draft</code> file and routes every line. Move
+                draftably lays out a plain-text <code>.draft</code> file and routes every line. Move
                 a box by hand and the move lands in the file as one readable line.
               </p>
             </div>
@@ -90,7 +90,7 @@ export function Landing() {
       <footer class="footer">
         <span class="wordmark">
           <Logo size={18} />
-          Draftably
+          draftably
         </span>
         <span class="footer-links">
           <a href={appUrl()} rel="external">
@@ -109,7 +109,7 @@ function Nav() {
     <header class="nav">
       <a class="wordmark" href={import.meta.env.BASE_URL}>
         <Logo />
-        Draftably
+        draftably
       </a>
       <SiteNav current="home" class="nav-links" />
     </header>
@@ -264,13 +264,13 @@ function ReopenLine() {
   const [error, setError] = createSignal('');
   const choose = async (file: File) => {
     const source = await readDiagramFile(file);
-    if (source == null) return setError(`${file.name} has no Draftably source in it.`);
+    if (source == null) return setError(`${file.name} has no draftably source in it.`);
     deliver(source);
     navigate('/play');
   };
   return (
     <p class="hero-reopen" classList={{ 'is-error': !!error() }}>
-      {error() || 'Have a Draftably PNG or SVG? Drop or paste it anywhere, or '}
+      {error() || 'Have a draftably PNG or SVG? Drop or paste it anywhere, or '}
       <Show when={!error()}>
         <label class="hero-reopen-pick">
           choose a file

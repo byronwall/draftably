@@ -1,5 +1,5 @@
 /**
- * Draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
+ * draftably command line: check, format and inspect `.draft` files, or edit them in the viewer.
  * Built with `vite build --ssr` so it shares the editor's model code; run it with `pnpm draftably`.
  */
 import fs from 'node:fs';
@@ -21,7 +21,7 @@ import { updateNotice } from './update';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
 
-Any <file> may also be a PNG, SVG or PDF that Draftably exported: its embedded source is read.
+Any <file> may also be a PNG, SVG or PDF that draftably exported: its embedded source is read.
 A PDF holds several; name one as diagrams.pdf#name.draft, or check reads them all.
 
 Commands:
@@ -162,7 +162,7 @@ async function read(file: string | undefined) {
   const source = await readImageSource(fs.readFileSync(path.resolve(file)));
   if (source === null)
     throw Error(
-      `${file} has no embedded Draftably source. It was exported with --no-source, by another tool, or recompressed by a host.`,
+      `${file} has no embedded draftably source. It was exported with --no-source, by another tool, or recompressed by a host.`,
     );
   return source;
 }
@@ -175,7 +175,7 @@ async function pdfSources(file: string) {
   const sources = await readPdfSources(fs.readFileSync(path.resolve(file)));
   if (!sources.length)
     throw Error(
-      `${file} has no embedded Draftably source. It was exported with --no-source or by another tool.`,
+      `${file} has no embedded draftably source. It was exported with --no-source or by another tool.`,
     );
   return sources;
 }

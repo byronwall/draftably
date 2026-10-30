@@ -1,4 +1,4 @@
-# Draftably: deep usability audit of the published experience
+# draftably: deep usability audit of the published experience
 
 https://github.com/byronwall/draftably
 
@@ -7,7 +7,7 @@ Mode: Review. Published target: https://byronwall.github.io/draftably/
 
 ## Mission
 
-How well does Draftably help a new visitor understand its value, learn its language, make a useful diagram, and retain or share that work? Audit the landing page, documentation, Playground, and full Editor as one product. Byron requests a DEEP DEEP usability audit with a real browser and detailed findings. The decision is which experience problems deserve fixes first and what a coherent product journey should become.
+How well does draftably help a new visitor understand its value, learn its language, make a useful diagram, and retain or share that work? Audit the landing page, documentation, Playground, and full Editor as one product. Byron requests a DEEP DEEP usability audit with a real browser and detailed findings. The decision is which experience problems deserve fixes first and what a coherent product journey should become.
 
 Act as a senior usability researcher and technical product designer with experience in diagram editors, developer tools, documentation, and accessibility. Give candid, specific judgment. Favor deep investigation over generic advice. Preserve effective features.
 

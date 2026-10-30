@@ -7,7 +7,7 @@ const editable = (target: EventTarget | null) =>
   (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName));
 
 /**
- * Every page: a Draftably PNG, SVG or `.draft` file dropped or pasted anywhere opens in the
+ * Every page: a draftably PNG, SVG or `.draft` file dropped or pasted anywhere opens in the
  * playground, so someone with an exported diagram is back at work in one step.
  */
 export function Shell(props: RouteSectionProps) {
@@ -39,7 +39,7 @@ export function Shell(props: RouteSectionProps) {
   };
   const openFile = async (file: File) => {
     const source = await readDiagramFile(file);
-    if (source == null) fail(`${file.name} has no Draftably source in it. ${REOPEN_HINT}.`);
+    if (source == null) fail(`${file.name} has no draftably source in it. ${REOPEN_HINT}.`);
     else open(source);
   };
 

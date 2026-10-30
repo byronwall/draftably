@@ -1,4 +1,4 @@
-# Draftably published-site usability audit: independent browser evidence
+# draftably published-site usability audit: independent browser evidence
 
 Audit date: October 29, 2026, EDT. Target: https://byronwall.github.io/draftably/
 
@@ -6,7 +6,7 @@ Status: historical independent browser evidence. The completed Pro review and cu
 
 ## Assessment
 
-Draftably demonstrates a useful capability quickly: source becomes a diagram, and the diagram remains editable. The strongest product idea is the portable image that retains its source. Live documentation examples also support a good learning loop. A visitor can edit a docs example, continue in Playground, and open that source in the visual Editor.
+draftably demonstrates a useful capability quickly: source becomes a diagram, and the diagram remains editable. The strongest product idea is the portable image that retains its source. Live documentation examples also support a good learning loop. A visitor can edit a docs example, continue in Playground, and open that source in the visual Editor.
 
 The main weakness is continuity. The site has several editing surfaces, but their links, storage rules, examples, and learning paths do not form one dependable journey. Ordinary Editor links fail during client navigation. The landing demo does not transfer edited source. Playground breaks at phone and tablet widths. These failures outweigh the otherwise calm visual presentation.
 

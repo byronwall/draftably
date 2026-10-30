@@ -391,7 +391,7 @@ export const commands = {
     run: () => copyCommand('image'),
   },
   'copy-svg': { label: 'SVG markup', icon: 'code', run: () => copyCommand('svg') },
-  'copy-source': { label: 'Draftably source', icon: 'file', run: () => copyCommand('source') },
+  'copy-source': { label: 'draftably source', icon: 'file', run: () => copyCommand('source') },
   'copy-link': { label: 'Link to this diagram', icon: 'globe', run: () => copyCommand('link') },
   theme: { label: 'Toggle light / dark', icon: 'sun', run: actions.toggleTheme },
   docs: {

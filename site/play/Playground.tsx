@@ -223,7 +223,7 @@ export function Playground() {
 
   // Name the tab after the diagram.
   createEffect(() => {
-    if (ready()) document.title = `${titleOf(source())} · Draftably playground`;
+    if (ready()) document.title = `${titleOf(source())} · draftably playground`;
   });
 
   // Source the site shell hands over (a dropped or pasted file) replaces what is open.
@@ -240,7 +240,7 @@ export function Playground() {
   const openFile = async (file: File) => {
     const text = await readDiagramFile(file);
     if (text == null) {
-      setFileError(`${file.name} has no Draftably source in it.`);
+      setFileError(`${file.name} has no draftably source in it.`);
       setTimeout(() => setFileError(''), 3500);
     } else deliver(text);
   };
@@ -457,7 +457,7 @@ export function Playground() {
       <header class="play-head">
         <a class="wordmark" href={BASE}>
           <Logo />
-          Draftably
+          draftably
         </a>
         <SiteNav current="play" class="play-nav" />
         <div class="play-actions">

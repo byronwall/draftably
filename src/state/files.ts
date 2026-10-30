@@ -142,7 +142,7 @@ export async function importText(text: string, name = '') {
     if (xml.querySelector('parsererror')) throw Error('This SVG is not valid XML.');
     const metadata = xml.querySelector('metadata#diagram-studio-data');
     if (!metadata)
-      throw Error('Use an SVG exported by Draftably. Other SVGs are not editable diagrams.');
+      throw Error('Use an SVG exported by draftably. Other SVGs are not editable diagrams.');
     data = JSON.parse(metadata.textContent || '');
   } else if (trimmed.startsWith('{')) data = JSON.parse(trimmed);
   else throw Error('Open a saved JSON diagram or an exported, editable SVG.');
@@ -164,7 +164,7 @@ export async function importText(text: string, name = '') {
 
 /** Embed an image as a new shape, or replace the image in an existing one. */
 export async function insertImage(file: File, replaceId: string | null = null) {
-  // A Draftably export opens as the diagram it was drawn from.
+  // A draftably export opens as the diagram it was drawn from.
   if (!replaceId && (await openImageSource(file))) return;
   if (!IMAGE_TYPES.test(file.type))
     throw Error(

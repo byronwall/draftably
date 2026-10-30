@@ -1,11 +1,11 @@
 # Get started
 
-Draftably turns short text into a laid-out diagram. Start in your browser: you need no install to
+draftably turns short text into a laid-out diagram. Start in your browser: you need no install to
 make a diagram and keep it.
 
 ## Make a diagram in your browser
 
-You write the boxes and lines. Draftably places the boxes and routes every line. The example below
+You write the boxes and lines. draftably places the boxes and routes every line. The example below
 is live: it has two boxes and no line.
 
 ```draft
@@ -39,7 +39,7 @@ your work is kept.
 
 ## Install
 
-Draftably is one npm package with the CLI and the editor in it. It needs Node 22.21 or later.
+draftably is one npm package with the CLI and the editor in it. It needs Node 22.21 or later.
 
 ```sh
 npx draftably --help                 # run it without installing

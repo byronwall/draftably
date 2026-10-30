@@ -236,7 +236,7 @@ export async function go(url: string, { push = true } = {}) {
   } else {
     closeFileSession();
     if (push) history.pushState(null, '', next.href);
-    document.title = 'Draftably';
+    document.title = 'draftably';
     state.setView('start');
     void refreshWorkspace();
   }

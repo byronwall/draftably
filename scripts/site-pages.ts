@@ -24,21 +24,21 @@ interface Meta {
 const SITE: Meta[] = [
   {
     path: '',
-    title: 'Draftably: manual diagrams are a drag',
+    title: 'draftably: manual diagrams are a drag',
     description:
-      'A text language and CLI for diagrams. Write plain .draft source; Draftably lays out the boxes and routes the lines. Drag a box if you want, and the move is saved to the file.',
+      'A text language and CLI for diagrams. Write plain .draft source; draftably lays out the boxes and routes the lines. Drag a box if you want, and the move is saved to the file.',
   },
   {
     path: 'play',
-    title: 'Playground · Draftably',
+    title: 'Playground · draftably',
     description:
       'Write .draft source and watch the diagram redraw as you type. Share a link, download SVG or PNG, or drop an exported diagram to keep editing.',
   },
   {
     path: 'docs',
-    title: 'Docs · Draftably',
+    title: 'Docs · draftably',
     description:
-      'The Draftably language, CLI, themes and agent skill, with live examples you can edit.',
+      'The draftably language, CLI, themes and agent skill, with live examples you can edit.',
   },
 ];
 
@@ -70,7 +70,7 @@ async function docsPages(): Promise<Meta[]> {
         const first = p.lead || p.tokens.find(t => t.type === 'paragraph')?.text || p.title;
         return {
           path: `docs/${p.slug}`,
-          title: `${p.title} · Draftably docs`,
+          title: `${p.title} · draftably docs`,
           description: clip(docs.plain(first)),
         };
       },
@@ -92,14 +92,14 @@ function page(template: string, meta: Meta) {
     `<meta name="description" content="${esc(meta.description)}" />`,
     `<link rel="canonical" href="${url}" />`,
     `<meta property="og:type" content="website" />`,
-    `<meta property="og:site_name" content="Draftably" />`,
+    `<meta property="og:site_name" content="draftably" />`,
     `<meta property="og:title" content="${esc(meta.title)}" />`,
     `<meta property="og:description" content="${esc(meta.description)}" />`,
     `<meta property="og:url" content="${url}" />`,
     `<meta property="og:image" content="${image}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="Draftably source beside the diagram it draws" />`,
+    `<meta property="og:image:alt" content="draftably source beside the diagram it draws" />`,
     `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${esc(meta.title)}" />`,
     `<meta name="twitter:description" content="${esc(meta.description)}" />`,

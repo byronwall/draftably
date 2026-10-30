@@ -1,6 +1,6 @@
-# Draftably
+# draftably
 
-Draftably is a local diagram DSL and viewer. Write a readable `.draft` file, open it in the browser,
+draftably is a local diagram DSL and viewer. Write a readable `.draft` file, open it in the browser,
 and refine its automatic layout. Viewer edits save to the file; external edits update the viewer.
 
 Requires Node 22.21 or later. The package includes the compiled CLI, viewer, and computation workers.

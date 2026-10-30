@@ -1,16 +1,16 @@
 ---
 name: draftably
-description: Create, edit, check and render Draftably `.draft` diagram files — a readable text DSL for architecture, flow, pipeline, event and container diagrams with automatic layout. Use when the user asks for a diagram, an architecture or system drawing, a flowchart, or mentions a `.draft` file or Draftably.
+description: Create, edit, check and render draftably `.draft` diagram files — a readable text DSL for architecture, flow, pipeline, event and container diagrams with automatic layout. Use when the user asks for a diagram, an architecture or system drawing, a flowchart, or mentions a `.draft` file or draftably.
 ---
 
-# Draftably diagrams
+# draftably diagrams
 
 A `.draft` file is plain text that compiles to a laid-out diagram. You declare objects, groups
 and connections; automatic layout places them. The same file always draws the same picture, so
 edit the source, never coordinates you guessed.
 
 Run the CLI with `npx draftably` (or `draftably` if installed globally, or `pnpm draftably`
-inside the Draftably repo). It needs Node 22.21 or later.
+inside the draftably repo). It needs Node 22.21 or later.
 
 ## Workflow
 

@@ -1,6 +1,6 @@
 # Agent skill
 
-Draftably ships a skill that teaches coding agents such as Claude Code to write `.draft` files,
+draftably ships a skill that teaches coding agents such as Claude Code to write `.draft` files,
 check them, pick a layout and hand the result to you in the editor. The agent edits text, so its
 diagrams diff and review like code.
 
