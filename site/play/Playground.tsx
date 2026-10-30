@@ -270,6 +270,30 @@ export function Playground() {
     if (item) editor?.goto(item.line);
   };
 
+  // A text outline of the drawing: screen readers always have it; Outline shows it on screen.
+  // Each entry finds its line, as a click on the shape does.
+  const [outline, setOutline] = createSignal(false);
+  let outlineToggle!: HTMLButtonElement;
+  const shapes = () => items().filter(i => i.type !== 'edge');
+  const connections = () => items().filter(i => i.type === 'edge');
+  const nameOf = (id?: string) => items().find(i => i.id === id)?.label || id || '';
+  const pickEntry = (id: string) => {
+    setTab('source');
+    pick(id);
+  };
+  const onOutlineKey = (e: KeyboardEvent) => {
+    const list = [...(e.currentTarget as HTMLElement).querySelectorAll('button')];
+    const at = list.indexOf(document.activeElement as HTMLButtonElement);
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      setOutline(false);
+      outlineToggle.focus();
+    } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && at >= 0) {
+      e.preventDefault();
+      list.at((at + (e.key === 'ArrowDown' ? 1 : -1)) % list.length)?.focus();
+    }
+  };
+
   const problems = () => drawing().diagnostics.filter(d => d.level === 'error');
   const allProblems = () => drawing().diagnostics.filter(d => d.level !== 'info');
   const [listOpen, setListOpen] = createSignal(false);
@@ -657,7 +681,7 @@ export function Playground() {
                 )}
               </Show>
               <Show when={shown()}>
-                <span class="play-hint">Click a shape to find its line</span>
+                <span class="play-hint">Click a shape or use Outline to find its line</span>
               </Show>
             </button>
           </div>
@@ -679,6 +703,73 @@ export function Playground() {
           }}
         />
         <section class="play-diagram" id="play-diagram" aria-label="Diagram">
+          <Show when={shown()}>
+            <button
+              type="button"
+              class="tool diagram-outline-toggle"
+              ref={outlineToggle}
+              aria-expanded={outline()}
+              aria-controls="diagram-outline"
+              onClick={() => {
+                const open = !outline();
+                setOutline(open);
+                if (open)
+                  queueMicrotask(() =>
+                    document.querySelector<HTMLButtonElement>('#diagram-outline button')?.focus(),
+                  );
+              }}
+            >
+              Outline
+            </button>
+            <nav
+              class="diagram-outline"
+              id="diagram-outline"
+              classList={{ 'is-open': outline() }}
+              aria-label="Diagram outline"
+              onKeyDown={onOutlineKey}
+            >
+              <h2>{titleOf(source())}</h2>
+              <p>Choose an entry to find its source line.</p>
+              <Show when={shapes().length}>
+                <h3>Shapes</h3>
+                <ul>
+                  <For each={shapes()}>
+                    {i => (
+                      <li>
+                        <button
+                          type="button"
+                          tabIndex={outline() ? 0 : -1}
+                          onClick={() => pickEntry(i.id)}
+                        >
+                          {i.label || i.id}
+                          {i.type === 'group' ? ' (group)' : ''}
+                        </button>
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              </Show>
+              <Show when={connections().length}>
+                <h3>Connections</h3>
+                <ul>
+                  <For each={connections()}>
+                    {i => (
+                      <li>
+                        <button
+                          type="button"
+                          tabIndex={outline() ? 0 : -1}
+                          onClick={() => pickEntry(i.id)}
+                        >
+                          {nameOf(i.from)} → {nameOf(i.to)}
+                          {i.label ? `: ${i.label}` : ''}
+                        </button>
+                      </li>
+                    )}
+                  </For>
+                </ul>
+              </Show>
+            </nav>
+          </Show>
           <DiagramView
             svg={shown()}
             stale={!drawing().svg && !!svg()}
