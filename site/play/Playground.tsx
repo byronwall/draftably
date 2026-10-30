@@ -365,7 +365,11 @@ export function Playground() {
             />
             <label class="select">
               <span class="select-label">Theme</span>
-              <select value={theme()} onChange={e => setTheme(e.currentTarget.value)}>
+              <select
+                aria-label="Theme"
+                value={theme()}
+                onChange={e => setTheme(e.currentTarget.value)}
+              >
                 <For each={THEME_IDS}>
                   {id => <option value={id}>{id[0].toUpperCase() + id.slice(1)}</option>}
                 </For>
