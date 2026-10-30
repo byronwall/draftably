@@ -470,6 +470,7 @@ export { exportKind, setExportKind };
 export function openExport(kind: ExportKind) {
   setExportKind(kind);
   const file = fileSession()?.file;
-  if (kind === 'pdf') setPdfFiles(file ? [file] : []);
+  // The PDF tab starts with the open file checked, whichever tab the dialog opens on.
+  setPdfFiles(file ? [file] : []);
   openDialog('export');
 }
