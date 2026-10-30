@@ -21,6 +21,8 @@ import { projectScene } from '../dsl/project';
 import { DslError, printSource, readSource } from '../dsl/syntax';
 import {
   anchorSurroundings,
+  type Drop,
+  keepDropped,
   movedOutsideEdit,
   reflowGroup,
   translateEdit,
@@ -50,7 +52,7 @@ import {
   setSelection,
   type EditKind,
 } from './document';
-import { toast } from './toast';
+import { toast, type ToastAction } from './toast';
 
 export interface FileSessionInfo {
   name: string;
@@ -294,14 +296,17 @@ let saving = false,
   saveAgain = false;
 /** Shown once the server confirms the save, so a refused save never reads as saved. */
 let savedMessage: string | null = null;
+/** A button on that message, such as keeping a drop's exact position. */
+let savedAction: ToastAction | undefined;
 /** A change on disk reported while a save was in flight. */
 let externalDuringSave: { source: string; revision: string } | null = null;
 
 async function save() {
   if (exampleMode()) {
     // Examples keep their edits in this tab; there is no file to write.
-    if (savedMessage) toast(savedMessage);
+    if (savedMessage) toast(savedMessage, savedAction);
     savedMessage = null;
+    savedAction = undefined;
     return;
   }
   if (saving) {
@@ -334,8 +339,9 @@ async function save() {
       if (!saveAgain) break;
     }
     state.setStatus('saved');
-    if (savedMessage) toast(savedMessage);
+    if (savedMessage) toast(savedMessage, savedAction);
     savedMessage = null;
+    savedAction = undefined;
   } catch {
     state.setStatus('failed');
     toast('Not saved: the file server is not reachable.');
@@ -353,6 +359,7 @@ async function save() {
 function enterConflict(source: string, revision: string) {
   const unsaved = localSource;
   savedMessage = null;
+  savedAction = undefined;
   diskSource = localSource = source;
   diskRevision = revision;
   resetHistory();
@@ -402,7 +409,12 @@ function arrangementEdit(scene: Scene, label: string) {
   const notes = placed.length
     ? [`${placed.length} positions` + (anchored.length ? ` · anchored ${anchored.length}` : '')]
     : [];
-  return { source, ids: new Map<string, string>(), notes: [label, ...notes] };
+  return {
+    source,
+    ids: new Map<string, string>(),
+    notes: [label, ...notes],
+    drops: [] as Drop[],
+  };
 }
 
 function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boolean {
@@ -442,11 +454,50 @@ function handleEdit(before: string, label: string, kind: EditKind = 'edit'): boo
     state.setRedoStack([]);
   });
   localSource = next;
-  const mapId = (id: string) => result.ids.get(id) ?? id;
-  void showSource(next, () => selectedIds().map(mapId), mapId);
+  const mapId = (id: string) => result.ids.get(id) ?? id,
+    { drops } = result;
+  void showSource(next, () => selectedIds().map(mapId), mapId).then(
+    drawn => drawn && checkDrops(drawn, next, drops),
+  );
   savedMessage = `${keptLabel()} · ${result.notes.length ? result.notes.join(' · ') : label}`;
+  savedAction = drops.length
+    ? { label: 'Keep exact position', run: () => void keepExact(drops) }
+    : undefined;
   void save();
   return true;
+}
+
+/** The source with each dropped object at the exact point it was let go. */
+function exactSource(drops: Drop[]) {
+  const source = readSource(localSource);
+  keepDropped(source, drops);
+  return printSource(source);
+}
+
+/** Save a `stay` where each dropped object was let go, in place of its `near`. */
+function keepExact(drops: Drop[]) {
+  const ids = drops.map(d => d.id).join(', ');
+  return commitSource(exactSource(drops), 'Keep exact position', `kept ${ids} where dropped`);
+}
+
+/**
+ * A `near` that does not draw an object where it was dropped is not what the drop asked for:
+ * save its exact position instead, as part of the same edit.
+ */
+function checkDrops(scene: Scene, source: string, drops: Drop[]) {
+  if (localSource !== source) return;
+  const off = drops.filter(d => {
+    const o = scene.byId.get(d.id);
+    return !o || Math.abs(o.x - d.x) > 1 || Math.abs(o.y - d.y) > 1;
+  });
+  if (!off.length) return;
+  const next = exactSource(off);
+  state.setUndoStack(stack => [...stack.slice(0, -1), { ...stack.at(-1)!, after: next }]);
+  localSource = next;
+  savedMessage = `${keptLabel()} · kept ${off.map(d => d.id).join(', ')} where dropped`;
+  savedAction = undefined;
+  void showSource(next);
+  void save();
 }
 
 /**
@@ -474,6 +525,7 @@ export async function commitSource(next: string, label: string, message: string)
   });
   localSource = next;
   savedMessage = `${keptLabel()} · ${message}`;
+  savedAction = undefined;
   void save();
   await showSource(next);
   return true;
