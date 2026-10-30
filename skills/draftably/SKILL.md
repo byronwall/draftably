@@ -275,7 +275,8 @@ content area.
     things that should stand out. `amber` and `orange` at 400–500 are bright fills with dark
     text, good for one highlight.
   - Say what each color means with one `legend family "meaning"` line per color; the viewer and
-    exports draw them as a key.
+    exports draw them as a key. The swatch is shade 500 unless the line sets `shade=`, so match
+    it to the nodes' shade; `check` warns when no node of that family uses it.
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
     unless they encode opposites.
   - Color the outer group and let members inherit (`color=auto`); nested groups of one family
