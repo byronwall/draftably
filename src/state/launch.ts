@@ -4,6 +4,7 @@
  * - `?file=path.draft` with `draftably open`: that file, saved back to disk.
  * - `?example=id`: a scratch copy of a bundled example. Never written to disk.
  * - `#s=…`: a scratch copy of source shared from the site's playground, opened like an example.
+ *   Unsaved edits to either kind of scratch copy come back after a reload.
  * - `draftably open` without a file: the start page, showing the folder's diagrams.
  * - The static site: the diagram kept in browser storage, as before.
  */
@@ -128,7 +129,7 @@ async function chooseLaunch(): Promise<LaunchMode> {
   const shared = await decodeSource(location.hash);
   if (shared != null) {
     const title = /^diagram\s+"([^"]*)"/m.exec(shared)?.[1] || 'Shared diagram';
-    await openExampleSession('shared', title, shared);
+    await openExampleSession('shared', title, shared, location.hash.slice(1));
     return 'example';
   }
   return info ? 'start' : 'static';

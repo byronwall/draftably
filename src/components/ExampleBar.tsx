@@ -3,6 +3,7 @@ import { downloadText } from '../lib/svg-export';
 import {
   currentSource,
   exampleEdited,
+  exampleRestored,
   fileSession,
   markExampleSaved,
   resetExample,
@@ -51,9 +52,11 @@ export function ExampleBar() {
             <span class="example-text">
               <strong>{fileSession()?.name}</strong>
               <span class="example-note">
-                {exampleEdited()
-                  ? 'Your edits are only in this tab. Save as a file to keep them.'
-                  : 'A scratch copy. Edits stay in this tab and are not written to disk.'}
+                {exampleRestored() && exampleEdited()
+                  ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
+                  : exampleEdited()
+                    ? 'Your edits are kept in this browser only. Save as a file to keep them.'
+                    : 'A scratch copy. Edits stay in this browser and are not written to disk.'}
               </span>
             </span>
             <span class="example-actions">

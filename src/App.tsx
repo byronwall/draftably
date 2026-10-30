@@ -102,9 +102,15 @@ export default function App() {
       resetModifiers();
       setSpaceHeld(false);
     };
-    // Leaving an edited example would lose its edits; the browser asks first.
+    // Edits to an example are not in any file; the browser asks first. A label or field still
+    // being typed is committed before the check (fields commit on blur), so it counts too.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (exampleEdited()) e.preventDefault();
+      finishInlineEdit(true);
+      (document.activeElement as HTMLElement | null)?.blur?.();
+      if (!exampleEdited()) return;
+      e.preventDefault();
+      // Older Chrome and Safari show the prompt only when returnValue is set.
+      e.returnValue = '';
     };
     const onUnload = () => {
       sculptBeforeUnload();
