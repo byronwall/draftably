@@ -5,17 +5,21 @@ when you close the tab, and how to export a diagram and open it again.
 
 ## Where your work is kept
 
-| Where you edit                                   | Where the source is kept       | Close the tab, then come back                  | Open the bare URL                   | Use another device        | Share it                                        |
-| ------------------------------------------------ | ------------------------------ | ---------------------------------------------- | ----------------------------------- | ------------------------- | ----------------------------------------------- |
-| The landing page demo or the [Playground](/play) | Browser storage on this device | Kept: your last draft opens again              | Your last draft opens again         | Not kept                  | Copy link in the Playground, or download a file |
-| A Copy link URL (`#s=…`)                         | In the URL itself              | Kept in the link, as it was when you copied it | Not kept: the source is in the link | Kept: open the link there | Send the link                                   |
-| The Editor's scratch copy                        | This tab only                  | Lost, unless you download the `.draft`         | Not kept                            | Not kept                  | Download the `.draft`, then send the file       |
-| `draftably open file.draft`                      | The `.draft` file on your disk | Kept: every edit saves to the file             | Run `draftably open` again          | Copy or commit the file   | Send the file, or commit it to a repository     |
+| Where you edit              | Where the source is kept                                       | Close the tab, then come back                         | Open the bare URL                   | Use another device        | Share it                                                  |
+| --------------------------- | -------------------------------------------------------------- | ----------------------------------------------------- | ----------------------------------- | ------------------------- | --------------------------------------------------------- |
+| The landing page demo       | Browser storage on this device: one draft for each example tab | Kept: the tab you had open comes back with your edits | Your edits come back                | Not kept                  | Select **Open in the editor**, then download the `.draft` |
+| The [Playground](/play)     | Browser storage on this device: one draft                      | Kept: your last draft opens again                     | Your last draft opens again         | Not kept                  | Copy link, or download a file                             |
+| A Copy link URL (`#s=…`)    | In the URL itself                                              | Kept in the link, as it was when you copied it        | Not kept: the source is in the link | Kept: open the link there | Send the link                                             |
+| The Editor's scratch copy   | This tab only                                                  | Lost, unless you download the `.draft`                | Not kept                            | Not kept                  | Download the `.draft`, then send the file                 |
+| `draftably open file.draft` | The `.draft` file on your disk                                 | Kept: every edit saves to the file                    | Run `draftably open` again          | Copy or commit the file   | Send the file, or commit it to a repository               |
 
 Some more facts about each case:
 
-- **Playground and landing demo.** The browser keeps one draft: the last diagram you changed. A
-  new draft replaces it. If you clear your browser data, the draft is lost.
+- **Landing page demo.** Each example tab keeps its own edits. When you come back, the tab you had
+  open shows again. **Reset** sets a tab back to its example.
+- **Playground.** The browser keeps one draft: the last diagram you changed. A new draft replaces
+  it, and the landing demo does not change it. A link that you open is kept only after you type.
+- **Both.** If you clear your browser data, the drafts are lost.
 - **Copy link.** The link holds the full source, so no server keeps a copy. Edits after you copy
   the link are not in it. Copy the link again to include them.
 - **Editor scratch copy.** "Open in the editor", an example, or a shared link in the Editor opens a
