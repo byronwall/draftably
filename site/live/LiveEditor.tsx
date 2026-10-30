@@ -1,4 +1,5 @@
 import { createEffect, createSignal, For, on, onCleanup, Show, untrack } from 'solid-js';
+import { encodeSource } from '../../src/lib/source-hash';
 import { findExample } from '../../src/model/examples';
 import { appUrl, draw, paperOf, type Drawing } from '../draw';
 import { highlightHtml } from '../highlight';
@@ -36,6 +37,16 @@ export function LiveEditor(props: { examples: string[] }) {
   );
   onCleanup(() => clearTimeout(timer));
 
+  // The editor opens the example, or once it is edited, the edited source in a share hash.
+  const [editorUrl, setEditorUrl] = createSignal(appUrl(first));
+  createEffect(() => {
+    const text = source();
+    if (!edited()) return setEditorUrl(appUrl(id()));
+    void encodeSource(text).then(
+      hash => source() === text && setEditorUrl(`${import.meta.env.BASE_URL}app/#${hash}`),
+    );
+  });
+
   const pick = (next: string) => {
     setId(next);
     setSource(findExample(next)?.source ?? '');
@@ -65,7 +76,7 @@ export function LiveEditor(props: { examples: string[] }) {
               Reset
             </button>
           </Show>
-          <a class="live-open" href={appUrl(id())} rel="external">
+          <a class="live-open" href={editorUrl()} rel="external">
             Open in the editor
           </a>
         </span>
