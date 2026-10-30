@@ -2,7 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { renderSvg } from '../src/cli/svg';
 import { checkSource } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
-import { parseModel } from '../src/dsl/syntax';
+import { parseModel, printSource, readSource } from '../src/dsl/syntax';
+import { translateEdit } from '../src/dsl/translate';
+import { clone } from '../src/model/geometry';
+import type { Diagram } from '../src/model/types';
 import { normalize } from '../src/model/document';
 
 const SOURCE = `diagram "Checkout" version=1
@@ -30,5 +33,32 @@ describe('heading', () => {
 
   it('allows one subtitle', () => {
     expect(() => parseModel('subtitle "a"\nsubtitle "b"\n')).toThrow(/Duplicate/);
+  });
+
+  it('saves title, subtitle and frame width edits as the heading lines alone', () => {
+    const edit = (source: string, fn: (d: Diagram) => void) => {
+      const scene = checkSource(source),
+        before = projectScene(scene),
+        after = clone(before);
+      fn(after);
+      const { source: out } = translateEdit({
+        source: readSource(source),
+        scene,
+        before: normalize(JSON.parse(JSON.stringify(before))),
+        after: normalize(JSON.parse(JSON.stringify(after))),
+        label: 'Edit',
+        selection: [],
+      });
+      return printSource(out);
+    };
+    const text = edit(SOURCE, d => {
+      d.title = 'Checkout v2';
+      d.appearance.heading = { title: 'Checkout v2', width: 900 };
+    });
+    expect(text).toBe(SOURCE.replace(/.*\n.*\n/, 'diagram "Checkout v2" version=1 width=900\n'));
+    const plain = 'node api "API"\n';
+    expect(edit(plain, d => (d.appearance.heading = { subtitle: 'Why' }))).toBe(
+      'diagram "" version=1\nsubtitle "Why"\n\nnode api "API"\n',
+    );
   });
 });

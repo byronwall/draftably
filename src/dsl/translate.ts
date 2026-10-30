@@ -137,16 +137,33 @@ export function translateEdit(input: EditInput): EditResult {
     }
   };
 
-  if (!same(before.appearance, after.appearance)) writeAppearance(source, after.appearance);
+  // The heading has its own lines; the rest of the appearance is the `theme` line.
+  const look = (d: Diagram) => ({ ...d.appearance, heading: undefined });
+  if (!same(look(before), look(after))) writeAppearance(source, after.appearance);
 
-  // Title.
-  if (after.title !== before.title) {
-    const s = statements(source).find(x => x.command === 'diagram');
-    if (s) s.args[0] = quoted(after.title);
-    else
-      source.lines.unshift(statement('diagram', [quoted(after.title)], [['version', bare(1)]]), {
-        kind: 'blank',
-      });
+  // Title, frame width and subtitle.
+  const head = before.appearance.heading ?? {},
+    next = after.appearance.heading ?? {};
+  // A file without a `diagram` line has no title, whatever name the editor shows for it.
+  const diagramLine = () => {
+    let s = statements(source).find(x => x.command === 'diagram');
+    if (!s) {
+      s = statement('diagram', [quoted(head.title ?? '')], [['version', bare(1)]]);
+      source.lines.unshift(s, { kind: 'blank' });
+    }
+    return s;
+  };
+  if (after.title !== before.title) diagramLine().args[0] = quoted(after.title);
+  if (next.width !== head.width)
+    setAttr(diagramLine(), 'width', next.width ? bare(Math.round(next.width)) : undefined);
+  if (next.subtitle !== head.subtitle) {
+    const s = statements(source).find(x => x.command === 'subtitle');
+    if (!next.subtitle) removeWhere(source, x => x === s);
+    else if (s) s.args[0] = quoted(next.subtitle);
+    else {
+      const d = diagramLine();
+      insertAfter(source, statement('subtitle', [quoted(next.subtitle)]), x => x === d);
+    }
   }
 
   // Removed objects and connections.

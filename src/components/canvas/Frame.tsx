@@ -4,7 +4,7 @@ import { MIN_FRAME_WIDTH, type DiagramFrame } from '../../model/frame';
 import { headingLines, headingTypes } from '../../model/heading';
 import { legendMarkup } from '../../model/legend';
 import { drawnLegend, usedStatuses } from '../../model/status';
-import { HEADING_EDIT, startInlineEdit } from '../../state/actions';
+import { HEADING_EDIT } from '../../state/actions';
 import { doc, transact } from '../../state/document';
 import { inlineEditId, screenToWorld } from '../../state/editor';
 import { viewerFrame } from '../../state/scene';
@@ -53,11 +53,6 @@ export function Frame() {
     if (doc.appearance.heading?.[key] || inlineEditId() === HEADING_EDIT[key]) return;
     return headingSlot(frame(), key);
   };
-  const edit = (key: Key) => (e: MouseEvent) => {
-    e.stopPropagation();
-    startInlineEdit(HEADING_EDIT[key]);
-  };
-
   let start = 0;
   const onEdgeDown = (e: PointerEvent) => {
     if (e.button) return;
@@ -109,7 +104,7 @@ export function Frame() {
             font-size={String(line.type.size)}
             font-weight={String(line.type.weight)}
             fill={line.fill}
-            onDblClick={edit(line.key)}
+            data-heading={HEADING_EDIT[line.key]}
           >
             {line.text}
           </text>
@@ -127,7 +122,7 @@ export function Frame() {
                 font-family={look().annotation.family}
                 font-size={String(look().annotation.size)}
                 fill={look().muted}
-                onDblClick={edit(key)}
+                data-heading={HEADING_EDIT[key]}
               >
                 {key === 'title' ? 'Double-click to add a title' : 'Double-click to add a subtitle'}
               </text>
@@ -140,6 +135,7 @@ export function Frame() {
       <g class="diagram-frame-legend" pointer-events="none" innerHTML={legend()} />
       <rect
         class="diagram-frame-edge"
+        data-frame-edge
         role="separator"
         aria-orientation="vertical"
         aria-label="Frame width. Drag to widen the frame."
@@ -151,7 +147,6 @@ export function Frame() {
         onPointerMove={onEdgeMove}
         onPointerUp={onEdgeUp}
         onPointerCancel={() => setDragW(null)}
-        onDblClick={e => e.stopPropagation()}
       />
     </g>
   );
