@@ -88,6 +88,8 @@ export interface RoutingOptions extends Partial<RoutingSettings> {
    * top. On unless false.
    */
   titleBands?: boolean;
+  /** Search each route near its two boxes first, and the whole grid only when that fails. On unless false. */
+  window?: boolean;
   /** Even out ports, fans and corridors after routing. On unless false. */
   tidy?: boolean;
   /**
