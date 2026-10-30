@@ -1,103 +1,151 @@
 # Draftably
 
-A diagram editor that runs entirely in the browser. Draw a diagram, improve its layout in small
-undoable passes, compare layout and routing candidates side by side, scrub through recorded layout
-steps, and repair small areas with a layout brush.
+Draftably turns plain-text `.draft` files into diagrams. Describe the boxes, groups and connections;
+Draftably places the boxes and routes the lines. Open the diagram in the browser to refine it.
+Your source stays readable, so you can keep it beside your code, review changes in Git,
+and give the same file to a coding agent.
 
-Built with SolidJS, TypeScript and Vite. The standalone editor saves to the browser; export JSON or
-editable SVG to keep a portable copy. The Draftably CLI serves the same editor locally and saves
-file-backed edits to `.draft` source.
+Use it for architecture diagrams, process flows, sequences, state machines and database schemas.
+Start in the browser with no install, or use the CLI to edit files on disk.
+
+[Try the live demo](https://draftably.dev/) · [Playground](https://draftably.dev/play) ·
+[Editor](https://draftably.dev/app/) · [Documentation](https://draftably.dev/docs/get-started) ·
+[npm package](https://www.npmjs.com/package/draftably)
+
+## What a diagram looks like
+
+Save this as `architecture.draft`:
+
+```text
+diagram "Architecture" version=1
+group backend "Backend" color=teal
+node app "Web app" color=blue
+node api "API" in=backend
+node db "Database" in=backend shape=pill
+edge request app -> api "HTTPS"
+edge query api -> db "query"
+```
+
+A `node` is a box, a `group` is a container, and an `edge` connects them by ID.
+Here, the API and database sit inside Backend. The connections put Web app before API before
+Database, with no coordinates to maintain. Labels can change without changing the IDs.
+
+Automatic layout gives you a starting arrangement. Use layout rules to choose a direction or
+engine, drag a node to save a relative placement preference, or pin it at an exact position.
+Editor changes save to the same `.draft` source. Changes from a text editor or agent update
+the drawing while the local editor is open.
+
+See the [language reference](docs/DSL.md) for layout rules, nested groups, swim lanes, sequences,
+cells and placement controls. The [examples](examples/) show complete diagrams.
+
+## Get started
+
+### In your browser
+
+Open the [Playground](https://draftably.dev/play), pick an example, and edit its source.
+The diagram redraws as you type. Select **Copy link** to share the current source in a URL,
+or **Download** to keep a `.draft`, PNG or SVG file.
+
+The Playground keeps your last draft in this browser. Download a file to keep a separate copy;
+browser storage does not move to another device. Open the [Editor](https://draftably.dev/app/)
+for direct canvas editing and layout tools.
+
+### On your files
+
+Requires **Node 22.21 or later**. Run the published package without cloning this repository:
+
+```sh
+pnpm dlx draftably open architecture.draft
+```
+
+The CLI serves the bundled editor locally. Open the URL on its `Viewer:` line if your browser
+does not open automatically. Edits save back to the file. Press **Ctrl+C** to stop the server.
+Run `pnpm dlx draftably open` without a file to browse the folder, create a diagram, or try an example.
+
+For regular use, install it once:
+
+```sh
+pnpm add --global draftably
+draftably open architecture.draft
+```
+
+Check, format and export the file from the terminal:
+
+```sh
+draftably check architecture.draft
+draftably format architecture.draft --write
+draftably inspect architecture.draft --svg > architecture.svg
+draftably inspect architecture.draft --png architecture.png
+```
+
+`check` reports source errors and drawing conflicts, and exits 1 on errors for CI.
+PNG export needs Chrome, Chromium or Edge. The package includes the CLI, editor and computation
+workers; installation does not download a browser.
+
+## Review, refine and share
+
+- **Review a change as a diagram.** Prefix declarations with `+`, `-` or `~` to show additions,
+  removals and changes. `draftably compare before.draft after.draft --svg > diff.svg` creates
+  a marked drawing from two files. A `compare "Before" "After"` line shows aligned panels.
+- **Try other layouts.** `draftably vary architecture.draft` renders and ranks layout variants
+  on a contact sheet. Use `draftably vary architecture.draft --apply best` to keep one.
+  In the editor, compare candidates, inspect recorded layout steps, or adjust a local area
+  with the layout brush. Layout edits are undoable.
+- **Change the look.** A `theme` line selects drafting, fieldnotes, signal, ink or blueprint.
+  Themes change the appearance while preserving placement. Color families and type settings
+  can also be set in source.
+- **Explain one path.** Named emphasis states keep selected nodes and connections in focus
+  while the rest fades. Export a state with `draftably inspect plan.draft --svg --state <id>`.
+- **Keep the source with the picture.** PNG and SVG exports embed their `.draft` source by default.
+  Drop or paste an export on the site, or run `draftably open architecture.svg`, to edit it again.
+  `draftably extract architecture.png` prints the source. Use `--no-source` when an image should
+  omit it. Image services that re-encode an upload can strip the embedded source.
+
+Read the [CLI guide](https://draftably.dev/docs/cli) for commands and options, and
+[Save, share and reopen](https://draftably.dev/docs/saving) for storage and export behavior.
+
+## Use with a coding agent
+
+The package bundles a skill that teaches agents to write, check, render and refine `.draft` files.
+Install it in your project:
+
+```sh
+pnpm dlx draftably skill install                       # ./.claude/skills/draftably
+pnpm dlx draftably skill install --dir .agents/skills  # Codex or another skills folder
+```
+
+Then ask for a concrete result, for example:
+
+> Draw the checkout flow in src/checkout as a .draft file next to it, and open it for me.
+
+The agent edits text and checks the result with the CLI. You can refine the drawing in the editor
+and return the same file to the agent. Read the [skill](skills/draftably/SKILL.md) or the
+[agent guide](https://draftably.dev/docs/agent-skill) for the full workflow.
 
 ## Develop
 
-Use Node 22.21 or later and pnpm 11.
+Built with SolidJS, TypeScript and Vite. Use Node 22.21 or later and pnpm 11.
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-| Script              | Purpose                                              |
-| ------------------- | ---------------------------------------------------- |
-| `pnpm dev`          | Start the dev server.                                |
-| `pnpm build`        | Typecheck and build the static site into `dist/`.    |
-| `pnpm preview`      | Serve the production build.                          |
-| `pnpm typecheck`    | Run TypeScript.                                      |
-| `pnpm test`         | Run the unit tests and the engine regression suites. |
-| `pnpm test:unit`    | Run the Vitest unit tests only.                      |
-| `pnpm test:engines` | Run the layout, brush and engine parity suites.      |
-| `pnpm lint`         | Lint with ESLint, including Solid reactivity rules.  |
-| `pnpm format`       | Format with Prettier.                                |
+| Command               | Purpose                                                 |
+| --------------------- | ------------------------------------------------------- |
+| `pnpm dev`            | Run the editor dev server.                              |
+| `pnpm site:dev`       | Run the public site dev server.                         |
+| `pnpm build`          | Typecheck and build the editor into `dist/`.            |
+| `pnpm site:build`     | Build the public site and editor into `dist-site/`.     |
+| `pnpm check:fast`     | Run typecheck, lint, formatting and unit tests.         |
+| `pnpm check`          | Also run engine regression suites and the editor build. |
+| `pnpm cli:build`      | Build the published CLI and bundled viewer.             |
+| `pnpm cli:pack-check` | Test a clean package install.                           |
 
-`pnpm build` writes a static site. Publish `dist/` as is; the computation worker sits in
-`dist/assets/`. Browser saves belong to the site's origin, so export a diagram before moving hosts.
+Run repository CLI commands as `pnpm draftably …`. Build the editor with `pnpm build` before
+using `pnpm draftably open`.
 
-## Use the editor
-
-| Action                        | Control                                             |
-| ----------------------------- | --------------------------------------------------- |
-| Create connected steps        | Press **N**, type a title, then press **Tab**.      |
-| Tidy the current arrangement  | Press **L**.                                        |
-| Preview automatic layout      | Select **Automatic layout…**, or press **Shift+L**. |
-| Compare layouts and routing   | Select **Compare**, or press **Alt+E**.             |
-| Inspect recorded layout steps | Select **Timeline**, or press **Alt+T**.            |
-| Adjust a local area           | Press **W** for the layout brush.                   |
-| Return to Edit                | Press **Escape** until previews and tools close.    |
-| Open help                     | Press **?**.                                        |
-
-Comparison candidates all start from the same diagram. Apply one to keep it; Undo restores the
-starting diagram. To repair one area, bookmark an early timeline step, keep a later step with
-**Keep & brush**, then brush the area back toward the bookmark.
-
-## Project layout
-
-```
-src/
-  model/       Typed document, graph queries, geometry, labels, routing and edit operations
-  state/       Solid stores: document + history, editor, layout, timeline/brush, comparison
-  components/  Toolbar, panels, menus, dialogs, canvas scene and comparison views
-  engines/     Layout, routing, comparison and brush engines (plain JS with type declarations)
-  workers/     The worker that runs engine computations off the main thread
-  samples/     Example diagrams shown in the File menu
-  dsl/         The .draft language: parser, formatter, compiler and editor projection
-  cli/         The `pnpm draftably` command
-  server/      The folder and file sessions behind `pnpm draftably open`
-examples/      Example .draft diagrams, bundled into the viewer's start page
-tests/         Vitest unit tests and the engine regression scripts
-reference/v7/  The original release, used by the engine parity test
-reference/meld/ The recovered Meld DSL prototype the .draft language is adapted from
-```
-
-## Diagram files
-
-`.draft` files describe a diagram as readable text that both a person and an agent can edit. See
-[Diagram files](docs/DSL.md) for the language. Check, format and inspect them from the terminal:
-
-```bash
-pnpm draftably check examples/checkout.draft
-pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
-pnpm build && pnpm draftably open                  # pick, create, or try an example
-pnpm draftably open examples/checkout.draft         # open one file directly
-```
-
-PNG and SVG exports carry their `.draft` source, so an image in a PR or a doc turns back into an
-editable diagram. `pnpm draftably extract diagram.png` prints it, and every command that takes a
-`.draft` also takes the image. Drop or paste the image into the viewer to open it. `--no-source`
-and a checkbox in the export menu leave the source out. Hosts that recompress or re-encode an
-upload strip the PNG chunk:
-
-| Destination               | Keeps the source   |
-| ------------------------- | ------------------ |
-| GitHub PR (`gh --attach`) | Yes, byte for byte |
-| Jira, Slack               | Not tested yet     |
-
-See [Architecture](docs/ARCHITECTURE.md) for how the pieces fit together and
-[Checks](docs/CHECKS.md) for what is tested. [Source record](docs/IMPORT.md) describes where the
-original release came from; its product notes live in [reference/v7/docs](reference/v7/docs).
-
-The `draftably` npm package includes the compiled CLI and viewer. Use `pnpm cli:build` to build it,
-`pnpm cli:pack-check` to test a clean tarball install, and `pnpm prove:installed` for the browser proof.
-See [release setup](docs/RELEASING.md) for Changesets and npm publishing.
-
-The [Diagram DSL initiative](docs/intent/diagram-dsl/shape-brief.md) records the goals and plan
-for shared file editing.
+- [Architecture](docs/ARCHITECTURE.md): source map and how the pieces fit together.
+- [Checks](docs/CHECKS.md): test suites, browser proofs, screenshots and performance budgets.
+- [Releasing](docs/RELEASING.md): Changesets and package publishing.
+- [Source record](docs/IMPORT.md): the original release and Meld language prototype.
