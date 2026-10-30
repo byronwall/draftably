@@ -7,12 +7,16 @@ import { highlightHtml } from '../highlight';
 /**
  * Editable `.draft` source beside its drawing. Each edit redraws after a short pause; while the
  * source has errors the last good drawing stays, dimmed. The landing page hero and the playground
- * both use it.
+ * both use it. Each example's edits are saved in the browser, so leaving the page and coming back
+ * resumes them on the tab that was open.
  */
 export function LiveEditor(props: { examples: string[] }) {
-  const first = untrack(() => props.examples[0]);
+  const saved = read(TAB);
+  const first = untrack(() =>
+    saved && props.examples.includes(saved) ? saved : props.examples[0],
+  );
   const [id, setId] = createSignal(first);
-  const [source, setSource] = createSignal(findExample(first)?.source ?? '');
+  const [source, setSource] = createSignal(read(DRAFT + first) ?? findExample(first)?.source ?? '');
   const [drawing, setDrawing] = createSignal<Drawing>({ svg: null, diagnostics: [], items: [] });
   const [lastSvg, setLastSvg] = createSignal('');
   const [ms, setMs] = createSignal(0);
@@ -37,6 +41,26 @@ export function LiveEditor(props: { examples: string[] }) {
   );
   onCleanup(() => clearTimeout(timer));
 
+  // Save the draft after a short pause, and at once on a tab switch or when the page goes away.
+  let pending: ReturnType<typeof setTimeout> | undefined;
+  const save = () => {
+    if (pending === undefined) return;
+    clearTimeout(pending);
+    pending = undefined;
+    write(DRAFT + id(), edited() ? source() : null);
+  };
+  createEffect(
+    on(
+      source,
+      () => {
+        clearTimeout(pending);
+        pending = setTimeout(save, 300);
+      },
+      { defer: true },
+    ),
+  );
+  onCleanup(save);
+
   // The editor opens the example, or once it is edited, the edited source in a share hash.
   const [editorUrl, setEditorUrl] = createSignal(appUrl(first));
   createEffect(() => {
@@ -48,9 +72,12 @@ export function LiveEditor(props: { examples: string[] }) {
   });
 
   const pick = (next: string) => {
+    save();
     setId(next);
-    setSource(findExample(next)?.source ?? '');
+    write(TAB, next);
+    setSource(read(DRAFT + next) ?? findExample(next)?.source ?? '');
   };
+  const reset = () => setSource(findExample(id())?.source ?? '');
   const lines = () => source().split('\n').length;
   const errors = () => drawing().diagnostics.filter(d => d.level === 'error');
 
@@ -72,7 +99,7 @@ export function LiveEditor(props: { examples: string[] }) {
         </For>
         <span class="live-bar-end">
           <Show when={edited()}>
-            <button type="button" class="live-reset" onClick={() => pick(id())}>
+            <button type="button" class="live-reset" onClick={reset}>
               Reset
             </button>
           </Show>
@@ -131,4 +158,25 @@ export function LiveEditor(props: { examples: string[] }) {
       </div>
     </div>
   );
+}
+
+const DRAFT = 'draftably.landing.draft.';
+const TAB = 'draftably.landing.tab';
+
+// Storage can be blocked or full; the demo then just starts from the example.
+function read(key: string) {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function write(key: string, value: string | null) {
+  try {
+    if (value === null) localStorage.removeItem(key);
+    else localStorage.setItem(key, value);
+  } catch {
+    // See read.
+  }
 }
