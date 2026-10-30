@@ -1,4 +1,4 @@
-import { createEffect, createSignal, on, onCleanup, onMount } from 'solid-js';
+import { createEffect, createSignal, on, onCleanup, onMount, untrack } from 'solid-js';
 import { paperOf } from '../draw';
 
 interface View {
@@ -58,20 +58,22 @@ export function DiagramView(props: {
     zoomAt(factor, box.width / 2, box.height / 2);
   };
 
-  // A new example fits once its drawing arrives; an edit to the same one keeps the view.
-  let pending = false;
+  // A new example fits once its own drawing arrives; an edit to the same one keeps the view.
+  // `props.svg` can notify before the new drawing exists (the page's getter also reads the
+  // source), so wait for an SVG that differs from the one on screen when the key changed.
+  let fitFrom: string | null = null;
   createEffect(
     on(
       () => props.fitKey,
-      () => (pending = true),
+      () => (fitFrom = untrack(() => props.svg)),
     ),
   );
   createEffect(
     on(
       () => props.svg,
       svg => {
-        if (!svg || !pending) return;
-        pending = false;
+        if (!svg || fitFrom == null || svg === fitFrom) return;
+        fitFrom = null;
         queueMicrotask(fit);
       },
     ),
