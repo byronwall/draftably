@@ -2699,7 +2699,8 @@ kbd {
   display: flex;
   flex-direction: column;
   width: min(640px, 100%);
-  max-height: 70vh;
+  /* One height for every query, so the box does not jump as results change. */
+  height: min(520px, calc(100dvh - 10vh - 16px));
   border: 1px solid var(--line-strong);
   border-radius: 10px;
   background: var(--surface);
