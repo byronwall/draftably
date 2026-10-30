@@ -8,3 +8,6 @@ packages/cli/dist/
 packages/cli/examples/
 packages/cli/DSL.md
 packages/cli/THIRD_PARTY_NOTICES
+
+# Preserve original Pro artifact bytes.
+docs/intent/**/assets/pro-results/**
