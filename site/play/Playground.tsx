@@ -249,6 +249,56 @@ export function Playground() {
   onMount(() => document.addEventListener('pointerdown', closeMenu));
   onCleanup(() => document.removeEventListener('pointerdown', closeMenu));
 
+  // The download menu follows the menu-button pattern: arrows move between items, and Escape or
+  // focus leaving it closes it.
+  let menuButton!: HTMLButtonElement;
+  const menuItems = () => [
+    ...menuButton.parentElement!.querySelectorAll<HTMLButtonElement>(
+      '[role="menuitem"]:not(:disabled)',
+    ),
+  ];
+  const openMenu = (at: 'first' | 'last') => {
+    setMenu(true);
+    const items = menuItems();
+    (at === 'first' ? items[0] : items.at(-1))?.focus();
+  };
+  const choose = (action: () => void) => {
+    setMenu(false);
+    menuButton.focus();
+    action();
+  };
+  const onMenuKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape' && menu()) {
+      e.preventDefault();
+      e.stopPropagation();
+      setMenu(false);
+      menuButton.focus();
+      return;
+    }
+    const items = menuItems();
+    const at = items.indexOf(document.activeElement as HTMLButtonElement);
+    if (at < 0) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        openMenu(e.key === 'ArrowDown' ? 'first' : 'last');
+      }
+      return;
+    }
+    const next =
+      e.key === 'ArrowDown'
+        ? at + 1
+        : e.key === 'ArrowUp'
+          ? at - 1
+          : e.key === 'Home'
+            ? 0
+            : e.key === 'End'
+              ? -1
+              : null;
+    if (next == null) return;
+    e.preventDefault();
+    items.at(next % items.length)?.focus();
+  };
+
   const saveSplit = () => {
     try {
       localStorage.setItem(SPLIT_KEY, String(split()));
@@ -307,16 +357,25 @@ export function Playground() {
             </svg>
             Copy link
           </button>
-          <div class="menu-wrap">
+          <div
+            class="menu-wrap"
+            onKeyDown={onMenuKey}
+            onFocusOut={e => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setMenu(false);
+            }}
+          >
             <button
               type="button"
               class="tool"
+              ref={menuButton}
+              aria-haspopup="menu"
               aria-expanded={menu()}
+              aria-controls="download-menu"
               disabled={!ready()}
-              onClick={() => setMenu(m => !m)}
-              onKeyDown={e => {
-                if (e.key === 'Escape') setMenu(false);
-              }}
+              // A keyboard press (detail 0) opens onto the first item, as a menu button should.
+              onClick={e =>
+                menu() ? setMenu(false) : e.detail ? setMenu(true) : openMenu('first')
+              }
             >
               <svg viewBox="0 0 16 16" aria-hidden="true">
                 <path d="M8 2.5v8M4.5 7.5L8 11l3.5-3.5M3 13.5h10" />
@@ -324,19 +383,21 @@ export function Playground() {
               Download
             </button>
             <Show when={menu()}>
-              <div class="menu" role="menu">
+              <div class="menu" id="download-menu" role="menu" aria-label="Download">
                 <button
                   type="button"
                   role="menuitem"
                   disabled={!!imageBlocked()}
                   aria-describedby={imageBlocked() ? 'export-note' : undefined}
-                  onClick={() => {
-                    setMenu(false);
-                    save(
-                      new Blob([embedSvgSource(svg(), source())], { type: 'image/svg+xml' }),
-                      fileName(source(), 'svg'),
-                    );
-                  }}
+                  tabIndex={-1}
+                  onClick={() =>
+                    choose(() =>
+                      save(
+                        new Blob([embedSvgSource(svg(), source())], { type: 'image/svg+xml' }),
+                        fileName(source(), 'svg'),
+                      ),
+                    )
+                  }
                 >
                   SVG<span>Opens again here</span>
                 </button>
@@ -345,10 +406,10 @@ export function Playground() {
                   role="menuitem"
                   disabled={!!imageBlocked()}
                   aria-describedby={imageBlocked() ? 'export-note' : undefined}
-                  onClick={() => {
-                    setMenu(false);
-                    void savePng(svg(), source(), fileName(source(), 'png'));
-                  }}
+                  tabIndex={-1}
+                  onClick={() =>
+                    choose(() => void savePng(svg(), source(), fileName(source(), 'png')))
+                  }
                 >
                   PNG<span>2×, opens again here</span>
                 </button>
@@ -360,10 +421,15 @@ export function Playground() {
                 <button
                   type="button"
                   role="menuitem"
-                  onClick={() => {
-                    setMenu(false);
-                    save(new Blob([source()], { type: 'text/plain' }), fileName(source(), 'draft'));
-                  }}
+                  tabIndex={-1}
+                  onClick={() =>
+                    choose(() =>
+                      save(
+                        new Blob([source()], { type: 'text/plain' }),
+                        fileName(source(), 'draft'),
+                      ),
+                    )
+                  }
                 >
                   .draft<span>The source</span>
                 </button>
