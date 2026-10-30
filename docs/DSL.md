@@ -566,15 +566,59 @@ One `routing` statement sets the router for every connection:
 routing edge-gap=24 clearance=12 corner-radius=0
 ```
 
-Settings: `clearance`, `standoff`, `port-gap`, `edge-gap`, `bend-penalty`, `crossing-penalty`,
-`shared-penalty`, `parallel-penalty`, `port-stability`, `fanout-penalty`, `passes` and
-`corner-radius`, with the router's own ranges. Without it, the router's defaults apply.
+Without a `routing` line, the router's defaults apply. A setting outside its range is an error
+with the line number, such as `Expected crossing-penalty from 0 to 1200; got 2000.`
 
-`clearance` (default 10) is the hard distance a line keeps from boxes. `standoff` (default 20,
-0 to 40) is the distance the router prefers for a line running alongside a box or a group border,
-inside or outside it. A line comes closer only when no clearer route exists. Only a group's title
-blocks its header band, so a line can enter a group straight down beside the title. `standoff=0` turns the
-preference off.
+| Setting            | What it does                                                                                               | Default | Range  |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------- | ------ |
+| `clearance`        | The hard distance in pixels a line keeps from boxes and from groups it does not enter.                     | 10      | 4–30   |
+| `standoff`         | The distance a line prefers when it runs alongside a box or a group border. `0` turns it off.              | 20      | 0–40   |
+| `port-gap`         | The least space the router prefers between two line ends on one side of a box.                             | 16      | 6–28   |
+| `edge-gap`         | The space the router prefers between two parallel lines. Gaps next to groups widen by this step.           | 16      | 4–48   |
+| `bend-penalty`     | The cost of each bend. Higher values give simpler routes with fewer bends.                                 | 32      | 0–100  |
+| `crossing-penalty` | The cost of each crossing. Higher values take a longer way round instead of a crossing.                    | 360     | 0–1200 |
+| `shared-penalty`   | The cost of each pixel of a segment that another line also uses.                                           | 8       | 0–20   |
+| `parallel-penalty` | The cost of two parallel lines closer than `edge-gap`. Higher values keep lines apart.                     | 18      | 0–60   |
+| `port-stability`   | The cost of moving a line's end to another side than the earlier drawing used. It never locks a side.      | 20      | 0–150  |
+| `fanout-penalty`   | The cost of each extra line on a side that other lines use. Higher values spread branches over more sides. | 50      | 0–160  |
+| `passes`           | Routing passes: one first pass, then up to four passes that repair crossings and shared segments.          | 3       | 1–5    |
+| `corner-radius`    | The radius of the rounded corners in pixels. `0` gives square corners.                                     | 6       | 0–16   |
+
+The router adds the costs to the route length in pixels and keeps the cheapest route. So
+`bend-penalty=32` means the router accepts a route up to 32 pixels longer to remove one bend, and
+`crossing-penalty=360` a route up to 360 pixels longer to remove one crossing.
+
+`clearance` is a hard limit. `standoff` is a preference: a line comes closer only when no clearer
+route exists. Only a group's title blocks its header band, so a line can enter a group straight
+down beside the title.
+
+Which setting to change for a problem:
+
+- **Too many bends:** raise `bend-penalty`, for example to 64.
+- **Lines cross:** raise `crossing-penalty`, for example to 900. The viewer's **Fewer crossings**
+  preset writes `crossing-penalty=900 shared-penalty=9 port-stability=10`.
+- **Parallel lines too close together:** raise `edge-gap`, then `parallel-penalty`.
+- **Lines too close to boxes:** raise `clearance` (a hard limit) or `standoff` (a preference).
+- **Line ends bunched on one side of a box:** raise `port-gap`, then `fanout-penalty`.
+- **Rounded corners not wanted:** set `corner-radius=0`.
+
+This file asks for fewer bends and square corners. Remove the `routing` line to see the defaults:
+
+```draft
+node client "Client"
+node gateway "Gateway"
+node orders "Orders"
+node billing "Billing"
+edge e1 client -> gateway "request"
+edge e2 gateway -> orders
+edge e3 gateway -> billing
+edge e4 client -> billing "invoice"
+routing bend-penalty=64 crossing-penalty=900 corner-radius=0
+```
+
+The viewer's **Routing** menu has a slider for each setting except `standoff`, and shows the
+crossings, close lane pairs and bends of the current drawing. A change there writes the `routing`
+line.
 
 When the root `layout` line declares `direction=right` or `direction=down`, a forward connection
 between objects that layout places leaves its source's trailing side and enters its target's
