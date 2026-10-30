@@ -9,6 +9,7 @@
  * --hints` can say how far each refinement moved its target.
  */
 import { measureText } from '../model/fonts';
+import { placeNotes } from '../model/note';
 import { groupHeaderFor, groupTitleLines } from '../model/labels';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Diagram, Point, Rect } from '../model/types';
@@ -288,7 +289,29 @@ export function sceneConflicts(scene: Scene): Diagnostic[] {
   const doc = projectScene(scene);
   const { vg, rects } = visibleRects(doc);
   const { routes } = computeRoutes(doc, vg, rects, { previous: [] });
-  return findConflicts(scene, doc, rects, routes);
+  return [...findConflicts(scene, doc, rects, routes), ...noteConflicts(scene, doc, rects, routes)];
+}
+
+/** An anchored note with no clear spot beside its object, so it covers part of the drawing. */
+function noteConflicts(
+  scene: Scene,
+  doc: Diagram,
+  rects: Map<string, Rect>,
+  routes: DrawnRoute[],
+): Diagnostic[] {
+  return placeNotes(doc, scene.look, rects, routes).flatMap((n, i) =>
+    n.overlaps
+      ? [
+          {
+            level: 'warning' as const,
+            code: 'note-overlap',
+            message: `The note beside ${n.note.near} covers part of the drawing. Try another side=, a smaller width=, or a note without near= in the frame.`,
+            line: scene.model.noteLines[i],
+            ids: [n.note.near!],
+          },
+        ]
+      : [],
+  );
 }
 
 export interface HintMove {

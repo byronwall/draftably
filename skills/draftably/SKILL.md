@@ -75,7 +75,8 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
 
 ## Syntax
 
-One statement per line. Indentation means nothing. Strings use JSON double quotes. IDs match
+One statement per line. Indentation means nothing. Strings use JSON double quotes; escape an
+inner quote as `\"` (`node n "Says \"hi\""`), a backslash as `\\`, and a line break as `\n`. IDs match
 `[A-Za-z_][A-Za-z0-9_.-]*` and are unique across nodes and groups (edges have their own IDs).
 References may point to later lines. Comments start with `#` or `//`.
 
@@ -120,6 +121,7 @@ layout services row gap=56
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                           |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                  |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                                                           |
+| `note "text"`                      | A sentence that never moves layout. `near=id side=below\|above\|left\|right` places it beside an object; without `near` it sits under the subtitle. `width=` (280 default)                                      |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                                                                     |
 | `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                                                                                                              |
@@ -299,8 +301,13 @@ content area.
   arrangement; by default it follows `aspect=` (1.6).
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
   `subtitle` stating its takeaway, so the exported picture stands alone.
-- Collapse many similar things into one node with `count=N` (drawn as a stack with a badge)
-  instead of drawing each one.
+- To define a term or add a sentence of context, write `note "…"` (under the subtitle) or
+  `note "…" near=id side=below` (beside one object). Never fake one with `node … shape=text`:
+  a node takes part in layout and pushes rows and ranks apart. `check` warns `note-overlap` when
+  an anchored note has no clear spot; try another side or leave out `near=`.
+- Collapse many similar things into one node with `count=42` (drawn as a stack with a `×42` badge)
+  instead of drawing each one. For "one per item" with no real number, use a symbol: `count=N`
+  draws `×N` (also `count=many`), so no one asks where a made-up number came from.
 - When one diagram answers several questions (the write path, the read path, what a PR touches),
   add a `state` line for each instead of drawing several diagrams:
   `state write "Write path" api orders db`. Listed IDs are in focus and the rest fades; a

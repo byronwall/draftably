@@ -88,6 +88,17 @@ describe('compile', () => {
     expect(small.diagnostics.some(d => d.code === 'group-grew')).toBe(true);
   });
 
+  it('points a bare inner quote at its column and suggests the escape', () => {
+    expect(() => parseModel('node a "Says "hi" now"')).toThrow(/Line 1, column 14: .*\\"/);
+    expect(parseModel('node a "Says \\"hi\\""').objects[0].label).toBe('Says "hi"');
+  });
+
+  it('takes a count as a number or a short symbol', () => {
+    const counts = parseModel('node a "A" count=12\nnode b "B" count=N').objects.map(o => o.count);
+    expect(counts).toEqual([12, 'N']);
+    expect(() => parseModel('node a "A" count=1')).toThrow(/count/);
+  });
+
   it('rejects relative placement cycles with a line', () => {
     expect(() => checkSource('node a "A"\nnode b "B"\nnear a b\nnear b a\n')).toThrow(/Line [34]/);
   });

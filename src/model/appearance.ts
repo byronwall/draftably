@@ -5,6 +5,7 @@
  *
  * Diagram appearance is separate from the editor's light or dark mode.
  */
+import type { Note } from './note';
 import { typeProfile, type FontRole, type TypeProfile } from './fonts';
 import type { FileConfig } from './link';
 
@@ -78,6 +79,8 @@ export interface DiagramAppearance {
   legend?: LegendEntry[];
   /** Title and subtitle drawn above exported images, from `diagram` and `subtitle` statements. */
   heading?: Heading;
+  /** Sentences drawn on the diagram without moving it, from `note` statements. */
+  notes?: Note[];
   /** Panel labels from a `compare` statement: draw the old and new versions side by side. */
   compare?: {
     before: string;

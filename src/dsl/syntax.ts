@@ -21,6 +21,7 @@ import {
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
 import { EDITORS } from '../model/link';
+import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
 import type {
   ColorKey,
@@ -35,8 +36,9 @@ export class DslError extends Error {
   constructor(
     message: string,
     readonly line = 0,
+    readonly column = 0,
   ) {
-    super((line ? `Line ${line}: ` : '') + message);
+    super((line ? `Line ${line}${column ? `, column ${column}` : ''}: ` : '') + message);
     this.name = 'DslError';
   }
 }
@@ -75,14 +77,34 @@ export const quoted = (value: string): Word => ({ value, quoted: true });
 
 // --- Tokens ------------------------------------------------------------------------------------
 
-/** Split one line into raw tokens and a trailing comment. Quoted tokens keep their quotes. */
-export function tokenize(text: string, line = 0): { tokens: string[]; comment?: string } {
-  const tokens: string[] = [];
+const INNER_QUOTE =
+  'A quote inside a quoted string needs a backslash: write \\" for each inner quote.';
+
+/**
+ * Split one line into raw tokens, each with its 1-based start column, and a trailing comment.
+ * Quoted tokens keep their quotes.
+ */
+export function tokenize(
+  text: string,
+  line = 0,
+): { tokens: string[]; columns: number[]; comment?: string } {
+  const tokens: string[] = [],
+    columns: number[] = [];
   let token = '',
+    start = 0,
+    open = 0,
     inQuote = false,
     escaped = false;
+  const push = () => {
+    if (token) {
+      tokens.push(token);
+      columns.push(start + 1);
+    }
+    token = '';
+  };
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
+    if (!token) start = i;
     if (escaped) {
       token += c;
       escaped = false;
@@ -94,30 +116,41 @@ export function tokenize(text: string, line = 0): { tokens: string[]; comment?: 
       continue;
     }
     if (c === '"') {
+      // A closing quote ends the word; text right after it means the label had a bare inner quote.
+      if (
+        inQuote &&
+        i + 1 < text.length &&
+        !/[\s#]/.test(text[i + 1]) &&
+        !text.startsWith('//', i + 1)
+      )
+        throw new DslError(INNER_QUOTE, line, i + 1);
+      if (!inQuote) open = i;
       inQuote = !inQuote;
       token += c;
       continue;
     }
     if (!inQuote && (c === '#' || (c === '/' && text[i + 1] === '/'))) {
-      if (token) tokens.push(token);
-      return { tokens, comment: text.slice(i).trim() };
+      push();
+      return { tokens, columns, comment: text.slice(i).trim() };
     }
-    if (!inQuote && /\s/.test(c)) {
-      if (token) tokens.push(token);
-      token = '';
-    } else token += c;
+    if (!inQuote && /\s/.test(c)) push();
+    else token += c;
   }
-  if (inQuote) throw new DslError('Unclosed quoted string.', line);
-  if (token) tokens.push(token);
-  return { tokens };
+  if (inQuote) throw new DslError('Unclosed quoted string.', line, open + 1);
+  push();
+  return { tokens, columns };
 }
 
-function word(raw: string, line: number): Word {
+function word(raw: string, line: number, column: number): Word {
   if (!raw.startsWith('"')) return bare(raw);
   try {
     return quoted(JSON.parse(raw));
   } catch {
-    throw new DslError('Invalid quoted string or escape.', line);
+    throw new DslError(
+      'Invalid escape in a quoted string. Use \\" for a quote, \\\\ for a backslash and \\n for a line break.',
+      line,
+      column,
+    );
   }
 }
 
@@ -127,21 +160,22 @@ export function readSource(source: string): SourceDoc {
   if (source.length > 300_000) throw new DslError('Limit: 300,000 source characters.');
   const lines: SourceLine[] = source.split(/\r?\n/).map((text, i) => {
     const line = i + 1,
-      { tokens, comment } = tokenize(text, line);
+      { tokens, columns, comment } = tokenize(text, line);
     if (!tokens.length) return comment ? { kind: 'comment', text: comment } : { kind: 'blank' };
     const [first, ...rest] = tokens,
       mark = MARKS[first[0] as Mark] && first.length > 1 ? (first[0] as Mark) : undefined,
       command = mark ? first.slice(1) : first,
       args: Word[] = [],
       attrs: Array<[string, Word]> = [];
-    for (const raw of rest) {
-      const eq = raw.indexOf('=');
+    rest.forEach((raw, i) => {
+      const eq = raw.indexOf('='),
+        col = columns[i + 1];
       if (eq > 0 && !raw.startsWith('"')) {
         const key = raw.slice(0, eq);
         if (attrs.some(([k]) => k === key)) throw new DslError(`Duplicate attribute ${key}.`, line);
-        attrs.push([key, word(raw.slice(eq + 1), line)]);
-      } else args.push(word(raw, line));
-    }
+        attrs.push([key, word(raw.slice(eq + 1), line, col + eq + 1)]);
+      } else args.push(word(raw, line, col));
+    });
     return { kind: 'statement', command, ...(mark ? { mark } : {}), args, attrs, comment, line };
   });
   return { lines };
@@ -202,8 +236,11 @@ export interface ModelObject {
   was?: string;
   /** A link to open from exported drawings, such as a source file or URL. */
   href?: string;
-  /** Nodes only: how many things this one box stands for, drawn as a stack with a badge. */
-  count?: number;
+  /**
+   * Nodes only: how many things this one box stands for, drawn as a stack with a badge. A short
+   * symbol such as `N` or `many` stands for an unknown number.
+   */
+  count?: number | string;
   /**
    * Groups only: `soft` draws a tint behind the members and `none` draws nothing. Either way the
    * group is not a layout scope: its members are laid out with the nearest framed container's.
@@ -319,6 +356,8 @@ export interface Model {
   colorLines: Map<string, number>;
   /** Source line of each `legend` entry, in order. */
   legendLines: number[];
+  /** Source line of each `note`, in order. */
+  noteLines: number[];
   /** Source line of each ID an emphasis state lists, by `state:id`. */
   stateLines: Map<string, number>;
   /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
@@ -410,6 +449,8 @@ export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
 const FRAMES = ['box', 'soft', 'none'] as const;
+/** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
+const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
 const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
 
@@ -427,6 +468,7 @@ export function parseModel(source: string | SourceDoc): Model {
     themeLine: 0,
     colorLines: new Map(),
     legendLines: [],
+    noteLines: [],
     stateLines: new Map(),
     phases: [],
     warnings: [],
@@ -471,6 +513,10 @@ export function parseModel(source: string | SourceDoc): Model {
         `Expected ${key} from ${min} to ${max}; got ${w.value}.`,
       );
       return n;
+    };
+    const countOf = () => {
+      const w = attrs.get('count')!;
+      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num('count', 2, 2, 1_000_000);
     };
     const choice = <T extends string>(key: string, fallback: T, choices: readonly T[]): T => {
       const value = (attrs.get(key)?.value ?? fallback) as T;
@@ -658,7 +704,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
-          ...(attrs.has('count') ? { count: num('count', 2, 2, 1_000_000) } : {}),
+          ...(attrs.has('count') ? { count: countOf() } : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
             : {}),
@@ -824,6 +870,20 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(shade !== undefined ? { shade } : {}),
         });
         m.legendLines.push(line);
+        break;
+      }
+      case 'note': {
+        count(1);
+        allow(['near', 'side', 'width']);
+        assert(args[0].quoted && args[0].value.trim(), 'A note needs its text in quotes.');
+        assert(attrs.has('near') || !attrs.has('side'), 'side= places a note beside near=<id>.');
+        (m.appearance.notes ??= []).push({
+          text: args[0].value,
+          ...(attrs.has('near') ? { near: id(attrs.get('near')) } : {}),
+          ...(attrs.has('side') ? { side: choice('side', 'below', NOTE_SIDES) } : {}),
+          ...(attrs.has('width') ? { width: num('width', NOTE_WIDTH, 80, 1200) } : {}),
+        });
+        m.noteLines.push(line);
         break;
       }
       case 'routing':
@@ -1047,6 +1107,9 @@ function validateReferences(m: Model) {
         e.line,
       );
     }
+  (m.appearance.notes ?? []).forEach((n, i) => {
+    if (n.near) exists(n.near, m.noteLines[i]);
+  });
   const edgeIds = new Set(m.edges.map(e => e.id));
   for (const s of m.appearance.states ?? [])
     for (const x of s.ids) {

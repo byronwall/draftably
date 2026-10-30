@@ -6,9 +6,9 @@
 /** Offsets of the outlines behind the node, back to front. */
 export const STACK_OFFSETS = [6, 3];
 
-/** The badge's text: `×42`, or `×1.2k` for large counts. */
-export function countText(count: number) {
-  if (count < 1000) return `×${count}`;
+/** The badge's text: `×42`, `×1.2k` for large counts, or `×N` for a symbol. */
+export function countText(count: number | string) {
+  if (typeof count === 'string' || count < 1000) return `×${count}`;
   const k = count / 1000;
   return `×${k < 10 ? k.toFixed(1).replace(/\.0$/, '') : Math.round(k)}k`;
 }
