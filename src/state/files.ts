@@ -34,6 +34,8 @@ import { currentSource, fileMode, openExampleSession, settleSave } from './file-
 import { runLayout } from './layout';
 import { viewerFrame } from './scene';
 import { toast } from './toast';
+import { openDialog } from './ui';
+import type { PdfOptions } from '../cli/pdf';
 
 const IMAGE_TYPES = /^image\/(png|jpeg|webp|gif)$/;
 
@@ -233,6 +235,40 @@ export function exportSvg(): string {
       setConnectFrom(previousConnect);
     });
   }
+}
+
+/** The files the PDF dialog starts with checked, in order. */
+const [pdfFiles, setPdfFiles] = createSignal<string[]>([]);
+export { pdfFiles };
+
+/** Open the PDF export dialog with `paths` chosen. */
+export function openPdfExport(paths: string[]) {
+  setPdfFiles(paths);
+  openDialog('export-pdf');
+}
+
+/**
+ * Ask the server for one PDF of `paths` in order, as `draftably pdf` makes it, and download it.
+ * Throws with the server's message, such as the file whose errors stopped the export.
+ */
+export async function exportPdf(paths: string[], opts: PdfOptions) {
+  await settleSave();
+  const res = await fetch('./api/workspace/pdf', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ files: paths, order: 'given', ...opts }),
+  });
+  if (!res.ok) throw Error(((await res.json()) as { error: string }).error);
+  const base =
+    opts.title || (paths.length === 1 ? paths[0].replace(/^.*\/|\.draft$/g, '') : 'diagrams');
+  downloadBlob(
+    await res.blob(),
+    base
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') + '.pdf',
+  );
+  toast(`Exported ${paths.length === 1 ? '1 diagram' : `${paths.length} diagrams`} as PDF`);
 }
 
 export type ExportFormat = 'json' | 'svg' | 'png';

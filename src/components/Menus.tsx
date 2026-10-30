@@ -279,6 +279,9 @@ function ExportMenu() {
       <MenuItem command="export-svg" />
       <MenuItem command="export-png" />
       <Show when={fileMode()}>
+        <MenuItem command="export-pdf" />
+      </Show>
+      <Show when={fileMode()}>
         <label class="menu-item menu-check">
           <span class="menu-icon">
             <input

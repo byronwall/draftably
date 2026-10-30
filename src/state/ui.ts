@@ -5,7 +5,7 @@ import { workspace } from './launch';
 const UI_STORAGE = 'diagram-studio-v5-ui';
 
 export type MenuId = 'file' | 'edit' | 'export' | 'routing' | 'context' | 'appearance' | 'tools';
-export type DialogId = 'help' | 'quick-build' | 'confirm' | 'error';
+export type DialogId = 'help' | 'quick-build' | 'confirm' | 'error' | 'export-pdf';
 
 export interface MenuState {
   id: MenuId;

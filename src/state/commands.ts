@@ -5,7 +5,7 @@
 import * as actions from './actions';
 import { canRedo, canUndo, doc, redo, selectedIds, undo } from './document';
 import { fitView, zoomAt } from './editor';
-import { exportDocument } from './files';
+import { exportDocument, openPdfExport } from './files';
 import {
   acceptPreview,
   captureCheckpoint,
@@ -27,7 +27,7 @@ import {
   timelineOpen,
   toggleBrush,
 } from './sculpt';
-import { fileMode, reflowSelectedGroup } from './file-session';
+import { fileMode, fileSession, reflowSelectedGroup } from './file-session';
 import { go, setStartOpen, startUrl, workspace } from './launch';
 import { toast } from './toast';
 import {
@@ -344,6 +344,15 @@ export const commands = {
   },
   'export-svg': { label: 'Export SVG', icon: 'export', run: () => exportCommand('svg') },
   'export-png': { label: 'Export PNG', icon: 'image', run: () => exportCommand('png') },
+  'export-pdf': {
+    label: 'Export PDF…',
+    icon: 'file',
+    run: () => {
+      const file = fileSession()?.file;
+      if (file) openPdfExport([file]);
+      else toast('PDF export needs a file opened with draftably open.');
+    },
+  },
   theme: { label: 'Toggle light / dark', icon: 'sun', run: actions.toggleTheme },
 } satisfies Record<string, Command>;
 

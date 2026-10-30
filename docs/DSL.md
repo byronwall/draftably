@@ -628,6 +628,10 @@ scratch diagram. The format is stable, so other tools can read it:
   chunks do not change the pixels.
 - **SVG:** a `<metadata id="draftably-source" data-draftably-version="…">` element inside the root
   `<svg>`, holding the XML-escaped source.
+- **PDF:** `draftably pdf` attaches each file's formatted source as an embedded file (the
+  catalog's `EmbeddedFiles` name tree) named after the file, such as `checkout.draft`, with the
+  diagram's title as its description. `check`, `extract` and `open` read every attachment whose
+  name ends in `.draft`; `diagrams.pdf#checkout.draft` names one.
 
 Hosts that recompress images drop the PNG chunk. See the README for where it survives.
 

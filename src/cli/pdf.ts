@@ -94,13 +94,13 @@ interface Sheet {
 async function sheets(inputs: PdfInput[], opts: PdfOptions) {
   const drawn = [];
   for (const input of inputs) {
-    const scene = await compile(input.source);
+    // Name the file, so the person exporting knows which one to fix or leave out.
+    const fail = (lines: string[]) => {
+      throw Error(`${input.name} has errors; fix them or leave it out. ${lines.join(' ')}`);
+    };
+    const scene = await compile(input.source).catch((e: Error) => fail([e.message]));
     const errors = scene.diagnostics.filter(d => d.level === 'error');
-    if (errors.length)
-      throw Error(
-        `${input.name} has errors; fix them or leave the file out:\n` +
-          errors.map(d => `  ${d.line ? `line ${d.line}: ` : ''}${d.message}`).join('\n'),
-      );
+    if (errors.length) fail(errors.map(d => `${d.line ? `Line ${d.line}: ` : ''}${d.message}`));
     const doc = projectScene(scene),
       title = doc.appearance.heading?.title || doc.title || path.basename(input.name, '.draft');
     const states = opts.states ? (doc.appearance.states ?? []) : [];
