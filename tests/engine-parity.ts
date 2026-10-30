@@ -55,10 +55,16 @@ const clean = (value: unknown) => {
   };
   return visit(plain);
 };
-// The soft standoff band, the tidy pass, facing-side fans and gated title bands postdate v7, so routing
-// parity runs with them off. Their own behaviour is covered in
+// The soft standoff band, the tidy pass, facing-side fans, gated title bands and the search window
+// postdate v7, so routing parity runs with them off. Their own behaviour is covered in
 // tests/routing-clearance.test.ts, tests/routing-order.test.ts and tests/routing-fans.test.ts.
-const LEGACY_ROUTING = { standoff: 0, tidy: false, facing: false, titleBands: false };
+const LEGACY_ROUTING = {
+  standoff: 0,
+  tidy: false,
+  facing: false,
+  titleBands: false,
+  window: false,
+};
 let checks = 0;
 const results: Array<{ name: string; status: string; message?: string }> = [];
 function parity(name: string, before: unknown, after: unknown) {
