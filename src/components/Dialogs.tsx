@@ -5,7 +5,7 @@ import { buildFromList, setTool } from '../state/actions';
 import { doc, selectedIds } from '../state/document';
 import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
 import { IconButton } from './controls';
-import { PdfDialog } from './ExportDialog';
+import { ExportDialog } from './ExportDialog';
 import './dialogs.css';
 
 /** The single modal dialog that is open, if any. */
@@ -18,8 +18,8 @@ export function Dialogs() {
       <Match when={dialog() === 'quick-build'}>
         <QuickBuildDialog />
       </Match>
-      <Match when={dialog() === 'export-pdf'}>
-        <PdfDialog />
+      <Match when={dialog() === 'export'}>
+        <ExportDialog />
       </Match>
       <Match when={dialog() === 'confirm' && confirmRequest()}>
         {request => (

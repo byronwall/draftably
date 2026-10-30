@@ -5,7 +5,7 @@
 import * as actions from './actions';
 import { canRedo, canUndo, doc, redo, selectedIds, undo } from './document';
 import { fitView, zoomAt } from './editor';
-import { exportDocument, openPdfExport } from './files';
+import { copyImage, exportDocument, openExport, type CopyAs, type ExportKind } from './files';
 import {
   acceptPreview,
   captureCheckpoint,
@@ -27,7 +27,7 @@ import {
   timelineOpen,
   toggleBrush,
 } from './sculpt';
-import { fileMode, fileSession, reflowSelectedGroup } from './file-session';
+import { fileMode, reflowSelectedGroup } from './file-session';
 import { go, setStartOpen, startUrl, workspace } from './launch';
 import { toast } from './toast';
 import {
@@ -72,12 +72,27 @@ function redoCommand() {
   redo();
 }
 
-function exportCommand(format: 'json' | 'svg' | 'png') {
+function exportCommand(format: 'json') {
   if (sculptInteracting()) {
     toast('Keep or cancel the preview before exporting the diagram.');
     return;
   }
   return exportDocument(format).catch(error =>
+    toast(error instanceof Error ? error.message : String(error)),
+  );
+}
+
+function openExportCommand(kind: ExportKind) {
+  if (sculptInteracting()) toast('Keep or cancel the preview before exporting the diagram.');
+  else openExport(kind);
+}
+
+function copyCommand(kind: CopyAs) {
+  if (sculptInteracting()) {
+    toast('Keep or cancel the preview before copying the diagram.');
+    return;
+  }
+  return copyImage(kind).catch(error =>
     toast(error instanceof Error ? error.message : String(error)),
   );
 }
@@ -342,17 +357,18 @@ export const commands = {
     icon: 'download',
     run: () => exportCommand('json'),
   },
-  'export-svg': { label: 'Export SVG', icon: 'export', run: () => exportCommand('svg') },
-  'export-png': { label: 'Export PNG', icon: 'image', run: () => exportCommand('png') },
-  'export-pdf': {
-    label: 'Export PDF…',
-    icon: 'file',
-    run: () => {
-      const file = fileSession()?.file;
-      if (file) openPdfExport([file]);
-      else toast('PDF export needs a file opened with draftably open.');
-    },
+  'export-png': { label: 'Export PNG…', icon: 'image', run: () => openExportCommand('png') },
+  'export-svg': { label: 'Export SVG…', icon: 'export', run: () => openExportCommand('svg') },
+  'export-pdf': { label: 'Export PDF…', icon: 'file', run: () => openExportCommand('pdf') },
+  'copy-image': {
+    label: 'Copy image',
+    keys: '⇧⌘C',
+    icon: 'copy',
+    run: () => copyCommand('image'),
   },
+  'copy-svg': { label: 'SVG markup', icon: 'code', run: () => copyCommand('svg') },
+  'copy-source': { label: 'Draftably source', icon: 'file', run: () => copyCommand('source') },
+  'copy-link': { label: 'Link to this diagram', icon: 'globe', run: () => copyCommand('link') },
   theme: { label: 'Toggle light / dark', icon: 'sun', run: actions.toggleTheme },
 } satisfies Record<string, Command>;
 

@@ -47,6 +47,9 @@ Commands:
                             Save the drawing as a PNG (needs Chrome or Chromium). --max-width
                             lowers the scale so the image is at most that many pixels wide.
                             PNG and SVG output embed the source; --no-source leaves it out.
+  inspect <file> --clipboard [--scale 2]
+                            Put the drawing on the macOS clipboard: a PNG with its source, and
+                            the SVG as text.
   pdf <file|folder>… -o <out.pdf>
                             Save the diagrams as one vector PDF, one per page, each with its
        [--order <how>]      heading and key (needs Chrome or Chromium). --order: given (default;
@@ -385,6 +388,15 @@ export async function main(argv: string[]): Promise<number> {
           if (!doc.appearance.states?.length) throw new UsageError('The file has no state lines.');
           if (doc.appearance.compare)
             throw new UsageError('--states draws panels, and so does compare; use one at a time.');
+        }
+        if (flag('--clipboard')) {
+          const scale = Number(option(rest, '--scale') ?? 2);
+          if (!(scale > 0 && scale <= 8)) throw new UsageError('--scale must be from 0 to 8.');
+          const { copyToClipboard } = await import('./png');
+          const svg = renderSvg(doc, opts),
+            { w, h } = await copyToClipboard(svg, withSource(svg, source), scale, embed(source));
+          console.log(`Copied the drawing as a PNG (${w}×${h}) and SVG text.`);
+          return 0;
         }
         if (await maybePng(() => renderSvg(doc, opts), rest, embed(source))) return 0;
         if (flag('--svg')) process.stdout.write(withSource(renderSvg(doc, opts), source));

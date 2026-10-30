@@ -95,8 +95,8 @@ export function downloadBlob(blob: Blob, name: string) {
 export const downloadText = (text: string, name: string, type: string) =>
   downloadBlob(new Blob([text], { type }), name);
 
-/** Rasterize an SVG string at up to 2× scale, within browser canvas limits. */
-export async function svgToPng(svg: string): Promise<Blob> {
+/** Rasterize an SVG string at `scale` (2× unless given), within browser canvas limits. */
+export async function svgToPng(svg: string, scale = 2): Promise<Blob> {
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
   try {
     const image = new Image();
@@ -116,10 +116,10 @@ export async function svgToPng(svg: string): Promise<Blob> {
       window.clearTimeout(timer);
     }
     const { naturalWidth: w, naturalHeight: h } = image;
-    const scale = Math.min(2, 8192 / Math.max(w, h), Math.sqrt(24e6 / (w * h)));
+    const k = Math.min(scale, 8192 / Math.max(w, h), Math.sqrt(24e6 / (w * h)));
     const canvas = document.createElement('canvas');
-    canvas.width = Math.max(1, Math.round(w * scale));
-    canvas.height = Math.max(1, Math.round(h * scale));
+    canvas.width = Math.max(1, Math.round(w * k));
+    canvas.height = Math.max(1, Math.round(h * k));
     canvas.getContext('2d')!.drawImage(image, 0, 0, canvas.width, canvas.height);
     return await new Promise((resolve, reject) =>
       canvas.toBlob(

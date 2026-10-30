@@ -24,7 +24,6 @@ import { RangeField } from './controls';
 import { Icon } from './Icon';
 import './menus.css';
 import { workspace } from '../state/launch';
-import { embedSource, setEmbedSource } from '../state/files';
 
 /** The open popover menu, positioned under its anchor. */
 export function Menus() {
@@ -252,6 +251,7 @@ function EditMenu() {
       <MenuItem command="quick-build" />
       <MenuItem command="add-node" />
       <MenuItem command="add-connected" />
+      <MenuItem command="copy-image" />
       <hr />
       <MenuItem command="duplicate" />
       <MenuItem command="group" />
@@ -276,27 +276,24 @@ function ExportMenu() {
   return (
     <>
       <MenuItem command="export-json" />
-      <MenuItem command="export-svg" />
+      <hr />
+      <MenuItem command="copy-image" />
+      <Heading>Copy as</Heading>
+      <MenuItem command="copy-svg" />
+      <Show when={fileMode()}>
+        <MenuItem command="copy-source" />
+        <MenuItem command="copy-link" />
+      </Show>
+      <hr />
       <MenuItem command="export-png" />
+      <MenuItem command="export-svg" />
       <Show when={fileMode()}>
         <MenuItem command="export-pdf" />
       </Show>
-      <Show when={fileMode()}>
-        <label class="menu-item menu-check">
-          <span class="menu-icon">
-            <input
-              type="checkbox"
-              checked={embedSource()}
-              onChange={e => setEmbedSource(e.currentTarget.checked)}
-            />
-          </span>
-          <span class="menu-label">Include .draft source in SVG and PNG</span>
-        </label>
-      </Show>
       <p class="menu-note">
         {fileMode()
-          ? 'An image with its source opens again as an editable diagram.'
-          : 'Saved diagrams and exported SVGs remain editable. PNG is image-only.'}
+          ? 'Copy takes the selection when something is selected. An image with its source opens again as an editable diagram.'
+          : 'Copy takes the selection when something is selected. Saved diagrams and exported SVGs remain editable.'}
       </p>
     </>
   );
