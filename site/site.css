@@ -175,26 +175,37 @@ main {
   padding: 12px var(--gutter) 0;
 }
 
-/* Headline at the left, actions at the right, so the live editor gets the rest of the screen. */
+/* One big line, then the pitch at the left and the actions at the right, so the live diagram
+   starts high on the first screen. */
+.hero h1 {
+  margin: 8px 0 0;
+  font-size: clamp(38px, 5.6vw, 76px);
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
 .hero-head {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 32px;
-  margin-bottom: 20px;
+  margin: 10px 0 22px;
 }
 
-.hero h1 {
+.hero-kicker {
   margin: 0;
-  font-size: clamp(30px, 3.4vw, 44px);
-  line-height: 1.08;
-  font-weight: 800;
-  letter-spacing: -0.035em;
+  color: var(--accent);
+  font-size: clamp(20px, 2.1vw, 28px);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 }
 
 .hero-sub {
   max-width: 640px;
-  margin: 10px 0 0;
+  margin: 8px 0 0;
   color: var(--muted);
   font-size: 16px;
 }
@@ -207,12 +218,10 @@ main {
   display: flex;
   flex: none;
   gap: 10px;
-  /* Sit on the sub line's last line of text, not below its line box. */
-  margin-bottom: 2px;
 }
 
 .hero .live {
-  height: clamp(440px, calc(100vh - 208px), 780px);
+  height: clamp(460px, calc(100vh - 280px), 760px);
 }
 
 .button {
@@ -347,11 +356,16 @@ main {
 .live-bar {
   display: flex;
   align-items: stretch;
-  gap: 2px;
   height: 40px;
   padding: 0 8px;
   border-bottom: 1px solid var(--line);
   background: var(--bg);
+}
+
+.live-tabs {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -398,18 +412,216 @@ main {
   padding: 0 6px;
 }
 
+.live-reset:hover {
+  color: var(--text);
+}
+
+/* The drawing first and widest; the source it writes to at the right. */
 .live-body {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(300px, 32%) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 34%);
 }
 
 .live-source {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border-right: 1px solid var(--line);
+  min-width: 0;
+  border-left: 1px solid var(--line);
+}
+
+.live-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Live or static: a small segmented switch at the start of the caption under the drawing. */
+.live-output {
+  flex: none;
+  display: flex;
+  padding: 2px;
+  border-radius: 6px;
+  background: #15171f0f;
+}
+
+.live-output button {
+  height: 24px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 5px;
+  background: none;
+  color: var(--muted);
+  font: 600 12.5px var(--font);
+  cursor: pointer;
+  transition:
+    background-color 140ms,
+    color 140ms;
+}
+
+.live-output button:hover {
+  color: var(--text);
+}
+
+.live-output button[aria-pressed='true'] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px #15171f1f;
+}
+
+.live-caption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 37px;
+  padding: 0 8px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.live-caption > span:nth-child(2) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.live-caption-actions {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.live-caption-actions .live-reset {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.live-caption-actions .live-reset:hover {
+  color: var(--accent-hover);
+}
+
+.drag-view,
+.live-static {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: var(--canvas);
+  transition: opacity 120ms;
+}
+
+.drag-view.is-stale,
+.live-static.is-stale {
+  opacity: 0.45;
+}
+
+.drag-host {
+  position: absolute;
+  inset: 20px;
+}
+
+.drag-host svg {
+  display: block;
+  overflow: visible;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Boxes and groups pick up; lines do not. touch-action keeps page scroll on the empty canvas. */
+.drag-view .is-drag {
+  cursor: grab;
+  touch-action: none;
+}
+
+.drag-view .is-drag:hover > .shape {
+  filter: brightness(1.04) drop-shadow(0 1px 2px #15171f2e);
+}
+
+.drag-view.is-dragging,
+.drag-view.is-dragging .is-drag {
+  cursor: grabbing;
+}
+
+.drag-view .is-lifted > .shape {
+  filter: drop-shadow(0 6px 10px #15171f33);
+}
+
+.drag-hint {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, -130%);
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: var(--text);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: hint-in 260ms 500ms ease-out both;
+}
+
+.drag-hint::after {
+  content: '';
+  position: absolute;
+  left: calc(50% - 4px);
+  bottom: -4px;
+  border: 4px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--text);
+}
+
+@keyframes hint-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drag-hint {
+    animation: none;
+  }
+}
+
+.live-static {
+  display: flex;
+  padding: 20px;
+}
+
+.live-static img {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  object-fit: contain;
+}
+
+/* The lines a drag wrote, marked under the highlighted source. */
+.live-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: #6650d91a;
+  box-shadow: inset 2px 0 0 var(--accent);
+  animation: band-in 700ms ease-out;
+}
+
+@keyframes band-in {
+  from {
+    background: #6650d940;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-band {
+    animation: none;
+  }
 }
 
 .live-scroll {
@@ -504,7 +716,9 @@ main {
 
 .live-status {
   flex: none;
-  padding: 8px 14px;
+  height: 37px;
+  padding: 0 14px;
+  line-height: 36px;
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 12px;
@@ -517,24 +731,8 @@ main {
   color: var(--danger);
 }
 
-.live-diagram {
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  padding: 20px;
-  background: var(--canvas);
-  transition: opacity 120ms;
-}
-
-/* The SVG keeps its aspect ratio from its viewBox and scales to fill the pane. */
-.live-diagram svg {
-  flex: 1;
-  width: 100%;
-  height: 100%;
-}
-
-.live-diagram.is-stale {
-  opacity: 0.45;
+.live-status .is-note {
+  color: var(--text);
 }
 
 /* Points: three things the text does that a picture cannot. Pick one and it draws live. */
@@ -787,8 +985,13 @@ main {
 
 .install-cols {
   display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: 48px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 40px;
+}
+
+.install-cols > div {
+  display: flex;
+  flex-direction: column;
 }
 
 .install h3 {
@@ -809,6 +1012,19 @@ main {
 
 .install .copy {
   width: 100%;
+  margin-top: auto;
+}
+
+.install-cols p {
+  margin-bottom: 14px;
+}
+
+.install .commands {
+  margin-top: 28px;
+}
+
+.install-note {
+  font-size: 13px;
 }
 
 .commands {
@@ -955,14 +1171,17 @@ main {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .live-diagram {
-    order: -1;
-    height: 220px;
+  .live-stage {
+    height: 300px;
     border-bottom: 1px solid var(--line);
   }
 
+  .drag-host {
+    inset: 10px;
+  }
+
   .live-source {
-    border-right: 0;
+    border-left: 0;
   }
 
   .live-scroll {

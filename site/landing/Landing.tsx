@@ -12,10 +12,17 @@ import { drawSvg, enqueue, whenSeen } from './render';
 const GITHUB = 'https://github.com/byronwall/draftably';
 const NPM = 'https://www.npmjs.com/package/draftably';
 
-const HERO_EXAMPLES = ['checkout', 'login-sequence', 'order-lifecycle', 'billing-schema'];
+const HERO_EXAMPLES = ['checkout', 'order-lifecycle', 'support-triage', 'billing-schema'];
+/** The box each hero example labels "Drag me". */
+const HERO_HINTS: Record<string, string> = {
+  checkout: 'db',
+  'order-lifecycle': 'cancelled',
+  'support-triage': 'link',
+  'billing-schema': 'invoices',
+};
 /** None of these repeat a hero tab, so every example on the page is a new one. */
 const CARD_EXAMPLES = [
-  'support-triage',
+  'login-sequence',
   'incident-response',
   'data-lakehouse',
   'observability-stack',
@@ -27,12 +34,11 @@ const CARD_EXAMPLES = [
 
 const COMMANDS: [string, string][] = [
   ['draftably check plan.draft', 'Reports errors by line. Exits 1, so CI can fail on them.'],
-  ['draftably inspect plan.draft --svg', 'Writes an SVG or PNG for docs, READMEs and PRs.'],
   ['draftably compare old.draft new.draft', 'Marks what changed between two versions.'],
   ['draftably vary plan.draft', 'Ranks layout variants on one contact sheet.'],
 ];
 
-const TITLE = 'Draftably: write the diagram, skip the dragging';
+const TITLE = 'Draftably: manual diagrams are a drag';
 
 export function Landing() {
   // Arriving from another page keeps that page's title; name this one.
@@ -58,14 +64,14 @@ export function Landing() {
       <Nav />
       <main>
         <section class="hero">
+          <h1>Manual diagrams are a drag.</h1>
           <div class="hero-head">
             <div>
-              <h1>Write the diagram. Skip the dragging.</h1>
+              <p class="hero-kicker">Write yours. Drag only if you want to.</p>
               <p class="hero-sub">
-                Plain-text <code>.draft</code> files in, clean diagrams out. Draftably lays out the
-                boxes and routes the lines. Edit the source below and watch it redraw.
+                Draftably lays out a plain-text <code>.draft</code> file and routes every line. Move
+                a box by hand and the move lands in the file as one readable line.
               </p>
-              <ReopenLine />
             </div>
             <div class="hero-actions">
               <a class="button primary" href={appUrl()}>
@@ -74,11 +80,12 @@ export function Landing() {
               <CopyCommand text="npx draftably open" class="button" />
             </div>
           </div>
-          <LiveEditor examples={HERO_EXAMPLES} />
+          <LiveEditor examples={HERO_EXAMPLES} hints={HERO_HINTS} />
+          <ReopenLine />
         </section>
+        <Install />
         <Points />
         <Examples />
-        <Install />
       </main>
       <footer class="footer">
         <span class="wordmark">
@@ -200,42 +207,49 @@ function Install() {
   return (
     <section class="install" id="install">
       <div class="section-head">
-        <h2>Install</h2>
+        <h2>Two ways out of one file</h2>
       </div>
       <div class="install-cols">
         <div>
-          <h3>Run it on your files</h3>
-          <CopyCommand text="npx draftably open plan.draft" />
+          <h3>Static: ship a picture</h3>
           <p>
-            Opens the editor on a local file, and edits save back to it. Needs Node 22.21 or later.
-            Run <code>npm i -g draftably</code> to use the commands below.
+            An SVG or PNG for READMEs, docs and pull requests. Nothing in it moves. The source rides
+            inside the image, so drop it back here to edit it.
           </p>
-          <dl class="commands">
-            <For each={COMMANDS}>
-              {([cmd, what]) => (
-                <>
-                  <dt>
-                    <code>{cmd}</code>
-                  </dt>
-                  <dd>{what}</dd>
-                </>
-              )}
-            </For>
-          </dl>
+          <CopyCommand text="npx draftably inspect plan.draft --svg > plan.svg" />
+        </div>
+        <div>
+          <h3>Live: keep a diagram</h3>
+          <p>
+            The editor on your own file. Drag a box and the file gets a <code>near</code> or{' '}
+            <code>stay</code> line. Edit the text and the drawing follows. Git sees every change.
+          </p>
+          <CopyCommand text="npx draftably open plan.draft" />
         </div>
         <div>
           <h3>Teach your coding agent</h3>
+          <p>
+            A bundled skill teaches an agent the language, so it writes, checks and renders{' '}
+            <code>.draft</code> files on its own. Add <code>--global</code> for every project.
+          </p>
           <CopyCommand text="npx draftably skill install" />
-          <p>
-            A bundled skill teaches an agent the language, so it can write, check and render{' '}
-            <code>.draft</code> files on its own.
-          </p>
-          <p>
-            It installs to <code>.claude/skills/draftably</code>. Add <code>--global</code> for
-            every project, or run <code>npx skills add byronwall/draftably</code>.
-          </p>
         </div>
       </div>
+      <dl class="commands">
+        <For each={COMMANDS}>
+          {([cmd, what]) => (
+            <>
+              <dt>
+                <code>{cmd}</code>
+              </dt>
+              <dd>{what}</dd>
+            </>
+          )}
+        </For>
+      </dl>
+      <p class="install-note">
+        Needs Node 22.21 or later. Run <code>npm i -g draftably</code> to drop the <code>npx</code>.
+      </p>
     </section>
   );
 }
