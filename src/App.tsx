@@ -21,7 +21,7 @@ import { cancelGeneration, closeComparison } from './state/comparison';
 import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
-import { exampleEdited, exampleMode, fileMode } from './state/file-session';
+import { exampleEdited, exampleMode, fileMode, leaveAgreed } from './state/file-session';
 import { openFile } from './state/files';
 import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
@@ -102,9 +102,15 @@ export default function App() {
       resetModifiers();
       setSpaceHeld(false);
     };
-    // Leaving an edited example would lose its edits; the browser asks first.
+    // Edits to an example are not in any file; the browser asks first. A label or field still
+    // being typed is committed before the check (fields commit on blur), so it counts too.
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (exampleEdited()) e.preventDefault();
+      finishInlineEdit(true);
+      (document.activeElement as HTMLElement | null)?.blur?.();
+      if (!exampleEdited() || leaveAgreed()) return;
+      e.preventDefault();
+      // Older Chrome and Safari show the prompt only when returnValue is set.
+      e.returnValue = '';
     };
     const onUnload = () => {
       sculptBeforeUnload();

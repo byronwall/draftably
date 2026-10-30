@@ -1427,6 +1427,12 @@ main {
   flex: 0 1 280px;
 }
 
+.picker-new {
+  flex: none;
+  height: 30px;
+  padding: 0 10px;
+}
+
 .picker-button {
   position: relative;
   width: 100%;

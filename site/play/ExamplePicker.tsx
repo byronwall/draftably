@@ -31,8 +31,8 @@ function Marked(props: { text: string; query: string }) {
 }
 
 /**
- * Picks a starting diagram: a button naming the current one opens a searchable gallery of every
- * example, drawn as thumbnails.
+ * Picks a starting diagram: New starts a blank one, and a button naming the current one opens a
+ * searchable gallery of every example, drawn as thumbnails.
  */
 export function ExamplePicker(props: {
   current: string;
@@ -70,80 +70,94 @@ export function ExamplePicker(props: {
   onCleanup(() => document.removeEventListener('pointerdown', outside));
 
   return (
-    <div class="picker" ref={wrap}>
+    <>
       <button
-        ref={button}
         type="button"
-        class="picker-button"
-        aria-expanded={open()}
-        onClick={toggle}
+        class="tool picker-new"
+        title="Start a blank diagram"
+        onClick={() => pick('blank')}
       >
-        <span>{props.title}</span>
+        + New
       </button>
-      <Show when={open()}>
-        <div
-          class="picker-panel"
-          role="dialog"
-          aria-label="Examples"
-          onKeyDown={e => {
-            if (e.key !== 'Escape') return;
-            setOpen(false);
-            button.focus();
-          }}
+      <div class="picker" ref={wrap}>
+        <button
+          ref={button}
+          type="button"
+          class="picker-button"
+          aria-expanded={open()}
+          onClick={toggle}
         >
-          <div class="picker-top">
-            <input
-              ref={input}
-              class="picker-search"
-              type="search"
-              placeholder={`Search ${EXAMPLES.length} examples`}
-              value={query()}
-              onInput={e => setQuery(e.currentTarget.value)}
-              onKeyDown={e => {
-                if (e.key === 'Enter' && shown()[0]) pick(shown()[0].id);
-              }}
-            />
-            <label class="tool picker-file" title={REOPEN_HINT}>
-              Open a file…
+          <span>{props.title}</span>
+        </button>
+        <Show when={open()}>
+          <div
+            class="picker-panel"
+            role="dialog"
+            aria-label="Examples"
+            onKeyDown={e => {
+              if (e.key !== 'Escape') return;
+              setOpen(false);
+              button.focus();
+            }}
+          >
+            <div class="picker-top">
               <input
-                type="file"
-                accept=".draft,.png,.svg,text/plain,image/png,image/svg+xml"
-                class="visually-hidden"
-                onChange={e => {
-                  const file = e.currentTarget.files?.[0];
-                  e.currentTarget.value = '';
-                  if (!file) return;
-                  setOpen(false);
-                  props.onOpenFile(file);
+                ref={input}
+                class="picker-search"
+                type="search"
+                placeholder={`Search ${EXAMPLES.length} examples`}
+                value={query()}
+                onInput={e => setQuery(e.currentTarget.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && shown()[0]) pick(shown()[0].id);
                 }}
               />
-            </label>
-          </div>
-          <div class="picker-grid">
-            <Show when={!query()}>
-              <button type="button" class="picker-card picker-blank" onClick={() => pick('blank')}>
-                <span class="picker-thumb">+</span>
-                <strong>Blank diagram</strong>
-                <span>Two nodes and an edge to start from.</span>
-              </button>
-            </Show>
-            <For each={shown()}>
-              {ex => (
-                <Card
-                  example={ex}
-                  query={query()}
-                  current={ex.id === props.current}
-                  onPick={pick}
+              <label class="tool picker-file" title={REOPEN_HINT}>
+                Open a file…
+                <input
+                  type="file"
+                  accept=".draft,.png,.svg,text/plain,image/png,image/svg+xml"
+                  class="visually-hidden"
+                  onChange={e => {
+                    const file = e.currentTarget.files?.[0];
+                    e.currentTarget.value = '';
+                    if (!file) return;
+                    setOpen(false);
+                    props.onOpenFile(file);
+                  }}
                 />
-              )}
-            </For>
+              </label>
+            </div>
+            <div class="picker-grid">
+              <Show when={!query()}>
+                <button
+                  type="button"
+                  class="picker-card picker-blank"
+                  onClick={() => pick('blank')}
+                >
+                  <span class="picker-thumb">+</span>
+                  <strong>Blank diagram</strong>
+                  <span>Two nodes and an edge to start from.</span>
+                </button>
+              </Show>
+              <For each={shown()}>
+                {ex => (
+                  <Card
+                    example={ex}
+                    query={query()}
+                    current={ex.id === props.current}
+                    onPick={pick}
+                  />
+                )}
+              </For>
+            </div>
+            <Show when={!shown().length}>
+              <p class="picker-empty">No example matches “{query()}”.</p>
+            </Show>
           </div>
-          <Show when={!shown().length}>
-            <p class="picker-empty">No example matches “{query()}”.</p>
-          </Show>
-        </div>
-      </Show>
-    </div>
+        </Show>
+      </div>
+    </>
   );
 }
 
