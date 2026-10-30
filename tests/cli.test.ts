@@ -30,6 +30,15 @@ const good = write(
   bad = write('set/bad.draft', 'diagram "Bad" version=1\nnode a "A"\nedge e a -> zz\n');
 
 describe('cli', () => {
+  it('prints one section of the guide, or lists the topics for an unknown one', async () => {
+    const legend = await run('docs', 'legend');
+    expect(legend.out).toMatch(/^\*\*Legend\.\*\*/);
+    expect(legend.out).not.toContain('## Layout engines');
+    const unknown = await run('docs', 'nope');
+    expect(unknown.code).toBe(1);
+    expect(unknown.out).toContain('Themes and colors');
+  });
+
   it('checks every file given and fails when any one fails', async () => {
     const { code, out } = await run('check', good, bad);
     expect(code).toBe(1);

@@ -453,7 +453,9 @@ never its shade. A node with neither color nor shade uses the theme's neutral su
 **Legend.** `legend family "meaning"` adds a row to the diagram's color key, in file order: a
 swatch of that family (`shade=` picks one; 500 by default) and its meaning. The viewer shows the
 key in the canvas corner, in the diagram's colors; `inspect --svg` and exports draw it under the
-drawing. Each family and shade may appear once. A legend never moves anything.
+drawing. Each family and shade may appear once. A legend never moves anything. `check` warns
+when a swatch's shade matches none of its family's nodes (`legend-shade`), such as the default
+500 for nodes drawn at `shade=200`.
 
 ```draft
 group edge "Edge" color=blue
@@ -604,6 +606,7 @@ pnpm draftably open                              # start page for the current fo
 pnpm draftably open --status                     # running viewers: URL, folder, version (open reuses one)
 pnpm draftably vary --help                       # any command's options; --version for the version
 pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
+pnpm draftably docs legend                       # one section of this guide; docs alone lists them
 ```
 
 `check`, `format`, `inspect`, `compare` and `open` also take a PNG or SVG export in place of a

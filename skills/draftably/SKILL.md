@@ -275,7 +275,8 @@ content area.
     things that should stand out. `amber` and `orange` at 400–500 are bright fills with dark
     text, good for one highlight.
   - Say what each color means with one `legend family "meaning"` line per color; the viewer and
-    exports draw them as a key.
+    exports draw them as a key. The swatch is shade 500 unless the line sets `shade=`, so match
+    it to the nodes' shade; `check` warns when no node of that family uses it.
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
     unless they encode opposites.
   - Color the outer group and let members inherit (`color=auto`); nested groups of one family
@@ -314,5 +315,6 @@ content area.
 - Not supported yet: views, checkpoints, edge bends, label positions and images. `view`,
   `snapshot` and `box` statements are errors.
 
-The full language guide ships with the CLI package as `DSL.md`, and the package's `examples/`
-folder holds sixteen diagrams to copy from.
+The full language guide ships with the CLI package as `DSL.md`: `draftably docs` lists its
+sections and `draftably docs legend` prints one. The package's `examples/` folder holds sixteen
+diagrams to copy from.
