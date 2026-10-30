@@ -34,6 +34,8 @@ import { HELP } from './reference';
 export interface EditorApi {
   /** Replace the whole text as one undoable step. */
   replace(text: string): void;
+  /** Scroll `line` into view without moving the cursor or taking focus. */
+  reveal(line: number): void;
   /** Put the cursor at the start of a line and scroll it into view. */
   goto(line: number): void;
   focus(): void;
@@ -342,9 +344,22 @@ export function CodeEditor(props: {
       }),
     });
     props.ref({
+      // Only the changed middle is replaced, so the scroll, the cursor and undo steps stay put.
       replace(text) {
-        if (!view || text === view.state.doc.toString()) return;
-        view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: text } });
+        const old = view?.state.doc.toString();
+        if (!view || old === undefined || text === old) return;
+        let a = 0;
+        while (a < old.length && a < text.length && old[a] === text[a]) a++;
+        let b = 0;
+        while (b < old.length - a && b < text.length - a && old.at(-1 - b) === text.at(-1 - b)) b++;
+        view.dispatch({
+          changes: { from: a, to: old.length - b, insert: text.slice(a, text.length - b) },
+        });
+      },
+      reveal(line) {
+        if (!view) return;
+        const at = view.state.doc.line(Math.min(Math.max(line, 1), view.state.doc.lines)).from;
+        view.dispatch({ effects: EditorView.scrollIntoView(at, { y: 'center' }) });
       },
       goto(line) {
         if (!view) return;

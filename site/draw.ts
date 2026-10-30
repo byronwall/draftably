@@ -1,5 +1,5 @@
 import { renderSvg } from '../src/cli/svg';
-import { compile, type Diagnostic } from '../src/dsl/compile';
+import { compile, type Diagnostic, type Scene } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 
 /** A node, group or edge and the source line that declares it. */
@@ -18,6 +18,8 @@ export interface Drawing {
   svg: string | null;
   diagnostics: Diagnostic[];
   items: DrawnItem[];
+  /** The compiled scene, when the source compiled. */
+  scene?: Scene;
 }
 
 /** Compile `.draft` source and draw it the way `draftably inspect --svg` does. */
@@ -41,6 +43,7 @@ export async function draw(source: string): Promise<Drawing> {
       svg: failed ? null : renderSvg(projectScene(scene)),
       diagnostics: scene.diagnostics,
       items,
+      scene,
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

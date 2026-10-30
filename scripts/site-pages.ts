@@ -24,9 +24,9 @@ interface Meta {
 const SITE: Meta[] = [
   {
     path: '',
-    title: 'Draftably: write the diagram, skip the dragging',
+    title: 'Draftably: manual diagrams are a drag',
     description:
-      'A text language and CLI for diagrams. Write plain .draft source; Draftably lays out the boxes, routes the lines and keeps it in git.',
+      'A text language and CLI for diagrams. Write plain .draft source; Draftably lays out the boxes and routes the lines. Drag a box if you want, and the move is saved to the file.',
   },
   {
     path: 'play',
