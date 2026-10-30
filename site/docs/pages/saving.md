@@ -5,13 +5,13 @@ when you close the tab, and how to export a diagram and open it again.
 
 ## Where your work is kept
 
-| Where you edit              | Where the source is kept                                       | Close the tab, then come back                         | Open the bare URL                   | Use another device        | Share it                                                  |
-| --------------------------- | -------------------------------------------------------------- | ----------------------------------------------------- | ----------------------------------- | ------------------------- | --------------------------------------------------------- |
-| The landing page demo       | Browser storage on this device: one draft for each example tab | Kept: the tab you had open comes back with your edits | Your edits come back                | Not kept                  | Select **Open in the editor**, then download the `.draft` |
-| The [Playground](/play)     | Browser storage on this device: one draft                      | Kept: your last draft opens again                     | Your last draft opens again         | Not kept                  | Copy link, or download a file                             |
-| A Copy link URL (`#s=…`)    | In the URL itself                                              | Kept in the link, as it was when you copied it        | Not kept: the source is in the link | Kept: open the link there | Send the link                                             |
-| The Editor's scratch copy   | This tab only                                                  | Lost, unless you download the `.draft`                | Not kept                            | Not kept                  | Download the `.draft`, then send the file                 |
-| `draftably open file.draft` | The `.draft` file on your disk                                 | Kept: every edit saves to the file                    | Run `draftably open` again          | Copy or commit the file   | Send the file, or commit it to a repository               |
+| Where you edit              | Where the source is kept                                       | Close the tab, then come back                         | Open the bare URL                             | Use another device        | Share it                                                  |
+| --------------------------- | -------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------------- | ------------------------- | --------------------------------------------------------- |
+| The landing page demo       | Browser storage on this device: one draft for each example tab | Kept: the tab you had open comes back with your edits | Your edits come back                          | Not kept                  | Select **Open in the editor**, then download the `.draft` |
+| The [Playground](/play)     | Browser storage on this device: one draft                      | Kept: your last draft opens again                     | Your last draft opens again                   | Not kept                  | Copy link, or download a file                             |
+| A Copy link URL (`#s=…`)    | In the URL itself                                              | Kept in the link, as it was when you copied it        | Not kept: the source is in the link           | Kept: open the link there | Send the link                                             |
+| The Editor's scratch copy   | Browser storage on this device, until you save it as a file    | Kept: your edits come back as unsaved edits           | Not kept: open the same example or link again | Not kept                  | Download the `.draft`, then send the file                 |
+| `draftably open file.draft` | The `.draft` file on your disk                                 | Kept: every edit saves to the file                    | Run `draftably open` again                    | Copy or commit the file   | Send the file, or commit it to a repository               |
 
 Some more facts about each case:
 
@@ -23,7 +23,9 @@ Some more facts about each case:
 - **Copy link.** The link holds the full source, so no server keeps a copy. Edits after you copy
   the link are not in it. Copy the link again to include them.
 - **Editor scratch copy.** "Open in the editor", an example, or a shared link in the Editor opens a
-  scratch copy. The bar at the top says so. Use **Download .draft** in that bar to keep your edits.
+  scratch copy. The bar at the top says so. When you reload or come back, the bar shows your
+  unsaved edits again. The browser keeps the 10 newest scratch copies. Use **Download .draft** in
+  that bar to keep your edits as a file.
 - **`draftably open`.** The editor saves to disk as you work. Changes that other programs make to
   the file show in the editor at once. See [Get started](#get-started) to install the CLI.
 
@@ -37,7 +39,8 @@ In the Playground:
 1. Select **Download**.
 2. Select **SVG**, **PNG** or **.draft**.
 
-In the Editor, open the export menu and select **Export PNG…**, **Export SVG…** or **Export PDF…**.
+In the Editor, select **Export**, then select **Export PNG…** or **Export SVG…** in the menu.
+With `draftably open`, **Export PDF…** is also in the menu.
 
 From the command line:
 
