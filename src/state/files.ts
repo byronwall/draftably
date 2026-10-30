@@ -30,19 +30,66 @@ import {
   transact,
 } from './document';
 import { connectFrom, fitView, setConnectFrom } from './editor';
-import { currentSource, fileMode, openExampleSession, settleSave } from './file-session';
+import {
+  currentSource,
+  fileMode,
+  fileSession,
+  openExampleSession,
+  settleSave,
+} from './file-session';
 import { runLayout } from './layout';
-import { viewerFrame } from './scene';
+import { routes, sceneRects, viewerFrame, visibleScene } from './scene';
+import { drawingBounds } from '../model/bounds';
+import { FRAME_PAD } from '../model/frame';
 import { toast } from './toast';
+import { openDialog } from './ui';
+import type { PdfOptions } from '../cli/pdf';
 
 const IMAGE_TYPES = /^image\/(png|jpeg|webp|gif)$/;
 
-/** Exported PNGs and SVGs carry the open file's source unless this is switched off. */
-const [embedSource, setEmbedSource] = createSignal(true);
-export { embedSource, setEmbedSource };
+/** How PNG, SVG and copied images look. The last choice is remembered in this browser. */
+export interface ExportLook {
+  /** PNG pixels per drawing pixel. */
+  scale: number;
+  /** Leave out the canvas color behind the drawing. */
+  transparent: boolean;
+  /** Draw the title, subtitle and key round the drawing. */
+  heading: boolean;
+  /** Carry the open file's `.draft` source. */
+  source: boolean;
+}
+
+const LOOK_KEY = 'draftably-export-look';
+const [exportLook, setLook] = createSignal<ExportLook>({
+  scale: 2,
+  transparent: false,
+  heading: true,
+  source: true,
+  ...(() => {
+    try {
+      return JSON.parse(localStorage.getItem(LOOK_KEY) ?? '{}');
+    } catch {
+      return {};
+    }
+  })(),
+});
+export { exportLook };
+
+export function setExportLook(patch: Partial<ExportLook>) {
+  setLook({ ...exportLook(), ...patch });
+  try {
+    localStorage.setItem(LOOK_KEY, JSON.stringify(exportLook()));
+  } catch {
+    // Storage is off; the choice lasts for this page.
+  }
+}
 
 /** The `.draft` source to put in an export, or undefined when there is none to carry. */
-const exportSource = () => (fileMode() && embedSource() ? currentSource() : undefined);
+const exportSource = (look = exportLook()) =>
+  fileMode() && look.source ? currentSource() : undefined;
+
+/** Space round the selected objects when only they are exported. */
+const SELECTION_MARGIN = 24;
 
 /**
  * Open a PNG or SVG export that carries `.draft` source as a new scratch diagram, which the
@@ -167,14 +214,23 @@ export async function openFile(file: File | undefined, replaceImageId: string | 
   await importText(await file.text(), file.name);
 }
 
-/** Editable SVG: the drawing plus the full diagram in a metadata element. */
-export function exportSvg(): string {
+/**
+ * Editable SVG: the drawing plus the full diagram in a metadata element. With `onlySelection` and
+ * something selected, the image is cropped to the selected objects with a margin and no heading.
+ */
+export function exportSvg(look = exportLook(), onlySelection = false): string {
   finishInlineEdit(true);
   // A comparison draws each version as its own panel, which the canvas does not show.
-  const source = exportSource(),
+  const source = exportSource(look),
     carry = (svg: string) => (source === undefined ? svg : embedSvgSource(svg, source));
-  if (doc.appearance.compare)
-    return '<?xml version="1.0" encoding="UTF-8"?>\n' + carry(renderSvg(doc));
+  if (doc.appearance.compare) {
+    const svg = renderSvg(doc);
+    return (
+      '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      carry(look.transparent ? svg.replace(/(<\/defs>)\s*<rect[^>]*\/>/, '$1') : svg)
+    );
+  }
+  const picked = onlySelection ? selection() : new Set<string>();
   const world = sceneElement;
   if (!world) throw Error('The canvas is not ready.');
   const previousSelection = selection(),
@@ -185,11 +241,27 @@ export function exportSvg(): string {
     setConnectFrom(null);
   });
   try {
-    const look = resolveAppearance(doc.appearance),
+    const theme = resolveAppearance(doc.appearance),
       statuses = usedStatuses(doc),
       legend = drawnLegend(doc),
       frame = viewerFrame(),
-      { x, y, w, h } = frame;
+      vg = visibleScene();
+    // The frame as the viewer draws it; the drawing alone without the heading; or the selection.
+    const { x, y, w, h } = picked.size
+      ? drawingBounds(
+          doc,
+          {
+            ...vg,
+            nodes: vg.nodes.filter(n => picked.has(n.id)),
+            groups: vg.groups.filter(g => picked.has(g.id)),
+          },
+          sceneRects(),
+          routes().filter(r => picked.has(r.id)),
+          SELECTION_MARGIN,
+        )
+      : look.heading
+        ? frame
+        : drawingBounds(doc, vg, sceneRects(), routes(), FRAME_PAD);
     const svg = createSvgElement('svg', {
       xmlns: 'http://www.w3.org/2000/svg',
       width: Math.ceil(w),
@@ -204,19 +276,18 @@ export function exportSvg(): string {
     // The drawing's own canvas and fonts, so the file renders the same without the app.
     const defs = createSvgElement('defs'),
       style = createSvgElement('style');
-    style.textContent = fontFaceCss(look);
+    style.textContent = fontFaceCss(theme);
     defs.append(style);
-    svg.append(
-      title,
-      meta,
-      defs,
-      createSvgElement('rect', { x, y, width: w, height: h, fill: look.canvas }),
-    );
+    svg.append(title, meta, defs);
+    if (!look.transparent)
+      svg.append(createSvgElement('rect', { x, y, width: w, height: h, fill: theme.canvas }));
     svg.appendChild(materializeSvg(world, exportHref));
     // The key from the file's legend lines goes under the drawing, as in `inspect --svg`.
     const markup =
-      headingMarkup(look, doc.appearance.heading, frame.heading.x, frame.heading.y) +
-      legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses);
+      picked.size || !look.heading
+        ? ''
+        : headingMarkup(theme, doc.appearance.heading, frame.heading.x, frame.heading.y) +
+          legendMarkup(theme, legend, frame.legend.x, frame.legend.y, statuses);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,
@@ -235,9 +306,57 @@ export function exportSvg(): string {
   }
 }
 
+/** The files the PDF dialog starts with checked, in order. */
+const [pdfFiles, setPdfFiles] = createSignal<string[]>([]);
+export { pdfFiles };
+
+/** Open the export dialog on PDF with `paths` chosen. */
+export function openPdfExport(paths: string[]) {
+  setPdfFiles(paths);
+  setExportKind('pdf');
+  openDialog('export');
+}
+
+/**
+ * Ask the server for one PDF of `paths` in order, as `draftably pdf` makes it, and download it.
+ * Throws with the server's message, such as the file whose errors stopped the export.
+ */
+export async function exportPdf(paths: string[], opts: PdfOptions) {
+  await settleSave();
+  const res = await fetch('./api/workspace/pdf', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ files: paths, order: 'given', ...opts }),
+  });
+  if (!res.ok) throw Error(((await res.json()) as { error: string }).error);
+  const base =
+    opts.title || (paths.length === 1 ? paths[0].replace(/^.*\/|\.draft$/g, '') : 'diagrams');
+  downloadBlob(
+    await res.blob(),
+    base
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') + '.pdf',
+  );
+  toast(`Exported ${paths.length === 1 ? '1 diagram' : `${paths.length} diagrams`} as PDF`);
+}
+
 export type ExportFormat = 'json' | 'svg' | 'png';
 
-export async function exportDocument(format: ExportFormat) {
+/** `svg` as a PNG at the look's scale, carrying the file's source when the look keeps it. */
+async function pngOf(svg: string, look: ExportLook) {
+  const png = await svgToPng(svg, look.scale),
+    source = exportSource(look);
+  if (source === undefined) return png;
+  const bytes = await embedPngSource(new Uint8Array(await png.arrayBuffer()), source);
+  return new Blob([bytes as BlobPart], { type: 'image/png' });
+}
+
+export async function exportDocument(
+  format: ExportFormat,
+  look = exportLook(),
+  onlySelection = false,
+) {
   finishInlineEdit(true);
   if (format === 'json')
     downloadText(
@@ -245,21 +364,113 @@ export async function exportDocument(format: ExportFormat) {
       filename('json'),
       'application/json',
     );
-  else if (format === 'svg') downloadText(exportSvg(), filename('svg'), 'image/svg+xml');
-  else {
-    const png = await svgToPng(exportSvg()),
-      source = exportSource();
-    downloadBlob(
-      source === undefined
-        ? png
-        : new Blob(
-            [(await embedPngSource(new Uint8Array(await png.arrayBuffer()), source)) as BlobPart],
-            {
-              type: 'image/png',
-            },
-          ),
-      filename('png'),
-    );
-  }
+  else if (format === 'svg')
+    downloadText(exportSvg(look, onlySelection), filename('svg'), 'image/svg+xml');
+  else downloadBlob(await pngOf(exportSvg(look, onlySelection), look), filename('png'));
   toast(format.toUpperCase() + ' export created');
+}
+
+/** What Copy puts on the clipboard: every format at once, or one thing as text. */
+export type CopyAs = 'image' | 'svg' | 'source' | 'link';
+
+/** Clipboard formats, richest first, with the word the toast uses for each. */
+const FORMATS: [string, string][] = [
+  ['image/png', 'PNG'],
+  ['image/svg+xml', 'SVG'],
+  ['web image/svg+xml', 'SVG'],
+  ['text/html', 'HTML'],
+  ['text/plain', 'text'],
+];
+
+const and = (words: string[]) =>
+  words.length > 1 ? `${words.slice(0, -1).join(', ')} and ${words.at(-1)}` : words[0];
+
+const blobText = (blob: Blob) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(Error('Could not read the image.'));
+    reader.readAsDataURL(blob);
+  });
+
+/**
+ * Copy the diagram, or the selection when something is selected. `image` writes one clipboard item
+ * with PNG, SVG, HTML and the SVG markup as text, so the app it is pasted into takes the format it
+ * reads; a browser that refuses some of them gets the richest set it accepts, down to PNG alone.
+ * The other kinds copy one thing as text.
+ */
+export async function copyImage(kind: CopyAs = 'image', look = exportLook(), onlySelection = true) {
+  finishInlineEdit(true);
+  const clip = navigator.clipboard;
+  if (kind === 'source') {
+    const source = currentSource();
+    if (source == null) throw Error('Only a diagram file has .draft source to copy.');
+    await clip.writeText(source);
+    return toast('Copied the .draft source');
+  }
+  if (kind === 'link') {
+    await clip.writeText(location.href);
+    return toast('Copied a link to this diagram');
+  }
+  const part = onlySelection && selection().size > 0,
+    svg = exportSvg(look, part),
+    what = part ? 'the selection' : '';
+  if (kind === 'svg') {
+    await clip.writeText(svg);
+    return toast(`Copied ${what || 'the diagram'} as SVG markup`);
+  }
+  const png = pngOf(svg, look);
+  const [, w, h] = /width="(\d+)" height="(\d+)"/.exec(svg) ?? [];
+  const blobs: Record<string, Promise<Blob>> = {
+    'image/png': png,
+    'image/svg+xml': Promise.resolve(new Blob([svg], { type: 'image/svg+xml' })),
+    'web image/svg+xml': Promise.resolve(new Blob([svg], { type: 'image/svg+xml' })),
+    'text/html': png.then(
+      async b =>
+        new Blob(
+          [
+            `<img src="${await blobText(b)}" width="${w}" height="${h}" alt="${doc.title.replace(/"/g, '&quot;')}">`,
+          ],
+          { type: 'text/html' },
+        ),
+    ),
+    'text/plain': Promise.resolve(new Blob([svg], { type: 'text/plain' })),
+  };
+  const supports = (type: string) =>
+    typeof ClipboardItem.supports !== 'function' || ClipboardItem.supports(type);
+  let failure: unknown;
+  for (const drop of [
+    [],
+    ['web image/svg+xml'],
+    ['image/svg+xml', 'web image/svg+xml'],
+    FORMATS.slice(1).map(f => f[0]),
+  ]) {
+    const types = FORMATS.map(f => f[0]).filter(t => supports(t) && !drop.includes(t));
+    try {
+      await clip.write([new ClipboardItem(Object.fromEntries(types.map(t => [t, blobs[t]])))]);
+      const words = [...new Set(FORMATS.filter(f => types.includes(f[0])).map(f => f[1]))];
+      return toast(`Copied ${what ? what + ' ' : ''}as ${and(words)}`);
+    } catch (error) {
+      failure = error;
+    }
+  }
+  throw failure instanceof Error && failure.name !== 'NotAllowedError'
+    ? failure
+    : Error(
+        'The browser blocked the clipboard. Allow clipboard access for this page and copy again.',
+      );
+}
+
+/** Formats the export dialog makes. */
+export type ExportKind = 'png' | 'svg' | 'pdf' | 'copy';
+const [exportKind, setExportKind] = createSignal<ExportKind>('png');
+export { exportKind, setExportKind };
+
+/** Open the export dialog on `kind`. */
+export function openExport(kind: ExportKind) {
+  setExportKind(kind);
+  const file = fileSession()?.file;
+  // The PDF tab starts with the open file checked, whichever tab the dialog opens on.
+  setPdfFiles(file ? [file] : []);
+  openDialog('export');
 }

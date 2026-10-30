@@ -120,6 +120,8 @@ export function handleKeyDown(e: KeyboardEvent) {
       s: () => runCommand('export-json'),
       o: () => runCommand('open'),
     };
+    // ⇧⌘C copies the diagram, or the selection, as an image; ⌘C stays an object copy.
+    if (key === 'c' && e.shiftKey) shortcuts.c = () => runCommand('copy-image');
     // ⌘P goes to a diagram in the served folder; without one the browser prints as usual.
     if (key === 'p' && commandEnabled('find-file')) shortcuts.p = () => runCommand('find-file');
     if (shortcuts[key]) {

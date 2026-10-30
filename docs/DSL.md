@@ -619,7 +619,7 @@ exits 1 when the image carries no source.
 `inspect --png`, `inspect --svg`, `compare --png` and `compare --svg` embed the formatted source,
 and the viewer's PNG and SVG exports embed the open file's source. A `compare` export embeds the
 marked file, so both versions come back. `--no-source`, or the checkbox in the viewer's export
-menu, leaves it out. Dropping or pasting an image with source into the viewer opens it as a new
+dialog, leaves it out. Dropping or pasting an image with source into the viewer opens it as a new
 scratch diagram. The format is stable, so other tools can read it:
 
 - **PNG:** an `iTXt` chunk with keyword `draftably`. Its text is the UTF-8 source, with the
@@ -628,6 +628,10 @@ scratch diagram. The format is stable, so other tools can read it:
   chunks do not change the pixels.
 - **SVG:** a `<metadata id="draftably-source" data-draftably-version="…">` element inside the root
   `<svg>`, holding the XML-escaped source.
+- **PDF:** `draftably pdf` attaches each file's formatted source as an embedded file (the
+  catalog's `EmbeddedFiles` name tree) named after the file, such as `checkout.draft`, with the
+  diagram's title as its description. `check`, `extract` and `open` read every attachment whose
+  name ends in `.draft`; `diagrams.pdf#checkout.draft` names one.
 
 Hosts that recompress images drop the PNG chunk. See the README for where it survives.
 

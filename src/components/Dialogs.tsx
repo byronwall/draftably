@@ -5,6 +5,7 @@ import { buildFromList, setTool } from '../state/actions';
 import { doc, selectedIds } from '../state/document';
 import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } from '../state/ui';
 import { IconButton } from './controls';
+import { ExportDialog } from './ExportDialog';
 import './dialogs.css';
 
 /** The single modal dialog that is open, if any. */
@@ -16,6 +17,9 @@ export function Dialogs() {
       </Match>
       <Match when={dialog() === 'quick-build'}>
         <QuickBuildDialog />
+      </Match>
+      <Match when={dialog() === 'export'}>
+        <ExportDialog />
       </Match>
       <Match when={dialog() === 'confirm' && confirmRequest()}>
         {request => (
@@ -55,7 +59,7 @@ export function Dialogs() {
 }
 
 /** Native modal dialog: traps focus, closes on Escape, and restores focus when it closes. */
-function Modal(props: {
+export function Modal(props: {
   title: string;
   children: JSX.Element;
   footer?: JSX.Element;

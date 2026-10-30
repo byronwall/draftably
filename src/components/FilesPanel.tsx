@@ -1,5 +1,6 @@
 import { createMemo, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
 import { focusCanvas } from '../state/editor';
+import { openPdfExport } from '../state/files';
 import { fileSession } from '../state/file-session';
 import {
   createDiagramFile,
@@ -79,6 +80,12 @@ export function FilesPanel() {
         </h2>
         <span class="files-header-actions">
           <IconButton icon="plus" label="New diagram" onClick={() => setCreating(true)} />
+          <IconButton
+            icon="file"
+            label="Export these diagrams as one PDF"
+            disabled={!files().length}
+            onClick={() => openPdfExport(files().map(f => f.path))}
+          />
           <IconButton
             icon="close"
             label="Close diagrams"

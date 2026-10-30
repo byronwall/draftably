@@ -13,6 +13,7 @@ import { renderSvg } from '../cli/svg';
 import { checkSource, compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { DslError } from '../dsl/syntax';
+import type { PdfOptions } from '../cli/pdf';
 import { createFileSession, type FileSession } from './file-session';
 
 export interface WorkspaceFile {
@@ -149,6 +150,33 @@ export function createWorkspace(root: string): Workspace {
     json(res, 201, { path: path.relative(root, full).split(path.sep).join('/') });
   };
 
+  /** One PDF of the listed files, drawn as `draftably pdf` draws it. */
+  const pdf = async (body: string, res: ServerResponse) => {
+    let request: { files?: unknown } & PdfOptions;
+    try {
+      request = JSON.parse(body);
+    } catch {
+      return json(res, 400, { error: 'Expected JSON.' });
+    }
+    const files = Array.isArray(request.files) ? request.files.map(resolve) : [];
+    if (!files.length || files.some(f => !f || !fs.existsSync(f)))
+      return json(res, 400, { error: 'Choose .draft files inside this folder.' });
+    try {
+      const { buildPdf } = await import('../cli/pdf');
+      const { bytes } = await buildPdf(
+        files.map(f => ({
+          name: path.relative(root, f!).split(path.sep).join('/'),
+          source: fs.readFileSync(f!, 'utf8'),
+        })),
+        request,
+      );
+      res.writeHead(200, { 'content-type': 'application/pdf', 'cache-control': 'no-store' });
+      res.end(bytes);
+    } catch (error) {
+      json(res, 422, { error: (error as Error).message });
+    }
+  };
+
   return {
     root,
     handle(req, res) {
@@ -161,11 +189,14 @@ export function createWorkspace(root: string): Workspace {
         } satisfies WorkspaceInfo);
         return true;
       }
-      if (url === '/api/workspace/files' && req.method === 'POST') {
+      if (
+        (url === '/api/workspace/files' || url === '/api/workspace/pdf') &&
+        req.method === 'POST'
+      ) {
         let body = '';
         req.setEncoding('utf8');
         req.on('data', chunk => (body += chunk));
-        req.on('end', () => create(body, res));
+        req.on('end', () => void (url.endsWith('pdf') ? pdf(body, res) : create(body, res)));
         return true;
       }
       const perFile = ['/api/session', '/api/source', '/api/events', '/api/workspace/thumbnail'];
