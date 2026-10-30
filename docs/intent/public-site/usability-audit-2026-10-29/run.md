@@ -24,6 +24,8 @@
 
 Read this record and live state before acting. Do not resubmit. Use the authorized workflow for collection, original artifact preservation, synthesis, validation, commits, push, PR, and heartbeat shutdown. No product implementation, merge, or deployment is requested.
 
+Byron also requested GitHub issues for existing audit findings, with no duplicates. All 13 independent findings are now tracked in [issues.md](issues.md): eight new issues (#257–#264), four exact existing matches, and the related source-recovery issue #248 with added evidence. Check this register and current open/closed issues before filing later Pro findings. Do not recreate already tracked work.
+
 The existing browser-saved editor diagram is personal state. Do not modify it. An audit source named `Usability audit` was created in Playground and opened in the Editor as an unsaved scratch example. Use that disposable example for edit tests.
 
 ## Independent observations so far
