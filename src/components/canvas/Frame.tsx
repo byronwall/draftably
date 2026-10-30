@@ -51,6 +51,8 @@ export function Frame() {
     legendMarkup(look(), drawnLegend(doc), frame().legend.x, frame().legend.y, usedStatuses(doc));
   const ghost = (key: Key) => {
     if (doc.appearance.heading?.[key] || inlineEditId() === HEADING_EDIT[key]) return;
+    // Frame notes sit where a missing subtitle would go, as exports draw them.
+    if (key === 'subtitle' && frame().notes.some(n => n.inFrame)) return;
     return headingSlot(frame(), key);
   };
   let start = 0;
