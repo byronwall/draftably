@@ -25,5 +25,6 @@ Pointers only. Read the linked doc when the task touches it.
 - **Viewer:** `pnpm draftably open <file>` serves a file at `?file=<path>` and prints the real URL on
   its `Viewer:` line; use that URL. In the page, `window.diagramStudio`
   ([src/state/debug-api.ts](src/state/debug-api.ts)) reads file state and geometry.
+  Await its `ready()` before you read or export.
 - **Branches:** build stacked branches in separate worktrees. Run `pnpm install` after switching
   branches in one checkout; it can drop packages another branch needs.
