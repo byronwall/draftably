@@ -16,6 +16,7 @@ import {
   edgeLabelSize,
   GROUP_TITLE_LINES,
   groupHeaderFor,
+  diamondMeasure,
   titleArea,
   titleHeight,
   wrapTitle,
@@ -860,6 +861,7 @@ export function leafSize(
   look: ResolvedAppearance,
 ) {
   const base = defaultShapeSize(o.shape);
+  if (o.shape === 'diamond') return diamondSize(o, size, base, look);
   const w = size?.width ?? fitWidth(o, base, look);
   const area = titleArea(o.shape, w, size?.height ?? base.h, look),
     lines = wrapTitle(o.label, area.width, look).length;
@@ -867,15 +869,34 @@ export function leafSize(
     return { w, h: size.height, overflow: lines * look.title.lineHeight > area.maxHeight + 0.5 };
   return {
     w,
-    h: titleHeight(
-      o.shape,
-      lines,
-      o.shape === 'circle' || o.shape === 'diamond' ? base.h : 0,
-      look,
-    ),
+    h: titleHeight(o.shape, lines, o.shape === 'circle' ? base.h : 0, look),
     overflow: false,
   };
 }
+
+/**
+ * A diamond is square. A requested size keeps its larger side; otherwise the default side grows
+ * in 4px steps until the title, wrapped to the wider measure the larger square gives, fits.
+ */
+function diamondSize(
+  o: ModelObject,
+  size: { width: number; height?: number } | undefined,
+  base: { w: number; h: number },
+  look: ResolvedAppearance,
+) {
+  const need = widestPiece(o.label, look.title),
+    fits = (s: number) => (diamondMeasure(o.label, s, look) ?? 0) >= need;
+  if (size) {
+    const s = Math.max(size.width, size.height ?? 0);
+    return { w: s, h: s, overflow: !fits(s) };
+  }
+  let s = base.w;
+  while (!fits(s)) s += 4;
+  return { w: s, h: s, overflow: false };
+}
+
+/** A diamond grown past this many times its default side reads as much larger than its neighbours. */
+const BIG_DIAMOND = 1.4;
 
 /**
  * Longest-path ranks, in declaration order. Cycles are broken first: a depth-first walk from the
@@ -2577,6 +2598,14 @@ function layoutPass(
             ref: { w: round(r.w), h: round(r.h) },
           });
         }
+        if (o.shape === 'diamond' && !hint && leaf.w > defaultShapeSize('diamond').w * BIG_DIAMOND)
+          diagnostics.push({
+            level: 'info',
+            code: 'big-diamond',
+            message: `${o.id}'s question makes its diamond ${round(leaf.w)}px square, much larger than the shapes around it. Shorten the question, or move the detail onto its edges' labels.`,
+            line: o.line,
+            ids: [o.id],
+          });
         if (leaf.overflow)
           diagnostics.push({
             level: 'warning',
