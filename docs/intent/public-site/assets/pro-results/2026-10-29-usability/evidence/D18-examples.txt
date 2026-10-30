@@ -1,0 +1,34 @@
+Browser tab: 9, Title: "Examples · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/examples".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 119, 444-446, 451-624
+~0 AXWebArea Examples · Draftably docs, URL: byronwall.github.io/draftably/docs/examples
+~			442 link Description: Tools, Value: byronwall.github.io/draftably/docs/command-line
+~			443 text Examples
++			51 heading Examples, Value: 1
++				52 text Examples
++			444 container
++				445 text examples/  holds the bundled diagrams, from flat flows to five levels of containers. They are bundled into the viewer, so they open without a server at  ?example=id . An example is a scratch copy: an amber  Example  bar stays across the top, the toolbar reads  Example · not on disk , and nothing is written anywhere. Edits behave exactly as in a file.  Save as file…  writes the current source to a new file in the served folder and opens it; on the static site the bar offers  Download .draft  instead. Leaving an edited example asks first.
++			446 text The file is the source of truth while it is open: browser storage is not read or written, and moving the camera never changes the file.
+~				448 text --png <file>  on  inspect  or  compare  saves a PNG at  --scale  times the SVG's size (2 by default) and prints its size in pixels.  --max-width <px>  lowers the scale so the image is at most that wide. It renders with an installed Chrome, Chromium or Edge in headless mode; set  CHROME_PATH  to use another copy.
+~			449 container
+~				450 text inspect  uses the editor's own router and the same font tables, so its geometry matches the viewer.  inspect --svg  draws with the file's theme and embeds its fonts.
+~				441 link Description: ← Previous Editing in the viewer, Value: byronwall.github.io/draftably/docs/editing-in-the-viewer
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#examples
+The focused UI element is 48 link Description: Examples, URL: byronwall.github.io/draftably/docs/examples
+
+VISIBLE MAIN TEXT
+Tools
+/
+Examples
+Examples
+
+examples/ holds the bundled diagrams, from flat flows to five levels of containers. They are bundled into the viewer, so they open without a server at ?example=id. An example is a scratch copy: an amber Example bar stays across the top, the toolbar reads Example · not on disk, and nothing is written anywhere. Edits behave exactly as in a file. Save as file… writes the current source to a new file in the served folder and opens it; on the static site the bar offers Download .draft instead. Leaving an edited example asks first.
+
+The file is the source of truth while it is open: browser storage is not read or written, and moving the camera never changes the file.
+
+--png <file> on inspect or compare saves a PNG at --scale times the SVG's size (2 by default) and prints its size in pixels. --max-width <px> lowers the scale so the image is at most that wide. It renders with an installed Chrome, Chromium or Edge in headless mode; set CHROME_PATH to use another copy.
+
+inspect uses the editor's own router and the same font tables, so its geometry matches the viewer. inspect --svg draws with the file's theme and embeds its fonts.
+
+← Previous
+Editing in the viewer

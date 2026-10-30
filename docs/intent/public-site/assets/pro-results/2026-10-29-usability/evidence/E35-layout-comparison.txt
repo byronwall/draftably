@@ -1,0 +1,281 @@
+Browser tab: 3, Title: "Example: Checkout architecture · Draftably", URL: "https://byronwall.github.io/draftably/app/?example=checkout".
+1 AXWebArea Example: Checkout architecture · Draftably, URL: byronwall.github.io/draftably/app/?example=checkout
+	2 container Compare layouts
+		3 container
+			4 button Toggle comparison controls
+			5 heading Compare layouts, Value: 2, ID: comparison-title
+				6 text Compare layouts
+			7 text Checkout architecture
+			8 container Comparison display
+				9 checkbox Grid, Value: 1
+				10 checkbox Overlay, Value: 0
+			11 text Preview only · Apply to keep
+			12 button Close comparison
+				13 text Close
+				14 text Esc
+		15 container Comparison settings
+			16 tab group Comparison type
+				17 checkbox Layouts, Value: 1
+				18 checkbox Ports & routes, Value: 0
+			19 container
+				20 text Compare
+				21 pop up button (collapsed, settable) Compare, Value: Different approaches, Secondary Actions: Expand
+					22 menu
+						23 (selected) Different approaches
+						24 Parameter grid
+				25 text Starting point
+				26 pop up button (collapsed, settable) Starting point, Value: Rebuild & settle, Secondary Actions: Expand
+					27 menu
+						28 (selected) Rebuild & settle
+						29 Current positions → settle
+						30 One bounded pass
+				31 button (collapsed) Approaches · 6 selected, Secondary Actions: Expand
+					32 text Approaches · 
+					33 text 6
+					34 text  selected
+				35 button (collapsed) Scope & effort, Secondary Actions: Expand
+					36 text Scope & effort
+				37 button Regenerate layouts
+					38 text Regenerate
+					99 text layouts
+			40 button (collapsed) Drawing intent, Secondary Actions: Expand
+				41 text Drawing intent
+			42 container
+				43 heading INSPECT, Value: 3
+					44 text INSPECT
+				45 text Grid navigation
+				46 pop up button (collapsed, settable) Grid navigation, Value: Synced · same world position, Secondary Actions: Expand
+					47 menu
+						48 (selected) Synced · same world position
+						49 Same clicked object
+						50 Independent cameras
+				51 button Fit all
+				52 button 100%
+				53 text Drag / scroll to pan. Pinch to zoom. Click any shape to set the overlay anchor.
+			54 button (collapsed) Export comparison, Secondary Actions: Expand
+				55 text Export comparison
+		56 container Candidate diagrams
+			57 text Visual anchor:  Web app  · click a shape to change
+			58 button Fit all Home
+				59 text Fit all
+				60 text Home
+			61 container Comparison contact sheet
+				62 container Candidate 1
+					63 container
+						64 text 01 Compound flow Cross-hierarchy layered
+						65 button Enlarge candidate 1
+					100 container
+						101 container Candidate 1. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.
+							102 text Customer channels
+							103 text Commerce platform
+							104 text Domain services
+							105 container authorize
+								106 text authorize
+							107 container HTTPS
+								108 text HTTPS
+							109 container create order
+								110 text create order
+							111 container HTTPS
+								112 text HTTPS
+							113 container persist
+								114 text persist
+							115 button Description: Use Web app as visual anchor, Help: Web app
+								116 text Web app
+							117 button Description: Use Mobile app as visual anchor, Help: Mobile app
+								118 text Mobile app
+							119 button Description: Use API gateway as visual anchor, Help: API gateway
+								120 text API gateway
+							121 button Description: Use Orders as visual anchor, Help: Orders
+								122 text Orders
+							123 button Description: Use Payments as visual anchor, Help: Payments
+								124 text Payments
+							125 button Description: Use Postgres as visual anchor, Help: Postgres
+								126 text Postgres
+						127 text 39 %
+					128 container
+						129 text layout root engine=compound-flow
+						130 text 0 crossings · 0 close lane pairs · 11 bends
+						131 button Apply
+				68 container Candidate 2
+					69 container
+						70 text 02 Layered + fold Hierarchical
+						71 button Enlarge candidate 2
+					132 container
+						133 container Candidate 2. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.
+							134 text Customer channels
+							135 text Commerce platform
+							136 text Domain services
+							137 container authorize
+								138 text authorize
+							139 container HTTPS
+								140 text HTTPS
+							141 container create order
+								142 text create order
+							143 container HTTPS
+								144 text HTTPS
+							145 container persist
+								146 text persist
+							147 button Description: Use Web app as visual anchor, Help: Web app
+								148 text Web app
+							149 button Description: Use Mobile app as visual anchor, Help: Mobile app
+								150 text Mobile app
+							151 button Description: Use API gateway as visual anchor, Help: API gateway
+								152 text API gateway
+							153 button Description: Use Orders as visual anchor, Help: Orders
+								154 text Orders
+							155 button Description: Use Payments as visual anchor, Help: Payments
+								156 text Payments
+							157 button Description: Use Postgres as visual anchor, Help: Postgres
+								158 text Postgres
+						159 text 39 %
+					160 container
+						161 text layout root engine=layered
+						162 text 0 crossings · 0 close lane pairs · 11 bends
+						163 button Apply
+				74 container Candidate 3
+					75 container
+						76 text 03 Directional flow Constraint relaxation
+						77 button Enlarge candidate 3
+					164 container
+						165 container Candidate 3. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.
+							166 text Customer channels
+							167 text Commerce platform
+							168 text Domain services
+							169 container authorize
+								170 text authorize
+							171 container HTTPS
+								172 text HTTPS
+							173 container create order
+								174 text create order
+							175 container HTTPS
+								176 text HTTPS
+							177 container persist
+								178 text persist
+							179 button Description: Use Web app as visual anchor, Help: Web app
+								180 text Web app
+							181 button Description: Use Mobile app as visual anchor, Help: Mobile app
+								182 text Mobile app
+							183 button Description: Use API gateway as visual anchor, Help: API gateway
+								184 text API gateway
+							185 button Description: Use Orders as visual anchor, Help: Orders
+								186 text Orders
+							187 button Description: Use Payments as visual anchor, Help: Payments
+								188 text Payments
+							189 button Description: Use Postgres as visual anchor, Help: Postgres
+								190 text Postgres
+						191 text 39 %
+					192 container
+						193 text layout root engine=flow
+						194 text 0 crossings · 0 close lane pairs · 11 bends
+						195 button Apply
+				80 container Candidate 4
+					81 container
+						82 text 04 Subtree tree Tree drawing
+						83 button Enlarge candidate 4
+					196 container
+						197 container Candidate 4. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.
+							198 text Customer channels
+							199 text Commerce platform
+							200 text Domain services
+							201 container authorize
+								202 text authorize
+							203 container HTTPS
+								204 text HTTPS
+							205 container create order
+								206 text create order
+							207 container HTTPS
+								208 text HTTPS
+							209 container persist
+								210 text persist
+							211 button Description: Use Web app as visual anchor, Help: Web app
+								212 text Web app
+							213 button Description: Use Mobile app as visual anchor, Help: Mobile app
+								214 text Mobile app
+							215 button Description: Use API gateway as visual anchor, Help: API gateway
+								216 text API gateway
+							217 button Description: Use Orders as visual anchor, Help: Orders
+								218 text Orders
+							219 button Description: Use Payments as visual anchor, Help: Payments
+								220 text Payments
+							221 button Description: Use Postgres as visual anchor, Help: Postgres
+								222 text Postgres
+						223 text 39 %
+					224 container
+						225 text layout root engine=tree
+						226 text 0 crossings · 0 close lane pairs · 11 bends
+						227 button Apply
+				86 container Candidate 5
+					87 container
+						88 text 05 Stress descent Distance optimisation
+						89 button Enlarge candidate 5
+					228 container
+						229 container Candidate 5. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.
+							230 text Customer channels
+							231 text Commerce platform
+							232 text Domain services
+							233 container authorize
+								234 text authorize
+							235 container HTTPS
+								236 text HTTPS
+							237 container create order
+								238 text create order
+							239 container HTTPS
+								240 text HTTPS
+							241 container persist
+								242 text persist
+							243 button Description: Use Web app as visual anchor, Help: Web app
+								244 text Web app
+							245 button Description: Use Mobile app as visual anchor, Help: Mobile app
+								246 text Mobile app
+							247 button Description: Use API gateway as visual anchor, Help: API gateway
+								248 text API gateway
+							249 button Description: Use Orders as visual anchor, Help: Orders
+								250 text Orders
+							251 button Description: Use Payments as visual anchor, Help: Payments
+								252 text Payments
+							253 button Description: Use Postgres as visual anchor, Help: Postgres
+								254 text Postgres
+						255 text 39 %
+					256 container
+						257 text layout root engine=stress
+						258 text 0 crossings · 0 close lane pairs · 11 bends
+						259 button Apply
+				92 container Candidate 6
+					93 container
+						94 text 06 Spring network Force-directed
+						95 button Enlarge candidate 6
+					260 container
+						261 container Candidate 6. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.
+							262 text Customer channels
+							263 text Commerce platform
+							264 text Domain services
+							265 container authorize
+								266 text authorize
+							267 container HTTPS
+								268 text HTTPS
+							269 container create order
+								270 text create order
+							271 container HTTPS
+								272 text HTTPS
+							273 container persist
+								274 text persist
+							275 button Description: Use Web app as visual anchor, Help: Web app
+								276 text Web app
+							277 button Description: Use Mobile app as visual anchor, Help: Mobile app
+								278 text Mobile app
+							279 button Description: Use API gateway as visual anchor, Help: API gateway
+								280 text API gateway
+							281 button Description: Use Orders as visual anchor, Help: Orders
+								282 text Orders
+							283 button Description: Use Payments as visual anchor, Help: Payments
+								284 text Payments
+							285 button Description: Use Postgres as visual anchor, Help: Postgres
+								286 text Postgres
+						287 text 39 %
+					288 container
+						289 text layout root engine=force
+						290 text 0 crossings · 0 close lane pairs · 11 bends
+						291 button Apply
+			98 text 6 of 6 ready · 1.6 s · original diagram unchanged
+
+The focused UI element is 4 button Toggle comparison controls

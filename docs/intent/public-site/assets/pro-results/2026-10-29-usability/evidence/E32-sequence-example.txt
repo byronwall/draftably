@@ -1,0 +1,3 @@
+Browser tab: 4, Title: "Sign-in sequence · Draftably playground", URL: "https://byronwall.github.io/draftably/play/?example=login-sequence".
+There has been no change in the accessibility tree.
+The focused UI element is 0 AXWebArea Sign-in sequence · Draftably playground, URL: byronwall.github.io/draftably/play/?example=login-sequence

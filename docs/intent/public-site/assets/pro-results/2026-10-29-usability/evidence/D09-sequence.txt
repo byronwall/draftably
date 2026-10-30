@@ -1,0 +1,161 @@
+Browser tab: 9, Title: "Sequence diagrams · Draftably docs", URL: "https://byronwall.github.io/draftably/docs/sequence-diagrams".
+The following is a diff from the previous accessibility tree with ~ and + representing changed and added elements, respectively. Removed elements are summarized by ID range.
+Removed element IDs: 443-578
+~0 AXWebArea Sequence diagrams · Draftably docs, URL: byronwall.github.io/draftably/docs/sequence-diagrams
+~			129 link Description: Diagram kinds, Value: byronwall.github.io/draftably/docs/swim-lanes
+~			130 text Sequence diagrams
+~			51 heading Sequence diagrams, Value: 1
+~				52 text Sequence diagrams
+~			442 container
++				443 text layout root sequence  draws an exchange between participants. Every node is a participant, drawn in a row across the top in file order (or the order an  order root  line gives), with a dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file reads top to bottom as the exchange does. A message's label sits just above its arrow, a step larger than other labels, and wraps to about 170px; a self-message's label sits beside its loop. Participants are spaced for the wrapped labels, and a short participant title gets a box only as wide as it needs.
++			444 container
++				445 text .draft  · editable
++				446 button Copy
++				447 button Expand
++				448 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=RY6xDsIwDET3fIXlnQHoWiQ-AjGH1DRWixOapFL-nqQlsJyse3cnixsIUqAF8FYUIVjtqfc8z0oq094D3ulRD_xaKVrAa9VSWdkQKhpGgtdxnzpc9lrgUYCl0dPmVrgNrLTwMzd43t0fNZbMBFYH2xLdP1HHo5tIECaWodchi1Gzzi5FWJyL5bF3IjH0AQ
++				449 text entry area (settable) Description: Diagram source, Value: node user "User" shape=pill
+node app "Web app"
+node auth "Auth service"
+edge m1 user -> app "sign in"
+edge m2 app -> auth "verify"
+edge m3 auth -> auth "check hash"
+edge m4 auth -> app "token" kind=async
+layout root sequence
++				450 button Expand the drawing
++					451 image Untitled diagram
++						452 text sign in
++						453 text verify
++						454 text check hash
++						455 text token
++						456 text User
++						457 text Web app
++						458 text Auth service
++			459 container
++				460 text kind=async  draws a dashed message, the usual mark of a reply. A message from a participant to itself draws a short loop. Participants are spaced so each message's label fits between them. Position refinements do not apply.
++			461 container
++				462 text The diagram is drawn on a framed panel, and each participant is outlined in its color with a thin stripe of it along the top, so the row of headers stays quiet. A top-level  group  gathers participants ( in=group ) into a lightly tinted column band behind their lifelines, with its title above them; its participants stay together where its first one falls in the order. A  phase  lists messages that belong together and draws them as a row band across the panel, its label in a tab at the left; alternate phases are tinted, so neighbours read apart:
++			463 container
++				464 text .draft  · editable
++				465 button Copy
++				466 button Expand
++				467 link Description: Edit in playground →, Value: byronwall.github.io/draftably/play#s=VZDBbsQgDETv-QrL9z10u6eVUqlq_6CHngm4CQqxUzCt8vcFklTaC4M8j9HgMUpewQZPrIBvTRGsBIn9EDJ1YwMSxR-KgB9NT0DJhI7FEZh1BfykoV4QPPd74mFmnQBf61lzvKWG7Jk74gbAd6NmMOnBJDcSLE8t__JyJBXDf214mNd9WtwaEsk4yOX1aT8_2L_RK5UWKXnhE7n9I-0bKjMxwuzZ9SZtbLt1KrXATmTnsqMqd2DRyfMINVErX1ou1xOVZfF1n02xtlhuXTCbZIUooqXCdya29Ac
++				468 text entry area (settable) Description: Diagram source, Value: group client "Client" color=blue
+group server "Server" color=teal
+node app "Web app" in=client
+node auth "Auth service" in=server
+node db "Database" in=server
+edge m1 app -> auth "verify"
+edge m2 auth -> db "read user"
+edge m3 auth -> db "write session"
+edge m4 auth -> app "token" kind=async
+phase check "Check: nothing written" m1 m2
+phase commit "Commit" m3 m4
+layout root sequence
++				469 button Expand the drawing
++					470 image Untitled diagram
++						471 text Client
++						472 text Server
++						473 text Check: nothing written
++						474 text Commit
++						475 text verify
++						476 text read user
++						477 text write session
++						478 text token
++						479 text Web app
++						480 text Auth service
++						481 text Database
++			482 container
++				483 text A message belongs to at most one phase. Change marks work as anywhere else: a  +edge  line shows a new message in place. Fragments ( loop ,  alt ), activations and notes are not supported yet.
+~				441 link Description: ← Previous Swim lanes, Value: byronwall.github.io/draftably/docs/swim-lanes
+~				119 link Description: Next → Cells, Value: byronwall.github.io/draftably/docs/cells
+~			128 link Description: Edit this page on GitHub, Value: github.com/byronwall/draftably/blob/main/docs/DSL.md#sequence-diagrams
+The focused UI element is 35 link Description: Sequence diagrams, URL: byronwall.github.io/draftably/docs/sequence-diagrams
+
+VISIBLE MAIN TEXT
+Diagram kinds
+/
+Sequence diagrams
+Sequence diagrams
+
+layout root sequence draws an exchange between participants. Every node is a participant, drawn in a row across the top in file order (or the order an order root line gives), with a dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file reads top to bottom as the exchange does. A message's label sits just above its arrow, a step larger than other labels, and wraps to about 170px; a self-message's label sits beside its loop. Participants are spaced for the wrapped labels, and a short participant title gets a box only as wide as it needs.
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+4
+5
+6
+7
+8
+node user "User" shape=pill
+node app "Web app"
+node auth "Auth service"
+edge m1 user -> app "sign in"
+edge m2 app -> auth "verify"
+edge m3 auth -> auth "check hash"
+edge m4 auth -> app "token" kind=async
+layout root sequence
+
+sign in
+verify
+check hash
+token
+User
+Web app
+Auth service
+
+kind=async draws a dashed message, the usual mark of a reply. A message from a participant to itself draws a short loop. Participants are spaced so each message's label fits between them. Position refinements do not apply.
+
+The diagram is drawn on a framed panel, and each participant is outlined in its color with a thin stripe of it along the top, so the row of headers stays quiet. A top-level group gathers participants (in=group) into a lightly tinted column band behind their lifelines, with its title above them; its participants stay together where its first one falls in the order. A phase lists messages that belong together and draws them as a row band across the panel, its label in a tab at the left; alternate phases are tinted, so neighbours read apart:
+
+.draft · editable
+Copy
+Expand
+Edit in playground →
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+group client "Client" color=blue
+group server "Server" color=teal
+node app "Web app" in=client
+node auth "Auth service" in=server
+node db "Database" in=server
+edge m1 app -> auth "verify"
+edge m2 auth -> db "read user"
+edge m3 auth -> db "write session"
+edge m4 auth -> app "token" kind=async
+phase check "Check: nothing written" m1 m2
+phase commit "Commit" m3 m4
+layout root sequence
+
+Client
+Server
+Check: nothing written
+Commit
+verify
+read user
+write session
+token
+Web app
+Auth service
+Database
+
+A message belongs to at most one phase. Change marks work as anywhere else: a +edge line shows a new message in place. Fragments (loop, alt), activations and notes are not supported yet.
+
+← Previous
+Swim lanes
+Next →
+Cells
