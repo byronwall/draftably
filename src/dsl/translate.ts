@@ -58,6 +58,34 @@ export interface EditResult {
   ids: Map<string, string>;
   /** Short descriptions of saved refinements, for the status message. */
   notes: string[];
+  /** Objects a move placed `near` a neighbour, with where they were dropped. */
+  drops: Drop[];
+}
+
+/** A dropped object: where it was let go in the drawing, and that point in its parent. */
+export interface Drop {
+  id: string;
+  x: number;
+  y: number;
+  local: { x: number; y: number };
+}
+
+/** Replace the `near` of each dropped object with a `stay` at the exact point it was dropped. */
+export function keepDropped(source: SourceDoc, drops: Drop[]) {
+  for (const d of drops) {
+    clearPosition(source, d.id);
+    addRefinement(
+      source,
+      statement(
+        'stay',
+        [bare(d.id)],
+        [
+          ['x', num(Math.max(0, d.local.x))],
+          ['y', num(Math.max(0, d.local.y))],
+        ],
+      ),
+    );
+  }
 }
 
 const same = (a: unknown, b: unknown) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
@@ -266,8 +294,9 @@ export function translateEdit(input: EditInput): EditResult {
     }
   }
 
-  placeSelection(input, sid, notes);
-  return { source, ids, notes };
+  const drops: Drop[] = [];
+  placeSelection(input, sid, notes, drops);
+  return { source, ids, notes, drops };
 }
 
 function writeShade(s: Statement, shade: number | undefined) {
@@ -319,6 +348,23 @@ export function writeAppearance(source: SourceDoc, appearance: DiagramAppearance
   }
 }
 
+/**
+ * The direction the layout around an object reads along: its parent's `layout` line, or the
+ * nearest ancestor's that names one. Diagrams read down unless told otherwise.
+ */
+function readsAlong(source: SourceDoc, parentOf: (id: string) => string) {
+  return (id: string): 'right' | 'down' => {
+    for (let p = parentOf(id); ; p = parentOf(p)) {
+      const s = layoutStatement(source, p),
+        algorithm = s?.args[1]?.value,
+        direction = s && getAttr(s, 'direction')?.value;
+      if (algorithm === 'row' || direction === 'right') return 'right';
+      if (algorithm === 'column' || direction === 'down') return 'down';
+      if (p === 'root') return 'down';
+    }
+  };
+}
+
 /** Local rectangle of an object relative to its parent's content origin in the compiled scene. */
 function localRect(scene: Scene, parent: string, r: Rect): Rect | null {
   if (parent === 'root') return { ...r };
@@ -336,16 +382,28 @@ interface Candidate {
   score: number;
 }
 
-/** The nearest sibling an object can be placed next to without overlapping it. */
-function nearestSibling(me: Rect, siblings: Array<{ id: string; r: Rect }>): Candidate | null {
+/**
+ * The sibling an object reads next to: the nearest one it lines up with, beside it or stacked on
+ * it, without overlapping it. A box beside another must share some of its height, and a box
+ * stacked on another some of its width. Stacking along the reading direction wins unless a side
+ * neighbour is less than half as far: a node dropped under another in a column that reads down is
+ * below it, not beside the node across the gap.
+ */
+function nearestSibling(
+  me: Rect,
+  siblings: Array<{ id: string; r: Rect }>,
+  reads: 'right' | 'down',
+): Candidate | null {
   let best: Candidate | null = null;
   for (const { id, r } of siblings) {
     const dx = me.x + me.w / 2 - (r.x + r.w / 2),
       dy = me.y + me.h / 2 - (r.y + r.h / 2);
     const options: Candidate[] = [];
     const horizontal = dx >= 0 ? me.x - (r.x + r.w) : r.x - (me.x + me.w),
-      vertical = dy >= 0 ? me.y - (r.y + r.h) : r.y - (me.y + me.h);
-    if (horizontal >= 0)
+      vertical = dy >= 0 ? me.y - (r.y + r.h) : r.y - (me.y + me.h),
+      sharesHeight = me.y < r.y + r.h && r.y < me.y + me.h,
+      sharesWidth = me.x < r.x + r.w && r.x < me.x + me.w;
+    if (horizontal >= 0 && sharesHeight)
       options.push({
         ref: id,
         side: dx >= 0 ? 'right' : 'left',
@@ -353,7 +411,7 @@ function nearestSibling(me: Rect, siblings: Array<{ id: string; r: Rect }>): Can
         offset: dy,
         score: 0,
       });
-    if (vertical >= 0)
+    if (vertical >= 0 && sharesWidth)
       options.push({
         ref: id,
         side: dy >= 0 ? 'below' : 'above',
@@ -365,6 +423,7 @@ function nearestSibling(me: Rect, siblings: Array<{ id: string; r: Rect }>): Can
       c.gap = Math.round(c.gap);
       c.offset = Math.round(c.offset);
       c.score = c.gap + Math.abs(c.offset) * 0.6;
+      if ((c.side === 'above' || c.side === 'below') !== (reads === 'down')) c.score *= 2;
       if (!best || c.score < best.score) best = c;
     }
   }
@@ -419,7 +478,12 @@ function reorderCells(input: EditInput, sid: (id: string) => string, id: string)
   return true;
 }
 
-function placeSelection(input: EditInput, sid: (id: string) => string, notes: string[]) {
+function placeSelection(
+  input: EditInput,
+  sid: (id: string) => string,
+  notes: string[],
+  drops: Drop[],
+) {
   const { source, before, after, label } = input;
   // Positions are written in the containers that lay objects out, so soft groups drop out: a
   // moved soft group places each of its members instead, with a `stay` at its new position.
@@ -552,11 +616,13 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
               : [];
           });
         // Prefer siblings that stayed put as references.
-        const pick =
-          nearestSibling(
-            now,
-            siblings.filter(s => !s.moved),
-          ) ?? nearestSibling(now, siblings);
+        const reads = readsAlong(source, parentOf),
+          pick =
+            nearestSibling(
+              now,
+              siblings.filter(s => !s.moved),
+              reads(id),
+            ) ?? nearestSibling(now, siblings, reads(id));
         if (pick) {
           addRefinement(
             source,
@@ -570,6 +636,7 @@ function placeSelection(input: EditInput, sid: (id: string) => string, notes: st
               ],
             ),
           );
+          drops.push({ id: sourceId, x: is.x, y: is.y, local: { x: now.x, y: now.y } });
           notes.push(
             `${sourceId} ${pick.side === 'above' || pick.side === 'below' ? pick.side : pick.side + ' of'} ${pick.ref}`,
           );

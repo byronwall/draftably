@@ -1218,6 +1218,19 @@ details.inspector-section[open] > summary {
   transform: translate(-50%, 0);
 }
 
+.toast-action {
+  margin-left: 12px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 /* Side panels share the workspace so camera fitting uses the visible canvas size. */
 
 @media (max-width: 900px) {
