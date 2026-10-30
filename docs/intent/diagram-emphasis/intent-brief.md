@@ -10,7 +10,7 @@ last_updated: '2026-10-26'
 
 ## My read
 
-Many Draftably diagrams describe real code: files, modules and services. A reader who sees a box
+Many draftably diagrams describe real code: files, modules and services. A reader who sees a box
 named `routes.ts` wants to open `routes.ts`. Today `href=` makes a node a link in `inspect --svg`,
 but nothing on the drawing says so, and the viewer only shows the link in a hover tooltip. Byron
 wants linked objects to work as links in SVG and in the viewer, with a visual cue that fits the

@@ -1,4 +1,4 @@
-diagram "Draftably: what CI runs on a PR" version=1
+diagram "draftably: what CI runs on a PR" version=1
 
 # expect reads-x pr install changeset skill release_check fast
 # expect order-x merged version_pr npm

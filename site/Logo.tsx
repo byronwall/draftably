@@ -1,6 +1,6 @@
 import logo from '../src/assets/logo.svg?raw';
 
-/** The Draftably mark, inline so it is sharp at any size and needs no request. */
+/** The draftably mark, inline so it is sharp at any size and needs no request. */
 export function Logo(props: { size?: number }) {
   return (
     <span

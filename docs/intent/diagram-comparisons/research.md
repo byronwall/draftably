@@ -45,7 +45,7 @@ What belongs to which repository:
 - **The other repository** (the automated PR summary tool, likely built on `tsx-data-flow`) owns
   T1–T4, T7, T8 and T10: static analysis, the code-to-block mapping, which lens to show, and
   island detection.
-- **Draftably** owns the drawing contract that those features need: T5 (aligned side-by-side
+- **draftably** owns the drawing contract that those features need: T5 (aligned side-by-side
   panels), T6 (a superset graph with added, removed and changed styles), stable placement of
   unchanged nodes across two versions, quiet "context" nodes (T4), and summarized nodes for
   large fan-out (T10).
@@ -59,7 +59,7 @@ What belongs to which repository:
 | 2026-07-02 | Diagrams, layout, and the pain of making visual structure explicit (`20260702-212928-1312A672`) | Auto layout plus containers plus easy edits; current tools fail at the combination.                                                                                |
 | 2026-08-21 | Diagramming-focused public presence (`20260821-204450-DB29548F`)                                | PR and code diagrams as a public showcase.                                                                                                                         |
 
-No memo names Draftably directly; the archive search for "draftably" returns nothing. The links
+No memo names draftably directly; the archive search for "draftably" returns nothing. The links
 above come from topic searches ("PR summary", "diff diagram", "side by side diagram",
 "before and after diagram", "change summary").
 
@@ -76,7 +76,7 @@ The automated PR summary is worth building because:
 5. **Determinism.** The diagram comes from code on disk, not an LLM, so two runs agree and the
    picture can be trusted as evidence.
 
-Benefits 1, 2 and 4 depend on Draftably drawing _two states, or one merged state, without the
+Benefits 1, 2 and 4 depend on draftably drawing _two states, or one merged state, without the
 layout moving around_. If unchanged nodes jump between the before and after pictures, the
 viewer cannot see what changed, and the diagram fails at its one job.
 
@@ -117,5 +117,5 @@ Graphviz layouts". In practice:
 - The legend sits at `rank=sink` with invisible edges, which can pull panels around.
 
 These are exactly the failures that T5 says must not happen. They are also the place where
-Draftably can do much better than Graphviz, because Draftably already owns its layout engine,
+draftably can do much better than Graphviz, because draftably already owns its layout engine,
 already keeps layout stable across theme changes, and already has `stay`, `pin` and `align`.

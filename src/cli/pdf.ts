@@ -248,7 +248,7 @@ export async function buildPdf(inputs: PdfInput[], opts: PdfOptions = {}) {
   pdf.setTitle(opts.title ?? (drawn.length === 1 ? drawn[0].title : 'Diagrams'), {
     showInWindowTitleBar: true,
   });
-  pdf.setCreator('Draftably');
+  pdf.setCreator('draftably');
   if (opts.source !== false) {
     const used = new Set<string>();
     for (const { input, title } of drawn) {

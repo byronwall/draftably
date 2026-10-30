@@ -52,7 +52,7 @@ const html = `<!doctype html>
 <div class="card">
   <div class="head">
     <h1>Manual diagrams<br />are a drag.</h1>
-    <span class="mark">${fs.readFileSync(path.join(root, 'src/assets/logo.svg'), 'utf8')}Draftably</span>
+    <span class="mark">${fs.readFileSync(path.join(root, 'src/assets/logo.svg'), 'utf8')}draftably</span>
   </div>
   <div class="frame">
     <pre>${highlightHtml(source)}</pre>

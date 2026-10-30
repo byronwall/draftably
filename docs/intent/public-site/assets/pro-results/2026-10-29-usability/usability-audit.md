@@ -1,4 +1,4 @@
-# Draftably — deep usability audit
+# draftably — deep usability audit
 
 **Published experience:** https://byronwall.github.io/draftably/  
 **Audit date:** 30 October 2026 UTC  
@@ -13,7 +13,7 @@
 
 ## Executive assessment
 
-**Draftably demonstrates a useful product, but its advertised journey is not dependable enough yet. Fix continuity and retention before expanding the interface or rewriting the documentation.** The strongest parts already work: immediate source-to-diagram feedback, expressive diagram families, recoverable inline syntax errors, direct visual editing, layout alternatives with an explicit Apply step, Undo, and an editable SVG round trip. The weakest parts sit at transitions: entering Editor from the landing page, entering Playground from docs, starting a new document from an example, and deciding what an exported image actually contains.
+**draftably demonstrates a useful product, but its advertised journey is not dependable enough yet. Fix continuity and retention before expanding the interface or rewriting the documentation.** The strongest parts already work: immediate source-to-diagram feedback, expressive diagram families, recoverable inline syntax errors, direct visual editing, layout alternatives with an explicit Apply step, Undo, and an editable SVG round trip. The weakest parts sit at transitions: entering Editor from the landing page, entering Playground from docs, starting a new document from an example, and deciding what an exported image actually contains.
 
 Four **P1 findings** deserve the first repair cycle. These are tested failures, not aesthetic preferences:
 
@@ -156,7 +156,7 @@ Scores are expert judgments from this audit, not survey ratings or statistical m
 
 **Starting state:** Audit lesson in source-mode Editor via the completed handoff; Checkout in a separate disposable example tab for representative nested-layout comparison.
 
-**Actions and observations:** Double-click renamed Audit learner to Audit visual edit. N created a box, renamed Receipt; C connected Receipt to API. Tidy moved a position, Undo and Redo reported the corresponding layout action. Copy Draftably source produced three node declarations, two edge declarations and `stay` refinements. The SVG dialog initially selected only the selected API object; this was visibly indicated and was unchecked for the full export. The downloaded SVG contained current source and all three nodes/two connections. Landing choose a file reopened that SVG into Playground with the labels and edges intact. Layout refinements were present, with notes about yielding constraints; exact pixel preservation was not asserted.
+**Actions and observations:** Double-click renamed Audit learner to Audit visual edit. N created a box, renamed Receipt; C connected Receipt to API. Tidy moved a position, Undo and Redo reported the corresponding layout action. Copy draftably source produced three node declarations, two edge declarations and `stay` refinements. The SVG dialog initially selected only the selected API object; this was visibly indicated and was unchecked for the full export. The downloaded SVG contained current source and all three nodes/two connections. Landing choose a file reopened that SVG into Playground with the labels and edges intact. Layout refinements were present, with notes about yielding constraints; exact pixel preservation was not asserted.
 
 On Checkout, Compare layouts generated six alternatives. The interface said preview-only and kept the original until Apply. Spring network was applied, then Undo restored the prior layout. The six candidates exposed recipes and metrics alongside pictures, a useful expert tool. [E23b](evidence/E23b-editor-three-shapes.jpg), [source](evidence/audit-lesson-copied-source.draft), [SVG](evidence/audit-lesson-export.svg), [E24b](evidence/E24b-source-export-selection.jpg), [E31](evidence/E31-reopened-svg-source-and-preview.jpg), [E35](evidence/E35-layout-comparison.jpg), [E38](evidence/E38-layout-undo.jpg).
 
@@ -598,7 +598,7 @@ These are browser accessibility/main-text captures, not repository substitutes. 
 
 | Artifact | Verification | Scope |
 | --- | --- | --- |
-| [audit-lesson-copied-source.draft](evidence/audit-lesson-copied-source.draft) | Copy Draftably source returned current source; 239 bytes | Three nodes, two edges and stay refinements; clipboard copy, not proof of the separate Download .draft action |
+| [audit-lesson-copied-source.draft](evidence/audit-lesson-copied-source.draft) | Copy draftably source returned current source; 239 bytes | Three nodes, two edges and stay refinements; clipboard copy, not proof of the separate Download .draft action |
 | [audit-lesson-export.svg](evidence/audit-lesson-export.svg) | Actual file, 82,430 bytes; XML metadata inspected; reopened through landing | `draftably-source` and `diagram-studio-data` metadata; three labels/two edges restored. Exact pixel layout not asserted. |
 | [invalid-source-export.svg](evidence/invalid-source-export.svg) | Actual file, 66,969 bytes; XML metadata inspected | Last-valid Cart/Payment picture paired with invalid `missing` target; F04 evidence. |
 

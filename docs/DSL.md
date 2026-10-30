@@ -773,7 +773,7 @@ scratch diagram. The format is stable, so other tools can read it:
 
 - **PNG:** an `iTXt` chunk with keyword `draftably`. Its text is the UTF-8 source, with the
   compression flag set to 1 (zlib) or 0 (none); readers accept both. A `tEXt` chunk with keyword
-  `draftably-version` names the Draftably version that drew it. Both sit before `IEND`. The
+  `draftably-version` names the draftably version that drew it. Both sit before `IEND`. The
   chunks do not change the pixels.
 - **SVG:** a `<metadata id="draftably-source" data-draftably-version="…">` element inside the root
   `<svg>`, holding the XML-escaped source.

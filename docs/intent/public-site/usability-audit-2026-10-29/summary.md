@@ -1,4 +1,4 @@
-# Draftably usability audit: reviewed result
+# draftably usability audit: reviewed result
 
 The core authoring tools work. The weakest parts are the transitions between editing surfaces and the promises about retained work. Fix those contracts before a broad redesign.
 

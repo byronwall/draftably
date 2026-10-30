@@ -1,4 +1,4 @@
-# Draftably — repair plan
+# draftably — repair plan
 
 **Status: proposed repairs; no implementation performed.** This report recommends staged work for Codex to review. Build means recommended for a plan, not authorized implementation. No repair, local build, CLI installation, or test-suite execution is claimed. The live interaction audit is reported in [usability-audit.md](usability-audit.md); finding priorities and dispositions are in [prioritized-fixes.md](prioritized-fixes.md). Source evidence is fixed at [`ca96d3babd05041aaa206509090d023b02b61b5b`](https://github.com/byronwall/draftably/tree/ca96d3babd05041aaa206509090d023b02b61b5b). **Deployment equality is unverified. The 390 px and 768 px browser tests are UNTESTED; all narrow-width acceptance checks below are proposed.**
 
@@ -10,7 +10,7 @@
 
 ## Decision
 
-Repair the transitions and the meaning of saved work before expanding features or restyling the product. Draftably already has compelling working pieces: editable source, a live compiler, visual editing, layout comparison, a broad example catalog, and editable exports. The product needs those pieces to carry the same diagram through a predictable journey.
+Repair the transitions and the meaning of saved work before expanding features or restyling the product. draftably already has compelling working pieces: editable source, a live compiler, visual editing, layout comparison, a broad example catalog, and editable exports. The product needs those pieces to carry the same diagram through a predictable journey.
 
 The first repairs should make ordinary Editor links work, stop the Example→New path from making a false browser-save promise, and prevent mismatched source/image exports. Preserve edited source across handoffs immediately afterward. Responsive and keyboard repairs can ship in parallel where their failure is reproduced or the source defect has a narrow verified fix. Tutorial and toolbar refinements should follow those behavioral contracts so the new guidance describes reality.
 

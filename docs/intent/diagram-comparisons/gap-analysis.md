@@ -16,7 +16,7 @@ unchanged parts **stay in the same place** between the before and after states. 
 `diagram-led-technical-brief` skill asks for the same thing: one image, two aligned panels, one
 shared legend, and a title and subtitle inside the image.
 
-Draftably can't do this today. It draws one diagram per file, has no visible title, and has no
+draftably can't do this today. It draws one diagram per file, has no visible title, and has no
 way to mark content as added, removed or changed. Its strengths fit the problem well, though:
 layout is deterministic, it already holds positions steady across theme changes and edits, and
 it owns its layout engine, so alignment does not have to fight a black box the way Graphviz
@@ -30,14 +30,14 @@ The recommendation is one mechanism that serves both requests:
 
 The source material is in [research.md](research.md).
 
-![Who owns what: the PR summary repo writes two .draft files; Draftably merges, lays out and draws them](pipeline.svg)
+![Who owns what: the PR summary repo writes two .draft files; draftably merges, lays out and draws them](pipeline.svg)
 
 This picture comes from [pipeline.draft](pipeline.draft) via `draftably inspect --svg`. Note that
 the `diagram "PR diagrams: who owns what"` title does not appear in it: that is gap N5.
 
-## What the PR summary tool needs from Draftably
+## What the PR summary tool needs from draftably
 
-Draftably's part is the drawing contract. Static analysis, choosing a lens (route, component,
+draftably's part is the drawing contract. Static analysis, choosing a lens (route, component,
 call stack), finding islands of change, and posting to GitHub stay in the other repository.
 
 | ID  | Need                                                                                                      | Source                             |
@@ -54,7 +54,7 @@ call stack), finding islands of change, and posting to GitHub stay in the other 
 
 ## Capability matrix
 
-| Need             | Draftably today                                                                                                                                                                     | Rating                  |
+| Need             | draftably today                                                                                                                                                                     | Rating                  |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | N1 side-by-side  | One diagram per file; `view` is a parse error (`src/dsl/syntax.ts:674`). Viewer **Compare** shows layout candidates for one document, not two versions (`src/state/comparison.ts`). | Missing                 |
 | N1 alignment     | `align x\|y` works only for siblings in one scope. `stay` and `pin` hold positions inside one file. No cross-diagram shared coordinates.                                            | Partial (pieces exist)  |
@@ -67,9 +67,9 @@ call stack), finding islands of change, and posting to GitHub stay in the other 
 | N8 fan-out       | Nothing. Meld had group collapse with aggregated edges (`reference/meld/original/DSL.md:95`).                                                                                       | Missing                 |
 | N9 code links    | No `href`, `url` or `src` attribute.                                                                                                                                                | Missing                 |
 
-What the skill needs beyond the PR case, for Draftably to replace Graphviz in the brief skill:
+What the skill needs beyond the PR case, for draftably to replace Graphviz in the brief skill:
 
-| Skill rule                                                        | Draftably today                                                  | Rating               |
+| Skill rule                                                        | draftably today                                                  | Rating               |
 | ----------------------------------------------------------------- | ---------------------------------------------------------------- | -------------------- |
 | Embedded title and subtitle                                       | No visible title                                                 | Missing (same as N5) |
 | Legend for color, border, line style, shape                       | Color only                                                       | Partial (N6)         |
@@ -81,7 +81,7 @@ What the skill needs beyond the PR case, for Draftably to replace Graphviz in th
 | Before/after on one aligned canvas                                | Missing                                                          | Missing (N1)         |
 
 The skill's other rules (reading direction, grouping, color as encoding, five-second test) are
-already Draftably's own rules in [FEEL.md](../diagram-quality/FEEL.md) and the audit
+already draftably's own rules in [FEEL.md](../diagram-quality/FEEL.md) and the audit
 [RUBRIC.md](../diagram-quality/RUBRIC.md).
 
 ## Gap 1: side-by-side panels with alignment
@@ -108,7 +108,7 @@ C also gives N2 for free: the diff view is the union drawn in one panel.
 Two ways in, one engine:
 
 ```bash
-# The other repo writes two plain files. Draftably merges, lays out and draws.
+# The other repo writes two plain files. draftably merges, lays out and draws.
 draftably compare before.draft after.draft --mode=side-by-side --png out.png
 draftably compare before.draft after.draft --mode=diff --svg out.svg
 draftably compare before.draft after.draft --write merged.draft   # inspect or hand-edit
@@ -183,7 +183,7 @@ Rules that follow from [FEEL.md](../diagram-quality/FEEL.md) and the skill:
 
 ## Gap 3: computing the diff
 
-Draftably should own the `.draft`-to-`.draft` diff, because it is about diagram files, not code.
+draftably should own the `.draft`-to-`.draft` diff, because it is about diagram files, not code.
 The other repository then needs only to write two ordinary files.
 
 - Match nodes, groups and edges by ID. IDs are already unique and stable in the DSL.
@@ -216,7 +216,7 @@ Needed by both the PR case and the brief skill, and useful on its own:
   in the viewer inspector. Small and independent.
 - **Context role (N4).** Covered by `status=context` above.
 
-## Out of scope for Draftably
+## Out of scope for draftably
 
 These belong to the PR summary repository:
 

@@ -69,7 +69,7 @@ any other.
 | PlantUML | Activity diagrams take `\|Lane\|` markers; steps after a marker fall in that lane.  | Like Mermaid plus dividers, delays, create/destroy, and grouping boxes.                         |
 | BPMN     | Pools hold lanes; every flow node sits in one lane; message flows cross pools only. | No sequence form; collaboration diagrams cover part of it.                                      |
 
-**What fits Draftably.**
+**What fits draftably.**
 
 - Lanes map onto groups that already exist. A lane is a root group drawn as a full-length band.
   The new part is one rule: rank all leaves globally across lanes, then place each leaf in its

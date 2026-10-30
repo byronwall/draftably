@@ -56,7 +56,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
         <header class="start-header">
           <h1>
             <img src={logo} alt="" width="22" height="22" />
-            Draftably
+            draftably
           </h1>
           <Show
             when={workspace()}

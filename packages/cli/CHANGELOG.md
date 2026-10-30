@@ -13,7 +13,7 @@
 
 ### Patch Changes
 
-- 666998f: The viewer shows the Draftably mark on its start screen and in the browser tab.
+- 666998f: The viewer shows the draftably mark on its start screen and in the browser tab.
 - 337c0c7: The editor keeps unsaved edits to an example or a Playground diagram in browser storage. A reload brings them back and says so.
 - cc8fcb7: A layout preview that does not fit the visible canvas is now fitted, so the whole result shows next to the layout panel.
 - 74994ef: The viewer opens source shared from the playground in a #s= link as a scratch copy.
@@ -22,7 +22,7 @@
 - ec1bff2: `count=` takes a short symbol as well as a number: `count=N` draws a `×N` badge on the stack, for "one per item" when no real number fits.
 - bb573bf: Routing is about twice as fast on large diagrams: each line searches near its two boxes first and the whole drawing only when that fails. Some lines take slightly different paths.
 - bcae043: A node dropped in the viewer keeps the place it was dropped. It is saved `near` a neighbour it lines up with, and a node under another in a layout that reads down is saved below it, not beside the node across the gap. When that `near` would draw it somewhere else, the drop saves a `stay` at the exact point instead, and the saved message offers "Keep exact position".
-- c064b52: The viewer now calls itself Draftably in the page title and start screen.
+- c064b52: The viewer now calls itself draftably in the page title and start screen.
 - 60d4b2b: The viewer's debug API waits for the canvas before exporting, and adds ready().
 - a2760db: The editor's File menu and shortcuts dialog link to the Docs and open the current source in the Playground. An example opened from the Playground offers Back to Playground.
 - 432ceea: check warns when a legend swatch's shade matches none of its family's nodes, and names the shade to add (legend-shade).
@@ -277,4 +277,4 @@ shade=800`); `theme-color` lines adjust built-in shades or define new families s
 
 ### Minor Changes
 
-- Publish the Draftably CLI with a bundled viewer and two-way diagram file editing.
+- Publish the draftably CLI with a bundled viewer and two-way diagram file editing.

@@ -1,11 +1,11 @@
 /**
- * Getting back to a diagram: a `.draft` file, or a PNG or SVG that Draftably exported (they carry
+ * Getting back to a diagram: a `.draft` file, or a PNG or SVG that draftably exported (they carry
  * their source), dropped or pasted anywhere on the site opens in the playground.
  */
 import { createSignal } from 'solid-js';
 import { readImageSource } from '../src/model/embed';
 
-export const REOPEN_HINT = 'Drop or paste a Draftably PNG, SVG or .draft file to keep editing';
+export const REOPEN_HINT = 'Drop or paste a draftably PNG, SVG or .draft file to keep editing';
 
 /** The source in a file, or null when it holds none. */
 export async function readDiagramFile(file: File): Promise<string | null> {

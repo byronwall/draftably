@@ -1,6 +1,6 @@
 # Save, share and reopen
 
-Where Draftably keeps your work depends on where you edit it. This page tells you what you keep
+Where draftably keeps your work depends on where you edit it. This page tells you what you keep
 when you close the tab, and how to export a diagram and open it again.
 
 ## Where your work is kept
@@ -31,7 +31,7 @@ Some more facts about each case:
 
 ## Export a PNG, SVG or .draft file
 
-Each PNG and SVG file that Draftably exports holds the diagram's source. Thus you can open it again
+Each PNG and SVG file that draftably exports holds the diagram's source. Thus you can open it again
 and continue to edit.
 
 In the Playground:
@@ -51,7 +51,7 @@ draftably inspect plan.draft --png plan.png --scale 2
 
 ## Reopen a diagram from an image or file
 
-1. Find a PNG, SVG or `.draft` file that Draftably made.
+1. Find a PNG, SVG or `.draft` file that draftably made.
 2. Drop it on any page of this site, or paste it.
 3. The diagram opens in the Playground. Edit it there.
 

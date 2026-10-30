@@ -1,7 +1,7 @@
-# Draftably
+# draftably
 
-Draftably turns plain-text `.draft` files into diagrams. Describe the boxes, groups and connections;
-Draftably places the boxes and routes the lines. Open the diagram in the browser to refine it.
+draftably turns plain-text `.draft` files into diagrams. Describe the boxes, groups and connections;
+draftably places the boxes and routes the lines. Open the diagram in the browser to refine it.
 Your source stays readable, so you can keep it beside your code, review changes in Git,
 and give the same file to a coding agent.
 

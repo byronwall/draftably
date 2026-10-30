@@ -47,7 +47,7 @@ Performance PRs paste a before → after table.
 ID. It also checks selection and the active title editor after projection. `tests/edge-labels.test.ts`
 checks labels across short gaps, group headers, existing labels, and long text.
 
-`pnpm cli:build && pnpm prove:installed` packs Draftably, installs the archive in a fresh temporary
+`pnpm cli:build && pnpm prove:installed` packs draftably, installs the archive in a fresh temporary
 project, and runs its executable outside the repository. It checks help, validation, formatting,
 repeatable JSON, SVG, bundled viewer assets, API saves, and conflicts. It then runs the browser proof
 below against the installed CLI. Only the proof harness uses the repository's Playwright dependency.

@@ -129,7 +129,7 @@
     "claims": [
       {
         "id": "C1",
-        "statement": "Draftably should cover what Graphviz DOT draws so it can be a general diagram tool.",
+        "statement": "draftably should cover what Graphviz DOT draws so it can be a general diagram tool.",
         "kind": "goal",
         "sources": ["S1"],
         "confidence": "high"
@@ -208,7 +208,7 @@
   "shape": {
     "status": "current",
     "appetite": "Three PRs for sequences, tables and bytes; image cells after PR #28 M1; viewer editing optional.",
-    "problem": "Sequences, byte layouts and tables need DOT or hand drawing today; Draftably has only separate boxes.",
+    "problem": "Sequences, byte layouts and tables need DOT or hand drawing today; draftably has only separate boxes.",
     "recommended_shape": "A `cells` layout recipe on a group. Members touch and share borders; columns=, span=, unit=, ruler= cover tables and byte layouts. Cells are nodes, so edges, colors, marks and compare work unchanged.",
     "options_scored": [
       {

@@ -1,6 +1,6 @@
-# How a Draftably diagram should feel
+# How a draftably diagram should feel
 
-This is the standing intent behind Draftably's drawings and viewer: what "good" looks and feels
+This is the standing intent behind draftably's drawings and viewer: what "good" looks and feels
 like to the person who uses it every day. It comes from review sessions over real diagrams, the
 latest being the [23 October walkthrough](../viewer-feedback-2026-10-23/README.md) of thirteen
 deployment diagrams. Use it to judge a change, a layout rule or an audit finding. When a rule

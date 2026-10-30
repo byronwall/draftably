@@ -1,4 +1,4 @@
-# Draftably usability repairs: reviewed plan
+# draftably usability repairs: reviewed plan
 
 This is a plan for review. It does not authorize implementation. Read the [summary and dispositions](summary.md), [issue register](issues.md), and [original Pro plan](../assets/pro-results/2026-10-29-usability/repair-plan.md).
 

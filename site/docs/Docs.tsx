@@ -40,14 +40,14 @@ export function Docs() {
       const anchor = !next && anchorPath(s);
       if (anchor) return navigate(anchor, { replace: true });
       if (!next) {
-        document.title = 'No such page · Draftably docs';
+        document.title = 'No such page · draftably docs';
         return setMissing(true);
       }
       void Promise.all(next.drafts.map(prepare)).then(() => {
         if (slug() !== s) return;
         setMissing(false);
         setPage(next);
-        document.title = `${next.title} · Draftably docs`;
+        document.title = `${next.title} · draftably docs`;
       });
     }),
   );
@@ -80,7 +80,7 @@ export function Docs() {
       <header class="docs-top">
         <a class="wordmark" href={BASE}>
           <Logo />
-          Draftably
+          draftably
         </a>
         <button
           type="button"

@@ -1,6 +1,6 @@
 # Architecture
 
-Draftably is a SolidJS single-page app. All state lives in the browser; computation-heavy work
+draftably is a SolidJS single-page app. All state lives in the browser; computation-heavy work
 runs in a Web Worker. The code is split into three layers, each depending only on the ones below it.
 
 ```
