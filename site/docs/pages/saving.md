@@ -1,0 +1,53 @@
+# Save, share and reopen
+
+Where Draftably keeps your work depends on where you edit it. This page tells you what you keep
+when you close the tab, and how to export a diagram and open it again.
+
+## Where your work is kept
+
+| Where you edit                                   | Where the source is kept       | Close the tab, then come back                  | Open the bare URL                   | Use another device        | Share it                                        |
+| ------------------------------------------------ | ------------------------------ | ---------------------------------------------- | ----------------------------------- | ------------------------- | ----------------------------------------------- |
+| The landing page demo or the [Playground](/play) | Browser storage on this device | Kept: your last draft opens again              | Your last draft opens again         | Not kept                  | Copy link in the Playground, or download a file |
+| A Copy link URL (`#s=…`)                         | In the URL itself              | Kept in the link, as it was when you copied it | Not kept: the source is in the link | Kept: open the link there | Send the link                                   |
+| The Editor's scratch copy                        | This tab only                  | Lost, unless you download the `.draft`         | Not kept                            | Not kept                  | Download the `.draft`, then send the file       |
+| `draftably open file.draft`                      | The `.draft` file on your disk | Kept: every edit saves to the file             | Run `draftably open` again          | Copy or commit the file   | Send the file, or commit it to a repository     |
+
+Some more facts about each case:
+
+- **Playground and landing demo.** The browser keeps one draft: the last diagram you changed. A
+  new draft replaces it. If you clear your browser data, the draft is lost.
+- **Copy link.** The link holds the full source, so no server keeps a copy. Edits after you copy
+  the link are not in it. Copy the link again to include them.
+- **Editor scratch copy.** "Open in the editor", an example, or a shared link in the Editor opens a
+  scratch copy. The bar at the top says so. Use **Download .draft** in that bar to keep your edits.
+- **`draftably open`.** The editor saves to disk as you work. Changes that other programs make to
+  the file show in the editor at once. See [Get started](#get-started) to install the CLI.
+
+## Export a PNG, SVG or .draft file
+
+Each PNG and SVG file that Draftably exports holds the diagram's source. Thus you can open it again
+and continue to edit.
+
+In the Playground:
+
+1. Select **Download**.
+2. Select **SVG**, **PNG** or **.draft**.
+
+In the Editor, open the export menu and select **Export PNG…**, **Export SVG…** or **Export PDF…**.
+
+From the command line:
+
+```sh
+draftably inspect plan.draft --svg > plan.svg
+draftably inspect plan.draft --png plan.png --scale 2
+```
+
+## Reopen a diagram from an image or file
+
+1. Find a PNG, SVG or `.draft` file that Draftably made.
+2. Drop it on any page of this site, or paste it.
+3. The diagram opens in the Playground. Edit it there.
+
+A PNG or SVG from another program has no source in it. The site tells you so and opens nothing.
+
+From the command line, `draftably open plan.svg` also opens the diagram that the image holds.
