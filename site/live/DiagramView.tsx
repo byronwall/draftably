@@ -1,5 +1,7 @@
 import { createEffect, createSignal, on, onCleanup, onMount } from 'solid-js';
+import type { Scene } from '../../src/dsl/compile';
 import { paperOf } from '../draw';
+import { subtree } from './move';
 
 interface View {
   x: number;
@@ -10,11 +12,32 @@ interface View {
 const MIN = 0.1;
 const MAX = 6;
 const clamp = (k: number) => Math.min(MAX, Math.max(MIN, k));
+/** The top left corner of an SVG's viewBox, in drawing units. */
+const originOf = (svg: Element | null) => {
+  const [x, y] = (svg?.getAttribute('viewBox') ?? '0 0').split(/\s+/).map(Number);
+  return { x, y };
+};
+
+/** A box being dragged: where it started, how far it has moved, and what is drawn for it. */
+interface Move {
+  id: string;
+  ids: string[];
+  x: number;
+  y: number;
+  dx: number;
+  dy: number;
+  /** The move the drawing on screen was laid out for. */
+  shown: { dx: number; dy: number };
+  moved: boolean;
+  busy: boolean;
+}
 
 /**
  * A drawing that pans with a drag and zooms around the cursor with the wheel. It fits itself when
  * `fitKey` changes (a new example), and keeps its view while the same diagram is edited, so the
  * picture holds still as you type. Hovering or clicking an object reports its `data-id`.
+ * With `drop`, dragging a box moves it: the file is laid out again as it moves, so lines re-route,
+ * and the release is written into the source. Dragging empty canvas pans.
  */
 export function DiagramView(props: {
   svg: string;
@@ -24,6 +47,11 @@ export function DiagramView(props: {
   onHover: (id: string | null) => void;
   /** An object's id, or null for a click on empty canvas. */
   onPick: (id: string | null) => void;
+  /** The scene `svg` was drawn from; its objects are the ones that drag. */
+  scene?: Scene;
+  preview?: (id: string, dx: number, dy: number) => Promise<string | null>;
+  /** False when the file could not take the move. */
+  drop?: (id: string, dx: number, dy: number) => Promise<boolean>;
 }) {
   let frame!: HTMLDivElement;
   let stage!: HTMLDivElement;
@@ -66,13 +94,23 @@ export function DiagramView(props: {
       () => (pending = true),
     ),
   );
+  // An edit that grows the drawing up or left moves its viewBox corner; shift the view by as much,
+  // so everything that did not move stays put on screen.
+  let origin: { x: number; y: number } | undefined;
   createEffect(
     on(
       () => props.svg,
       svg => {
-        if (!svg || !pending) return;
-        pending = false;
-        queueMicrotask(fit);
+        if (!svg) return;
+        const o = originOf(stage.querySelector('svg'));
+        if (pending) {
+          pending = false;
+          queueMicrotask(fit);
+        } else if (origin && (o.x !== origin.x || o.y !== origin.y)) {
+          const was = origin;
+          setView(v => ({ ...v, x: v.x + (o.x - was.x) * v.k, y: v.y + (o.y - was.y) * v.k }));
+        }
+        origin = o;
       },
     ),
   );
@@ -98,17 +136,94 @@ export function DiagramView(props: {
     );
   };
 
+  const objectEl = (id: string) => stage.querySelector(`[data-id="${CSS.escape(id)}"]`);
+
+  /**
+   * Show a drawing laid out mid-drag. Its viewBox keeps the drag's starting corner, so the screen
+   * mapping holds even when the drawing grows up or left; what lies past the corner still shows.
+   */
+  const mountPreview = (svg: string) => {
+    // The SVG comes from our own renderer, which escapes every label.
+    stage.innerHTML = svg;
+    const el = stage.querySelector('svg');
+    if (!el || !origin) return;
+    const [x, y, w, h] = el.getAttribute('viewBox')!.split(/\s+/).map(Number);
+    const vw = Math.max(1, x + w - origin.x),
+      vh = Math.max(1, y + h - origin.y);
+    el.setAttribute('viewBox', `${origin.x} ${origin.y} ${vw} ${vh}`);
+    el.setAttribute('width', String(vw));
+    el.setAttribute('height', String(vh));
+    el.style.overflow = 'visible';
+  };
+
+  /** Move the dragged objects by whatever the pointer has moved since the drawing on screen. */
+  const follow = (m: Move) => {
+    const rx = m.dx - m.shown.dx,
+      ry = m.dy - m.shown.dy;
+    for (const id of m.ids) objectEl(id)?.setAttribute('transform', `translate(${rx} ${ry})`);
+    objectEl(m.id)?.classList.add('is-lifted');
+  };
+
+  /** Lay the file out for the latest pointer position; one at a time, newest wins. */
+  const pump = (m: Move) => {
+    if (m.busy || !props.preview) return;
+    m.busy = true;
+    const { dx, dy } = m;
+    void props.preview(m.id, dx, dy).then(svg => {
+      m.busy = false;
+      if (move !== m) return;
+      if (svg) {
+        mountPreview(svg);
+        m.shown = { dx, dy };
+        follow(m);
+      }
+      if (m.dx !== dx || m.dy !== dy) pump(m);
+    });
+  };
+
   // The object under the pointer is read at pointerdown: pointer capture retargets pointerup to
   // the frame, so its target is never the shape.
   let drag:
     { x: number; y: number; vx: number; vy: number; moved: boolean; id: string | null } | undefined;
+  let move: Move | undefined;
+  const [moving, setMoving] = createSignal(false);
   const onDown = (e: PointerEvent) => {
     if (e.button !== 0 || (e.target as Element).closest('.diagram-tools')) return;
-    const v = view();
-    drag = { x: e.clientX, y: e.clientY, vx: v.x, vy: v.y, moved: false, id: idAt(e.target) };
+    const id = idAt(e.target);
     frame.setPointerCapture(e.pointerId);
+    if (id && props.drop && !props.stale && props.scene?.byId.has(id)) {
+      e.preventDefault();
+      move = {
+        id,
+        ids: subtree(props.scene, id),
+        x: e.clientX,
+        y: e.clientY,
+        dx: 0,
+        dy: 0,
+        shown: { dx: 0, dy: 0 },
+        moved: false,
+        busy: false,
+      };
+      return;
+    }
+    const v = view();
+    drag = { x: e.clientX, y: e.clientY, vx: v.x, vy: v.y, moved: false, id };
   };
   const onMove = (e: PointerEvent) => {
+    if (move) {
+      const k = view().k;
+      move.dx = (e.clientX - move.x) / k;
+      move.dy = (e.clientY - move.y) / k;
+      if (!move.moved && Math.abs(e.clientX - move.x) + Math.abs(e.clientY - move.y) <= 3) return;
+      if (!move.moved) {
+        move.moved = true;
+        setMoving(true);
+        props.onHover(null);
+      }
+      follow(move);
+      pump(move);
+      return;
+    }
     if (drag) {
       const dx = e.clientX - drag.x;
       const dy = e.clientY - drag.y;
@@ -118,19 +233,28 @@ export function DiagramView(props: {
     }
     props.onHover(idAt(e.target));
   };
-  const onUp = () => {
+  const onUp = async () => {
     if (drag && !drag.moved) props.onPick(drag.id);
     drag = undefined;
+    const m = move;
+    move = undefined;
+    setMoving(false);
+    if (!m) return;
+    if (!m.moved) return props.onPick(m.id);
+    // A drop the file refuses shows the last drawing again.
+    if (!(await props.drop!(m.id, m.dx, m.dy))) stage.innerHTML = props.svg;
   };
   const idAt = (target: EventTarget | null) =>
     (target as Element | null)?.closest?.('[data-id]')?.getAttribute('data-id') ?? null;
 
-  // Mark linked objects so the stylesheet can lift them and fade the rest.
+  // Mark linked objects so the stylesheet can lift them and fade the rest, and the ones that drag.
   createEffect(() => {
     const ids = new Set(props.linkedIds);
     void props.svg;
     stage.querySelectorAll('[data-id]').forEach(el => {
-      el.classList.toggle('is-linked', ids.has(el.getAttribute('data-id')!));
+      const id = el.getAttribute('data-id')!;
+      el.classList.toggle('is-linked', ids.has(id));
+      el.classList.toggle('is-drag', !!props.drop && !!props.scene?.byId.has(id));
     });
     frame.classList.toggle('has-linked', ids.size > 0);
   });
@@ -143,14 +267,15 @@ export function DiagramView(props: {
   return (
     <div
       class="diagram-view"
-      classList={{ 'is-stale': props.stale }}
+      classList={{ 'is-stale': props.stale, 'is-moving': moving() }}
       style={{ background: paperOf(props.svg) }}
       ref={frame}
       onWheel={onWheel}
       onPointerDown={onDown}
       onPointerMove={onMove}
-      onPointerUp={onUp}
-      onPointerLeave={() => props.onHover(null)}
+      onPointerUp={() => void onUp()}
+      onPointerCancel={() => void onUp()}
+      onPointerLeave={() => !move && props.onHover(null)}
       onDblClick={e => {
         if (!idAt(e.target)) fit();
       }}

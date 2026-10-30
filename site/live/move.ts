@@ -60,3 +60,30 @@ export async function moveObject(
   keepDropped(fixed, off);
   return printSource(fixed);
 }
+
+/** Line numbers (from 0) of `next` that `prev` does not have, blank lines left out. */
+export function addedLines(prev: string, next: string) {
+  const left = new Map<string, number>();
+  for (const l of prev.split('\n')) left.set(l, (left.get(l) ?? 0) + 1);
+  return next.split('\n').flatMap((l, i) => {
+    const n = left.get(l) ?? 0;
+    if (n) left.set(l, n - 1);
+    return n || !l.trim() ? [] : [i];
+  });
+}
+
+const PLACES = ['near', 'nudge', 'stay', 'pin', 'order'];
+
+/** What a move of `id` wrote, for a status line: "Wrote near db api … and 2 anchors nearby". */
+export function moveNote(prev: string, next: string, id: string) {
+  const lines = next.split('\n');
+  const added = addedLines(prev, next)
+    .map(i => lines[i].trim().split(/\s+/))
+    .filter(w => PLACES.includes(w[0]));
+  const mine = added.filter(w => w[1] === id).map(w => w.join(' '));
+  const others = added.length - mine.length;
+  return (
+    `Wrote ${mine[0] ?? `the move of ${id}`}` +
+    (others > 0 ? ` and ${others} anchor${others > 1 ? 's' : ''} nearby` : '')
+  );
+}

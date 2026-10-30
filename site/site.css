@@ -1528,6 +1528,20 @@ main {
   transition: opacity 140ms;
 }
 
+/* Boxes that drag show a move cursor; the canvas around them pans. */
+.diagram-stage .is-drag {
+  cursor: move;
+}
+
+.diagram-view.is-moving,
+.diagram-view.is-moving .is-drag {
+  cursor: grabbing;
+}
+
+.diagram-stage .is-lifted > .shape {
+  filter: drop-shadow(0 6px 10px #15171f33);
+}
+
 .has-linked .diagram-stage [data-id]:not(.is-linked) {
   opacity: 0.32;
 }

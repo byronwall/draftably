@@ -17,6 +17,8 @@ import { THEME_IDS } from '../../src/model/appearance';
 import { draw, type Drawing } from '../draw';
 import { CodeEditor, type EditorApi } from '../live/CodeEditor';
 import { DiagramView } from '../live/DiagramView';
+import { addedLines, moveNote, moveObject } from '../live/move';
+import type { Scene } from '../../src/dsl/compile';
 import { embedPngSource, embedSvgSource } from '../../src/model/embed';
 import { deliver, incoming, readDiagramFile, REOPEN_HINT } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
@@ -83,6 +85,11 @@ export function Playground() {
   // Ids for completion and linking, kept from the last source that parsed.
   const [items, setItems] = createSignal<Drawing['items']>([]);
   const [ms, setMs] = createSignal(0);
+  // The last source that drew, with its scene: drags start from it.
+  const [good, setGood] = createSignal<{ source: string; scene: Scene }>();
+  // What the last drag wrote: its lines (from 1) and a note for the status line.
+  const [written, setWritten] = createSignal<number[]>([]);
+  const [note, setNote] = createSignal('');
   const [fitKey, setFitKey] = createSignal('');
   const [cursorLine, setCursorLine] = createSignal(0);
   const [hoverId, setHoverId] = createSignal<string | null>(null);
@@ -116,6 +123,7 @@ export function Playground() {
           setMs(Math.round(performance.now() - t0));
           setDrawing(result);
           if (result.svg) setSvg(result.svg);
+          if (result.svg && result.scene) setGood({ source: text, scene: result.scene });
           if (result.items.length) setItems(result.items);
         },
         svg() ? 150 : 0,
@@ -204,8 +212,38 @@ export function Playground() {
   const linkedLines = createMemo(() => {
     const hover = hoverId() ?? picked();
     const item = hover ? items().find(i => i.id === hover) : undefined;
-    return item ? [item.line] : [];
+    return item ? [item.line] : written();
   });
+
+  // Dragging a box: previews lay out an exact position, the drop saves the editor's refinement.
+  const clearWritten = () => {
+    setWritten([]);
+    setNote('');
+  };
+  // Typing, undo or a new example makes the drag's marks stale.
+  let wroteFor = '';
+  createEffect(
+    on(source, text => {
+      if (text !== wroteFor) clearWritten();
+    }),
+  );
+  const preview = async (id: string, dx: number, dy: number) => {
+    const g = good();
+    const next = g && (await moveObject(g.source, g.scene, id, dx, dy, true));
+    return next ? (await draw(next)).svg : null;
+  };
+  const drop = async (id: string, dx: number, dy: number) => {
+    const g = good();
+    const next = g && (await moveObject(g.source, g.scene, id, dx, dy));
+    if (!g || !next || next === g.source) return false;
+    const lines = addedLines(g.source, next).map(i => i + 1);
+    wroteFor = next;
+    editor?.replace(next);
+    setWritten(lines);
+    setNote(moveNote(g.source, next, id));
+    if (lines[0]) editor?.reveal(lines[0]);
+    return true;
+  };
   const pick = (id: string | null) => {
     setPicked(id);
     const item = id ? items().find(i => i.id === id) : undefined;
@@ -443,9 +481,7 @@ export function Playground() {
                   <span>
                     {!source().trim()
                       ? 'Empty file'
-                      : svg()
-                        ? `No problems · drawn in ${ms()} ms`
-                        : 'Drawing…'}
+                      : note() || (svg() ? `No problems · drawn in ${ms()} ms` : 'Drawing…')}
                   </span>
                 }
               >
@@ -457,8 +493,8 @@ export function Playground() {
                   </span>
                 )}
               </Show>
-              <Show when={shown()}>
-                <span class="play-hint">Click a shape to find its line</span>
+              <Show when={shown() && !note()}>
+                <span class="play-hint">Drag a shape to move it, or click to find its line</span>
               </Show>
             </button>
           </div>
@@ -487,6 +523,9 @@ export function Playground() {
             linkedIds={linkedIds()}
             onHover={setHoverId}
             onPick={pick}
+            scene={good()?.scene}
+            preview={preview}
+            drop={drop}
           />
           <Show when={!shown() && ready()}>
             <div class="diagram-empty">

@@ -15,7 +15,7 @@ import { findExample } from '../../src/model/examples';
 import { appUrl, draw, paperOf, type Drawing } from '../draw';
 import { highlightHtml } from '../highlight';
 import { DragView } from './DragView';
-import { moveObject } from './move';
+import { addedLines, moveNote, moveObject } from './move';
 
 type Output = 'live' | 'static';
 
@@ -24,17 +24,6 @@ interface Good {
   source: string;
   svg: string;
   scene: Scene;
-}
-
-/** Line numbers (from 0) of `next` that `prev` does not have. */
-function addedLines(prev: string, next: string) {
-  const left = new Map<string, number>();
-  for (const l of prev.split('\n')) left.set(l, (left.get(l) ?? 0) + 1);
-  return next.split('\n').flatMap((l, i) => {
-    const n = left.get(l) ?? 0;
-    if (n) left.set(l, n - 1);
-    return n ? [] : [i];
-  });
 }
 
 const kb = (text: string) => `${Math.max(1, Math.round(new Blob([text]).size / 1024))} KB`;
@@ -81,7 +70,7 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
 
   /** Replace the source from outside the text box, marking the lines that are new. */
   const replace = (next: string, message: string) => {
-    setChanged(addedLines(source(), next).filter(i => next.split('\n')[i].trim()));
+    setChanged(addedLines(source(), next));
     setNote(message);
     now = true;
     setSource(next);
@@ -111,17 +100,8 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
     const g = good();
     const next = g && (await moveObject(g.source, g.scene, oid, dx, dy));
     if (!g || !next || next === g.source) return false;
-    const added = addedLines(g.source, next)
-      .map(i => next.split('\n')[i].trim().split(/\s+/))
-      .filter(w => ['near', 'nudge', 'stay', 'pin', 'order'].includes(w[0]));
-    const mine = added.filter(w => w[1] === oid).map(w => w.join(' '));
-    const others = added.length - mine.length;
     setUndo(u => [...u, g.source].slice(-40));
-    replace(
-      next,
-      `Wrote ${mine[0] ?? `the move of ${oid}`}` +
-        (others > 0 ? ` and ${others} anchor${others > 1 ? 's' : ''} nearby` : ''),
-    );
+    replace(next, moveNote(g.source, next, oid));
     return true;
   };
   const back = () => {
