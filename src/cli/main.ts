@@ -17,6 +17,7 @@ import { draw, FITS, qualityNotes, type Fit, type Metrics } from './variants';
 import { cliVersion, staleSkills } from './skill';
 import { svgSize } from './png';
 import { linkNotes, svgHref } from './links';
+import { updateNotice } from './update';
 
 const USAGE = `Usage: draftably <command> <file.draft> [options]
 
@@ -86,7 +87,8 @@ Commands:
                             --port 0 picks any free port. The Viewer line has the URL.
        [--replace]          Without --port, a viewer already serving the folder is reused;
        [--status]           --replace stops it and starts this version. --status lists the
-                            running viewers: URL, folder, version and pid.
+                            running viewers: URL, folder, version and pid. A viewer stops
+                            after 2 hours with no open tab, or when its folder is deleted.
   docs [topic]              Print the language guide (DSL.md) for this version: its contents,
                             the sections whose heading matches topic (docs legend, docs
                             count), or all of it with docs all.
@@ -97,7 +99,8 @@ Commands:
   skill print               Print the skill's SKILL.md.
   --version                 Print the installed version.
 
-Any command with --help prints its own part of this text.
+Any command with --help prints its own part of this text. Once a day the CLI checks npm for a
+newer version and notes it on stderr; set DRAFTABLY_NO_UPDATE_CHECK=1 to skip that.
 `;
 
 /** The usage lines for `command`, or all of them. */
@@ -564,7 +567,9 @@ export async function main(argv: string[]): Promise<number> {
 }
 
 // Tests import `main` and call it themselves.
-if (!process.env.VITEST)
+if (!process.env.VITEST) {
+  updateNotice();
   void main(process.argv.slice(2)).then(code => {
     if (code >= 0) process.exitCode = code;
   });
+}
