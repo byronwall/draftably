@@ -3085,3 +3085,65 @@ kbd {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
+
+/* Tablets stack the drawing over the source. This repeats the 900px rule above, which the
+   splitter's later grid-template-columns would otherwise undo. */
+@media (max-width: 900px) {
+  .play-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: 42% 1fr;
+  }
+}
+
+/* Phones show one pane at a time behind a Source / Diagram tab switch. */
+.play-tabs {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  .play-tabs {
+    display: flex;
+    flex: none;
+    gap: 4px;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .play-tabs button {
+    flex: 1;
+    height: 32px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    background: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .play-tabs button[aria-selected='true'] {
+    border-color: var(--line-strong);
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  .play-tabs button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .play-body {
+    grid-template-rows: 1fr;
+  }
+
+  .play-body[data-tab='source'] .play-diagram,
+  .play-body[data-tab='diagram'] .play-source {
+    display: none;
+  }
+
+  .play-diagram {
+    border-bottom: 0;
+  }
+}

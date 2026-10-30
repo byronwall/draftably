@@ -105,6 +105,8 @@ export function Playground() {
   const [copied, setCopied] = createSignal(false);
   const [menu, setMenu] = createSignal(false);
   const [split, setSplit] = createSignal(readSplit());
+  // Narrow screens show one pane at a time; wide ones ignore this.
+  const [tab, setTab] = createSignal<'source' | 'diagram'>('diagram');
   let editor: EditorApi | undefined;
   let body!: HTMLDivElement;
 
@@ -116,6 +118,7 @@ export function Playground() {
     setExampleId(start.id);
     setSource(start.source);
     setFitKey(`${start.id}:0`);
+    setTab(isCustom(start.source) ? 'source' : 'diagram');
     setReady(true);
   });
 
@@ -495,8 +498,36 @@ export function Playground() {
         </div>
       </header>
 
-      <div class="play-body" ref={body} style={{ '--split': `${split() * 100}%` }}>
-        <section class="play-source" aria-label="Source">
+      <div
+        class="play-tabs"
+        role="tablist"
+        aria-label="Panes"
+        onKeyDown={e => {
+          if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+          e.preventDefault();
+          const next = tab() === 'source' ? 'diagram' : 'source';
+          setTab(next);
+          document.getElementById(`play-tab-${next}`)?.focus();
+        }}
+      >
+        <For each={['source', 'diagram'] as const}>
+          {id => (
+            <button
+              type="button"
+              role="tab"
+              id={`play-tab-${id}`}
+              aria-selected={tab() === id}
+              aria-controls={`play-${id}`}
+              tabIndex={tab() === id ? 0 : -1}
+              onClick={() => setTab(id)}
+            >
+              {id === 'source' ? 'Source' : 'Diagram'}
+            </button>
+          )}
+        </For>
+      </div>
+      <div class="play-body" ref={body} data-tab={tab()} style={{ '--split': `${split() * 100}%` }}>
+        <section class="play-source" id="play-source" aria-label="Source">
           <div class="pane-head">
             <ExamplePicker
               current={shownExample()?.id ?? ''}
@@ -647,7 +678,7 @@ export function Playground() {
             saveSplit();
           }}
         />
-        <section class="play-diagram" aria-label="Diagram">
+        <section class="play-diagram" id="play-diagram" aria-label="Diagram">
           <DiagramView
             svg={shown()}
             stale={!drawing().svg && !!svg()}

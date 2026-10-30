@@ -42,9 +42,13 @@ export function DiagramView(props: {
     const { w, h } = svgSize();
     const box = frame.getBoundingClientRect();
     if (!w || !h || !box.width) return;
-    const pad = box.width < 500 ? 10 : 32;
-    const k = clamp(Math.min((box.width - pad * 2) / w, (box.height - pad * 2) / h, 2));
-    setView({ k, x: (box.width - w * k) / 2, y: (box.height - h * k) / 2 });
+    const narrow = box.width < 500;
+    const pad = narrow ? 10 : 32;
+    // A phone fits to width and lets a tall drawing run below the fold, to keep labels readable.
+    const across = (box.width - pad * 2) / w;
+    const k = clamp(Math.min(across, narrow ? 2 : (box.height - pad * 2) / h, 2));
+    const y = h * k > box.height - pad * 2 ? pad : (box.height - h * k) / 2;
+    setView({ k, x: (box.width - w * k) / 2, y });
   };
 
   const zoomAt = (factor: number, px: number, py: number) =>
@@ -84,7 +88,8 @@ export function DiagramView(props: {
       const box = frame.getBoundingClientRect();
       const old = size();
       setSize({ w: box.width, h: box.height });
-      if (old.w && (Math.abs(old.w - box.width) > 1 || Math.abs(old.h - box.height) > 1)) fit();
+      // Also fit when a hidden view (a narrow screen's other tab) is shown.
+      if (Math.abs(old.w - box.width) > 1 || Math.abs(old.h - box.height) > 1) fit();
     });
     observer.observe(frame);
     onCleanup(() => observer.disconnect());
