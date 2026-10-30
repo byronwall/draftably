@@ -8,6 +8,9 @@ export interface DrawnItem {
   type: 'node' | 'group' | 'edge';
   label: string;
   line: number;
+  /** An edge's start and finish ids. */
+  from?: string;
+  to?: string;
 }
 
 export interface Drawing {
@@ -25,7 +28,14 @@ export async function draw(source: string): Promise<Drawing> {
     const { objects, edges } = scene.model;
     const items: DrawnItem[] = [
       ...objects.map(o => ({ id: o.id, type: o.type, label: o.label, line: o.line })),
-      ...edges.map(e => ({ id: e.id, type: 'edge' as const, label: e.label ?? '', line: e.line })),
+      ...edges.map(e => ({
+        id: e.id,
+        type: 'edge' as const,
+        label: e.label ?? '',
+        line: e.line,
+        from: e.source,
+        to: e.target,
+      })),
     ];
     return {
       svg: failed ? null : renderSvg(projectScene(scene)),
