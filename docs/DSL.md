@@ -44,6 +44,7 @@ and groups. References may point to later lines.
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                            |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                               |
 | `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors).                                                                                                      |
+| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object; without `near` it sits under the subtitle. `width=`. See [Notes](#rules).                                                       |
 | `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides; `constraint=false` draws it without letting it rank or order anything (for feedback edges). |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                                                                                                                       |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                              |
@@ -82,6 +83,18 @@ in one frame round the drawing, so a copied image still says what it shows and w
 Like the legend, they never move anything. A file without either draws no heading. The frame is
 as wide as the drawing, the heading and the legend; `width=` on the `diagram` line makes it wider
 (`diagram "Checkout" version=1 width=900`), for a long subtitle or room on the right.
+
+**Notes.** `note "A plan is one pricing tier: Free, Team or Enterprise."` adds a sentence that
+defines a term or explains the drawing. Like the legend, a note never moves anything. Without
+`near=` it sits in the frame under the subtitle; several notes stack in file order. With
+`near=id` it is placed after layout beside that node or group: `side=below` (the default),
+`above`, `left` or `right`, at the first spot along that side that is clear of shapes, lines,
+group borders and other notes. A note wraps at 280px; `width=80..1200` changes that. `check`
+warns (`note-overlap`) when an anchored note found no clear spot.
+
+```text
+note "Seats are billed monthly." near=seat side=below width=220
+```
 
 **Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
 and exports, to a source file, a URL or anything else the reader should open. A linked object
@@ -723,6 +736,7 @@ rule:
 | `node-overlap`       | Two boxes overlap (across scopes; siblings are an `overlap` error). |
 | `label-collision`    | An edge label covers a box or another label.                        |
 | `outside-group`      | A box sits outside its group's frame.                               |
+| `note-overlap`       | A `note` with `near=` found no clear spot beside its object.        |
 
 When a refinement on one of the objects caused it, the warning names its line and a fix:
 

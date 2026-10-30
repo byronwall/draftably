@@ -19,6 +19,7 @@ export const COMMANDS = [
   'theme',
   'theme-color',
   'legend',
+  'note',
   'routing',
   'order',
   'align',

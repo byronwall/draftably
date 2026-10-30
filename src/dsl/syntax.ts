@@ -21,6 +21,7 @@ import {
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
 import { EDITORS } from '../model/link';
+import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
 import type {
   ColorKey,
@@ -355,6 +356,8 @@ export interface Model {
   colorLines: Map<string, number>;
   /** Source line of each `legend` entry, in order. */
   legendLines: number[];
+  /** Source line of each `note`, in order. */
+  noteLines: number[];
   /** Source line of each ID an emphasis state lists, by `state:id`. */
   stateLines: Map<string, number>;
   /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
@@ -465,6 +468,7 @@ export function parseModel(source: string | SourceDoc): Model {
     themeLine: 0,
     colorLines: new Map(),
     legendLines: [],
+    noteLines: [],
     stateLines: new Map(),
     phases: [],
     warnings: [],
@@ -868,6 +872,20 @@ export function parseModel(source: string | SourceDoc): Model {
         m.legendLines.push(line);
         break;
       }
+      case 'note': {
+        count(1);
+        allow(['near', 'side', 'width']);
+        assert(args[0].quoted && args[0].value.trim(), 'A note needs its text in quotes.');
+        assert(attrs.has('near') || !attrs.has('side'), 'side= places a note beside near=<id>.');
+        (m.appearance.notes ??= []).push({
+          text: args[0].value,
+          ...(attrs.has('near') ? { near: id(attrs.get('near')) } : {}),
+          ...(attrs.has('side') ? { side: choice('side', 'below', NOTE_SIDES) } : {}),
+          ...(attrs.has('width') ? { width: num('width', NOTE_WIDTH, 80, 1200) } : {}),
+        });
+        m.noteLines.push(line);
+        break;
+      }
       case 'routing':
         count(0);
         allow(Object.keys(ROUTING_PARAMS));
@@ -1089,6 +1107,9 @@ function validateReferences(m: Model) {
         e.line,
       );
     }
+  (m.appearance.notes ?? []).forEach((n, i) => {
+    if (n.near) exists(n.near, m.noteLines[i]);
+  });
   const edgeIds = new Set(m.edges.map(e => e.id));
   for (const s of m.appearance.states ?? [])
     for (const x of s.ids) {

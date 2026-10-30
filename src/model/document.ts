@@ -16,6 +16,7 @@ import {
 } from './appearance';
 import { FONT_ROLES } from './fonts';
 import { EDITORS, type FileConfig } from './link';
+import { NOTE_SIDES, type Note } from './note';
 import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
 import type {
@@ -461,6 +462,16 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     if (typeof h.width === 'number' && h.width > 0) heading.width = h.width;
     if (heading.title || heading.subtitle || heading.width) out.heading = heading;
   }
+  const notes: Note[] = [];
+  for (const n of Array.isArray(input.notes) ? input.notes : [])
+    if (n && typeof n.text === 'string')
+      notes.push({
+        text: n.text,
+        ...(typeof n.near === 'string' ? { near: n.near } : {}),
+        ...(NOTE_SIDES.includes(n.side) ? { side: n.side } : {}),
+        ...(typeof n.width === 'number' && n.width > 0 ? { width: n.width } : {}),
+      });
+  if (notes.length) out.notes = notes;
   const cfg = input.config;
   if (cfg && typeof cfg === 'object') {
     const config: FileConfig = {};

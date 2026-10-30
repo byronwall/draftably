@@ -9,6 +9,7 @@ import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
 import { headingMarkup } from '../model/heading';
 import { legendMarkup } from '../model/legend';
+import { noteMarkup, placeNotes } from '../model/note';
 import { drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
 import { drawingBounds } from '../model/bounds';
@@ -307,7 +308,12 @@ function sceneMarkup(
       '</g>',
     );
   }
-  return { markup: out.join('\n'), bounds: drawingBounds(doc, vg, rects, routes, 40) };
+  return {
+    markup: out.join('\n'),
+    bounds: drawingBounds(doc, vg, rects, routes, 40),
+    rects,
+    routes,
+  };
 }
 
 /** Height of a panel's label band in a side-by-side comparison, and the gap between panels. */
@@ -370,16 +376,20 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
     cw = Math.ceil(b.x + b.w) - x0,
     ch = Math.ceil(b.y + b.h) - y0 + PANEL_LABEL,
     statuses = usedStatuses(doc),
-    legend = drawnLegend(doc);
+    legend = drawnLegend(doc),
+    // Panels repeat the drawing, so every note sits in the frame.
+    notes = placeNotes(doc, look, new Map(), []);
   const target = doc.appearance.compare?.aspect ?? 1.6,
     grid = (cols: number) => {
       const rows = Math.ceil(states.length / cols),
-        frame = diagramFrame(look, doc.appearance.heading, legend, statuses, {
-          x: x0,
-          y: y0,
-          w: cols * cw,
-          h: rows * ch,
-        });
+        frame = diagramFrame(
+          look,
+          doc.appearance.heading,
+          legend,
+          statuses,
+          { x: x0, y: y0, w: cols * cw, h: rows * ch },
+          notes,
+        );
       return { cols, frame, w: frame.w, h: frame.h };
     },
     { cols, frame } = states
@@ -411,6 +421,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
     );
   });
   out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');
 }
@@ -465,7 +476,11 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     bh = Math.ceil(b.y + b.h) - y0,
     label = compare ? PANEL_LABEL : 0,
     statuses = usedStatuses(doc),
-    legend = drawnLegend(doc);
+    legend = drawnLegend(doc),
+    // A comparison's panels repeat the drawing, so its notes sit in the frame.
+    notes = compare
+      ? placeNotes(doc, look, new Map(), [])
+      : placeNotes(doc, look, scenes[0].rects, scenes[0].routes);
   // Along the stacking axis each panel takes only the room its own version needs; across it, the
   // panels share the merged extent, which is what keeps unchanged objects aligned: stacked panels
   // line up left to right, side-by-side panels top to bottom.
@@ -481,12 +496,14 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       total = starts.at(-1)! + spans.at(-1)!.size,
       areaW = stacked ? bw : total,
       areaH = stacked ? total + label : bh + label,
-      frame = diagramFrame(look, doc.appearance.heading, legend, statuses, {
-        x: x0,
-        y: y0,
-        w: areaW,
-        h: areaH,
-      });
+      frame = diagramFrame(
+        look,
+        doc.appearance.heading,
+        legend,
+        statuses,
+        { x: x0, y: y0, w: areaW, h: areaH },
+        notes,
+      );
     return { stacked, spans, starts, areaH, frame, w: frame.w, h: frame.h };
   };
   // An explicit direction wins; otherwise take the arrangement whose whole image comes closest to
@@ -520,6 +537,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   });
   // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
   out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');
 }
