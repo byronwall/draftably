@@ -123,6 +123,7 @@ export const setTimelineImporter = (fn: (data: unknown) => void) => (timelineImp
 /** Set by the canvas: the `<g>` that holds the drawn diagram. */
 let sceneElement: SVGGElement | undefined;
 export const registerSceneElement = (el: SVGGElement) => (sceneElement = el);
+export const sceneReady = () => !!sceneElement;
 
 export function filename(extension: string) {
   const base = doc.title
