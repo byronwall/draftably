@@ -595,7 +595,8 @@ down beside the title.
 Which setting to change for a problem:
 
 - **Too many bends:** raise `bend-penalty`, for example to 64.
-- **Lines cross:** raise `crossing-penalty`, for example to 900. The viewer's **Fewer crossings**
+- **Lines cross:** raise `crossing-penalty`, for example to 900. See also
+  [Fixing line crossings](#fixing-line-crossings). The viewer's **Fewer crossings**
   preset writes `crossing-penalty=900 shared-penalty=9 port-stability=10`.
 - **Parallel lines too close together:** raise `edge-gap`, then `parallel-penalty`.
 - **Lines too close to boxes:** raise `clearance` (a hard limit) or `standoff` (a preference).
@@ -624,6 +625,62 @@ When the root `layout` line declares `direction=right` or `direction=down`, a fo
 between objects that layout places leaves its source's trailing side and enters its target's
 leading side (bottom to top going down), turning in the gap between ranks. It uses another side
 only when those are blocked. Connections inside a group with its own recipe are left to that recipe.
+
+### Fixing line crossings
+
+Layout and routing are heuristics: they remove most crossings but do not promise none. To fix a
+crossing, change the source first, then compare the results. In this file, `web` connects to
+`orders` and `mobile` to `accounts`, but the `services` group lists them the other way round, so
+the two lines cross:
+
+```draft
+group apps "Apps"
+group services "Services"
+node web "Web" in=apps
+node mobile "Mobile" in=apps
+node accounts "Accounts" in=services
+node orders "Orders" in=services
+edge e1 web -> orders
+edge e2 mobile -> accounts
+layout root row
+```
+
+`draftably check --metrics` warns `Edges e1 and e2 cross.` and counts the crossings. Add
+`order services orders accounts` to remove the crossing. The two lines then run straight.
+
+Try these steps in order, and stop when the drawing reads well:
+
+1. **Change the order.** The order of `node` lines, or a scope's `order` line, decides where a box
+   goes when nothing else does. Put boxes in the same order as the boxes they connect to.
+2. **Let the engine reorder.** On a `compound-flow` or `layered` engine, add `ordering=crossings`:
+   `layout root engine=layered ordering=crossings`. In the viewer, the same setting is
+   **Within-rank ordering** → **Reorder to reduce crossings** in Layout options.
+3. **Move one box.** A `near` line with `side=` puts a box on the other side of its neighbor. A
+   `pin` holds a box at an exact place. See [Refinements](#refinements).
+4. **Choose the sides.** `from=` and `to=` on an `edge` line choose the sides a line leaves and
+   enters.
+5. **Route around it.** Raise `crossing-penalty` on the `routing` line, for example to 900. In the
+   viewer, **Routing** → **Fewer crossings** writes that line.
+
+To compare more than one result at once:
+
+- **In the viewer:** **Routing** shows the crossings in the current drawing. **Compare ports &
+  routes** draws routing candidates side by side, and **Compare layouts** (**Alt E**) does the same
+  for layout recipes. **Apply** writes the candidate's `routing` or `layout` line into the file.
+  **Reroute now** (**Alt R**) routes every line again without moving shapes. Undo steps back
+  through the file's versions. See [Layout tools](#layout-tools).
+- **From the command line:** `draftably vary diagram.draft` tries layouts and a router that avoids
+  crossings harder. Its table has a `crossings` column and its contact sheet draws each variant.
+  `--try crossing-penalty=360,900` or `--try ordering=stable,crossings` compares exact values.
+  `--apply v1` writes the variant you chose. The `recommended` variant also weighs size, so read
+  the `crossings` column. See [Layout variants](#layout-variants).
+
+When a crossing remains:
+
+- Some sets of connections cannot be drawn without a crossing. Keep the result with the fewest.
+- A feedback line, such as a retry back to the start, can pull boxes out of order. Add
+  `constraint=false` to its `edge` line so layout ignores it.
+- The file cannot store the bends of one line yet, so a hand-drawn route is not kept.
 
 ## Refinements
 
@@ -897,6 +954,8 @@ new position relative to its parent (an existing `stay` is updated in place), an
 around them are anchored as for a drag. Groups follow their contents, so a group whose children
 moved left or up moves with them. Pins never move. A root-level `stay` may be negative, because
 the root has no frame.
+
+For a step-by-step way to remove a crossing, see [Fixing line crossings](#fixing-line-crossings).
 
 Checkpoints are unavailable while a file is open, because undo steps through the file's versions.
 Connection bends, label positions, start/end preferences and images are unavailable because the

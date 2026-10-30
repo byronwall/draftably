@@ -44,6 +44,10 @@ rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no
    what wins a tie. When a variant is close, `--from v2` tries small changes around it.
    `vary` also offers to drop refinements that `check` blames for conflicts, to draw change marks
    as panels, and to soften groups (`frame=soft`) for fewer containers.
+   **For a crossing** (`check --metrics` warns `Edges a and b cross.`): first put boxes in the order of the
+   boxes they connect to (`node` line order or an `order` line), then try
+   `--try ordering=stable,crossings` or `--try crossing-penalty=360,900`. Some crossings cannot be
+   removed; keep the variant with the fewest.
 5. **Look at it.** `npx draftably inspect diagram.draft --svg > diagram.svg` renders a static SVG
    you can open or convert to an image; `--png diagram.png --max-width 2000` saves a PNG sized
    for viewing and prints its pixel size. `npx draftably inspect diagram.draft` prints node and
