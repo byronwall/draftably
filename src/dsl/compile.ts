@@ -652,7 +652,7 @@ function governingLayout(m: Model, scope: string): ModelLayout | undefined {
  * World positions from the layout engines named in the file, outermost scope first. The engines
  * start from the built-in recipes with sizes but no position refinements.
  */
-async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined> {
+async function engineArrangement(m: Model): Promise<Map<string, Pos & Size> | undefined> {
   const engines = m.layouts.filter(l => l.engine);
   if (!engines.length) return undefined;
   const depth = (scope: string) => {
@@ -707,7 +707,10 @@ async function engineArrangement(m: Model): Promise<Map<string, Pos> | undefined
     doc = result.document;
   }
   return new Map(
-    Object.entries(doc.layout.nodes).map(([id, r]) => [original.get(id) ?? id, { x: r.x, y: r.y }]),
+    Object.entries(doc.layout.nodes).map(([id, r]) => [
+      original.get(id) ?? id,
+      { x: r.x, y: r.y, w: r.w, h: r.h },
+    ]),
   );
 }
 
@@ -1589,17 +1592,22 @@ function besideCallers(
  * Pack an engine-arranged scope tight. Members take local ranks from the edges between them, so a
  * chain reads as a straight row or column in the reading direction instead of stepping across the
  * engine's global rank columns. Each rank keeps the engine's order across it, and every rank is
- * centred on one line. A gap next to a group is the drawing's one group gap.
+ * centred on one line. A gap next to a group is the drawing's one group gap. Where members are
+ * linked, a member with no edge to another member has nothing here to order it by: the engine
+ * centres it under the linked ones. It sits across where its `outside` neighbours are instead, so
+ * two outcomes fed by one node outside the group sit together on that node's side. In a scope with
+ * no inner edges the engine's order already follows the outside neighbours, and it stays.
  */
 function packed(
   items: Item[],
-  arranged: Map<string, Pos>,
+  arranged: Map<string, Pos & Size>,
   axis: 'right' | 'down',
   pairs: Array<[string, string]>,
   rooms: LabelRoom[],
   gaps: PackGaps,
   sinks = false,
   lines: ScopeLine[] = [],
+  outside = new Map<string, string[]>(),
 ) {
   const by = new Map(items.map(n => [n.id, n])),
     ids = items.map(n => n.id),
@@ -1607,7 +1615,14 @@ function packed(
   const major = (id: string) => (right ? by.get(id)!.w : by.get(id)!.h),
     minor = (id: string) => (right ? by.get(id)!.h : by.get(id)!.w),
     group = (id: string) => by.get(id)!.type === 'group';
+  const centre = (p: Pos & Size) => (right ? p.y + p.h / 2 : p.x + p.w / 2),
+    linked = new Set(pairs.flat());
   const across = (id: string) => {
+    const ns =
+      !linked.size || linked.has(id)
+        ? []
+        : (outside.get(id) ?? []).flatMap(o => arranged.get(o) ?? []);
+    if (ns.length) return ns.reduce((s, p) => s + centre(p), 0) / ns.length;
     const p = arranged.get(id)!;
     return right ? p.y + by.get(id)!.h / 2 : p.x + by.get(id)!.w / 2;
   };
@@ -2255,7 +2270,7 @@ const spillOf = (gap: number) => Math.min(gap * SLOT_SPILL, Math.max(0, gap - SL
  * than the scope's gap can absorb (`SLOT_SPILL`), or where spilling would bring two boxes closer
  * than `MIN_GAP`. With `slots`, objects come out at their slot size (the engines' input).
  */
-export function layoutModel(m: Model, arranged?: Map<string, Pos>, slots = false): Scene {
+export function layoutModel(m: Model, arranged?: Map<string, Pos & Size>, slots = false): Scene {
   // The engines' input (`slots`) has no channels: they are planned on the final arrangement.
   if (slots) return layoutPass(m, arranged, true);
   // A `near` whose reference sits inside a sibling group places against that group, lined up
@@ -2311,7 +2326,7 @@ const packFolds = new WeakMap<Scene, PackFold>();
 
 function layoutPass(
   m: Model,
-  arranged?: Map<string, Pos>,
+  arranged?: Map<string, Pos & Size>,
   slots = false,
   channels?: Map<string, Channel>,
   packFold?: PackFold,
@@ -2635,6 +2650,14 @@ function layoutPass(
     });
     // Label rooms are measured on the reference appearance too; a theme's label may use up to
     // one `LABEL_RUN` of the line beside it before the room grows.
+    // Each member's neighbours outside the scope, for ordering members with no edge inside it.
+    const outside = new Map<string, string[]>();
+    for (const e of ranking) {
+      const a = immediate(e.source, scope),
+        b = immediate(e.target, scope);
+      if (a && !b) outside.set(a, [...(outside.get(a) ?? []), e.target]);
+      if (b && !a) outside.set(b, [...(outside.get(b) ?? []), e.source]);
+    }
     const rooms = m.edges.flatMap(e => {
       const a = immediate(e.source, scope),
         b = immediate(e.target, scope);
@@ -2724,6 +2747,7 @@ function layoutPass(
               packGaps,
               scope === 'root',
               lines,
+              outside,
             )
           : governing?.engine && list.every(n => arranged!.has(n.id))
             ? fromEngine(list, arranged!, axisOf(governing), with_)
