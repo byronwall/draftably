@@ -700,8 +700,13 @@ export function onDoubleClick(e: MouseEvent) {
   if (timelineOpen() || stroking()) return e.preventDefault();
   if (inlineEditId() || performance.now() < suppressDoubleClickUntil) return;
   const t = e.target as Element,
+    // The canvas holds the pointer during a background gesture, so the heading is found by position.
+    under = document.elementFromPoint(e.clientX, e.clientY) ?? t,
+    heading = targetData(under, '[data-heading]'),
     waypoint = targetData(t, '[data-waypoint]'),
     object = targetData(t, '[data-kind]');
+  if (heading) return actions.startInlineEdit(heading.heading!);
+  if (under.closest('[data-frame-edge]')) return;
   if (waypoint && object?.id) return actions.removeWaypoint(object.id, Number(waypoint.waypoint));
   if (object?.kind === 'node') return actions.startInlineEdit(object.id!);
   if (object?.kind === 'group' && t.closest('[data-group-header]'))

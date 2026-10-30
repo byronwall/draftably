@@ -7,7 +7,7 @@ import { clamp, rectUnion } from '../model/geometry';
 import { findNode, objectRect } from '../model/graph';
 import type { NodeGeometry, Point, PortSide, Rect } from '../model/types';
 import { doc, selectedIds, setCamera } from './document';
-import { geometry, sceneBounds } from './scene';
+import { geometry, viewerFrame } from './scene';
 
 export type Tool =
   'select' | 'pan' | 'box' | 'diamond' | 'circle' | 'text' | 'container' | 'connect' | 'brush';
@@ -79,7 +79,7 @@ export const {
   spaceHeld,
   setSpaceHeld,
   stageSize: measuredStageSize,
-  setStageSize,
+  setStageSize: setMeasuredStageSize,
   reducedMotion,
   setReducedMotion,
 } = state;
@@ -137,16 +137,28 @@ export function panBy(dx: number, dy: number) {
   setCamera({ ...c, x: c.x + dx, y: c.y + dy });
 }
 
+/** A fit asked for before the canvas had a size, run on its first real size. */
+let fitPending = false;
+
+/** Record the canvas size from its resize observer, and run a fit that was waiting for it. */
+export function setStageSize(size: { width: number; height: number }) {
+  setMeasuredStageSize(size);
+  if (fitPending && size.width > 1 && size.height > 1) fitView();
+}
+
 /**
- * Fit the whole diagram in view, leaving room for the zoom controls. The drawing takes about 92%
- * of the stage, never more than its actual size: edge to edge reads as overwhelming on a large
- * monitor.
+ * Fit the whole diagram and its frame in view, leaving room for the zoom controls. The frame takes
+ * about 92% of the stage, never more than its actual size: edge to edge reads as overwhelming on a
+ * large monitor. Before the canvas is laid out its size is unknown, so the fit waits for it rather
+ * than zoom out to the minimum.
  */
 export function fitView() {
   const { width: w, height: h } = stageSize();
   if (!doc.graph.nodes.length && !doc.graph.groups.length) return;
-  const b = sceneBounds(),
-    pad = 40,
+  fitPending = w <= 1 || h <= 1;
+  if (fitPending) return;
+  const b = viewerFrame(),
+    pad = 16,
     bottom = 60,
     k = clamp(
       FIT_SHARE * Math.min((w - pad * 2) / Math.max(1, b.w), (h - pad - bottom) / Math.max(1, b.h)),

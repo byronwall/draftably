@@ -23,7 +23,7 @@ const STYLE_PROPS = [
 
 /** Interactive-only parts of a scene that never belong in an exported drawing. */
 const EDITOR_ONLY =
-  '.port,.selection-ring,.resize-handle,.waypoint,.edge-hit,.group-collapse,.group-header,.position-badge,.overlay-layer,.link-hit';
+  '.diagram-frame,.port,.selection-ring,.resize-handle,.waypoint,.edge-hit,.group-collapse,.group-header,.position-badge,.overlay-layer,.link-hit';
 
 /**
  * Deep-copy an SVG subtree with computed styles inlined and editor-only parts removed. An object

@@ -92,7 +92,22 @@ onSourceIdMap(mapId => {
   if (id) setInlineEditId(mapId(id));
 });
 
+/** Inline-edit ids of the frame's title and subtitle; never valid object ids. */
+export const HEADING_EDIT = { title: '@title', subtitle: '@subtitle' } as const;
+const headingKey = (id: string) =>
+  id === HEADING_EDIT.title ? 'title' : id === HEADING_EDIT.subtitle ? 'subtitle' : undefined;
+
 export function startInlineEdit(id: string) {
+  const key = headingKey(id);
+  if (key) {
+    finishInlineEdit(true);
+    batch(() => {
+      setConnectFrom(null);
+      setInlineDraft(doc.appearance.heading?.[key] ?? '');
+      setInlineEditId(id);
+    });
+    return;
+  }
   const entity = findNode(doc, id) ?? findGroup(doc, id) ?? findEdge(doc, id);
   if (!entity) return;
   finishInlineEdit(true);
@@ -108,7 +123,18 @@ export function finishInlineEdit(save = true) {
   if (!id) return;
   setInlineEditId(null);
   if (!save) return;
-  const value = inlineDraft().trim();
+  const value = inlineDraft().trim(),
+    key = headingKey(id);
+  if (key) {
+    if ((doc.appearance.heading?.[key] ?? '') !== value)
+      transact(key === 'title' ? 'Edit title' : 'Edit subtitle', d => {
+        const heading = (d.appearance.heading ??= {});
+        if (value) heading[key] = value;
+        else delete heading[key];
+        if (key === 'title') d.title = value;
+      });
+    return;
+  }
   const edge = findEdge(doc, id);
   if (edge) {
     if (edge.label !== value) transact('Edit label', d => edits.setEdgeLabel(d, id, value));

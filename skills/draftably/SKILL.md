@@ -107,7 +107,7 @@ layout services row gap=56
 
 | Statement                          | Options                                                                                                                                                                                                         |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional, at most one. Exports draw the title above the drawing                                                                                                                                                 |
+| `diagram "title" version=1`        | Optional, at most one. Exports and the viewer draw the title above the drawing; `width=` widens the frame                                                                                                       |
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                       |
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                                                                    |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                                                                                              |

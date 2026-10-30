@@ -34,9 +34,9 @@ and groups. References may point to later lines.
 
 | Statement                          | Meaning                                                                                                                                                                                                                                                 |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one. Exports draw it above the drawing.                                                                                                                                                                                         |
+| `diagram "title" version=1`        | Optional title. At most one. Exports and the viewer draw it above the drawing. `width=` sets the frame's width.                                                                                                                                         |
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                                                                                                                           |
-| `subtitle "text"`                  | One line under the title in exports. At most one.                                                                                                                                                                                                       |
+| `subtitle "text"`                  | One line under the title. At most one.                                                                                                                                                                                                                  |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                           |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                    |
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                            |
@@ -74,10 +74,12 @@ can fold do the groups themselves wrap into rows. A group that only receives lin
 API, a cache) sits beside the group that calls it rather than past it. `fold=never` on the root
 engine keeps one long line. Stays and pins never change what folds.
 
-**Title and subtitle.** `inspect --svg` and the viewer's SVG and PNG exports draw the `diagram`
-title and the `subtitle` line above the drawing, left-aligned with the legend, so a copied image
-still says what it shows and why it matters. Like the legend, they never move anything. A file
-without either draws no heading.
+**Title and subtitle.** `inspect --svg`, the viewer's SVG and PNG exports and the viewer's canvas
+draw the `diagram` title and the `subtitle` line above the drawing, left-aligned with the legend,
+in one frame round the drawing, so a copied image still says what it shows and why it matters.
+Like the legend, they never move anything. A file without either draws no heading. The frame is
+as wide as the drawing, the heading and the legend; `width=` on the `diagram` line makes it wider
+(`diagram "Checkout" version=1 width=900`), for a long subtitle or room on the right.
 
 **Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
 and exports, to a source file, a URL or anything else the reader should open. A linked object
@@ -790,6 +792,8 @@ Edits made in the viewer are written back to the file as readable statements:
 | Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.   |
 | Color family or shade in Inspector         | `color=` and `shade=` on the declaration.                           |
 | Theme or padding in **Appearance**         | The `theme` line; preset changes drop built-in `theme-color` lines. |
+| Double-click the title or subtitle         | The `diagram` title and the `subtitle` line.                        |
+| Drag the frame's right edge                | `width=` on the `diagram` line; back to its content removes it.     |
 | Wrap in a container or ungroup             | A `group` and the members' `in=`.                                   |
 | Clear manual markers                       | Removes the object's soft position refinements.                     |
 | Rebuild, or Apply in Compare               | `layout scope engine=…` for the diagram or the selected container.  |

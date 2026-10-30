@@ -522,12 +522,13 @@ export function parseModel(source: string | SourceDoc): Model {
     switch (command) {
       case 'diagram':
         count(1);
-        allow(['version']);
+        allow(['version', 'width']);
         assert(!diagramLine, 'Only one diagram declaration is allowed.');
         diagramLine = line;
         m.title = text(args[0]);
         num('version', 1, 1, 1);
         if (m.title) (m.appearance.heading ??= {}).title = m.title;
+        if (attrs.has('width')) (m.appearance.heading ??= {}).width = num('width', 0, 160, 8000);
         break;
       case 'compare': {
         count(0, 2);

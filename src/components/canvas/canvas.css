@@ -528,35 +528,48 @@
   cursor: pointer;
 }
 
-.diagram-legend {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  z-index: 20;
-  display: grid;
-  gap: 4px;
-  max-width: min(320px, 40%);
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
-  font-size: 12px;
-  pointer-events: none;
+.diagram-frame-page {
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
-.diagram-legend-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  line-height: 1.3;
+.diagram-frame-heading,
+.diagram-frame-ghost {
+  cursor: text;
 }
 
-.diagram-legend-swatch {
-  flex: none;
-  width: 16px;
-  height: 12px;
-  border: 1px solid;
-  border-radius: 3px;
+.diagram-frame-heading.editing {
+  visibility: hidden;
+}
+
+/* The prompts to add a title or subtitle show only while the pointer is over the frame. */
+.diagram-frame-ghost {
+  opacity: 0;
+  transition: opacity 140ms ease;
+}
+
+.diagram-frame:hover .diagram-frame-ghost {
+  opacity: 0.8;
+}
+
+.diagram-frame-edge {
+  fill: var(--accent);
+  fill-opacity: 0;
+  cursor: ew-resize;
+  transition: fill-opacity 140ms ease;
+}
+
+.diagram-frame-edge:hover,
+.diagram-frame.resizing .diagram-frame-edge {
+  fill-opacity: 0.25;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram-frame-ghost,
+  .diagram-frame-edge {
+    transition: none;
+  }
 }
 
 .zoom-controls {
