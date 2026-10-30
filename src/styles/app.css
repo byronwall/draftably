@@ -1218,6 +1218,11 @@ details.inspector-section[open] > summary {
   transform: translate(-50%, 0);
 }
 
+/* A toast with a button takes clicks, so a near miss never lands on the canvas below. */
+.toast.show.actionable {
+  pointer-events: auto;
+}
+
 .toast-action {
   margin-left: 12px;
   padding: 0;
@@ -1228,7 +1233,6 @@ details.inspector-section[open] > summary {
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
-  pointer-events: auto;
 }
 
 /* Side panels share the workspace so camera fitting uses the visible canvas size. */
