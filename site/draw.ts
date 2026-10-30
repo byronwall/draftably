@@ -54,6 +54,9 @@ export async function draw(source: string): Promise<Drawing> {
 /** The drawing's paper color, so whatever frames it can match. */
 export const paperOf = (svg: string) => /<rect[^>]*fill="(#[0-9a-f]+)"/i.exec(svg)?.[1];
 
-/** The viewer build, served next to the site. */
+/**
+ * The viewer build, served next to the site. Links to it need `rel="external"`, or the site's
+ * router takes the click and shows the landing page at the editor's URL.
+ */
 export const appUrl = (example?: string) =>
   `${import.meta.env.BASE_URL}app/${example ? `?example=${encodeURIComponent(example)}` : ''}`;

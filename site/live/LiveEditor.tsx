@@ -65,7 +65,7 @@ export function LiveEditor(props: { examples: string[] }) {
               Reset
             </button>
           </Show>
-          <a class="live-open" href={appUrl(id())}>
+          <a class="live-open" href={appUrl(id())} rel="external">
             Open in the editor
           </a>
         </span>

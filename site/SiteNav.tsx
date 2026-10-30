@@ -5,7 +5,7 @@ const GITHUB = 'https://github.com/byronwall/draftably';
 
 /**
  * The links every page's header carries, in one order, with the current section marked. Site
- * pages move with the router; the editor and GitHub are other sites and load normally.
+ * pages move with the router; the editor and GitHub are other sites, so their links skip it.
  */
 export function SiteNav(props: { current: 'home' | 'play' | 'docs'; class?: string }) {
   return (
@@ -30,7 +30,7 @@ export function SiteNav(props: { current: 'home' | 'play' | 'docs'; class?: stri
       >
         Examples
       </a>
-      <a class="site-nav-more" href={appUrl()}>
+      <a class="site-nav-more" href={appUrl()} rel="external">
         Editor
       </a>
       <a href={GITHUB} class="site-nav-gh">
