@@ -22,7 +22,7 @@ fs.writeFileSync(
   path.join(dir, 'package.json'),
   JSON.stringify({ name: 'install-proof', private: true }),
 );
-execFileSync('pnpm', ['--dir', dir, 'add', '--offline', '--ignore-scripts', packed.filename], {
+execFileSync('pnpm', ['--dir', dir, 'add', '--ignore-scripts', packed.filename], {
   cwd: dir,
   stdio: 'inherit',
 });
