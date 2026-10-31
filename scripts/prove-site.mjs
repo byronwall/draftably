@@ -329,6 +329,39 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'a Playground module that fails to load'() {
+    const module = /Playground-[^/]*\.js/;
+    const failed = async page => {
+      await page.waitForSelector('.load-failed');
+      await page.unroute(module);
+      await page.screenshot({ path: path.join(proof.out, 'load-failed.png') });
+      await page.click('.load-failed button');
+      await page.waitForSelector('.cm-content');
+    };
+
+    const docs = await open('docs/cells');
+    const example = docs.locator('.doc-example').first();
+    const source = await example.locator('textarea').inputValue();
+    await example.locator('textarea').fill(`# Kept through the failure\n${source}`);
+    await sleep(500);
+    await docs.route(module, r => r.abort());
+    await example.locator('.doc-example-play').click();
+    await failed(docs);
+    check('#304 Reload keeps a docs edit', (await sourceText(docs)).includes('Kept through'));
+    await docs.context().close();
+
+    const home = await open('');
+    await home.route(module, r => r.abort());
+    await home.setInputFiles('.hero-reopen input[type="file"]', {
+      name: 'dropped.draft',
+      mimeType: 'text/plain',
+      buffer: Buffer.from('diagram "Dropped" version=1\nnode a "From a file"\n'),
+    });
+    await failed(home);
+    check('#304 Reload keeps a reopened file', (await sourceText(home)).includes('From a file'));
+    await home.context().close();
+  },
+
   async 'search answers tasks'() {
     const page = await open('docs');
     await page.waitForSelector('.docs-search-button');
