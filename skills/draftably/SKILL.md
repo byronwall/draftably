@@ -35,8 +35,8 @@ inside the draftably repo). It needs Node 22.21 or later.
    and a table of crossings, bends, size and warnings. Look at the sheet, pick one (the table
    marks a `recommended` variant), and run `npx draftably vary diagram.draft --apply v2` (or
    `--apply best`). It rewrites only the layout lines and runs `check`.
-   To explore a setting yourself, `--try direction` or `--try engine=layered,flow --try
-rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no effect),
+   To explore a setting yourself, `--try engine=layered --try direction` or `--try
+engine=layered,flow --try rank-gap` sweeps exact values (12 at most; `same as v1` means the setting had no effect),
    `--grid` sweeps the main engines in both directions (on a lanes root too, keeping the lanes
    as `v0`; add `--budget 120s` on a large diagram), and `--scope <group>` varies one
    group's layout line. Say what the drawing is for: `--fit slide` (or `wide`, `square`, `page`,
@@ -332,5 +332,5 @@ content area.
   `snapshot` and `box` statements are errors.
 
 The full language guide ships with the CLI package as `DSL.md`: `draftably docs` lists its
-sections and `draftably docs legend` prints one. The package's `examples/` folder holds sixteen
-diagrams to copy from.
+sections and `draftably docs legend` prints one. The package's `examples/` folder holds more than
+twenty diagrams to copy from.
