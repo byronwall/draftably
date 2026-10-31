@@ -4,6 +4,10 @@ This ledger reconciles the [audit](summary.md) with `main` at `2f210ce`. Each ro
 
 GitHub marked #254 and #264 closed, but the audit asked for more than those PRs delivered. Status comes from the proof, not from the issue state.
 
+## Result
+
+All rows under Open work are repaired. `pnpm prove:site` passes on the top of the stack. The rows stay here as the baseline that each fix replaced.
+
 ## Open work
 
 | ID         | Problem                                                                                | Baseline proof                                                                           | Batch |
@@ -93,13 +97,13 @@ Two failed loads named two different hashed files, on one day with many deploys.
 
 ### #307: where layout actions explain themselves
 
-| Option                                    | Scope visible before the action | Keyboard and touch reach it | Tools stay where they are | Main tradeoff                            |
-| ----------------------------------------- | ------------------------------: | --------------------------: | ------------------------: | ---------------------------------------- |
-| Longer tooltips                           |                               4 |                           2 |                        10 | Touch and keyboard users never see them. |
-| Move tools into a layout panel            |                               8 |                           8 |                         0 | The audit said not to move tools yet.    |
-| A live line in the menu, and a docs table |                               9 |                           9 |                        10 | The menu grows by a few lines.           |
+| Option                                                    | Scope visible before the action | Keyboard and touch reach it | Tools stay where they are | Main tradeoff                            |
+| --------------------------------------------------------- | ------------------------------: | --------------------------: | ------------------------: | ---------------------------------------- |
+| Longer tooltips                                           |                               4 |                           2 |                        10 | Touch and keyboard users never see them. |
+| Move tools into a layout panel                            |                               8 |                           8 |                         0 | The audit said not to move tools yet.    |
+| A live line in the panel and phone menu, and a docs table |                               9 |                           9 |                        10 | The menu grows by a few lines.           |
 
-**Choice:** each layout item in the Edit menu states what it changes, with the scope from the live selection. A short docs table compares the actions. **Watch:** this is not a user study. The issue's task test remains open.
+**Choice:** the Layout options panel, the Tidy tooltip and the phone's More menu state what each action changes, with the scope from the live selection. A short docs table compares the actions. The desktop Edit menu stays as it is: a trial there pushed the menu over the toolbar. **Watch:** this is not a user study. The issue's task test remains open.
 
 ## Batches
 

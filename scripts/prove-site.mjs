@@ -274,6 +274,9 @@ const journeys = {
     const menu = await phone.locator('.popover').textContent();
     check('#307 the phone menu states the scope', /Small moves in the whole diagram/.test(menu));
     check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
+    await phone.keyboard.press('Escape');
+    check('F08 the phone shows where work is kept', await phone.isVisible('.save-status'));
+    await phone.screenshot({ path: path.join(proof.out, 'phone-status.png') });
     await phone.screenshot({ path: path.join(proof.out, 'layout-menu.png') });
     await phone.context().close();
   },
