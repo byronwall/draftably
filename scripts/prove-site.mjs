@@ -490,6 +490,45 @@ const journeys = {
     check('U09 the File menu reaches the Playground', /Playground/.test(menu));
     await page.context().close();
   },
+
+  async 'LD01 narrow demo edits reach the editor'() {
+    for (const width of [390, 768]) {
+      const page = await open('', { width, height: 844 });
+      await page.waitForSelector('.live-source textarea');
+      await page.fill(
+        '.live-source textarea',
+        'diagram "Narrow edit" version=1\nnode a "Edited on a phone"\n',
+      );
+      await sleep(700);
+      await page.click('.live-open');
+      await editorReady(page);
+      await wait(page, () => document.body.textContent.includes('Edited on'), 'the edited node');
+      check(`LD01 the demo link carries edits at ${width}px`, true);
+      await page.context().close();
+    }
+  },
+
+  async 'LD02 demo Undo keeps typed text'() {
+    const page = await open('');
+    const box = page.locator('.drag-host [data-id="db"]').first();
+    await box.waitFor();
+    const at = await box.boundingBox();
+    await page.mouse.move(at.x + at.width / 2, at.y + at.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(at.x + at.width / 2 + 30, at.y + at.height / 2 + 60, { steps: 5 });
+    await page.mouse.up();
+    await page.waitForSelector('.live-bar-end >> text=Undo');
+    await page.click('.live-source textarea');
+    await page.keyboard.press('ControlOrMeta+ArrowDown');
+    await page.keyboard.type('# typed after the drag');
+    await sleep(400);
+    const undo = page.locator('.live-bar-end >> text=Undo');
+    if (await undo.count()) await undo.click();
+    await sleep(400);
+    const text = await page.inputValue('.live-source textarea');
+    check('LD02 Undo cannot delete typed text', text.includes('# typed after the drag'));
+    await page.context().close();
+  },
 };
 
 const only = process.argv[2];
