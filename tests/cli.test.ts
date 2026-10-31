@@ -32,7 +32,7 @@ const good = write(
 describe('cli', () => {
   it('prints one section of the guide, or lists the topics for an unknown one', async () => {
     const legend = await run('docs', 'legend');
-    expect(legend.out).toMatch(/^\*\*Legend\.\*\*/);
+    expect(legend.out).toMatch(/^### Legend/);
     expect(legend.out).not.toContain('## Layout engines');
     const unknown = await run('docs', 'nope');
     expect(unknown.code).toBe(1);

@@ -39,7 +39,7 @@ const first = run('inspect', file, '--json');
 assert.equal(run('inspect', file, '--json'), first);
 assert.match(run('inspect', file, '--svg'), /<svg/);
 assert.match(run('docs'), /node_modules\/draftably\/DSL\.md/);
-assert.match(run('docs', 'legend'), /^\*\*Legend\.\*\*/);
+assert.match(run('docs', 'legend'), /^### Legend/);
 run('skill', 'install');
 assert.ok(fs.existsSync(path.join(dir, '.claude/skills/draftably/SKILL.md')));
 assert.equal(spawnSync(bin, ['skill', 'install'], { cwd: dir, timeout: 10000 }).status, 1);

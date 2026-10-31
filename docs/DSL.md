@@ -4,8 +4,6 @@ A `.draft` file is a readable diagram source that a person and an agent can both
 model (objects, groups, connections), the automatic layout recipe, and layout refinements. It
 never holds a picture of the final layout: the same file always compiles to the same geometry.
 
-Views and checkpoints are not supported yet.
-
 ```draft
 diagram "Checkout architecture" version=1
 
@@ -23,8 +21,12 @@ edge persist orders -> db "persist" kind=async
 layout root flow gap=48
 layout services row gap=24
 near payments orders side=right gap=32
-pin db x=900 y=40
 ```
+
+To write a first file, read [Get started](https://draftably.dev/docs/get-started). To look up a
+statement, read [Rules](#rules).
+
+Views and checkpoints are not supported yet.
 
 ## Rules
 
@@ -34,28 +36,28 @@ a line break: `node n "Says \"hi\""`. A bare quote inside a string is an error t
 column. IDs match `[A-Za-z_][A-Za-z0-9_.-]*` and must be unique across nodes
 and groups. References may point to later lines.
 
-| Statement                          | Meaning                                                                                                                                                                                                                                                 |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `diagram "title" version=1`        | Optional title. At most one. Exports and the viewer draw it above the drawing. `width=` sets the frame's width.                                                                                                                                         |
-| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=right\|down`, `aspect=`. At most one.                                                                                                                                                           |
-| `subtitle "text"`                  | One line under the title. At most one.                                                                                                                                                                                                                  |
-| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                           |
-| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                    |
-| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                            |
-| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                               |
-| `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Themes and colors](#themes-and-colors).                                                                                                      |
-| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object; without `near` it sits under the subtitle. `width=`. See [Notes](#rules).                                                       |
-| `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides; `constraint=false` draws it without letting it rank or order anything (for feedback edges). |
-| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=`, `direction=auto\|right\|down`, `min-width=`, `min-height=`.                                                                                                                       |
-| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                              |
-| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                              |
-| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                |
-| `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                            |
-| `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note.                       |
-| `routing`                          | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                          |
-| `config key=value`                 | File settings. See [Links and counts](#rules).                                                                                                                                                                                                          |
-| `state id "label" ids...`          | A named emphasis state. See [Emphasis states](#emphasis-states).                                                                                                                                                                                        |
-| `phase id "label" message ids...`  | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                  |
+| Statement                          | Meaning                                                                                                                                                                                                                                                                                    |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `diagram "title" version=1`        | Optional title. At most one. Exports and the Editor draw it above the drawing. `width=` (160–8000) sets the frame's width. See [Title and subtitle](#title-and-subtitle).                                                                                                                  |
+| `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                            |
+| `subtitle "text"`                  | One line under the title. At most one.                                                                                                                                                                                                                                                     |
+| `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                                                              |
+| `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                       |
+| `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                               |
+| `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                  |
+| `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Legend](#legend).                                                                                                                                                               |
+| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object; without `near` it sits under the subtitle. `width=` (80–1200). See [Notes](#notes).                                                                                |
+| `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges). |
+| `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                     |
+| `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                 |
+| `layout root sequence`             | A sequence diagram: nodes are participants, edges are messages in file order. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                 |
+| `layout group cells`               | The group's nodes touch, edge to edge, as one object. `columns=`, `unit=byte\|bit`. See [Cells](#cells).                                                                                                                                                                                   |
+| `layout scope engine=name`         | Arrange a scope's whole subtree with a layout engine. See [Layout engines](#layout-engines).                                                                                                                                                                                               |
+| `layout root … fit=slide`          | Aim the drawing at a shape: `wide` (2:1), `slide` (16:9), `square`, `page` (portrait) or `tall`. Compile also lays it out reading the other way and with folding on and off, keeps the closest, and says which in an `info` note.                                                          |
+| `routing`                          | Router settings for every connection. See [Routing](#routing).                                                                                                                                                                                                                             |
+| `config key=value`                 | File settings. See [Links and counts](#links-and-counts).                                                                                                                                                                                                                                  |
+| `state id "label" ids...`          | A named emphasis state. See [Emphasis states](#emphasis-states).                                                                                                                                                                                                                           |
+| `phase id "label" message ids...`  | Sequence diagrams: a run of messages drawn as a row band. See [Sequence diagrams](#sequence-diagrams).                                                                                                                                                                                     |
 
 Colors are covered in [Themes and colors](#themes-and-colors). An `auto` color inherits the
 family of the nearest colored group. Without a `layout` line, `root` uses `flow gap=48` and groups
@@ -77,14 +79,18 @@ can fold do the groups themselves wrap into rows. A group that only receives lin
 API, a cache) sits beside the group that calls it rather than past it. `fold=never` on the root
 engine keeps one long line. Stays and pins never change what folds.
 
-**Title and subtitle.** `inspect --svg`, the viewer's SVG and PNG exports and the viewer's canvas
+### Title and subtitle
+
+`inspect --svg`, the Editor's SVG and PNG exports and the Editor's canvas
 draw the `diagram` title and the `subtitle` line above the drawing, left-aligned with the legend,
 in one frame round the drawing, so a copied image still says what it shows and why it matters.
 Like the legend, they never move anything. A file without either draws no heading. The frame is
 as wide as the drawing, the heading and the legend; `width=` on the `diagram` line makes it wider
 (`diagram "Checkout" version=1 width=900`), for a long subtitle or room on the right.
 
-**Notes.** `note "A plan is one pricing tier: Free, Team or Enterprise."` adds a sentence that
+### Notes
+
+`note "A plan is one pricing tier: Free, Team or Enterprise."` adds a sentence that
 defines a term or explains the drawing. Like the legend, a note never moves anything. Without
 `near=` it sits in the frame under the subtitle; several notes stack in file order. With
 `near=id` it is placed after layout beside that node or group: `side=below` (the default),
@@ -96,16 +102,18 @@ warns (`note-overlap`) when an anchored note found no clear spot.
 note "Seats are billed monthly." near=seat side=below width=220
 ```
 
-**Links and counts.** `href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
+### Links and counts
+
+`href="src/api.ts"` on a node or group makes it a link in `inspect --svg`
 and exports, to a source file, a URL or anything else the reader should open. A linked object
-draws a small ↗ mark at its top-right corner (beside a container's title). In the viewer the mark
+draws a small ↗ mark at its top-right corner (beside a container's title). In the Editor the mark
 is the open button, and the Inspector shows the link with an **Open** button; a click elsewhere on
 the object still selects it. The link opens as written: a URL (`https://…`, a GitHub link) in a
-new tab, a `.draft` in the viewer, and a file path in VS Code. A file path may end in `:42` or
+new tab, a `.draft` in the Editor, and a file path in VS Code. A file path may end in `:42` or
 `:42:5` to open at that line and column. A relative path starts at the diagram's git root, or its
 folder outside a repository.
 
-In `inspect --svg` and the viewer's SVG export, each linked object is an `<a>` with a tooltip
+In `inspect --svg` and the Editor's SVG export, each linked object is an `<a>` with a tooltip
 naming its target, and its outline thickens on hover. A URL stays as written and opens in a new
 tab. A file link is written as a path from the diagram's folder, without its line, so it opens
 when the SVG is saved beside the `.draft`. Each object's group carries `data-id` with its ID.
@@ -394,17 +402,6 @@ version, and the merged drawing shows the move. A group that moved keeps one pos
 panels draw it in its new container; `compare` names those groups on stderr. A tool that generates
 diagrams only has to write two plain files.
 
-**Side by side.** Add a `compare` line to draw the two versions as panels instead of one merged
-drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
-leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
-use the merged positions and the merged routes, so every unchanged object and line sits at the same place in each. `direction=right` sets the
-panels side by side, so every row lines up across them; `direction=down` stacks them, so every
-column lines up. Without it, the arrangement whose whole image comes closest to `aspect` (width
-over height, 1.6 by default) wins: a wide flow usually stacks and a tall one sits side by side. Each panel takes
-only the room its version needs along that axis, and a container that lost members in a panel
-shrinks to fit the rest; no object moves, so the alignment holds. The canvas keeps
-showing the merged drawing, where edits go; `inspect --svg` and exports draw the panels.
-
 Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
 change.
 
@@ -416,17 +413,49 @@ so every theme draws a diff in its own palette. Each mark also has a border weig
 or strike, so it reads in grayscale too, and the legend is one row of the marks the file uses, each with how many objects and lines carry it. Marks never move anything: the drawing
 holds both versions at once, so unchanged objects stay where they are.
 
+### Side by side
+
+Add a `compare` line to draw the two versions as panels instead of one merged
+drawing: `compare "main" "PR 123"` names them (`Before` and `After` by default). The old panel
+leaves out `+` objects and shows `was=` labels; the new panel leaves out `-` objects. Both panels
+use the merged positions and the merged routes, so every unchanged object and line sits at the same place in each. `direction=right` sets the
+panels side by side, so every row lines up across them; `direction=down` stacks them, so every
+column lines up. Without it, the arrangement whose whole image comes closest to `aspect` (width
+over height, 1.6 by default) wins: a wide flow usually stacks and a tall one sits side by side. Each panel takes
+only the room its version needs along that axis, and a container that lost members in a panel
+shrinks to fit the rest; no object moves, so the alignment holds. The canvas keeps
+showing the merged drawing, where edits go; `inspect --svg` and exports draw the panels.
+
 ## Emphasis states
 
 One diagram often answers several questions: what the write path touches, what a request reads.
 A `state` line names a way to draw the diagram: the objects and connections it lists are in
 focus, and everything else fades.
 
-```text
+```draft
+node web "Web app"
+node api "API"
+node orders "Orders"
+node payments "Payments"
+node catalog "Catalog"
+node cache "Cache"
+node db "Database"
+node queue "Event queue"
+edge e1 web -> api
+edge e2 api -> orders
+edge e3 orders -> payments
+edge e4 orders -> db
+edge e5 api -> catalog
+edge e6 catalog -> cache
+edge publish orders -> queue
 state write "Write path" web api orders payments db queue
 state read "Read path" web api catalog cache
 state events "Events" queue publish rest=plain
 ```
+
+**Try it:** this drawing shows no state, because a live example does not draw them. Select **Edit
+in playground**, then **Open in the editor**. Then select **Read path** in the row of chips over
+the canvas.
 
 The first word is the state's ID, then an optional label in quotes, then the IDs in focus:
 nodes, groups (a group brings all its members) and connections. A connection between two
@@ -445,13 +474,13 @@ a state only adds the heavier border or the fade.
 order, in a grid whose whole image comes closest to 1.6 wide per tall. Every object sits at the
 same place in every panel, so the eye can jump between them.
 
-In the viewer, a file with states shows a row of chips over the canvas: **All**, each state, and
+In the Editor, a file with states shows a row of chips over the canvas: **All**, each state, and
 **Grid**. A chip draws that state in place, and `[` and `]` step through them in file order.
 **Grid** shows every state side by side, as `--states` draws them; click a panel to draw that
 state. The state is part of the address (`?state=write`), so a link or a reload keeps it, but it
 is never written to the file. Edits work in any state, on faded objects too. `check`
 reports an ID a state lists that the file does not declare. Deleting an object or connection in
-the viewer takes it out of every state.
+the Editor takes it out of every state.
 
 ## Themes and colors
 
@@ -481,12 +510,26 @@ title), `radius` (0–24, rectangle corners), `title-font` and `annotation-font`
 `mono`), and `canvas`, `text` and `connection` colors. Colors are hex values in double quotes:
 `#` outside quotes starts a comment.
 
-Switching themes keeps the layout: nodes are placed on slots sized in Drafting (with the file's
-own overrides) and drawn at the theme's size in their slot, centred along the reading direction
+Switching themes keeps rows and order, but it can move and resize boxes. Nodes are placed on slots
+sized in Drafting (with the file's own overrides) and drawn at the theme's size in their slot,
+centred along the reading direction
 with each row keeping its top. A slot grows only where the theme's node is larger than the gap
 around it can absorb, so rows and order always hold.
 
-**Families and shades.** Built-in families: `primary` and `secondary` (the theme's own accents),
+Padding and title type change node sizes and so the layout; colors and shades never move
+anything. Choosing a theme in the Editor's **Appearance** menu rewrites the `theme` line, clears
+the old preset's overrides and keeps your own `theme-color` families.
+
+Titles wrap using width tables for the bundled fonts (Inter, Source Serif 4 and JetBrains Mono,
+under the SIL Open Font License), so the compiler, the Editor and `inspect --svg` break every
+title at the same place. A word too long for a line breaks where an identifier's parts meet
+(`annotation` / `Commands`, `src/` / `viz/`), and a node without a `size` grows wider, up to twice
+its default width, rather than break a word in the middle. Exported SVG files embed the fonts
+they use.
+
+### Families and shades
+
+Built-in families: `primary` and `secondary` (the theme's own accents),
 `slate`, `stone`, `blue`, `sky`, `teal`, `mint`, `green`, `amber`, `orange`, `red`, `rose` and
 `violet`. Each has shades `50 100 200 300 400 500 600 700 800 900 950`; lower numbers are lighter
 and higher numbers darker in every theme, dark ones included. Shades 50–300 are pale fills with
@@ -497,20 +540,6 @@ darker carry white text. A theme may tune a family's hue: Signal draws `green`, 
 and `rose` as Okabe–Ito's bluish green, orange, vermilion and reddish purple. A node that names a color without a shade uses 500; a group uses a quiet surface shade
 (100, or 900 in Blueprint). Shade is chosen per object: `color=auto` inherits a group's family,
 never its shade. A node with neither color nor shade uses the theme's neutral surface.
-
-**Legend.** `legend family "meaning"` adds a row to the diagram's color key, in file order: a
-swatch of that family (`shade=` picks one; 500 by default) and its meaning. The viewer shows the
-key in the canvas corner, in the diagram's colors; `inspect --svg` and exports draw it under the
-drawing. Each family and shade may appear once. A legend never moves anything. `check` warns
-when a swatch's shade matches none of its family's nodes (`legend-shade`), such as the default
-500 for nodes drawn at `shade=200`.
-
-```draft
-group edge "Edge" color=blue
-node db "Postgres" color=violet
-legend blue "Public entry points"
-legend violet "Data stores"
-```
 
 Drawing keeps an object apart from a container of its own family. A group inside a same-family
 group steps one shade toward emphasis per level (100, 200, 300 in light themes; 900, 800, 700 in
@@ -524,16 +553,21 @@ built-in family any of the three may be given and the rest come from the theme. 
 such as `brand`, defines each shade it uses with all three. Referencing a family or shade that is
 not defined is an error on the referencing line. Each family and shade may be declared once.
 
-Padding and title type change node sizes and so the layout; colors and shades never move
-anything. Choosing a theme in the viewer's **Appearance** menu rewrites the `theme` line, clears
-the old preset's overrides and keeps your own `theme-color` families.
+### Legend
 
-Titles wrap using width tables for the bundled fonts (Inter, Source Serif 4 and JetBrains Mono,
-under the SIL Open Font License), so the compiler, the viewer and `inspect --svg` break every
-title at the same place. A word too long for a line breaks where an identifier's parts meet
-(`annotation` / `Commands`, `src/` / `viz/`), and a node without a `size` grows wider, up to twice
-its default width, rather than break a word in the middle. Exported SVG files embed the fonts
-they use.
+`legend family "meaning"` adds a row to the diagram's color key, in file order: a
+swatch of that family (`shade=` picks one; 500 by default) and its meaning. The Editor shows the
+key in the canvas corner, in the diagram's colors; `inspect --svg` and exports draw it under the
+drawing. Each family and shade may appear once. A legend never moves anything. `check` warns
+when a swatch's shade matches none of its family's nodes (`legend-shade`), such as the default
+500 for nodes drawn at `shade=200`.
+
+```draft
+group edge "Edge" color=blue
+node db "Postgres" color=violet
+legend blue "Public entry points"
+legend violet "Data stores"
+```
 
 ## Layout engines
 
@@ -779,15 +813,32 @@ When a crossing remains:
 Refinements adjust the automatic layout for one object. Positions are relative to the parent's
 content area, not the whole canvas, so moving a group moves everything inside it.
 
-| Statement                                | Strength | Meaning                                                                                                                                                                                     |
-| ---------------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling, or next to something inside a sibling group: then beside that group, lined up with `ref`. `strength=required` enforces side and gap.                               |
-| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                                                                                                                         |
-| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. Layout tools write these.                                                                                                      |
-| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                                                                                                                     |
-| `size id width= height=`                 | —        | Exact node size. A title that does not fit is reported, not grown. A diamond stays square at the larger side. `height=auto` fits the title at that width, so the line survives label edits. |
-| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                                                                                                                      |
-| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                                                                                                                                  |
+```draft
+node web "Web"
+node orders "Orders"
+node users "Users"
+node cache "Cache"
+edge e1 web -> orders
+edge e2 web -> users
+edge e3 users -> cache
+order root web users orders
+near cache users side=right gap=64
+```
+
+The `order` line puts Users above Orders. The `near` line keeps Cache to the right of Users.
+
+**Try it:** change `side=right` to `side=above`. Cache moves above Users, and the drawing gets
+narrower. Remove the `order` line, and Orders goes back above Users.
+
+| Statement                                | Strength | Meaning                                                                                                                                                                                                                          |
+| ---------------------------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `near id ref side=right gap=28 offset=0` | soft     | Place next to a sibling, or next to something inside a sibling group: then beside that group, lined up with `ref`. `side=right\|left\|above\|below`, `gap=` 0–2000. `strength=required` enforces side and gap.                   |
+| `nudge id dx=0 dy=0`                     | soft     | Offset from the automatic position.                                                                                                                                                                                              |
+| `stay id x= y= weight=8`                 | soft     | Prefer this position; resists movement when content changes. `weight=` 1–100. Layout tools write these.                                                                                                                          |
+| `pin id x= y=`                           | hard     | Exactly this position. Automatic layout never moves it.                                                                                                                                                                          |
+| `size id width= height=`                 | —        | Exact node size: `width=` 40–1200, `height=` 24–1200. A title that does not fit is reported, not grown. A diamond stays square at the larger side. `height=auto` fits the title at that width, so the line survives label edits. |
+| `order scope id...`                      | soft     | Preferred order of a scope's children.                                                                                                                                                                                           |
+| `align x\|y id...`                       | soft     | Align centers of siblings. `strength=required` locks them.                                                                                                                                                                       |
 
 Soft rules give way to keep siblings from overlapping. When one does, `check` reports it with its
 line. Pins never move; conflicting pins are reported as errors.
