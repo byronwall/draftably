@@ -18,7 +18,7 @@
 - Model: Pro; live selector showed power 5 of 5.
 - Submitted: 2026-10-30 22:44 EDT (2026-10-31 02:44 UTC).
 - Verified: sent prompt, both document attachments, image attachment, Thinking, and Stop control.
-- Phase: collected and reviewed; final validation and PR pending.
+- Phase: collected and reviewed; final validation passed; PR pending.
 - Follow-up count: 0 of 1.
 - Heartbeat: `complete-sequence-diagram-pro-research`, ACTIVE, hourly at minute 47.
 - First check: about 2026-10-30 23:47 EDT (2026-10-31 03:47 UTC).
@@ -50,3 +50,5 @@ Inspect the recorded conversation before any send. Preserve a running response. 
 - Wrote [reviewed summary/dispositions](research-summary.md) and [implementation plan](implementation-plan.md). Reuse existing frame notes before adding scope fields. No product implementation.
 - Original recommendations: 16 Build, 5 Explore, 2 Defer, 3 Avoid. Integration retains those groups with explicit limits on scope duplication, warnings, compatibility machinery, and proposed grammar.
 - No central research catalogue exists in this checkout. The initiative summary and asset index serve as its entry points.
+- Final `pnpm check` passed after integration: typecheck, lint, formatting, unit tests, engine suites, and build. Log: `tmp/pro/sequence-explanations/check-final.log`.
+- Verified the committed asset inventory: all 20 original files still match the archive bytes. The ZIP is untracked.
