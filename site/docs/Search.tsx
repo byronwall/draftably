@@ -3,7 +3,7 @@ import { docsPath } from './content';
 import { marks, search, words, type Hit } from './find';
 
 const LAST = 'draftably-docs-search';
-const SAMPLES = ['swim lanes', 'fold=never', 'vary --apply', 'kind=async'];
+const SAMPLES = ['export a PNG', 'install', 'fix a layout', 'swim lanes'];
 
 /**
  * ⌘K search, in a native modal dialog: the browser makes the page behind it inert and puts focus
