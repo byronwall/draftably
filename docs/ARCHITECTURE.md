@@ -55,6 +55,12 @@ Each module owns one concern and exposes signals plus the actions that change th
   inline label, accept a layout preview, close a timeline or finish a drag.
 - **Camera movement is not an edit.** It saves with the document but never creates undo steps.
 
+## import/ — foreign diagram source
+
+`import/` detects supported text formats and converts DOT graphs to validated native source.
+It reports unsupported meaning and loss before a caller opens the result. The CLI and viewer
+entry points are planned separately.
+
 ## dsl/ and cli/ — diagram files
 
 `dsl/` reads, formats and compiles `.draft` files (see [Diagram files](DSL.md)). It is pure
