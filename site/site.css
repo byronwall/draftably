@@ -2689,7 +2689,7 @@ kbd {
   color: var(--accent-hover);
 }
 
-/* One focus ring for everything in the docs. The editable source shows focus by its tint. */
+/* One focus ring for everything in the docs. The editable source draws it on its box. */
 .docs :focus-visible,
 .search :focus-visible,
 .zoom :focus-visible {
@@ -2781,13 +2781,16 @@ kbd {
 }
 
 .doc-example-label {
+  min-width: 0;
   margin-right: auto;
+  overflow: hidden;
   color: var(--muted);
   font: 500 12px var(--mono);
+  white-space: nowrap;
 }
 
 .doc-example-label span {
-  color: #a3a8b8;
+  color: #6a7082;
   font-family: var(--font);
 }
 
@@ -2802,6 +2805,21 @@ kbd {
 
 .doc-example-play:hover {
   color: var(--accent-hover);
+}
+
+.doc-play-short {
+  display: none;
+}
+
+@media (max-width: 520px) {
+  .doc-example-label span,
+  .doc-play-long {
+    display: none;
+  }
+
+  .doc-play-short {
+    display: inline;
+  }
 }
 
 .doc-example.is-split .doc-example-body {
@@ -2865,6 +2883,11 @@ kbd {
 
 .doc-example-source:focus-within {
   background: #fdfcff;
+}
+
+.doc-example-source:has(.doc-example-text:focus-visible:not([data-pointer])) {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
 }
 
 .doc-drawing {
@@ -2995,6 +3018,7 @@ kbd {
 
 .zoom-bar span {
   margin-right: auto;
+  line-height: 1.2;
 }
 
 /* The drawing below is the last good one, so the overlay says so. */
@@ -3010,6 +3034,7 @@ kbd {
 
 .zoom-bar button {
   height: 28px;
+  min-width: 32px;
   padding: 0 6px;
   border: 0;
   background: none;
@@ -3259,11 +3284,25 @@ kbd {
 
   .docs-top .wordmark {
     width: auto;
+    min-height: 40px;
   }
 
   .docs-search-button {
     width: auto;
+    height: 40px;
     flex: 1;
+  }
+
+  .docs-top .site-nav {
+    gap: 8px;
+  }
+
+  .docs-top .site-nav a {
+    min-height: 40px;
+  }
+
+  .docs-top .site-nav-gh {
+    min-width: 36px;
   }
 
   .docs-search-button kbd,
@@ -3273,6 +3312,7 @@ kbd {
 
   .docs-menu-button {
     display: block;
+    min-height: 40px;
     border: 0;
     background: none;
     color: var(--accent);
@@ -3334,6 +3374,18 @@ kbd {
   .doc-example.is-split > .doc-example-body > .doc-drawing {
     border-left: 0;
     border-top: 1px solid var(--line);
+  }
+
+  .zoom-bar {
+    gap: 8px;
+  }
+}
+
+/* Each bar button is a finger's size, inside the bar's 44px. */
+@media (pointer: coarse) {
+  .zoom-bar button {
+    height: 40px;
+    min-width: 40px;
   }
 }
 
@@ -3471,6 +3523,10 @@ kbd {
 /* Phones: the docs and playground headers keep the nav by showing the mark without its name and
    search as an icon. */
 @media (max-width: 560px) {
+  .docs-top {
+    gap: 8px;
+  }
+
   .docs-top .wordmark,
   .play-head .wordmark {
     font-size: 0;
