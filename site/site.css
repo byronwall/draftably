@@ -2656,12 +2656,6 @@ kbd {
   outline-offset: -3px;
 }
 
-@media (hover: none) {
-  .doc-copy {
-    opacity: 1;
-  }
-}
-
 .doc-copy {
   position: absolute;
   top: 8px;
@@ -2675,6 +2669,20 @@ kbd {
 .doc-code:hover .doc-copy,
 .doc-copy:focus-visible {
   opacity: 1;
+}
+
+/* A touch screen has no hover, so Copy stays on, with its own row above the first line of code. */
+@media (hover: none) {
+  .doc-copy {
+    top: 2px;
+    right: 2px;
+    padding: 6px 10px;
+    opacity: 1;
+  }
+
+  .doc-code pre {
+    padding-top: 30px;
+  }
 }
 
 .doc-copy:hover,
@@ -3255,15 +3263,13 @@ kbd {
     font-size: 16px;
   }
 
-  .doc table {
-    width: max-content;
-    min-width: 100%;
+  /* Cells wrap to fit the box. These floors keep text readable; past them, the box scrolls. */
+  .doc td {
+    min-width: 14ch;
   }
 
-  /* Aligned shell comments read better scrolled than wrapped. */
-  .doc-code pre {
-    white-space: pre;
-    overflow-x: auto;
+  .doc td:last-child {
+    min-width: 24ch;
   }
 
   .doc-themes {
