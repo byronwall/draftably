@@ -40,7 +40,7 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
     setView({ x: px - ((px - v.x) * k) / v.k, y: py - ((py - v.y) * k) / v.k, k });
   };
 
-  const local = (e: PointerEvent) => {
+  const local = (e: MouseEvent) => {
     const box = stage.getBoundingClientRect();
     return { x: e.clientX - box.left, y: e.clientY - box.top };
   };
