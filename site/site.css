@@ -2828,6 +2828,17 @@ kbd {
   margin-right: auto;
 }
 
+/* The drawing below is the last good one, so the overlay says so. */
+.zoom-notice {
+  margin: 0;
+  padding: 8px 16px;
+  border-bottom: 1px solid #ecc5cc;
+  background: #fff7f8;
+  color: var(--danger);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .zoom-bar button {
   height: 28px;
   padding: 0 6px;
@@ -2924,7 +2935,13 @@ kbd {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
   padding: 10vh 16px 16px;
+  border: 0;
   background: #15171f33;
 }
 
