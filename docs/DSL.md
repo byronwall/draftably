@@ -987,6 +987,15 @@ outside the viewer clears them, so undo never erases someone else's work.
 
 ## Layout tools
 
+| Action           | What it changes                              | Applies to                                  | How to reverse                         |
+| ---------------- | -------------------------------------------- | ------------------------------------------- | -------------------------------------- |
+| Tidy positions   | Small moves from the current drawing         | The selection, a group or the whole diagram | Undo                                   |
+| Automatic layout | A new arrangement, saved as a recipe         | The whole diagram or one group              | Discard the preview, or Undo           |
+| Compare layouts  | Nothing until you Apply a candidate          | The whole diagram or one group              | Close it, or Undo after Apply          |
+| Layout timeline  | Steps from the current drawing               | The diagram                                 | Close it, or Undo a kept step          |
+| Layout brush     | The shapes you paint over                    | The shapes under the brush                  | Undo                                   |
+| Reroute now      | Connection paths. Shapes stay where they are | Every connection                            | Not needed: the source does not change |
+
 A rebuild arranges a scope from scratch, so it is saved as a recipe. **Preview automatic layout**
 in Layout options, and every rebuild candidate in **Compare**, compile the file with the new
 `layout` line. What you see is exactly what the file will draw, and **Keep** or **Apply** saves

@@ -14,6 +14,7 @@ import {
 } from '../model/appearance';
 import { chooseTheme, openSample, setAppearanceOverrides, setTool } from '../state/actions';
 import type { Tool } from '../state/editor';
+import { layoutTarget } from '../state/layout';
 import { timelineOpen } from '../state/sculpt';
 import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
 import { commit, doc, setDoc, snapshot } from '../state/document';
@@ -97,7 +98,9 @@ function Popover(props: { state: MenuState }) {
     <div
       ref={el}
       class="popover"
-      classList={{ wide: props.state.id === 'routing' || props.state.id === 'appearance' }}
+      classList={{
+        wide: ['routing', 'appearance', 'tools'].includes(props.state.id),
+      }}
       role="menu"
       onKeyDown={onKeyDown}
     >
@@ -122,6 +125,28 @@ function Popover(props: { state: MenuState }) {
         </Match>
       </Switch>
     </div>
+  );
+}
+
+/** The layout actions, each saying what it changes and how to reverse it. */
+function LayoutItems() {
+  return (
+    <>
+      <MenuItem
+        command="layout"
+        label="Tidy positions"
+        note={`Small moves in ${layoutTarget()}. Undo restores.`}
+      />
+      <MenuItem
+        command="layout-menu"
+        label="Automatic layout…"
+        note="A new arrangement to preview. Undo restores."
+      />
+      <MenuItem command="timeline-toggle" note="Steps from the current drawing. Undo restores." />
+      <MenuItem command="brush-toggle" note="Paint over shapes to move them. Undo restores." />
+      <MenuItem command="compare-layouts" note="Preview only until you Apply. Undo restores." />
+      <MenuItem command="reroute" note="Redraws connections. Shapes stay." />
+    </>
   );
 }
 
@@ -168,12 +193,7 @@ function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
         <MenuItem command="add-connected" />
         <MenuItem command="quick-build" />
         <hr />
-        <MenuItem command="layout" label="Tidy positions" />
-        <MenuItem command="layout-menu" label="Automatic layout…" />
-        <MenuItem command="timeline-toggle" />
-        <MenuItem command="brush-toggle" />
-        <MenuItem command="compare-layouts" />
-        <MenuItem command="reroute" />
+        <LayoutItems />
         <button type="button" class="menu-item" role="menuitem" onClick={submenu('routing')}>
           Routing options…
         </button>
@@ -184,12 +204,13 @@ function ToolsMenu(props: { anchor: MenuState['anchor'] }) {
   );
 }
 
-function MenuItem(props: { command: CommandId; label?: string }) {
+function MenuItem(props: { command: CommandId; label?: string; note?: string }) {
   const command = () => commands[props.command] as { label: string; keys?: string; icon?: string };
   return (
     <button
       type="button"
       class="menu-item"
+      classList={{ 'has-note': !!props.note }}
       role="menuitem"
       disabled={!commandEnabled(props.command)}
       onClick={() => {
@@ -200,7 +221,12 @@ function MenuItem(props: { command: CommandId; label?: string }) {
       <span class="menu-icon">
         <Show when={command().icon}>{icon => <Icon name={icon()} />}</Show>
       </span>
-      <span class="menu-label">{props.label ?? command().label}</span>
+      <span class="menu-label">
+        {props.label ?? command().label}
+        <Show when={props.note}>
+          <small class="menu-note">{props.note}</small>
+        </Show>
+      </span>
       <Show when={command().keys}>
         <kbd>{command().keys}</kbd>
       </Show>

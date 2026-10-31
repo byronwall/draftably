@@ -246,6 +246,38 @@ const journeys = {
     await copy.context().close();
   },
 
+  async 'layout actions say what they change'() {
+    const page = await open('app/?example=checkout');
+    await editorReady(page);
+    const button = page.locator('.toolbar button:has-text("Tidy positions")');
+    await page.click('[aria-label^="Layout options"]');
+    const panel = page.locator('.hint', { hasText: 'Tidy positions changes' });
+    check(
+      '#307 nothing selected means the whole diagram',
+      /the whole diagram/.test(await panel.textContent()),
+    );
+    await page.locator('[data-id="web"]').first().click({ force: true });
+    check(
+      '#307 a selection narrows the scope',
+      /the selection|this group/.test(await panel.textContent()),
+    );
+    check(
+      '#307 the toolbar tooltip agrees',
+      /the selection|this group/.test(await button.getAttribute('title')),
+    );
+    await page.screenshot({ path: path.join(proof.out, 'layout-panel.png') });
+    await page.context().close();
+
+    const phone = await open('app/?example=checkout', { width: 390, height: 844 });
+    await editorReady(phone);
+    await phone.click('.toolbar button:has-text("More")');
+    const menu = await phone.locator('.popover').textContent();
+    check('#307 the phone menu states the scope', /Small moves in the whole diagram/.test(menu));
+    check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
+    await phone.screenshot({ path: path.join(proof.out, 'layout-menu.png') });
+    await phone.context().close();
+  },
+
   async 'docs overlays'() {
     const page = await open('docs/cells');
     await page.waitForSelector('.docs-search-button');

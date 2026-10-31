@@ -10,7 +10,7 @@ import {
   fileStatusText,
 } from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
-import { layoutBusy, cancelLayout } from '../state/layout';
+import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
 import { filesShown, inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
 import { workspace } from '../state/launch';
@@ -107,7 +107,7 @@ export function Toolbar() {
               <button
                 type="button"
                 class="button primary"
-                title="Tidy current positions · L"
+                title={`Small moves in ${layoutTarget()}. Undo restores them · L`}
                 disabled={locked() || !commandEnabled('layout')}
                 onClick={run('layout')}
               >
