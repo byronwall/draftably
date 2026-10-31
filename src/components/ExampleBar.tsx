@@ -119,7 +119,7 @@ export function ExampleBar() {
                     history.back();
                   }}
                 >
-                  Back to Playground
+                  Back to Playground (separate copy)
                 </a>
               </Show>
             </span>
