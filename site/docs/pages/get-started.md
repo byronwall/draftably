@@ -21,7 +21,7 @@ node sketch "Sketch" color=teal
    ```
 
 2. Look at the drawing. It redraws with a line from Idea to Sketch.
-3. Select **Edit in playground**. The Playground opens with your diagram. After you edit it there,
+3. Select **Playground**. The Playground opens with your diagram. After you edit it there,
    the browser keeps your last draft.
 4. Keep a copy: select **Copy link** to get a URL that holds the source, or select **Download**
    and pick PNG, SVG or `.draft`.

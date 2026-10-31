@@ -61,17 +61,15 @@ export const fileUrl = (path: string) => `${location.pathname}?file=${encodeURIC
 export const exampleUrl = (id: string) => `${location.pathname}?example=${encodeURIComponent(id)}`;
 export const startUrl = () => location.pathname;
 
+/** The public site serves the editor at `<site>/app/`. `draftably open` serves it at the root. */
+const onSite = () => /\/app\/(index\.html)?$/.test(location.pathname);
+
 /**
- * A page of the public site (docs, the Playground). The editor is served at `<site>/app/` there;
- * `draftably open` and the dev server have no site, so their links go to draftably.dev.
+ * A page of the public site (docs, the Playground). `draftably open` and the dev server have no
+ * site, so their links go to draftably.dev.
  */
 export const siteUrl = (path = '') =>
-  new URL(
-    path,
-    !state.workspace() && /\/app\/(index\.html)?$/.test(location.pathname)
-      ? new URL('..', location.href)
-      : 'https://draftably.dev/',
-  ).href;
+  new URL(path, onSite() ? new URL('..', location.href) : 'https://draftably.dev/').href;
 
 /** The editor was opened from the Playground, as its "Open in the editor" does. */
 export const cameFromPlayground = () => {
@@ -103,6 +101,7 @@ export async function openInPlayground() {
 }
 
 async function fetchWorkspace(): Promise<WorkspaceInfo | null> {
+  if (onSite()) return null;
   try {
     const res = await fetch('./api/workspace', { headers: { accept: 'application/json' } });
     if (!res.ok || !res.headers.get('content-type')?.includes('application/json')) return null;
