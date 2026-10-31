@@ -59,7 +59,10 @@ export function ExampleBar() {
         fallback={
           <>
             <span class="example-text">
-              <strong>{fileSession()?.name}</strong>
+              {/* A draft is renamed in the toolbar, so only an example's name stays true here. */}
+              <Show when={scratchName() === 'Example'}>
+                <strong>{fileSession()?.name}</strong>
+              </Show>
               <span class="example-note">
                 {exampleRestored() && exampleEdited()
                   ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
