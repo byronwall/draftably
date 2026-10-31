@@ -10,17 +10,18 @@ All rows under Open work are repaired. `pnpm prove:site` passes on the top of th
 
 ## Open work
 
-| ID         | Problem                                                                                | Baseline proof                                                                           | Batch |
-| ---------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----- |
-| #306 / F07 | Space does nothing on a focused Editor button.                                         | Fails: the File menu stays closed and the pan state starts.                              | A     |
-| #254 / F06 | Docs search lets focus reach the page behind it. Escape then stops working.            | Fails: Tab leaves search in all three states. Search has no `aria-modal`. Focus is lost. | B     |
-| U05        | The expanded drawing has no keyboard zoom or pan.                                      | Source only: the overlay handles the wheel and the pointer.                              | B     |
-| #308 / F13 | The expanded drawing hides that the source has an error.                               | Fails: the overlay does not say "last valid" or give a line.                             | B     |
-| #304 / F02 | A Playground module that fails to load leaves a blank page.                            | Fails: no message and no action.                                                         | C     |
-| #305 / F03 | The start dialog's Blank diagram still makes the false saving promise from an example. | Fails: the dialog says "saved in this browser" in an example session.                    | D     |
-| #305 / F03 | File › New leaves the example, but the blank draft is still called an example.         | Fails: the status says `Example · not on disk`.                                          | D     |
-| #307 / F12 | Layout actions do not say what they change, or how to reverse them.                    | Expert judgment. No proof failure exists.                                                | E     |
-| F08        | The Editor hides its save status below 720px.                                          | Source only: `.save-status` has `display: none`.                                         | F     |
+| ID                 | Problem                                                                                                                               | Baseline proof                                                                               | Batch |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----- |
+| #306 / F07         | Space does nothing on a focused Editor button.                                                                                        | Fails: the File menu stays closed and the pan state starts.                                  | A     |
+| #254 / F06         | Docs search lets focus reach the page behind it. Escape then stops working.                                                           | Fails: Tab leaves search in all three states. Search has no `aria-modal`. Focus is lost.     | B     |
+| U05                | The expanded drawing has no keyboard zoom or pan.                                                                                     | Source only: the overlay handles the wheel and the pointer.                                  | B     |
+| #308 / F13         | The expanded drawing hides that the source has an error.                                                                              | Fails: the overlay does not say "last valid" or give a line.                                 | B     |
+| #304 / F02         | A Playground module that fails to load leaves a blank page.                                                                           | Fails: no message and no action.                                                             | C     |
+| #305 / F03         | The start dialog's Blank diagram still makes the false saving promise from an example.                                                | Fails: the dialog says "saved in this browser" in an example session.                        | D     |
+| #305 / F03         | File › New leaves the example, but the blank draft is still called an example.                                                        | Fails: the status says `Example · not on disk`.                                              | D     |
+| #307 / F12         | Layout actions do not say what they change, or how to reverse them.                                                                   | Expert judgment. No proof failure exists.                                                    | E     |
+| F08                | The Editor hides its save status below 720px.                                                                                         | Source only: `.save-status` has `display: none`.                                             | F     |
+| Start dialog (new) | **New, open or example…** froze the page while it compiled all 25 thumbnails. The audit did not report this. The site proof found it. | Failed on CI. 3,021 ms to paint here, and 13,481 ms at 4× CPU slowdown. Now 38 ms and 50 ms. | D     |
 
 ## Verified complete
 
