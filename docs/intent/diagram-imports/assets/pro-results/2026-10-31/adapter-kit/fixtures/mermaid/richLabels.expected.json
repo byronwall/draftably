@@ -1,0 +1,182 @@
+{
+  "status": "needs-review",
+  "format": "mermaid",
+  "family": "flowchart",
+  "diagnostics": [
+    {
+      "code": "MERMAID_INTERACTION_IGNORED",
+      "severity": "warning",
+      "impact": "security",
+      "message": "Mermaid click links and callbacks are data only; no interactions are installed.",
+      "line": 4
+    },
+    {
+      "code": "MERMAID_HTML_LABEL",
+      "message": "HTML label formatting was reduced to plain text; line breaks are retained and no HTML is inserted into the diagram.",
+      "impact": "appearance",
+      "severity": "warning",
+      "foreignIds": [
+        "A"
+      ]
+    },
+    {
+      "code": "MERMAID_SHAPE_APPROXIMATION",
+      "message": "Mermaid shape cylinder becomes native box; the shape-specific visual meaning is not fully preserved.",
+      "impact": "semantics",
+      "severity": "warning",
+      "foreignIds": [
+        "B"
+      ]
+    },
+    {
+      "code": "MERMAID_SHAPE_APPROXIMATION",
+      "message": "Mermaid shape round becomes native pill; the shape-specific visual meaning is not fully preserved.",
+      "impact": "semantics",
+      "severity": "warning",
+      "foreignIds": [
+        "D"
+      ]
+    },
+    {
+      "code": "MERMAID_MARKDOWN_LABEL",
+      "message": "Markdown label markers remain literal text in this profile.",
+      "impact": "appearance",
+      "severity": "warning",
+      "foreignIds": [
+        "C"
+      ]
+    },
+    {
+      "code": "MERMAID_REVERSED_LAYOUT",
+      "message": "BT layout is normalized to down; edge endpoints keep their semantic order.",
+      "impact": "layout",
+      "severity": "warning",
+      "foreignIds": [
+        "root"
+      ]
+    },
+    {
+      "code": "MERMAID_STYLE_PROPERTY",
+      "message": "Unsupported style declaration was omitted: font-size:20px",
+      "impact": "appearance",
+      "severity": "warning",
+      "foreignIds": [
+        "A"
+      ]
+    },
+    {
+      "code": "MERMAID_LINK_OMITTED",
+      "message": "External link was omitted; the native object has no active link.",
+      "impact": "security",
+      "severity": "warning",
+      "foreignIds": [
+        "A"
+      ]
+    },
+    {
+      "code": "MERMAID_ASSET_OMITTED",
+      "message": "Image/icon references are not fetched or embedded; the object remains a labeled native shape.",
+      "impact": "security",
+      "severity": "warning",
+      "foreignIds": [
+        "C"
+      ]
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "A",
+      "native": "A"
+    },
+    {
+      "kind": "node",
+      "foreign": "B",
+      "native": "B"
+    },
+    {
+      "kind": "node",
+      "foreign": "D",
+      "native": "D"
+    },
+    {
+      "kind": "node",
+      "foreign": "C",
+      "native": "C"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "2",
+      "native": "edge_2"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Mermaid richLabels\" version=1\ntheme-color import_1 shade=500 fill=\"#aabbcc\" stroke=\"#ddeeff\" ink=\"#112233\"\nnode A \"API\\n♥\" color=import_1 shade=500\nnode B \"Store\"\nnode D \"Complete\" shape=pill\nnode C \"Asset\"\nedge edge_1 A -> B \"\"\nedge edge_2 B -> D \"\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "Mermaid richLabels",
+    "objects": [
+      {
+        "id": "A",
+        "kind": "node",
+        "label": "API\n♥",
+        "shape": "box",
+        "color": "import_1",
+        "shade": 500
+      },
+      {
+        "id": "B",
+        "kind": "node",
+        "label": "Store",
+        "shape": "box"
+      },
+      {
+        "id": "D",
+        "kind": "node",
+        "label": "Complete",
+        "shape": "pill"
+      },
+      {
+        "id": "C",
+        "kind": "node",
+        "label": "Asset",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "A",
+        "to": "B",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "edge_2",
+        "from": "B",
+        "to": "D",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": [
+      {
+        "name": "import_1",
+        "fill": "#aabbcc",
+        "stroke": "#ddeeff",
+        "ink": "#112233"
+      }
+    ]
+  }
+}

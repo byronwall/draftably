@@ -1,0 +1,5 @@
+digraph Ranking {
+  node [shape=box];
+  {rank=same; a; b;}
+  a -> b;
+}

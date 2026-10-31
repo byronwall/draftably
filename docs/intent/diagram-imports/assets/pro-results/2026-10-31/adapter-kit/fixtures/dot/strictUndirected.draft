@@ -1,0 +1,6 @@
+diagram "Relationships" version=1
+node a "a"
+node b "b"
+edge edge_1 a -> b "latest" directed=false from=top to=bottom
+edge edge_2 b -> b "self" directed=false
+layout root flow direction=down

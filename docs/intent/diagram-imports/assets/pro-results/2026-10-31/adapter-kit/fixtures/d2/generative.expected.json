@@ -1,0 +1,124 @@
+{
+  "status": "needs-review",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_PROGRAM_SNAPSHOT",
+      "severity": "warning",
+      "impact": "semantics",
+      "message": "D2 classes, globs, variables become a concrete graph snapshot. Their rules, class tags, and future edit behavior are not retained in native source."
+    },
+    {
+      "code": "D2_STYLE_DROPPED",
+      "severity": "warning",
+      "impact": "appearance",
+      "message": "Explicit D2 styles omitted by this companion: fill.",
+      "foreignIds": [
+        "cluster.a"
+      ]
+    },
+    {
+      "code": "D2_STYLE_DROPPED",
+      "severity": "warning",
+      "impact": "appearance",
+      "message": "Explicit D2 styles omitted by this companion: fill.",
+      "foreignIds": [
+        "cluster.b"
+      ]
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "group",
+      "foreign": "cluster",
+      "native": "cluster"
+    },
+    {
+      "kind": "node",
+      "foreign": "cluster.a",
+      "native": "cluster.a"
+    },
+    {
+      "kind": "node",
+      "foreign": "cluster.b",
+      "native": "cluster.b"
+    },
+    {
+      "kind": "node",
+      "foreign": "outside",
+      "native": "outside"
+    },
+    {
+      "kind": "edge",
+      "foreign": "cluster.(a -> b)[0]",
+      "native": "d2_edge_1"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 generative\" version=1\ngroup cluster \"Cluster\"\nnode cluster.a \"Inner\" in=cluster shape=diamond\nnode cluster.b \"B\" in=cluster shape=diamond\nnode outside \"Outer\"\nedge d2_edge_1 cluster.a -> cluster.b \"call\"\nlayout root flow direction=down\nlayout cluster flow direction=down\n",
+  "facts": {
+    "title": "D2 generative",
+    "objects": [
+      {
+        "id": "cluster",
+        "kind": "group",
+        "label": "Cluster"
+      },
+      {
+        "id": "cluster.a",
+        "kind": "node",
+        "label": "Inner",
+        "parent": "cluster",
+        "shape": "diamond"
+      },
+      {
+        "id": "cluster.b",
+        "kind": "node",
+        "label": "B",
+        "parent": "cluster",
+        "shape": "diamond"
+      },
+      {
+        "id": "outside",
+        "kind": "node",
+        "label": "Outer",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "d2_edge_1",
+        "from": "cluster.a",
+        "to": "cluster.b",
+        "label": "call",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      },
+      {
+        "scope": "cluster",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

@@ -1,0 +1,16 @@
+diagram "Mermaid nested" version=1
+theme-color import_1 shade=500 fill="#dbeafe" stroke="#123456" ink="#000000"
+group workers "Workers" in=system
+group system "System"
+node A "API" in=system color=import_1 shade=500
+node B "Ready?" in=workers shape=diamond
+node C "Store" in=workers
+node X "X"
+edge edge_1 X -> system ""
+edge edge_2 A -> B "send"
+edge edge_3 B -> C ""
+edge edge_4 B -> A "retry" kind=async
+edge edge_5 A -> B ""
+layout root flow direction=right
+layout workers flow direction=down
+layout system flow direction=down

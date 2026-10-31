@@ -1,0 +1,73 @@
+{
+  "status": "needs-review",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_RANK_CONSTRAINT",
+      "message": "A subgraph rank constraint is not reproduced by native layout.",
+      "severity": "warning",
+      "impact": "layout",
+      "line": 3
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Ranking\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "Ranking",
+    "objects": [
+      {
+        "kind": "node",
+        "id": "a",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "b",
+        "label": "b",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}
