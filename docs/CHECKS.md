@@ -75,6 +75,14 @@ once and prints that command.
 
 The file proof also switches between more than six diagrams with Chrome’s back/forward cache enabled, then restores a cached page after an external file change. This catches retained EventSource connections that can exhaust the browser’s HTTP/1 pool; Playwright disables that cache by default.
 
+## The public site
+
+`pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in
+Chromium with real clicks and keys. It covers the links between surfaces, narrow Playground panes,
+docs overlays, export blocking, reopening an exported image, and a failed module load. Direct URLs
+miss most of these failures, so a journey clicks what a visitor clicks. Pass a word from a journey's
+name to run one: `pnpm prove:site narrow`. Screenshots go to `tmp/proof-site/`.
+
 ## Themes in file mode
 
 `pnpm build && pnpm prove:themes` serves a temporary copy of `examples/theme-proof.draft` on a free
