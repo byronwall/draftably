@@ -3,20 +3,38 @@
 `draftably` checks, formats, draws and edits `.draft` files, and serves the editor. Run any
 command with `--help` for its own options, and `draftably --version` for the version.
 
-Any file argument may also be a PNG or SVG that draftably exported. The command reads the source
-embedded in it.
+Any file argument may also be a PNG, SVG or PDF that draftably exported. The command reads the
+source embedded in it. A PDF can hold several diagrams, so name one as
+`diagrams.pdf#architecture.draft`. `check` reads them all.
 
 ## open
 
+Start on a page for this folder's diagrams:
+
 ```sh
-draftably open                      # a start page for this folder's diagrams
-draftably open architecture.draft   # edit one file
-draftably open --status             # list running editors
+draftably open
 ```
 
-Serves the editor and opens the browser. Saves in the editor go back to the file, and changes
-made to the file elsewhere show at once. Without a file, it starts on a page that lists the
-folder's `.draft` files, makes a new one, or opens an example.
+Edit one file:
+
+```sh
+draftably open architecture.draft
+```
+
+List the running editors:
+
+```sh
+draftably open --status
+```
+
+Serves the editor and opens the browser on macOS. Saves in the editor go back to the file, and
+changes made to the file elsewhere show at once. Without a file, or with a folder, it starts on a
+page that lists the folder's `.draft` files, makes a new one, or opens an example. An editor stops
+after 2 hours with no open tab, or when its folder is deleted.
+
+An image needs a file to save to. `draftably open a.svg` writes `a.draft` beside the image and
+edits that file. If `a.draft` already holds other text, `open` stops and writes nothing. A PDF
+writes its diagrams to a folder with the PDF's name and opens that folder.
 
 | Option      | Effect                                                                      |
 | ----------- | --------------------------------------------------------------------------- |
@@ -68,18 +86,39 @@ draftably inspect architecture.draft --png architecture.png --scale 2
 Prints the canonical geometry of every node and route, or draws the diagram. SVG and PNG output
 embed the source.
 
-| Option             | Effect                                                                |
-| ------------------ | --------------------------------------------------------------------- |
-| `--json`           | Print the geometry on one line.                                       |
-| `--hints`          | With `--json`, add the raw position of every node a refinement moved. |
-| `--metrics`        | Add the measurements `vary` uses.                                     |
-| `--svg`            | Print an SVG drawing.                                                 |
-| `--png <out.png>`  | Save a PNG. Needs Chrome, Chromium or Edge.                           |
-| `--scale N`        | PNG scale, 2 by default.                                              |
-| `--max-width <px>` | Lower the scale so the PNG is at most this wide.                      |
-| `--state <id>`     | Draw one [emphasis state](#emphasis-states).                          |
-| `--states`         | Draw every state as its own aligned panel.                            |
-| `--no-source`      | Don't embed the source.                                               |
+| Option             | Effect                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------- |
+| `--json`           | Print the geometry on one line.                                                          |
+| `--hints`          | With `--json`, add the raw position of every node a refinement moved.                    |
+| `--metrics`        | Add the measurements `vary` uses.                                                        |
+| `--svg`            | Print an SVG drawing.                                                                    |
+| `--png <out.png>`  | Save a PNG. Needs Chrome, Chromium or Edge.                                              |
+| `--clipboard`      | Put a PNG and the SVG text on the clipboard. macOS only. Needs Chrome, Chromium or Edge. |
+| `--scale N`        | PNG scale, 2 by default.                                                                 |
+| `--max-width <px>` | Lower the scale so the PNG is at most this wide.                                         |
+| `--state <id>`     | Draw one [emphasis state](#emphasis-states).                                             |
+| `--states`         | Draw every state as its own aligned panel.                                               |
+| `--no-source`      | Don't embed the source.                                                                  |
+
+## pdf
+
+```sh
+draftably pdf architecture.draft -o architecture.pdf
+draftably pdf diagrams/ -o diagrams.pdf --title "System notes" --page letter
+```
+
+Saves diagrams as one vector PDF, with one diagram per page and its heading and key. Needs Chrome,
+Chromium or Edge. A folder adds each `.draft` in it, in name order. It stops on a file with errors.
+Each file's source is attached, so `check`, `extract` and `open` can read the PDF.
+
+| Option          | Effect                                                                                                                          |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `-o <out.pdf>`  | Where to save the PDF. You must give this. `--out` is the same.                                                                 |
+| `--order <how>` | `given` by default, `name` or `title`.                                                                                          |
+| `--page <size>` | `fit` by default, which makes each page the diagram's size, or `letter`, `a4`, `slide`. A fixed size scales the drawing to fit. |
+| `--title "…"`   | Add a cover and contents.                                                                                                       |
+| `--states`      | Add a page for each [emphasis state](#emphasis-states).                                                                         |
+| `--no-source`   | Don't attach the source.                                                                                                        |
 
 ## compare
 
@@ -87,9 +126,9 @@ embed the source.
 draftably compare before.draft after.draft --svg > diff.svg
 ```
 
-Prints one file that holds both versions, with `+`, `-` and `~` [change marks](#change-marks) on
-the lines that differ. `--write <file>` saves it, `--svg` draws it, and `--png <out.png>` saves an
-image.
+Prints one file that holds two versions of a diagram, with `+`, `-` and `~`
+[change marks](#change-marks) on the lines that differ. `--write <file>` saves it, `--svg` draws it,
+and `--png <out.png>` saves an image at the `--scale` that `inspect` uses.
 
 ## vary
 
@@ -122,11 +161,12 @@ crossings, bends, size and warnings. `--apply <id>` writes a variant into the fi
 
 ```sh
 draftably set architecture.draft api label="Public API" color=teal
-draftably rm architecture.draft cache
+draftably rm architecture.draft query
 draftably mv architecture.draft db orders_db
 ```
 
-Edit a file by ID. `set` changes a declaration: `label="…"` replaces its label and `color=`
+Edit a file by ID. These lines change the file from [Get started](#get-started): `query` is an
+edge, so `rm` removes that line and keeps `db`. `set` changes a declaration: `label="…"` replaces its label and `color=`
 with no value removes the attribute. Write `node.x`, `group.x` or `edge.x` when a bare ID is
 ambiguous. `rm` removes nodes, groups or edges with their edges, refinements and state mentions;
 a removed group's members move to its container. `mv` renames an ID everywhere. All three
@@ -138,8 +178,20 @@ rewrite the file through the formatter, then check it.
 draftably extract architecture.png --write architecture.draft
 ```
 
-Prints the `.draft` source embedded in a PNG or SVG export, or saves it with `--write`. Exits 1
-when the image has no source.
+Prints the `.draft` source embedded in a PNG, SVG or PDF export, or saves it with `--write`. Exits 1
+when the file has no source. For a PDF with several diagrams, name one:
+`draftably extract diagrams.pdf#architecture.draft`.
+
+## docs
+
+```sh
+draftably docs
+draftably docs legend
+draftably docs all
+```
+
+Prints the language guide for the version you have. With no topic it prints the contents. With a
+topic it prints the sections whose heading matches. `all` prints the whole guide.
 
 ## skill
 
@@ -151,3 +203,58 @@ draftably skill print
 Installs the [agent skill](#agent-skill) into `./.claude/skills/draftably`. `--global` uses
 `~/.claude/skills`, `--dir <folder>` picks another skills folder, and `--force` replaces an
 existing copy. `skill print` prints its `SKILL.md`.
+
+## Troubleshoot common problems
+
+Use this list to troubleshoot a command that is not working.
+
+### Node is too old
+
+draftably needs Node 22.21 or later. npm shows an `EBADENGINE` warning on an older Node, and some
+commands can still start. Run `node --version`, and update Node if it is older.
+
+### `draftably: command not found`
+
+The install did not finish, or its folder is not on your `PATH`.
+
+- With pnpm, run `pnpm setup`, open a new terminal and install again.
+- With npm, add `$(npm prefix --global)/bin` to your `PATH`.
+- With neither, run `npx draftably` in its place.
+
+### PNG or PDF output fails
+
+`inspect --png`, `inspect --clipboard`, `compare --png`, `pdf` and `vary` need a browser to draw.
+With no browser they stop with `PNG and PDF output need Chrome or Chromium.` Install Chrome,
+Chromium or Edge, or point `CHROME_PATH` at one:
+
+```sh
+CHROME_PATH=/path/to/chrome draftably inspect architecture.draft --png architecture.png
+```
+
+`spawn … ENOENT` means that `CHROME_PATH` names a file that does not exist. `inspect --svg` needs no
+browser.
+
+### Port 5180 is busy
+
+Without `--port`, `open` takes the next free port, so use the URL on the `Viewer:` line. With
+`--port`, it stops with `Port 5180 is already in use.` Pick another port, or use `--port 0`.
+
+### The editor is from an older version
+
+`open` reuses an editor that already serves the folder. After an update it prints
+`A viewer from draftably 0.7.0 serves …`. Stop that editor and start this version:
+
+```sh
+draftably open architecture.draft --replace
+```
+
+`draftably open --status` shows the version of each running editor.
+
+### The browser does not open
+
+`open` opens the browser on macOS only. On other systems, open the URL on the `Viewer:` line.
+
+### An export has no source
+
+`has no embedded draftably source` means that the file came from `--no-source` or another tool, or
+that a host compressed it again. Use the `.draft` file, or export it again.
