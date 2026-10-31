@@ -1,0 +1,5 @@
+diagram "D2 hiddenDirection" version=1
+node a "a"
+node b "b"
+edge d2_edge_1 a -> b ""
+layout root flow direction=down

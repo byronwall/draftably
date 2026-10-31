@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_PARSE_OR_COMPILE_ERROR",
+      "severity": "error",
+      "impact": "syntax",
+      "message": "Error: [{\"range\":\"input.d2,0:3:3-0:11:11\",\"errmsg\":\"input.d2:1:4: failed to import \\\"missing.d2\\\": file does not exist\"}]"
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

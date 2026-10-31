@@ -1,0 +1,93 @@
+{
+  "status": "ready",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "node",
+      "foreign": "c",
+      "native": "c"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "edge",
+      "foreign": "2",
+      "native": "edge_2"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Scopes\" version=1\nnode a \"Shared identity\"\nnode b \"Local default\"\nnode c \"Root default\"\nedge edge_1 a -> b \"explicit endpoint beats default\" from=right to=bottom\nedge edge_2 b -> c \"non-ranking\" constraint=false to=top\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "Scopes",
+    "objects": [
+      {
+        "kind": "node",
+        "id": "a",
+        "label": "Shared identity",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "b",
+        "label": "Local default",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "c",
+        "label": "Root default",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "explicit endpoint beats default",
+        "directed": true,
+        "fromSide": "right",
+        "toSide": "bottom"
+      },
+      {
+        "id": "edge_2",
+        "from": "b",
+        "to": "c",
+        "label": "non-ranking",
+        "directed": true,
+        "constraint": false,
+        "toSide": "top"
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

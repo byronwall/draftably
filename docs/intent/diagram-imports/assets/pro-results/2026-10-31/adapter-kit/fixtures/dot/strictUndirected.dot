@@ -1,0 +1,6 @@
+strict graph Relationships {
+  node [shape=box];
+  a:e -- b:w [label="first"];
+  b:s -- a:n [label="latest"];
+  b -- b [label="self"];
+}

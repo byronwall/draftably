@@ -1,0 +1,8 @@
+diagram "D2 generative" version=1
+group cluster "Cluster"
+node cluster.a "Inner" in=cluster shape=diamond
+node cluster.b "B" in=cluster shape=diamond
+node outside "Outer"
+edge d2_edge_1 cluster.a -> cluster.b "call"
+layout root flow direction=down
+layout cluster flow direction=down

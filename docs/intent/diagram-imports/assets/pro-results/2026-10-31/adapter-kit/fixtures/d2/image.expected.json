@@ -1,0 +1,66 @@
+{
+  "status": "needs-review",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_SHAPE_APPROXIMATED",
+      "severity": "warning",
+      "impact": "appearance",
+      "message": "D2 shape \"image\" becomes a native box.",
+      "foreignIds": [
+        "remote"
+      ]
+    },
+    {
+      "code": "D2_ACTIVE_RESOURCE_DROPPED",
+      "severity": "warning",
+      "impact": "security",
+      "message": "Image/icon and link references are omitted; no input resource is opened.",
+      "foreignIds": [
+        "remote"
+      ]
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "remote",
+      "native": "remote"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 image\" version=1\nnode remote \"Image\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "D2 image",
+    "objects": [
+      {
+        "id": "remote",
+        "kind": "node",
+        "label": "Image",
+        "shape": "box"
+      }
+    ],
+    "edges": [],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

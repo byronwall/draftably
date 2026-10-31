@@ -1,0 +1,8 @@
+diagram "D2 arrowSubset" version=1
+node a "a"
+node b "b"
+edge d2_edge_1 a -> b "forward"
+edge d2_edge_2 b -> a "backward"
+edge d2_edge_3 a -> b "neither" directed=false
+edge d2_edge_4 a -> b "parallel"
+layout root flow direction=down

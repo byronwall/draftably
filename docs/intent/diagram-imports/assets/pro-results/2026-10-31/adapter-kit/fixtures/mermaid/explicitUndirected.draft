@@ -1,0 +1,7 @@
+diagram "Mermaid explicitUndirected" version=1
+node A "A"
+node B "B"
+node C "C"
+edge request A -> B ""
+edge edge_2 B -> C "" directed=false
+layout root flow direction=right
