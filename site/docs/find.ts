@@ -1,4 +1,5 @@
 /** Full-text search over the docs: one entry per page section, ranked by where the words match. */
+import type { Tokens } from 'marked';
 import { PAGES, plain, type Page } from './content';
 
 export interface Entry {
@@ -7,30 +8,135 @@ export interface Entry {
   heading?: string;
   id?: string;
   text: string;
+  /** Lowercase text outside code blocks. */
+  prose: string;
+  /** Lowercase text of the code blocks. */
+  code: string;
+  /** The first word of each table row, in lowercase: what the row defines. */
+  keys: string;
 }
 
 const ENTRIES: Entry[] = PAGES.flatMap(page => {
-  const out: Entry[] = [{ page, text: plain(page.lead) }];
+  const lead = plain(page.lead);
+  const out: Entry[] = [{ page, text: lead, prose: lead.toLowerCase(), code: '', keys: '' }];
   for (const t of page.tokens) {
     if (t.type === 'heading') {
       const h = page.headings.find(h => h.id === (t as { id?: string }).id);
-      out.push({ page, heading: h?.text ?? plain(t.text), id: h?.id, text: '' });
+      const heading = h?.text ?? plain(t.text);
+      out.push({ page, heading, id: h?.id, text: '', prose: '', code: '', keys: '' });
     } else if (t.type !== 'space') {
       const last = out[out.length - 1];
-      last.text += ' ' + plain(t.type === 'code' ? (t as { text: string }).text : t.raw);
+      const body = plain(t.type === 'code' ? (t as { text: string }).text : t.raw);
+      last.text += ' ' + body;
+      if (t.type === 'code') last.code += ' ' + body.toLowerCase();
+      else last.prose += ' ' + body.toLowerCase();
+      if (t.type === 'table') {
+        for (const row of (t as Tokens.Table).rows)
+          last.keys += ' ' + plain(row[0].text).split(' ')[0].toLowerCase();
+      }
     }
   }
   return out;
 });
 
-export const words = (query: string) =>
-  query
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(w => w.length > 0);
+/**
+ * Words a visitor types, and the words the docs use for them. The typed word still counts first,
+ * so a heading that uses it outranks these.
+ */
+const TASK_WORDS: Record<string, string[]> = {
+  arrow: ['edge'],
+  box: ['node'],
+  change: ['pick', 'set', 'edit'],
+  clipboard: ['paste', 'copy'],
+  'class diagram': ['entity', 'cells'],
+  codex: ['agent skill'],
+  colour: ['color'],
+  dark: ['blueprint'],
+  'dark mode': ['dark', 'blueprint'],
+  delete: ['rm'],
+  dotted: ['dashed'],
+  download: ['export'],
+  'er diagram': ['entity', 'cells'],
+  flowchart: ['flow'],
+  'github actions': ['ci'],
+  grey: ['gray'],
+  horizontal: ['direction=right'],
+  hotkey: ['shortcut', 'keyboard', 'editor', 'viewer'],
+  icon: ['shape'],
+  'keyboard shortcuts': ['shortcut', 'keyboard', 'editor', 'viewer'],
+  logo: ['shape'],
+  mcp: ['agent skill'],
+  move: ['refinements', 'near', 'drag'],
+  'not working': ['problem', 'conflicts', 'error'],
+  offline: ['browser storage'],
+  pan: ['editor', 'viewer'],
+  privacy: ['browser storage'],
+  remove: ['rm'],
+  rename: ['mv'],
+  save: ['export', 'download'],
+  shortcut: ['keyboard', 'editor', 'viewer'],
+  swimlane: ['swim'],
+  troubleshoot: ['problem', 'conflicts', 'error'],
+  uml: ['sequence diagrams', 'entity'],
+  update: ['install'],
+  upgrade: ['update', 'install'],
+  vertical: ['direction=down'],
+  zoom: ['editor', 'viewer'],
+};
 
-/** Words a visitor types for the verb a task heading starts with. */
-const VERBS: Record<string, string[]> = { save: ['export', 'download'], download: ['export'] };
+const PHRASES = Object.keys(TASK_WORDS).filter(k => k.includes(' '));
+
+/** Words that say nothing about the task, ignored next to a word that does. */
+const FILLER = new Set(['a', 'an', 'the', 'my', 'to', 'how', 'do', 'i']);
+
+/** One list per thing the query asks for: the typed word, then the words the docs use for it. */
+function wanted(query: string): string[][] {
+  let rest = query.toLowerCase();
+  const out: string[][] = [];
+  for (const phrase of PHRASES) {
+    if (!rest.includes(phrase)) continue;
+    out.push([phrase, ...TASK_WORDS[phrase]]);
+    rest = rest.replace(phrase, ' ');
+  }
+  const typed = rest.split(/\s+/).filter(w => w.length > 0);
+  const kept = typed.filter(w => !FILLER.has(w));
+  for (const w of kept.length || out.length ? kept : typed)
+    out.push([w, ...(TASK_WORDS[w] ?? TASK_WORDS[w.replace(/s$/, '')] ?? [])]);
+  return out;
+}
+
+/** The words to mark in a result, including the words the docs use for the typed ones. */
+export const words = (query: string) => wanted(query).flat();
+
+const literal = (term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** A term as a whole word, or its plural. */
+const whole = (term: string) =>
+  new RegExp(`(?<![a-z0-9])${literal(term)}(?:e?s)?(?![a-z0-9])`, 'g');
+
+/** A term inside a word. A short term must start the word, so `rm` does not match `format`. */
+const inside = (term: string) =>
+  term.length > 3 ? literal(term) : `(?<![a-z0-9])${literal(term)}`;
+
+const count = (text: string, re: RegExp) => text.match(re)?.length ?? 0;
+
+/** How well one term fits an entry: a heading beats a table row, prose, then sample code. */
+function fit(entry: Entry, term: string): number {
+  const word = whole(term);
+  const part = new RegExp(inside(term));
+  const title = entry.page.title.toLowerCase();
+  const heading = entry.heading?.toLowerCase() ?? '';
+  let score = 0;
+  if (count(title, word)) score += entry.heading ? 4 : 12;
+  if (count(heading, word)) score += 12;
+  else if (part.test(heading)) score += 3;
+  if (` ${entry.keys} `.includes(` ${term} `)) score += 6;
+  const inProse = count(entry.prose, word);
+  if (inProse) score += 2 + Math.min(3, inProse);
+  if (count(entry.code, word)) score += 1;
+  if (score) return score;
+  return part.test(title) || part.test(entry.prose) || part.test(entry.code) ? 0.5 : 0;
+}
 
 export interface Hit {
   entry: Entry;
@@ -38,28 +144,23 @@ export interface Hit {
 }
 
 export function search(query: string, limit = 40): Hit[] {
-  const terms = words(query);
-  if (!terms.length) return [];
+  const asks = wanted(query);
+  if (!asks.length) return [];
+  const terms = asks.flat();
   const hits: { hit: Hit; score: number }[] = [];
-  const verbs = new Set(terms.flatMap(t => [t, ...(VERBS[t] ?? [])]));
   for (const entry of ENTRIES) {
-    const title = `${entry.page.title} ${entry.heading ?? ''}`.toLowerCase();
-    const text = entry.text.toLowerCase();
     let score = 0;
-    for (const term of terms) {
-      const inTitle = title.includes(term);
-      const at = text.indexOf(term);
-      if (!inTitle && at < 0) {
+    for (const [typed, ...others] of asks) {
+      const best = Math.max(fit(entry, typed), ...others.map(t => 0.75 * fit(entry, t)));
+      if (!best) {
         score = -1;
         break;
       }
-      if (entry.page.title.toLowerCase().includes(term)) score += entry.heading ? 4 : 12;
-      if (entry.heading?.toLowerCase().includes(term)) score += 8;
-      if (at >= 0) score += 1 + Math.min(3, text.split(term).length - 2);
+      score += best;
     }
     if (score < 0) continue;
     // A heading that starts with the query's verb, such as "Export a PNG", is the task itself.
-    if (verbs.has(entry.heading?.toLowerCase().split(/\W/)[0] ?? '')) score += 10;
+    if (terms.includes(entry.heading?.toLowerCase().split(/\W/)[0] ?? '')) score += 10;
     hits.push({ hit: { entry, snippet: snippet(entry.text, terms) }, score });
   }
   return hits
@@ -71,7 +172,10 @@ export function search(query: string, limit = 40): Hit[] {
 /** About 150 characters of the text around the first match. */
 function snippet(text: string, terms: string[]): string {
   const lower = text.toLowerCase();
-  const at = Math.min(...terms.map(t => lower.indexOf(t)).filter(i => i >= 0), text.length);
+  const first = (find: (term: string) => number) =>
+    Math.min(...terms.map(find).filter(i => i >= 0), text.length);
+  const word = first(t => lower.search(whole(t)));
+  const at = word < text.length ? word : first(t => lower.search(inside(t)));
   if (at >= text.length) return text.slice(0, 150).trim();
   const start = Math.max(0, text.lastIndexOf(' ', Math.max(0, at - 50)));
   const end = Math.min(text.length, start + 150);
@@ -81,7 +185,8 @@ function snippet(text: string, terms: string[]): string {
 /** Split text into plain and matched runs, for `<mark>`. */
 export function marks(text: string, terms: string[]): { text: string; match: boolean }[] {
   if (!terms.length) return [{ text, match: false }];
-  const re = new RegExp(terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi');
+  const longest = [...terms].sort((a, b) => b.length - a.length);
+  const re = new RegExp(longest.map(inside).join('|'), 'gi');
   const out: { text: string; match: boolean }[] = [];
   let last = 0;
   for (const m of text.matchAll(re)) {
