@@ -100,6 +100,26 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'Playground return identifies its separate copy'() {
+    const page = await open('play');
+    await page.waitForSelector('.cm-content');
+    await setSource(page, 'diagram "Playground copy" version=1\nnode a "Alpha"\n');
+    await page.getByRole('button', { name: /open in the editor/i }).click();
+    await editorReady(page);
+    await page.fill('.title-input', 'Editor copy');
+    await page.keyboard.press('Enter');
+    await sleep(800);
+    const back = page.getByRole('link', { name: 'Back to Playground (separate copy)' });
+    check('Return to Playground identifies the separate copy', await back.isVisible());
+    await back.click();
+    await page.waitForSelector('.cm-content');
+    check('Return retains Playground source', (await sourceText(page)).includes('Playground copy'));
+    await page.goForward();
+    await editorReady(page);
+    check('Editor copy stays separate', (await page.inputValue('.title-input')) === 'Editor copy');
+    await page.context().close();
+  },
+
   async 'narrow Playground'() {
     for (const width of [390, 768]) {
       const page = await open('play', { width, height: 844 });
