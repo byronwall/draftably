@@ -210,6 +210,54 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'a late Playground hash cannot replace a newer edit'() {
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await context.addInitScript(() => {
+      const Native = window.CompressionStream;
+      window.CompressionStream = class {
+        constructor(format) {
+          const stream = new Native(format);
+          this.writable = stream.writable;
+          const hold = window.holdNextCompression;
+          window.holdNextCompression = false;
+          this.readable = stream.readable.pipeThrough(
+            new TransformStream({
+              async transform(chunk, controller) {
+                if (hold) {
+                  await new Promise(resolve => {
+                    window.releaseCompression = resolve;
+                  });
+                }
+                controller.enqueue(chunk);
+              },
+            }),
+          );
+        }
+      };
+    });
+    const page = await context.newPage();
+    proof.watch(page);
+    await page.goto(`${site}play?example=checkout`);
+    await page.waitForSelector('.cm-content');
+    await page.evaluate(() => {
+      window.holdNextCompression = true;
+    });
+    await setSource(page, 'diagram "Slow old" version=1\nnode a "A"\n');
+    await wait(page, () => typeof window.releaseCompression === 'function', 'the held compression');
+    await setSource(page, 'diagram "Fast new" version=1\nnode b "B"\n');
+    await wait(page, () => /#s=/.test(location.hash), 'the newer hash');
+    await page.evaluate(() => window.releaseCompression());
+    await sleep(300);
+    const other = await context.newPage();
+    await other.goto(page.url());
+    await other.waitForSelector('.cm-content');
+    check(
+      'A late hash does not replace the newer shared source',
+      (await sourceText(other)).includes('Fast new'),
+    );
+    await context.close();
+  },
+
   async 'native keys in the editor'() {
     const page = await open('app/?example=checkout');
     await editorReady(page);
