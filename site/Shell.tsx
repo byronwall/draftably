@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, type RouteSectionProps } from '@solidjs/router';
 import { createEffect, createSignal, on, onCleanup, onMount, Show } from 'solid-js';
-import { deliver, readDiagramFile, readPastedText, REOPEN_HINT } from './reopen';
+import { deliver, readDiagramFile, readPastedText, REOPEN_HINT, unreadableFile } from './reopen';
 
 const editable = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -39,7 +39,7 @@ export function Shell(props: RouteSectionProps) {
   };
   const openFile = async (file: File) => {
     const source = await readDiagramFile(file);
-    if (source == null) fail(`${file.name} has no draftably source in it. ${REOPEN_HINT}.`);
+    if (source == null) fail(unreadableFile(file.name));
     else open(source);
   };
 
