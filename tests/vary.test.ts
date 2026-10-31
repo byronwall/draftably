@@ -95,6 +95,17 @@ describe('vary', () => {
     expect(result.drawn.get('v2')!.source).toContain('layout root flow direction=down');
   });
 
+  it('does not call a cell marker an overlap', async () => {
+    const scene = await compile(
+      `group req "Request"
+layout req cells
+node a "First part" in=req
+node cp "cache point" in=req shape=marker
+node b "Second part" in=req`,
+    );
+    expect(sceneConflicts(scene)).toEqual([]);
+  });
+
   it('gives a built-in recipe an engine when a sweep sets an engine setting', async () => {
     const shape = shapeOf(await compile(SOURCE));
     const [first] = sweep(shape, [parseTry('rank-gap=52'), parseTry('crossing-penalty=900')]);
