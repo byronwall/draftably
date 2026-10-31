@@ -58,7 +58,7 @@ const POINTS: Point[] = [
   },
   {
     title: 'Restyle with one line',
-    body: 'Five themes ship with the language. A theme changes the look and never moves a box.',
+    body: 'Five themes ship with the language. A theme changes fonts and colors. The structure stays, and boxes resize to fit.',
     variants: THEME_IDS.map(id => ({
       label: id[0].toUpperCase() + id.slice(1),
       source: withLine(themed, `theme ${id}`),

@@ -70,7 +70,7 @@ export function Landing() {
               <p class="hero-kicker">Write yours. Drag only if you want to.</p>
               <p class="hero-sub">
                 draftably lays out a plain-text <code>.draft</code> file and routes every line. Move
-                a box by hand and the move lands in the file as one readable line.
+                a box by hand and the move lands in the file as plain, readable lines.
               </p>
             </div>
             <div class="hero-actions">
@@ -225,8 +225,8 @@ function Install() {
         <div>
           <h3>Live: keep a diagram</h3>
           <p>
-            The editor on your own file. Drag a box and the file gets a <code>near</code> or{' '}
-            <code>stay</code> line. Edit the text and the drawing follows. Git sees every change.
+            The editor on your own file. Drag a box and the move lands in the file as plain,
+            readable lines. Edit the text and the drawing follows. Git sees every change.
           </p>
           <CopyCommand text="npx draftably open plan.draft" />
         </div>
