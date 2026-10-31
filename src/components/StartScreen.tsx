@@ -377,22 +377,49 @@ const ExampleGallery = () => (
 const nesting = (depth: number) =>
   depth === 0 ? 'Flat' : `${depth} level${depth === 1 ? '' : 's'} deep`;
 
+const thumbnails = new Map<string, string>();
+let turn = Promise.resolve();
+
+/** One thumbnail at a time, each after a paint, so 25 of them never freeze the dialog. */
+function drawThumbnail(source: string, wanted: () => boolean) {
+  const known = thumbnails.get(source);
+  if (known != null) return Promise.resolve(known);
+  const drawn = turn
+    .then(() => new Promise(resolve => setTimeout(resolve)))
+    .then(async () => {
+      if (!wanted()) return '';
+      // Compiling is async: a file can name a layout engine.
+      const svg = renderSvg(projectScene(await compile(source)));
+      const url = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      thumbnails.set(source, url);
+      return url;
+    })
+    .catch(() => '');
+  turn = drawn.then(() => {});
+  return drawn;
+}
+
 function ExampleCard(props: { example: ExampleInfo }) {
-  // Compiling is async: a file can name a layout engine.
+  const [seen, setSeen] = createSignal(false);
+  let open = true;
+  onCleanup(() => (open = false));
+  // A card below the fold draws when it scrolls into view.
+  const watch = (el: HTMLElement) => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      setSeen(true);
+      observer.disconnect();
+    });
+    observer.observe(el);
+    onCleanup(() => observer.disconnect());
+  };
   const [thumbnail] = createResource(
-    () => props.example.source,
-    async source => {
-      try {
-        const svg = renderSvg(projectScene(await compile(source)));
-        return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-      } catch {
-        return '';
-      }
-    },
+    () => seen() && props.example.source,
+    source => drawThumbnail(source, () => open),
   );
   return (
     <li>
-      <a class="start-example" href={exampleUrl(props.example.id)}>
+      <a ref={watch} class="start-example" href={exampleUrl(props.example.id)}>
         <span class="start-thumb">
           <Show when={thumbnail()}>
             <img src={thumbnail()} alt="" loading="lazy" />
