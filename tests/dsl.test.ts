@@ -30,6 +30,13 @@ describe('syntax', () => {
     expect(errorLine('layout root grid')).toBe(1);
   });
 
+  it('refuses attributes that have no effect', () => {
+    for (const attr of ['kind=database', 'detail="x"', 'priority=3'])
+      expect(errorLine(`node a "A" ${attr}`)).toBe(1);
+    for (const attr of ['kind=data', 'importance=2'])
+      expect(errorLine(`node a "A"\nnode b "B"\nedge e a -> b ${attr}`)).toBe(3);
+  });
+
   it('formats consistently and keeps comments and unrelated statements', () => {
     const messy =
       '\n\n# heading\n  node   a  "A"   color=blue   # inline note\n\n\n\nnode b "B" // other style\n\n';

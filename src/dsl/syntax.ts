@@ -451,7 +451,6 @@ export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text
 const FRAMES = ['box', 'soft', 'none'] as const;
 /** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
 const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
-const KINDS = ['group', 'service', 'app', 'database', 'queue', 'person', 'document'];
 const SIDES: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
 
 /** Parse and validate source. Throws `DslError` with a line number for the first problem. */
@@ -655,31 +654,8 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? [
-                'in',
-                'color',
-                'shade',
-                'shape',
-                'was',
-                'href',
-                'count',
-                'span',
-                'kind',
-                'detail',
-                'priority',
-              ]
-            : [
-                'in',
-                'color',
-                'shade',
-                'was',
-                'href',
-                'kind',
-                'detail',
-                'priority',
-                'frame',
-                'fold',
-              ],
+            ? ['in', 'color', 'shade', 'shape', 'was', 'href', 'count', 'span']
+            : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold'],
         );
         const oid = id(args[0]);
         assert(oid !== 'root', 'root is reserved for the outer layout scope.');
@@ -691,8 +667,6 @@ export function parseModel(source: string | SourceDoc): Model {
           `Expected color=auto, a built-in color (${BUILT_IN_FAMILIES.join(', ')}) or a theme-color name; got ${color}.`,
         );
         const shade = attrs.has('shade') ? shadeOf(attrs.get('shade')!) : undefined;
-        if (attrs.has('kind')) choice('kind', 'service', KINDS);
-        num('priority', 5, 1, 10);
         m.objects.push({
           id: oid,
           type: command,
@@ -723,7 +697,7 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'importance', 'constraint']);
+        allow(['kind', 'from', 'to', 'was', 'constraint']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -731,13 +705,12 @@ export function parseModel(source: string | SourceDoc): Model {
         const eid = id(args[0]);
         assert(!edgeIds.has(eid), `Duplicate edge id ${eid}.`);
         edgeIds.add(eid);
-        num('importance', 7, 1, 10);
         m.edges.push({
           id: eid,
           source: id(args[1]),
           target: id(args[3]),
           label: text(args[4]),
-          dashed: choice('kind', 'sync', ['sync', 'async', 'data']) === 'async',
+          dashed: choice('kind', 'sync', ['sync', 'async']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
           ...(choice('constraint', 'true', ['true', 'false']) === 'false'

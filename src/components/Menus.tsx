@@ -371,7 +371,7 @@ function ExportMenu() {
       <hr />
       <MenuItem command="export-png" />
       <MenuItem command="export-svg" />
-      <Show when={fileMode()}>
+      <Show when={fileMode() && workspace()}>
         <MenuItem command="export-pdf" />
       </Show>
       <p class="menu-note">

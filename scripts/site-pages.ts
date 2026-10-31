@@ -24,9 +24,9 @@ interface Meta {
 const SITE: Meta[] = [
   {
     path: '',
-    title: 'draftably: manual diagrams are a drag',
+    title: 'draftably: diagrams from plain text',
     description:
-      'A text language and CLI for diagrams. Write plain .draft source; draftably lays out the boxes and routes the lines. Drag a box if you want, and the move is saved to the file.',
+      'A text language and CLI for diagrams. Write plain .draft source; draftably lays out the boxes and routes the lines. Drag a box to keep the move.',
   },
   {
     path: 'play',
@@ -83,9 +83,23 @@ async function docsPages(): Promise<Meta[]> {
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+// Pages serves each route from its folder and redirects the bare path to it with a slash.
+const urlOf = (meta: Meta) => `${origin}${base}${meta.path ? `${meta.path}/` : ''}`;
+
+/** The page's text before the app runs. One line, so a second run can find and replace it. */
+function staticBody(meta: Meta) {
+  const links = [
+    [`${base}app/`, 'Editor'],
+    [`${base}play/`, 'Playground'],
+    [`${base}docs/`, 'Docs'],
+    ['https://www.npmjs.com/package/draftably', 'npm'],
+    ['https://github.com/byronwall/draftably', 'GitHub'],
+  ].map(([href, text]) => `<a href="${href}">${text}</a>`);
+  return `<div class="page"><main class="hero"><h1>${esc(meta.title.split(' · ')[0])}</h1><p class="hero-sub">${esc(meta.description)}</p><p class="footer-links">${links.join(' ')}</p></main></div>`;
+}
+
 function page(template: string, meta: Meta) {
-  // Pages serves each route from its folder and redirects the bare path to it with a slash.
-  const url = `${origin}${base}${meta.path ? `${meta.path}/` : ''}`;
+  const url = urlOf(meta);
   const image = `${origin}${base}og.png`;
   const tags = [
     `<title>${esc(meta.title)}</title>`,
@@ -109,7 +123,8 @@ function page(template: string, meta: Meta) {
   return template
     .replace(/<title>[^<]*<\/title>/, '')
     .replace(/<meta\s+name="description"[^>]*\/>/, '')
-    .replace('</head>', `    ${tags}\n  </head>`);
+    .replace('</head>', `    ${tags}\n  </head>`)
+    .replace(/<div id="root">.*<\/div>/, () => `<div id="root">${staticBody(meta)}</div>`);
 }
 
 // Strip tags a previous run added, so running this twice on one build gives the same pages.
@@ -126,4 +141,9 @@ for (const meta of all) {
 }
 // Unknown paths still load the app, under the site's own card.
 fs.writeFileSync(path.join(out, '404.html'), page(template, SITE[0]));
-console.log(`Wrote ${all.length} pages with social tags.`);
+const urls = all.map(meta => `  <url><loc>${esc(urlOf(meta))}</loc></url>`).join('\n');
+fs.writeFileSync(
+  path.join(out, 'sitemap.xml'),
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+);
+console.log(`Wrote ${all.length} pages with social tags, and sitemap.xml.`);

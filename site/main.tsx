@@ -43,6 +43,10 @@ function PlaygroundPage() {
   );
 }
 
+const root = document.getElementById('root')!;
+// The build writes each page's headline and links here, for crawlers and readers with no JS.
+root.textContent = '';
+
 render(
   () => (
     <Router base={import.meta.env.BASE_URL.replace(/\/$/, '')} root={Shell}>
@@ -51,5 +55,5 @@ render(
       <Route path="*" component={Landing} />
     </Router>
   ),
-  document.getElementById('root')!,
+  root,
 );

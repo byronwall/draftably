@@ -215,9 +215,11 @@ function fitOption(args: string[]) {
   return fit as Fit | undefined;
 }
 
+const counted = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
 /** One line of what `vary` measures: size and aspect, crossings, bends, line length, warnings. */
 const metricsLine = (m: Omit<Metrics, 'moved'>) =>
-  `Metrics: ${m.width}×${m.height} (aspect ${(m.width / m.height).toFixed(2)}), ${m.crossings} crossings, ${m.bends} bends, ${m.length}px of lines, ${m.warnings} warnings.`;
+  `Metrics: ${m.width}×${m.height} (aspect ${(m.width / m.height).toFixed(2)}), ${counted(m.crossings, 'crossing')}, ${counted(m.bends, 'bend')}, ${m.length}px of lines, ${counted(m.warnings, 'warning')}.`;
 
 /** The document in emphasis state `id`, or as it is without one. */
 function drawnState(doc: Diagram, id: string | undefined) {
@@ -271,10 +273,10 @@ async function checkFile(
     warnings = diagnostics.filter(d => d.level === 'warning');
   for (const d of diagnostics) if (!quiet || d.level !== 'info') console.log(tag + describe(d));
   if (hints) console.log(hintTable(await hintMoves(source, scene)));
-  if (drawn) console.log(tag + metricsLine(drawn.metrics));
+  if (drawn) console.log(tag + metricsLine({ ...drawn.metrics, warnings: warnings.length }));
   const nodes = scene.objects.filter(o => o.type === 'node').length;
   console.log(
-    `${tag}${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${nodes} nodes, ${scene.objects.length - nodes} groups, ${scene.edges.length} connections.`,
+    `${tag}${errors.length ? 'Problems' : warnings.length ? 'Warnings' : 'OK'}: ${counted(nodes, 'node')}, ${counted(scene.objects.length - nodes, 'group')}, ${counted(scene.edges.length, 'connection')}.`,
   );
   return errors.length ? 1 : 0;
 }
