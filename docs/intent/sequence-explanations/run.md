@@ -18,13 +18,13 @@
 - Model: Pro; live selector showed power 5 of 5.
 - Submitted: 2026-10-30 22:44 EDT (2026-10-31 02:44 UTC).
 - Verified: sent prompt, both document attachments, image attachment, Thinking, and Stop control.
-- Phase: collected and reviewed; final validation passed; PR pending.
+- Phase: complete; research PR open for review.
 - Follow-up count: 0 of 1.
-- Heartbeat: `complete-sequence-diagram-pro-research`, ACTIVE, hourly at minute 47.
+- Heartbeat: `complete-sequence-diagram-pro-research`, deleted after completion.
 - First check: about 2026-10-30 23:47 EDT (2026-10-31 03:47 UTC).
 - Blockers: none. Branch creation and Chromium rendering needed approved sandbox escalation. Locked dependencies installed successfully.
 - Collected results: all 20 files in [assets-index.md](assets-index.md). Original bytes preserved and verified against archive entries.
-- PR: pending collection and integration.
+- PR: https://github.com/byronwall/draftably/pull/331 (OPEN; branch and complete file inventory verified).
 
 ## Preparation checks
 
@@ -52,3 +52,6 @@ Inspect the recorded conversation before any send. Preserve a running response. 
 - No central research catalogue exists in this checkout. The initiative summary and asset index serve as its entry points.
 - Final `pnpm check` passed after integration: typecheck, lint, formatting, unit tests, engine suites, and build. Log: `tmp/pro/sequence-explanations/check-final.log`.
 - Verified the committed asset inventory: all 20 original files still match the archive bytes. The ZIP is untracked.
+- PR description includes the plan, summary, asset index, conversation, proof limits, and actual baseline/manual proposal images. Both images use verified GitHub attachment URLs.
+- Full final check: 64 unit test files, 371 tests, 195 named geometry assertions, 55 sculpt checks, 320 engine parity comparisons, and build passed.
+- Completion: all results collected and reviewed, dispositions and plan written, PR verified, and heartbeat deleted. Stop for review; no feature implementation, merge, or deployment.
