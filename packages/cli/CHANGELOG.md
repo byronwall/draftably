@@ -1,5 +1,27 @@
 # draftably
 
+## 0.8.1
+
+### Patch Changes
+
+- f1bdf2e: The docs now say when to pick each layout engine, add a Fix a layout path, and match the Editor's routing menu names.
+- 2f210ce: Use lowercase draftably in documentation, the website, editor labels, and CLI messages.
+- f6bca86: `vary --try direction` works on a file with no `layout` line. `check` no longer warns about a cell
+  marker, and `check --metrics` counts every warning that it prints. The parser now refuses
+  attributes that had no effect: `kind`, `detail` and `priority` on nodes and groups, `importance` on
+  edges, and `kind=data`. The hosted Editor no longer offers Export PDF.
+- 6d9ef67: The CLI reference in `draftably docs` uses commands that a reader can run, and the Examples section lists every example.
+- c13e879: The language guide in `draftably docs` has headings for notes, links, shades, the legend and side-by-side panels. It lists the values and ranges of more attributes, and its Refinements and Emphasis states samples run as whole files.
+- 7d03d01: The hosted Editor no longer requests a local workspace that does not exist there.
+- 624fafc: Layout actions in the Edit menu state what they change, with the scope from the live selection, and how to reverse them. The Layout tools docs compare them.
+- 7a76d11: The Editor shows where work is kept on phone-width screens.
+- cfa1f11: New from an example opens one blank draft from every entry point. The draft has its own name and no longer promises a browser save it does not make.
+
+  The start dialog opens at once. Example thumbnails draw one at a time as they scroll into view.
+
+- 61ccd09: Space activates a focused Editor button again. Space-drag still pans on the canvas and after a toolbar click.
+- 1819b87: The Editor's start dialog names `npx draftably open`, the command a visitor can run.
+
 ## 0.8.0
 
 ### Minor Changes
