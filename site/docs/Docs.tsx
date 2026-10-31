@@ -42,6 +42,12 @@ const remember = () => {
 };
 let returning: { at?: number; y?: number } = {};
 window.addEventListener('scroll', remember, { passive: true });
+// Back from another document, such as the Editor, loads this page again, so the entry holds it.
+window.addEventListener('pagehide', () => {
+  history.replaceState({ ...history.state, y: window.scrollY }, '');
+});
+const [load] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+if (load?.type === 'back_forward') returning = { at: entry(), y: history.state?.y };
 // The new page clamps or resets the scroll, so read the position before it shows.
 window.addEventListener('popstate', () => {
   returning = { at: entry(), y: scrolls.get(entry() ?? -1) };
