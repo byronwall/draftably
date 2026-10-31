@@ -34,6 +34,7 @@
     "prove:file": "node scripts/prove-file-session.mjs",
     "prove:installed": "node scripts/prove-package.ts --browser",
     "prove:layout": "node scripts/prove-layout-tools.mjs",
+    "prove:site": "node scripts/prove-site.mjs",
     "prove:themes": "node scripts/prove-themes.mjs",
     "font-metrics": "node scripts/font-metrics.mjs",
     "audit:compare": "node scripts/audit-compare.mjs",
