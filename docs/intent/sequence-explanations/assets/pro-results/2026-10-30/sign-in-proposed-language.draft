@@ -1,0 +1,30 @@
+# PROPOSED FUTURE LANGUAGE. NOT SUPPORTED by commit 2f210ce4.
+# Editorial source for sign-in-engineering-proposal.svg; not a renderer-equivalent artifact.
+# Manual visual design coordinates are specified in visual-spec.json.
+diagram "Successful password sign-in" version=1
+subtitle "The web app delegates credential verification to the auth service."
+scope "Valid credentials; error paths omitted."
+
+node user "User"
+node app "Web app"
+node auth "Auth service"
+node db "User store"
+
+# An interaction is an authored exchange, with no synchronous/blocking claim.
+edge m1 user -> app "submit email + password" message=interaction
+edge m2 app -> auth "verify credentials" message=interaction
+edge m3 auth -> db "load user" message=interaction
+edge m4 db -> auth "user record" message=reply reply-to=m3
+action m5 auth "check password hash"
+edge m6 auth -> app "session token" message=reply reply-to=m2
+edge m7 app -> user "signed in" message=outcome
+
+phase submit "Submit" m1 m2
+phase verify "Verify" m3 m4 m5
+phase result "Return" m6 m7
+order root user app auth db
+layout root sequence
+
+# Proposed compiler always emits an order-only timing caption for narrative sequences.
+# This source intentionally claims neither cookie handling, durable storage, token format,
+# session issuance location, exact protocol, blocking behavior nor measured duration.
