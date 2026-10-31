@@ -121,6 +121,10 @@ export const fileSession = state.info;
 export const fileMode = () => !!state.info();
 /** True while an example is open: edits are kept in this browser only. */
 export const exampleMode = () => !!state.info()?.example;
+/** The id of the blank draft that New opens: a scratch copy with no example behind it. */
+export const DRAFT_ID = 'untitled';
+/** What a scratch copy is called on screen. */
+export const scratchName = () => (state.info()?.example === DRAFT_ID ? 'Draft' : 'Example');
 /** The example has edits that are not in any file. */
 export const exampleEdited = () => exampleMode() && state.undoStack().length > 0;
 /** The user already agreed to leave the page, so the browser need not ask again. */
@@ -143,7 +147,7 @@ let diskSource = '',
 /** Selects this file's session on the server: `?file=…`. */
 let fileQuery = '';
 /** What an edit is called once it is kept: saved to disk, or only in the example. */
-const keptLabel = () => (exampleMode() ? 'Example only' : 'Saved');
+const keptLabel = () => (exampleMode() ? `${scratchName()} only` : 'Saved');
 /** The source the viewer shows; it differs from `diskSource` while a save is pending. */
 let localSource = '';
 export const currentSource = () => localSource;
@@ -678,7 +682,7 @@ export async function openExampleSession(
   source: string,
   key = `example:${id}`,
 ) {
-  document.title = `Example: ${title} · draftably`;
+  document.title = `${id === DRAFT_ID ? title : `Example: ${title}`} · draftably`;
   scratchKey = key;
   const kept = readScratch()[key]?.source;
   const restored = kept != null && kept !== source;
@@ -817,8 +821,8 @@ export function fileStatusText(): string {
   if (info?.example) {
     const edits = state.undoStack().length;
     return edits
-      ? `Example · ${edits} unsaved edit${edits === 1 ? '' : 's'}`
-      : 'Example · not on disk';
+      ? `${scratchName()} · ${edits} unsaved edit${edits === 1 ? '' : 's'}`
+      : `${scratchName()} · not on disk`;
   }
   const name = info?.file ?? info?.name ?? '';
   switch (state.status()) {

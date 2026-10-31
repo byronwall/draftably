@@ -5,6 +5,7 @@ import {
   exampleEdited,
   exampleRestored,
   fileSession,
+  scratchName,
   markExampleSaved,
   resetExample,
 } from '../state/file-session';
@@ -51,14 +52,17 @@ export function ExampleBar() {
     <div class="example-bar" role="status">
       <span class="example-badge">
         <Icon name="spark" />
-        Example
+        {scratchName()}
       </span>
       <Show
         when={saving()}
         fallback={
           <>
             <span class="example-text">
-              <strong>{fileSession()?.name}</strong>
+              {/* A draft is renamed in the toolbar, so only an example's name stays true here. */}
+              <Show when={scratchName() === 'Example'}>
+                <strong>{fileSession()?.name}</strong>
+              </Show>
               <span class="example-note">
                 {exampleRestored() && exampleEdited()
                   ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
@@ -101,7 +105,7 @@ export function ExampleBar() {
                 when={fromPlay}
                 fallback={
                   <a class="button small ghost" href={startUrl()}>
-                    Close example
+                    Close {scratchName().toLowerCase()}
                   </a>
                 }
               >

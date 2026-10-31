@@ -85,6 +85,14 @@ export function currentScope(): { scope: LayoutScope; containerId?: string } {
   return { scope: 'all' };
 }
 
+/** What Tidy positions changes now, as the menu and the toolbar say it. */
+export function layoutTarget() {
+  const scope = state.labScope() === 'auto' ? currentScope().scope : state.labScope();
+  if (scope === 'all') return 'the whole diagram';
+  if (scope === 'neighbourhood') return 'the selection and its neighbours';
+  return scope === 'container' ? 'this group' : 'the selection';
+}
+
 /** Ids that layout must not move: brush holds. Set by the brush module. */
 let fixedIdsProvider: () => string[] = () => [];
 export const setFixedIdsProvider = (provider: () => string[]) => (fixedIdsProvider = provider);

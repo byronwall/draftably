@@ -175,6 +175,112 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'New from an example'() {
+    const page = await open('app/?example=checkout');
+    await editorReady(page);
+    const opened = page.url();
+    await page.click(FILE);
+    await page.click('.popover >> text="New diagram"');
+    await page.waitForURL(url => url.href !== opened, { timeout: 5000 });
+    await editorReady(page);
+    check('#305 File › New leaves the example URL', !page.url().includes('example=checkout'));
+    const status = await page.locator('.in-example').textContent();
+    check('#305 the blank draft is not called an example', !/example/i.test(status), status);
+    const bar = await page.locator('.example-bar').textContent();
+    check('#305 the bar says draft', /Draft/.test(bar) && !/example/i.test(bar), bar.slice(0, 80));
+    check('#305 the tab title drops the example', !/example|checkout/i.test(await page.title()));
+    await page.fill('.title-input', 'Audit new draft');
+    await page.keyboard.press('Enter');
+    await sleep(800);
+    await page.reload();
+    await editorReady(page);
+    const kept = await page.inputValue('.title-input');
+    check('#305 the new draft survives a reload', kept === 'Audit new draft', kept);
+    await page.screenshot({ path: path.join(proof.out, 'new-draft.png') });
+    await page.context().close();
+
+    const start = await open('app/?example=checkout');
+    await editorReady(start);
+    await start.click(FILE);
+    // Timed in the page: drawing 25 thumbnails at once froze this click for seconds.
+    const took = await start.evaluate(
+      () =>
+        new Promise(done => {
+          const item = [...document.querySelectorAll('.popover .menu-item')].find(b =>
+            b.textContent.startsWith('New, open or example'),
+          );
+          const from = performance.now();
+          item.click();
+          requestAnimationFrame(() => setTimeout(() => done(performance.now() - from)));
+        }),
+    );
+    await start.waitForSelector('.start-dialog');
+    check('the start dialog paints within a second', took < 1000, `${Math.round(took)} ms`);
+    const hint = await start.locator('.start-new').textContent();
+    check('#305 the start dialog says what New does', /blank draft/.test(hint), hint.slice(0, 80));
+    await start.click('.start-new button');
+    await start.waitForURL(url => url.search.includes('new'), { timeout: 5000 });
+    await editorReady(start);
+    check('#305 the start dialog opens the same draft', !start.url().includes('checkout'));
+    await start.context().close();
+
+    // The browser copy stays the promised path outside an example.
+    const copy = await open('app/');
+    await editorReady(copy);
+    await copy.click('.start-new button');
+    const ok = copy.locator(
+      'dialog button:has-text("New diagram"), .dialog button:has-text("New diagram")',
+    );
+    if (await ok.count()) await ok.first().click();
+    await sleep(300);
+    await copy.fill('.title-input', 'Browser copy');
+    await copy.keyboard.press('Enter');
+    await sleep(800);
+    await copy.reload();
+    await copy.waitForSelector('.title-input');
+    await sleep(300);
+    check(
+      '#305 a browser copy survives a reload',
+      (await copy.inputValue('.title-input')) === 'Browser copy',
+    );
+    await copy.context().close();
+  },
+
+  async 'layout actions say what they change'() {
+    const page = await open('app/?example=checkout');
+    await editorReady(page);
+    const button = page.locator('.toolbar button:has-text("Tidy positions")');
+    await page.click('[aria-label^="Layout options"]');
+    const panel = page.locator('.hint', { hasText: 'Tidy positions changes' });
+    check(
+      '#307 nothing selected means the whole diagram',
+      /the whole diagram/.test(await panel.textContent()),
+    );
+    await page.locator('[data-id="web"]').first().click({ force: true });
+    check(
+      '#307 a selection narrows the scope',
+      /the selection|this group/.test(await panel.textContent()),
+    );
+    check(
+      '#307 the toolbar tooltip agrees',
+      /the selection|this group/.test(await button.getAttribute('title')),
+    );
+    await page.screenshot({ path: path.join(proof.out, 'layout-panel.png') });
+    await page.context().close();
+
+    const phone = await open('app/?example=checkout', { width: 390, height: 844 });
+    await editorReady(phone);
+    await phone.click('.toolbar button:has-text("More")');
+    const menu = await phone.locator('.popover').textContent();
+    check('#307 the phone menu states the scope', /Small moves in the whole diagram/.test(menu));
+    check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
+    await phone.keyboard.press('Escape');
+    check('F08 the phone shows where work is kept', await phone.isVisible('.save-status'));
+    await phone.screenshot({ path: path.join(proof.out, 'phone-status.png') });
+    await phone.screenshot({ path: path.join(proof.out, 'layout-menu.png') });
+    await phone.context().close();
+  },
+
   async 'docs overlays'() {
     const page = await open('docs/cells');
     await page.waitForSelector('.docs-search-button');

@@ -192,10 +192,6 @@
   .title-block {
     width: min(62vw, 260px);
   }
-
-  .save-status {
-    display: none;
-  }
 }
 
 .save-status.on-disk.warning {
