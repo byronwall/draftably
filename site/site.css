@@ -381,6 +381,14 @@ main {
   white-space: nowrap;
 }
 
+.live-tab:hover {
+  color: var(--text);
+}
+
+.live-tab:focus-visible {
+  outline-offset: -2px;
+}
+
 .live-tab[aria-selected='true'] {
   color: var(--text);
   background: var(--surface);
@@ -404,12 +412,20 @@ main {
 }
 
 .live-open {
+  display: flex;
+  align-items: center;
+  height: 28px;
   font-size: 13px;
   font-weight: 600;
   color: var(--accent);
   text-decoration: none;
   white-space: nowrap;
   padding: 0 6px;
+  transition: color 140ms;
+}
+
+.live-open:hover {
+  color: var(--accent-hover);
 }
 
 .live-reset:hover {
@@ -430,6 +446,11 @@ main {
   min-height: 0;
   min-width: 0;
   border-left: 1px solid var(--line);
+}
+
+.live-source:focus-within {
+  background: #fdfcff;
+  box-shadow: inset 0 2px 0 var(--accent);
 }
 
 .live-stage {
@@ -474,6 +495,8 @@ main {
 }
 
 .live-caption {
+  container-type: inline-size;
+  flex: none;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -504,6 +527,44 @@ main {
 
 .live-caption-actions .live-reset:hover {
   color: var(--accent-hover);
+}
+
+.live-caption-actions .live-reset:disabled {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+/* The caption drops words as its own width runs out, so nothing leaves the row. */
+@container (max-width: 690px) {
+  .live-caption-long {
+    display: none;
+  }
+}
+
+@container (max-width: 440px) {
+  .live-caption-tail {
+    display: none;
+  }
+
+  .live-caption-actions .live-reset {
+    padding: 0 8px;
+  }
+}
+
+/* Stands in for the drawing when there is none. */
+.live-caption-blank {
+  position: absolute;
+  inset: 0 0 37px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 24px;
+  background: var(--canvas);
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
 }
 
 .drag-view,
@@ -1207,12 +1268,38 @@ main {
     border-left: 0;
   }
 
+  /* Tabs get the full width; the actions keep one row, so Undo appearing moves nothing. */
+  .live-bar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0;
+  }
+
+  .live-tabs {
+    flex: 1 0 100%;
+    height: 40px;
+    padding: 0 8px;
+  }
+
+  .live-bar-end {
+    flex: 1 0 100%;
+    justify-content: flex-end;
+    height: 32px;
+    margin: 0;
+    padding: 0 8px;
+    border-top: 1px solid var(--line);
+  }
+
   .live-scroll {
     max-height: 280px;
   }
+}
 
-  .live-open {
-    display: none;
+/* Tabs run past the edge here, so the last one fades to say there are more. */
+@media (max-width: 720px) {
+  .live-tabs {
+    padding-right: 40px;
+    mask-image: linear-gradient(to left, transparent, #000 40px);
   }
 }
 
