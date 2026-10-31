@@ -1,7 +1,7 @@
 # Themes
 
-A `theme` line picks one of five presets. The layout stays the same in every theme: only type,
-padding and color change. Here is one file drawn in each of them.
+A `theme` line picks one of five presets. A theme changes fonts, padding and colors. The structure
+stays, and boxes resize to fit, so some boxes move. Here is one file drawn in each of them.
 
 ```draft themes
 group edge "Edge" color=blue
@@ -21,11 +21,15 @@ legend violet "Data stores"
 
 ## Pick a theme
 
-Write the theme first in the file. A file with no `theme` line uses `drafting`.
+A file with no `theme` line uses `drafting`. The sample above has no `theme` line, so a copy of it
+draws in `drafting`. To pick another theme, write its line first in the file:
 
 ```text
 theme fieldnotes
 ```
+
+In the Editor, select **Appearance**, the palette at the right of the toolbar. Then select a theme.
+The Editor writes the `theme` line for you.
 
 | Theme        | Character                                                       |
 | ------------ | --------------------------------------------------------------- |
