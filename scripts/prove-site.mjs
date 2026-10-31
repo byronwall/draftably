@@ -544,6 +544,48 @@ const journeys = {
       await page.context().close();
     }
   },
+
+  async 'LC01 the page says what a drag writes'() {
+    const page = await open('');
+    const box = page.locator('.drag-host [data-id="db"]').first();
+    await box.waitFor();
+    const before = await page.inputValue('.live-source textarea');
+    const at = await box.boundingBox();
+    await page.mouse.move(at.x + at.width / 2, at.y + at.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(at.x + at.width / 2 + 30, at.y + at.height / 2 + 60, { steps: 5 });
+    await page.mouse.up();
+    await page.waitForSelector('.live-bar-end >> text=Undo');
+    const after = await page.inputValue('.live-source textarea');
+    const lines = text => text.split('\n').length;
+    const added = lines(after) - lines(before);
+    check('LC01 a drag writes more than one line', added > 1, `${added} lines`);
+    const hero = await page.locator('.hero-sub').textContent();
+    check('LC01 the hero says lines', /readable lines/.test(hero), hero);
+    const install = await page.locator('.install').textContent();
+    check('LC01 Install says lines', /readable lines/.test(install));
+    await page.context().close();
+  },
+
+  async 'LC02 the page says what a theme changes'() {
+    const page = await open('');
+    await page.locator('.points').scrollIntoViewIfNeeded();
+    await page.click('.point button:has-text("Restyle with one line")');
+    const gate = async theme => {
+      await page.click(`.point-tabs button:has-text("${theme}")`);
+      await sleep(600);
+      return page
+        .locator('.point-figure [data-id="gate"]')
+        .first()
+        .evaluate(el => el.getBBox().y);
+    };
+    const [drafting, ink] = [await gate('Drafting'), await gate('Ink')];
+    check('LC02 a theme moves a box', drafting !== ink, `y ${drafting} to ${ink}`);
+    const text = await page.locator('.point.is-active').textContent();
+    check('LC02 the claim admits the resize', /boxes resize to fit/.test(text), text.slice(0, 90));
+    check('LC02 the false claim is gone', !/never moves/.test(text));
+    await page.context().close();
+  },
 };
 
 const only = process.argv[2];

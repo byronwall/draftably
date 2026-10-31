@@ -209,8 +209,8 @@ function FolderFiles() {
         when={workspace()}
         fallback={
           <p class="start-hint">
-            Run <code>pnpm draftably open</code> in a folder to list and edit its{' '}
-            <code>.draft</code> files here.
+            Run <code>npx draftably open</code> in a folder to list and edit its <code>.draft</code>{' '}
+            files here.
           </p>
         }
       >

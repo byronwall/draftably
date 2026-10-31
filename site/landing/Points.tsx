@@ -1,8 +1,9 @@
-import { createSignal, For, onCleanup, onMount, type JSX } from 'solid-js';
+import { createSignal, For, onCleanup, onMount, Show, type JSX } from 'solid-js';
 import { findExample } from '../../src/model/examples';
 import { THEME_IDS } from '../../src/model/appearance';
 import { paperOf } from '../draw';
 import { highlightHtml } from '../highlight';
+import { Expand } from '../live/Expand';
 import { drawSvg, enqueue, whenSeen } from './render';
 
 interface Variant {
@@ -50,7 +51,7 @@ const POINTS: Point[] = [
     variants: [
       { label: 'Marked', source: change, lines: linesOf(change, /^[+~-]node/) },
       {
-        label: 'Side by side',
+        label: 'Before and after',
         source: withLine(change, 'compare "Before" "After"'),
         lines: 'compare "Before" "After"',
       },
@@ -58,7 +59,7 @@ const POINTS: Point[] = [
   },
   {
     title: 'Restyle with one line',
-    body: 'Five themes ship with the language. A theme changes the look and never moves a box.',
+    body: 'Five themes ship with the language. A theme changes fonts and colors. The structure stays, and boxes resize to fit.',
     variants: THEME_IDS.map(id => ({
       label: id[0].toUpperCase() + id.slice(1),
       source: withLine(themed, `theme ${id}`),
@@ -146,14 +147,21 @@ export function Points() {
           </For>
         </div>
         <div class="point-view">
-          <div
-            class="point-figure"
-            classList={{ 'is-drawn': !!svg() }}
-            style={{ background: paperOf(svg()) }}
-            // The SVG comes from our own renderer, which escapes every label.
-            // eslint-disable-next-line solid/no-innerhtml
-            innerHTML={svg()}
-          />
+          <div style={{ position: 'relative' }}>
+            <div
+              class="point-figure"
+              classList={{ 'is-drawn': !!svg() }}
+              style={{ background: paperOf(svg()) }}
+              role="img"
+              aria-label={`${POINTS[point()].title}: ${variant().label}`}
+              // The SVG comes from our own renderer, which escapes every label.
+              // eslint-disable-next-line solid/no-innerhtml
+              innerHTML={svg()}
+            />
+            <Show when={svg()}>
+              <Expand svg={svg()} />
+            </Show>
+          </div>
           <pre
             class="point-source"
             // Built from escaped tokens by highlightHtml.

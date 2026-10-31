@@ -12,7 +12,8 @@ export async function readDiagramFile(file: File): Promise<string | null> {
   const bytes = new Uint8Array(await file.arrayBuffer());
   const image = await readImageSource(bytes);
   if (image != null) return image;
-  if (file.type.startsWith('image/') || /\.(png|svg)$/i.test(file.name)) return null;
+  // Only `.draft` text is source. A NUL byte means a binary file with that name.
+  if (!/\.draft$/i.test(file.name) || bytes.includes(0)) return null;
   return new TextDecoder().decode(bytes);
 }
 

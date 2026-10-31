@@ -3,8 +3,8 @@ import { Logo } from '../Logo';
 import { SiteNav } from '../SiteNav';
 import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/examples';
 import { appUrl, paperOf } from '../draw';
-import { useLocation, useNavigate } from '@solidjs/router';
-import { LiveEditor } from '../live/LiveEditor';
+import { A, useLocation, useNavigate } from '@solidjs/router';
+import { demoEditorUrl, LiveEditor } from '../live/LiveEditor';
 import { deliver, readDiagramFile } from '../reopen';
 import { Points } from './Points';
 import { drawSvg, enqueue, whenSeen } from './render';
@@ -38,7 +38,10 @@ const COMMANDS: [string, string][] = [
   ['draftably vary plan.draft', 'Ranks layout variants on one contact sheet.'],
 ];
 
-const TITLE = 'draftably: manual diagrams are a drag';
+const TITLE = 'draftably: diagrams from plain text';
+
+/** The demo's URL once it is edited (it then carries a `#s=` hash); the blank Editor before that. */
+const heroEditorUrl = () => (demoEditorUrl().includes('#') ? demoEditorUrl() : appUrl());
 
 export function Landing() {
   // Arriving from another page keeps that page's title; name this one.
@@ -61,20 +64,21 @@ export function Landing() {
   );
   return (
     <div class="page">
+      <SkipLink />
       <Nav />
-      <main>
+      <main id="main" tabIndex={-1} style={{ outline: 'none' }}>
         <section class="hero">
           <h1>Manual diagrams are a drag.</h1>
           <div class="hero-head">
             <div>
               <p class="hero-kicker">Write yours. Drag only if you want to.</p>
               <p class="hero-sub">
-                draftably lays out a plain-text <code>.draft</code> file and routes every line. Move
-                a box by hand and the move lands in the file as one readable line.
+                For developers: architecture, flows, sequences, state machines and schemas, laid out
+                from plain text. Move a box and the file gets plain, readable lines.
               </p>
             </div>
             <div class="hero-actions">
-              <a class="button primary" href={appUrl()} rel="external">
+              <a class="button primary" href={heroEditorUrl()} rel="external">
                 Open the editor
               </a>
               <CopyCommand text="npx draftably open" class="button" />
@@ -87,20 +91,58 @@ export function Landing() {
         <Points />
         <Examples />
       </main>
-      <footer class="footer">
+      <footer class="footer" style={{ 'flex-wrap': 'wrap' }}>
         <span class="wordmark">
           <Logo size={18} />
           draftably
         </span>
         <span class="footer-links">
+          <A href="/play">Playground</A>
           <a href={appUrl()} rel="external">
             Editor
           </a>
+          <A href="/docs">Docs</A>
           <a href={NPM}>npm</a>
           <a href={GITHUB}>GitHub</a>
         </span>
+        <p style={{ width: '100%', margin: 0, color: 'var(--muted)', 'font-size': '13px' }}>
+          Playground: write the source and see it draw. Editor: build on a canvas, tidy the layout
+          and save a file.
+        </p>
       </footer>
     </div>
+  );
+}
+
+/** Hidden until it has focus: the first Tab stop on the page. */
+function SkipLink() {
+  const [shown, setShown] = createSignal(false);
+  return (
+    <a
+      href="#main"
+      class={shown() ? 'button primary' : 'sr-only'}
+      style={shown() ? { position: 'fixed', top: '8px', left: '8px', 'z-index': 10 } : undefined}
+      onFocus={() => setShown(true)}
+      onBlur={() => setShown(false)}
+      onClick={e => {
+        e.preventDefault();
+        document.getElementById('main')?.focus();
+      }}
+    >
+      Skip to content
+    </a>
+  );
+}
+
+/** A link inside muted text: accent color and no underline, unlike a bare link there. */
+function DocLink(props: { href: string; children: string }) {
+  return (
+    <A
+      href={props.href}
+      style={{ color: 'var(--accent)', 'text-decoration': 'none', 'white-space': 'nowrap' }}
+    >
+      {props.children}
+    </A>
   );
 }
 
@@ -211,7 +253,7 @@ function Install() {
   return (
     <section class="install" id="install">
       <div class="section-head">
-        <h2>Two ways out of one file</h2>
+        <h2>Three ways to use one file</h2>
       </div>
       <div class="install-cols">
         <div>
@@ -225,8 +267,8 @@ function Install() {
         <div>
           <h3>Live: keep a diagram</h3>
           <p>
-            The editor on your own file. Drag a box and the file gets a <code>near</code> or{' '}
-            <code>stay</code> line. Edit the text and the drawing follows. Git sees every change.
+            The editor on your own file. Drag a box and the move lands in the file as plain,
+            readable lines. Edit the text and the drawing follows. Git sees every change.
           </p>
           <CopyCommand text="npx draftably open plan.draft" />
         </div>
@@ -234,7 +276,8 @@ function Install() {
           <h3>Teach your coding agent</h3>
           <p>
             A bundled skill teaches an agent the language, so it writes, checks and renders{' '}
-            <code>.draft</code> files on its own. Add <code>--global</code> for every project.
+            <code>.draft</code> files on its own. Add <code>--global</code> for every project.{' '}
+            <DocLink href="/docs/agent-skill">Read the guide</DocLink>.
           </p>
           <CopyCommand text="npx draftably skill install" />
         </div>
@@ -252,7 +295,8 @@ function Install() {
         </For>
       </dl>
       <p class="install-note">
-        Needs Node 22.21 or later. Run <code>npm i -g draftably</code> to drop the <code>npx</code>.
+        Needs Node 22.21 or later. Run <code>npm i -g draftably</code> to drop the <code>npx</code>.{' '}
+        <DocLink href="/docs/cli">See every command</DocLink>.
       </p>
     </section>
   );
@@ -263,6 +307,7 @@ function ReopenLine() {
   const navigate = useNavigate();
   const [error, setError] = createSignal('');
   const choose = async (file: File) => {
+    setError('');
     const source = await readDiagramFile(file);
     if (source == null) return setError(`${file.name} has no draftably source in it.`);
     deliver(source);
@@ -270,23 +315,22 @@ function ReopenLine() {
   };
   return (
     <p class="hero-reopen" classList={{ 'is-error': !!error() }}>
-      {error() || 'Have a draftably PNG or SVG? Drop or paste it anywhere, or '}
-      <Show when={!error()}>
-        <label class="hero-reopen-pick">
-          choose a file
-          <input
-            type="file"
-            accept=".draft,.png,.svg,text/plain,image/png,image/svg+xml"
-            class="sr-only"
-            onChange={e => {
-              const file = e.currentTarget.files?.[0];
-              e.currentTarget.value = '';
-              if (file) void choose(file);
-            }}
-          />
-        </label>
-        , to keep editing.
-      </Show>
+      <span role="alert">{error()}</span>{' '}
+      <Show when={!error()}>Have a draftably PNG or SVG? Drop or paste it anywhere, or </Show>
+      <label class="hero-reopen-pick">
+        {error() ? 'Choose another file' : 'choose a file'}
+        <input
+          type="file"
+          accept=".draft,.png,.svg,image/png,image/svg+xml"
+          class="sr-only"
+          onChange={e => {
+            const file = e.currentTarget.files?.[0];
+            e.currentTarget.value = '';
+            if (file) void choose(file);
+          }}
+        />
+      </label>
+      <Show when={!error()}>, to keep editing. Runs in your browser. Nothing is uploaded.</Show>
     </p>
   );
 }
