@@ -1,20 +1,48 @@
 # Agent skill
 
-draftably ships a skill that teaches coding agents such as Claude Code to write `.draft` files,
-check them, pick a layout and hand the result to you in the editor. The agent edits text, so its
-diagrams diff and review like code.
+draftably ships a skill that teaches coding agents such as Claude Code, Codex and Cursor to write
+`.draft` files, check them, pick a layout and hand the result to you in the editor. The agent edits
+text, so its diagrams diff and review like code.
 
 ## Install it
 
+Each agent reads skills from its own folder. Run one command in your project.
+
+Claude Code reads `.claude/skills`. This is the default:
+
 ```sh
-npx draftably skill install                       # ./.claude/skills/draftably
-npx draftably skill install --global              # ~/.claude/skills/draftably
-npx draftably skill install --dir .agents/skills  # any other skills folder
-npx skills add byronwall/draftably                # or straight from the repository
+npx draftably skill install
 ```
 
-`--force` replaces a copy that is already there. `npx draftably skill print` prints the skill so
-you can read it first.
+Add `--global` to install it in `~/.claude/skills`, for all your projects:
+
+```sh
+npx draftably skill install --global
+```
+
+Codex and Cursor read `.agents/skills`. For another agent, use the folder that it reads:
+
+```sh
+npx draftably skill install --dir .agents/skills
+```
+
+You can also install straight from the repository:
+
+```sh
+npx skills add byronwall/draftably
+```
+
+`npx draftably skill print` prints the skill so you can read it first.
+
+## Update it
+
+The agent reads its installed copy, so that copy does not change when you update draftably. Run
+the same command with `--force` to replace it. `draftably check` prints a note when the two
+differ.
+
+```sh
+npx draftably skill install --force
+```
 
 ## What the agent does with it
 
