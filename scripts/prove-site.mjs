@@ -529,6 +529,21 @@ const journeys = {
     check('LD02 Undo cannot delete typed text', text.includes('# typed after the drag'));
     await page.context().close();
   },
+
+  async 'the landing page fits a phone'() {
+    for (const width of [320, 390, 464]) {
+      const page = await open('', { width, height: 844 });
+      await page.waitForSelector('.install .copy');
+      const over = await page.evaluate(w => document.documentElement.scrollWidth - w, width);
+      check(`LP01 no sideways scroll at ${width}px`, over <= 0, `${over}px over`);
+      const out = await page.evaluate(w => {
+        const rights = [...document.querySelectorAll('.install .copy, .install .copy-icon')];
+        return Math.max(...rights.map(e => e.getBoundingClientRect().right)) - w;
+      }, width);
+      check(`LP01 install commands stay on screen at ${width}px`, out <= 0, `${out}px over`);
+      await page.context().close();
+    }
+  },
 };
 
 const only = process.argv[2];
