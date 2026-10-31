@@ -26,6 +26,14 @@
 - Collected results: none yet.
 - PR: pending collection and integration.
 
+## Preparation checks
+
+- New Markdown files pass Prettier.
+- First `pnpm check` passed typecheck, lint, and formatting. Unit tests hit sandbox restrictions on Chromium and local ports: 61 files passed; three failed.
+- Retried `pnpm check` with approved access. Log: `tmp/pro/sequence-explanations/check-approved.log`. Inspect its result on resume; this was still running at the preparation checkpoint.
+- Submission screenshot: `tmp/pro/sequence-explanations/submitted.jpg`.
+- Pro confirmed the packet's 34 files and began its source review. No follow-up sent.
+
 ## Resume
 
 Inspect the recorded conversation before any send. Preserve a running response. Collect task downloads under the skill's standing approval. Keep ZIPs ignored. Preserve originals under `assets/pro-results/2026-10-30/`, with an asset index. Review all outputs and decisive code claims. Write the summary, dispositions, and implementation plan. Run required checks, commit, push, and open the research PR. Verify its body and file list. Disable the heartbeat at completion or an essential user blocker.
