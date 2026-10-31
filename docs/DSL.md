@@ -314,8 +314,8 @@ edge hit cache -> cp "cached prefix"
 - A cell stays in its place. `near`, `nudge`, `stay` and `pin` on a cell are reported and
   ignored; move the group instead, by its title band. An engine on the root moves the group as
   one block.
-- In the viewer, dragging a cell and dropping it among the others reorders the group: it writes
-  the group's `order` line. A marker keeps its place before the cell it preceded. The inspector's
+- In the Editor, dragging a cell and dropping it among the others reorders the group: it writes
+  the group's `order` line. A marker keeps its place before the cell it preceded. The Inspector's
   **Span** field writes `span=`.
 - Cells are nodes, so colors, links, `count=` and change marks work on them.
 
@@ -537,7 +537,7 @@ they use.
 
 ## Layout engines
 
-`layout scope engine=name` arranges a scope with one of the editor's layout engines instead of a
+`layout scope engine=name` arranges a scope with one of the Editor's layout engines instead of a
 built-in recipe. The engine runs from scratch each time the file compiles, so the result depends
 only on the objects, their sizes and the connections, never on an earlier drawing. Adding an
 object lays the scope out again.
@@ -687,7 +687,7 @@ Which setting to change for a problem:
 
 - **Too many bends:** raise `bend-penalty`, for example to 64.
 - **Lines cross:** raise `crossing-penalty`, for example to 900. See also
-  [Fixing line crossings](#fixing-line-crossings). The viewer's **Fewer crossings**
+  [Fixing line crossings](#fixing-line-crossings). The Editor's **Fewer crossings**
   preset writes `crossing-penalty=900 shared-penalty=9 port-stability=10`.
 - **Parallel lines too close together:** raise `edge-gap`, then `parallel-penalty`.
 - **Lines too close to boxes:** raise `clearance` (a hard limit) or `standoff` (a preference).
@@ -745,7 +745,7 @@ Try these steps in order, and stop when the drawing reads well:
 1. **Change the order.** The order of `node` lines, or a scope's `order` line, decides where a box
    goes when nothing else does. Put boxes in the same order as the boxes they connect to.
 2. **Let the engine reorder.** On a `compound-flow` or `layered` engine, add `ordering=crossings`:
-   `layout root engine=layered ordering=crossings`. In the viewer, the same setting is
+   `layout root engine=layered ordering=crossings`. In the Editor, the same setting is
    **Within-rank ordering** → **Reorder to reduce crossings** in Layout options.
 3. **Move one box.** A `near` line with `side=` puts a box on the other side of its neighbor. A
    `pin` holds a box at an exact place. See [Refinements](#refinements).
@@ -997,7 +997,7 @@ viewer. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ## Editing in the viewer
 
-When you edit a diagram in the viewer, the viewer writes each change into the `.draft` file as a
+When you edit a diagram in the Editor, the Editor writes each change into the `.draft` file as a
 readable line, so the file stays the source.
 
 ```draft
@@ -1011,11 +1011,11 @@ Inspector from the toolbar. Select Cache and choose teal as its color. The box t
 file's `node cache` line gets `color=teal`. Then drag Cache below API: the file gets a `near` line
 for Cache. Undo returns the file to its earlier version.
 
-### Viewer edits reference
+### Editor edits reference
 
-Edits made in the viewer are written back to the file as readable statements:
+Edits made in the Editor are written back to the file as readable statements:
 
-| In the viewer                              | In the file                                                         |
+| In the Editor                              | In the file                                                         |
 | ------------------------------------------ | ------------------------------------------------------------------- |
 | Drag an object                             | `near` the closest sibling it does not overlap; `nudge` if none.    |
 | Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
@@ -1037,13 +1037,13 @@ An accepted move, pin or resize also writes soft `stay` anchors for the objects 
 top-level object, and the siblings of the edited object and of its containers. When an agent later
 adds content, nearby objects make room while anchored regions hold. If growth forces an anchor to
 give way, the status bar's **layout notes** name it with its line, and the change notice lists the
-objects outside the edit that moved. **Reflow group** (Edit menu or inspector) removes the soft
+objects outside the edit that moved. **Reflow group** (Edit menu or Inspector) removes the soft
 refinements inside a group so its recipe arranges it again, and anchors what is around it.
 
-Each save is checked against the file's revision. If the file changed on disk first, the viewer
+Each save is checked against the file's revision. If the file changed on disk first, the Editor
 shows the file and keeps your edit aside: **Keep file** discards the edit, and **Save my edit over
 it** replaces the newer file. Undo and redo step through the file's versions; a change from
-outside the viewer clears them, so undo never erases someone else's work.
+outside the Editor clears them, so undo never erases someone else's work.
 
 ## Layout tools
 
