@@ -23,7 +23,8 @@ Some more facts about each case:
 - **Copy link.** The link holds the full source, so no server keeps a copy. Edits after you copy
   the link are not in it. Copy the link again to include them.
 - **Editor scratch copy.** "Open in the editor", an example, or a shared link in the Editor opens a
-  scratch copy. The bar at the top says so. When you reload or come back, the bar shows your
+  scratch copy. **New diagram** from an example opens one too, called a draft, and leaves the
+  diagram kept in this browser as it is. The bar at the top says so. When you reload or come back, the bar shows your
   unsaved edits again. The browser keeps the 10 newest scratch copies. Use **Download .draft** in
   that bar to keep your edits as a file.
 - **`draftably open`.** The editor saves to disk as you work. Changes that other programs make to

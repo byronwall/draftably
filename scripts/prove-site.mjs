@@ -175,6 +175,65 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'New from an example'() {
+    const page = await open('app/?example=checkout');
+    await editorReady(page);
+    const opened = page.url();
+    await page.click(FILE);
+    await page.click('.popover >> text="New diagram"');
+    await page.waitForURL(url => url.href !== opened, { timeout: 5000 });
+    await editorReady(page);
+    check('#305 File › New leaves the example URL', !page.url().includes('example=checkout'));
+    const status = await page.locator('.in-example').textContent();
+    check('#305 the blank draft is not called an example', !/example/i.test(status), status);
+    const bar = await page.locator('.example-bar').textContent();
+    check('#305 the bar says draft', /Draft/.test(bar) && !/example/i.test(bar), bar.slice(0, 80));
+    check('#305 the tab title drops the example', !/example|checkout/i.test(await page.title()));
+    await page.fill('.title-input', 'Audit new draft');
+    await page.keyboard.press('Enter');
+    await sleep(800);
+    await page.reload();
+    await editorReady(page);
+    const kept = await page.inputValue('.title-input');
+    check('#305 the new draft survives a reload', kept === 'Audit new draft', kept);
+    await page.screenshot({ path: path.join(proof.out, 'new-draft.png') });
+    await page.context().close();
+
+    const start = await open('app/?example=checkout');
+    await editorReady(start);
+    await start.click(FILE);
+    await start.click('.popover >> text=/New, open or example/');
+    await start.waitForSelector('.start-dialog');
+    const hint = await start.locator('.start-new').textContent();
+    check('#305 the start dialog says what New does', /blank draft/.test(hint), hint.slice(0, 80));
+    await start.click('.start-new button');
+    await start.waitForURL(url => url.search.includes('new'), { timeout: 5000 });
+    await editorReady(start);
+    check('#305 the start dialog opens the same draft', !start.url().includes('checkout'));
+    await start.context().close();
+
+    // The browser copy stays the promised path outside an example.
+    const copy = await open('app/');
+    await editorReady(copy);
+    await copy.click('.start-new button');
+    const ok = copy.locator(
+      'dialog button:has-text("New diagram"), .dialog button:has-text("New diagram")',
+    );
+    if (await ok.count()) await ok.first().click();
+    await sleep(300);
+    await copy.fill('.title-input', 'Browser copy');
+    await copy.keyboard.press('Enter');
+    await sleep(800);
+    await copy.reload();
+    await copy.waitForSelector('.title-input');
+    await sleep(300);
+    check(
+      '#305 a browser copy survives a reload',
+      (await copy.inputValue('.title-input')) === 'Browser copy',
+    );
+    await copy.context().close();
+  },
+
   async 'docs overlays'() {
     const page = await open('docs/cells');
     await page.waitForSelector('.docs-search-button');

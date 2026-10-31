@@ -4,7 +4,8 @@ import { renderSvg } from '../cli/svg';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
 import { EXAMPLES, type ExampleInfo } from '../model/examples';
-import { newDocument } from '../state/actions';
+import { runCommand } from '../state/commands';
+import { exampleMode } from '../state/file-session';
 import {
   createDiagramFile,
   exampleUrl,
@@ -60,7 +61,13 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
           </h1>
           <Show
             when={workspace()}
-            fallback={<span class="start-where">Browser copy · saved on this device</span>}
+            fallback={
+              <span class="start-where">
+                {exampleMode()
+                  ? 'Scratch copy · not on disk'
+                  : 'Browser copy · saved on this device'}
+              </span>
+            }
           >
             {info => (
               <span class="start-where" title={info().root}>
@@ -108,7 +115,7 @@ function NewDiagram() {
     e.preventDefault();
     setError('');
     if (!workspace()) {
-      newDocument();
+      runCommand('new-diagram');
       setStartOpen(false);
       return;
     }
@@ -129,7 +136,11 @@ function NewDiagram() {
         when={workspace()}
         fallback={
           <form class="start-new" onSubmit={create}>
-            <p class="start-hint">Replaces the diagram kept in this browser. Undo restores it.</p>
+            <p class="start-hint">
+              {exampleMode()
+                ? 'Opens a blank draft. The diagram kept in this browser stays as it is.'
+                : 'Replaces the diagram kept in this browser. Undo restores it.'}
+            </p>
             <button type="submit" class="button primary">
               <Icon name="plus" />
               Blank diagram

@@ -5,6 +5,7 @@ import {
   exampleEdited,
   exampleRestored,
   fileSession,
+  scratchName,
   markExampleSaved,
   resetExample,
 } from '../state/file-session';
@@ -51,7 +52,7 @@ export function ExampleBar() {
     <div class="example-bar" role="status">
       <span class="example-badge">
         <Icon name="spark" />
-        Example
+        {scratchName()}
       </span>
       <Show
         when={saving()}
@@ -101,7 +102,7 @@ export function ExampleBar() {
                 when={fromPlay}
                 fallback={
                   <a class="button small ghost" href={startUrl()}>
-                    Close example
+                    Close {scratchName().toLowerCase()}
                   </a>
                 }
               >
