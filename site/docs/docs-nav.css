@@ -1,0 +1,139 @@
+/* Docs keyboard and small-screen navigation. */
+
+.docs-skip {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 20;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: var(--surface);
+  box-shadow: 0 1px 4px #0003;
+  color: var(--accent);
+  font: 600 14px var(--font);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.docs-skip:focus {
+  transform: none;
+}
+
+/* Both take focus from code only, so a ring would mark nothing a reader chose. */
+.docs-main:focus,
+.doc h1:focus {
+  outline: none;
+}
+
+/* The current topic stops short of the sidebar's edge, so its neighbors show too. */
+.docs-side a {
+  scroll-margin-block: 28px;
+}
+
+.doc-onpage {
+  display: none;
+}
+
+@media (max-width: 1180px) {
+  .doc-onpage {
+    display: block;
+    margin-top: 6px;
+    font-size: 13.5px;
+    line-height: 1.4;
+  }
+
+  .doc-onpage > button,
+  .doc-onpage > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--accent);
+    font: inherit;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 140ms;
+  }
+
+  .doc-onpage > a {
+    font-weight: 400;
+  }
+
+  .doc-onpage > button:hover,
+  .doc-onpage > a:hover {
+    color: var(--accent-hover);
+  }
+
+  .doc-onpage > button:active {
+    color: var(--text);
+  }
+
+  .doc-onpage > button svg {
+    width: 10px;
+    height: 6px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+/* The top layer's own containing block is the page, so the panel scrolls with its button. */
+.doc-onpage-panel {
+  position: absolute;
+  inset: auto;
+  width: min(320px, calc(100vw - 32px));
+  max-height: min(60vh, 480px);
+  margin: 0;
+  padding: 6px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 4px 16px #0000001f;
+}
+
+.doc-onpage-panel a {
+  display: block;
+  padding: 5px 8px;
+  border-radius: 5px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.4;
+  text-decoration: none;
+  transition:
+    color 140ms,
+    background-color 140ms;
+}
+
+.doc-onpage-panel a:hover {
+  color: var(--accent);
+}
+
+.doc-onpage-panel a:active {
+  background: var(--accent-soft);
+}
+
+.doc-onpage-panel a.is-sub {
+  padding-left: 20px;
+}
+
+.doc-onpage-panel a.is-current {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.doc-onpage-panel .docs-edit {
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
