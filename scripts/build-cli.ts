@@ -11,7 +11,7 @@ await build({
   root,
   configFile: false,
   // The package has no runtime dependencies, so pdf-lib is bundled into the CLI.
-  ssr: { noExternal: ['pdf-lib'] },
+  ssr: { noExternal: ['pdf-lib', '@ts-graphviz/ast', '@ts-graphviz/common'] },
   build: {
     ssr: 'src/cli/main.ts',
     target: 'node22',
@@ -34,6 +34,8 @@ writeFileSync(
     readFileSync(path.join(root, 'node_modules/solid-js/LICENSE'), 'utf8') +
     '\n\npdf-lib\n\n' +
     readFileSync(path.join(root, 'node_modules/pdf-lib/LICENSE.md'), 'utf8') +
+    '\n\n@ts-graphviz/ast and @ts-graphviz/common\n\n' +
+    readFileSync(path.join(root, 'node_modules/@ts-graphviz/ast/LICENSE'), 'utf8') +
     // Diagram fonts, embedded in the viewer and in exported SVG files.
     ['Inter', 'SourceSerif4', 'JetBrainsMono']
       .map(

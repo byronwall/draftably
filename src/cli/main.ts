@@ -25,6 +25,9 @@ Any <file> may also be a PNG, SVG or PDF that draftably exported: its embedded s
 A PDF holds several; name one as diagrams.pdf#name.draft, or check reads them all.
 
 Commands:
+  import <file.dot> [--output <new.draft>] [--from dot] [--accept-lossy]
+                            Convert DOT to a new .draft file, or print native source.
+                            Warnings require --accept-lossy. The input stays unchanged.
   check <file>…             Report source errors, layout diagnostics and drawing conflicts
        [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
        [--quiet]            errors. Several files or a folder check each .draft in turn.
@@ -299,6 +302,24 @@ export async function main(argv: string[]): Promise<number> {
   };
   try {
     switch (command) {
+      case 'import': {
+        if (!file || file.startsWith('--'))
+          throw new UsageError('import needs a foreign diagram file.');
+        for (let i = 0; i < rest.length; i++) {
+          if (rest[i] === '--accept-lossy') continue;
+          if (rest[i] === '--from' || rest[i] === '--output') {
+            if (!rest[i + 1] || rest[i + 1].startsWith('--'))
+              throw new UsageError(`${rest[i]} needs a value.`);
+            i++;
+          } else throw new UsageError(`Unknown import option: ${rest[i]}`);
+        }
+        const { importFile } = await import('./import');
+        return importFile(file, {
+          from: option(rest, '--from'),
+          output: option(rest, '--output'),
+          acceptLossy: flag('--accept-lossy'),
+        });
+      }
       case 'check': {
         const args = [file, ...rest],
           files = args.filter(
