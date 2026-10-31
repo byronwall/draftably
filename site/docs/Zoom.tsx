@@ -10,10 +10,10 @@ const PAN_KEYS: Record<string, [number, number]> = {
 };
 
 /**
- * A drawing over the whole window: it opens fitted, the wheel or + and - zoom, a drag or the arrow
- * keys pan, and Escape or the close button leaves. A touch screen has only the bar's buttons. It is a modal dialog: focus moves to Close, Tab
- * stays on its buttons, and focus goes back to the opener when it closes. `error` says the drawing
- * is the last good one, while the source has that error.
+ * A drawing over the whole window: it opens fitted, the wheel, a pinch or + and - zoom, a drag or
+ * the arrow keys pan, and Escape or the close button leaves. It is a modal dialog: focus moves to
+ * Close, Tab stays on its buttons, and focus goes back to the opener when it closes. `error` says
+ * the drawing is the last good one, while the source has that error.
  */
 export function Zoom(props: { svg: string; error?: string; onClose: () => void }) {
   const [view, setView] = createSignal({ x: 0, y: 0, k: 1 });
@@ -21,6 +21,8 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
   let paper!: HTMLDivElement;
   let dialog!: HTMLDivElement;
   let close!: HTMLButtonElement;
+  /** The mouse or fingers down on the stage, in stage pixels. */
+  const pointers = new Map<number, { x: number; y: number }>();
 
   const fit = () => {
     const svg = paper.querySelector('svg');
@@ -37,6 +39,31 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
     const k = Math.min(8, Math.max(0.1, v.k * by));
     setView({ x: px - ((px - v.x) * k) / v.k, y: py - ((py - v.y) * k) / v.k, k });
   };
+
+  const local = (e: MouseEvent) => {
+    const box = stage.getBoundingClientRect();
+    return { x: e.clientX - box.left, y: e.clientY - box.top };
+  };
+
+  /** One pointer pans. With a second, the midpoint pans and the gap between them zooms. */
+  const move = (e: PointerEvent) => {
+    const last = pointers.get(e.pointerId);
+    if (!last) return;
+    const next = local(e);
+    pointers.set(e.pointerId, next);
+    const other = [...pointers].find(([id]) => id !== e.pointerId)?.[1] ?? next;
+    const dx = other === next ? next.x - last.x : (next.x - last.x) / 2;
+    const dy = other === next ? next.y - last.y : (next.y - last.y) / 2;
+    setView(v => ({ ...v, x: v.x + dx, y: v.y + dy }));
+    if (other === next) return;
+    const gap = Math.hypot(last.x - other.x, last.y - other.y);
+    if (gap) {
+      const by = Math.hypot(next.x - other.x, next.y - other.y) / gap;
+      zoomAt((next.x + other.x) / 2, (next.y + other.y) / 2, by);
+    }
+  };
+
+  const up = (e: PointerEvent) => pointers.delete(e.pointerId);
 
   const zoomKey = (by: number) => {
     const box = stage.getBoundingClientRect();
@@ -65,9 +92,15 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
       e.stopPropagation();
     };
     window.addEventListener('keydown', key, true);
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
     document.body.style.overflow = 'hidden';
     onCleanup(() => {
       window.removeEventListener('keydown', key, true);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
       document.body.style.overflow = '';
       opener?.focus();
     });
@@ -75,28 +108,14 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
 
   const wheel = (e: WheelEvent) => {
     e.preventDefault();
-    const box = stage.getBoundingClientRect();
-    const px = e.clientX - box.left;
-    const py = e.clientY - box.top;
-    zoomAt(px, py, Math.exp(-e.deltaY * 0.0015));
+    const { x, y } = local(e);
+    zoomAt(x, y, Math.exp(-e.deltaY * 0.0015));
   };
 
   const down = (e: PointerEvent) => {
     if (e.button !== 0) return;
     e.preventDefault();
-    const initial = { cx: e.clientX, cy: e.clientY, ...view() };
-    const move = (m: PointerEvent) =>
-      setView({
-        k: initial.k,
-        x: initial.x + m.clientX - initial.cx,
-        y: initial.y + m.clientY - initial.cy,
-      });
-    const up = () => {
-      window.removeEventListener('pointermove', move);
-      window.removeEventListener('pointerup', up);
-    };
-    window.addEventListener('pointermove', move);
-    window.addEventListener('pointerup', up);
+    pointers.set(e.pointerId, local(e));
   };
 
   return (
@@ -112,23 +131,13 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
         <div class="zoom-bar">
           <span>
             {matchMedia('(pointer: coarse)').matches
-              ? 'Drag to pan'
+              ? 'Pinch to zoom · drag to pan'
               : 'Scroll or + − to zoom · drag or arrows to pan · 0 to fit · Esc to close'}
           </span>
-          <button
-            type="button"
-            aria-label="Zoom out"
-            style={{ 'min-width': '32px' }}
-            onClick={() => zoomKey(0.8)}
-          >
+          <button type="button" aria-label="Zoom out" onClick={() => zoomKey(0.8)}>
             −
           </button>
-          <button
-            type="button"
-            aria-label="Zoom in"
-            style={{ 'min-width': '32px' }}
-            onClick={() => zoomKey(1.25)}
-          >
+          <button type="button" aria-label="Zoom in" onClick={() => zoomKey(1.25)}>
             +
           </button>
           <button type="button" onClick={fit}>
