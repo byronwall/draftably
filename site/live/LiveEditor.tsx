@@ -29,6 +29,14 @@ interface Good {
 
 const kb = (text: string) => `${Math.max(1, Math.round(new Blob([text]).size / 1024))} KB`;
 
+const [handoff, setHandoff] = createSignal(appUrl());
+
+/**
+ * Where the demo's work opens in the Editor: the open example, or once it is edited, a share URL
+ * that carries the edited source. Links to it need `rel="external"`.
+ */
+export const demoEditorUrl = handoff;
+
 /**
  * The landing page hero: `.draft` source beside its drawing, with the two ways out of a file.
  * Live: drag a box and the move is written into the source, or edit the source and it redraws.
@@ -50,6 +58,7 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
   const [changed, setChanged] = createSignal<number[]>([]);
   const [note, setNote] = createSignal('');
   const [undo, setUndo] = createSignal<string[]>([]);
+  const [fits, setFits] = createSignal(0);
   const edited = () => source() !== findExample(id())?.source;
 
   let run = 0;
@@ -83,8 +92,13 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
     const top = changed()[0];
     if (top !== undefined && scroller) {
       const y = top * 20;
-      if (y < scroller.scrollTop || y > scroller.scrollTop + scroller.clientHeight - 60)
-        scroller.scrollTo({ top: Math.max(0, y - scroller.clientHeight / 3), behavior: 'smooth' });
+      if (y < scroller.scrollTop || y > scroller.scrollTop + scroller.clientHeight - 60) {
+        const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        scroller.scrollTo({
+          top: Math.max(0, y - scroller.clientHeight / 3),
+          behavior: still ? 'auto' : 'smooth',
+        });
+      }
     }
   };
 
@@ -137,29 +151,55 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
   onCleanup(save);
 
   // The editor opens the example, or once it is edited, the edited source in a share hash.
-  const [editorUrl, setEditorUrl] = createSignal(appUrl(first));
   createEffect(() => {
     const text = source();
-    if (!edited()) return setEditorUrl(appUrl(id()));
+    if (!edited()) return setHandoff(appUrl(id()));
     void encodeSource(text).then(
-      hash => source() === text && setEditorUrl(`${import.meta.env.BASE_URL}app/#${hash}`),
+      hash => source() === text && setHandoff(`${import.meta.env.BASE_URL}app/#${hash}`),
     );
   });
 
   const pick = (next: string) => {
+    if (next === id()) return;
     save();
     setId(next);
     write(TAB, next);
     clearMarks();
+    // The last tab's drawing is not this file's, so it cannot stand in if this draft is broken.
+    setGood(undefined);
     setSource(read(DRAFT + next) ?? findExample(next)?.source ?? '');
   };
   const reset = () => {
     clearMarks();
+    setFits(n => n + 1);
     setSource(findExample(id())?.source ?? '');
+  };
+  const onTabKey = (e: KeyboardEvent) => {
+    const tabs = props.examples;
+    const at = tabs.indexOf(id());
+    const keys: Record<string, number> = {
+      ArrowRight: (at + 1) % tabs.length,
+      ArrowLeft: (at - 1 + tabs.length) % tabs.length,
+      Home: 0,
+      End: tabs.length - 1,
+    };
+    const to = keys[e.key];
+    if (to === undefined) return;
+    e.preventDefault();
+    pick(tabs[to]);
+    document.getElementById(`live-tab-${tabs[to]}`)?.focus();
   };
   const lines = () => source().split('\n').length;
   const errors = () => drawing().diagnostics.filter(d => d.level === 'error');
   const stale = () => !drawing().svg && !!good();
+  /** Nothing to show or export: no drawing yet from a broken file, or a file with no objects. */
+  const blank = () => (errors().length > 0 || !!good()) && !good()?.scene.objects.length;
+  /** What stands between the source and an up-to-date download. */
+  const blocked = () => {
+    const err = errors()[0];
+    if (err) return err.line ? `Fix line ${err.line}` : 'Fix the source';
+    return blank() ? 'Add a node' : '';
+  };
   let scroller: HTMLDivElement | undefined;
 
   // The static image carries its source, so a copy found in a doc or PR reopens as this file.
@@ -184,14 +224,17 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
   return (
     <div class="live">
       <div class="live-bar">
-        <div class="live-tabs" role="tablist" aria-label="Examples">
+        <div class="live-tabs" role="tablist" aria-label="Examples" onKeyDown={onTabKey}>
           <For each={props.examples}>
             {ex => (
               <button
                 type="button"
                 role="tab"
                 class="live-tab"
+                id={`live-tab-${ex}`}
                 aria-selected={id() === ex}
+                aria-controls="live-panel"
+                tabIndex={id() === ex ? 0 : -1}
                 onClick={() => pick(ex)}
               >
                 {ex}.draft
@@ -210,12 +253,12 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
               Reset
             </button>
           </Show>
-          <a class="live-open" href={editorUrl()} rel="external">
+          <a class="live-open" href={handoff()} rel="external">
             Open in the editor
           </a>
         </span>
       </div>
-      <div class="live-body">
+      <div class="live-body" id="live-panel" role="tabpanel" aria-labelledby={`live-tab-${id()}`}>
         <div class="live-stage">
           <Show
             when={output() === 'static'}
@@ -225,7 +268,7 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
                 scene={good()?.scene}
                 stale={stale()}
                 error={errors()[0]?.message}
-                fitKey={id()}
+                fitKey={`${id()}:${fits()}`}
                 hint={props.hints?.[id()]}
                 preview={preview}
                 drop={drop}
@@ -241,6 +284,13 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
                 <img src={imageUrl()} alt={`${good()?.scene.title ?? id()} as a static image`} />
               </Show>
             </div>
+          </Show>
+          <Show when={blank()}>
+            <p class="live-caption-blank">
+              {errors().length
+                ? 'This file has an error, so it cannot draw. Fix it in the source, or press Reset.'
+                : 'Nothing to draw yet. Add a node in the source.'}
+            </p>
           </Show>
           <div class="live-caption">
             <div class="live-output" role="group" aria-label="Output">
@@ -260,16 +310,50 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
               </button>
             </div>
             <Show
-              when={output() === 'static'}
-              fallback={<span>Drag any box. The move is saved to the source.</span>}
+              when={blocked()}
+              fallback={
+                <Show
+                  when={output() === 'static'}
+                  fallback={
+                    <span>
+                      Drag any box.
+                      <span class="live-caption-tail"> The move is saved to the source.</span>
+                    </span>
+                  }
+                >
+                  <span>
+                    A {kb(exported())} SVG
+                    <span class="live-caption-long"> that stays put. Its source rides inside.</span>
+                  </span>
+                </Show>
+              }
             >
-              <span>A {kb(exported())} SVG that stays put. Its source rides inside.</span>
+              <span>
+                {blocked()}
+                <span class="live-caption-tail">
+                  {output() === 'static' ? ' to download.' : ' to drag.'}
+                </span>
+              </span>
+            </Show>
+            <Show when={output() === 'static'}>
               <span class="live-caption-actions">
-                <button type="button" class="live-reset" onClick={saveSvg}>
-                  Download SVG
+                <button
+                  type="button"
+                  class="live-reset"
+                  aria-label="Download SVG"
+                  disabled={!!blocked()}
+                  onClick={saveSvg}
+                >
+                  <span class="live-caption-tail">Download </span>SVG
                 </button>
-                <button type="button" class="live-reset" onClick={() => void savePng()}>
-                  Download PNG
+                <button
+                  type="button"
+                  class="live-reset"
+                  aria-label="Download PNG"
+                  disabled={!!blocked()}
+                  onClick={() => void savePng()}
+                >
+                  <span class="live-caption-tail">Download </span>PNG
                 </button>
               </span>
             </Show>
@@ -299,6 +383,8 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
                 rows={lines()}
                 value={source()}
                 onInput={e => {
+                  // Undo restores a whole source, so it would take this typing with it.
+                  setUndo([]);
                   setChanged([]);
                   setNote('');
                   setSource(e.currentTarget.value);
@@ -306,12 +392,18 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
               />
             </div>
           </div>
-          <div class="live-status" classList={{ 'is-error': errors().length > 0 }}>
+          <div
+            class="live-status"
+            classList={{ 'is-error': errors().length > 0 }}
+            aria-live="polite"
+          >
             <Show
               when={errors()[0]}
               fallback={
-                <span classList={{ 'is-note': !!note() }}>
-                  {note() || (good() ? `Drawn in ${ms()} ms` : 'Drawing…')}
+                // Timings change on each keystroke, so a screen reader skips them.
+                <span classList={{ 'is-note': !!note() }} aria-hidden={!note() && !blank()}>
+                  {note() ||
+                    (blank() ? 'Nothing to draw yet' : good() ? `Drawn in ${ms()} ms` : 'Drawing…')}
                 </span>
               }
             >
