@@ -98,7 +98,7 @@ const linked = StateField.define<DecorationSet>({
   provide: f => EditorView.decorations.from(f),
 });
 
-const EDGE_KINDS = ['sync', 'async', 'data'];
+const EDGE_KINDS = ['sync', 'async'];
 
 /** The nodes and groups the text declares, read from the text so a new one counts at once. */
 function declared(text: string) {

@@ -20,7 +20,7 @@ import { DiagramView } from '../live/DiagramView';
 import { addedLines, moveNote, moveObject } from '../live/move';
 import type { Scene } from '../../src/dsl/compile';
 import { embedPngSource, embedSvgSource } from '../../src/model/embed';
-import { deliver, incoming, readDiagramFile, REOPEN_HINT } from '../reopen';
+import { deliver, incoming, readDiagramFile, REOPEN_HINT, unreadableFile } from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
@@ -240,7 +240,7 @@ export function Playground() {
   const openFile = async (file: File) => {
     const text = await readDiagramFile(file);
     if (text == null) {
-      setFileError(`${file.name} has no draftably source in it.`);
+      setFileError(unreadableFile(file.name));
       setTimeout(() => setFileError(''), 3500);
     } else deliver(text);
   };

@@ -804,7 +804,7 @@ main {
   color: #a2611a;
 }
 .tok-mark-context {
-  color: #8c92a4;
+  color: #6a7082;
 }
 .tok-string {
   color: #2d7a5c;
@@ -3019,6 +3019,21 @@ kbd {
 .zoom-bar span {
   margin-right: auto;
   line-height: 1.2;
+}
+
+/* The full hint needs three lines in a narrow bar, and the bar holds two. */
+.zoom-hint-short {
+  display: none;
+}
+
+@media (max-width: 440px) {
+  .zoom-hint-long {
+    display: none;
+  }
+
+  .zoom-hint-short {
+    display: inline;
+  }
 }
 
 /* The drawing below is the last good one, so the overlay says so. */

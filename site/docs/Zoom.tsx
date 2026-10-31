@@ -130,9 +130,16 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
       >
         <div class="zoom-bar">
           <span>
-            {matchMedia('(pointer: coarse)').matches
-              ? 'Pinch to zoom · drag to pan'
-              : 'Scroll or + − to zoom · drag or arrows to pan · 0 to fit · Esc to close'}
+            {matchMedia('(pointer: coarse)').matches ? (
+              'Pinch to zoom · drag to pan'
+            ) : (
+              <>
+                <span class="zoom-hint-long">
+                  Scroll or + − to zoom · drag or arrows to pan · 0 to fit · Esc to close
+                </span>
+                <span class="zoom-hint-short">Scroll to zoom · drag to pan</span>
+              </>
+            )}
           </span>
           <button type="button" aria-label="Zoom out" onClick={() => zoomKey(0.8)}>
             −

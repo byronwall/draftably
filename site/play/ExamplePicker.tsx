@@ -116,7 +116,7 @@ export function ExamplePicker(props: {
                 Open a file…
                 <input
                   type="file"
-                  accept=".draft,.png,.svg,text/plain,image/png,image/svg+xml"
+                  accept=".draft,.png,.svg,image/png,image/svg+xml"
                   class="visually-hidden"
                   onChange={e => {
                     const file = e.currentTarget.files?.[0];
