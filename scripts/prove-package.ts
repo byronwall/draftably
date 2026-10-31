@@ -56,6 +56,26 @@ assert.equal(
   1,
 );
 
+// Import through the installed package so parser workers and runtime dependencies are exercised.
+for (const [name, source] of [
+  ['proof.mmd', 'flowchart LR\nA[API] -->|reads| B[Store]\n'],
+  ['proof.d2', 'a: API\nb: Store\na -> b: reads\n'],
+] as const) {
+  const input = path.join(dir, name),
+    output = path.join(dir, name + '.draft');
+  fs.writeFileSync(input, source);
+  execFileSync(bin, ['import', input, '--output', output], {
+    cwd: dir,
+    encoding: 'utf8',
+    timeout: 60000,
+    env: { ...process.env, DRAFTABLY_NO_UPDATE_CHECK: '1' },
+  });
+  assert.match(run('check', output), /2 nodes, 0 groups, 1 connections/);
+  assert.equal(fs.readFileSync(input, 'utf8'), source);
+  fs.unlinkSync(input);
+  fs.unlinkSync(output);
+}
+
 const probe = net.createServer();
 probe.listen(0, '127.0.0.1');
 await once(probe, 'listening');

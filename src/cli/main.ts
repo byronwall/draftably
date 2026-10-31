@@ -4,6 +4,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { isMainThread, workerData } from 'node:worker_threads';
 import { compile, type Diagnostic } from '../dsl/compile';
 import { compareDetailed } from '../dsl/compare';
 import { hintMoves, sceneConflicts } from '../dsl/conflicts';
@@ -25,8 +26,8 @@ Any <file> may also be a PNG, SVG or PDF that draftably exported: its embedded s
 A PDF holds several; name one as diagrams.pdf#name.draft, or check reads them all.
 
 Commands:
-  import <file.dot> [--output <new.draft>] [--from dot] [--accept-lossy]
-                            Convert DOT to a new .draft file, or print native source.
+  import <file> [--output <new.draft>] [--from dot|mermaid|d2] [--accept-lossy]
+                            Convert a text diagram to a new .draft file, or print native source.
                             Warnings require --accept-lossy. The input stays unchanged.
   check <file>…             Report source errors, layout diagnostics and drawing conflicts
        [--hints]            (a line through a box, overlapping boxes or labels). Exits 1 on
@@ -316,11 +317,15 @@ export async function main(argv: string[]): Promise<number> {
           } else throw new UsageError(`Unknown import option: ${rest[i]}`);
         }
         const { importFile } = await import('./import');
-        return importFile(file, {
-          from: option(rest, '--from'),
-          output: option(rest, '--output'),
-          acceptLossy: flag('--accept-lossy'),
-        });
+        return await importFile(
+          file,
+          {
+            from: option(rest, '--from'),
+            output: option(rest, '--output'),
+            acceptLossy: flag('--accept-lossy'),
+          },
+          new URL('./main.js', import.meta.url),
+        );
       }
       case 'check': {
         const args = [file, ...rest],
@@ -679,7 +684,9 @@ export async function main(argv: string[]): Promise<number> {
 }
 
 // Tests import `main` and call it themselves.
-if (!process.env.VITEST) {
+if (!isMainThread && workerData?.kind === 'foreign-import') {
+  void import('./import-worker').then(module => module.runImportWorker());
+} else if (!process.env.VITEST) {
   updateNotice();
   void main(process.argv.slice(2)).then(code => {
     if (code >= 0) process.exitCode = code;

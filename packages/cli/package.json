@@ -31,5 +31,10 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
+  },
+  "dependencies": {
+    "@d2lang/d2": "0.1.34",
+    "jsdom": "26.1.0",
+    "mermaid": "12.2.0"
   }
 }

@@ -36,6 +36,14 @@ writeFileSync(
     readFileSync(path.join(root, 'node_modules/pdf-lib/LICENSE.md'), 'utf8') +
     '\n\n@ts-graphviz/ast and @ts-graphviz/common\n\n' +
     readFileSync(path.join(root, 'node_modules/@ts-graphviz/ast/LICENSE'), 'utf8') +
+    '\n\nMermaid\n\n' +
+    readFileSync(path.join(root, 'node_modules/mermaid/LICENSE'), 'utf8') +
+    '\n\njsdom\n\n' +
+    readFileSync(path.join(root, 'node_modules/jsdom/LICENSE.txt'), 'utf8') +
+    '\n\nD2\n\n' +
+    readFileSync(path.join(root, 'node_modules/@d2lang/d2/LICENSE.txt'), 'utf8') +
+    '\n\nD2 third-party notices\n\n' +
+    readFileSync(path.join(root, 'node_modules/@d2lang/d2/THIRD_PARTY_NOTICES.txt'), 'utf8') +
     // Diagram fonts, embedded in the viewer and in exported SVG files.
     ['Inter', 'SourceSerif4', 'JetBrainsMono']
       .map(
