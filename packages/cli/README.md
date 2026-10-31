@@ -39,7 +39,11 @@ On other systems, open the printed URL. Use `--port 5190` to choose another port
 
 ## Commands
 
+Convert a DOT, Mermaid flowchart or D2 graph into a new native file. The input stays unchanged.
+Some supported syntax needs `--accept-lossy` after you review the warnings.
+
 ```sh
+draftably import architecture.mmd --output architecture.draft
 draftably check architecture.draft
 draftably format architecture.draft --write
 draftably inspect architecture.draft --json

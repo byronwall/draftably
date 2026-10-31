@@ -94,7 +94,17 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/node@22.20.5)(jsdom@26.1.0)(vite@6.4.3(@types/node@22.20.5))
 
-  packages/cli: {}
+  packages/cli:
+    dependencies:
+      '@d2lang/d2':
+        specifier: 0.1.34
+        version: 0.1.34
+      jsdom:
+        specifier: 26.1.0
+        version: 26.1.0
+      mermaid:
+        specifier: 12.2.0
+        version: 12.2.0
 
 packages:
 
