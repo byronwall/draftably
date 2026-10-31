@@ -145,6 +145,71 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'Playground reload keeps the current history entry'() {
+    const page = await open('play?example=checkout');
+    await page.waitForSelector('.cm-content');
+    const custom = 'diagram "Immediate edit" version=1\nnode a "Alpha"\n';
+    await setSource(page, custom);
+    await page.reload();
+    await page.waitForSelector('.cm-content');
+    check(
+      'Immediate reload retains edited source',
+      (await sourceText(page)).includes('Immediate edit'),
+    );
+    await setSource(page, 'invalid source');
+    await page.reload();
+    await page.waitForSelector('.cm-content');
+    check('Immediate reload retains invalid source', (await sourceText(page)) === 'invalid source');
+    await setSource(page, '');
+    await page.reload();
+    await page.waitForSelector('.cm-content');
+    check('Immediate reload retains empty source', (await sourceText(page)) === '');
+    await setSource(page, custom);
+    await wait(page, () => /#s=/.test(location.hash), 'the source hash');
+    const shared = page.url();
+    await page.click('.picker-button');
+    await page.fill('.picker-search', 'Sign-in');
+    await page.keyboard.press('Enter');
+    await wait(page, () => location.search.includes('example='), 'the selected example');
+    await wait(
+      page,
+      () => document.querySelector('.cm-content')?.textContent.includes('Sign-in sequence'),
+      'the example source',
+    );
+    const example = await sourceText(page);
+    await page.goBack();
+    await wait(
+      page,
+      () => document.querySelector('.cm-content')?.textContent.includes('Immediate edit'),
+      'the previous draft',
+    );
+    check('Back restores the draft', (await sourceText(page)).includes('Immediate edit'));
+    await page.goForward();
+    await wait(
+      page,
+      () => document.querySelector('.cm-content')?.textContent.includes('Sign-in sequence'),
+      'the example again',
+    );
+    check('Forward restores the selected example', (await sourceText(page)) === example);
+    await setSource(page, 'diagram "First edit" version=1\nnode a "A"\n');
+    await setSource(page, 'diagram "Unrelated draft" version=1\nnode b "Beta"\n');
+    await sleep(800);
+    await page.reload();
+    await page.waitForSelector('.cm-content');
+    check(
+      'The latest repeated edit survives',
+      (await sourceText(page)).includes('Unrelated draft'),
+    );
+    const other = await page.context().newPage();
+    await other.goto(shared);
+    await other.waitForSelector('.cm-content');
+    check(
+      'A new shared link wins over an unrelated draft',
+      (await sourceText(other)).includes('Immediate edit'),
+    );
+    await page.context().close();
+  },
+
   async 'native keys in the editor'() {
     const page = await open('app/?example=checkout');
     await editorReady(page);

@@ -37,11 +37,23 @@ async function urlSource() {
   return ex ? { id: ex.id, source: ex.source } : null;
 }
 
+// History state belongs to this tab and entry, unlike the browser-wide saved draft.
+const entryUrl = () => `${location.pathname}${location.search}${location.hash}`;
+function entrySource() {
+  const saved = history.state?.draftablyPlay;
+  return saved?.url === entryUrl() && typeof saved.source === 'string' ? saved.source : null;
+}
+function rememberEntry(source: string, url = entryUrl()) {
+  history.replaceState({ ...history.state, draftablyPlay: { url, source } }, '', url);
+}
+
 /** The source to start from: a handed-over file, the URL, the saved draft, then checkout. */
 async function startingSource() {
   // A file dropped or pasted on another page, handed over by the site shell.
   const handed = incoming();
   if (handed) return { id: 'shared', source: handed.source };
+  const entry = entrySource();
+  if (entry !== null) return { id: 'draft', source: entry };
   const fromUrl = await urlSource();
   if (fromUrl) return fromUrl;
   const draft = readDraft();
@@ -136,9 +148,13 @@ export function Playground() {
   createEffect(on(source, saveDraft));
 
   // Back and Forward move between a draft and the example that replaced it.
+  let navigation = 0;
   const onPop = async () => {
-    const next = await urlSource();
-    if (!next || next.source === source()) return;
+    const mine = ++navigation;
+    const before = source();
+    const saved = entrySource();
+    const next = saved === null ? await urlSource() : { id: 'draft', source: saved };
+    if (mine !== navigation || source() !== before || !next || next.source === source()) return;
     setReplaced(null);
     fromLink = next.id === 'shared';
     setExampleId(next.id);
@@ -176,16 +192,21 @@ export function Playground() {
   // Keep the URL current, so a refresh or a copied link reopens this source.
   let hashTimer: ReturnType<typeof setTimeout> | undefined;
   const writeHash = async () => {
-    const hash = await encodeSource(source());
-    history.replaceState(null, '', `${location.pathname}#${hash}`);
+    const text = source();
+    const url = entryUrl();
+    const mine = navigation;
+    const hash = await encodeSource(text);
+    if (mine !== navigation || text !== source() || url !== entryUrl()) return;
+    rememberEntry(text, `${location.pathname}#${hash}`);
   };
   createEffect(
     on(source, () => {
       if (!ready()) return;
       const ex = findExample(exampleId());
+      rememberEntry(source());
       clearTimeout(hashTimer);
       if (ex && ex.source === source()) {
-        history.replaceState(null, '', `${location.pathname}?example=${ex.id}`);
+        rememberEntry(source(), `${location.pathname}?example=${ex.id}`);
         return;
       }
       hashTimer = setTimeout(() => void writeHash(), 400);
