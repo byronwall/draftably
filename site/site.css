@@ -576,6 +576,11 @@ main {
   transition: opacity 120ms;
 }
 
+/* The fit trims the margin, so the drawing's paper runs past the frame. */
+.drag-view {
+  overflow: hidden;
+}
+
 .drag-view.is-stale .drag-host,
 .live-static.is-stale {
   opacity: 0.45;

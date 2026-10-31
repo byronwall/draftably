@@ -240,7 +240,7 @@ export function DragView(props: {
           </span>
         )}
       </Show>
-      <Show when={props.svg}>
+      <Show when={props.scene?.objects.length}>
         <Expand svg={props.svg} error={props.stale ? props.error : undefined} />
       </Show>
     </div>
