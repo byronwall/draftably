@@ -48,11 +48,23 @@ const GROUPS: [string, string[]][] = [
   ],
   ['Diagram kinds', ['swim-lanes', 'sequence-diagrams', 'cells']],
   ['Layout', ['layout-engines', 'routing', 'layout-tools']],
-  ['Tools', ['command-line', 'editing-in-the-viewer', 'examples']],
+  ['Tools', ['command-line', 'editing-in-the-viewer', 'shortcuts', 'examples']],
 ];
 
 /** Sidebar titles that differ from the section's heading. */
-const TITLES: Record<string, string> = { 'command-line': 'CLI details' };
+const TITLES: Record<string, string> = {
+  'command-line': 'CLI reference',
+  'editing-in-the-viewer': 'Using the Editor',
+};
+
+/** A first line for pages that share a subject, to say which one does what. */
+const PAIRED: Record<string, string> = {
+  cli: 'This guide shows each command in use. The [CLI reference](#command-line) lists them all and explains variants, conflicts and exports.',
+  themes:
+    'This guide shows the presets and how to pick one. [Themes and colors](#themes-and-colors) is the reference for the lines that set them.',
+  'themes-and-colors':
+    'This page is the reference for `theme`, `theme-color` and `legend` lines. To compare the presets, read the [Themes guide](#themes).',
+};
 
 export const slugify = (text: string) =>
   text
@@ -106,6 +118,7 @@ function makePage(slug: string, title: string, md: string, source: string): Page
     .filter(isDraft)
     .flatMap(t => (t.lang === 'draft themes' ? themed(t.text).map(v => v.source) : [t.text]));
   const name = TITLES[slug] ?? title;
+  if (PAIRED[slug]) lead = `${PAIRED[slug]} ${lead}`.trim();
   return { slug, title: name, group: '', lead, tokens: body, headings, drafts, source };
 }
 
@@ -169,7 +182,11 @@ for (const page of PAGES) ANCHORS.set(page.slug, docsPath(page.slug));
 /** The docs path for a DSL.md heading anchor, such as `byte-and-bit-layouts`. */
 export const anchorPath = (id: string) => ANCHORS.get(id);
 
+/** This site's own address. DSL.md uses it, since `draftably docs` and GitHub also show the file. */
+const SITE = 'https://draftably.dev/';
+
 function resolveHref(href: string): string {
+  if (href.startsWith(SITE)) href = `/${href.slice(SITE.length)}`;
   if (href.startsWith('#')) {
     const to = ANCHORS.get(href.slice(1));
     return to ? BASE + to.slice(1) : href;
@@ -223,7 +240,14 @@ const md = new Marked({
     link(t) {
       const href = resolveHref(t.href);
       const external = /^https?:/.test(href) && !href.startsWith(location.origin);
-      return `<a href="${esc(href)}"${external ? ' target="_blank" rel="noreferrer"' : ''}>${this.parser.parseInline(t.tokens)}</a>`;
+      // The Editor is a separate build, so the site's router must leave these links alone.
+      const editor = href.startsWith(`${BASE}app/`);
+      const attrs = external
+        ? ' target="_blank" rel="noreferrer"'
+        : editor
+          ? ' rel="external"'
+          : '';
+      return `<a href="${esc(href)}"${attrs}>${this.parser.parseInline(t.tokens)}</a>`;
     },
     code(t) {
       const lang = t.lang ?? '';
