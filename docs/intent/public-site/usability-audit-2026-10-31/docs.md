@@ -149,9 +149,42 @@ Each PR that changes `src/` needs a changeset. A fix in `src/cli` reaches `npx` 
 
 ## J. Docs proof
 
-| ID  | Sev | Problem                                             | Repro                  | Evidence                                                                                             | Fix                                                                                                                                                                                                                         | Files                    |
-| --- | --- | --------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| J1  | P2  | The site proof does not cover touch or narrow docs. | Run `pnpm prove:site`. | It passes 60 of 60 with each defect in this ledger open. The new journeys must fail without the fix. | Add checks: Copy shows on touch (A1), Rules table wraps at 390 (A2), Copy has no `#` text (B1), Escape closes Topics (B3), Back keeps scroll (B4), `colour` finds Themes (C1), `--try direction` runs on a plain file (I1). | `scripts/prove-site.mjs` |
+| ID  | Sev | Problem                                                                | Repro                  | Evidence                                                                                             | Fix                                                                                                                                                                                                                         | Files                    |
+| --- | --- | ---------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| J1  | P2  | **Fixed in #355.** The site proof does not cover touch or narrow docs. | Run `pnpm prove:site`. | It passes 60 of 60 with each defect in this ledger open. The new journeys must fail without the fix. | Add checks: Copy shows on touch (A1), Rules table wraps at 390 (A2), Copy has no `#` text (B1), Escape closes Topics (B3), Back keeps scroll (B4), `colour` finds Themes (C1), `--try direction` runs on a plain file (I1). | `scripts/prove-site.mjs` |
+
+Run one group with `pnpm prove:site J1`. Each journey failed with its fix turned off, on one local build:
+
+| Row | How the fix was turned off                          | Result without the fix            | Result with the fix |
+| --- | --------------------------------------------------- | --------------------------------- | ------------------- |
+| A1  | Remove `opacity: 1` from the `hover: none` rule     | Copy has opacity 0                | opacity 1           |
+| A2  | Set `.doc table` to `width: max-content`            | The widest table is 2106px        | 567px               |
+| B1  | Copy the code without `pasteable`                   | The copied text holds `# errors…` | No `#` text         |
+| B3  | Remove the Escape branch                            | The menu stays open               | Closed, focus back  |
+| B4  | Ignore `takeReturn()`                               | `scrollY` is 0                    | 1800                |
+| C1  | Remove the `colour` row                             | No result                         | Themes and colors   |
+| I1  | Remove the `flow` recipe from the new `layout` line | `vary` prints `Failed`            | Clean exit          |
+
+## Search rerun after batches F, G and H
+
+This run used the real dialog on the local build of the merged batches. It has 70 queries: the C1 and C2 lists, the strengths list, and new queries for the `layout-engines` headings. All 70 have a result. The ledger kept only these lists, so the other queries of the first 145 did not run again.
+
+| Query                                      | First result before               | First result now                         |
+| ------------------------------------------ | --------------------------------- | ---------------------------------------- |
+| `not working`                              | CLI reference › Drawing conflicts | CLI › Troubleshoot common problems       |
+| `keyboard shortcuts`, `shortcut`, `hotkey` | Using the Editor › Editor edits   | Shortcuts                                |
+| `pan`                                      | Using the Editor › Editor edits   | Shortcuts › Zoom and pan                 |
+| `horizontal`                               | Change marks › Side by side       | Layout engines › Engine settings         |
+| `vertical`                                 | Rules                             | Layout engines › Engine settings         |
+| `engine`                                   | Layout engines › Engine settings  | Layout engines › Choose an engine        |
+| `which engine`                             | Rules                             | Layout engines › Choose an engine        |
+| `pick a layout`                            | Agent skill                       | Layout engines › Choose an engine        |
+| `group layout`, `layout a group`           | CLI reference › Layout variants   | Layout engines › Scopes and groups       |
+| `back edge`                                | Rules                             | Layout engines › Feedback lines and ties |
+| `cycle`                                    | Examples › Flows and states       | Layout engines › Feedback lines and ties |
+| `spacing`                                  | Routing                           | Refinements                              |
+
+The other queries stay as they were, and their first results are correct. `dotted` still leads to Sequence reference, and Rules comes second. Both describe `kind=async`, which draws a dashed line. `clipboard` leads to the Editor's copy keys, and `inspect --clipboard` comes second.
 
 ## Needs Byron
 

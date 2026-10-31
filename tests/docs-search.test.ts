@@ -53,6 +53,16 @@ describe('docs search', () => {
     ['change theme', /Themes/],
     ['er diagram', /Cells/],
     ['move a box', /Refinements/],
+    ['not working', /Troubleshoot/],
+    ['keyboard shortcuts', /Shortcuts/],
+    ['hotkey', /Shortcuts/],
+    ['which engine', /Choose an engine/],
+    ['engine', /Choose an engine/],
+    ['scopes', /Scopes and groups/],
+    ['engine settings', /Engine settings/],
+    ['feedback', /Feedback lines and ties/],
+    ['back edge', /Feedback lines and ties/],
+    ['group layout', /Scopes and groups/],
   ])('ranks the right page first: %s', (query, page) => {
     expect(top(query)).toMatch(page);
   });

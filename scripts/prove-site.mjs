@@ -9,6 +9,7 @@
  *
  * Run `pnpm site:build` first. Usage: pnpm prove:site
  */
+import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
@@ -49,9 +50,9 @@ await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const site = `http://127.0.0.1:${server.address().port}${BASE}`;
 
 const browser = await chromium.launch();
-const open = async (url, viewport = { width: 1440, height: 900 }) => {
+const open = async (url, viewport = { width: 1440, height: 900 }, device = {}) => {
   // A new context each time: nothing kept in the browser leaks from one journey to the next.
-  const context = await browser.newContext({ viewport });
+  const context = await browser.newContext({ viewport, ...device });
   const page = await context.newPage();
   page.setDefaultTimeout(6000);
   proof.watch(page);
@@ -585,6 +586,95 @@ const journeys = {
     check('LC02 the claim admits the resize', /boxes resize to fit/.test(text), text.slice(0, 90));
     check('LC02 the false claim is gone', !/never moves/.test(text));
     await page.context().close();
+  },
+
+  async 'J1 A1 Copy shows on a touch screen'() {
+    const page = await open(
+      'docs/cli',
+      { width: 390, height: 844 },
+      { hasTouch: true, isMobile: true },
+    );
+    const copy = page.locator('.doc-copy').first();
+    await copy.waitFor({ state: 'attached' });
+    const opacity = await copy.evaluate(el => getComputedStyle(el).opacity);
+    check('A1 Copy shows without a hover', opacity === '1', `opacity ${opacity}`);
+    await page.context().close();
+  },
+
+  async 'J1 A2 Rules tables wrap at 390px'() {
+    const page = await open('docs/rules', { width: 390, height: 844 });
+    await page.waitForSelector('.doc table');
+    const widest = await page.evaluate(() =>
+      Math.max(...[...document.querySelectorAll('.doc table')].map(t => t.offsetWidth)),
+    );
+    check('A2 prose cells wrap in the box', widest < 900, `${widest}px wide`);
+    await page.context().close();
+  },
+
+  async 'J1 B1 Copy leaves out shell notes'() {
+    const page = await open('docs/get-started');
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    const block = page.locator('.doc-code', { hasText: /^\s*(draftably|npx|pnpm|npm)\b.* #/m });
+    const shown = await block.first().locator('code').textContent();
+    await block.first().hover();
+    await block.first().locator('.doc-copy').click();
+    await page.waitForSelector('.is-copied');
+    const copied = await page.evaluate(() => navigator.clipboard.readText());
+    check('B1 the block shows a # note', shown.includes('#'));
+    check('B1 Copy has no # text', copied.length > 0 && !copied.includes('#'), copied.slice(0, 80));
+    await page.context().close();
+  },
+
+  async 'J1 B3 Escape closes Topics'() {
+    const page = await open('docs/rules', { width: 390, height: 844 });
+    await page.click('.docs-menu-button');
+    await page.waitForSelector('.docs-menu-button[aria-expanded="true"]');
+    await page.keyboard.press('Escape');
+    await sleep(100);
+    const expanded = await page.getAttribute('.docs-menu-button', 'aria-expanded');
+    check('B3 Escape closes the menu', expanded === 'false', `aria-expanded ${expanded}`);
+    check('B3 focus returns to the button', (await focused(page)) === 'Topics');
+    await page.context().close();
+  },
+
+  async 'J1 B4 Back keeps the scroll position'() {
+    const page = await open('docs/rules');
+    await page.waitForSelector('.docs-side a[href$="/docs/cells"]');
+    await page.evaluate(() => window.scrollTo(0, 1800));
+    await sleep(200);
+    await page.click('.docs-side a[href$="/docs/cells"]');
+    await wait(page, () => location.pathname.endsWith('/docs/cells'), 'the Cells page');
+    await sleep(200);
+    await page.goBack();
+    await wait(page, () => location.pathname.endsWith('/docs/rules'), 'the Rules page');
+    await sleep(300);
+    const y = await page.evaluate(() => window.scrollY);
+    check('B4 Back returns to the same place', Math.abs(y - 1800) < 4, `scrollY ${y}`);
+    await page.context().close();
+  },
+
+  async 'J1 C1 colour finds Themes'() {
+    const page = await open('docs');
+    await page.click('.docs-search-button');
+    await page.fill('.search input', 'colour');
+    const first = await page
+      .locator('.search-hit-title')
+      .first()
+      .textContent({ timeout: 2000 })
+      .catch(() => 'no result');
+    check('C1 colour leads to Themes', /Themes/.test(first), first);
+    await page.context().close();
+  },
+
+  async 'J1 I1 --try direction runs on a plain file'() {
+    const file = path.join(proof.out, 'plain.draft');
+    fs.writeFileSync(file, 'diagram "Plain" version=1\nnode a "A"\nnode b "B"\nedge e1 a -> b\n');
+    const cli = path.join(root, 'scripts/draftably.mjs');
+    const run = spawnSync(process.execPath, [cli, 'vary', file, '--try', 'direction'], {
+      encoding: 'utf8',
+    });
+    const said = `${run.stdout}${run.stderr}`;
+    check('I1 vary exits clean', run.status === 0 && !/Failed/.test(said), said.slice(0, 160));
   },
 };
 

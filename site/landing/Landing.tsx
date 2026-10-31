@@ -5,7 +5,7 @@ import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/example
 import { appUrl, paperOf } from '../draw';
 import { A, useLocation, useNavigate } from '@solidjs/router';
 import { demoEditorUrl, LiveEditor } from '../live/LiveEditor';
-import { deliver, readDiagramFile } from '../reopen';
+import { deliver, readDiagramFile, unreadableFile } from '../reopen';
 import { Points } from './Points';
 import { drawSvg, enqueue, whenSeen } from './render';
 
@@ -309,7 +309,7 @@ function ReopenLine() {
   const choose = async (file: File) => {
     setError('');
     const source = await readDiagramFile(file);
-    if (source == null) return setError(`${file.name} has no draftably source in it.`);
+    if (source == null) return setError(unreadableFile(file.name));
     deliver(source);
     navigate('/play');
   };
