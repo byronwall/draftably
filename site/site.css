@@ -421,7 +421,7 @@ main {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 34%);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 26%);
 }
 
 .live-source {
@@ -515,14 +515,55 @@ main {
   transition: opacity 120ms;
 }
 
-.drag-view.is-stale,
+.drag-view.is-stale .drag-host,
 .live-static.is-stale {
   opacity: 0.45;
 }
 
 .drag-host {
   position: absolute;
-  inset: 20px;
+  inset: 8px;
+  transition: opacity 120ms;
+}
+
+/* Over the drawing, so a solid fill keeps it readable where a box runs under it. */
+.drag-expand {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 5px;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--line);
+  color: var(--muted);
+  font: 600 12px var(--font);
+  cursor: pointer;
+  transition: color 140ms;
+}
+
+.drag-expand:hover,
+.drag-expand:active {
+  color: var(--text);
+}
+
+.drag-expand:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.drag-expand svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
 }
 
 .drag-host svg {
@@ -1177,7 +1218,12 @@ main {
   }
 
   .drag-host {
-    inset: 10px;
+    inset: 6px;
+  }
+
+  .drag-expand {
+    height: 32px;
+    padding: 0 10px;
   }
 
   .live-source {

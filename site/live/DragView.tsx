@@ -1,13 +1,17 @@
 import { createEffect, createSignal, on, onCleanup, onMount, Show } from 'solid-js';
 import type { Scene } from '../../src/dsl/compile';
 import { paperOf } from '../draw';
+import { Expand } from './Expand';
 import { subtree } from './move';
 
 type Box = { x: number; y: number; w: number; h: number };
 
+/** How much of the renderer's 40-unit margin the frame leaves out, so the drawing reads larger. */
+const TRIM = 28;
+
 const boxOf = (svg: SVGSVGElement): Box => {
   const [x, y, w, h] = (svg.getAttribute('viewBox') ?? '0 0 0 0').split(/\s+/).map(Number);
-  return { x, y, w, h };
+  return { x: x + TRIM, y: y + TRIM, w: w - TRIM * 2, h: h - TRIM * 2 };
 };
 const contains = (a: Box, b: Box) =>
   b.x >= a.x - 0.5 &&
@@ -33,15 +37,21 @@ interface Drag {
   busy: boolean;
 }
 
+/** One drag retires the "Drag me" hint for the page, across a remount from Static back to Live. */
+let used = false;
+
 /**
  * A drawing whose boxes drag. During a drag the object follows the pointer while the file is
  * re-laid out behind it, so its lines re-route as it moves; on release `drop` writes the move into
  * the source. The view holds still through a drag and only widens when the drawing outgrows it.
+ * Any other change to the drawing, such as a typed edit, frames it again.
  */
 export function DragView(props: {
   svg: string;
   scene: Scene | undefined;
   stale: boolean;
+  /** The source's error, which the expanded view shows while the drawing is stale. */
+  error?: string;
   fitKey: string;
   /** The object to label "Drag me" until the first drag. */
   hint?: string;
@@ -54,14 +64,13 @@ export function DragView(props: {
   let view: Box | undefined;
   let drag: Drag | undefined;
   const [hintAt, setHintAt] = createSignal<{ x: number; y: number }>();
-  const [used, setUsed] = createSignal(false);
   const [dragging, setDragging] = createSignal(false);
 
   const svgEl = () => host.querySelector('svg');
   const objectEl = (id: string) => host.querySelector(`[data-id="${CSS.escape(id)}"]`);
 
   const placeHint = () => {
-    const el = props.hint && !used() ? objectEl(props.hint) : null;
+    const el = props.hint && !used ? objectEl(props.hint) : null;
     if (!el) return setHintAt(undefined);
     const r = el.getBoundingClientRect(),
       f = frame.getBoundingClientRect();
@@ -96,6 +105,8 @@ export function DragView(props: {
     el.setAttribute('width', '100%');
     el.setAttribute('height', '100%');
     el.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    el.setAttribute('role', 'img');
+    el.setAttribute('aria-label', props.scene?.title ?? 'Diagram');
     host.querySelectorAll('[data-id]').forEach(g => {
       if (props.scene?.byId.has(g.getAttribute('data-id')!)) g.classList.add('is-drag');
     });
@@ -103,6 +114,8 @@ export function DragView(props: {
   };
 
   let refit = true;
+  /** The next drawing is a drag's own result, so the view holds. */
+  let dropped = false;
   createEffect(
     on(
       () => props.fitKey,
@@ -114,8 +127,8 @@ export function DragView(props: {
       () => props.svg,
       svg => {
         if (!svg || drag) return;
-        mount(svg, refit);
-        refit = false;
+        mount(svg, refit || !dropped);
+        refit = dropped = false;
       },
     ),
   );
@@ -187,7 +200,7 @@ export function DragView(props: {
     if (!drag.moved) {
       drag.moved = true;
       setDragging(true);
-      setUsed(true);
+      used = true;
       setHintAt(undefined);
     }
     follow();
@@ -198,7 +211,11 @@ export function DragView(props: {
     drag = undefined;
     setDragging(false);
     if (!d) return;
-    if (!d.moved || !(await props.drop(d.id, d.dx, d.dy))) mount(props.svg);
+    dropped = d.moved;
+    if (!d.moved || !(await props.drop(d.id, d.dx, d.dy))) {
+      dropped = false;
+      mount(props.svg);
+    }
   };
 
   return (
@@ -222,6 +239,9 @@ export function DragView(props: {
             Drag me
           </span>
         )}
+      </Show>
+      <Show when={props.svg}>
+        <Expand svg={props.svg} error={props.stale ? props.error : undefined} />
       </Show>
     </div>
   );
