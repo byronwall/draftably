@@ -82,11 +82,15 @@ export function Example(props: { source: string; themes?: boolean }) {
         <span class="doc-example-label">
           .draft <span>· editable</span>
         </span>
-        <Show when={source() !== original}>
-          <button type="button" class="doc-link-button" onClick={() => edit(original)}>
-            Reset
-          </button>
-        </Show>
+        {/* Always in the bar, so that it holds its space and an edit moves nothing. */}
+        <button
+          type="button"
+          class="doc-link-button"
+          style={{ visibility: source() === original ? 'hidden' : 'visible' }}
+          onClick={() => edit(original)}
+        >
+          Reset
+        </button>
         <CopyButton text={source} />
         <Show when={!props.themes}>
           <button type="button" class="doc-link-button" onClick={() => setZoomed(svgs()[0])}>
@@ -94,7 +98,8 @@ export function Example(props: { source: string; themes?: boolean }) {
           </button>
         </Show>
         <a class="doc-example-play" href={play()}>
-          Edit in playground →
+          <span class="doc-play-long">Edit in playground</span>
+          <span class="doc-play-short">Playground</span> →
         </a>
       </div>
       <div class="doc-example-body">
@@ -118,6 +123,9 @@ export function Example(props: { source: string; themes?: boolean }) {
               rows={lines()}
               value={source()}
               onInput={e => edit(e.currentTarget.value)}
+              // A textarea always matches :focus-visible, so a click marks itself for the CSS.
+              onPointerDown={e => (e.currentTarget.dataset.pointer = '')}
+              onBlur={e => delete e.currentTarget.dataset.pointer}
             />
           </div>
         </div>
