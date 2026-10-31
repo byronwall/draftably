@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "format": "mermaid",
+  "family": "flowchart",
+  "diagnostics": [
+    {
+      "code": "MERMAID_FAMILY_UNSUPPORTED",
+      "severity": "error",
+      "impact": "syntax",
+      "message": "This adapter supports Mermaid flowcharts only. Sequence, class, ER, state, chart and other families require separate semantic adapters."
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

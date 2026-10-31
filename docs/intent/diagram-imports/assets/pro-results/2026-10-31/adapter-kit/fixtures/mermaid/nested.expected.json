@@ -1,0 +1,201 @@
+{
+  "status": "needs-review",
+  "format": "mermaid",
+  "family": "flowchart",
+  "diagnostics": [
+    {
+      "code": "MERMAID_INHERITED_LAYOUT",
+      "message": "This group has no declared direction. Native flow layout uses the nearest declared ancestor/root direction; Mermaid can use another direction depending on its layout engine and external connections.",
+      "impact": "layout",
+      "severity": "warning",
+      "foreignIds": [
+        "workers"
+      ]
+    },
+    {
+      "code": "MERMAID_SUBGRAPH_LAYOUT",
+      "message": "The native group retains its declared direction. Mermaid can ignore a subgraph direction when its members connect outside, so the resulting layout may differ.",
+      "impact": "layout",
+      "severity": "warning",
+      "foreignIds": [
+        "system"
+      ]
+    },
+    {
+      "code": "MERMAID_DASH_STYLE",
+      "message": "Dotted Mermaid stroke uses native kind=async only for its dashed visual treatment; no asynchronous execution semantics are inferred.",
+      "impact": "appearance",
+      "severity": "info",
+      "foreignIds": [
+        "L_B_A_0"
+      ]
+    }
+  ],
+  "ids": [
+    {
+      "kind": "group",
+      "foreign": "workers",
+      "native": "workers"
+    },
+    {
+      "kind": "group",
+      "foreign": "system",
+      "native": "system"
+    },
+    {
+      "kind": "node",
+      "foreign": "A",
+      "native": "A"
+    },
+    {
+      "kind": "node",
+      "foreign": "B",
+      "native": "B"
+    },
+    {
+      "kind": "node",
+      "foreign": "C",
+      "native": "C"
+    },
+    {
+      "kind": "node",
+      "foreign": "X",
+      "native": "X"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "1",
+      "native": "edge_1"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "2",
+      "native": "edge_2"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "3",
+      "native": "edge_3"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "4",
+      "native": "edge_4"
+    },
+    {
+      "kind": "edge-occurrence",
+      "foreign": "5",
+      "native": "edge_5"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Mermaid nested\" version=1\ntheme-color import_1 shade=500 fill=\"#dbeafe\" stroke=\"#123456\" ink=\"#000000\"\ngroup workers \"Workers\" in=system\ngroup system \"System\"\nnode A \"API\" in=system color=import_1 shade=500\nnode B \"Ready?\" in=workers shape=diamond\nnode C \"Store\" in=workers\nnode X \"X\"\nedge edge_1 X -> system \"\"\nedge edge_2 A -> B \"send\"\nedge edge_3 B -> C \"\"\nedge edge_4 B -> A \"retry\" kind=async\nedge edge_5 A -> B \"\"\nlayout root flow direction=right\nlayout workers flow direction=down\nlayout system flow direction=down\n",
+  "facts": {
+    "title": "Mermaid nested",
+    "objects": [
+      {
+        "id": "workers",
+        "kind": "group",
+        "label": "Workers",
+        "parent": "system"
+      },
+      {
+        "id": "system",
+        "kind": "group",
+        "label": "System"
+      },
+      {
+        "id": "A",
+        "kind": "node",
+        "label": "API",
+        "shape": "box",
+        "parent": "system",
+        "color": "import_1",
+        "shade": 500
+      },
+      {
+        "id": "B",
+        "kind": "node",
+        "label": "Ready?",
+        "shape": "diamond",
+        "parent": "workers"
+      },
+      {
+        "id": "C",
+        "kind": "node",
+        "label": "Store",
+        "shape": "box",
+        "parent": "workers"
+      },
+      {
+        "id": "X",
+        "kind": "node",
+        "label": "X",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "X",
+        "to": "system",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "edge_2",
+        "from": "A",
+        "to": "B",
+        "label": "send",
+        "directed": true
+      },
+      {
+        "id": "edge_3",
+        "from": "B",
+        "to": "C",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "edge_4",
+        "from": "B",
+        "to": "A",
+        "label": "retry",
+        "directed": true,
+        "dashed": true
+      },
+      {
+        "id": "edge_5",
+        "from": "A",
+        "to": "B",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "right"
+      },
+      {
+        "scope": "workers",
+        "kind": "flow",
+        "direction": "down"
+      },
+      {
+        "scope": "system",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": [
+      {
+        "name": "import_1",
+        "fill": "#dbeafe",
+        "stroke": "#123456",
+        "ink": "#000000"
+      }
+    ]
+  }
+}

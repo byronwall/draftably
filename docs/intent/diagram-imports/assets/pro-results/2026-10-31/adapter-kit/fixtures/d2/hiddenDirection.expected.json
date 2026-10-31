@@ -1,0 +1,81 @@
+{
+  "status": "needs-review",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_ARROW_APPEARANCE_CHANGED",
+      "severity": "warning",
+      "impact": "appearance",
+      "message": "Native arrowheads show the declared connection direction; foreign arrowhead suppression is not preserved.",
+      "foreignIds": [
+        "(a -> b)[0]"
+      ]
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "(a -> b)[0]",
+      "native": "d2_edge_1"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 hiddenDirection\" version=1\nnode a \"a\"\nnode b \"b\"\nedge d2_edge_1 a -> b \"\"\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "D2 hiddenDirection",
+    "objects": [
+      {
+        "id": "a",
+        "kind": "node",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "id": "b",
+        "kind": "node",
+        "label": "b",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "d2_edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

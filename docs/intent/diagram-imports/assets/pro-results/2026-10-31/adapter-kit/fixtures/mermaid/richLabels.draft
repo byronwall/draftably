@@ -1,0 +1,9 @@
+diagram "Mermaid richLabels" version=1
+theme-color import_1 shade=500 fill="#aabbcc" stroke="#ddeeff" ink="#112233"
+node A "API\n♥" color=import_1 shade=500
+node B "Store"
+node D "Complete" shape=pill
+node C "Asset"
+edge edge_1 A -> B ""
+edge edge_2 B -> D ""
+layout root flow direction=down

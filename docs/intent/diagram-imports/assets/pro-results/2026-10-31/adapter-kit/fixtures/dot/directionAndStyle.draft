@@ -1,0 +1,5 @@
+diagram "Appearance" version=1
+node a "a"
+node b "b"
+edge edge_1 a -> b ""
+layout root flow direction=right

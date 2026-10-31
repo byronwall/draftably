@@ -1,0 +1,13 @@
+digraph Scopes {
+  node [shape=box,label="Root default"];
+  a;
+  subgraph local {
+    node [label="Local default"];
+    b;
+    a [label="Shared identity"];
+  }
+  c;
+  edge [headport=n];
+  a:e -> b:s [label="explicit endpoint beats default"];
+  b -> c [label="non-ranking",constraint=0];
+}

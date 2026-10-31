@@ -1,0 +1,5 @@
+diagram "D2 styles" version=1
+node a "A"
+node b "B" shape=diamond
+edge d2_edge_1 a -> b "request" kind=async
+layout root flow direction=down

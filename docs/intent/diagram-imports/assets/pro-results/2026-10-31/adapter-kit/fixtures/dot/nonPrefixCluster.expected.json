@@ -1,0 +1,16 @@
+{
+  "status": "failed",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_CLUSTER_ATTRIBUTE",
+      "message": "cluster=true on a non-prefix or anonymous subgraph requires a separate cluster mapper; it is not flattened.",
+      "severity": "error",
+      "impact": "semantics",
+      "line": 1
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

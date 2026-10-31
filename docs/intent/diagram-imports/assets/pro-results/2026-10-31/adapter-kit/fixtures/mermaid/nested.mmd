@@ -1,0 +1,15 @@
+flowchart LR
+subgraph system[System]
+  direction TB
+  A[API]
+  subgraph workers[Workers]
+    B{Ready?}
+    C[Store]
+  end
+end
+X --> system
+A -->|send| B --> C
+B -. retry .-> A
+A --> B
+classDef ok fill:#dbeafe,stroke:#123456,color:#000
+class A ok
