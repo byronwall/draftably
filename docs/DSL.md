@@ -314,8 +314,8 @@ edge hit cache -> cp "cached prefix"
 - A cell stays in its place. `near`, `nudge`, `stay` and `pin` on a cell are reported and
   ignored; move the group instead, by its title band. An engine on the root moves the group as
   one block.
-- In the viewer, dragging a cell and dropping it among the others reorders the group: it writes
-  the group's `order` line. A marker keeps its place before the cell it preceded. The inspector's
+- In the Editor, dragging a cell and dropping it among the others reorders the group: it writes
+  the group's `order` line. A marker keeps its place before the cell it preceded. The Inspector's
   **Span** field writes `span=`.
 - Cells are nodes, so colors, links, `count=` and change marks work on them.
 
@@ -537,19 +537,74 @@ they use.
 
 ## Layout engines
 
-`layout scope engine=name` arranges a scope with one of the editor's layout engines instead of a
+`layout scope engine=name` arranges a scope with one of the Editor's layout engines instead of a
 built-in recipe. The engine runs from scratch each time the file compiles, so the result depends
 only on the objects, their sizes and the connections, never on an earlier drawing. Adding an
 object lays the scope out again.
 
-```text
+A scope takes one `layout` line. Each line here is a separate choice:
+
+- `layout root engine=compound-flow` arranges the whole drawing.
+- `layout root engine=layered direction=down rank-gap=96 fold=auto` also sets the direction, the
+  gap between ranks and folding.
+- `layout services engine=grid` arranges only the group `services`.
+
+### Choose an engine
+
+Start with `compound-flow` if the drawing has groups, and `layered` if it has none. Change the
+engine only when you can name what is wrong with the drawing.
+
+| Engine            | Name in the Editor | Use it when                                                                                                                                                                                 | Example                                  |
+| ----------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `compound-flow`   | Compound flow      | The drawing has groups and reads in one direction. It orders groups by all their connections and packs them tight. The first engine to try for groups.                                      | Web, service and data tiers              |
+| `layered`         | Layered + fold     | The drawing reads in one direction. It puts objects in ranks and reduces crossings. A long run folds into rows, and `fold=never` keeps one row. The first engine to try without groups.     | A seven-step pipeline in a slide         |
+| `tree`            | Subtree tree       | Each object has one parent. It centers parents next to their children and gives each subtree its own space. `root=` names the top object.                                                   | An org chart                             |
+| `grid`            | Soft grid          | Objects have few connections or none. It packs them into a block that follows `aspect`. Many lines take long routes through a grid.                                                         | Nine services with no lines between them |
+| `boundary-align`  | Boundary alignment | Straight lines between groups matter more than size. It lines up connected objects across groups, so the groups move apart and the drawing grows.                                           | A few groups with many links between     |
+| `compound-spring` | Compound spring    | Packed groups read as a long strip, and you want a shape nearer a square. It relaxes groups by the connections of their members. It follows `aspect`.                                       | Groups for a page or a square slide      |
+| `flow`            | Directional flow   | You want a reading direction, but ranks look too rigid. Boxes keep the direction without a shared column.                                                                                   | A data platform with many sources        |
+| `stress`          | Stress descent     | The drawing is a network with no main direction. It sets the distance between two objects from the number of lines on the path between them.                                                | Services that call each other            |
+| `force`           | Spring network     | Connected clusters should find their own shape, and a loose result is fine. It often leaves more space between objects.                                                                     | A map of related topics                  |
+| `tidy`            | Local tidy         | Ranks are close, but some lines are stretched. It shortens long lines and aligns neighbors. To tidy the current drawing instead, use **Tidy positions**. See [Layout tools](#layout-tools). | A flow with one long line                |
+
+`compound-flow`, `boundary-align` and `compound-spring` differ only when a scope holds groups.
+Without groups, those three, `flow` and `tidy` often draw almost the same result, because each
+starts from the same ranks. `stress` and `force` start there too, so they keep that order with
+more space. If a change of engine does nothing, try another `direction`, `fold` on `layered`, or
+`aspect` on `grid` or `compound-spring`.
+
+This file has three groups. `compound-flow` packs them, and the lines from Auth and Jobs cross:
+
+```draft
+group web "Web"
+group svc "Services"
+group data "Data"
+node ui "App" in=web
+node cdn "CDN" in=web
+node api "API" in=svc
+node jobs "Jobs" in=svc
+node auth "Auth" in=svc
+node db "Postgres" in=data
+node cache "Redis" in=data
+edge e1 cdn -> ui
+edge e2 ui -> api
+edge e3 api -> auth
+edge e4 api -> db
+edge e5 auth -> cache
+edge e6 jobs -> db
 layout root engine=compound-flow
-layout root engine=layered direction=down rank-gap=96 fold=auto
-layout services engine=grid
 ```
 
-Engines: `compound-flow`, `boundary-align`, `compound-spring`, `tidy`, `stress`, `force`,
-`flow`, `layered`, `tree` and `grid`. The editor's Layout options panel describes each one.
+**Try it:** change `compound-flow` to `boundary-align`. The groups move apart, the crossing goes,
+and the drawing gets larger.
+
+To compare engines on your own file, run
+`draftably vary diagram.draft --try engine=layered,tree,grid`, or select **Compare layouts**
+(**Alt E**) in the Editor. To set one in the Editor, select **Layout options**, then **Advanced
+layout settings**. **Approach** lists the engines by the names in the table. Choose one, select
+**Preview automatic layout**, then select **Keep layout** to write the `layout` line.
+
+### Scopes and groups
 
 An engine on `root` arranges everything, including the contents of groups. A group with its own
 `layout` line keeps that recipe instead. An engine on a group arranges only that group. Groups
@@ -567,6 +622,8 @@ each rank. A scope that holds groups is packed the same way. Every gap next to a
 across the drawing: `group-gap`, widened up to 96px when more lines cross a gap, at 16px pitch
 (the router's `edge-gap`).
 
+### Engine settings
+
 | Setting            | Values                   | Setting         | Values                |
 | ------------------ | ------------------------ | --------------- | --------------------- |
 | `direction`        | `auto\|right\|down`      | `edge-length`   | 20–260                |
@@ -579,6 +636,8 @@ across the drawing: `group-gap`, widened up to 96px when more lines cross a gap,
 | `aspect`           | `1\|1.333\|1.6\|2\|0.75` | `root`          | a node ID, for `tree` |
 
 `min-width` and `min-height` work as they do for the built-in recipes; `gap` does not apply.
+
+### Feedback lines and ties
 
 An edge with `constraint=false` is drawn and routed but takes no part in layout: it neither
 ranks nor orders the objects it joins, as if it weren't there. Use it for a feedback edge (a
@@ -601,20 +660,20 @@ routing edge-gap=24 clearance=12 corner-radius=0
 Without a `routing` line, the router's defaults apply. A setting outside its range is an error
 with the line number, such as `Expected crossing-penalty from 0 to 1200; got 2000.`
 
-| Setting            | What it does                                                                                               | Default | Range  |
-| ------------------ | ---------------------------------------------------------------------------------------------------------- | ------- | ------ |
-| `clearance`        | The hard distance in pixels a line keeps from boxes and from groups it does not enter.                     | 10      | 4–30   |
-| `standoff`         | The distance a line prefers when it runs alongside a box or a group border. `0` turns it off.              | 20      | 0–40   |
-| `port-gap`         | The least space the router prefers between two line ends on one side of a box.                             | 16      | 6–28   |
-| `edge-gap`         | The space the router prefers between two parallel lines. Gaps next to groups widen by this step.           | 16      | 4–48   |
-| `bend-penalty`     | The cost of each bend. Higher values give simpler routes with fewer bends.                                 | 32      | 0–100  |
-| `crossing-penalty` | The cost of each crossing. Higher values take a longer way round instead of a crossing.                    | 360     | 0–1200 |
-| `shared-penalty`   | The cost of each pixel of a segment that another line also uses.                                           | 8       | 0–20   |
-| `parallel-penalty` | The cost of two parallel lines closer than `edge-gap`. Higher values keep lines apart.                     | 18      | 0–60   |
-| `port-stability`   | The cost of moving a line's end to another side than the earlier drawing used. It never locks a side.      | 20      | 0–150  |
-| `fanout-penalty`   | The cost of each extra line on a side that other lines use. Higher values spread branches over more sides. | 50      | 0–160  |
-| `passes`           | Routing passes: one first pass, then up to four passes that repair crossings and shared segments.          | 3       | 1–5    |
-| `corner-radius`    | The radius of the rounded corners in pixels. `0` gives square corners.                                     | 6       | 0–16   |
+| Setting            | Menu name            | What it does                                                                                               | Default | Range  |
+| ------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------- | ------- | ------ |
+| `clearance`        | Shape clearance      | The hard distance in pixels a line keeps from boxes and from groups it does not enter.                     | 10      | 4–30   |
+| `standoff`         | —                    | The distance a line prefers when it runs alongside a box or a group border. `0` turns it off.              | 20      | 0–40   |
+| `port-gap`         | Port spacing         | The least space the router prefers between two line ends on one side of a box.                             | 16      | 6–28   |
+| `edge-gap`         | Parallel edge gap    | The space the router prefers between two parallel lines. Gaps next to groups widen by this step.           | 16      | 4–48   |
+| `bend-penalty`     | Bend cost            | The cost of each bend. Higher values give simpler routes with fewer bends.                                 | 32      | 0–100  |
+| `crossing-penalty` | Crossing cost        | The cost of each crossing. Higher values take a longer way round instead of a crossing.                    | 360     | 0–1200 |
+| `shared-penalty`   | Shared-path cost     | The cost of each pixel of a segment that another line also uses.                                           | 8       | 0–20   |
+| `parallel-penalty` | Lane separation cost | The cost of two parallel lines closer than `edge-gap`. Higher values keep lines apart.                     | 18      | 0–60   |
+| `port-stability`   | Keep previous sides  | The cost of moving a line's end to another side than the earlier drawing used. It never locks a side.      | 20      | 0–150  |
+| `fanout-penalty`   | Spread fan-out       | The cost of each extra line on a side that other lines use. Higher values spread branches over more sides. | 50      | 0–160  |
+| `passes`           | Routing passes       | Routing passes: one first pass, then up to four passes that repair crossings and shared segments.          | 3       | 1–5    |
+| `corner-radius`    | Corner radius        | The radius of the rounded corners in pixels. `0` gives square corners.                                     | 6       | 0–16   |
 
 The router adds the costs to the route length in pixels and keeps the cheapest route. So
 `bend-penalty=32` means the router accepts a route up to 32 pixels longer to remove one bend, and
@@ -628,7 +687,7 @@ Which setting to change for a problem:
 
 - **Too many bends:** raise `bend-penalty`, for example to 64.
 - **Lines cross:** raise `crossing-penalty`, for example to 900. See also
-  [Fixing line crossings](#fixing-line-crossings). The viewer's **Fewer crossings**
+  [Fixing line crossings](#fixing-line-crossings). The Editor's **Fewer crossings**
   preset writes `crossing-penalty=900 shared-penalty=9 port-stability=10`.
 - **Parallel lines too close together:** raise `edge-gap`, then `parallel-penalty`.
 - **Lines too close to boxes:** raise `clearance` (a hard limit) or `standoff` (a preference).
@@ -649,9 +708,10 @@ edge e4 client -> billing "invoice"
 routing bend-penalty=64 crossing-penalty=900 corner-radius=0
 ```
 
-The viewer's **Routing** menu has a slider for each setting except `standoff`, and shows the
-crossings, close lane pairs and bends of the current drawing. A change there writes the `routing`
-line.
+The **Routing options** menu in the Editor has a slider for each setting except `standoff`, under
+the menu names in the table. **Shared-path cost** and **Routing passes** are under **Advanced
+routing**. The menu also shows the crossings, close lane pairs and bends of the current drawing. A
+change there writes the `routing` line.
 
 When the root `layout` line declares `direction=right` or `direction=down`, a forward connection
 between objects that layout places leaves its source's trailing side and enters its target's
@@ -685,19 +745,19 @@ Try these steps in order, and stop when the drawing reads well:
 1. **Change the order.** The order of `node` lines, or a scope's `order` line, decides where a box
    goes when nothing else does. Put boxes in the same order as the boxes they connect to.
 2. **Let the engine reorder.** On a `compound-flow` or `layered` engine, add `ordering=crossings`:
-   `layout root engine=layered ordering=crossings`. In the viewer, the same setting is
+   `layout root engine=layered ordering=crossings`. In the Editor, the same setting is
    **Within-rank ordering** → **Reorder to reduce crossings** in Layout options.
 3. **Move one box.** A `near` line with `side=` puts a box on the other side of its neighbor. A
    `pin` holds a box at an exact place. See [Refinements](#refinements).
 4. **Choose the sides.** `from=` and `to=` on an `edge` line choose the sides a line leaves and
    enters.
 5. **Route around it.** Raise `crossing-penalty` on the `routing` line, for example to 900. In the
-   viewer, **Routing** → **Fewer crossings** writes that line.
+   Editor, **Routing options** → **Fewer crossings** writes that line.
 
 To compare more than one result at once:
 
-- **In the viewer:** **Routing** shows the crossings in the current drawing. **Compare ports &
-  routes** draws routing candidates side by side, and **Compare layouts** (**Alt E**) does the same
+- **In the Editor:** **Routing options** shows the crossings in the current drawing. **Compare
+  ports & routes** draws routing candidates side by side, and **Compare layouts** (**Alt E**) does the same
   for layout recipes. **Apply** writes the candidate's `routing` or `layout` line into the file.
   **Reroute now** (**Alt R**) routes every line again without moving shapes. Undo steps back
   through the file's versions. See [Layout tools](#layout-tools).
@@ -1014,7 +1074,7 @@ moving the camera never changes the file.
 
 ## Editing in the viewer
 
-When you edit a diagram in the viewer, the viewer writes each change into the `.draft` file as a
+When you edit a diagram in the Editor, the Editor writes each change into the `.draft` file as a
 readable line, so the file stays the source.
 
 ```draft
@@ -1023,16 +1083,16 @@ node cache "Cache"
 edge read api -> cache "read"
 ```
 
-**Try it:** save these lines as `cache.draft` and run `npx draftably open cache.draft`. Select
-Cache and choose teal as its color in the Inspector. The box turns teal, and the file's
-`node cache` line gets `color=teal`. Then drag Cache below API: the file gets a `near` line for
-Cache. Undo returns the file to its earlier version.
+**Try it:** save these lines as `cache.draft` and run `npx draftably open cache.draft`. Open the
+Inspector from the toolbar. Select Cache and choose teal as its color. The box turns teal, and the
+file's `node cache` line gets `color=teal`. Then drag Cache below API: the file gets a `near` line
+for Cache. Undo returns the file to its earlier version.
 
-### Viewer edits reference
+### Editor edits reference
 
-Edits made in the viewer are written back to the file as readable statements:
+Edits made in the Editor are written back to the file as readable statements:
 
-| In the viewer                              | In the file                                                         |
+| In the Editor                              | In the file                                                         |
 | ------------------------------------------ | ------------------------------------------------------------------- |
 | Drag an object                             | `near` the closest sibling it does not overlap; `nudge` if none.    |
 | Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
@@ -1054,15 +1114,40 @@ An accepted move, pin or resize also writes soft `stay` anchors for the objects 
 top-level object, and the siblings of the edited object and of its containers. When an agent later
 adds content, nearby objects make room while anchored regions hold. If growth forces an anchor to
 give way, the status bar's **layout notes** name it with its line, and the change notice lists the
-objects outside the edit that moved. **Reflow group** (Edit menu or inspector) removes the soft
+objects outside the edit that moved. **Reflow group** (Edit menu or Inspector) removes the soft
 refinements inside a group so its recipe arranges it again, and anchors what is around it.
 
-Each save is checked against the file's revision. If the file changed on disk first, the viewer
+Each save is checked against the file's revision. If the file changed on disk first, the Editor
 shows the file and keeps your edit aside: **Keep file** discards the edit, and **Save my edit over
 it** replaces the newer file. Undo and redo step through the file's versions; a change from
-outside the viewer clears them, so undo never erases someone else's work.
+outside the Editor clears them, so undo never erases someone else's work.
 
 ## Layout tools
+
+The automatic layout is a start. These tools change it, in the file or in the Editor.
+
+### Fix a layout
+
+Find what is wrong, then use the tool for it. Start at the top: a small fix keeps more of the
+drawing.
+
+- **One box is in the wrong place.** Drag it in the Editor, or add a `near` line. To hold it at an
+  exact place, add a `pin` line. See [Refinements](#refinements).
+- **Boxes are in the wrong order.** Add an `order` line, or move the `node` lines. See
+  [Refinements](#refinements).
+- **Lines cross.** Follow [Fixing line crossings](#fixing-line-crossings).
+- **Lines have too many bends, or run too close.** Change one setting on the `routing` line. See
+  [Routing](#routing).
+- **Shapes are close, but a few lines are stretched or uneven.** Select **Tidy positions** (**L**).
+- **A group is out of shape after edits.** Select **Reflow group**. It removes the soft refinements
+  inside the group. To clear one object, select **Clear manual markers**.
+- **The whole drawing has the wrong shape.** Set `direction=` on the `layout` line, or run
+  `draftably vary diagram.draft --fit slide`. See [Layout variants](#layout-variants).
+- **The whole arrangement is wrong.** Change the engine. See
+  [Choose an engine](#choose-an-engine), and use **Compare layouts** (**Alt E**) to see the results
+  side by side.
+
+### What each tool changes
 
 | Action           | What it changes                              | Applies to                                  | How to reverse                         |
 | ---------------- | -------------------------------------------- | ------------------------------------------- | -------------------------------------- |
