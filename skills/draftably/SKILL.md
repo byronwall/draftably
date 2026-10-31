@@ -277,6 +277,11 @@ content area.
   and `soft-overlap` when its tint covers an object outside it; soften leaf groups first.
 - Keep labels short (two to four words). Put detail in edge labels or comments, not in boxes.
 - Use `kind=async` for events, queues and background work, so sync and async paths read apart.
+- Use `directed=false` on an `edge` for an undirected connection. Keep the `->` endpoint
+  separator; no arrowhead is drawn. It does not impose a flow/swim-lane rank, but layout engines
+  may use it as adjacency. Omission or `directed=true` means the usual directed edge.
+  `constraint=false` independently removes it from engine layout. For undirected relationship
+  graphs, try `layout root engine=stress`.
 - A feedback edge (a refetch, a retry back to the start) pulls the section it points at below its
   source. Add `constraint=false` to draw it without letting it rank anything.
 - Use color to mean something, not for decoration:

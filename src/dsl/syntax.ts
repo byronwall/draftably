@@ -268,6 +268,8 @@ export interface ModelEdge {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** `directed=false`: an undirected connection, drawn without an arrowhead. */
+  directed?: false;
   /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
   constraint?: false;
   line: number;
@@ -697,7 +699,7 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'constraint']);
+        allow(['kind', 'from', 'to', 'was', 'constraint', 'directed']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -713,6 +715,9 @@ export function parseModel(source: string | SourceDoc): Model {
           dashed: choice('kind', 'sync', ['sync', 'async']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
+          ...(choice('directed', 'true', ['true', 'false']) === 'false'
+            ? { directed: false as const }
+            : {}),
           ...(choice('constraint', 'true', ['true', 'false']) === 'false'
             ? { constraint: false as const }
             : {}),

@@ -2332,8 +2332,8 @@ function layoutPass(
   channels?: Map<string, Channel>,
   packFold?: PackFold,
 ): Scene {
-  /** Edges that rank and order objects: all but `constraint=false`, which are only drawn. */
-  const ranking = m.edges.filter(e => e.constraint !== false);
+  /** Only directed, constraining edges impose a reading order. Engines still see undirected links. */
+  const ranking = m.edges.filter(e => e.constraint !== false && e.directed !== false);
   const diagnostics: Diagnostic[] = [],
     children = new Map<string, ModelObject[]>([['root', []]]);
   for (const o of m.objects) {
