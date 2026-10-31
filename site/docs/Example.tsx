@@ -97,9 +97,8 @@ export function Example(props: { source: string; themes?: boolean }) {
             Expand
           </button>
         </Show>
-        <a class="doc-example-play" href={play()}>
-          <span class="doc-play-long">Edit in playground</span>
-          <span class="doc-play-short">Playground</span> →
+        <a class="doc-example-play" href={play()} aria-label="Edit in playground">
+          Playground →
         </a>
       </div>
       <div class="doc-example-body">
