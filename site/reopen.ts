@@ -17,11 +17,17 @@ export async function readDiagramFile(file: File): Promise<string | null> {
   return new TextDecoder().decode(bytes);
 }
 
-/** Why a file did not open. A draftably PDF holds source, but only the CLI reads it. */
-export const unreadableFile = (name: string) =>
-  /\.pdf$/i.test(name)
-    ? `The site cannot read a PDF. Run draftably open ${name} to keep editing.`
-    : `${name} has no draftably source in it. ${REOPEN_HINT}.`;
+/**
+ * Why a file did not open. A draftably PDF holds source, but only the CLI reads it. Other text is
+ * not read, so the message says nothing about what it holds.
+ */
+export function unreadableFile(name: string) {
+  if (/\.pdf$/i.test(name))
+    return `The site cannot read a PDF. Run draftably open ${name} to keep editing.`;
+  if (/\.(png|svg|draft)$/i.test(name))
+    return `${name} has no draftably source in it. ${REOPEN_HINT}.`;
+  return `Only .draft files open as text, so ${name} did not open. ${REOPEN_HINT}.`;
+}
 
 /** The source in pasted SVG markup, or null. */
 export async function readPastedText(text: string): Promise<string | null> {
