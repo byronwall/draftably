@@ -144,6 +144,37 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'native keys in the editor'() {
+    const page = await open('app/?example=checkout');
+    await editorReady(page);
+    const held = () => page.evaluate(() => !!document.querySelector('.space-held'));
+    const tabToFile = async () => {
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press('Tab');
+        if ((await focused(page)) === 'File and examples') return;
+      }
+    };
+    await tabToFile();
+    await page.keyboard.down('Space');
+    check('#306 Space on a focused button starts no pan', !(await held()));
+    await page.keyboard.up('Space');
+    await page.waitForSelector('.popover');
+    check('#306 Space opens the File menu', true);
+    await page.keyboard.press('Escape');
+
+    await page.click('.canvas', { position: { x: 5, y: 5 } });
+    await page.keyboard.down('Space');
+    check('#306 Space on the canvas holds the pan', await held());
+    await page.keyboard.up('Space');
+    check('#306 keyup releases the pan', !(await held()));
+
+    await page.click('[role="toolbar"] button');
+    await page.keyboard.down('Space');
+    check('#306 Space still pans after a toolbar click', await held());
+    await page.keyboard.up('Space');
+    await page.context().close();
+  },
+
   async 'docs overlays'() {
     const page = await open('docs/cells');
     await page.click('.doc-example-bar >> text=Expand');
