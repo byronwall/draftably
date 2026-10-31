@@ -40,8 +40,9 @@ In the Playground:
 1. Select **Download**.
 2. Select **SVG**, **PNG** or **.draft**.
 
-In the Editor, select **Export**, then select **Export PNG…** or **Export SVG…** in the menu.
-With `draftably open`, **Export PDF…** is also in the menu.
+In the Editor, select **Save and export**, the arrow at the right of the toolbar. Then select
+**Export PNG…** or **Export SVG…** in the menu. With `draftably open`, **Export PDF…** is also in
+the menu.
 
 From the command line:
 
@@ -53,7 +54,8 @@ draftably inspect plan.draft --png plan.png --scale 2
 ## Reopen a diagram from an image or file
 
 1. Find a PNG, SVG or `.draft` file that draftably made.
-2. Drop it on any page of this site, or paste it.
+2. Drop it on any page of this site, or paste it. On a phone, use **choose a file** on the
+   [home page](/).
 3. The diagram opens in the Playground. Edit it there.
 
 A PNG or SVG from another program has no source in it. The site tells you so and opens nothing.
