@@ -87,6 +87,14 @@ describe('vary', () => {
     expect(() => parseTry('rank-gap=999')).toThrow('use 12 to 220');
   });
 
+  it('sweeps direction on a file with no layout line', async () => {
+    const result = await vary('node a "A"\nnode b "B"\nedge e a -> b\n', {
+      axes: [parseTry('direction')],
+    });
+    expect(result.failed).toEqual([]);
+    expect(result.drawn.get('v2')!.source).toContain('layout root flow direction=down');
+  });
+
   it('gives a built-in recipe an engine when a sweep sets an engine setting', async () => {
     const shape = shapeOf(await compile(SOURCE));
     const [first] = sweep(shape, [parseTry('rank-gap=52'), parseTry('crossing-penalty=900')]);
