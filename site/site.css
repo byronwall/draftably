@@ -711,7 +711,7 @@ main {
 }
 .tok-arrow,
 .tok-comment {
-  color: #8c92a4;
+  color: #6a7082;
 }
 
 .live-status {
@@ -812,6 +812,7 @@ main {
 }
 
 .point-tabs button {
+  min-width: 24px;
   height: 26px;
   padding: 0;
   border: 0;
@@ -1010,9 +1011,28 @@ main {
   font-size: 14px;
 }
 
+/* A long command wraps inside its button, so it never sets the column's width. */
 .install .copy {
+  align-items: flex-start;
   width: 100%;
+  height: auto;
+  min-height: 40px;
   margin-top: auto;
+  padding: 10px 12px;
+  line-height: 20px;
+}
+
+.install .copy code {
+  white-space: normal;
+  text-wrap: balance;
+}
+
+.install .copy-prompt {
+  line-height: 20px;
+}
+
+.install .copy-icon {
+  margin-top: 2px;
 }
 
 .install-cols p {
@@ -1069,6 +1089,9 @@ main {
 }
 
 .footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: var(--muted);
 }
 
@@ -3209,6 +3232,7 @@ kbd {
 }
 
 .hero-reopen-pick {
+  padding-block: 4px;
   color: var(--accent);
   cursor: pointer;
   white-space: nowrap;
@@ -3252,7 +3276,10 @@ kbd {
 .site-nav a {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  min-width: 24px;
+  min-height: 24px;
   color: var(--muted);
   font-weight: 500;
   text-decoration: none;
