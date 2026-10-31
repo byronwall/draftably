@@ -60,6 +60,13 @@ const open = async (url, viewport = { width: 1440, height: 900 }) => {
   return page;
 };
 const FILE = '[aria-label="File and examples"]';
+/** The first click can land before the toolbar is ready, so try until the menu shows. */
+const openFile = async page => {
+  for (let i = 0; i < 5 && !(await page.isVisible('.popover')); i++) {
+    await page.click(FILE);
+    await sleep(300);
+  }
+};
 const editorReady = page =>
   wait(page, () => !!document.querySelector('.canvas [data-id], .start'), 'the editor', 10000);
 const focused = page =>
@@ -179,7 +186,7 @@ const journeys = {
     const page = await open('app/?example=checkout');
     await editorReady(page);
     const opened = page.url();
-    await page.click(FILE);
+    await openFile(page);
     await page.click('.popover >> text="New diagram"');
     await page.waitForURL(url => url.href !== opened, { timeout: 5000 });
     await editorReady(page);
@@ -201,7 +208,7 @@ const journeys = {
 
     const start = await open('app/?example=checkout');
     await editorReady(start);
-    await start.click(FILE);
+    await openFile(start);
     await start.click('.popover >> text=/New, open or example/');
     await start.waitForSelector('.start-dialog');
     const hint = await start.locator('.start-new').textContent();
