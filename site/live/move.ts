@@ -72,18 +72,8 @@ export function addedLines(prev: string, next: string) {
   });
 }
 
-const PLACES = ['near', 'nudge', 'stay', 'pin', 'order'];
-
-/** What a move of `id` wrote, for a status line: "Wrote near db api … and 2 anchors nearby". */
+/** What a move of `id` wrote, for a status line: "Moved db. 3 lines added." */
 export function moveNote(prev: string, next: string, id: string) {
-  const lines = next.split('\n');
-  const added = addedLines(prev, next)
-    .map(i => lines[i].trim().split(/\s+/))
-    .filter(w => PLACES.includes(w[0]));
-  const mine = added.filter(w => w[1] === id).map(w => w.join(' '));
-  const others = added.length - mine.length;
-  return (
-    `Wrote ${mine[0] ?? `the move of ${id}`}` +
-    (others > 0 ? ` and ${others} anchor${others > 1 ? 's' : ''} nearby` : '')
-  );
+  const added = addedLines(prev, next).length;
+  return `Moved ${id}.` + (added ? ` ${added} line${added > 1 ? 's' : ''} added.` : '');
 }
