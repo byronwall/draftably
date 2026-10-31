@@ -11,7 +11,7 @@ const PAN_KEYS: Record<string, [number, number]> = {
 
 /**
  * A drawing over the whole window: it opens fitted, the wheel or + and - zoom, a drag or the arrow
- * keys pan, and Escape or the close button leaves. It is a modal dialog: focus moves to Close, Tab
+ * keys pan, and Escape or the close button leaves. A touch screen has only the bar's buttons. It is a modal dialog: focus moves to Close, Tab
  * stays on its buttons, and focus goes back to the opener when it closes. `error` says the drawing
  * is the last good one, while the source has that error.
  */
@@ -110,7 +110,27 @@ export function Zoom(props: { svg: string; error?: string; onClose: () => void }
         style={{ background: paperOf(props.svg) ?? '#fbfbfd' }}
       >
         <div class="zoom-bar">
-          <span>Scroll or + − to zoom · drag or arrows to pan · 0 to fit · Esc to close</span>
+          <span>
+            {matchMedia('(pointer: coarse)').matches
+              ? 'Drag to pan'
+              : 'Scroll or + − to zoom · drag or arrows to pan · 0 to fit · Esc to close'}
+          </span>
+          <button
+            type="button"
+            aria-label="Zoom out"
+            style={{ 'min-width': '32px' }}
+            onClick={() => zoomKey(0.8)}
+          >
+            −
+          </button>
+          <button
+            type="button"
+            aria-label="Zoom in"
+            style={{ 'min-width': '32px' }}
+            onClick={() => zoomKey(1.25)}
+          >
+            +
+          </button>
           <button type="button" onClick={fit}>
             Fit
           </button>

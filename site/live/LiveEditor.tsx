@@ -267,6 +267,7 @@ export function LiveEditor(props: { examples: string[]; hints?: Record<string, s
                 svg={good()?.svg ?? ''}
                 scene={good()?.scene}
                 stale={stale()}
+                error={errors()[0]?.message}
                 fitKey={`${id()}:${fits()}`}
                 hint={props.hints?.[id()]}
                 preview={preview}
