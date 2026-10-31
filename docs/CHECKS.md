@@ -75,6 +75,9 @@ once and prints that command.
 
 The file proof also switches between more than six diagrams with Chrome’s back/forward cache enabled, then restores a cached page after an external file change. This catches retained EventSource connections that can exhaust the browser’s HTTP/1 pool; Playwright disables that cache by default.
 
+To serve a folder from the dev server instead, run `DIAGRAM_ROOT=folder pnpm dev`.
+`DIAGRAM_FILE=path/to/file.draft pnpm dev` serves the current folder and prints the file's address.
+
 ## The public site
 
 `pnpm site:build && pnpm prove:site` serves `dist-site/` the way GitHub Pages does and drives it in

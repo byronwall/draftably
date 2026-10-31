@@ -794,41 +794,89 @@ line. Pins never move; conflicting pins are reported as errors.
 
 ## Command line
 
-```bash
-pnpm draftably check examples/checkout.draft      # errors, diagnostics, conflicts; exit 1 on errors
-pnpm draftably check examples/checkout.draft --hints  # also: how far each refinement moved its target
-pnpm draftably check examples/ --quiet            # every .draft in a folder (or several files); no info notes
-pnpm draftably format examples/checkout.draft     # print formatted source (--write to save)
-pnpm draftably format diagram.draft --drop-stale --write  # also drop refinements that no longer hold
-pnpm draftably inspect examples/checkout.draft    # canonical node and route geometry as JSON
-pnpm draftably inspect examples/checkout.draft --svg > checkout.svg
-pnpm draftably compare old.draft new.draft        # one file with + - ~ marks (--write, --svg)
-pnpm draftably inspect examples/checkout.draft --png checkout.png --scale 2
-pnpm draftably extract checkout.png              # print the source embedded in a PNG or SVG export
-pnpm draftably set f.draft node.api label="API" color=teal  # change a declaration by id (key= removes)
-pnpm draftably rm f.draft cache                  # remove it with its edges, refinements and state mentions
-pnpm draftably mv f.draft cache store            # rename an id everywhere
-pnpm draftably vary examples/checkout.draft       # layout variants: contact sheet, metrics, ranking
-pnpm draftably vary examples/checkout.draft --apply v1  # write variant v1 into the file
-pnpm draftably open examples/checkout.draft       # serve the viewer for this file (after pnpm build)
-pnpm draftably open                              # start page for the current folder's diagrams
-pnpm draftably open --status                     # running viewers: URL, folder, version (open reuses one)
-pnpm draftably vary --help                       # any command's options; --version for the version
-pnpm draftably skill install                     # agent skill into ./.claude/skills/draftably
-pnpm draftably docs legend                       # one section of this guide; docs alone lists them
+This page lists each command and explains how variants, conflicts and exports work. To learn a command by use, read the [CLI guide](https://draftably.dev/docs/cli).
+
+The samples use the `draftably` command. Without a global install, write `npx draftably`
+([Get started](https://draftably.dev/docs/get-started)). To run them, save this file as
+`plan.draft`:
+
+```draft
+diagram "Plan"
+group app "App"
+node web "Web" in=app
+node api "API" in=app
+group data "Data"
+node db "Database" in=data
+node cache "Cache" in=data
+edge e1 web -> api "calls"
+edge e2 api -> db "reads"
+edge e3 api -> cache "checks"
 ```
+
+```bash
+draftably check plan.draft                 # errors, diagnostics, conflicts; exit 1 on errors
+draftably check plan.draft --hints         # also: how far each refinement moved its target
+draftably check . --quiet                  # every .draft in a folder (or several files); no info notes
+draftably format plan.draft                # print formatted source (--write to save)
+draftably format plan.draft --drop-stale --write  # also drop refinements that no longer hold
+draftably inspect plan.draft               # canonical node and route geometry as JSON
+draftably inspect plan.draft --svg > plan.svg
+draftably inspect plan.draft --png plan.png --scale 2
+draftably compare plan.draft new.draft     # one file with + - ~ marks (--write, --svg)
+draftably extract plan.png                 # print the source embedded in a PNG or SVG export
+draftably set plan.draft api label="Public API" color=teal  # change a declaration by id (key= removes)
+draftably mv plan.draft cache store        # rename an id everywhere
+draftably rm plan.draft store              # remove it with its edges, refinements and state mentions
+draftably vary plan.draft                  # layout variants: contact sheet, metrics, ranking
+draftably vary plan.draft --apply v1       # write variant v1 into the file
+draftably open plan.draft                  # serve the Editor for this file
+draftably open                             # start page for the current folder's diagrams
+draftably open --status                    # running editors: URL, folder, version (open reuses one)
+draftably vary --help                      # any command's options; --version for the version
+draftably skill install                    # agent skill into ./.claude/skills/draftably
+draftably docs legend                      # one section of this guide; docs alone lists them
+```
+
+`compare` needs a second version of the file, here `new.draft`.
 
 `check`, `format`, `inspect`, `compare` and `open` also take a PNG or SVG export in place of a
 `.draft` file, and read the source embedded in it. `open` writes that source to a `.draft` beside
-the image first. `extract --write file.draft` saves the source instead of printing it. `extract`
+the image first. `extract --write plan.draft` saves the source instead of printing it. `extract`
 exits 1 when the image carries no source.
+
+### open
+
+`open` serves a folder: the current folder, the folder you name, or the current folder around
+the file you name. Without a file, the Editor starts on a page that lists every `.draft` file in
+the folder (skipping dot folders and `node_modules`), creates a new one, or opens an example. Each
+file opens at `?file=path/in/folder.draft`, so links and reloads keep it.
+
+`open` watches the open file. Edits made in another program appear in the Editor at once. If the
+source becomes invalid, the Editor keeps the last valid drawing and shows the error line.
+
+### inspect
+
+`--png <file>` on `inspect` or `compare` saves a PNG at `--scale` times the SVG's size (2 by
+default) and prints its size in pixels. `--max-width <px>` lowers the scale so the image is at
+most that wide. It renders with an installed Chrome, Chromium or Edge in headless mode; set
+`CHROME_PATH` to use another copy.
+
+`inspect` uses the Editor's own router and the same font tables, so its geometry matches the
+Editor. `inspect --svg` draws with the file's theme and embeds its fonts.
+
+### skill
+
+`skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
+teaches coding agents to write and check `.draft` files. `--global` installs it under
+`~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.
+`npx skills add byronwall/draftably` installs the same skill from the repository.
 
 ### Source in exported images
 
 `inspect --png`, `inspect --svg`, `compare --png` and `compare --svg` embed the formatted source,
-and the viewer's PNG and SVG exports embed the open file's source. A `compare` export embeds the
-marked file, so both versions come back. `--no-source`, or the checkbox in the viewer's export
-dialog, leaves it out. Dropping or pasting an image with source into the viewer opens it as a new
+and the Editor's PNG and SVG exports embed the open file's source. A `compare` export embeds the
+marked file, so both versions come back. `--no-source`, or the checkbox in the Editor's export
+dialog, leaves it out. Dropping or pasting an image with source into the Editor opens it as a new
 scratch diagram. The format is stable, so other tools can read it:
 
 - **PNG:** an `iTXt` chunk with keyword `draftably`. Its text is the UTF-8 source, with the
@@ -842,7 +890,8 @@ scratch diagram. The format is stable, so other tools can read it:
   diagram's title as its description. `check`, `extract` and `open` read every attachment whose
   name ends in `.draft`; `diagrams.pdf#checkout.draft` names one.
 
-Hosts that recompress images drop the PNG chunk. See the README for where it survives.
+Hosts that recompress images drop the PNG chunk. The [README](../README.md#review-refine-and-share)
+has more on this.
 
 ### Layout variants
 
@@ -854,16 +903,20 @@ that suit it: `compound-flow` for groups and `layered` without, in both reading 
 labels, and a router that avoids crossings harder. Files whose root uses `lanes`, `sequence` or
 `cells` get routing variants only.
 
+Here is `plan.draft` after the `set`, `mv` and `rm` samples above:
+
 ```text
-$ pnpm draftably vary examples/checkout.draft
-5 variants tried, 2 kept. Sheet: examples/checkout.vary/contact-sheet.png
-id  change               crossings  bends    size            warnings  moved  notes
-v0  current              0          8        1143×462        0                fewest bends
-v1  compound-flow down   0          9 (+1)   598×713 (-19%)  0         349px  recommended, smallest
-v2  compound-flow right  0          11 (+3)  1143×451 (-2%)  0         46px   least moved
-v1: 3 groups, reading down.
-v2: 3 groups, reading right.
-Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
+$ draftably vary plan.draft
+5 variants tried (3 kept). Sheet: plan.vary/contact-sheet.png
+id  change               crossings  bends   size            warnings  moved  notes
+v0  current              0          2       578×359         0
+v1  compound-flow down   0          0 (-2)  292×539 (-24%)  0         162px  recommended, smallest, fewest bends
+v2  compound-flow right  0          0 (-2)  810×254 (-1%)   0         169px  fewest bends
+v3  data frame=soft      0          2       540×387 (+1%)   0         29px   least moved
+v1: 2 groups, reading down.
+v2: 2 groups, reading right.
+v3: fewer containers: soften group data.
+Recommended: v1. Apply: draftably vary plan.draft --apply v1
 ```
 
 - Output goes to `<name>.vary/` beside the file, or to `--out <folder>`: `contact-sheet.png`
@@ -887,7 +940,7 @@ Recommended: v1. Apply: draftably vary examples/checkout.draft --apply v1
     lines.
 - `--try key=a,b` tries exactly those values instead of suggesting, in order, and keeps every
   one. A second `--try` makes a grid (12 variants at most), with the first axis varying fastest.
-  `--try key` alone uses the steps the viewer's Compare offers (`rank-gap` → 28, 52, 88). Keys
+  `--try key` alone uses the steps the Editor's **Compare** offers (`rank-gap` → 28, 52, 88). Keys
   are `engine`, `direction`, the engine settings in [Layout engines](#layout-engines) and the
   settings in [Routing](#routing). An engine setting on a scope with a built-in recipe also sets
   the engine: the scope's own, else `compound-flow` with groups or `layered` without.
@@ -960,25 +1013,57 @@ crossings, bends, total line length and warnings. It also warns on how the drawi
 `inspect --json --metrics` adds the same numbers as a `metrics` object, so a script can compare
 two versions of a file without drawing an image.
 
-`skill install` copies the agent skill in [`skills/draftably`](../skills/draftably/SKILL.md), which
-teaches coding agents to write and check `.draft` files. `--global` installs it under
-`~/.claude/skills`, `--dir` names another skills folder, and `--force` replaces an existing copy.
-`npx skills add byronwall/draftably` installs the same skill from the repository.
-
-`open` serves a folder: the current folder, the folder you name, or the current folder around
-the file you name. Without a file, the viewer starts on a page that lists every `.draft` file in
-the folder (skipping dot folders and `node_modules`), creates a new one, or opens an example. Each
-file opens at `?file=path/in/folder.draft`, so links and reloads keep it.
-
-`open` watches the open file. Edits made in another program appear in the viewer at once. If the
-source becomes invalid, the viewer keeps the last valid drawing and shows the error line. During
-development, `DIAGRAM_ROOT=folder pnpm dev` serves the same folder from Vite;
-`DIAGRAM_FILE=path/to/file.draft` serves the current folder and prints the file's address.
-
 ## Examples
 
-`examples/` holds the bundled diagrams, from flat flows to five levels of containers. They are bundled
-into the viewer, so they open without a server at `?example=id`. An example is a scratch copy:
+draftably comes with these diagrams. Select a name to open a copy in the Editor. You need no install, and nothing is saved until you ask.
+
+### Flows and states
+
+- [Support ticket triage](https://draftably.dev/app/?example=support-triage): A flat decision flow: no containers, decision diamonds, and labeled branches.
+- [Order lifecycle](https://draftably.dev/app/?example=order-lifecycle): A state machine with loops back to earlier states and two terminal states.
+- [Order pipeline](https://draftably.dev/app/?example=order-pipeline): An order from intake to fulfilment, arranged by a layout engine instead of a built-in recipe.
+- [CI/CD pipeline](https://draftably.dev/app/?example=ci-cd-pipeline): One level of containers: each stage is a group, jobs run inside it.
+- [Order saga](https://draftably.dev/app/?example=order-saga): Event-driven services around a broker. Dashed lines are asynchronous events.
+- [Observability stack](https://draftably.dev/app/?example=observability-stack): Telemetry flows from instrumented services through collectors into storage and tools.
+
+### Architecture
+
+- [Checkout architecture](https://draftably.dev/app/?example=checkout): Two levels: a platform group holds the API and a nested group of domain services.
+- [RAG support assistant](https://draftably.dev/app/?example=rag-assistant): Two levels: the platform contains a retrieval subsystem and a generation subsystem.
+- [Monorepo packages](https://draftably.dev/app/?example=monorepo-packages): A dependency graph grouped by workspace folder, with a nested group for shared UI.
+- [Data lakehouse](https://draftably.dev/app/?example=data-lakehouse): Medallion layers as containers between external sources and consumers.
+- [Hexagonal billing service](https://draftably.dev/app/?example=hexagonal-billing): Ports and adapters: the domain core sits inside the application, adapters on either side.
+- [Kubernetes cluster](https://draftably.dev/app/?example=kubernetes-cluster): Three levels: cluster > namespace > deployment, with pods inside each deployment.
+- [AWS VPC network](https://draftably.dev/app/?example=aws-vpc-network): Four levels of containment: account > region > VPC > availability zone > subnet.
+- [Multi-region failover](https://draftably.dev/app/?example=multi-region-failover): Two mirrored regions, each split into tiers. Replication crosses region boundaries.
+- [Web app component tree](https://draftably.dev/app/?example=web-app-components): A UI shell nested five levels deep, with data hooks feeding the components that use them.
+
+### Lanes and sequences
+
+- [Support ticket lanes](https://draftably.dev/app/?example=support-lanes): Swim lanes: each top-level group is a role. Steps take their place in order across all lanes.
+- [Incident response](https://draftably.dev/app/?example=incident-response): One container per role, with hand-offs crossing between lanes.
+- [Sign-in sequence](https://draftably.dev/app/?example=login-sequence): A sequence diagram: participants across the top, one message per edge line, read top to bottom.
+- [How a request is built](https://draftably.dev/app/?example=prompt-request): The request is one group of touching cells, and a marker shows the cache point.
+
+### Tables and byte layouts
+
+- [Billing schema](https://draftably.dev/app/?example=billing-schema): Each entity is a group of cells in two columns, and foreign keys join rows.
+- [PNG file layout](https://draftably.dev/app/?example=png-file): A byte layout: each group of cells uses `unit=byte`, so a field's width is its size.
+- [TCP header](https://draftably.dev/app/?example=tcp-header): A bit layout: `unit=bit` with 32 columns, fields sized in bits, and options of variable length.
+
+### Marks, states and themes
+
+- [Checkout: add refunds](https://draftably.dev/app/?example=checkout-change): Change marks: `+` added, `-` removed, `~` changed, `.` unchanged context.
+- [Order service paths](https://draftably.dev/app/?example=emphasis): Emphasis states: one diagram drawn three ways, for the write path, the read path and events.
+- [Field service intake](https://draftably.dev/app/?example=theme-proof): The `fieldnotes` theme: serif titles, wrapped labels, a diamond and nested groups.
+
+### Where else to find them
+
+The **Examples** link at the top of this site goes to the home page gallery, which shows some of these. The [Playground](https://draftably.dev/play) picker and the Editor's File menu list all of them, and `draftably open` offers them on its start page.
+
+### How an example opens
+
+The examples are bundled into the Editor, so they open without a server at `?example=id`. An example is a scratch copy:
 an amber **Example** bar stays across the top, the toolbar reads _Example · not on disk_, and
 nothing is written anywhere. Edits behave exactly as in a file. **Save as file…** writes the
 current source to a new file in the served folder and opens it; on the static site the bar offers
@@ -986,14 +1071,6 @@ current source to a new file in the served folder and opens it; on the static si
 
 The file is the source of truth while it is open: browser storage is not read or written, and
 moving the camera never changes the file.
-
-`--png <file>` on `inspect` or `compare` saves a PNG at `--scale` times the SVG's size (2 by
-default) and prints its size in pixels. `--max-width <px>` lowers the scale so the image is at
-most that wide. It renders with an installed Chrome, Chromium or Edge in headless mode; set
-`CHROME_PATH` to use another copy.
-
-`inspect` uses the editor's own router and the same font tables, so its geometry matches the
-viewer. `inspect --svg` draws with the file's theme and embeds its fonts.
 
 ## Editing in the viewer
 
