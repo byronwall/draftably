@@ -229,7 +229,7 @@ function sceneMarkup(
       route.halo
         ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
         : '',
-      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''} marker-end="url(#${arrow(ink)})"/>`,
+      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${edge.directed ? ` marker-end="url(#${arrow(ink)})"` : ''}/>`,
     );
     const l = route.label,
       message = doc.layout.edges[route.id]?.row !== undefined,
