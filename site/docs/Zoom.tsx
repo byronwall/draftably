@@ -1,13 +1,21 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
+import { createSignal, onCleanup, onMount, Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import { paperOf } from '../draw';
 
+const PAN_KEYS: Record<string, [number, number]> = {
+  ArrowLeft: [60, 0],
+  ArrowRight: [-60, 0],
+  ArrowUp: [0, 60],
+  ArrowDown: [0, -60],
+};
+
 /**
- * A drawing over the whole window: it opens fitted, the wheel zooms about the cursor, a drag
- * pans, and Escape or the close button leaves. It is a modal dialog: focus moves to Close, Tab
- * stays on its buttons, and focus goes back to the opener when it closes.
+ * A drawing over the whole window: it opens fitted, the wheel or + and - zoom, a drag or the arrow
+ * keys pan, and Escape or the close button leaves. It is a modal dialog: focus moves to Close, Tab
+ * stays on its buttons, and focus goes back to the opener when it closes. `error` says the drawing
+ * is the last good one, while the source has that error.
  */
-export function Zoom(props: { svg: string; onClose: () => void }) {
+export function Zoom(props: { svg: string; error?: string; onClose: () => void }) {
   const [view, setView] = createSignal({ x: 0, y: 0, k: 1 });
   let stage!: HTMLDivElement;
   let paper!: HTMLDivElement;
@@ -24,6 +32,17 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
     setView({ x: (box.width - w * k) / 2, y: (box.height - h * k) / 2, k });
   };
 
+  const zoomAt = (px: number, py: number, by: number) => {
+    const v = view();
+    const k = Math.min(8, Math.max(0.1, v.k * by));
+    setView({ x: px - ((px - v.x) * k) / v.k, y: py - ((py - v.y) * k) / v.k, k });
+  };
+
+  const zoomKey = (by: number) => {
+    const box = stage.getBoundingClientRect();
+    zoomAt(box.width / 2, box.height / 2, by);
+  };
+
   onMount(() => {
     fit();
     const opener = document.activeElement as HTMLElement | null;
@@ -31,7 +50,12 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
     const key = (e: KeyboardEvent) => {
       if (e.key === 'Escape') props.onClose();
       else if (e.key === '0') fit();
-      else if (e.key === 'Tab') {
+      else if (e.key === '+' || e.key === '=') zoomKey(1.25);
+      else if (e.key === '-') zoomKey(0.8);
+      else if (PAN_KEYS[e.key]) {
+        const [dx, dy] = PAN_KEYS[e.key];
+        setView(v => ({ ...v, x: v.x + dx, y: v.y + dy }));
+      } else if (e.key === 'Tab') {
         const buttons = [...dialog.querySelectorAll('button')];
         const i = buttons.indexOf(document.activeElement as HTMLButtonElement);
         const step = e.shiftKey ? -1 : 1;
@@ -54,9 +78,7 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
     const box = stage.getBoundingClientRect();
     const px = e.clientX - box.left;
     const py = e.clientY - box.top;
-    const v = view();
-    const k = Math.min(8, Math.max(0.1, v.k * Math.exp(-e.deltaY * 0.0015)));
-    setView({ x: px - ((px - v.x) * k) / v.k, y: py - ((py - v.y) * k) / v.k, k });
+    zoomAt(px, py, Math.exp(-e.deltaY * 0.0015));
   };
 
   const down = (e: PointerEvent) => {
@@ -88,7 +110,7 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
         style={{ background: paperOf(props.svg) ?? '#fbfbfd' }}
       >
         <div class="zoom-bar">
-          <span>Scroll to zoom · drag to pan · 0 to fit · Esc to close</span>
+          <span>Scroll or + − to zoom · drag or arrows to pan · 0 to fit · Esc to close</span>
           <button type="button" onClick={fit}>
             Fit
           </button>
@@ -96,6 +118,11 @@ export function Zoom(props: { svg: string; onClose: () => void }) {
             Close
           </button>
         </div>
+        <Show when={props.error}>
+          <p class="zoom-notice" role="status">
+            Last valid drawing. The source has an error: {props.error}
+          </p>
+        </Show>
         <div class="zoom-stage" ref={stage} onWheel={wheel} onPointerDown={down}>
           <div
             ref={paper}

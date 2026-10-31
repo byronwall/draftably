@@ -147,7 +147,9 @@ export function Example(props: { source: string; themes?: boolean }) {
           </div>
         </Show>
       </div>
-      <Show when={zoomed()}>{svg => <Zoom svg={svg()} onClose={() => setZoomed()} />}</Show>
+      <Show when={zoomed()}>
+        {svg => <Zoom svg={svg()} error={error()} onClose={() => setZoomed()} />}
+      </Show>
     </figure>
   );
 }

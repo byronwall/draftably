@@ -144,8 +144,83 @@ const journeys = {
     await page.context().close();
   },
 
+  async 'native keys in the editor'() {
+    const page = await open('app/?example=checkout');
+    await editorReady(page);
+    const held = () => page.evaluate(() => !!document.querySelector('.space-held'));
+    const tabToFile = async () => {
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press('Tab');
+        if ((await focused(page)) === 'File and examples') return;
+      }
+    };
+    await tabToFile();
+    await page.keyboard.down('Space');
+    check('#306 Space on a focused button starts no pan', !(await held()));
+    await page.keyboard.up('Space');
+    await page.waitForSelector('.popover');
+    check('#306 Space opens the File menu', true);
+    await page.keyboard.press('Escape');
+
+    await page.click('.canvas', { position: { x: 5, y: 5 } });
+    await page.keyboard.down('Space');
+    check('#306 Space on the canvas holds the pan', await held());
+    await page.keyboard.up('Space');
+    check('#306 keyup releases the pan', !(await held()));
+
+    await page.click('[role="toolbar"] button');
+    await page.keyboard.down('Space');
+    check('#306 Space still pans after a toolbar click', await held());
+    await page.keyboard.up('Space');
+    await page.context().close();
+  },
+
   async 'docs overlays'() {
     const page = await open('docs/cells');
+    await page.waitForSelector('.docs-search-button');
+    await page.focus('.docs-search-button');
+    await page.keyboard.press('Enter');
+    await page.waitForSelector('.search input');
+    check('F06 search focuses its input', await inside(page, '.search'));
+    const modal = await page.evaluate(
+      () => !!document.querySelector('dialog.search-backdrop:modal'),
+    );
+    check('F06 search is a modal dialog', modal);
+    for (const [state, text] of [
+      ['empty', ''],
+      ['results', 'swim'],
+      ['no-results', 'zzzqq'],
+    ]) {
+      await page.fill('.search input', text);
+      let held = true;
+      for (const keys of ['Shift+Tab', 'Shift+Tab', 'Tab', 'Tab', 'Tab', 'Tab']) {
+        await page.keyboard.press(keys);
+        // The page behind is inert, so focus can only rest in the dialog or leave the document.
+        held &&= await page.evaluate(
+          () =>
+            !document.activeElement ||
+            document.activeElement === document.body ||
+            !!document.activeElement.closest('dialog'),
+        );
+      }
+      check(`F06 Tab stays in search (${state})`, held, await focused(page));
+      await page.focus('.search input');
+    }
+    await page.fill('.search input', 'zzzqq');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await sleep(100);
+    check(
+      'F06 a sample button keeps Enter',
+      (await page.inputValue('.search input')) !== 'zzzqq',
+      await page.inputValue('.search input'),
+    );
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Escape');
+    await sleep(100);
+    check('F06 Escape closes search from any control', !(await page.isVisible('.search')));
+    check('F06 focus returns to the search button', (await focused(page)) === 'Search docs');
+
     await page.click('.doc-example-bar >> text=Expand');
     await page.waitForSelector('.zoom');
     check('U05 focus enters the expanded drawing', await inside(page, '.zoom'));
@@ -155,6 +230,11 @@ const journeys = {
       held &&= await inside(page, '.zoom');
     }
     check('U05 Tab stays in the expanded drawing', held);
+    const transform = () => page.locator('.zoom-paper').getAttribute('style');
+    const fitted = await transform();
+    await page.keyboard.press('+');
+    await page.keyboard.press('ArrowLeft');
+    check('U05 keys zoom and pan the drawing', (await transform()) !== fitted);
     await page.keyboard.press('Escape');
     check('U05 Escape closes the expanded drawing', !(await page.isVisible('.zoom')));
     check('U05 focus returns to the opener', (await focused(page)) === 'Expand');
@@ -225,6 +305,61 @@ const journeys = {
       check(`${kind} opens with its source`, text.includes('Kept in the image'), text.slice(0, 50));
     }
     await page.context().close();
+  },
+
+  async 'a stale drawing says so when expanded'() {
+    const page = await open('docs/cells');
+    const example = page.locator('.doc-example').first();
+    const source = await example.locator('textarea').inputValue();
+    await example.locator('textarea').fill(`${source}\nnope -> nothing\n`);
+    await page.waitForSelector('.doc-drawing-error');
+    await example.locator('.doc-example-bar >> text=Expand').click();
+    await page.waitForSelector('.zoom');
+    const said = await page.locator('.zoom').textContent();
+    check('#308 the overlay names the last valid drawing', /last valid/i.test(said));
+    check('#308 the overlay gives the error line', /line \d+/i.test(said));
+    await page.screenshot({ path: path.join(proof.out, 'stale-zoom.png') });
+    await page.keyboard.press('Escape');
+    await example.locator('textarea').fill(source);
+    await page.waitForFunction(() => !document.querySelector('.doc-drawing-error'));
+    await example.locator('.doc-example-bar >> text=Expand').click();
+    await page.waitForSelector('.zoom');
+    const after = await page.locator('.zoom').textContent();
+    check('#308 the notice clears after repair', !/last valid/i.test(after));
+    await page.context().close();
+  },
+
+  async 'a Playground module that fails to load'() {
+    const module = /Playground-[^/]*\.js/;
+    const failed = async page => {
+      await page.waitForSelector('.load-failed');
+      await page.unroute(module);
+      await page.screenshot({ path: path.join(proof.out, 'load-failed.png') });
+      await page.click('.load-failed button');
+      await page.waitForSelector('.cm-content');
+    };
+
+    const docs = await open('docs/cells');
+    const example = docs.locator('.doc-example').first();
+    const source = await example.locator('textarea').inputValue();
+    await example.locator('textarea').fill(`# Kept through the failure\n${source}`);
+    await sleep(500);
+    await docs.route(module, r => r.abort());
+    await example.locator('.doc-example-play').click();
+    await failed(docs);
+    check('#304 Reload keeps a docs edit', (await sourceText(docs)).includes('Kept through'));
+    await docs.context().close();
+
+    const home = await open('');
+    await home.route(module, r => r.abort());
+    await home.setInputFiles('.hero-reopen input[type="file"]', {
+      name: 'dropped.draft',
+      mimeType: 'text/plain',
+      buffer: Buffer.from('diagram "Dropped" version=1\nnode a "From a file"\n'),
+    });
+    await failed(home);
+    check('#304 Reload keeps a reopened file', (await sourceText(home)).includes('From a file'));
+    await home.context().close();
   },
 
   async 'search answers tasks'() {

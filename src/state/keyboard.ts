@@ -39,6 +39,10 @@ const isEditable = (el: EventTarget | null) =>
 
 const modalOpen = () => !!dialog() || comparison.open;
 
+/** Keyboard focus on a button keeps Space. A button a click left focused still lets Space pan. */
+const keepsSpace = (el: EventTarget | null) =>
+  el instanceof Element && el.matches('button:focus-visible,summary:focus-visible');
+
 const ARROW_SIDES: Record<string, Side> = {
   ArrowRight: 'right',
   ArrowLeft: 'left',
@@ -104,6 +108,7 @@ export function handleKeyDown(e: KeyboardEvent) {
   }
   if (isEditable(target)) return;
 
+  if (e.code === 'Space' && keepsSpace(target)) return;
   if (e.code === 'Space' && !e.repeat) {
     e.preventDefault();
     setSpaceHeld(true);

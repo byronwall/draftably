@@ -5,7 +5,10 @@ import { marks, search, words, type Hit } from './find';
 const LAST = 'draftably-docs-search';
 const SAMPLES = ['swim lanes', 'fold=never', 'vary --apply', 'kind=async'];
 
-/** ⌘K search. Arrow keys move, Enter opens, Escape closes. */
+/**
+ * ⌘K search, in a native modal dialog: the browser makes the page behind it inert and puts focus
+ * back when it closes. Arrow keys move, Enter opens, Escape closes.
+ */
 export function SearchDialog(props: {
   onClose: () => void;
   onPick: (to: string, query: string) => void;
@@ -14,14 +17,17 @@ export function SearchDialog(props: {
   const [active, setActive] = createSignal(0);
   const hits = createMemo(() => search(query()));
   const terms = () => words(query());
+  let dialog!: HTMLDialogElement;
   let input!: HTMLInputElement;
   let list!: HTMLDivElement;
 
   onMount(() => {
-    input.focus();
+    dialog.showModal();
     input.select();
   });
   onCleanup(() => {
+    // Leaving the page without close() would skip the focus return.
+    dialog.close();
     try {
       localStorage.setItem(LAST, query());
     } catch {
@@ -38,6 +44,8 @@ export function SearchDialog(props: {
     list.querySelector(`[data-i="${active()}"]`)?.scrollIntoView({ block: 'nearest' });
   };
   const key = (e: KeyboardEvent) => {
+    // A sample button in the empty state keeps its own Enter.
+    if (e.target !== input && e.key !== 'Escape') return;
     if (e.key === 'ArrowDown') move(1);
     else if (e.key === 'ArrowUp') move(-1);
     else if (e.key === 'Enter') pick(hits()[active()]);
@@ -47,8 +55,18 @@ export function SearchDialog(props: {
   };
 
   return (
-    <div class="search-backdrop" onMouseDown={e => e.target === e.currentTarget && props.onClose()}>
-      <div class="search" role="dialog" aria-label="Search docs" onKeyDown={key}>
+    <dialog
+      ref={dialog}
+      class="search-backdrop"
+      aria-label="Search docs"
+      onKeyDown={key}
+      onCancel={e => {
+        e.preventDefault();
+        props.onClose();
+      }}
+      onMouseDown={e => e.target === e.currentTarget && props.onClose()}
+    >
+      <div class="search">
         <label class="search-field">
           <SearchIcon />
           <input
@@ -56,6 +74,11 @@ export function SearchDialog(props: {
             value={query()}
             placeholder="Search the docs: fold=never, swim lanes, vary…"
             aria-label="Search the docs"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-expanded={hits().length > 0}
+            aria-controls="search-results"
+            aria-activedescendant={hits().length ? `search-hit-${active()}` : undefined}
             spellcheck={false}
             onInput={e => {
               setQuery(e.currentTarget.value);
@@ -65,7 +88,13 @@ export function SearchDialog(props: {
           />
           <kbd>Esc</kbd>
         </label>
-        <div class="search-results" ref={list} role="listbox">
+        <div
+          class="search-results"
+          id="search-results"
+          ref={list}
+          role={hits().length ? 'listbox' : undefined}
+          aria-label="Results"
+        >
           <Show
             when={hits().length}
             fallback={
@@ -97,6 +126,8 @@ export function SearchDialog(props: {
                 <a
                   href={`${import.meta.env.BASE_URL}${to(hit).slice(1)}`}
                   class="search-hit"
+                  id={`search-hit-${i()}`}
+                  tabIndex={-1}
                   classList={{ 'is-active': i() === active() }}
                   data-i={i()}
                   role="option"
@@ -136,7 +167,7 @@ export function SearchDialog(props: {
           </span>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
 
