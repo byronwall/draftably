@@ -109,8 +109,8 @@ function rejectUnsupported(before: Diagram, after: Diagram) {
     if ((a.labelDx ?? 0) !== (b.labelDx ?? 0) || (a.labelDy ?? 0) !== (b.labelDy ?? 0))
       throw new UnsupportedEdit('Connection label positions are not saved to diagram files yet.');
     const old = before.graph.edges.find(x => x.id === e.id);
-    if (e.directed === false || e.emphasis || (old && old.emphasis !== e.emphasis))
-      throw new UnsupportedEdit('Emphasized and undirected connections are not supported yet.');
+    if (e.emphasis || (old && old.emphasis !== e.emphasis))
+      throw new UnsupportedEdit('Emphasized connections are not supported yet.');
   }
   if (!same(before.layout.labels, after.layout.labels))
     throw new UnsupportedEdit('Label positions are not saved to diagram files yet.');
@@ -272,6 +272,7 @@ export function translateEdit(input: EditInput): EditResult {
   const writeEdge = (e: DiagramEdge, s: Statement) => {
     s.args = [s.args[0], bare(sid(e.from)), bare('->'), bare(sid(e.to))];
     if (e.label) s.args.push(quoted(e.label));
+    setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
     const kind = getAttr(s, 'kind')?.value;
     if (e.dashed) setAttr(s, 'kind', bare('async'));
     else if (kind === 'async') setAttr(s, 'kind', undefined);
