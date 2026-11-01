@@ -122,6 +122,8 @@ The agent edits text and checks the result with the CLI. You can refine the draw
 and return the same file to the agent. Read the [skill](skills/draftably/SKILL.md) or the
 [agent guide](https://draftably.dev/docs/agent-skill) for the full workflow.
 
+Import DOT files as editable native diagrams with the [import command](docs/IMPORTING.md).
+
 ## Develop
 
 Built with SolidJS, TypeScript and Vite. Use Node 22.21 or later and pnpm 11.
