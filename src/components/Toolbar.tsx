@@ -14,6 +14,7 @@ import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
 import { filesShown, inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
 import { workspace } from '../state/launch';
+import { AppNav, Brand } from './Brand';
 import { IconButton } from './controls';
 import { Icon } from './Icon';
 import './toolbar.css';
@@ -41,6 +42,8 @@ export function Toolbar() {
   return (
     <header class="toolbar">
       <div class="toolbar-group">
+        <Brand />
+        <span class="divider" />
         <IconButton
           icon="menu"
           label="File and examples"
@@ -179,6 +182,7 @@ export function Toolbar() {
       </div>
 
       <div class="toolbar-group toolbar-panels">
+        <AppNav />
         <IconButton
           icon="palette"
           label="Appearance"

@@ -30,7 +30,7 @@ export function SiteNav(props: { current: 'home' | 'play' | 'docs'; class?: stri
       >
         Examples
       </a>
-      <a class="site-nav-more" href={appUrl()} rel="external">
+      <a class="site-nav-editor" href={appUrl()} rel="external">
         Editor
       </a>
       <a href={GITHUB} class="site-nav-gh" aria-label="GitHub">

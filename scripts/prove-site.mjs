@@ -352,6 +352,11 @@ const journeys = {
     check('the start dialog paints within a second', took < 1000, `${Math.round(took)} ms`);
     const hint = await start.locator('.start-new').textContent();
     check('#305 the start dialog says what New does', /blank draft/.test(hint), hint.slice(0, 80));
+    check(
+      'the start dialog links home',
+      new URL(await start.locator('.start-dialog .brand').getAttribute('href'), start.url())
+        .pathname === new URL('..', start.url()).pathname,
+    );
     await start.click('.start-new button');
     await start.waitForURL(url => url.search.includes('new'), { timeout: 5000 });
     await editorReady(start);
@@ -370,6 +375,12 @@ const journeys = {
     await copy.fill('.title-input', 'Browser copy');
     await copy.keyboard.press('Enter');
     await sleep(800);
+    await copy.goto(new URL('..', copy.url()).href);
+    await copy.waitForSelector('.hero');
+    const resume = await copy.locator('.hero-actions .button.primary').textContent();
+    check('the landing page offers the diagram left in the editor', /Browser copy/.test(resume));
+    await copy.screenshot({ path: path.join(proof.out, 'landing-resume.png') });
+    await copy.goBack();
     await copy.reload();
     await copy.waitForSelector('.title-input');
     await sleep(300);
@@ -410,8 +421,12 @@ const journeys = {
     check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
     await phone.keyboard.press('Escape');
     check('F08 the phone shows where work is kept', await phone.isVisible('.save-status'));
+    await phone.screenshot({ path: path.join(proof.out, 'phone-brand.png') });
     await phone.screenshot({ path: path.join(proof.out, 'phone-status.png') });
     await phone.screenshot({ path: path.join(proof.out, 'layout-menu.png') });
+    await phone.click('.toolbar .brand');
+    await phone.waitForSelector('.hero');
+    check('the editor logo returns to the landing page', true);
     await phone.context().close();
   },
 

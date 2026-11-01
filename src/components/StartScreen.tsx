@@ -1,5 +1,4 @@
 import { createMemo, createResource, createSignal, For, onCleanup, onMount, Show } from 'solid-js';
-import logo from '../assets/logo.svg';
 import { renderSvg } from '../cli/svg';
 import { compile } from '../dsl/compile';
 import { projectScene } from '../dsl/project';
@@ -21,6 +20,7 @@ import {
   workspace,
 } from '../state/launch';
 import type { WorkspaceFile } from '../server/workspace';
+import { AppNav, Brand } from './Brand';
 import { IconButton } from './controls';
 import { FileOrderSwitch, FileTime, FolderHeading } from './FilesPanel';
 import { Icon } from './Icon';
@@ -56,8 +56,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
       <div class="start-frame">
         <header class="start-header">
           <h1>
-            <img src={logo} alt="" width="22" height="22" />
-            draftably
+            <Brand />
           </h1>
           <Show
             when={workspace()}
@@ -77,6 +76,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
             )}
           </Show>
           <span class="grow" />
+          <AppNav />
           <Show when={props.variant === 'dialog'}>
             <IconButton icon="close" label="Close" onClick={() => setStartOpen(false)} />
           </Show>

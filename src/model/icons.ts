@@ -60,6 +60,7 @@ export const ICONS: Record<string, string> = {
   file: '<path d="M14 2H5v20h14V7zM14 2v5h5M8 12h8m-8 4h8"/>',
   folder: '<path d="M2 6V3h7l3 3h10v15H2z"/>',
   mail: '<rect x="2" y="4" width="20" height="16" rx="3"/><path d="m2 6 10 7L22 6"/>',
+  home: '<path d="m3 11 9-8 9 8M5 9v12h14V9"/>',
   globe:
     '<circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/>',
   terminal: '<rect x="2" y="3" width="20" height="18" rx="3"/><path d="m6 8 4 4-4 4m7 0h5"/>',

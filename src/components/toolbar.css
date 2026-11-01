@@ -143,6 +143,20 @@
   }
 }
 
+/* The name gives way while the tools share its row; the mark stays as the link home. */
+@media (min-width: 1101px) and (max-width: 1500px), (max-width: 720px) {
+  .toolbar .brand-name {
+    display: none;
+  }
+}
+
+/* The site links take spare room only. The file menu keeps Home, Docs and the Playground. */
+@media (min-width: 1101px) and (max-width: 1900px), (max-width: 720px) {
+  .toolbar .app-nav {
+    display: none;
+  }
+}
+
 /* On narrow windows the tools move to a second row instead of being cut off. */
 @media (max-width: 1100px) {
   .toolbar {
@@ -157,7 +171,7 @@
     height: 40px;
   }
 
-  .toolbar > .toolbar-group:last-child {
+  .toolbar-panels {
     margin-left: auto;
   }
 }
@@ -189,8 +203,16 @@
     font-size: 11px;
   }
 
+  .toolbar > .toolbar-group:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
   .title-block {
-    width: min(62vw, 260px);
+    flex: 1;
+    width: auto;
+    min-width: 0;
+    max-width: 260px;
   }
 }
 
