@@ -1,0 +1,14 @@
+diagram "Independent scope settings" version=1
+group a "A"
+node a1 "A1" in=a
+node a2 "A2" in=a
+node a3 "A3" in=a
+node a4 "A4" in=a
+group b "B"
+node b1 "B1" in=b
+node b2 "B2" in=b
+node b3 "B3" in=b
+node b4 "B4" in=b
+layout root row
+layout a engine=grid node-gap=120
+layout b engine=grid

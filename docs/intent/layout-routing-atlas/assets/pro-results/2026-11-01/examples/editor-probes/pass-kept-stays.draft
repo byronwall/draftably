@@ -1,0 +1,23 @@
+diagram "Atlas: same starting arrangement" version=1
+node entry "Entry"
+node auth "Authenticate"
+node browse "Browse"
+node pay "Pay"
+node ship "Ship"
+node done "Complete"
+node island "Disconnected"
+edge e1 entry -> auth
+edge e2 auth -> browse
+edge e3 browse -> pay
+edge e4 pay -> ship
+edge e5 ship -> done
+edge e6 auth -> pay
+edge e7 browse -> ship
+layout root engine=layered direction=right fold=never
+stay entry x=46 y=135
+stay auth x=280 y=25
+stay browse x=495 y=158
+stay pay x=703 y=55
+stay ship x=917 y=180
+stay done x=1154 y=92
+stay island x=493 y=356

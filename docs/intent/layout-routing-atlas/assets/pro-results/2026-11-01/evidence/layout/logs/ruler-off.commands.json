@@ -1,0 +1,60 @@
+{
+  "file": "ruler-off.draft",
+  "source_sha256": "53d597b7e7732b62abfa9e0ac8a990c088e3a9871deccbdbd56b5965167206a0",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/ruler-off.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.15
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/ruler-off.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.115
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 464,
+    "height": 228,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "2c6623387af2b0f11aa0c641750eab3a9bc46b7428695fc4c53ca77fcb51e95f",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "1d6d61378b8c148e6de3151d6727fbcefe4184adfbf20b581b2355199eb0cebf",
+  "check_output": "Metrics: 464\u00d7228 (aspect 2.04), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 4 nodes, 1 group, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/ruler-off.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.095,
+    "file": "svg/ruler-off.svg",
+    "bytes": 68086,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "7cc4c25b1c412da087e3731db9f95835f3dcc69a5d7bb6704e780747f9393ec2"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

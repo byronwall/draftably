@@ -1,0 +1,7 @@
+diagram "Near under crowding" version=1
+node a "Reference"
+node b "Fixed obstacle"
+node c "Target"
+layout root row gap=48
+pin b x=0 y=140
+near c a side=below gap=48 strength=prefer

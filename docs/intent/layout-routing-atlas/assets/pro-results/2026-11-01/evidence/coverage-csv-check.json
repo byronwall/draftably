@@ -1,0 +1,26 @@
+{
+  "mode": "Read-only CSV import verification with Artifact Tool; no workbook or CSV changes",
+  "rows": 197,
+  "columns": 14,
+  "headers": [
+    "id",
+    "entry_type",
+    "surface",
+    "syntax",
+    "values",
+    "context_specific_default",
+    "applicability",
+    "persistence",
+    "source",
+    "current_docs",
+    "gap",
+    "proposed_page",
+    "visual_ids",
+    "baseline"
+  ],
+  "coverage_ids": 197,
+  "all_fields_match_manifest": true,
+  "source_sha256": "4b3783abcd118bb6d26ba099173dd1eff1f8470fa9d001a55f2b9f6d276fee60",
+  "inspection": "{\"kind\":\"sheet\",\"id\":\"ws/q2munr\",\"name\":\"Coverage\",\"index\":0,\"range\":\"A1:N198\",\"address\":\"A1:N198\"}",
+  "issues": []
+}

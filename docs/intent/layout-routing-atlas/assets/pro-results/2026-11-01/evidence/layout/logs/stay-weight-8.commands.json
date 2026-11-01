@@ -1,0 +1,60 @@
+{
+  "file": "stay-weight-8.draft",
+  "source_sha256": "7d86c1674b557af4239d11234fc13a2a7085bcea7c3d53e6487e165ecefa9232",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/stay-weight-8.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.109
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/stay-weight-8.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.094
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 668,
+    "height": 250,
+    "crossings": 0,
+    "bends": 1,
+    "length": 218,
+    "warnings": 0
+  },
+  "node_hash": "31d20b432d42c9858878c8f46775e9ea402de5f912fb13add341fc261e3f5f8b",
+  "route_hash": "72bd438fd841e87b568b4292a69e33e8fc00cbd012530451481388f4f75594b4",
+  "geometry_hash": "411e0e17c23c205153baba56b193b3956511ea11ab1c3702771377119dc6a284",
+  "check_output": "info    line 8: stay b gave way by 8 px to keep root clear.\nMetrics: 668\u00d7250 (aspect 2.67), 0 crossings, 1 bend, 218px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/stay-weight-8.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.099,
+    "file": "svg/stay-weight-8.svg",
+    "bytes": 67569,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "9bbba46830bb3dbf13618063eb7884f5d59fd0c81a8458106aee08d6c5a2eacf"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

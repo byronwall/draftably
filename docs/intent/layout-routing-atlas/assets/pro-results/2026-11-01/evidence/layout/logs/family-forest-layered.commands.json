@@ -1,0 +1,60 @@
+{
+  "file": "family-forest-layered.draft",
+  "source_sha256": "810b6e3fa44e443d926d64ece2ad4576bad1057b536f41b168a9d595b07bf452",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/family-forest-layered.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.33
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/family-forest-layered.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.29
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 456,
+    "height": 506,
+    "crossings": 0,
+    "bends": 9,
+    "length": 1102,
+    "warnings": 0
+  },
+  "node_hash": "36d872416ecf67a6ad01876a281d4176d6322c28c61f07e58754bf6ddb3e2753",
+  "route_hash": "08aa176c64a9d698095d50599fcb14c5ccbe2afbcf9b37cda3246878a42daa78",
+  "geometry_hash": "892790ad7e8d1e8378c2e6ceea763c487dee1bca5c1b365707f9e63c46e77d80",
+  "check_output": "Metrics: 456\u00d7506 (aspect 0.90), 0 crossings, 9 bends, 1102px of lines, 0 warnings.\nOK: 7 nodes, 0 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/family-forest-layered.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.246,
+    "file": "svg/family-forest-layered.svg",
+    "bytes": 70212,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "73ecbe8ba85b5bc8fda30c3cf08d969e012ea4a71bc172070aab79bcb4460060"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

@@ -1,0 +1,30 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "coverage_entries": 197,
+  "authored_control_operations": 194,
+  "visual_families": 105,
+  "nonvisual_groups": 4,
+  "positive_draft_sources": 323,
+  "expected_diagnostic_sources": 1,
+  "defect_repros": 10,
+  "page_fences": 13,
+  "svg_assets": 359,
+  "page_draft_words": 16322,
+  "layout_controls": 78,
+  "editor_controls": 89,
+  "missing_visual_references": [],
+  "native_model_svg_assets": 24,
+  "positive_cli_commands": 969,
+  "frozen_subcomparisons": 17,
+  "preview_groups_exercised": 109,
+  "recommendations": 34,
+  "recommendation_classes": {
+    "Build": 27,
+    "Explore": 3,
+    "Defer": 1,
+    "Avoid": 3
+  },
+  "report_words": 6527,
+  "implementation_plan_words": 7287,
+  "recommendation_words": 8115
+}

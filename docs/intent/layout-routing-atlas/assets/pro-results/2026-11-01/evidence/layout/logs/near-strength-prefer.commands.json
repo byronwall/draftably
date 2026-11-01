@@ -1,0 +1,60 @@
+{
+  "file": "near-strength-prefer.draft",
+  "source_sha256": "3ba9a09e4696a6fc3266cbd0f50d62911cc4726610b143a43f081ed5994d5f47",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-strength-prefer.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.098
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-strength-prefer.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.085
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 285,
+    "height": 322,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 1
+  },
+  "node_hash": "54008e93d1b2b3436ea48d5938c4ea19cf14d39bae82ab70aac6e459d8125f47",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "d85609e94ec5b006cc1976ff99b1ccf8f72ab39b7f4a12ebf6d71b4012733b51",
+  "check_output": "warning line 7: near c gave way by 32 px to keep root clear. Remove line 7, or run format --drop-stale. [relaxed]\nMetrics: 285\u00d7322 (aspect 0.89), 0 crossings, 0 bends, 0px of lines, 1 warning.\nWarnings: 3 nodes, 0 groups, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-strength-prefer.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.102,
+    "file": "svg/near-strength-prefer.svg",
+    "bytes": 67251,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "dd850a8f9029c628c38a028217e302896bf473c59d663f93ea86103379d7e902"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

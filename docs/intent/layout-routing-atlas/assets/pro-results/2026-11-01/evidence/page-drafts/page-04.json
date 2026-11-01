@@ -1,0 +1,37 @@
+{
+  "nodes": [
+    {
+      "id": "draft",
+      "parent": "root",
+      "x": 204,
+      "y": 0,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "publish",
+      "parent": "root",
+      "x": 408,
+      "y": 0,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "review",
+      "parent": "root",
+      "x": 0,
+      "y": 0,
+      "w": 164,
+      "h": 56
+    }
+  ],
+  "routes": [],
+  "metrics": {
+    "width": 652,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  }
+}

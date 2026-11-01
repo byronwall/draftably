@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "id": "a",
+      "parent": "root",
+      "x": 16,
+      "y": 48,
+      "w": 104,
+      "h": 56
+    },
+    {
+      "id": "b",
+      "parent": "root",
+      "x": 160,
+      "y": 48,
+      "w": 104,
+      "h": 56
+    },
+    {
+      "id": "empty",
+      "parent": "root",
+      "x": null,
+      "y": 0,
+      "w": null,
+      "h": 180
+    }
+  ],
+  "routes": [
+    {
+      "id": "e",
+      "points": [
+        {
+          "x": 68,
+          "y": 140
+        },
+        {
+          "x": 212,
+          "y": 140
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "width": 13,
+    "height": 13,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  }
+}

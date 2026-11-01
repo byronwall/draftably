@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "Atlas: scopes and protection",
+  "graph": {
+    "nodes": [
+      {
+        "id": "w1",
+        "title": "Receive",
+        "parentId": "west"
+      },
+      {
+        "id": "w2",
+        "title": "Validate",
+        "parentId": "west"
+      },
+      {
+        "id": "w3",
+        "title": "Store",
+        "parentId": "west"
+      },
+      {
+        "id": "e1",
+        "title": "Process",
+        "parentId": "east"
+      },
+      {
+        "id": "e2",
+        "title": "Publish",
+        "parentId": "east"
+      },
+      {
+        "id": "external",
+        "title": "External"
+      }
+    ],
+    "edges": [
+      {
+        "id": "a",
+        "from": "w1",
+        "to": "w2",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "b",
+        "from": "w2",
+        "to": "w3",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "c",
+        "from": "w2",
+        "to": "e1",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "d",
+        "from": "e1",
+        "to": "e2",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e",
+        "from": "e2",
+        "to": "external",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": [
+      {
+        "id": "west",
+        "title": "West"
+      },
+      {
+        "id": "east",
+        "title": "East"
+      }
+    ]
+  },
+  "layout": {
+    "nodes": {
+      "west": {
+        "x": 0,
+        "y": 0,
+        "w": 712,
+        "h": 428,
+        "manual": false,
+        "pinned": false
+      },
+      "east": {
+        "x": 760,
+        "y": 82,
+        "w": 212,
+        "h": 264,
+        "manual": false,
+        "pinned": false
+      },
+      "w1": {
+        "x": 24,
+        "y": 228,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "w2": {
+        "x": 24,
+        "y": 348,
+        "w": 164,
+        "h": 56,
+        "manual": true,
+        "pinned": false
+      },
+      "w3": {
+        "x": 524,
+        "y": 48,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": true
+      },
+      "e1": {
+        "x": 784,
+        "y": 130,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "e2": {
+        "x": 784,
+        "y": 266,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "external": {
+        "x": 1020,
+        "y": 186,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "a": {},
+      "b": {},
+      "c": {
+        "flow": "right"
+      },
+      "d": {},
+      "e": {
+        "flow": "right"
+      }
+    },
+    "labels": {},
+    "containers": {
+      "west": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      },
+      "east": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      }
+    },
+    "intent": {}
+  },
+  "styles": {
+    "west": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "east": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "w1": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "w2": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "w3": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "e1": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "e2": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "external": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "compound-flow",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "Atlas: scopes and protection"
+    }
+  }
+}

@@ -1,0 +1,1624 @@
+{
+  "schema_version": 1,
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "path_base": "work/ in review workspace; integration should rebase these to examples/, renders/ and evidence/",
+  "group_count": 40,
+  "visual_group_count": 36,
+  "justified_nonvisual_group_count": 4,
+  "surface_row_count": 90,
+  "unmapped_control_ids": [],
+  "context_legend": {
+    "F": "Source-backed file/example; native source is canonical",
+    "J": "Native JSON editor; import provided projection in a plain /app/ browser document",
+    "CLI": "Pinned CLI; read-only unless applying to an explicit disposable copy"
+  },
+  "groups": [
+    {
+      "id": "V-E01",
+      "title": "Three convenience presets are engine choices",
+      "control_ids": [
+        "E001"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F"
+      ],
+      "action_sequence": [
+        "Open Layout options; capture its initial Diagram type.",
+        "Independently choose Flow, Nested architecture and Compact grid, resetting source between samples.",
+        "Choose tree under Advanced \u2192 Approach; record Custom approach.",
+        "Preview automatic layout and record the In the file recipe before deciding Keep."
+      ],
+      "expected": "Preset mappings are compound-flow, boundary-align and grid; the selection is a preference until a layout is run; no new engine is introduced.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F `editor-compare-start.draft`. Open Layout options. Capture Flow, Nested architecture, Compact grid, and Custom approach after selecting `tree` in Advanced \u2192 Approach. Reset source between variants. Preview automatic layout and inspect **In the file**. Show that the three presets map to `compound-flow`, `boundary-align`, `grid`; changing the label alone does not run a layout. Annotate engine ID once beside its UI name. Do not present the UI Flow preset as built-in `flow` or `engine=flow`.",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg"
+    },
+    {
+      "id": "V-E02",
+      "title": "Separate is local repair",
+      "control_ids": [
+        "E002"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "J",
+        "F"
+      ],
+      "action_sequence": [
+        "Import native starting JSON; set auth X=40 and Y=165 to overlap entry.",
+        "Set Separate overlaps, mode pass, scope all; run once and capture fixed-scale geometry.",
+        "Reset; pin entry; repeat.",
+        "Run again after overlaps clear; record the distant disconnected island.",
+        "In F, attempt Separate rebuild and record the unstorable-recipe rejection."
+      ],
+      "expected": "Separate resolves padded collisions only; clean regions stay still; pins and the cap may prevent a full repair; file pass writes positions, rebuild has no valid file spelling.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start J `editor-pass-start.draft`. Set two boxes to overlapping coordinates using Inspector X/Y, respecting node sizes; retain a distant disconnected box. Approach **Separate overlaps**, mode bounded pass. Compare before/pass; then run a second pass on an already clear drawing. Add a pinned overlapping node case. Expected mechanism: padded collisions move, clean distant nodes stay, pins can leave unresolved overlap. In F, trying Separate as a rebuild is a labeled rejection, while a pass can be saved as stays. Record the error instead of inventing a file syntax.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E03",
+      "title": "Scope is not viewport or selection coloring",
+      "control_ids": [
+        "E003",
+        "E037"
+      ],
+      "source_fixture": "editor-fixtures/editor-scope-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Set Approach tidy, maximum move48, pass mode.",
+        "Reset for each: auto with none selected; auto with west; auto with w1,w2; explicit all with w1; selection w1,w2; neighbourhood w1; container west.",
+        "Repeat neighbourhood w2, and mixed-parent selection w1,e1; record errors rather than a fabricated layout.",
+        "Try file selection/neighbourhood rebuild.",
+        "Open Compare with w1 selected and record all as its default scope."
+      ],
+      "expected": "Movable IDs follow scope and common-parent rules; file recipes target root or one framed group. Compare default differs from the Layout lab.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F/J `editor-scope-start.draft`, Approach tidy, maxMove48. Independent variants: auto with nothing selected; auto with group `west` selected; auto with `w1,w2` selected; explicit all with `w1` selected; selection `w1,w2`; neighbourhood `w1`; container `west`. Include neighbourhood `w2` (cross-group neighbor `e1`) and mixed-parent selection `w1,e1` as expected rejected states. Overlay movable IDs and protected outside IDs, not just bounding rectangles. Run in pass mode for local scopes. In F, explicit selection/neighbourhood rebuild is rejected; only root/group can become recipes. Compare opens with scope **all**, even if an object was selected; selection IDs are captured when it opens.",
+      "source_validation": "work/editor-fixtures/editor-scope-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-scope-start.svg",
+      "native_start_json": "editor-validation/json/editor-scope-start.json"
+    },
+    {
+      "id": "V-E04",
+      "title": "Pass controls share one movement budget",
+      "control_ids": [
+        "E004",
+        "E005",
+        "E006"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Use tidy/all; baseline maxMove48, stability65, iterations32, nodeGap24.",
+        "Independently sweep maxMove8,48,192; stability0,65,100; iterations8,32,96.",
+        "Reset exact geometry before each sample; keep all other preferences fixed.",
+        "Add a pinned entry case and annotate actual displacement in world pixels."
+      ],
+      "expected": "Maximum move bounds a whole action; more iterations do not multiply its movement budget; constraints can produce non-monotone/no-effect outcomes.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start J/F `editor-pass-start.draft`; Approach tidy; reset source/JSON each sample. Baseline maxMove48, stability65, iterations32, nodeGap24. One-axis sweeps: maxMove8/48/192; stability0/65/100; iterations8/32/96. Hold algorithm, all other settings, graph, viewport and scope fixed. Show one displacement arrow per moved node with world-pixel ruler. MaxMove is a per-action bound across parent and child translations, not a per-iteration allowance. Show an unchanged/blocked pin example rather than guarantee each sweep produces monotone visible progress. Settings are preferences; F commits resulting positions, not the solver settings.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E05",
+      "title": "Protection and direction can dominate the solver",
+      "control_ids": [
+        "E007",
+        "E008",
+        "E009"
+      ],
+      "source_fixture": "editor-fixtures/editor-scope-start.draft",
+      "supporting_fixtures": [
+        "layout-fixtures/chain.draft"
+      ],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Use the source-defined long-chain companion for respectDirection true/false with fold auto; compare cold and warm separately.",
+        "For manual protection, import S JSON, set w2 manual with one Inspector position edit; save this common JSON, then compare respectManual false/true.",
+        "For growth, use the current fitted west frame, set nodeGap80 and compare growContainers false/true in the same local pass.",
+        "Pin w2 for a separate protected-descendant sample.",
+        "Repeat source-rebuild parameter pairs and inspect their serialized source."
+      ],
+      "expected": "Pins and fixed frames dominate solver requests; offered source boolean axes produce no serialized change. The recorded compiler probe verifies the no-effect source paths.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/probe-results.json#/probes/sourceIgnoredAxes"
+      ],
+      "full_recipe": "Start J `editor-scope-start.draft`; independently set respectDirection true/false, respectManual false/true, growContainers false/true. For direction, use a long-chain case with fold=auto and an actual cold/warm distinction; for manual protection, move w2 with Inspector before saving the common baseline; for growth, use the current fitted west frame, increase nodeGap to 80, and compare growth off/on; do not force the frame across its existing children. Add an explicit pin on w2 and demonstrate ancestor protection. Keep one pinned case across all variants. In F, source rebuild offers but cannot serialize respectDirection/respectManual/growContainers; show a labeled no-effect/source-diff card pending product fix. In particular do not claim the boolean survives reopening the file.",
+      "source_validation": "work/editor-fixtures/editor-scope-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-scope-start.svg",
+      "native_start_json": "editor-validation/json/editor-scope-start.json"
+    },
+    {
+      "id": "V-E06",
+      "title": "Match canvas is a session target",
+      "control_ids": [
+        "E010"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "J",
+        "F"
+      ],
+      "action_sequence": [
+        "Set grid and reset baseline for each sample.",
+        "Compare numeric aspect1.6 with canvas at1440\u00d71000 and900\u00d71200 viewport.",
+        "Display all samples at one final world scale, recording the invocation viewport.",
+        "Repeat file preview and inspect omitted aspect=canvas."
+      ],
+      "expected": "Canvas is an editor viewport target. It is omitted from source; source compile uses its own context. Its shape is a target, not an exact output ratio.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/probe-results.json#/probes/sourceIgnoredAxes"
+      ],
+      "full_recipe": "Start J `editor-pass-start.draft` with grid or compound-spring, no pins. Compare numeric aspect1.6 with canvas at 1440\u00d71000 and 900\u00d71200 viewports. For viewport comparison keep graph/settings identical and draw all outputs at one final display scale. Report actual viewport supplied to engine; output aspect is approximate. Repeat F preview and show that `aspect=canvas` is omitted, not serialized. This editor-only state supplements the five numeric DSL aspect choices.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E07",
+      "title": "Preview, hold, keep and discard",
+      "control_ids": [
+        "E011",
+        "E012",
+        "E014",
+        "E015",
+        "E016"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Set tidy; Preview tidy and record source unchanged.",
+        "Press and release Hold before; Discard.",
+        "Repeat; Keep; inspect stays and Undo.",
+        "Repeat preview and perform an ordinary selected-node edit."
+      ],
+      "expected": "Preview geometry is temporary until Keep or a subsequent ordinary edit implicitly accepts it; Discard restores before geometry. Source acceptance needs visible explanation.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F `editor-pass-start.draft`. Preview tidy; capture source unchanged, before/preview geometry, **Hold before** pressed and released, then Discard. Repeat and Keep; capture stays and source-history Undo. Repeat and begin an ordinary edit while preview is open: `onBeforeEdit` accepts the preview. This behavior is currently surprising relative to the panel text \u201cnothing until you keep it\u201d; mark the implicit accept path clearly. All screenshots share camera; show before/preview as two readable panels, not cross-faded tiny nodes.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E08",
+      "title": "Rebuild writes rules and removes soft positions",
+      "control_ids": [
+        "E013"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [
+        "editor-fixtures/editor-refined-groups.draft",
+        "editor-validation/sources/fold-before-explicit-never.draft",
+        "editor-validation/sources/fold-after-ui-never.draft",
+        "editor-validation/sources/fold-after-ui-auto.draft"
+      ],
+      "contexts": [
+        "F"
+      ],
+      "action_sequence": [
+        "Preview automatic layout with layered; record proposed source and soft stays removed.",
+        "Keep and reopen the source; compare fresh geometry.",
+        "Use G to repeat a group rebuild while preserving its pin and outside nested recipe.",
+        "Run the fold before/after serializer companion and compare explicit never with omitted/auto."
+      ],
+      "expected": "Rebuild changes a recipe and removes in-scope soft refinements; the current serializer turns never into omission, so Continuous ranks is not truthfully saved.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/probe-results.json#/probes/fold"
+      ],
+      "full_recipe": "Start F `editor-pass-start.draft`. Select layered and preview automatic layout. Show unchanged graph declarations, new/replaced layout line, removed stays, retained size/pin/nested recipe in a second grouped case. Keep, close/reopen, and confirm geometry from fresh compilation. For `fold=never`, label current serializer defect: it omits never because engine defaults differ from file defaults; do not accept such a screenshot as a valid Continuous ranks demonstration. Compare with CLI vary on the same refined source, which preserves refinements.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg"
+    },
+    {
+      "id": "V-E09",
+      "title": "Checkpoint belongs to a native session",
+      "control_ids": [
+        "E017",
+        "E018"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "J",
+        "F"
+      ],
+      "action_sequence": [
+        "Capture checkpoint in J.",
+        "Run one approach, restore; run another, restore.",
+        "Undo restore once.",
+        "Open F and inspect checkpoint availability."
+      ],
+      "expected": "A checkpoint is a native session snapshot and restoring it is one history step; files use source Undo instead.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start J `editor-pass-start.draft`. Capture checkpoint, try two different approaches from the checkpoint (Restore before each), restore again, then Undo once to prove replacement is one history step. Show the buttons disabled/hidden in F and explain file-source Undo as the supported alternative. Reload limitation is textual; no invented durable checkpoint gallery.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E10",
+      "title": "Clear one preference or reflow a whole group",
+      "control_ids": [
+        "E019",
+        "E020"
+      ],
+      "source_fixture": "editor-fixtures/editor-refined-groups.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F"
+      ],
+      "action_sequence": [
+        "Select w1 and Clear manual markers; save exact source diff.",
+        "Reset G; select west and Reflow group.",
+        "Compare removed near/stay lines, retained pin w3 and surrounding anchors."
+      ],
+      "expected": "Clear one selected preference and reflow an entire subtree are different scopes; pins persist.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F `editor-scope-start.draft`; add a `stay` for w1, `near` for w2, and a `pin` for w3 with valid local coordinates. Compare **Clear manual markers** on w1 with **Reflow group** on west. Capture source changes and surrounding anchors. Pin w3 remains. Reflow removes subtree soft preferences, while clearing a selected node is narrower. Use compiler diagnostics to confirm constraints rather than silently overlap pins.",
+      "source_validation": "work/editor-fixtures/editor-refined-groups.draft",
+      "baseline_svg": "editor-validation/svg/editor-refined-groups.svg"
+    },
+    {
+      "id": "V-E11",
+      "title": "Align and distribute are edits",
+      "control_ids": [
+        "E021",
+        "E022"
+      ],
+      "source_fixture": "editor-fixtures/editor-align-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Select a,b,c in the same exact baseline.",
+        "Reset independently and apply Align left, top, horizontal centers, vertical centers.",
+        "Reset independently and Distribute horizontally, vertically.",
+        "Use one axis guide and original outlines; inspect file changes separately."
+      ],
+      "expected": "Alignment/distribution are one-time geometry edits, not durable required DSL align constraints. Selection must have enough objects.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start J `editor-pass-start.draft`; choose three disconnected or safe nodes at asymmetric positions/sizes. Independent actions: Align left, top, horizontal centers, vertical centers; distribute horizontally and vertically. Draw one faint reference axis per action and original outline. In F, save geometry as translated refinements; do not label UI Align as an enduring DSL `align strength=required` constraint. Include fewer-than-two selection as nonvisual precondition.",
+      "source_validation": "work/editor-fixtures/editor-align-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-align-start.svg",
+      "native_start_json": "editor-validation/json/editor-align-start.json"
+    },
+    {
+      "id": "V-E12",
+      "title": "Snap and badges do different work",
+      "control_ids": [
+        "E023",
+        "E024"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "At100% zoom, drag auth within4 screen pixels of entry center with Snap on, off, and on while Ctrl/Cmd is held.",
+        "Record guide and final numeric position.",
+        "After one manual move, toggle Show manual position badges.",
+        "In source mode capture unsavable-change message and view preference after reprojection."
+      ],
+      "expected": "Snap affects drag alignment; badges change only presentation. Translator produces no source, but current view settings survive same-session reprojection.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/persistence-results.json#/changes"
+      ],
+      "full_recipe": "Start J `editor-pass-start.draft`. Drag auth to within 4 screen pixels of entry's center line with Snap on/off; repeat with Ctrl/Cmd held. Capture guide and final coordinates at fixed 100% zoom. Toggle Show manual position badges on/off after one manual move; geometry must remain equal. The pinned translation/projection probe verifies that F has no source change, while snap/badge view settings survive same-session reprojection. The browser toast/interaction still needs UI proof; fresh-file persistence is not implied.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E13",
+      "title": "Container controls and file limits",
+      "control_ids": [
+        "E025",
+        "E026",
+        "E027"
+      ],
+      "source_fixture": "editor-fixtures/editor-scope-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "J",
+        "F"
+      ],
+      "action_sequence": [
+        "For west compare Arrange contents inherit, RIGHT, DOWN using an identical pass.",
+        "Independently set padding12,24,80.",
+        "Enlarge west to width800,height240, then Fit contents; never force a frame across its children.",
+        "In F change Arrange contents or padding and record source/reprojection."
+      ],
+      "expected": "Native container settings are distinct from DSL layout direction. Source direction/padding controls currently fail to serialize and reset; Fit contents is native-only.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/persistence-results.json#/changes"
+      ],
+      "full_recipe": "Start J `editor-scope-start.draft`. For west, compare Arrange contents inherit/RIGHT/DOWN with a pass, Inner padding12/24/80, and Fit contents after enlarging west to width800 and height240. Keep explicit node dimensions. The pinned translator/projection probe verifies no serializer for these Inspector direction/padding fields; a browser operation is expected to snap back with \u201cThat change is not saved\u2026\u201d rather than writing the layout line. Show supported F equivalents: edit the group's layout direction, and use min-width/min-height for reservation; do not invent per-container padding syntax.",
+      "source_validation": "work/editor-fixtures/editor-scope-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-scope-start.svg",
+      "native_start_json": "editor-validation/json/editor-scope-start.json"
+    },
+    {
+      "id": "V-E14",
+      "title": "Collapsed view affects a layout experiment",
+      "control_ids": [
+        "E028"
+      ],
+      "source_fixture": "editor-fixtures/editor-scope-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Collapse west, capture its proxy edges/header, expand.",
+        "Reset and run one identical bounded pass expanded and collapsed.",
+        "Record collapsed set in experiment manifest."
+      ],
+      "expected": "Collapse is view state and changes visible geometry/eligible descendants; it is unrelated to sequence folding.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F/J `editor-scope-start.draft`. Collapse west, capture header anchor and external proxy edges, expand. Then run same bounded pass from common starting geometry once expanded and once collapsed; hidden descendants do not take normal inner passes. Frozen-engine comparison must specify collapse state. In F collapse is view state, not a source edit. Do not conflate this operation with layout `fold`.",
+      "source_validation": "work/editor-fixtures/editor-scope-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-scope-start.svg",
+      "native_start_json": "editor-validation/json/editor-scope-start.json"
+    },
+    {
+      "id": "V-E15",
+      "title": "Every preferred region",
+      "control_ids": [
+        "E029",
+        "E030"
+      ],
+      "source_fixture": "editor-fixtures/editor-intent-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "J"
+      ],
+      "action_sequence": [
+        "Mark hub Start here; unset end for the start sweep.",
+        "For each start region top-left,left-center,center,top-center,top-right,right-center,bottom-left,bottom-center,bottom-right, reset and rebuild using identical settings.",
+        "Unset start; mark finish End here; sweep the same regions except center.",
+        "Run coupled start-center/end-bottom-right and pin-hub failure cases separately."
+      ],
+      "expected": "Requested regions are soft targets; report satisfaction and pin conflicts. Source files do not have persistent drawing-intent syntax.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start J `editor-intent-start.draft`. Mark Hub as start, Finish as end; capture Clear role as well. In native Compare, click each shape and use Use clicked shape as start/end, choose area, then Generate; assigning here resets the role to its corner default. Regenerate independently for each allowed role placement: Start's nine regions (top-left,left-center,center,top-center,top-right,right-center,bottom-left,bottom-center,bottom-right), End's eight excluding center. Keep the other role unset for single-role sweeps to avoid changing two factors. Use a 3\u00d73 **legend of requested regions**, then one full-size drawing at a time; show selected geometry versus target region, pins and satisfaction report. A second coupled case Start center + End bottom-right teaches branch-both-ways and conflict. Pin Hub for the failure case. F commands are unavailable; file Compare rebuild still exposes inert intent and must be labeled as defect, not a supported file choice.",
+      "source_validation": "work/editor-fixtures/editor-intent-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-intent-start.svg",
+      "native_start_json": "editor-validation/json/editor-intent-start.json"
+    },
+    {
+      "id": "V-E16",
+      "title": "Generate is the experiment boundary",
+      "control_ids": [
+        "E031",
+        "E032",
+        "E033",
+        "E040"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Open Compare; record six selected default algorithms.",
+        "Choose all ten file engines and Generate; then alter a setting without regenerating to show stale panel config.",
+        "Switch layout/routing; choose parameter grid with one algorithm.",
+        "Generate and Stop while retaining any complete candidate."
+      ],
+      "expected": "Generation freezes the experiment; selecting options does not rerun it. Limits160nodes,360edges,12cells are constraints, not atlas sizing advice.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F `editor-compare-start.draft`. Open Compare; capture the default six, then choose all ten file engines. Show layout/routing mode switch and the \u201cexisting panels are from previous experiment\u201d state before Regenerate. Select one algorithm for parameter grid. Stop midway and inspect a completed candidate. Source unchanged until Apply. Enforce <=160 nodes/360 edges and <=12 cells as textual limits, not recommended atlas size.",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg",
+      "native_start_json": "editor-validation/json/editor-compare-start.json"
+    },
+    {
+      "id": "V-E17",
+      "title": "Cold, warm and bounded are different questions",
+      "control_ids": [
+        "E034",
+        "E038"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Use identical tidy baseline and run cold rebuild, warm rebuild, bounded pass independently.",
+        "For native settled runs sweep effort320,640,1200 separately; pass retains iterations32/maxMove48.",
+        "Repeat with boundary-align for a context comparison.",
+        "In F inspect source-compiled rebuild versus current-coordinate warm/pass persistence."
+      ],
+      "expected": "Cold, warm and pass answer different questions. Executed tidy model samples prove different outputs; source rebuild ignores Compare maximum effort.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [
+        "editor-validation/svg/model-layout-before.svg",
+        "editor-validation/svg/model-layout-cold.svg",
+        "editor-validation/svg/model-layout-warm.svg",
+        "editor-validation/svg/model-layout-pass.svg"
+      ],
+      "evidence": [],
+      "full_recipe": "Start J/F `editor-pass-start.draft`. Compare same selected algorithm (tidy plus boundary-align as second experiment) with rebuild, warm, pass. Warm/rebuild settled max effort320/640/1200, same seed input; pass uses iterations32/maxMove48. Show original geometry ghost and displacement. F rebuild is compiler recipe; F warm/pass are current-coordinate engine runs and save stays. The F maximum-effort control is currently ignored by the source compile branch, so explicitly display identical **effective source settings** and label it unsupported. Do not force a visible difference if solver settles before limit.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E18",
+      "title": "One axis first, two only for interaction",
+      "control_ids": [
+        "E035",
+        "E036"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [
+        "routing-fixtures/corner-radius-0.draft"
+      ],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Sweep nodeGap12,24,44 with one algorithm.",
+        "Use frozen routing fixture R for edgeGap4,16,48 and bendPenalty0,32,100.",
+        "Add a second parameter only for a named interaction; reject duplicate axes and>12cells.",
+        "Enter edgeGap1 in native and source-backed mode; record requested label and effective source."
+      ],
+      "expected": "Teaching sweeps mark the actual default; baseline Compare route presets omit defaults16/32. Source clamp mismatch is verified: spec1, effective4; native rejects.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/probe-results.json#/probes/sourceClamp"
+      ],
+      "full_recipe": "Start F/J `editor-compare-start.draft`. One-axis nodeGap12/24/44 shows why current Compare presets are not low/default/high for nodeGap default24 (this one includes default). Routing default grid edgeGap10/18/28 \u00d7 bendPenalty16/64 lacks actual16 and32 defaults; create edgeGap4/16/48 and bendPenalty0/32/100 with a baseline marker. A second row parameter is reserved for a concrete interaction such as radius\u00d7fixed port or gap\u00d7bend cost. Reject duplicate axes and >12 candidates. Include invalid value1 for edgeGap in native and source mode to reveal clamping-label defect until fixed.",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg",
+      "native_start_json": "editor-validation/json/editor-compare-start.json"
+    },
+    {
+      "id": "V-E19",
+      "title": "Fixed ports must be released by a real edit",
+      "control_ids": [
+        "E039"
+      ],
+      "source_fixture": "routing-fixtures/ports-fixed-both.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Import/open the identical fixed-side fixture.",
+        "Compare unchanged routing settings with Release fixed port sides off/on.",
+        "Check edge fromSide/toSide fields and source, not just route silhouette."
+      ],
+      "expected": "Native resets fixed sides to auto; source Compare currently ignores release. Preserve all node rectangles.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "companion supplied; validation owned by routing/layout audit",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/probe-results.json#/probes/releasePorts"
+      ],
+      "full_recipe": "Start from routing agent's frozen-port source, in F and J. Compare same routing setting with Release fixed port sides off/on. J resets fromSide/toSide to auto; F currently ignores checkbox because candidateSource writes only routing line. Source diff is decisive. The corrected product should either write edge attribute changes or disable this checkbox in source-backed mode. Preserve every node rectangle."
+    },
+    {
+      "id": "V-E20",
+      "title": "Applying the candidate shown",
+      "control_ids": [
+        "E041"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Generate and independently Apply a ready source, warm, and emphasized overlay candidate.",
+        "For overlay choose db anchor before Apply; verify display translation is not persisted.",
+        "Undo each application.",
+        "Change the disposable source after generation; attempt Apply to prove stale guard."
+      ],
+      "expected": "The candidate geometry/source shown is applied; overlay camera is presentation. Stale source is refused.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Start F/J `editor-compare-start.draft`. Apply one ready source candidate, warm candidate, and emphasized overlay candidate separately. Record source diff, fresh recompile or JSON geometry, and one Undo. For overlay, select anchor db before Apply and show that its display translation is not saved. Change baseline externally in a controlled local file session before Apply as a stale guard proof; UI must refuse rather than overwrite. No external user file is used.",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg",
+      "native_start_json": "editor-validation/json/editor-compare-start.json"
+    },
+    {
+      "id": "V-E21",
+      "title": "Same scale teaches size",
+      "control_ids": [
+        "E042",
+        "E043",
+        "E044",
+        "E045",
+        "E046"
+      ],
+      "source_fixture": "editor-fixtures/editor-ten-engine-grouped.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Create the same all-ten engine result from T; consult supplied evidence metrics.",
+        "Inspect two/three candidates at a time in Grid and Overlay.",
+        "Toggle sync/focus/independent camera, visual anchor web/db, Fit all/100%, Enlarge/Back.",
+        "At390px width inspect one enlarged candidate with baseline toggle in proposed docs viewer."
+      ],
+      "expected": "Display controls do not change geometry. One common world scale makes area tradeoffs visible; proposed docs narrow-screen controls are not shipped UI.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Reuse one ready ten-engine result, but display at most two/three full-size candidates. Compare Grid/Overlay, sync/focus/independent navigation, anchor web/db, Fit all/100%, Enlarge/Back. Geometry hashes stay fixed across display changes. Explain that independent fitting makes a large result appear deceptively compact; source image dimensions remain visible. On 390px width show one candidate with previous/next and a baseline toggle; current application Enlarge suffices for reproduction, proposed docs viewer may adapt presentation.",
+      "source_validation": "work/editor-fixtures/editor-ten-engine-grouped.draft",
+      "baseline_svg": "editor-validation/svg/editor-ten-engine-grouped.svg",
+      "native_start_json": "editor-validation/json/editor-ten-engine-grouped.json",
+      "supplied_evidence_manifest": "../baseline/evidence/engine-variants.json"
+    },
+    {
+      "id": "V-E22",
+      "title": "Overlay controls expose a difference",
+      "control_ids": [
+        "E047",
+        "E048",
+        "E049",
+        "E050"
+      ],
+      "source_fixture": "editor-fixtures/editor-ten-engine-grouped.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Use current and one changed ready candidate with same anchor.",
+        "Toggle layer visibility, emphasis, opacity5/30/100, and all-labels off/on.",
+        "Record85% emphasized default and unchanged geometry hashes."
+      ],
+      "expected": "Overlay presentation reveals displacement; opacity and labels do not alter candidates. Active labels must remain readable without relying on color alone.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Use current plus one changed result with same anchor. Toggle per-layer visibility; emphasize each layer; opacity5/30/100 with85% emphasized default marked; labels all off/on. Confirm geometry unchanged. Use inactive outline colors and a readable active label layer; never assume color alone identifies the winner.",
+      "source_validation": "work/editor-fixtures/editor-ten-engine-grouped.draft",
+      "baseline_svg": "editor-validation/svg/editor-ten-engine-grouped.svg",
+      "native_start_json": "editor-validation/json/editor-ten-engine-grouped.json",
+      "supplied_evidence_manifest": "../baseline/evidence/engine-variants.json"
+    },
+    {
+      "id": "V-E23",
+      "title": "Recorded steps, not percentage optimal",
+      "control_ids": [
+        "E053",
+        "E054",
+        "E055",
+        "E060"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Set tidy/all; open timeline from the exact native/source geometry.",
+        "Inspect first, a recorded middle frame, computed finish; hover a different frame without selecting it.",
+        "Use slider/keyboard/endpoints, Play/Pause and Cancel; reopen.",
+        "Repeat with an already-settled document as a no-effect case."
+      ],
+      "expected": "Frames are recorded arrangements, not percentage quality. The model run has13frames; rendered0/6/12 demonstrate the mechanism, not UI controls.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [
+        "editor-validation/svg/model-timeline-first.svg",
+        "editor-validation/svg/model-timeline-middle.svg",
+        "editor-validation/svg/model-timeline-last.svg"
+      ],
+      "evidence": [],
+      "full_recipe": "Start F/J `editor-pass-start.draft`; open timeline with currentScope all. Capture first, middle recorded frame, computed finish, selected frame vs hover peek, Play/Pause, cancel, then reopen. Geometry source unchanged before Keep. Use previous/next/endpoints and keyboard slider actions. A run with one already-settled frame is a valid no-effect example. Playback interval differs for reduced motion; no fake solver-timing claim.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E24",
+      "title": "Ghost and steady camera",
+      "control_ids": [
+        "E056",
+        "E057"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Use the V-E23 archive.",
+        "At selected frame0 and middle frame, compare Ghost next meaningful change/computed finish/off.",
+        "Fit path once and retain the camera.",
+        "Measure lookahead at the same100% zoom."
+      ],
+      "expected": "Next ghost searches recorded movement threshold48screen pixels; it is not the next solver iteration. Fitting every frame would hide travel.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [
+        "editor-validation/svg/model-timeline-first.svg",
+        "editor-validation/svg/model-timeline-middle.svg",
+        "editor-validation/svg/model-timeline-last.svg"
+      ],
+      "evidence": [],
+      "full_recipe": "Same recorded timeline. Compare Next meaningful change / Computed finish / Off at selected frame0 and a middle frame. Fit path once and preserve camera; next ghost uses future recorded movement threshold (48 screen pixels by default), not one raw solver iteration. Include screenshot with off to make geometry readable. Never animate node motion and refit camera simultaneously in docs.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json",
+      "prerequisite": "V-E23",
+      "timeline_archive": "editor-validation/json/model-timeline-full.json"
+    },
+    {
+      "id": "V-E25",
+      "title": "Restore one good area after keeping a later step",
+      "control_ids": [
+        "E058",
+        "E059"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Use the V-E23 archive; bookmark a readable auth/browse frame.",
+        "Select a later frame; hover another frame and choose Keep & edit.",
+        "Reset and Keep & brush; verify bookmark reference name.",
+        "Capture saved stays and fresh compiler result."
+      ],
+      "expected": "The selected frame is kept, not the hover frame; brush reference remains bookmarked. Source soft constraints can introduce recompile drift.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Same timeline. Bookmark a frame where auth/browse arrangement is acceptable, move to later frame, Keep & edit; repeat with Keep & brush. Brush reference text must name bookmarked step. Position hovering over a different frame must not change the chosen frame committed. In F capture the new stays and recompile drift evidence.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json",
+      "prerequisite": "V-E23",
+      "timeline_archive": "editor-validation/json/model-timeline-full.json"
+    },
+    {
+      "id": "V-E26",
+      "title": "Reopening has compatibility rules",
+      "control_ids": [
+        "E061"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "After keeping V-E25, reopen Last path in unchanged graph.",
+        "Reset/archive anew; independently add a node, resize one, or pin one before reopening.",
+        "Record compatibility rejection and fresh-recording path."
+      ],
+      "expected": "Archive contains actual frames and baseline, not a portable arbitrary-graph replay recipe.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "After V-E25, reopen Last path in unchanged graph; compare rejected reopen after adding node, changing size, or pinning a node. The imported timeline contains actual frames and baseline, not a recipe that will replay against arbitrary future graph edits. Restore-source matching is separate from timeline compatibility. One small screenshot plus textual preconditions is sufficient.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json",
+      "prerequisite": "V-E23",
+      "timeline_archive": "editor-validation/json/model-timeline-full.json"
+    },
+    {
+      "id": "V-E27",
+      "title": "Hover, dab, stroke, cancel",
+      "control_ids": [
+        "E063",
+        "E072"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Activate brush tidy/radius190/strength35/softness75 at100% zoom.",
+        "Hover center browse without committing; press L once.",
+        "Undo; begin a stroke and Escape to cancel; exit W/Escape.",
+        "Record continuous strokes only as timing-dependent qualitative sequences."
+      ],
+      "expected": "Hover changes nothing; one dab is reproducible. Completed stroke is one history edit; cancellation restores before.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [
+        "editor-validation/svg/model-brush-before.svg",
+        "editor-validation/svg/model-brush-tidy.svg",
+        "editor-validation/svg/model-brush-flow.svg",
+        "editor-validation/svg/model-brush-space.svg",
+        "editor-validation/svg/model-brush-restore.svg",
+        "editor-validation/svg/model-brush-protect.svg"
+      ],
+      "evidence": [],
+      "full_recipe": "Start J/F `editor-pass-start.draft`, 100% zoom, brush tidy radius190 strength35 softness75. Hover center browse, capture ghost (no source edit); press L once, capture one changed geometry+Undo; start a stroke then Escape, prove reversion; exit W/Escape. A continuously held pointer is a separately labeled qualitative video, never used as numerical low/default/high fixture.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E28",
+      "title": "Five brush mechanisms",
+      "control_ids": [
+        "E064"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [
+        "editor-validation/json/model-brush-before.json",
+        "editor-validation/json/model-brush-reference.json"
+      ],
+      "contexts": [
+        "J"
+      ],
+      "action_sequence": [
+        "Import source-projected JSON and capture restore reference.",
+        "Set browse X=560,Y=320, camera scale1, saving this common perturbed baseline.",
+        "Reset this baseline/reference for each mode tidy,flow,space,restore,protect.",
+        "Dab once at browse center642,348 with radius190,strength35,softness75,step18.",
+        "Record moved IDs and hold IDs; separately test empty/pinned regions as no-op cases."
+      ],
+      "expected": "All five one-dab model outputs are generated. Tidy/flow/space have distinct displacements; restore moves browse toward reference; protect leaves geometry identical and emits hold-eligible IDs.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [
+        "editor-validation/svg/model-brush-before.svg",
+        "editor-validation/svg/model-brush-tidy.svg",
+        "editor-validation/svg/model-brush-flow.svg",
+        "editor-validation/svg/model-brush-space.svg",
+        "editor-validation/svg/model-brush-restore.svg",
+        "editor-validation/svg/model-brush-protect.svg"
+      ],
+      "evidence": [],
+      "full_recipe": "Start from `editor-validation/json/editor-pass-start.json`, capture its node positions as the restore reference, then set browse to X=560,Y=320 at camera scale1. Save that common perturbed baseline. Modes tidy,flow,space,restore,protect each get one L dab at browse center642,348 with radius190,strength35,softness75. Exact baseline/reference JSON and all five actual model renders are in `editor-validation/`. For restore, use reference with browse at original position and a perturbed baseline; protect changes holds, no node geometry. Tidy shortens/alines nearby linked shapes, flow adds directed pressure, space emphasizes padded separation. Show pin-protected region and empty region no-op. Keep node sizes, frames, graph and camera fixed.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E29",
+      "title": "Radius/strength/softness sweeps",
+      "control_ids": [
+        "E065",
+        "E066",
+        "E067"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [
+        "editor-validation/json/model-brush-before.json",
+        "editor-validation/json/model-brush-reference.json"
+      ],
+      "contexts": [
+        "J"
+      ],
+      "action_sequence": [
+        "Use V-E28 common perturbed JSON and point642,348.",
+        "Keep mode tidy and zoom1; independently sweep radius40,190,600; strength1,35,100; softness0,75,100.",
+        "Show field core/rim and eligible/locked counts with displacement arrows."
+      ],
+      "expected": "Radius uses screen pixels; world-radius conversion depends on zoom. Softness weights rectangle distance; constraints can attenuate motion. Only default dab is executed so far.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "At center browse on same geometry and named mode, sweep radius40/190/600, strength1/35/100, softness0/75/100 independently. Show brush disk, full-strength core/rim, eligible/locked counts, and displacement arrows. The brush tests distance to rectangles. Holding zoom constant is mandatory; radius is screen pixels while move caps use world units. Label solver block/attenuation when an obstacle prevents proposed motion.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E30",
+      "title": "Restore holds, temporary Alt, preview again",
+      "control_ids": [
+        "E068",
+        "E069",
+        "E070",
+        "E071",
+        "E073"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [
+        "editor-validation/json/model-brush-before.json",
+        "editor-validation/json/model-brush-reference.json"
+      ],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Capture reference then perturb browse as V-E28.",
+        "Independently restore one dab with holdRestored true/false, then the same bounded pass.",
+        "Protect region; Alt-paint to remove holds; ordinary Alt temporarily restores.",
+        "Use current reference, Clear holds, and Preview from here separately."
+      ],
+      "expected": "Holds are session-only and separate from pins; source cold rebuild cannot encode them. Model result records eligible holds but UI transition remains unexecuted.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Capture reference, perturb browse, restore one dab with holdRestored true/false; then run same bounded layout and observe protected IDs. In protect mode add hold, Alt-paint removes it; ordinary Alt temporarily restores. Use current changes reference without moving nodes. Clear holds changes hold count and subsequent pass, leaves pins. Preview from here records warm timeline. File rebuild currently cannot serialize/transmit session holds through source compile, so do not promise protection there; file pass/warm respects fixed IDs.",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json"
+    },
+    {
+      "id": "V-E31",
+      "title": "Suggestions can change more than the engine",
+      "control_ids": [
+        "E074"
+      ],
+      "source_fixture": "editor-fixtures/editor-refined-groups.draft",
+      "supporting_fixtures": [
+        "editor-fixtures/editor-change-marks.draft"
+      ],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Run ordinary vary on G, then independently on M change-mark source.",
+        "Record only actual suggestions, edits, why text and diagnostics.",
+        "Show engine/router/soft-group/drop-refinement proposals only if generated."
+      ],
+      "expected": "Suggestions depend on graph and source; they are not all-ten coverage. Mandatory PNG export currently blocks a completed CLI vary artifact in this environment.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "blocked by missing Chrome for vary PNG output"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Use exact companions `editor-refined-groups.draft` and `editor-change-marks.draft` (the latter copies supplied `examples/checkout-change.draft`). Run ordinary vary. Show proposed engine, stricter router, soften group, or drop-conflicting-refinement edits only when suggested by actual input. Captions list exact source changes and why each suggestion ran. The suggestions are not a ten-engine coverage guarantee and may omit a useful alternative. Keep input untouched.",
+      "source_validation": "work/editor-fixtures/editor-refined-groups.draft",
+      "baseline_svg": "editor-validation/svg/editor-refined-groups.svg"
+    },
+    {
+      "id": "V-E32",
+      "title": "Explicit sweeps keep repeats",
+      "control_ids": [
+        "E075",
+        "E076"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [
+        "routing-fixtures/corner-radius-0.draft"
+      ],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Run --try engine=compound-flow,boundary-align,compound-spring,tidy,stress,force,flow,layered,tree,grid without a second axis.",
+        "Independently run --grid and --try direction=auto,right,down.",
+        "On R run --try corner-radius=0,6,16.",
+        "Try rejected --try root; require explicit value list for standoff."
+      ],
+      "expected": "Try/grid retain repeats. Actual vary module tags radius6/16 same-as-v0 despite different SVGs because fingerprint omits corner style; full CLI export is blocked by Chrome absence.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "executed subset",
+        "cli_export": "blocked by missing Chrome for vary PNG output"
+      },
+      "actual_model_svgs": [],
+      "evidence": [
+        "editor-validation/probe-results.json#/probes/radiusVary"
+      ],
+      "full_recipe": "Use unrefined `editor-compare-start.draft` for `--try engine=<all10>` with no second axis (20 cells would exceed limit). Repeat `--grid` to show fixed broad subset and `--try direction=auto,right,down` to reveal metadata/routing distinctions. Exact duplicate/tie results remain labeled in try/grid; plain suggestions deduplicate approximate geometry keys. Explicit numeric sweeps use canonical parameter table values. `--try root` is rejected; standoff needs a value list.",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg"
+    },
+    {
+      "id": "V-E33",
+      "title": "Scope does not lock everything outside it",
+      "control_ids": [
+        "E077"
+      ],
+      "source_fixture": "editor-fixtures/editor-scope-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Run --scope west --try engine=layered,grid.",
+        "Measure west dimensions and external siblings after whole-file recompilation.",
+        "Run --scope west --try crossing-penalty=0,360,900 independently.",
+        "Try a soft-group scope in a copy and record rejection."
+      ],
+      "expected": "Scope selects a recipe, not a position lock; explicit routing axes remain global.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "blocked by missing Chrome for vary PNG output"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Use `editor-scope-start.draft`, sweep `--scope west --try engine=layered,grid`. Same outer recipe remains, but changing west's width/height can move siblings when parent recompiles. Contrast with `--scope west --try crossing-penalty=0,360,900`, which is still whole-file routing. Soft group scope rejection is textual. No screenshot may imply scope freezes all external geometry.",
+      "source_validation": "work/editor-fixtures/editor-scope-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-scope-start.svg"
+    },
+    {
+      "id": "V-E34",
+      "title": "Metrics support, but do not replace, a choice",
+      "control_ids": [
+        "E078",
+        "E079"
+      ],
+      "source_fixture": "editor-fixtures/editor-ten-engine-grouped.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Use the supplied real engine metrics and common-scale candidate SVGs.",
+        "Inspect recommendations under fewer-crossings,compact,stable.",
+        "Sweep fit wide,slide,square,page,tall independently and show target/output aspect."
+      ],
+      "expected": "Area guard can keep v0 recommended despite fewer-crossing larger alternatives. --fit is a suggestion/ranking goal, not the engine aspect parameter.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "blocked by missing Chrome for vary PNG output"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Use supplied real grouped engine comparison. Show current vs zero-crossing larger candidate at shared scale, then ranking keys for fewer-crossings/compact/stable. Current stays recommended when zero crossings requires larger area and no fit goal, even under fewer-crossings. Sweep five `--fit` targets separately, display target silhouette and actual image aspect; do not pass `--fit` to engines as if it were engine aspect. All metric values come from generated manifests.",
+      "source_validation": "work/editor-fixtures/editor-ten-engine-grouped.draft",
+      "baseline_svg": "editor-validation/svg/editor-ten-engine-grouped.svg",
+      "supplied_evidence_manifest": "../baseline/evidence/engine-variants.json"
+    },
+    {
+      "id": "V-E35",
+      "title": "From then Apply, with fresh IDs",
+      "control_ids": [
+        "E080",
+        "E086"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Copy C to a disposable work file and vary it into output folder run1.",
+        "Copy run1 aside as an archive; run --from v2 --out run1 so savedVariant reads the existing manifest.",
+        "Read the new IDs after reranking; apply chosen vN from the matching run1 manifest.",
+        "Show best resolving to v0 as no-op; independently edit disposable source after generation to prove hash rejection."
+      ],
+      "expected": "IDs are per-run. --from reads then rewrites the selected output folder. Apply changes source and has no editor Undo.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "blocked by missing Chrome for vary PNG output"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "On a copy of `editor-compare-start.draft`, run vary, write output as run1, copy that folder aside, then use `--from v2 --out run1` so the saved manifest is found before the folder is rewritten. The follow-up run reassigns IDs, so label an earlier v2 explicitly. Show Apply vN line diff and `best`->v0 no-op example. Change copy source after measurement and demonstrate hash guard. CLI has no editor Undo; supply original source copy.",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg"
+    },
+    {
+      "id": "V-E36",
+      "title": "Diagnosing why the drawing moved",
+      "control_ids": [
+        "E087",
+        "E088",
+        "E090"
+      ],
+      "source_fixture": "editor-fixtures/editor-refinement-drift.draft",
+      "supporting_fixtures": [
+        "editor-validation/sources/refinement-drift-cleaned.draft"
+      ],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Run check --hints, inspect --json --hints, check --metrics, and inspect --json --metrics.",
+        "Run format --drop-stale without --write and save returned source as a new companion.",
+        "Inspect the cleanup diff and render before/after."
+      ],
+      "expected": "Verified source reports stay b relaxed32px and near c44px; cleanup removes both lines. Subsequent aspect quality warning is distinct from refinement warning and vary warnings.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "format cleanup, check/inspect hints and metrics, and SVG executed"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "Use `editor-refinement-drift.draft`: the actual CLI verifies that stay b relaxes32px and near c44px. The cleaned companion is `editor-validation/sources/refinement-drift-cleaned.draft`. Run check --hints, inspect --json --hints, check --metrics, and inspect --json --metrics; annotate raw/final positions and pushed siblings. Pair format --drop-stale output (without write first) with source diff and resulting drawing. Explain warnings vs errors and that vary warning metric excludes additional qualityNotes which check --metrics prints.",
+      "source_validation": "work/editor-fixtures/editor-refinement-drift.draft",
+      "baseline_svg": "editor-validation/svg/editor-refinement-drift.svg"
+    },
+    {
+      "id": "NV-E01",
+      "title": "Comparison exports",
+      "control_ids": [
+        "E051",
+        "E052"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Generate a comparison; save current visible view as SVG and full experiment as JSON.",
+        "Check baseline/config/candidate presence, readability and schema; reuse V-E21/V-E22 visual."
+      ],
+      "expected": "Export changes the artifact format, not graph layout; an extra causal rendering would repeat existing evidence.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg",
+      "native_start_json": "editor-validation/json/editor-compare-start.json"
+    },
+    {
+      "id": "NV-E02",
+      "title": "Timeline archive",
+      "control_ids": [
+        "E062"
+      ],
+      "source_fixture": "editor-fixtures/editor-pass-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "F",
+        "J"
+      ],
+      "action_sequence": [
+        "Save the V-E23 timeline JSON; reopen it in the same compatible drawing.",
+        "Inspect actual baseline,frames,pins,settings and reject malformed/incompatible archive."
+      ],
+      "expected": "Timeline JSON is an archive format. The generated native model timeline is provided; browser import/export path remains a UI proof.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "actual timeline archive generated; UI save/open not executed",
+        "cli_export": "not applicable or described below"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "",
+      "source_validation": "work/editor-fixtures/editor-pass-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-pass-start.svg",
+      "native_start_json": "editor-validation/json/editor-pass-start.json",
+      "prerequisite": "V-E23",
+      "timeline_archive": "editor-validation/json/model-timeline-full.json"
+    },
+    {
+      "id": "NV-E03",
+      "title": "Vary output and budget",
+      "control_ids": [
+        "E081",
+        "E082",
+        "E083",
+        "E084",
+        "E085"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Run vary with explicit --out, then --json, --no-source, --limit and a small --budget independently.",
+        "Record file list, embedded-source presence, manifest counters and skipped candidates."
+      ],
+      "expected": "These flags control time/output retention, not graph meaning. PNG dependency blocks complete vary exports here, including --json because it still renders PNG.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "blocked by missing Chrome for vary PNG output"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg"
+    },
+    {
+      "id": "NV-E04",
+      "title": "Inspect formats",
+      "control_ids": [
+        "E089"
+      ],
+      "source_fixture": "editor-fixtures/editor-compare-start.draft",
+      "supporting_fixtures": [],
+      "contexts": [
+        "CLI"
+      ],
+      "action_sequence": [
+        "Run inspect default, --json --metrics, and --svg on the same exact fixture.",
+        "Compare canonical node/route arrays and explain rendered-label exclusions."
+      ],
+      "expected": "All formats describe one diagram; metric equality is not proof of byte-equal geometry. Actual JSON/SVG companions are generated.",
+      "invariants": [
+        "Same starting graph, labels and dimensions for each independent variant.",
+        "Reset source or native JSON, selected IDs, pins/manual flags, collapsed groups, camera and session holds before each sample.",
+        "Change only the named control; keep all other settings and routing fixed unless the interaction is explicitly named."
+      ],
+      "status": {
+        "recipe": "specified",
+        "source": "actual CLI check/inspect/SVG completed",
+        "editor_ui": "not executed",
+        "model": "not executed",
+        "cli_export": "inspect JSON metrics and SVG executed"
+      },
+      "actual_model_svgs": [],
+      "evidence": [],
+      "full_recipe": "",
+      "source_validation": "work/editor-fixtures/editor-compare-start.draft",
+      "baseline_svg": "editor-validation/svg/editor-compare-start.svg"
+    }
+  ]
+}

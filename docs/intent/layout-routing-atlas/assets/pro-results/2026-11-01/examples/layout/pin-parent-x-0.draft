@@ -1,0 +1,10 @@
+diagram "A pin uses parent-local coordinates" version=1
+group container "Local coordinates"
+node a "Pinned child" in=container
+node b "Sibling" in=container
+node anchor "World anchor"
+layout root row gap=48
+layout container column gap=32
+pin container x=0 y=0
+pin a x=20 y=20
+pin anchor x=0 y=360

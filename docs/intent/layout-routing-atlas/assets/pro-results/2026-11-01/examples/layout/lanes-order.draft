@@ -1,0 +1,12 @@
+diagram "Responsibilities" version=1
+group customer "Customer"
+group operator "Operator"
+node request "Request" in=customer
+node triage "Triage" in=operator
+node review "Review" in=operator
+node approve "Approve" in=customer
+edge a request -> triage
+edge b triage -> review
+edge c review -> approve
+layout root lanes direction=right
+order root operator customer

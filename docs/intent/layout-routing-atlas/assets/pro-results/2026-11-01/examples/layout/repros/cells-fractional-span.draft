@@ -1,0 +1,3 @@
+group g "G"
+node a "A" in=g span=1.5
+layout g cells columns=2

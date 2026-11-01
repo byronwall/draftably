@@ -1,0 +1,4 @@
+warning Edges bd and ca cross. [crossing]
+warning The drawing is 1379×296 (aspect 4.66). Try draftably vary --fit slide (or page). [aspect]
+Metrics: 1379×296 (aspect 4.66), 1 crossing, 12 bends, 2314px of lines, 2 warnings.
+Warnings: 7 nodes, 0 groups, 8 connections.

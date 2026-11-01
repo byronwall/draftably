@@ -1,0 +1,15 @@
+diagram "Atlas: compare the same graph" version=1
+group client "Clients"
+group service "Services"
+node web "Web" in=client
+node mobile "Mobile" in=client
+node api "API" in=service
+node jobs "Jobs" in=service
+node cache "Cache"
+node db "Database"
+edge e1 web -> api
+edge e2 mobile -> api
+edge e3 api -> db
+edge e4 api -> cache
+edge e5 jobs -> db
+layout root engine=compound-flow direction=right fold=never

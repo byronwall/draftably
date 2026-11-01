@@ -1,0 +1,17 @@
+diagram "Atlas: scopes and protection" version=1
+group west "West"
+group east "East"
+node w1 "Receive" in=west
+node w2 "Validate" in=west
+node w3 "Store" in=west
+node e1 "Process" in=east
+node e2 "Publish" in=east
+node external "External"
+edge a w1 -> w2
+edge b w2 -> w3
+edge c w2 -> e1
+edge d e1 -> e2
+edge e e2 -> external
+layout root engine=compound-flow direction=right fold=never
+layout west row gap=64
+layout east column gap=80

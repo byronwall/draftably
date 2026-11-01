@@ -1,0 +1,3 @@
+warning a sits NaNpx outside its group g. The layout could not avoid it; move or resize a neighbour. [outside-group]
+Metrics: 58×66 (aspect 0.88), 0 crossings, 0 bends, 0px of lines, 1 warning.
+Warnings: 1 node, 1 group, 0 connections.

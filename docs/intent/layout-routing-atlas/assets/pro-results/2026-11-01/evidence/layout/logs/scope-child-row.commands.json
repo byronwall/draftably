@@ -1,0 +1,60 @@
+{
+  "file": "scope-child-row.draft",
+  "source_sha256": "bf4652584a72a09a63fe98adbf3c0dcfc29ba21e1cb5493d43e669777aeb2a59",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/scope-child-row.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.422
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/scope-child-row.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.417
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1284,
+    "height": 370,
+    "crossings": 0,
+    "bends": 11,
+    "length": 2138,
+    "warnings": 0
+  },
+  "node_hash": "decb72b0afc5c0e83810193f43ad234d30f477be0e24f6d1f2cd73e42f3d0ca5",
+  "route_hash": "c47f73a9aa700bd25445626a3be55748842e99f760fb72fb84f11a59a2595673",
+  "geometry_hash": "f0f14ac8e1da4cbe3baf4f43bbc0fbed49e26adde31b3d7589472f51a8f73cdd",
+  "check_output": "warning cache is 568px from the nearest node it connects to. [stranded]\nwarning The drawing is 1284\u00d7370 (aspect 3.47). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1284\u00d7370 (aspect 3.47), 0 crossings, 11 bends, 2138px of lines, 2 warnings.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/scope-child-row.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.305,
+    "file": "svg/scope-child-row.svg",
+    "bytes": 73351,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "77fc0befc31bdf5d2713926225069b1eb75a13a88b889b345f0ff636af012909"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

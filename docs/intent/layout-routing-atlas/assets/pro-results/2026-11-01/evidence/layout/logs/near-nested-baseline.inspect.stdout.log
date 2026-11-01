@@ -1,0 +1,1 @@
+{"nodes":[{"id":"api","parent":"services","x":24,"y":48,"w":164,"h":56},{"id":"jobs","parent":"services","x":24,"y":136,"w":164,"h":56},{"id":"note","parent":"root","x":244,"y":0,"w":164,"h":56},{"id":"services","parent":"root","x":0,"y":0,"w":212,"h":216}],"routes":[],"metrics":{"width":488,"height":342,"crossings":0,"bends":0,"length":0,"warnings":0}}

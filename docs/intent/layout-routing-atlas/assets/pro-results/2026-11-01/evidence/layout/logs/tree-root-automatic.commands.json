@@ -1,0 +1,60 @@
+{
+  "file": "tree-root-automatic.draft",
+  "source_sha256": "4a88680e8017479abd27c0dd1045f542744fbdb8d5d709466284047ec6d607e6",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/tree-root-automatic.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.196
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/tree-root-automatic.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.262
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 836,
+    "height": 499,
+    "crossings": 0,
+    "bends": 10,
+    "length": 1048,
+    "warnings": 0
+  },
+  "node_hash": "f4e5ce6eeefb334f596f09495e0ec936b6a91db3c517ecd42ad1b14eaa7af05b",
+  "route_hash": "aed633a5b8034fc2cb960a9e087e6e8e734af696866ff856acc6a904b1a9a5d8",
+  "geometry_hash": "cd7fec82004c98e9f13d711984a435121e42820f0e2e2254554d34f7903a9321",
+  "check_output": "Metrics: 836\u00d7499 (aspect 1.68), 0 crossings, 10 bends, 1048px of lines, 0 warnings.\nOK: 7 nodes, 0 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/tree-root-automatic.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.175,
+    "file": "svg/tree-root-automatic.svg",
+    "bytes": 70256,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "b15b3486d0230e59c17b94e1521a8046d0a9e9c5c88b8e3c7a2d43dbb92c781b"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

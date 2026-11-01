@@ -1,0 +1,60 @@
+{
+  "file": "node-gap-24.draft",
+  "source_sha256": "a83c2645553ecdabbc5daf61d12267465a0638d94c04dab234e9f00fe4a1c161",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/node-gap-24.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.264
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/node-gap-24.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.225
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 878,
+    "height": 450,
+    "crossings": 0,
+    "bends": 12,
+    "length": 814,
+    "warnings": 0
+  },
+  "node_hash": "8878ce1ad4e8bdff55a2063d13affdc4df5f51ad31bb80e0db420b3f375e1bba",
+  "route_hash": "ca6b97dd1cd737bb605893bf71a98c19d0c38e1aeef3dc93f286b1f56b88fd4e",
+  "geometry_hash": "1deb7ef9f37ec8c89986315f06cbc2fb02ab1a2da776ed983a9b3ae067521b4b",
+  "check_output": "Metrics: 878\u00d7450 (aspect 1.95), 0 crossings, 12 bends, 814px of lines, 0 warnings.\nOK: 7 nodes, 0 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/node-gap-24.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.203,
+    "file": "svg/node-gap-24.svg",
+    "bytes": 70352,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "8fb37f5f52a6487cca14df49edeef5dd561f227a4d12ef5fd128953b0f43211e"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

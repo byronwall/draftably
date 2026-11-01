@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "Within-rank order before a pass",
+  "graph": {
+    "nodes": [
+      {
+        "id": "a",
+        "title": "Source A"
+      },
+      {
+        "id": "b",
+        "title": "Source B"
+      },
+      {
+        "id": "c",
+        "title": "Target C"
+      },
+      {
+        "id": "d",
+        "title": "Target D"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ad",
+        "from": "a",
+        "to": "d",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "a": {
+        "x": 191.264,
+        "y": 16.778,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "b": {
+        "x": 191.264,
+        "y": 123.222,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "c": {
+        "x": 440.119,
+        "y": 66.487,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "d": {
+        "x": 717.224,
+        "y": 81.212,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "ad": {},
+      "bc": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "a": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "b": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "c": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "d": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "layered",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 192,
+    "stability": 0,
+    "iterations": 96,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "crossings",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "Within-rank order before a pass"
+    }
+  }
+}

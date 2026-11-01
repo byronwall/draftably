@@ -1,0 +1,17 @@
+diagram "Routing: a 28px corridor" version=1
+# Fixed rectangles: only the clearance setting changes.
+node a "Start"
+size a width=120 height=56
+pin a x=40 y=126
+node b "End"
+size b width=120 height=56
+pin b x=520 y=126
+node top "Upper wall"
+size top width=120 height=100
+pin top x=240 y=40
+node bottom "Lower wall"
+size bottom width=120 height=100
+pin bottom x=240 y=168
+edge e a -> b from=right to=left
+layout root row
+routing clearance=30 standoff=0

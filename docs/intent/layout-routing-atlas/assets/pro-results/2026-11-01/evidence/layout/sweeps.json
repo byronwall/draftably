@@ -1,0 +1,4451 @@
+[
+  {
+    "visual": "VL00",
+    "files": [
+      {
+        "file": "flat-dag.draft",
+        "control": [],
+        "metrics": {
+          "width": 892,
+          "height": 286,
+          "crossings": 0,
+          "bends": 9,
+          "length": 754,
+          "warnings": 0
+        },
+        "geometry_hash": "4923c35cf694ac93cf43fe72a6432c3056875d0ba21b48fbc7fed423cd7c7a56",
+        "visible_svg_hash": "6534778b01b16a8001220c1d4d820c6cd502eb7e61305503af3ba15838462e22",
+        "node_hash": "049130d4969ad3a2dccaa008a24dedbfe3e52ddc13e66b35dec7d35a5397be80",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "nested.draft",
+        "control": [],
+        "metrics": {
+          "width": 1288,
+          "height": 370,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2016,
+          "warnings": 0
+        },
+        "geometry_hash": "3367fd220c65ca527819dd1cc0e10d1639e72ad534b88d843337f45f08437cbd",
+        "visible_svg_hash": "ba66dcff51607c5358bd5994955d5d6ecea763736b508a1c133f2e9441e50218",
+        "node_hash": "a914c56be65cd150275f6361375443941120f556099f57266f2b8abe7bf22a5f",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 3
+      },
+      {
+        "file": "network.draft",
+        "control": [],
+        "metrics": {
+          "width": 1260,
+          "height": 296,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2236,
+          "warnings": 0
+        },
+        "geometry_hash": "9f6520149b6a8f3169a240e755ff6cf0d06e811beef2a9eb279b4ce39bf98348",
+        "visible_svg_hash": "b8ce0eb57fb0fc8a62bc6a224836e730008ee5870a270c8e463c841046e36335",
+        "node_hash": "a8aa96ed884b8877688864a5fb6d534871554454843768057c769b4228ea6dc1",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "forest.draft",
+        "control": [],
+        "metrics": {
+          "width": 836,
+          "height": 499,
+          "crossings": 0,
+          "bends": 10,
+          "length": 1048,
+          "warnings": 0
+        },
+        "geometry_hash": "cd7fec82004c98e9f13d711984a435121e42820f0e2e2254554d34f7903a9321",
+        "visible_svg_hash": "b15b3486d0230e59c17b94e1521a8046d0a9e9c5c88b8e3c7a2d43dbb92c781b",
+        "node_hash": "f4e5ce6eeefb334f596f09495e0ec936b6a91db3c517ecd42ad1b14eaa7af05b",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "units.draft",
+        "control": [],
+        "metrics": {
+          "width": 464,
+          "height": 249,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "120cd71b26f4a6a667b34f45db075d3d910a313df87d20c016030bb6420d8db2",
+        "visible_svg_hash": "3bb7b04d11d14d51cfdb0116e690e74fef89c8b9f6c397e42ffdb78f940b7ee9",
+        "node_hash": "6d67f2675a9ad1642d376084bf48ed2545544d05bb55aef90b8dcbb6cb73fec0",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "grid.draft",
+        "control": [],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "chain.draft",
+        "control": [],
+        "metrics": {
+          "width": 820,
+          "height": 462,
+          "crossings": 0,
+          "bends": 4,
+          "length": 1572,
+          "warnings": 0
+        },
+        "geometry_hash": "955015bc861aedec67fc6c76677b38ea43185a1c68f9decfd7bf9fcf805d57af",
+        "visible_svg_hash": "d84f31ee1e7bb40ebfa2843ac76379e418cdd6e85c4389ec32f6439e5c028bd6",
+        "node_hash": "a829109eaba8b1fcc463c01e9df71e22c4b946023db81fbed465ee3f42dd8c77",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 7,
+    "unique_visible_svgs": 7,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL02",
+    "files": [
+      {
+        "file": "rank-gap-24.draft",
+        "control": [
+          "L017"
+        ],
+        "metrics": {
+          "width": 803,
+          "height": 422,
+          "crossings": 0,
+          "bends": 12,
+          "length": 631,
+          "warnings": 0
+        },
+        "geometry_hash": "67526069dc3df6de1889be26ad2ff4b7db63803e471e6e855a2aa0e3485e7abf",
+        "visible_svg_hash": "d04974c078127e7071aa7d69dd1e6681a327a51f9f7ad4c267a2b1bd62c8c55f",
+        "node_hash": "acc2c390fd3b1434f377b1d6f77516cfaab4c944e79bde5beffbad58a3b9b316",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "rank-gap-52.draft",
+        "control": [
+          "L017"
+        ],
+        "metrics": {
+          "width": 878,
+          "height": 450,
+          "crossings": 0,
+          "bends": 12,
+          "length": 814,
+          "warnings": 0
+        },
+        "geometry_hash": "1deb7ef9f37ec8c89986315f06cbc2fb02ab1a2da776ed983a9b3ae067521b4b",
+        "visible_svg_hash": "8fb37f5f52a6487cca14df49edeef5dd561f227a4d12ef5fd128953b0f43211e",
+        "node_hash": "8878ce1ad4e8bdff55a2063d13affdc4df5f51ad31bb80e0db420b3f375e1bba",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "rank-gap-120.draft",
+        "control": [
+          "L017"
+        ],
+        "metrics": {
+          "width": 1077,
+          "height": 518,
+          "crossings": 0,
+          "bends": 12,
+          "length": 1295,
+          "warnings": 0
+        },
+        "geometry_hash": "a2f78e8929eb34813e1cd78c4a06f907aaf3aaaa826b2d32962a0a5bc0c1c98d",
+        "visible_svg_hash": "6d114df2aa131e39a847b15c038a76fe781a53549b655256add7f26f54cbde1a",
+        "node_hash": "bed30c06d9bf5e80c5dc23912dd1ccb948c4ff30e794ae0accddc4bea6ee4bac",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL03",
+    "files": [
+      {
+        "file": "group-gap-24.draft",
+        "control": [
+          "L018"
+        ],
+        "metrics": {
+          "width": 1076,
+          "height": 474,
+          "crossings": 1,
+          "bends": 10,
+          "length": 1504,
+          "warnings": 0
+        },
+        "geometry_hash": "fed284527227cf8657a4495a1893154335d104d951a84fac3b23d2145dbbc54e",
+        "visible_svg_hash": "664387ff62d619661b984ef2d52f948023352d2b964a7c2f0d09762ae90d850e",
+        "node_hash": "f34e4ffc3db0fc174e3ffb702ea7f976eb4c1427c5ce6613f5d5885e5c87c5e6",
+        "diagnostic_codes": [
+          "crossing"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "group-gap-48.draft",
+        "control": [
+          "L018"
+        ],
+        "metrics": {
+          "width": 1076,
+          "height": 474,
+          "crossings": 1,
+          "bends": 10,
+          "length": 1504,
+          "warnings": 0
+        },
+        "geometry_hash": "fed284527227cf8657a4495a1893154335d104d951a84fac3b23d2145dbbc54e",
+        "visible_svg_hash": "664387ff62d619661b984ef2d52f948023352d2b964a7c2f0d09762ae90d850e",
+        "node_hash": "f34e4ffc3db0fc174e3ffb702ea7f976eb4c1427c5ce6613f5d5885e5c87c5e6",
+        "diagnostic_codes": [
+          "crossing"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "group-gap-120.draft",
+        "control": [
+          "L018"
+        ],
+        "metrics": {
+          "width": 1172,
+          "height": 474,
+          "crossings": 1,
+          "bends": 10,
+          "length": 1696,
+          "warnings": 0
+        },
+        "geometry_hash": "9fe615e7d46e7af0edbdb2a0b4b60aa26b3cf47865856f76cf84b560bf88a827",
+        "visible_svg_hash": "f63d82c557fb4d397ed4377abf081c4cc05f4aa54dacb1de244c5991e1b38b71",
+        "node_hash": "915cf066fa5838a199eb1b716c4a0532dc38fe50d6b871a828ed91190a4933e4",
+        "diagnostic_codes": [
+          "crossing"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "group-gap-96.draft",
+        "control": [
+          "L018"
+        ],
+        "metrics": {
+          "width": 1172,
+          "height": 474,
+          "crossings": 1,
+          "bends": 10,
+          "length": 1696,
+          "warnings": 0
+        },
+        "geometry_hash": "9fe615e7d46e7af0edbdb2a0b4b60aa26b3cf47865856f76cf84b560bf88a827",
+        "visible_svg_hash": "f63d82c557fb4d397ed4377abf081c4cc05f4aa54dacb1de244c5991e1b38b71",
+        "node_hash": "915cf066fa5838a199eb1b716c4a0532dc38fe50d6b871a828ed91190a4933e4",
+        "diagnostic_codes": [
+          "crossing"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "group-gap-180.draft",
+        "control": [
+          "L018"
+        ],
+        "metrics": {
+          "width": 1172,
+          "height": 474,
+          "crossings": 1,
+          "bends": 10,
+          "length": 1696,
+          "warnings": 0
+        },
+        "geometry_hash": "9fe615e7d46e7af0edbdb2a0b4b60aa26b3cf47865856f76cf84b560bf88a827",
+        "visible_svg_hash": "f63d82c557fb4d397ed4377abf081c4cc05f4aa54dacb1de244c5991e1b38b71",
+        "node_hash": "915cf066fa5838a199eb1b716c4a0532dc38fe50d6b871a828ed91190a4933e4",
+        "diagnostic_codes": [
+          "crossing"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [
+      [
+        "group-gap-24.draft",
+        "group-gap-48.draft"
+      ],
+      [
+        "group-gap-120.draft",
+        "group-gap-96.draft",
+        "group-gap-180.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "group-gap-24.draft",
+        "group-gap-48.draft"
+      ],
+      [
+        "group-gap-120.draft",
+        "group-gap-96.draft",
+        "group-gap-180.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL04",
+    "files": [
+      {
+        "file": "node-gap-8.draft",
+        "control": [
+          "L019"
+        ],
+        "metrics": {
+          "width": 878,
+          "height": 422,
+          "crossings": 0,
+          "bends": 12,
+          "length": 761,
+          "warnings": 0
+        },
+        "geometry_hash": "de5117508d47efd551990a2b01e8430f6f5ee063b0b33e3481bec28482161212",
+        "visible_svg_hash": "cd19a0411892902ae677a8e6f7c2c84029440e7c5478a03cb84f60c572d1282e",
+        "node_hash": "74f66b0515717f901b89751fa1b3740dc687d259b6030786623aa8aeca216ae9",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "node-gap-24.draft",
+        "control": [
+          "L019"
+        ],
+        "metrics": {
+          "width": 878,
+          "height": 450,
+          "crossings": 0,
+          "bends": 12,
+          "length": 814,
+          "warnings": 0
+        },
+        "geometry_hash": "1deb7ef9f37ec8c89986315f06cbc2fb02ab1a2da776ed983a9b3ae067521b4b",
+        "visible_svg_hash": "8fb37f5f52a6487cca14df49edeef5dd561f227a4d12ef5fd128953b0f43211e",
+        "node_hash": "8878ce1ad4e8bdff55a2063d13affdc4df5f51ad31bb80e0db420b3f375e1bba",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "node-gap-64.draft",
+        "control": [
+          "L019"
+        ],
+        "metrics": {
+          "width": 908,
+          "height": 530,
+          "crossings": 0,
+          "bends": 12,
+          "length": 1025,
+          "warnings": 0
+        },
+        "geometry_hash": "35c4cd7810f91da7f39bfb5a4d5e8e8181437d87b7f4088dc1d578ca14344ae1",
+        "visible_svg_hash": "3a4c34280dd6fc54f4697d075e60d2ada8fb11cc4d8c09062a207f860ff72621",
+        "node_hash": "f7a17281afa2446ec57925bcb55cfbde407133e69cddaf1972c79456c2c8deb2",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL05",
+    "files": [
+      {
+        "file": "boundary-pull-0.draft",
+        "control": [
+          "L020"
+        ],
+        "metrics": {
+          "width": 1300,
+          "height": 408,
+          "crossings": 1,
+          "bends": 13,
+          "length": 1932,
+          "warnings": 0
+        },
+        "geometry_hash": "15a37c691644a6f96e1a20643bda55c818273b932c4adbe324fcc1fc9a6eacb5",
+        "visible_svg_hash": "7f5c3cc0d68b321cd06f5acb5cbb62a141c037184401aff5360ae894c1334792",
+        "node_hash": "d1023a916f4d301a4cb52586163a5243d40c973a0dd5699a3e5fd0e3cf47bd81",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 3
+      },
+      {
+        "file": "boundary-pull-65.draft",
+        "control": [
+          "L020"
+        ],
+        "metrics": {
+          "width": 1393,
+          "height": 658,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2496,
+          "warnings": 0
+        },
+        "geometry_hash": "afc66aeaf3875e35dd14d341231aab6423faf10a5eb693c796bc1ce9f8bbdf81",
+        "visible_svg_hash": "2178d5a86573d1d1915ca2655bd9852d3a40408d14f16fca737141daed2143e8",
+        "node_hash": "c63ae85aa739afff6184eeca3da2363fbb46c0c39c0c385e04708141c98bc379",
+        "diagnostic_codes": [
+          "stranded"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "boundary-pull-100.draft",
+        "control": [
+          "L020"
+        ],
+        "metrics": {
+          "width": 1403,
+          "height": 678,
+          "crossings": 0,
+          "bends": 10,
+          "length": 2089,
+          "warnings": 0
+        },
+        "geometry_hash": "fdb38ce2102c945d3bf914249c73bba0f203c87a6db9c31d1d8a3effd39c0cd7",
+        "visible_svg_hash": "701e45ce562965f7fcb909bddc4ad140493d67d57fc3360eebeab5c8e787208d",
+        "node_hash": "36208ba50aba2dd88e0db53fcb229e8febf6e786bce607653c7ee0de6d6ea103",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL06",
+    "files": [
+      {
+        "file": "hierarchy-sweeps-1.draft",
+        "control": [
+          "L021"
+        ],
+        "metrics": {
+          "width": 1204,
+          "height": 700,
+          "crossings": 1,
+          "bends": 12,
+          "length": 2342,
+          "warnings": 0
+        },
+        "geometry_hash": "e260cacf56352054cfeedb0038ab1d43562df506cc284208c5769c4d80b7ff93",
+        "visible_svg_hash": "75d8ef0ffe117bd22749afec47f4761a014352cbdcfd855e117a7aa0598826bd",
+        "node_hash": "d7c4a25f777fb3d26d06a05ff018e553eeacf541dbafc1355b94eb63336d146b",
+        "diagnostic_codes": [
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "hierarchy-sweeps-2.draft",
+        "control": [
+          "L021"
+        ],
+        "metrics": {
+          "width": 1204,
+          "height": 745,
+          "crossings": 1,
+          "bends": 10,
+          "length": 2422,
+          "warnings": 0
+        },
+        "geometry_hash": "1f483e47b2256b14c7cfc325dc4c798cb5ddf235cdd5c9709579d8101058779d",
+        "visible_svg_hash": "c10a2773c8c3f57ba987189a2395f611b1aa4c07df3049a912b246a1d31e33c8",
+        "node_hash": "b0d5c91d6d5bcf1de96d88bf910eede80f26baff6a25e62df25e3102ab085a77",
+        "diagnostic_codes": [
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "hierarchy-sweeps-4.draft",
+        "control": [
+          "L021"
+        ],
+        "metrics": {
+          "width": 1465,
+          "height": 745,
+          "crossings": 1,
+          "bends": 11,
+          "length": 2887,
+          "warnings": 0
+        },
+        "geometry_hash": "6a67311c1a5fc5d0a2abb3943f753ff5809a03b760456bbc4f9f77b49e0628c6",
+        "visible_svg_hash": "3ffa72626d89507cae111eba7342c148758588c9267916f9bd12ea5bfd90d2ae",
+        "node_hash": "e7322777438f0cfb3d978d825dd6c6e355496ddebe900a4109d0f79e1e38ddd3",
+        "diagnostic_codes": [
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 2
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL07",
+    "files": [
+      {
+        "file": "edge-length-32.draft",
+        "control": [
+          "L022"
+        ],
+        "metrics": {
+          "width": 1270,
+          "height": 324,
+          "crossings": 0,
+          "bends": 10,
+          "length": 2873,
+          "warnings": 0
+        },
+        "geometry_hash": "13875d9680eb5f84dc647cadeea1b8c10b2e10122e293459408f1ed4eae3893c",
+        "visible_svg_hash": "07ea71d838deeb448b3a2f0bf1d0090dfba59792d55d526fd95eb2c796df54e3",
+        "node_hash": "aa0f62b9d6cb22fa754bd5c8e9046841777983c5e3e2d67d876fb2a8cfe94bb4",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "edge-length-88.draft",
+        "control": [
+          "L022"
+        ],
+        "metrics": {
+          "width": 1260,
+          "height": 296,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2236,
+          "warnings": 0
+        },
+        "geometry_hash": "9f6520149b6a8f3169a240e755ff6cf0d06e811beef2a9eb279b4ce39bf98348",
+        "visible_svg_hash": "b8ce0eb57fb0fc8a62bc6a224836e730008ee5870a270c8e463c841046e36335",
+        "node_hash": "a8aa96ed884b8877688864a5fb6d534871554454843768057c769b4228ea6dc1",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "edge-length-176.draft",
+        "control": [
+          "L022"
+        ],
+        "metrics": {
+          "width": 1339,
+          "height": 474,
+          "crossings": 0,
+          "bends": 12,
+          "length": 2544,
+          "warnings": 0
+        },
+        "geometry_hash": "a9633788a43d6540d8ad4a3b8e6b94ba04e067924a94ba3fce6bb86e0a296ffd",
+        "visible_svg_hash": "bd8906c35433356160d994502dc12e46b5e4384c1c69376c72c49e1bad09ba88",
+        "node_hash": "918e332a80267144c4a1f5d0b3e6d70e266de78a89b80a20e359c75153e8f3d8",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL08",
+    "files": [
+      {
+        "file": "repulsion-0.draft",
+        "control": [
+          "L023"
+        ],
+        "metrics": {
+          "width": 1269,
+          "height": 326,
+          "crossings": 0,
+          "bends": 12,
+          "length": 2902,
+          "warnings": 0
+        },
+        "geometry_hash": "1d18b04810dcf74a7bfb937fc35c7d874c91cf51fe9fb80122ae98d455a57ecd",
+        "visible_svg_hash": "1b9f5f8fc3f3227f9573d980b96119e1d1dbfea8ef6be4319493890a4242e063",
+        "node_hash": "d44bcfa847221790108caa1d6c2cab7d1fc1421a0c144b57654a87a16291a79a",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "repulsion-45.draft",
+        "control": [
+          "L023"
+        ],
+        "metrics": {
+          "width": 1260,
+          "height": 296,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2236,
+          "warnings": 0
+        },
+        "geometry_hash": "9f6520149b6a8f3169a240e755ff6cf0d06e811beef2a9eb279b4ce39bf98348",
+        "visible_svg_hash": "b8ce0eb57fb0fc8a62bc6a224836e730008ee5870a270c8e463c841046e36335",
+        "node_hash": "a8aa96ed884b8877688864a5fb6d534871554454843768057c769b4228ea6dc1",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "repulsion-100.draft",
+        "control": [
+          "L023"
+        ],
+        "metrics": {
+          "width": 1306,
+          "height": 387,
+          "crossings": 0,
+          "bends": 12,
+          "length": 2529,
+          "warnings": 0
+        },
+        "geometry_hash": "b7e10c74266b0d8fc4cba2e08f91a6411a4ee7706c4871e07806c53da335a727",
+        "visible_svg_hash": "f49918b979b0f611d094cfec5af8582f93f40ff135f3c79dae9ddb905df7700a",
+        "node_hash": "17257db58bb2bdc36558b9de1b9a8c559d361db26cac3346e0d68dd29219409c",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL09",
+    "files": [
+      {
+        "file": "flow-strength-0.draft",
+        "control": [
+          "L024"
+        ],
+        "metrics": {
+          "width": 881,
+          "height": 262,
+          "crossings": 0,
+          "bends": 8,
+          "length": 582,
+          "warnings": 0
+        },
+        "geometry_hash": "edf41672021c42bb06b109ef1c1e0a79b627085be73167b479d600eeda4f06b1",
+        "visible_svg_hash": "91efcab810c6486d083b9ba4741a828aa4869c60bfc2a69959beaa9187027918",
+        "node_hash": "2c5b70dd81056276a4233c632c31fa8399e83c7d56ce62f9fe481a65d30acab2",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "flow-strength-65.draft",
+        "control": [
+          "L024"
+        ],
+        "metrics": {
+          "width": 882,
+          "height": 262,
+          "crossings": 0,
+          "bends": 8,
+          "length": 584,
+          "warnings": 0
+        },
+        "geometry_hash": "5a8064b778c988e7f0a08d63df96554bcf590631b308912e26a3be0fa7b3ea7f",
+        "visible_svg_hash": "4d8b5a84006c5325a471906cc4afbf668e0144d31de7b31ba54c519ba8b47afc",
+        "node_hash": "61da4e89498f0cbcdad7f8393a445820011c06fe2aa305088af0f599f687d636",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "flow-strength-100.draft",
+        "control": [
+          "L024"
+        ],
+        "metrics": {
+          "width": 883,
+          "height": 262,
+          "crossings": 0,
+          "bends": 8,
+          "length": 586,
+          "warnings": 0
+        },
+        "geometry_hash": "245bc842871f3c1e9441ca151c4d6664532cb40aeb983ecd12f69dfe5741315b",
+        "visible_svg_hash": "210cc1f0b1913885557cc809292b0f9b429d2c1037b3eb2ab21df167ccfdc641",
+        "node_hash": "2707a71f01c5b544f7b1592381d7400e5c86f79c95161b96ff7bcd6045bdf65c",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "flow-strength-stress-0.draft",
+        "control": [
+          "L024"
+        ],
+        "metrics": {
+          "width": 1252,
+          "height": 302,
+          "crossings": 0,
+          "bends": 14,
+          "length": 2544,
+          "warnings": 0
+        },
+        "geometry_hash": "cfb8ac3e56aecd6a06c5d45224816d1ac45e74aa41ad9b463e9edc7aaeae9255",
+        "visible_svg_hash": "4bf00cf3dddf6a52145f2bda72be2300363ceabdcbfbce8d3fb097f33a6cbdab",
+        "node_hash": "fe84a9e889afb7d8e7b70ccbf6609cfb9c7304c70bb2c42aef85d770390cf0b8",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "flow-strength-stress-65.draft",
+        "control": [
+          "L024"
+        ],
+        "metrics": {
+          "width": 1239,
+          "height": 303,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2168,
+          "warnings": 0
+        },
+        "geometry_hash": "191b9f8e3252b57de8eb8800979271469bf3949d7f1870d857003434738e1310",
+        "visible_svg_hash": "7956828284886c4d8e43e04c22e09442acbbb1da649a8b7c49d892e1d1bc6750",
+        "node_hash": "603477913ebc40bb35c2fa182ae73b95c48b96edb475a97335029ad35f9ca825",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "flow-strength-stress-100.draft",
+        "control": [
+          "L024"
+        ],
+        "metrics": {
+          "width": 1241,
+          "height": 303,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2168,
+          "warnings": 0
+        },
+        "geometry_hash": "eba354bc31065c99caa8bd0bf40d512019fa02411dd5393bf349fba8e4fcbd54",
+        "visible_svg_hash": "90ba24fae1e92aa6e127fa28658f190d536617adb4b79e98d43a772fb31d21ba",
+        "node_hash": "2da078802cd4a34e5682f578395e6a27b658d56ddcd7ae74a6f7094d94d91e2a",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 6,
+    "unique_visible_svgs": 6,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL10",
+    "files": [
+      {
+        "file": "alignment-0.draft",
+        "control": [
+          "L025"
+        ],
+        "metrics": {
+          "width": 1393,
+          "height": 657,
+          "crossings": 0,
+          "bends": 9,
+          "length": 2531,
+          "warnings": 0
+        },
+        "geometry_hash": "d5e29b598bc36e9bd003074712b1921e348b6303fad4286c1a09ce72fd3c5ae6",
+        "visible_svg_hash": "edc55a81b10e453612d5a832d380b36f3303d5836d1c1747112081f7dfe3da5b",
+        "node_hash": "9ab8b088c7dd3d5f818eb352c028816a71cff9a54d38b825a37c87c0fa9f7799",
+        "diagnostic_codes": [
+          "stranded"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "alignment-55.draft",
+        "control": [
+          "L025"
+        ],
+        "metrics": {
+          "width": 1393,
+          "height": 658,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2496,
+          "warnings": 0
+        },
+        "geometry_hash": "afc66aeaf3875e35dd14d341231aab6423faf10a5eb693c796bc1ce9f8bbdf81",
+        "visible_svg_hash": "2178d5a86573d1d1915ca2655bd9852d3a40408d14f16fca737141daed2143e8",
+        "node_hash": "c63ae85aa739afff6184eeca3da2363fbb46c0c39c0c385e04708141c98bc379",
+        "diagnostic_codes": [
+          "stranded"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "alignment-100.draft",
+        "control": [
+          "L025"
+        ],
+        "metrics": {
+          "width": 1390,
+          "height": 658,
+          "crossings": 0,
+          "bends": 9,
+          "length": 2476,
+          "warnings": 0
+        },
+        "geometry_hash": "75aa18dfe01c8856b73b1e082081a229f6eb59b1b0c311c925b8831a19825085",
+        "visible_svg_hash": "4d9da782417a4587250652ce371477a2974ba7c481919c5b597de9d6ccde4742",
+        "node_hash": "3803fa376fa1f3fe75c362fac66ddf97df63a620eb15efbf4c5fa47b23418dc9",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL11",
+    "files": [
+      {
+        "file": "compactness-0.draft",
+        "control": [
+          "L026"
+        ],
+        "metrics": {
+          "width": 1379,
+          "height": 296,
+          "crossings": 1,
+          "bends": 12,
+          "length": 2314,
+          "warnings": 0
+        },
+        "geometry_hash": "416a3f681565f8561ad560db30eeae3c8f2038613b3132d404f6b1946640a8b1",
+        "visible_svg_hash": "b9ee9540809674b3dadab08c17001b248e94f136022601fafb558a945ff8a7ea",
+        "node_hash": "17f5ac851f60f8f7610c8906682b6704048d8d3957f0c1b00e72dec01b985ec1",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "compactness-35.draft",
+        "control": [
+          "L026"
+        ],
+        "metrics": {
+          "width": 1260,
+          "height": 296,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2236,
+          "warnings": 0
+        },
+        "geometry_hash": "9f6520149b6a8f3169a240e755ff6cf0d06e811beef2a9eb279b4ce39bf98348",
+        "visible_svg_hash": "b8ce0eb57fb0fc8a62bc6a224836e730008ee5870a270c8e463c841046e36335",
+        "node_hash": "a8aa96ed884b8877688864a5fb6d534871554454843768057c769b4228ea6dc1",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "compactness-100.draft",
+        "control": [
+          "L026"
+        ],
+        "metrics": {
+          "width": 1258,
+          "height": 318,
+          "crossings": 0,
+          "bends": 12,
+          "length": 2536,
+          "warnings": 0
+        },
+        "geometry_hash": "c6db6b06914de54dceec88213a85ef0f6a03b4945ff73cb6d52854285295905f",
+        "visible_svg_hash": "303e97d8b01608abd99295fdf244ab7f15093a82f25f243b5d5da76903ff866e",
+        "node_hash": "ccd3b89a8acd75337429cc97daf13f4e6062b5a0aaddf042091e2dd719379ca7",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL12",
+    "files": [
+      {
+        "file": "grid-strength-0.draft",
+        "control": [
+          "L027"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "grid-strength-45.draft",
+        "control": [
+          "L027"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "grid-strength-100.draft",
+        "control": [
+          "L027"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 1,
+    "unique_visible_svgs": 1,
+    "equal_geometry_groups": [
+      [
+        "grid-strength-0.draft",
+        "grid-strength-45.draft",
+        "grid-strength-100.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "grid-strength-0.draft",
+        "grid-strength-45.draft",
+        "grid-strength-100.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL13",
+    "files": [
+      {
+        "file": "ordering-stable.draft",
+        "control": [
+          "L028"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 286,
+          "crossings": 0,
+          "bends": 9,
+          "length": 754,
+          "warnings": 0
+        },
+        "geometry_hash": "4923c35cf694ac93cf43fe72a6432c3056875d0ba21b48fbc7fed423cd7c7a56",
+        "visible_svg_hash": "6534778b01b16a8001220c1d4d820c6cd502eb7e61305503af3ba15838462e22",
+        "node_hash": "049130d4969ad3a2dccaa008a24dedbfe3e52ddc13e66b35dec7d35a5397be80",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "ordering-crossings.draft",
+        "control": [
+          "L028"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 286,
+          "crossings": 0,
+          "bends": 9,
+          "length": 754,
+          "warnings": 0
+        },
+        "geometry_hash": "4923c35cf694ac93cf43fe72a6432c3056875d0ba21b48fbc7fed423cd7c7a56",
+        "visible_svg_hash": "6534778b01b16a8001220c1d4d820c6cd502eb7e61305503af3ba15838462e22",
+        "node_hash": "049130d4969ad3a2dccaa008a24dedbfe3e52ddc13e66b35dec7d35a5397be80",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 1,
+    "unique_visible_svgs": 1,
+    "equal_geometry_groups": [
+      [
+        "ordering-stable.draft",
+        "ordering-crossings.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "ordering-stable.draft",
+        "ordering-crossings.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL14",
+    "files": [
+      {
+        "file": "aspect-1.draft",
+        "control": [
+          "L030"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "aspect-1.333.draft",
+        "control": [
+          "L030"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "aspect-1.6.draft",
+        "control": [
+          "L030"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "aspect-2.draft",
+        "control": [
+          "L030"
+        ],
+        "metrics": {
+          "width": 620,
+          "height": 342,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "49d54678b3d9dde999c225b71e95e3ffb5e02dff95f1fe8d0266212d764f3b49",
+        "visible_svg_hash": "49695edc7ddedb56596a4d15dd96f7865f35c43a4d043fc0dad72038728237c7",
+        "node_hash": "5f44000bf4eb97443527ff958bad239d76f9f7e199d6d7eedc63b06ce04cde6e",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "aspect-0.75.draft",
+        "control": [
+          "L030"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "aspect-omitted.draft",
+        "control": [
+          "L030"
+        ],
+        "metrics": {
+          "width": 432,
+          "height": 502,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e56819f98f5d856d3308fe19dfb424014edf1ee05a9f3241449882844f8f9473",
+        "visible_svg_hash": "30534f51d9bdc76304d9d7e9a7c0a58c247ca12ddc79223d990b9149e20624e6",
+        "node_hash": "29138436a6b24a4c57b4b448fa38493dfdcf3b556f339c92c60415f247f7fac7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [
+      [
+        "aspect-1.draft",
+        "aspect-1.333.draft",
+        "aspect-1.6.draft",
+        "aspect-0.75.draft",
+        "aspect-omitted.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "aspect-1.draft",
+        "aspect-1.333.draft",
+        "aspect-1.6.draft",
+        "aspect-0.75.draft",
+        "aspect-omitted.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL15",
+    "files": [
+      {
+        "file": "fold-auto.draft",
+        "control": [
+          "L029"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 462,
+          "crossings": 0,
+          "bends": 4,
+          "length": 1932,
+          "warnings": 0
+        },
+        "geometry_hash": "89df82e0bbb975ac598c35826789b1d38bc721ca5d1ed48d57f209fe171952dc",
+        "visible_svg_hash": "17992c30509ad64e42664f59d167fb4558b45612979b08d3b4797576ae5f272f",
+        "node_hash": "cb9214c96393b0c21c59c37ab8cc936e7318b2c1e0390d399252f3d5c8b52ba1",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "fold-never.draft",
+        "control": [
+          "L029"
+        ],
+        "metrics": {
+          "width": 2620,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 572,
+          "warnings": 0
+        },
+        "geometry_hash": "feb19a4114775a11edbbcf307705b0643637c7d561dec0074822649172bb9928",
+        "visible_svg_hash": "076da7d217c7c5954a7d0d536ceb13d72d59cf3105432c3bfc9df421910f41d5",
+        "node_hash": "e2c17aee952a412adf47cd0be806b34c381af2bc64133fde0f6364cd46d21e3d",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL16",
+    "files": [
+      {
+        "file": "direction-auto.draft",
+        "control": [
+          "L033"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 286,
+          "crossings": 0,
+          "bends": 9,
+          "length": 754,
+          "warnings": 0
+        },
+        "geometry_hash": "4923c35cf694ac93cf43fe72a6432c3056875d0ba21b48fbc7fed423cd7c7a56",
+        "visible_svg_hash": "6534778b01b16a8001220c1d4d820c6cd502eb7e61305503af3ba15838462e22",
+        "node_hash": "049130d4969ad3a2dccaa008a24dedbfe3e52ddc13e66b35dec7d35a5397be80",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "direction-right.draft",
+        "control": [
+          "L033"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 286,
+          "crossings": 0,
+          "bends": 9,
+          "length": 754,
+          "warnings": 0
+        },
+        "geometry_hash": "4923c35cf694ac93cf43fe72a6432c3056875d0ba21b48fbc7fed423cd7c7a56",
+        "visible_svg_hash": "6534778b01b16a8001220c1d4d820c6cd502eb7e61305503af3ba15838462e22",
+        "node_hash": "049130d4969ad3a2dccaa008a24dedbfe3e52ddc13e66b35dec7d35a5397be80",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "direction-down.draft",
+        "control": [
+          "L033"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 506,
+          "crossings": 0,
+          "bends": 9,
+          "length": 862,
+          "warnings": 0
+        },
+        "geometry_hash": "487f33f9d806e232a68c6d30ad5845bd580ec7ffdd0d253aa883640eec316180",
+        "visible_svg_hash": "d2b2e75efe62a77f55c98a29cde0cdaf19aef794d503d3aae61ae4ad9e889f2f",
+        "node_hash": "79c2cb4617110d85eda856da665cbbf35c50a3a24f292b586ffab6fdd7546694",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [
+      [
+        "direction-auto.draft",
+        "direction-right.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "direction-auto.draft",
+        "direction-right.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL17",
+    "files": [
+      {
+        "file": "fit-wide.draft",
+        "control": [
+          "L037"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 462,
+          "crossings": 0,
+          "bends": 4,
+          "length": 1932,
+          "warnings": 0
+        },
+        "geometry_hash": "89df82e0bbb975ac598c35826789b1d38bc721ca5d1ed48d57f209fe171952dc",
+        "visible_svg_hash": "17992c30509ad64e42664f59d167fb4558b45612979b08d3b4797576ae5f272f",
+        "node_hash": "cb9214c96393b0c21c59c37ab8cc936e7318b2c1e0390d399252f3d5c8b52ba1",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "fit-slide.draft",
+        "control": [
+          "L037"
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 462,
+          "crossings": 0,
+          "bends": 4,
+          "length": 1932,
+          "warnings": 0
+        },
+        "geometry_hash": "89df82e0bbb975ac598c35826789b1d38bc721ca5d1ed48d57f209fe171952dc",
+        "visible_svg_hash": "17992c30509ad64e42664f59d167fb4558b45612979b08d3b4797576ae5f272f",
+        "node_hash": "cb9214c96393b0c21c59c37ab8cc936e7318b2c1e0390d399252f3d5c8b52ba1",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "fit-square.draft",
+        "control": [
+          "L037"
+        ],
+        "metrics": {
+          "width": 492,
+          "height": 722,
+          "crossings": 0,
+          "bends": 2,
+          "length": 1144,
+          "warnings": 0
+        },
+        "geometry_hash": "bbaa53552c207021ecacb9fb068f9fa2610fb93de96c2952c21ab65d9fbdfd9e",
+        "visible_svg_hash": "c3a5eecb65fa3d4f211ed19db7e52ae525d34af35d0b45a3a1acea0cd8fe79b3",
+        "node_hash": "3a9469ebb663ab575c821e65eb1628348b4ac803f360ee9ce32eb969c6bd5138",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "fit-page.draft",
+        "control": [
+          "L037"
+        ],
+        "metrics": {
+          "width": 492,
+          "height": 722,
+          "crossings": 0,
+          "bends": 2,
+          "length": 1144,
+          "warnings": 0
+        },
+        "geometry_hash": "bbaa53552c207021ecacb9fb068f9fa2610fb93de96c2952c21ab65d9fbdfd9e",
+        "visible_svg_hash": "c3a5eecb65fa3d4f211ed19db7e52ae525d34af35d0b45a3a1acea0cd8fe79b3",
+        "node_hash": "3a9469ebb663ab575c821e65eb1628348b4ac803f360ee9ce32eb969c6bd5138",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "fit-tall.draft",
+        "control": [
+          "L037"
+        ],
+        "metrics": {
+          "width": 492,
+          "height": 722,
+          "crossings": 0,
+          "bends": 2,
+          "length": 1144,
+          "warnings": 0
+        },
+        "geometry_hash": "bbaa53552c207021ecacb9fb068f9fa2610fb93de96c2952c21ab65d9fbdfd9e",
+        "visible_svg_hash": "c3a5eecb65fa3d4f211ed19db7e52ae525d34af35d0b45a3a1acea0cd8fe79b3",
+        "node_hash": "3a9469ebb663ab575c821e65eb1628348b4ac803f360ee9ce32eb969c6bd5138",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "fit-omitted.draft",
+        "control": [
+          "L037"
+        ],
+        "metrics": {
+          "width": 244,
+          "height": 1370,
+          "crossings": 0,
+          "bends": 0,
+          "length": 572,
+          "warnings": 0
+        },
+        "geometry_hash": "27701511582ad4ac528fc9221f6b89cfcf5234f2e99ba80f49edbd083ddc0b3d",
+        "visible_svg_hash": "87cc7e9ac0719affa0f9ebfc3716111128cd6693d08c8d1da40fa84d48d64593",
+        "node_hash": "bc9fb7cf92fde176ed28f060ef0285ed9ad56a5152a24d1394bd62feedde109f",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [
+      [
+        "fit-wide.draft",
+        "fit-slide.draft"
+      ],
+      [
+        "fit-square.draft",
+        "fit-page.draft",
+        "fit-tall.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "fit-wide.draft",
+        "fit-slide.draft"
+      ],
+      [
+        "fit-square.draft",
+        "fit-page.draft",
+        "fit-tall.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL18",
+    "files": [
+      {
+        "file": "recipe-flow.draft",
+        "control": [
+          "L001",
+          "L002",
+          "L003"
+        ],
+        "metrics": {
+          "width": 880,
+          "height": 310,
+          "crossings": 0,
+          "bends": 5,
+          "length": 786,
+          "warnings": 0
+        },
+        "geometry_hash": "82b5f20e79b192e12003fadd850ba87f4df01e6b07a495cc13e20abb10b29cc6",
+        "visible_svg_hash": "4ed32ecb1ec0bd9214ad20c80eb51adb345006bf995fcb1f43e9975ee75f7959",
+        "node_hash": "80da92295084ca3d846490f8d0f4f83a804ed031d0c8fe71c711b7f5588686a8",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "recipe-row.draft",
+        "control": [
+          "L001",
+          "L002",
+          "L003"
+        ],
+        "metrics": {
+          "width": 1092,
+          "height": 230,
+          "crossings": 0,
+          "bends": 12,
+          "length": 1132,
+          "warnings": 0
+        },
+        "geometry_hash": "8540fc4699fedc4ba5c07fc19507a7e72539ac5ef19477fe592976d13b31e1a1",
+        "visible_svg_hash": "ff85f129083d29d1d84d67bb9fc0647b0e8e6c7e80fbc9e076bd80891a6f1abd",
+        "node_hash": "a6ae0c7945fdcaecacff23d3ea458fde1aa0ffe983f3ecc153e2db256a7f2677",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "recipe-column.draft",
+        "control": [
+          "L001",
+          "L002",
+          "L003"
+        ],
+        "metrics": {
+          "width": 285,
+          "height": 598,
+          "crossings": 0,
+          "bends": 9,
+          "length": 956,
+          "warnings": 0
+        },
+        "geometry_hash": "aaa5802db82e4b7e5d043bda263f005abd3799171802f86331cc88cfc77e448b",
+        "visible_svg_hash": "42a946a117b779e6892ea34b9345f2e9b668ecc03c3e34c1bf889bf5a3fa7870",
+        "node_hash": "a502445d3738801694416c14535d8fa46e2a7c6dc0520325a1847693b01e3de7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL19",
+    "files": [
+      {
+        "file": "gap-8.draft",
+        "control": [
+          "L034"
+        ],
+        "metrics": {
+          "width": 596,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 24,
+          "warnings": 0
+        },
+        "geometry_hash": "6ec951f3e145c2c2a395a65a1e715edc3ff1909872f01df54d0440bdfb34af50",
+        "visible_svg_hash": "11ee546e64c4c68dc2a38b6c073663e847c1c9519dad18b197ebfc2fba9419c2",
+        "node_hash": "905ada79bfcfef2ff22d2b9a0f71dcad474be01f3a106db5d7e8033721114333",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "gap-28.draft",
+        "control": [
+          "L034"
+        ],
+        "metrics": {
+          "width": 628,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 56,
+          "warnings": 0
+        },
+        "geometry_hash": "3068f37fa2a80fd9b363f7694a8c57d06ac3cf4fa6c9b742515ee1142cc014c2",
+        "visible_svg_hash": "34dde77e2d573a6f7236b6b082cc122b4eb92b6a43c1614bd2e97c84fcd2222f",
+        "node_hash": "507b1b20abbe4cd0078abf24d22fdf4e50d206e327941335af0183023fa8c286",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "gap-96.draft",
+        "control": [
+          "L034"
+        ],
+        "metrics": {
+          "width": 764,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 192,
+          "warnings": 0
+        },
+        "geometry_hash": "71203b476aa7535dcec7517ab5dda2694cf2bba5f4d46a8d2d0e1b984cd5a275",
+        "visible_svg_hash": "c3871e1e7ba6c42e9d9dde9a0df44116ae813767af14f16fcb5afc56b2079f1e",
+        "node_hash": "ad60078695657a753971161864605bf3cb9f56e6f0140f525ca13b22cf840c01",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL20",
+    "files": [
+      {
+        "file": "near-right.draft",
+        "control": [
+          "L044",
+          "L045"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 250,
+          "crossings": 0,
+          "bends": 2,
+          "length": 117,
+          "warnings": 0
+        },
+        "geometry_hash": "5bfdf7ad43fb6b7f002558455e030d9e2831b29b922ee83da8a1870b374c952a",
+        "visible_svg_hash": "4632115e646c02af664211c4740338509468f217f84077c47bf2553f7658b758",
+        "node_hash": "6d45ef290a4429adc5ca713fd6eb90bc77cab4616f398729b2526978c7124234",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-left.draft",
+        "control": [
+          "L044",
+          "L045"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 206,
+          "crossings": 0,
+          "bends": 4,
+          "length": 380,
+          "warnings": 0
+        },
+        "geometry_hash": "82be954bd6010ae8ddfb6ee2952ddcc8c51230ed19d44f4f07d254ae7181c26d",
+        "visible_svg_hash": "55ce75c15e6c9135be48b188ed300c91ff077b1e71214de4b95bfd7d4fcdff1d",
+        "node_hash": "9028a0ce3bed540fe13968c533d1c7f1ded213a6882ce9a74779baba9b8a1231",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "near-above.draft",
+        "control": [
+          "L044",
+          "L045"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 286,
+          "crossings": 0,
+          "bends": 2,
+          "length": 192,
+          "warnings": 0
+        },
+        "geometry_hash": "c901217110a136a0be68e04f06ba8b16ae0a13a2aa6a12237d52532446c58075",
+        "visible_svg_hash": "075a584de2b572da75bba16455145fc8e64208f184af025bc8fc78966ef5f032",
+        "node_hash": "26b972f40b1d592adbfed6ddb6cbd100a3dcea7ec102050c0853e8971b359226",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-below.draft",
+        "control": [
+          "L044",
+          "L045"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 286,
+          "crossings": 0,
+          "bends": 2,
+          "length": 192,
+          "warnings": 0
+        },
+        "geometry_hash": "8a56a6e126af4a922ee19594d6abbd6667043b68eb797456c53cd6fa33d1b649",
+        "visible_svg_hash": "e7cc31a2039ddbe6c92dea9d6d8023575ad744a45414cbf4e7645ad3dea4ce12",
+        "node_hash": "95114f11195811c6e5f35c4331d119e9639ebb2941f50224eb8936f4cd1e57e9",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-nested-baseline.draft",
+        "control": [
+          "L044"
+        ],
+        "metrics": {
+          "width": 488,
+          "height": 342,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "fb52e5a657c1aa1c54f12f8655f9a48c50f134d3c4814d599fd2b90c3bd9be70",
+        "visible_svg_hash": "a5c55e76ae07a0a5d1f94f1def8b6f2e279408d48629bf599f982b6399b5ae68",
+        "node_hash": "24f60bb69977c24bb4aca7ddab9fb487048da6254cd3dac2ae63e329cb393dd7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-nested-reference.draft",
+        "control": [
+          "L044"
+        ],
+        "metrics": {
+          "width": 488,
+          "height": 342,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "c5990687f070f1631fef6c1923cf30e4f4cc5b8cdec52c1c499ea7f47cd0c021",
+        "visible_svg_hash": "a14fbe2fcbc4c6235540273f15a98bd6d364ee41049f30ec3182c1f0e13a31eb",
+        "node_hash": "d034b0262466c572cb1809f50dd09957a622797e4d1f6dd30e763174e555a4d5",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 6,
+    "unique_visible_svgs": 6,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL21",
+    "files": [
+      {
+        "file": "near-gap-0.draft",
+        "control": [
+          "L046",
+          "L047"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 250,
+          "crossings": 0,
+          "bends": 2,
+          "length": 141,
+          "warnings": 0
+        },
+        "geometry_hash": "7d06783c1f6c056ea063717d3391bb536dbb18d405727efb60fed14b9deda1f9",
+        "visible_svg_hash": "3f3e69091d4f685c4a0097976b68d8fb9932e1ab7e67e45427dab516f0e9ed82",
+        "node_hash": "c87047702b51114132bdedfe148b9d8af0075e8aa77464185d5bf80061ad0076",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-gap-28.draft",
+        "control": [
+          "L046",
+          "L047"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 266,
+          "crossings": 0,
+          "bends": 2,
+          "length": 172,
+          "warnings": 0
+        },
+        "geometry_hash": "954b99e9c3d5bd9be9852042b3c819b146c1c1435d1ff9cb5129b49b8b2b09d5",
+        "visible_svg_hash": "0243b20f179eadf13a5693e56ab07a11ba065e4a99566cc85c43094e6652a7b5",
+        "node_hash": "bce3274346ac907c10491be0f97bd2715d90cc90fde1da4256149ac6d9415d7c",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-gap-100.draft",
+        "control": [
+          "L046",
+          "L047"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 338,
+          "crossings": 0,
+          "bends": 2,
+          "length": 244,
+          "warnings": 0
+        },
+        "geometry_hash": "2b18b6367eefcd346e2722cef6d75ee15df83d77a94fecc8d347f8226dc32416",
+        "visible_svg_hash": "fb0a4239f9b2a5c12bdecb7589b04d0832c56c9bcf4582a47ff33b548fe3d8fd",
+        "node_hash": "2cc546e9a5ead137d82b4deab0a96f7eabb6fb56aae880cdfa06af4893cea4e0",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-offset--80.draft",
+        "control": [
+          "L046",
+          "L047"
+        ],
+        "metrics": {
+          "width": 536,
+          "height": 266,
+          "crossings": 0,
+          "bends": 2,
+          "length": 252,
+          "warnings": 0
+        },
+        "geometry_hash": "af0f88948a0ba3f6a878e4123eb10d0aa83ca26d4e7c96305b38c5fba4bbc6c8",
+        "visible_svg_hash": "7e53efb5e1fb549f8f98b956e2dd153d82b71b6717ec7e5da1ea3594a7ad54a2",
+        "node_hash": "d7761d03ef8229445be773b0ccd16e852a3c0451b8ee41ec4f1b1702d5971af9",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-offset-0.draft",
+        "control": [
+          "L046",
+          "L047"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 266,
+          "crossings": 0,
+          "bends": 2,
+          "length": 172,
+          "warnings": 0
+        },
+        "geometry_hash": "954b99e9c3d5bd9be9852042b3c819b146c1c1435d1ff9cb5129b49b8b2b09d5",
+        "visible_svg_hash": "0243b20f179eadf13a5693e56ab07a11ba065e4a99566cc85c43094e6652a7b5",
+        "node_hash": "bce3274346ac907c10491be0f97bd2715d90cc90fde1da4256149ac6d9415d7c",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "near-offset-80.draft",
+        "control": [
+          "L046",
+          "L047"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 266,
+          "crossings": 0,
+          "bends": 1,
+          "length": 154,
+          "warnings": 0
+        },
+        "geometry_hash": "7e84730b423e74d3b615b7feaa00744099319d90cd0b2e9de8e58bf48c646d10",
+        "visible_svg_hash": "6bf7a5684043c6d7af6abf20702b2b8e5091ec4af3ddaface8857377f5f93ed5",
+        "node_hash": "5faab09774e2a4c64b3c5d40f517280614b20bf71410d1594322ab9d0dcddfeb",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 5,
+    "unique_visible_svgs": 5,
+    "equal_geometry_groups": [
+      [
+        "near-gap-28.draft",
+        "near-offset-0.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "near-gap-28.draft",
+        "near-offset-0.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL22",
+    "files": [
+      {
+        "file": "near-strength-prefer.draft",
+        "control": [
+          "L048"
+        ],
+        "metrics": {
+          "width": 285,
+          "height": 322,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 1
+        },
+        "geometry_hash": "d85609e94ec5b006cc1976ff99b1ccf8f72ab39b7f4a12ebf6d71b4012733b51",
+        "visible_svg_hash": "dd850a8f9029c628c38a028217e302896bf473c59d663f93ea86103379d7e902",
+        "node_hash": "54008e93d1b2b3436ea48d5938c4ea19cf14d39bae82ab70aac6e459d8125f47",
+        "diagnostic_codes": [
+          "relaxed"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "near-strength-required.draft",
+        "control": [
+          "L048"
+        ],
+        "metrics": {
+          "width": 285,
+          "height": 354,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "604b0eba6f3ebfabd1783c95782f292c388b4a88903d8f3e63a6bb7277541603",
+        "visible_svg_hash": "3a5a51b24cace6a52c1ba1475efeaef229ed30cd5baa0483235a32097b92fb23",
+        "node_hash": "6440089e9947d8a7c4e0b9c09eb5a2eb9de1dcb5e095006e8760025eb92e9077",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL23",
+    "files": [
+      {
+        "file": "align-x-prefer.draft",
+        "control": [
+          "L059",
+          "L060",
+          "L061"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 290,
+          "crossings": 0,
+          "bends": 4,
+          "length": 190,
+          "warnings": 0
+        },
+        "geometry_hash": "5d4565fef534fabff688fb3a2373ddb853e3c0d8aa50b6466091562afba9091b",
+        "visible_svg_hash": "c91d6c83b8d7c5e89d7e855c39b4c90d93e2c85ef8e16fae8fbd445a4980690c",
+        "node_hash": "0ee4604d9655acd25f8b5fcaa0ea239308b880be25bac6087655d2b8db080747",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "align-x-required.draft",
+        "control": [
+          "L059",
+          "L060",
+          "L061"
+        ],
+        "metrics": {
+          "width": 255,
+          "height": 358,
+          "crossings": 0,
+          "bends": 0,
+          "length": 24,
+          "warnings": 0
+        },
+        "geometry_hash": "3751c5e3bc70a93baed2fbd4b6d8a60308d164a31d7f6503b2380cae537d707b",
+        "visible_svg_hash": "ce7d23ff36ee13a767b1a6b243900a06f3055d42cd109c81c77ce80a613af183",
+        "node_hash": "123b1e3748d3e3c54c61ffefcf99c28bc4c80935f3e131c74301b12f1de8f9c4",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "align-y-prefer.draft",
+        "control": [
+          "L059",
+          "L060",
+          "L061"
+        ],
+        "metrics": {
+          "width": 624,
+          "height": 222,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "92e0513a0e457125eb586c6df3b030c021505f7e338e1ccb9a97cab86f98d6ea",
+        "visible_svg_hash": "332194b0b0da75eff0eb6fb61f884fb3612bed8d4dd9d5c01338bd0c60bc67a5",
+        "node_hash": "ecd451361414a48abee16d4d885dac3f57dcb32a56f1d5654ca3f016db4dd87c",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "align-y-required.draft",
+        "control": [
+          "L059",
+          "L060",
+          "L061"
+        ],
+        "metrics": {
+          "width": 624,
+          "height": 222,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "0b881f29c70035d3ba0fd55ecbd2149b4a4a5e82f6f5de9cd47b0ba90470a834",
+        "visible_svg_hash": "4223c57aaa9f0c274df8c477b2e80f8b78cb8219bbea8071a04f47727fe8f41b",
+        "node_hash": "615a387b582eafd2ba348f434a938de37cb8da35ed11382e685cc12dc60db5f0",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 4,
+    "unique_visible_svgs": 4,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL24",
+    "files": [
+      {
+        "file": "stay-weight-1.draft",
+        "control": [
+          "L052",
+          "L055"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 250,
+          "crossings": 0,
+          "bends": 3,
+          "length": 252,
+          "warnings": 1
+        },
+        "geometry_hash": "67f660ae3949de1303e8ddc21cb122a6ddfcb72c3e78de99d24e6cee89f9dd12",
+        "visible_svg_hash": "2ca1322b552c08caa35f5eb1b44fbb7644a6059cf1c05566e05cb367a06feff0",
+        "node_hash": "deece63434d048a700469e0d06ac6147abe314f7b9782bf8baaf36d409eddead",
+        "diagnostic_codes": [
+          "relaxed"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "stay-weight-8.draft",
+        "control": [
+          "L052",
+          "L055"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 250,
+          "crossings": 0,
+          "bends": 1,
+          "length": 218,
+          "warnings": 0
+        },
+        "geometry_hash": "411e0e17c23c205153baba56b193b3956511ea11ab1c3702771377119dc6a284",
+        "visible_svg_hash": "9bbba46830bb3dbf13618063eb7884f5d59fd0c81a8458106aee08d6c5a2eacf",
+        "node_hash": "31d20b432d42c9858878c8f46775e9ea402de5f912fb13add341fc261e3f5f8b",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-weight-100.draft",
+        "control": [
+          "L052",
+          "L055"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 250,
+          "crossings": 0,
+          "bends": 1,
+          "length": 218,
+          "warnings": 0
+        },
+        "geometry_hash": "5e7d205005639246f83c10da892b30665781d0264a453d71cf52e2bd2d03aed2",
+        "visible_svg_hash": "4fed75727c33646b4d79135e3a1191b2f61e785a3554c400c308701d2260f5bc",
+        "node_hash": "cd5ecb9a804a5220e5f58f37676f235e127a9351601d311a72cf60387208c31e",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-x--80.draft",
+        "control": [
+          "L053"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "3829177dea4dd14f0dd6b54d11de78cee171914bdd683415463ffe7374ff9555",
+        "visible_svg_hash": "f8563a63f689eb11d06f6814c85852d120705fc26b1fd6d8320d3abbd93c2d26",
+        "node_hash": "127020aac7adc3899e0cde17b4ae166359f4efe91b71d5440100f983b1ae85f2",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-x-0.draft",
+        "control": [
+          "L053"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "35a43c40ee72df4b4f57c62b5680ce58cf9a07005878d6323e3680d8edc74e71",
+        "visible_svg_hash": "1e986c7d98f95b56be16df408b14d5d1736bf5295b53cc1bfdc382aaeba8e8e3",
+        "node_hash": "29769aa63c9d2ba9e670c75c4baeb9893933ef3e27b9e22c617e282619159202",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-x-120.draft",
+        "control": [
+          "L053"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "54a1330fe706add97caa31f2b3e5d9d32a8ec621426b91b059b69b4625584fd5",
+        "visible_svg_hash": "ec6fb179f0f25c43fa0dc5323b87fc67e509eaabf466d79811753be5ba1044c6",
+        "node_hash": "f0c6603d8e225f5c9113b4f02d38763495d944de303f48a50006bad835bfe47f",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-y--80.draft",
+        "control": [
+          "L054"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "9c8211d937479c8eb84fa344b4c5cece099d47cd3b8c629bde63df27ae598199",
+        "visible_svg_hash": "fc28f0e475cdc61052286a68a12d33f88079585fb18f906ca55dc206aeb960ab",
+        "node_hash": "674c78027919645fbf8d7cb9167eaea0612d74dd04198ee1cef33b2bf5fd0e61",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-y-0.draft",
+        "control": [
+          "L054"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "35a43c40ee72df4b4f57c62b5680ce58cf9a07005878d6323e3680d8edc74e71",
+        "visible_svg_hash": "1e986c7d98f95b56be16df408b14d5d1736bf5295b53cc1bfdc382aaeba8e8e3",
+        "node_hash": "29769aa63c9d2ba9e670c75c4baeb9893933ef3e27b9e22c617e282619159202",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "stay-y-120.draft",
+        "control": [
+          "L054"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "686ea9f3c237c1747228598b7bf50304ec83163d403d4630e51f5704e5ce6bff",
+        "visible_svg_hash": "1c1d162beb57b823c677850740a68940b809010cb95c82646def12ae9329b0e6",
+        "node_hash": "6e3f4c3c714f69723fd494ccdd40c0e1608b108c9100a47d853c89c220bb4f85",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 8,
+    "unique_visible_svgs": 8,
+    "equal_geometry_groups": [
+      [
+        "stay-x-0.draft",
+        "stay-y-0.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "stay-x-0.draft",
+        "stay-y-0.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL25",
+    "files": [
+      {
+        "file": "nudge-dx--80.draft",
+        "control": [
+          "L049",
+          "L050"
+        ],
+        "metrics": {
+          "width": 703,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 131,
+          "warnings": 0
+        },
+        "geometry_hash": "7625af03ef491538c61e72dc7a62428c37620ca397d67f1e7e41936c415d774f",
+        "visible_svg_hash": "7d67c49d0c22d8c248cfa0fef0f2bd2b42d24ce60d74463f4f16f95832157e97",
+        "node_hash": "dde54b9510be8250e77c0bd1eb66be128b53ed3b3d7c8cb29f27e23b922be8cd",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "nudge-dy--80.draft",
+        "control": [
+          "L049",
+          "L051"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 262,
+          "crossings": 0,
+          "bends": 4,
+          "length": 256,
+          "warnings": 0
+        },
+        "geometry_hash": "f124b902a535ed4c2a7aa48ccba88548a62216aa4a1d02f831f3876c6d7e2038",
+        "visible_svg_hash": "7560c3cef9357850b85ed9cb048c5ca8fd262b2122f334fa53dbd2c485ef1b41",
+        "node_hash": "4a46eb46b84958f889c4dd3e6a7b82ce74e0f311fb0ea606328d1844ad92cc5a",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "nudge-dx-0.draft",
+        "control": [
+          "L049",
+          "L050"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "c005e0b723d909b5604681cca0e91d1e6ca5f93d81ad30c5973de51e3ba3ec33",
+        "visible_svg_hash": "92653e6b0d9296e832bcc4c2b2d299bc63663c24e5af09af4c69428bb0a9caa8",
+        "node_hash": "1e206136a929d0598b64a3ace816398c9f9b88463bae1dfba824a2b8f78a22f2",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "nudge-dy-0.draft",
+        "control": [
+          "L049",
+          "L051"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "c005e0b723d909b5604681cca0e91d1e6ca5f93d81ad30c5973de51e3ba3ec33",
+        "visible_svg_hash": "92653e6b0d9296e832bcc4c2b2d299bc63663c24e5af09af4c69428bb0a9caa8",
+        "node_hash": "1e206136a929d0598b64a3ace816398c9f9b88463bae1dfba824a2b8f78a22f2",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "nudge-dx-80.draft",
+        "control": [
+          "L049",
+          "L050"
+        ],
+        "metrics": {
+          "width": 703,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 131,
+          "warnings": 0
+        },
+        "geometry_hash": "c54a08168dbbac3d20145058757b403f7e6c2c814a684e00fb119f46f71ec86b",
+        "visible_svg_hash": "1f689ef4d0d424bf7d9859775807ea44de120cb68d3ebe2049b5bcc2f1a77f7e",
+        "node_hash": "5b591d7f77ee1cff1ea68a8a89c1a9da14b3b8c67aef303a5e443289e5370528",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "nudge-dy-80.draft",
+        "control": [
+          "L049",
+          "L051"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 262,
+          "crossings": 0,
+          "bends": 4,
+          "length": 256,
+          "warnings": 0
+        },
+        "geometry_hash": "9be30959f4406ba620a151c8b920ed396362613b35884f6e08588522acb1d19f",
+        "visible_svg_hash": "d7188cf0bdfbf6e02b22d04b1965d93283949f9458ea1dc9a86bd444642f6bfe",
+        "node_hash": "f0474dd76bc68c5dd6b673585c560991d7c92d58f5fb4bd65f6c8e2c0014a1e4",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 5,
+    "unique_visible_svgs": 5,
+    "equal_geometry_groups": [
+      [
+        "nudge-dx-0.draft",
+        "nudge-dy-0.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "nudge-dx-0.draft",
+        "nudge-dy-0.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL26",
+    "files": [
+      {
+        "file": "pin.draft",
+        "control": [
+          "L056",
+          "L057",
+          "L058"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 302,
+          "crossings": 0,
+          "bends": 4,
+          "length": 336,
+          "warnings": 0
+        },
+        "geometry_hash": "08dd925692baf3efa5ea72574c944fa096d8064f54555226237f65fd432bac9e",
+        "visible_svg_hash": "2b5f01eb7d3b8ad24e336a306b9e69d1d826e7db72a72a8ada7ed19bb2acc2ac",
+        "node_hash": "860195369ca1ef375aa56e9ab46864bfb8a780c084724cf5cb5e9c2f5a84df1e",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-x-0.draft",
+        "control": [
+          "L057"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "35a43c40ee72df4b4f57c62b5680ce58cf9a07005878d6323e3680d8edc74e71",
+        "visible_svg_hash": "1e986c7d98f95b56be16df408b14d5d1736bf5295b53cc1bfdc382aaeba8e8e3",
+        "node_hash": "29769aa63c9d2ba9e670c75c4baeb9893933ef3e27b9e22c617e282619159202",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-x-120.draft",
+        "control": [
+          "L057"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "54a1330fe706add97caa31f2b3e5d9d32a8ec621426b91b059b69b4625584fd5",
+        "visible_svg_hash": "ec6fb179f0f25c43fa0dc5323b87fc67e509eaabf466d79811753be5ba1044c6",
+        "node_hash": "f0c6603d8e225f5c9113b4f02d38763495d944de303f48a50006bad835bfe47f",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-x-300.draft",
+        "control": [
+          "L057"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "d61579cf03a44ebbceb64bd1d0fdb406eb2808ef5933b52add1c6194b970ef26",
+        "visible_svg_hash": "e9bd74d84f680fc50882ca42bfe121b812551cc67892d08855cf8fc8e478764c",
+        "node_hash": "cc449942a5d4f05c3285608c529e55a201e6b59d1846fda42150fa4816540295",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-y-0.draft",
+        "control": [
+          "L058"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "35a43c40ee72df4b4f57c62b5680ce58cf9a07005878d6323e3680d8edc74e71",
+        "visible_svg_hash": "1e986c7d98f95b56be16df408b14d5d1736bf5295b53cc1bfdc382aaeba8e8e3",
+        "node_hash": "29769aa63c9d2ba9e670c75c4baeb9893933ef3e27b9e22c617e282619159202",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-y-120.draft",
+        "control": [
+          "L058"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "686ea9f3c237c1747228598b7bf50304ec83163d403d4630e51f5704e5ce6bff",
+        "visible_svg_hash": "1c1d162beb57b823c677850740a68940b809010cb95c82646def12ae9329b0e6",
+        "node_hash": "6e3f4c3c714f69723fd494ccdd40c0e1608b108c9100a47d853c89c220bb4f85",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-y-300.draft",
+        "control": [
+          "L058"
+        ],
+        "metrics": {
+          "width": 253,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "6a4da2a3ab90452914fa12c43f617c738780f6a6e0fea7fe1d7f735383b2db71",
+        "visible_svg_hash": "2b42a441111e15e80774e79e0c64957a04f3ba484fbddc13c5cf4d14657259ff",
+        "node_hash": "0aa0df8937b8401d1fc3c0807d8ae2111d7f346565de8f405bc052f54c7e772a",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-parent-x-0.draft",
+        "control": [
+          "L056",
+          "L057",
+          "L058"
+        ],
+        "metrics": {
+          "width": 425,
+          "height": 542,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "6a3d84e61ffc4d2f0e2aa8e9de3d71356e501de334db0414df0fb5c3747a807f",
+        "visible_svg_hash": "f598bcf9ef4112a95b6d807ca663765d01abfa0b9d9f14181450406892114c29",
+        "node_hash": "17b69f298d35670fa52363b5f09d4723e8cb57d059ced859aadc5829c11ed4c6",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "pin-parent-x-240.draft",
+        "control": [
+          "L056",
+          "L057",
+          "L058"
+        ],
+        "metrics": {
+          "width": 552,
+          "height": 542,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "d47dabf235aada8e3ba1b88143fcf381bf480128255f2f9fb31d6ee0e80ac3c8",
+        "visible_svg_hash": "ec55f8cee3de6068a0b8744f4289e891a7ae00eff1d0ff2aa16322427ef72faa",
+        "node_hash": "1824cd733a7ef108fa227719866203a39d56c17b2cf9b9ca7a4e03020fea5f46",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 8,
+    "unique_visible_svgs": 8,
+    "equal_geometry_groups": [
+      [
+        "pin-x-0.draft",
+        "pin-y-0.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "pin-x-0.draft",
+        "pin-y-0.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL27",
+    "files": [
+      {
+        "file": "size-width-64.draft",
+        "control": [
+          "L062",
+          "L063"
+        ],
+        "metrics": {
+          "width": 568,
+          "height": 262,
+          "crossings": 0,
+          "bends": 2,
+          "length": 136,
+          "warnings": 0
+        },
+        "geometry_hash": "488cd30d8489c568493144789944ecd2e34cbcaefa9e708526b4842bf574800e",
+        "visible_svg_hash": "c7f4b3c3075e2635fac6abc3fad7a39d24f6b9f118db9cf33ad5238ef7a37316",
+        "node_hash": "3a518660bb692722d219157e74633ee70f871577054c777a5a0bf4961096f9eb",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "size-width-164.draft",
+        "control": [
+          "L062",
+          "L063"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 198,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "87879a1f3b6dc5612f99ad8300da6e39621401f05200c449623d9e1b50e71746",
+        "visible_svg_hash": "8174894aadb98325ae55444820668284ab222fb0708648a24068bbccd724634d",
+        "node_hash": "0b54ee7d2dcb50454afbc31e35cbbed33dad21df6937a97b5f39ed49255c6f55",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "size-width-320.draft",
+        "control": [
+          "L062",
+          "L063"
+        ],
+        "metrics": {
+          "width": 824,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "a7e2c2c3f4f68431b3333bc581f7c662fc1deedb852f94f12b31c33d9862e95e",
+        "visible_svg_hash": "5d25938b36db76a98d5498d85920d545464fae5f0f1e4f67dce30f2ede0c58ab",
+        "node_hash": "ac9f9acd8b5174dc5ec59d5fbb45be6089ec269ad4b6f59b0c9e9948d880d170",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "size-height-24.draft",
+        "control": [
+          "L064"
+        ],
+        "metrics": {
+          "width": 624,
+          "height": 194,
+          "crossings": 0,
+          "bends": 2,
+          "length": 112,
+          "warnings": 1
+        },
+        "geometry_hash": "c221bd5caeee3dd26af8c2072c59faeae60ddc19cc04b6f7ad5ad2dbffa00d37",
+        "visible_svg_hash": "c17440226443b96a1cae7a4b88b205f0c69809c51c34f0c4e6a145c069071b1d",
+        "node_hash": "536992cfebfd0f06d15f4d110f9acc76e3015732c89abd3967bf08169acae5dd",
+        "diagnostic_codes": [
+          "aspect",
+          "text-overflow"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "size-height-56.draft",
+        "control": [
+          "L064"
+        ],
+        "metrics": {
+          "width": 624,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 1
+        },
+        "geometry_hash": "87f39d2db3c225d59abc781a4e65c6b5949f58ec5b578d8bce2705d5bebfd4e3",
+        "visible_svg_hash": "d2be9d1dc6d382d8a87b949652c38b5c15d0add9e51c1730efa3bafd0c1968df",
+        "node_hash": "34df5458141246ad42cde5d9c1a12725d3ec326077e506c3fdf6a577fc7f3554",
+        "diagnostic_codes": [
+          "aspect",
+          "text-overflow"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "size-height-120.draft",
+        "control": [
+          "L064"
+        ],
+        "metrics": {
+          "width": 624,
+          "height": 246,
+          "crossings": 0,
+          "bends": 2,
+          "length": 128,
+          "warnings": 0
+        },
+        "geometry_hash": "469c192b36b733cc572c4e19390231fcb69924436169329695369fb33bb66464",
+        "visible_svg_hash": "0cb1bc4e2140ba5c6c5adf70dba3d1051c51fa543c7a32ebdbe3e402e1df52b8",
+        "node_hash": "cde88f9ad7dd70d4f9768245990aa3f23ea0c614214e53dc140b785446a3e356",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "size-height-auto.draft",
+        "control": [
+          "L064"
+        ],
+        "metrics": {
+          "width": 624,
+          "height": 214,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "8dc6506117b08ff44e2c854acfc4f0413f437d48c9605e334c2a603cbaaa09ce",
+        "visible_svg_hash": "a0e3e08dd4f36b4962bbe7c6dca3660b453e5c348b952e1769bbc93107fdfe92",
+        "node_hash": "ba5de6d9a1636b7de8a0d9b882c540b5a8bf195b8327a2931eb3b60b5e78428e",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 7,
+    "unique_visible_svgs": 7,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL28",
+    "files": [
+      {
+        "file": "cells.draft",
+        "control": [
+          "L006",
+          "L065"
+        ],
+        "metrics": {
+          "width": 374,
+          "height": 192,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "7b3ddc4828d29c6670108fc170bdb7af13cef2b6fbfb7902345df38ebc1aea10",
+        "visible_svg_hash": "1a08cad9b799e461fd9468d93b37b4ebe2878be8058570402c2f3cdcf41586a3",
+        "node_hash": "3d6b840ba8fd2bed0b277d0a213b29da7dd3aa75858ba4db9d644fa99358a070",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cells-columns-1.draft",
+        "control": [
+          "L065"
+        ],
+        "metrics": {
+          "width": 200,
+          "height": 300,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "034a7f12ad9af9c3b3f97a13d8693750636ba287925625a69f68ca1ff9953444",
+        "visible_svg_hash": "8f56f4950b15573b5ae8c40855883e7c6d78552573f1ff099fa64a42e6e53f27",
+        "node_hash": "44c413b486ccc49e96a825a494a514721ff2c179e1873324421555467a3675ae",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cells-columns-2.draft",
+        "control": [
+          "L065"
+        ],
+        "metrics": {
+          "width": 246,
+          "height": 228,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "1806f8169c1c76014578240a81a1f947c1a1cb5a11ea2a4ee8652a3b3551e6d6",
+        "visible_svg_hash": "45caa25d6bbd6ec4f01256314af8937f0ef5e846eabb8525116bec05cbb77c03",
+        "node_hash": "a7b7083f551a54b12f9721ebcab98b403602e9dd7cb691cad48f7713d22ac885",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cells-columns-4.draft",
+        "control": [
+          "L065"
+        ],
+        "metrics": {
+          "width": 374,
+          "height": 192,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "7b3ddc4828d29c6670108fc170bdb7af13cef2b6fbfb7902345df38ebc1aea10",
+        "visible_svg_hash": "1a08cad9b799e461fd9468d93b37b4ebe2878be8058570402c2f3cdcf41586a3",
+        "node_hash": "3d6b840ba8fd2bed0b277d0a213b29da7dd3aa75858ba4db9d644fa99358a070",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [
+      [
+        "cells.draft",
+        "cells-columns-4.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "cells.draft",
+        "cells-columns-4.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL29",
+    "files": [
+      {
+        "file": "cells-unit-byte.draft",
+        "control": [
+          "L066"
+        ],
+        "metrics": {
+          "width": 464,
+          "height": 249,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "120cd71b26f4a6a667b34f45db075d3d910a313df87d20c016030bb6420d8db2",
+        "visible_svg_hash": "3bb7b04d11d14d51cfdb0116e690e74fef89c8b9f6c397e42ffdb78f940b7ee9",
+        "node_hash": "6d67f2675a9ad1642d376084bf48ed2545544d05bb55aef90b8dcbb6cb73fec0",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cells-unit-bit.draft",
+        "control": [
+          "L066"
+        ],
+        "metrics": {
+          "width": 280,
+          "height": 345,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "ab2178f58a61395a2096a12382190c4df131d24a13e1e569014cd38f8bae4855",
+        "visible_svg_hash": "20fa06373249342c31a9d85c26e387ffc5dbde61402099904cd95273f619d60e",
+        "node_hash": "40feb16979abf315d600a731ed48a43c57ef097f211fe38376a123849d096bc5",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cells-unit-bit-default-columns.draft",
+        "control": [
+          "L065",
+          "L066"
+        ],
+        "metrics": {
+          "width": 856,
+          "height": 345,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "36029696512f0be4db948e18956ab3929da0923c7a1828f8fb9a39b66e6f0a35",
+        "visible_svg_hash": "99ec959ddb0d17b70ab3b66b9d270533c9ec3d989cebd6665bd3eae180cca2e7",
+        "node_hash": "98413af0e909974e1f376ab819483257d1fdc6f689698390f9d1acde806dba0a",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cells-unit-byte-default-columns.draft",
+        "control": [
+          "L065",
+          "L066"
+        ],
+        "metrics": {
+          "width": 848,
+          "height": 249,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e29ab77f794bb42ab5bf3c6db81012e3514cde68ae09ef39b7294c486f8b45e2",
+        "visible_svg_hash": "5b135a5b232610a54c753296ba9412d691ee8b2ca0900ee464da656e79e5cfb1",
+        "node_hash": "b24dd4eb39f4513046ef40d8d1c1ea82aa613c1d8eee4c4454b00aa46c3663c5",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "unit-spanning-field.draft",
+        "control": [
+          "L069"
+        ],
+        "metrics": {
+          "width": 464,
+          "height": 285,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "02337834cf18ac33673ee0b7b0d6146862ffe2c8af82e82c91f823230daa2011",
+        "visible_svg_hash": "4faf50c47cc4ed7bbc478f8bd0cf8a99f1495d2c602f988c7d111c554a71c816",
+        "node_hash": "987f3bcb40e298f7997833ee02861994bd09c46deebd5e8be6a792263f88f5d2",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 5,
+    "unique_visible_svgs": 5,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL30",
+    "files": [
+      {
+        "file": "unit-width-8.draft",
+        "control": [
+          "L067"
+        ],
+        "metrics": {
+          "width": 183,
+          "height": 409,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "0662e15029812e59414fa386349023f17ef9b882875747ab29c4c03cbb6ed441",
+        "visible_svg_hash": "60357a61120133f42192487eed3d657b0fa583819c50eee03db3f491540ff0ee",
+        "node_hash": "b16e2f33ff7d425467750f429e7bbb3047d16d2dc2f3dbb5eecd53dacbf3a140",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "unit-width-48.draft",
+        "control": [
+          "L067"
+        ],
+        "metrics": {
+          "width": 464,
+          "height": 249,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "120cd71b26f4a6a667b34f45db075d3d910a313df87d20c016030bb6420d8db2",
+        "visible_svg_hash": "3bb7b04d11d14d51cfdb0116e690e74fef89c8b9f6c397e42ffdb78f940b7ee9",
+        "node_hash": "6d67f2675a9ad1642d376084bf48ed2545544d05bb55aef90b8dcbb6cb73fec0",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "unit-width-96.draft",
+        "control": [
+          "L067"
+        ],
+        "metrics": {
+          "width": 848,
+          "height": 249,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "8820bf5d5f08717b7a5337c4f66a3942d06e5aae7de6e8ad439a6799ecc7d9be",
+        "visible_svg_hash": "50a6aabe77cbb462880ebd00cbdd6701faadad4da1354f74f97ce1f5f82b2240",
+        "node_hash": "b228882ab902fda87ecb5631cf490b8b3d247257103e2d9b64f15c33a4c95513",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL31",
+    "files": [
+      {
+        "file": "ruler-on.draft",
+        "control": [
+          "L068"
+        ],
+        "metrics": {
+          "width": 464,
+          "height": 249,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "120cd71b26f4a6a667b34f45db075d3d910a313df87d20c016030bb6420d8db2",
+        "visible_svg_hash": "3bb7b04d11d14d51cfdb0116e690e74fef89c8b9f6c397e42ffdb78f940b7ee9",
+        "node_hash": "6d67f2675a9ad1642d376084bf48ed2545544d05bb55aef90b8dcbb6cb73fec0",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "ruler-off.draft",
+        "control": [
+          "L068"
+        ],
+        "metrics": {
+          "width": 464,
+          "height": 228,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "1d6d61378b8c148e6de3151d6727fbcefe4184adfbf20b581b2355199eb0cebf",
+        "visible_svg_hash": "7cc4c25b1c412da087e3731db9f95835f3dcc69a5d7bb6704e780747f9393ec2",
+        "node_hash": "2c6623387af2b0f11aa0c641750eab3a9bc46b7428695fc4c53ca77fcb51e95f",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL32",
+    "files": [
+      {
+        "file": "group-frame-box.draft",
+        "control": [
+          "L039"
+        ],
+        "metrics": {
+          "width": 1288,
+          "height": 370,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2016,
+          "warnings": 0
+        },
+        "geometry_hash": "3367fd220c65ca527819dd1cc0e10d1639e72ad534b88d843337f45f08437cbd",
+        "visible_svg_hash": "ba66dcff51607c5358bd5994955d5d6ecea763736b508a1c133f2e9441e50218",
+        "node_hash": "a914c56be65cd150275f6361375443941120f556099f57266f2b8abe7bf22a5f",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 3
+      },
+      {
+        "file": "group-frame-soft.draft",
+        "control": [
+          "L039"
+        ],
+        "metrics": {
+          "width": 1250,
+          "height": 370,
+          "crossings": 1,
+          "bends": 15,
+          "length": 2014,
+          "warnings": 0
+        },
+        "geometry_hash": "4c79535cf54e38abd570b8401db8542a8f8aa7a74852619d70959e7ac7ff178b",
+        "visible_svg_hash": "32c11c79aa8e94d0368a4f43f18523e79ba97bc052b0ebbf63d00475b58341e4",
+        "node_hash": "25b0e2ef85cc6fb0051aee7363b087731b6a4ac9245182371c7b3ecdea40bd2b",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 3
+      },
+      {
+        "file": "group-frame-none.draft",
+        "control": [
+          "L039"
+        ],
+        "metrics": {
+          "width": 1250,
+          "height": 370,
+          "crossings": 1,
+          "bends": 15,
+          "length": 2014,
+          "warnings": 0
+        },
+        "geometry_hash": "4c79535cf54e38abd570b8401db8542a8f8aa7a74852619d70959e7ac7ff178b",
+        "visible_svg_hash": "12ad385ab0e9f12a8fa20a75673b8ec11ae7c82d391525bac5361729d42288f6",
+        "node_hash": "25b0e2ef85cc6fb0051aee7363b087731b6a4ac9245182371c7b3ecdea40bd2b",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 3
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [
+      [
+        "group-frame-soft.draft",
+        "group-frame-none.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL33",
+    "files": [
+      {
+        "file": "tall-group.draft",
+        "control": [
+          "L040"
+        ],
+        "metrics": {
+          "width": 808,
+          "height": 578,
+          "crossings": 0,
+          "bends": 2,
+          "length": 780,
+          "warnings": 0
+        },
+        "geometry_hash": "6f580225df308e84a179c61528d1a09d51297c606f897b4031bf6c5fefe1c62f",
+        "visible_svg_hash": "600e0a5fc60ee13c3afee599858c7e4e1c296e945433619ae4b49b79fc59b525",
+        "node_hash": "659960575cb46e71131ed655f0ce5b3bd0d44e22e739d3942bf7db5a0256d1fe",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "group-fold-never.draft",
+        "control": [
+          "L040"
+        ],
+        "metrics": {
+          "width": 552,
+          "height": 1010,
+          "crossings": 0,
+          "bends": 0,
+          "length": 416,
+          "warnings": 0
+        },
+        "geometry_hash": "801d6e90ca72761d7829bebe0c35a06fcc1c73fd55aac5fa033b071619139319",
+        "visible_svg_hash": "2fb746c6b6970b1529878d53f23cdbfc4e44351876a6a2575b75380655b17c6d",
+        "node_hash": "8bae01ff339034ce72ac9d82870164b1f38f25ecc90f66492bfc53b1704b6799",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "group-fold-auto.draft",
+        "control": [
+          "L040"
+        ],
+        "metrics": {
+          "width": 808,
+          "height": 578,
+          "crossings": 0,
+          "bends": 2,
+          "length": 780,
+          "warnings": 0
+        },
+        "geometry_hash": "6f580225df308e84a179c61528d1a09d51297c606f897b4031bf6c5fefe1c62f",
+        "visible_svg_hash": "600e0a5fc60ee13c3afee599858c7e4e1c296e945433619ae4b49b79fc59b525",
+        "node_hash": "659960575cb46e71131ed655f0ce5b3bd0d44e22e739d3942bf7db5a0256d1fe",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [
+      [
+        "tall-group.draft",
+        "group-fold-auto.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "tall-group.draft",
+        "group-fold-auto.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL34",
+    "files": [
+      {
+        "file": "scope-root.draft",
+        "control": [
+          "L032",
+          "L038",
+          "L041"
+        ],
+        "metrics": {
+          "width": 1288,
+          "height": 370,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2016,
+          "warnings": 0
+        },
+        "geometry_hash": "3367fd220c65ca527819dd1cc0e10d1639e72ad534b88d843337f45f08437cbd",
+        "visible_svg_hash": "ba66dcff51607c5358bd5994955d5d6ecea763736b508a1c133f2e9441e50218",
+        "node_hash": "a914c56be65cd150275f6361375443941120f556099f57266f2b8abe7bf22a5f",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing",
+          "stranded"
+        ],
+        "check_warning_count": 3
+      },
+      {
+        "file": "scope-child-engine.draft",
+        "control": [
+          "L032",
+          "L041"
+        ],
+        "metrics": {
+          "width": 1288,
+          "height": 370,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2150,
+          "warnings": 0
+        },
+        "geometry_hash": "76c991e7f7a5bb6d736fa70064014bd0f93373ecb35c43587ffb8bfa6100febb",
+        "visible_svg_hash": "210afd0f22d7394ad9d97d001c04e29efd7806fbb9446659fd2bf12dc6b688ff",
+        "node_hash": "c8e8a5c3b4641fc4be09bc7bbf423f2071f9277464b90279ca751800545d8ade",
+        "diagnostic_codes": [
+          "aspect",
+          "stranded"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "scope-child-row.draft",
+        "control": [
+          "L032",
+          "L041"
+        ],
+        "metrics": {
+          "width": 1284,
+          "height": 370,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2138,
+          "warnings": 0
+        },
+        "geometry_hash": "f0f14ac8e1da4cbe3baf4f43bbc0fbed49e26adde31b3d7589472f51a8f73cdd",
+        "visible_svg_hash": "77fc0befc31bdf5d2713926225069b1eb75a13a88b889b345f0ff636af012909",
+        "node_hash": "decb72b0afc5c0e83810193f43ad234d30f477be0e24f6d1f2cd73e42f3d0ca5",
+        "diagnostic_codes": [
+          "aspect",
+          "stranded"
+        ],
+        "check_warning_count": 2
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL35",
+    "files": [
+      {
+        "file": "refine.draft",
+        "control": [
+          "L043"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "c005e0b723d909b5604681cca0e91d1e6ca5f93d81ad30c5973de51e3ba3ec33",
+        "visible_svg_hash": "92653e6b0d9296e832bcc4c2b2d299bc63663c24e5af09af4c69428bb0a9caa8",
+        "node_hash": "1e206136a929d0598b64a3ace816398c9f9b88463bae1dfba824a2b8f78a22f2",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "order-reverse.draft",
+        "control": [
+          "L042",
+          "L043"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 96,
+          "warnings": 0
+        },
+        "geometry_hash": "c5e6a6df9fd442ad6fa2d5f64a9556a37edb49355f67be829056f2b8f63c9279",
+        "visible_svg_hash": "0461e97563575564c4b011e7b07d4d4ea7f2bd1a53e50e44d4f4a77861827098",
+        "node_hash": "ca458d30782b162a764a4f9b918775adc765153c7d942cabc01711dbef178c07",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "order-partial.draft",
+        "control": [
+          "L043"
+        ],
+        "metrics": {
+          "width": 668,
+          "height": 206,
+          "crossings": 0,
+          "bends": 4,
+          "length": 380,
+          "warnings": 0
+        },
+        "geometry_hash": "9054fc6c799d7cda4d074b49ef5e09dcc5d2f37c2e7e262b0e32880601d2ac17",
+        "visible_svg_hash": "b8d3dee4fe86388fb951e08ad6615c504ed15c96cc18fa287a8671b6bb8bdd0a",
+        "node_hash": "3b1579bf1c92a7e778cb0ba30222fee709505acfa7d58974175e96ede0f64c69",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL36",
+    "files": [
+      {
+        "file": "min-width-0.draft",
+        "control": [
+          "L035"
+        ],
+        "metrics": {
+          "width": 292,
+          "height": 338,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "a711132fc0e78c2a4f1768f93fa32fbd7a5a4ac3b83b4e1af328b1256648bf03",
+        "visible_svg_hash": "cc9ff4a0c3f6b152bb16f7c8488ccbd6d713dbffcf2475a755cb84cc40a04aa8",
+        "node_hash": "649e103ec68cbeaf6b34ddf3c5c9c87d40185f4a1f7558c6c7657ed201f134d7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "min-width-300.draft",
+        "control": [
+          "L035"
+        ],
+        "metrics": {
+          "width": 380,
+          "height": 338,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "42cf3bfd688a5e2e7e6c1a68393aa1e81d61ffe356baca445d652e8c10705b91",
+        "visible_svg_hash": "5c77a87f0fff8f75da19a8c536d8bd1fbd3eaeca4abfe59357035de1c7432fe2",
+        "node_hash": "4c58e6016ae2588e917f3becb339383f1b005504efc60a1c875b7ff71b65dcc8",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "min-width-600.draft",
+        "control": [
+          "L035"
+        ],
+        "metrics": {
+          "width": 680,
+          "height": 338,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "bc51b5101d932614171ed673adee73ec7790969fb6516bf77cc6c47aaaa64d55",
+        "visible_svg_hash": "d7a031bcb754fc1588617f766a2617ab38b0a54dd19cdc5242bd07e06abc9657",
+        "node_hash": "4f06aa265369fafde7893f429a9c97beb0386c3997118bce6144c1e69805eeac",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "min-height-0.draft",
+        "control": [
+          "L036"
+        ],
+        "metrics": {
+          "width": 292,
+          "height": 338,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "a711132fc0e78c2a4f1768f93fa32fbd7a5a4ac3b83b4e1af328b1256648bf03",
+        "visible_svg_hash": "cc9ff4a0c3f6b152bb16f7c8488ccbd6d713dbffcf2475a755cb84cc40a04aa8",
+        "node_hash": "649e103ec68cbeaf6b34ddf3c5c9c87d40185f4a1f7558c6c7657ed201f134d7",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "min-height-300.draft",
+        "control": [
+          "L036"
+        ],
+        "metrics": {
+          "width": 292,
+          "height": 426,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "3a2e5b2646b97e10350832d048e2111efaa6b39cd90d18745d69bcd68c1381e1",
+        "visible_svg_hash": "d254da3b0e8fc5f46d8ce491bb98f110bc295c40fd4d57d36fcf179d3e4fb411",
+        "node_hash": "1b7c827e7d221e594c48ed7e57f40cfbbe76b5406b7f29135385f00fa054ecdf",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "min-height-600.draft",
+        "control": [
+          "L036"
+        ],
+        "metrics": {
+          "width": 292,
+          "height": 726,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "950c9603a68677c72f1b08077259394565b4e6563a5661ba8e130f7d97a2830a",
+        "visible_svg_hash": "a00fcf36fa65bf81f4525ed01be96578e8a1fae57d93a16e2b61ee7fa1dc545d",
+        "node_hash": "b4ea6f80c8cf76c9d952d66703465d19a929221f2aa3e9800f8869a27f14de73",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 5,
+    "unique_visible_svgs": 5,
+    "equal_geometry_groups": [
+      [
+        "min-width-0.draft",
+        "min-height-0.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "min-width-0.draft",
+        "min-height-0.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL37",
+    "files": [
+      {
+        "file": "cell-span-1.draft",
+        "control": [
+          "L069"
+        ],
+        "metrics": {
+          "width": 374,
+          "height": 192,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "7b3ddc4828d29c6670108fc170bdb7af13cef2b6fbfb7902345df38ebc1aea10",
+        "visible_svg_hash": "1a08cad9b799e461fd9468d93b37b4ebe2878be8058570402c2f3cdcf41586a3",
+        "node_hash": "3d6b840ba8fd2bed0b277d0a213b29da7dd3aa75858ba4db9d644fa99358a070",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cell-span-2.draft",
+        "control": [
+          "L069"
+        ],
+        "metrics": {
+          "width": 310,
+          "height": 228,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "b723614ec8abf17dd25c5a4eb323ff609b75ff1d37b2c66e71b56e304ef060fe",
+        "visible_svg_hash": "8506e60dce9e27f8a02cfe842ec39e56120b2537293c50d1a215163c9a9dd0e8",
+        "node_hash": "017a0cbfd06313354a284ad1c609b5534cf81888c3d97380b240b05cc1fabbe1",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "cell-span-4.draft",
+        "control": [
+          "L069"
+        ],
+        "metrics": {
+          "width": 235,
+          "height": 264,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "8064cc9a4d535247b5354bd36626a1355c78e785cbf00bb6704770c2172d39e2",
+        "visible_svg_hash": "4fe40f527372b3d197bec07b503b87f5e186608f6cd3f9cf75a54d263feef8b7",
+        "node_hash": "72bb481209a0865f07e9d8d842b8230ccfd4415e21d4c49e581b35c583714993",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "marker-right.draft",
+        "control": [
+          "L070"
+        ],
+        "metrics": {
+          "width": 374,
+          "height": 240,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "1d68115c8c182e4572e998067f6fffd10248f5c69fcb5ddd1603822a3be024f3",
+        "visible_svg_hash": "b19a633357586297e538c925a79162dbdc314198acf3948f1f4ac0f59c990f98",
+        "node_hash": "1d7ae6959da84c0b086bb9be0a37f457ffb661dacf94056dabec1198b1e581e1",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "marker-down.draft",
+        "control": [
+          "L070"
+        ],
+        "metrics": {
+          "width": 223,
+          "height": 300,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "fe04ef0ed6f79347efc555745535c85200b6e6727d5c2c48cd865b85a3eb2b1d",
+        "visible_svg_hash": "33bf61e3eeb912e52cbcdc863f34daf13c94a1375259cd886eb717cba8892872",
+        "node_hash": "9a1e9d83d01f069d955dfe1985aed9d830f5e5fa7b8439655de82f13083e9f60",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 5,
+    "unique_visible_svgs": 5,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL38",
+    "files": [
+      {
+        "file": "sequence.draft",
+        "control": [
+          "L005",
+          "L071",
+          "L072",
+          "L073"
+        ],
+        "metrics": {
+          "width": 653,
+          "height": 512,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "333f64debf6b2869178b6a35ec4ea3065e70e027525f9652d3aaa6f8cac9e09c",
+        "visible_svg_hash": "d4c92e907bdef03943ec2e07c00a90bcdbb224cdf63d547769a6902128e5af04",
+        "node_hash": "3e621d5e25dc73e8f5fba561f4611dfd58b4066beeb9c62622ae52b39ecddcbb",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "sequence-no-phases.draft",
+        "control": [
+          "L005",
+          "L071"
+        ],
+        "metrics": {
+          "width": 608,
+          "height": 512,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "61ac651ac5af36c279c195c999c06adbe94efb5a05a22b3138abe909a6d583f4",
+        "visible_svg_hash": "fc7b7f69677ae2714686ef111f8ddc4c944d9fbe241a1b361cc15c631cd2a948",
+        "node_hash": "bc2c6f325ef5671c8a017b766868c6f446a4cf9400c4bfcd5be67c3b10f7051b",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "sequence-reordered-messages.draft",
+        "control": [
+          "L073"
+        ],
+        "metrics": {
+          "width": 653,
+          "height": 512,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "9f74cd1666a99fc15bc4c543f83eb7c9cf7ddd03e7874328de72bdcf45233fc4",
+        "visible_svg_hash": "4acef7497db44384c586ea55f356dfac18f5375a3eb31e78ed01442b23989bac",
+        "node_hash": "3e621d5e25dc73e8f5fba561f4611dfd58b4066beeb9c62622ae52b39ecddcbb",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "sequence-reordered-participants.draft",
+        "control": [
+          "L072"
+        ],
+        "metrics": {
+          "width": 653,
+          "height": 512,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        },
+        "geometry_hash": "e18d6f19ea2b001d4e53081997320e5d071141f7b9f3f459ec7219bf4dc1c1b2",
+        "visible_svg_hash": "4dea32ed6bd8dc6854348c778799d9a8e0a6f0902aa2304e648ea53e4d264ecf",
+        "node_hash": "68f9fc567cc139c748688958072c874997b7617b94284f2493214541ef11bfb2",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 4,
+    "unique_visible_svgs": 4,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL39",
+    "files": [
+      {
+        "file": "lanes.draft",
+        "control": [
+          "L004"
+        ],
+        "metrics": {
+          "width": 952,
+          "height": 382,
+          "crossings": 0,
+          "bends": 2,
+          "length": 532,
+          "warnings": 0
+        },
+        "geometry_hash": "6fa3f9e9788fa081fae7471a48c5b7ee536cf1f0b0f5ff6391d668b1a36984ea",
+        "visible_svg_hash": "14dc9e04d7b528aacb05c415b5b4bf250f8271142b87783d64f215e68eadaa0e",
+        "node_hash": "f711f55cb71b6dd17cb7213046f4cc2bcec0b21dac08a4610a21d0ce8d2eb260",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "lanes-down.draft",
+        "control": [
+          "L004",
+          "L033"
+        ],
+        "metrics": {
+          "width": 504,
+          "height": 590,
+          "crossings": 0,
+          "bends": 3,
+          "length": 538,
+          "warnings": 0
+        },
+        "geometry_hash": "0eadabcd2fb96362227508a629e371d16dbc003cbce56e914abf91307097b074",
+        "visible_svg_hash": "55351a2516bc645f5a30af0556c79bc0a03be3b78566bc55d980440b10d3aeba",
+        "node_hash": "1154512ec6ddaa15536b15e25cec1fd921f084e2a31588f32315a9508a7f69e9",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "lanes-order.draft",
+        "control": [
+          "L043"
+        ],
+        "metrics": {
+          "width": 952,
+          "height": 382,
+          "crossings": 0,
+          "bends": 2,
+          "length": 532,
+          "warnings": 0
+        },
+        "geometry_hash": "513365fcd4d9f8919631448a7091f7a4c8a226a8b8c7b6876374ba6cf77558dd",
+        "visible_svg_hash": "be6604726fee67bdcb001659fa60903afac5950b688b1364f54792bfb8847cb1",
+        "node_hash": "56e51b285525bf80ab97bb73481417f51f3e1670eb13bf9d6934aa12077bac59",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL41",
+    "files": [
+      {
+        "file": "shape-box.draft",
+        "control": [
+          "L074"
+        ],
+        "metrics": {
+          "width": 436,
+          "height": 198,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "e71543f635b94ce431721fac07afa7c708a2630e0cf1ce78addc6363a404d6ee",
+        "visible_svg_hash": "969a80d94c1c14306a24ccd99c4fe09ecc45aa3b2b75cb8081b3679463d50754",
+        "node_hash": "66aa64c04d0255cd9db5fb591cd7a47eb98c014290026a135e64a13014c9b03c",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "shape-pill.draft",
+        "control": [
+          "L074"
+        ],
+        "metrics": {
+          "width": 436,
+          "height": 198,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "e71543f635b94ce431721fac07afa7c708a2630e0cf1ce78addc6363a404d6ee",
+        "visible_svg_hash": "6bcf040d2aee0c76403abbb103aa21253debe10bb6f2f065e0dd16375305e101",
+        "node_hash": "66aa64c04d0255cd9db5fb591cd7a47eb98c014290026a135e64a13014c9b03c",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "shape-circle.draft",
+        "control": [
+          "L074"
+        ],
+        "metrics": {
+          "width": 352,
+          "height": 264,
+          "crossings": 0,
+          "bends": 2,
+          "length": 69,
+          "warnings": 0
+        },
+        "geometry_hash": "91b870f36ab9037b90384d395b6f3e5523bbda148bcab535f8d2db03c284764b",
+        "visible_svg_hash": "99d3b1723c2af803262d014d325a6af8292843f260c797fb157b55192de91410",
+        "node_hash": "16b8096b00c5871b5904ae5156e62b7bff42b4de2316f277b33a2e25b4bced93",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "shape-diamond.draft",
+        "control": [
+          "L074"
+        ],
+        "metrics": {
+          "width": 408,
+          "height": 262,
+          "crossings": 0,
+          "bends": 2,
+          "length": 68,
+          "warnings": 0
+        },
+        "geometry_hash": "8fffed7e802c03325a1da3068b5694b42cc1206b60f10d8b46350cf73e14ed94",
+        "visible_svg_hash": "96af7f828a6f2b194e92d131610d2f1c5a20847c076d7faf3cd8f0128ac13046",
+        "node_hash": "e25032b77ef8da8d28d2e4f2ee982e24e0bdd49847372c0fda89f7e0169fd7e3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "shape-text.draft",
+        "control": [
+          "L074"
+        ],
+        "metrics": {
+          "width": 436,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "cb7af936281e3e6ee1d3bed9c07c77237dc1028f23d2b424363710d5b7a849e0",
+        "visible_svg_hash": "5f5b12735532db02f73f1203548e72d32a77c8eb661bd613756ed8c1829fa343",
+        "node_hash": "2e5643fb3f48214e966794bc5775b0b4b601905ba52db871ffccf8f14d3b5b60",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 4,
+    "unique_visible_svgs": 5,
+    "equal_geometry_groups": [
+      [
+        "shape-box.draft",
+        "shape-pill.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL42",
+    "files": [
+      {
+        "file": "diagram-width-160.draft",
+        "control": [
+          "L075"
+        ],
+        "metrics": {
+          "width": 436,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "84e0b3eb3cad51c54f244968c94e1acc538489d7388ea492588acecf48448d0d",
+        "visible_svg_hash": "91a8001b23770623d4c0b237df3477d34094b422af0954f51a75307215581ae6",
+        "node_hash": "0133f0ad12edbd4669d3d0b7ba00fe3727aba87c4bbd7e4ce767cf38e2ceef32",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "diagram-width-800.draft",
+        "control": [
+          "L075"
+        ],
+        "metrics": {
+          "width": 800,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "84e0b3eb3cad51c54f244968c94e1acc538489d7388ea492588acecf48448d0d",
+        "visible_svg_hash": "746c9b6fa10b36a0b2e671d6e66d01f5a5e932fce29f96c62a0ac0d41dd3f577",
+        "node_hash": "0133f0ad12edbd4669d3d0b7ba00fe3727aba87c4bbd7e4ce767cf38e2ceef32",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "diagram-width-1600.draft",
+        "control": [
+          "L075"
+        ],
+        "metrics": {
+          "width": 1600,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "84e0b3eb3cad51c54f244968c94e1acc538489d7388ea492588acecf48448d0d",
+        "visible_svg_hash": "e61ce60313fdd790935f07ec32faafa218f1c7ae2cd948926b2ab7785bd7782a",
+        "node_hash": "0133f0ad12edbd4669d3d0b7ba00fe3727aba87c4bbd7e4ce767cf38e2ceef32",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "diagram-width-omitted.draft",
+        "control": [
+          "L075"
+        ],
+        "metrics": {
+          "width": 436,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        "geometry_hash": "84e0b3eb3cad51c54f244968c94e1acc538489d7388ea492588acecf48448d0d",
+        "visible_svg_hash": "91a8001b23770623d4c0b237df3477d34094b422af0954f51a75307215581ae6",
+        "node_hash": "0133f0ad12edbd4669d3d0b7ba00fe3727aba87c4bbd7e4ce767cf38e2ceef32",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 1,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [
+      [
+        "diagram-width-160.draft",
+        "diagram-width-800.draft",
+        "diagram-width-1600.draft",
+        "diagram-width-omitted.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "diagram-width-160.draft",
+        "diagram-width-omitted.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL43",
+    "files": [
+      {
+        "file": "tree-root-automatic.draft",
+        "control": [
+          "L031"
+        ],
+        "metrics": {
+          "width": 836,
+          "height": 499,
+          "crossings": 0,
+          "bends": 10,
+          "length": 1048,
+          "warnings": 0
+        },
+        "geometry_hash": "cd7fec82004c98e9f13d711984a435121e42820f0e2e2254554d34f7903a9321",
+        "visible_svg_hash": "b15b3486d0230e59c17b94e1521a8046d0a9e9c5c88b8e3c7a2d43dbb92c781b",
+        "node_hash": "f4e5ce6eeefb334f596f09495e0ec936b6a91db3c517ecd42ad1b14eaa7af05b",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "tree-root-top.draft",
+        "control": [
+          "L031"
+        ],
+        "metrics": {
+          "width": 836,
+          "height": 499,
+          "crossings": 0,
+          "bends": 10,
+          "length": 1048,
+          "warnings": 0
+        },
+        "geometry_hash": "cd7fec82004c98e9f13d711984a435121e42820f0e2e2254554d34f7903a9321",
+        "visible_svg_hash": "b15b3486d0230e59c17b94e1521a8046d0a9e9c5c88b8e3c7a2d43dbb92c781b",
+        "node_hash": "f4e5ce6eeefb334f596f09495e0ec936b6a91db3c517ecd42ad1b14eaa7af05b",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "tree-root-left.draft",
+        "control": [
+          "L031"
+        ],
+        "metrics": {
+          "width": 864,
+          "height": 500,
+          "crossings": 0,
+          "bends": 8,
+          "length": 1090,
+          "warnings": 0
+        },
+        "geometry_hash": "8a97f085357cce00900b84d84d66b27d688c93c137b07ba98020d9ec37bf6ce5",
+        "visible_svg_hash": "878b8175237a15642809bd9d7d963df953218232fad40aba6657d11913d58030",
+        "node_hash": "d3c967c30f7714ee714ad34ddf5337560cb01d901e410892b9d9ca9f41bf284d",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [
+      [
+        "tree-root-automatic.draft",
+        "tree-root-top.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "tree-root-automatic.draft",
+        "tree-root-top.draft"
+      ]
+    ]
+  },
+  {
+    "visual": "VL44",
+    "files": [
+      {
+        "file": "family-network-stress.draft",
+        "control": [
+          "L011"
+        ],
+        "metrics": {
+          "width": 1239,
+          "height": 303,
+          "crossings": 0,
+          "bends": 11,
+          "length": 2168,
+          "warnings": 0
+        },
+        "geometry_hash": "191b9f8e3252b57de8eb8800979271469bf3949d7f1870d857003434738e1310",
+        "visible_svg_hash": "7956828284886c4d8e43e04c22e09442acbbb1da649a8b7c49d892e1d1bc6750",
+        "node_hash": "603477913ebc40bb35c2fa182ae73b95c48b96edb475a97335029ad35f9ca825",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      },
+      {
+        "file": "family-network-force.draft",
+        "control": [
+          "L012"
+        ],
+        "metrics": {
+          "width": 1260,
+          "height": 296,
+          "crossings": 1,
+          "bends": 13,
+          "length": 2236,
+          "warnings": 0
+        },
+        "geometry_hash": "9f6520149b6a8f3169a240e755ff6cf0d06e811beef2a9eb279b4ce39bf98348",
+        "visible_svg_hash": "b8ce0eb57fb0fc8a62bc6a224836e730008ee5870a270c8e463c841046e36335",
+        "node_hash": "a8aa96ed884b8877688864a5fb6d534871554454843768057c769b4228ea6dc1",
+        "diagnostic_codes": [
+          "aspect",
+          "crossing"
+        ],
+        "check_warning_count": 2
+      },
+      {
+        "file": "family-network-flow.draft",
+        "control": [
+          "L013"
+        ],
+        "metrics": {
+          "width": 1316,
+          "height": 302,
+          "crossings": 0,
+          "bends": 12,
+          "length": 2560,
+          "warnings": 0
+        },
+        "geometry_hash": "ef4cc35bbc266617fca76fd13096625bf05f01c911ea00ab72be1e25acc7a1e1",
+        "visible_svg_hash": "2db522d607543666c341ac05132072a15c415945dfd09e3b512d11a269c41e69",
+        "node_hash": "42003b312478e36c4caf4b39bb1a513997ea0eafb2f5537ce9b3415b4ce15a47",
+        "diagnostic_codes": [
+          "aspect"
+        ],
+        "check_warning_count": 1
+      }
+    ],
+    "unique_geometries": 3,
+    "unique_visible_svgs": 3,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL45",
+    "files": [
+      {
+        "file": "family-forest-tree.draft",
+        "control": [
+          "L015"
+        ],
+        "metrics": {
+          "width": 836,
+          "height": 499,
+          "crossings": 0,
+          "bends": 10,
+          "length": 1048,
+          "warnings": 0
+        },
+        "geometry_hash": "cd7fec82004c98e9f13d711984a435121e42820f0e2e2254554d34f7903a9321",
+        "visible_svg_hash": "b15b3486d0230e59c17b94e1521a8046d0a9e9c5c88b8e3c7a2d43dbb92c781b",
+        "node_hash": "f4e5ce6eeefb334f596f09495e0ec936b6a91db3c517ecd42ad1b14eaa7af05b",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "family-forest-layered.draft",
+        "control": [
+          "L014"
+        ],
+        "metrics": {
+          "width": 456,
+          "height": 506,
+          "crossings": 0,
+          "bends": 9,
+          "length": 1102,
+          "warnings": 0
+        },
+        "geometry_hash": "892790ad7e8d1e8378c2e6ceea763c487dee1bca5c1b365707f9e63c46e77d80",
+        "visible_svg_hash": "73ecbe8ba85b5bc8fda30c3cf08d969e012ea4a71bc172070aab79bcb4460060",
+        "node_hash": "36d872416ecf67a6ad01876a281d4176d6322c28c61f07e58754bf6ddb3e2753",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 2,
+    "unique_visible_svgs": 2,
+    "equal_geometry_groups": [],
+    "equal_visible_svg_groups": []
+  },
+  {
+    "visual": "VL46",
+    "files": [
+      {
+        "file": "compare-merged.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 448,
+          "height": 409,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "1641d9daee4505409bb5001f5a784f0c89ad2c232649492dd15f3b0b64420a86",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-default.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "18abbac9adafc3c4ac25c27a62a043eaf9509a55285924a00a61fed1c08dfe18",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-auto.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "cfec96da8f2a242f4286531db3b2ba4a357e6c6a1c24ef0ea0e0562cfc07e77b",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-right.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "cfec96da8f2a242f4286531db3b2ba4a357e6c6a1c24ef0ea0e0562cfc07e77b",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-down.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 448,
+          "height": 785,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "18af57c89e42aa0d2597a7bc4f822dd9d3dde41c9f9870bf1519e693371b2164",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-aspect-0.25.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 448,
+          "height": 785,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "18af57c89e42aa0d2597a7bc4f822dd9d3dde41c9f9870bf1519e693371b2164",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-aspect-1.6.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "cfec96da8f2a242f4286531db3b2ba4a357e6c6a1c24ef0ea0e0562cfc07e77b",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-aspect-8.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "cfec96da8f2a242f4286531db3b2ba4a357e6c6a1c24ef0ea0e0562cfc07e77b",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-right-aspect-0.25.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "cfec96da8f2a242f4286531db3b2ba4a357e6c6a1c24ef0ea0e0562cfc07e77b",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      },
+      {
+        "file": "compare-right-aspect-8.draft",
+        "control": [
+          "L076",
+          "L077",
+          "L078"
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        },
+        "geometry_hash": "b7f9418e7f090dc39402fae9f57ea5ef1bbd71c019aae038a67aaa825b2e4c0b",
+        "visible_svg_hash": "cfec96da8f2a242f4286531db3b2ba4a357e6c6a1c24ef0ea0e0562cfc07e77b",
+        "node_hash": "13a40eb9eee4cd5a98c5669aa85941f496758fb20fd1ce75629ca51fd83620a3",
+        "diagnostic_codes": [],
+        "check_warning_count": 0
+      }
+    ],
+    "unique_geometries": 1,
+    "unique_visible_svgs": 4,
+    "equal_geometry_groups": [
+      [
+        "compare-merged.draft",
+        "compare-default.draft",
+        "compare-auto.draft",
+        "compare-right.draft",
+        "compare-down.draft",
+        "compare-aspect-0.25.draft",
+        "compare-aspect-1.6.draft",
+        "compare-aspect-8.draft",
+        "compare-right-aspect-0.25.draft",
+        "compare-right-aspect-8.draft"
+      ]
+    ],
+    "equal_visible_svg_groups": [
+      [
+        "compare-auto.draft",
+        "compare-right.draft",
+        "compare-aspect-1.6.draft",
+        "compare-aspect-8.draft",
+        "compare-right-aspect-0.25.draft",
+        "compare-right-aspect-8.draft"
+      ],
+      [
+        "compare-down.draft",
+        "compare-aspect-0.25.draft"
+      ]
+    ]
+  }
+]

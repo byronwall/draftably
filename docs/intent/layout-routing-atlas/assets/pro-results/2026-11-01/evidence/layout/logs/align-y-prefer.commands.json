@@ -1,0 +1,60 @@
+{
+  "file": "align-y-prefer.draft",
+  "source_sha256": "718739ec81a46442b8b865176fb28d5ff4a7adf43f819fbf1efb5f8d9033a62e",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/align-y-prefer.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.105
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/align-y-prefer.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.103
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 624,
+    "height": 222,
+    "crossings": 0,
+    "bends": 0,
+    "length": 96,
+    "warnings": 0
+  },
+  "node_hash": "ecd451361414a48abee16d4d885dac3f57dcb32a56f1d5654ca3f016db4dd87c",
+  "route_hash": "2a10b7a1431e1301743a628ce256b8468f0a6c3a35f28e3d18e34bf64068a8d6",
+  "geometry_hash": "92e0513a0e457125eb586c6df3b030c021505f7e338e1ccb9a97cab86f98d6ea",
+  "check_output": "Metrics: 624\u00d7222 (aspect 2.81), 0 crossings, 0 bends, 96px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/align-y-prefer.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.108,
+    "file": "svg/align-y-prefer.svg",
+    "bytes": 67572,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "332194b0b0da75eff0eb6fb61f884fb3612bed8d4dd9d5c01338bd0c60bc67a5"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

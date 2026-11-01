@@ -1,0 +1,60 @@
+{
+  "file": "marker-down.draft",
+  "source_sha256": "00b92262e75788ca7ed4a179815ea8b3bebb9c27bef5dd0cde4c8e2d85c110e4",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/marker-down.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.094
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/marker-down.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.1
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 223,
+    "height": 300,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "9a1e9d83d01f069d955dfe1985aed9d830f5e5fa7b8439655de82f13083e9f60",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "fe04ef0ed6f79347efc555745535c85200b6e6727d5c2c48cd865b85a3eb2b1d",
+  "check_output": "Metrics: 223\u00d7300 (aspect 0.74), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 5 nodes, 1 group, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/marker-down.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.096,
+    "file": "svg/marker-down.svg",
+    "bytes": 68326,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "33bf61e3eeb912e52cbcdc863f34daf13c94a1375259cd886eb717cba8892872"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

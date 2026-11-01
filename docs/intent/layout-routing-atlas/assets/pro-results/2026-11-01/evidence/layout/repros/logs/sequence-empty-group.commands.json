@@ -1,0 +1,47 @@
+{
+  "file": "repros/sequence-empty-group.draft",
+  "source_sha256": "a140b30a47940de96ac99c160b18d691380c11255e2e1a7d4346bb299787244b",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/sequence-empty-group.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.125
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/sequence-empty-group.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.124
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [
+    "nodes[2].x=null",
+    "nodes[2].w=null"
+  ],
+  "metrics": {
+    "width": 13,
+    "height": 13,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "7beb72e7ab1689979c508fba3765b9de75cd2cb34c4080dbf535b1f7ddf324c9",
+  "route_hash": "cce3fc7ea9a76bbc7d2830581f5eb6268a269da60a03f4f88d68d6ebe5a3218d",
+  "geometry_hash": "ce3bd1203f03e3f20c1901da38e9c6f2e347dd4169f9833fdff42b79c5ed8e9e",
+  "check_output": "Metrics: 13\u00d713 (aspect 1.00), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 2 nodes, 1 group, 1 connection.\n",
+  "finite_inspect": false,
+  "svg_ok": true
+}

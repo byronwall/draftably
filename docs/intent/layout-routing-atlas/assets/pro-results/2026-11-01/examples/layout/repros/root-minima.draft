@@ -1,0 +1,7 @@
+diagram "Local refinements" version=1
+node a "A"
+node b "B"
+node c "C"
+edge ab a -> b
+edge bc b -> c
+layout root row gap=48 min-width=2000 min-height=2000

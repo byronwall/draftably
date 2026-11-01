@@ -1,0 +1,624 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "cli_entry": "node baseline/dist-cli/main.js (actual built CLI at pinned source; no wrapper rebuild)",
+  "standalone_draft_fence_count": 1,
+  "fixture_count": 9,
+  "results": [
+    {
+      "source": "work/editor-fixtures/editor-align-start.draft",
+      "sha256": "255ee8aa0daa7cdab5c93798d1e9fc84170fe755257d0261ffd55888d5ecd462",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-align-start.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.079,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-align-start.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.073,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-align-start.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.066,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "Metrics: 820\u00d7306 (aspect 2.68), 0 crossings, 0 bends, 0px of lines, 0 warnings.",
+        "OK: 3 nodes, 0 groups, 0 connections."
+      ],
+      "metrics": {
+        "width": 820,
+        "height": 306,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0,
+        "warnings": 0
+      },
+      "geometry_sha256": "1d45589dd04e0be5119c597d088bb51f2d8a27859d24e583ddd109e044925c3b",
+      "svg": "work/editor-validation/svg/editor-align-start.svg",
+      "svg_sha256": "3faaf720cbb6119f8e57f3c0644a1f053db73ba7cd4b7dd274f0b329dc28ffb4"
+    },
+    {
+      "source": "work/editor-fixtures/editor-change-marks.draft",
+      "sha256": "d6de3405828b166c72d5c722a4e1577324efd383f034cd82817ec0326bf46b69",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-change-marks.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.444,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-change-marks.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.493,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-change-marks.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.508,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "Metrics: 1090\u00d7487 (aspect 2.24), 0 crossings, 13 bends, 1839px of lines, 0 warnings.",
+        "OK: 7 nodes, 1 group, 7 connections."
+      ],
+      "metrics": {
+        "width": 1090,
+        "height": 487,
+        "crossings": 0,
+        "bends": 13,
+        "length": 1839,
+        "warnings": 0
+      },
+      "geometry_sha256": "3abe0aa5b0d745d6846a516d665be3e8ab6725f9e411812750d8ef041bf46d03",
+      "svg": "work/editor-validation/svg/editor-change-marks.svg",
+      "svg_sha256": "38b95f5b08ee359bb25088689f35dfb4c90fbe0346e9f8f92c934892d55d2e57"
+    },
+    {
+      "source": "work/editor-fixtures/editor-compare-start.draft",
+      "sha256": "a805eb6b48e3075a5ee94091c437ca353b955e3f27b897f670d1c93a03bf464e",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-compare-start.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.381,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-compare-start.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.385,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-compare-start.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.355,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "warning Edges e4 and e5 cross. [crossing]",
+        "Metrics: 796\u00d7334 (aspect 2.38), 1 crossing, 6 bends, 688px of lines, 1 warning.",
+        "Warnings: 6 nodes, 2 groups, 5 connections."
+      ],
+      "metrics": {
+        "width": 796,
+        "height": 334,
+        "crossings": 1,
+        "bends": 6,
+        "length": 688,
+        "warnings": 0
+      },
+      "geometry_sha256": "4aa590619c4f7cbdbfc2159679ddadb67fa02be27d4ffa17081e4360b707bddc",
+      "svg": "work/editor-validation/svg/editor-compare-start.svg",
+      "svg_sha256": "ec380badd7d3afab9897f621f16ce78af452f29c6e233b1f87386f894065f749"
+    },
+    {
+      "source": "work/editor-fixtures/editor-intent-start.draft",
+      "sha256": "4c76457165abb74cde4623fc4d72004ef70c505bace492cbbb037a994a713934",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-intent-start.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.213,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-intent-start.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.217,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-intent-start.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.21,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "Metrics: 892\u00d7366 (aspect 2.44), 0 crossings, 10 bends, 1572px of lines, 0 warnings.",
+        "OK: 8 nodes, 0 groups, 10 connections."
+      ],
+      "metrics": {
+        "width": 892,
+        "height": 366,
+        "crossings": 0,
+        "bends": 10,
+        "length": 1572,
+        "warnings": 0
+      },
+      "geometry_sha256": "dbf62f1194063027cbcadda72211138d314f8dea9dccc449113303be5f7f4a98",
+      "svg": "work/editor-validation/svg/editor-intent-start.svg",
+      "svg_sha256": "e53b8d76e579a7dd0479ed97c09c2c7ea061e98b746afdaff662498b1c0e95cd"
+    },
+    {
+      "source": "work/editor-fixtures/editor-pass-start.draft",
+      "sha256": "863e63eb5ce1d724461c19597844d5d76d7d881e3cd596351123aa24b79f06d8",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-pass-start.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.29,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-pass-start.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.294,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-pass-start.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.278,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "Metrics: 1444\u00d7542 (aspect 2.66), 0 crossings, 12 bends, 1890px of lines, 0 warnings.",
+        "OK: 7 nodes, 0 groups, 7 connections."
+      ],
+      "metrics": {
+        "width": 1444,
+        "height": 542,
+        "crossings": 0,
+        "bends": 12,
+        "length": 1890,
+        "warnings": 0
+      },
+      "geometry_sha256": "08d85eef8af24b75acdd30f32cf97b89e4161bfe6ee4ee9863d76c352c4a15d9",
+      "svg": "work/editor-validation/svg/editor-pass-start.svg",
+      "svg_sha256": "8eeffad252965e3a906345016cbee628a695a0a5c38aa591067b6770217a1a5c"
+    },
+    {
+      "source": "work/editor-fixtures/editor-refined-groups.draft",
+      "sha256": "61f752666c06b5178c29ace145ae72d2c3e14bc8f2203b312614f52eb08232ba",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-refined-groups.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.323,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-refined-groups.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.282,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-refined-groups.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.27,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "Metrics: 1264\u00d7554 (aspect 2.28), 0 crossings, 7 bends, 1776px of lines, 0 warnings.",
+        "OK: 6 nodes, 2 groups, 5 connections."
+      ],
+      "metrics": {
+        "width": 1264,
+        "height": 554,
+        "crossings": 0,
+        "bends": 7,
+        "length": 1776,
+        "warnings": 0
+      },
+      "geometry_sha256": "0f4821d0de836e43676382b48995c1dd2c27e115505c8e681c1d8fd6ef5e10cd",
+      "svg": "work/editor-validation/svg/editor-refined-groups.svg",
+      "svg_sha256": "7f124614a5cfcf80b0dcce206d5045e0b6f879317a575a8775942a1f68c9b1ca"
+    },
+    {
+      "source": "work/editor-fixtures/editor-refinement-drift.draft",
+      "sha256": "7a7fc0f1fa6bc26828ee1285ecc2b40b2973aea33c06dd87337226976f416da1",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-refinement-drift.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.115,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-refinement-drift.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.131,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-refinement-drift.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.107,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "warning line 9: stay b gave way by 32 px to keep root clear. Remove line 9, or run format --drop-stale. [relaxed]",
+        "warning line 8: near c gave way by 44 px to keep root clear. Remove line 8, or run format --drop-stale. [relaxed]",
+        "Metrics: 416\u00d7334 (aspect 1.25), 0 crossings, 3 bends, 330px of lines, 2 warnings.",
+        "Warnings: 3 nodes, 0 groups, 2 connections."
+      ],
+      "metrics": {
+        "width": 416,
+        "height": 334,
+        "crossings": 0,
+        "bends": 3,
+        "length": 330,
+        "warnings": 2
+      },
+      "geometry_sha256": "b2be654cdc462f4852a4d5bac1e28145ea60daaf0359e7dbd3a694c6d0c23857",
+      "svg": "work/editor-validation/svg/editor-refinement-drift.svg",
+      "svg_sha256": "3e402ae2dbc8a8a506508ff4ca9ac8b94bdd5b46cf1d533c91625ddb5f00d18d"
+    },
+    {
+      "source": "work/editor-fixtures/editor-scope-start.draft",
+      "sha256": "64dc43618f297a4c0577c43067424afafd9c4ba31a02a79aabfaa71f378bb512",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-scope-start.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.237,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-scope-start.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.23,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-scope-start.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.236,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "warning The drawing is 1220\u00d7390 (aspect 3.13). Try draftably vary --fit slide (or page). [aspect]",
+        "Metrics: 1220\u00d7390 (aspect 3.13), 0 crossings, 6 bends, 754px of lines, 1 warning.",
+        "Warnings: 6 nodes, 2 groups, 5 connections."
+      ],
+      "metrics": {
+        "width": 1220,
+        "height": 390,
+        "crossings": 0,
+        "bends": 6,
+        "length": 754,
+        "warnings": 0
+      },
+      "geometry_sha256": "31e4664c7677783601e46de942857ed1e4fde57befe9cb40372193f785ed5604",
+      "svg": "work/editor-validation/svg/editor-scope-start.svg",
+      "svg_sha256": "92ca65e70cf2a8d1b9158a1cf4b40c1521102f853d7f55fc68e78ad144360505"
+    },
+    {
+      "source": "work/editor-fixtures/editor-ten-engine-grouped.draft",
+      "sha256": "333894f315d09560e73059f0e7ee5a0e197a184f1b608b8555871cfae5a28bc5",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-ten-engine-grouped.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.422,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-ten-engine-grouped.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.45,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-fixtures/editor-ten-engine-grouped.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.376,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "warning Edges e5 and e6 cross. [crossing]",
+        "Metrics: 1060\u00d7402 (aspect 2.64), 1 crossing, 12 bends, 1340px of lines, 1 warning.",
+        "Warnings: 7 nodes, 3 groups, 6 connections."
+      ],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0
+      },
+      "geometry_sha256": "bc38c6307bd39a3e06a3381e687b330c9d21f3b61b59dc3a33c0127205162d87",
+      "svg": "work/editor-validation/svg/editor-ten-engine-grouped.svg",
+      "svg_sha256": "6b306d61705c61a02f662eed198e10e8583e27d49e64d91c468d27bc59ffe41e"
+    },
+    {
+      "source": "work/editor-validation/sources/page-draft-01.draft",
+      "sha256": "efaa675f83dc7c584ffbfd7cdb1d3b3a2f098465ea861efe76c7dac87db9c34b",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/work/editor-validation/sources/page-draft-01.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.131,
+          "stderr": ""
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-validation/sources/page-draft-01.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.134,
+          "stderr": ""
+        },
+        {
+          "label": "svg",
+          "command": [
+            "node",
+            "dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/work/editor-validation/sources/page-draft-01.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "elapsed_seconds": 0.155,
+          "stderr": ""
+        }
+      ],
+      "diagnostics": [
+        "warning The drawing is 892\u00d7136 (aspect 6.56). Try draftably vary --fit slide (or page). [aspect]",
+        "Metrics: 892\u00d7136 (aspect 6.56), 0 crossings, 0 bends, 156px of lines, 1 warning.",
+        "Warnings: 4 nodes, 0 groups, 3 connections."
+      ],
+      "metrics": {
+        "width": 892,
+        "height": 136,
+        "crossings": 0,
+        "bends": 0,
+        "length": 156,
+        "warnings": 0
+      },
+      "geometry_sha256": "901c770f29c82d8e28a34531e0cd165a11d8c90e4234a24cb5650257b9a9d381",
+      "svg": "work/editor-validation/svg/page-draft-01.svg",
+      "svg_sha256": "edeb0222e3f3b1ede500d7d32a5a5a5d813b8ded5e579915a31457bdd9158ecc"
+    }
+  ]
+}

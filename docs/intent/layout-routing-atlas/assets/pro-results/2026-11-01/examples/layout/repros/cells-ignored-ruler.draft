@@ -1,0 +1,3 @@
+group g "G"
+node a "A" in=g
+layout g cells ruler=bogus unit-width=-1

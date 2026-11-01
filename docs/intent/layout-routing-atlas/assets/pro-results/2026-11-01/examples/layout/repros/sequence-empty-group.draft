@@ -1,0 +1,5 @@
+group empty "Empty"
+node a "A"
+node b "B"
+edge e a -> b
+layout root sequence

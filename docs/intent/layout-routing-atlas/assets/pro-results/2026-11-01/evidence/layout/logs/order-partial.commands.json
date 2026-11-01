@@ -1,0 +1,60 @@
+{
+  "file": "order-partial.draft",
+  "source_sha256": "ad4b475c1c9da3bc44a63ed03dacd71ce44f4a4bf03eb3c23e799b383e116447",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/order-partial.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.109
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/order-partial.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.094
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 668,
+    "height": 206,
+    "crossings": 0,
+    "bends": 4,
+    "length": 380,
+    "warnings": 0
+  },
+  "node_hash": "3b1579bf1c92a7e778cb0ba30222fee709505acfa7d58974175e96ede0f64c69",
+  "route_hash": "ba828c2fe019a1605385f6e7ed22f9ca04aab286cf35383f95898af2f604d73b",
+  "geometry_hash": "9054fc6c799d7cda4d074b49ef5e09dcc5d2f37c2e7e262b0e32880601d2ac17",
+  "check_output": "warning The drawing is 668\u00d7206 (aspect 3.24). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 668\u00d7206 (aspect 3.24), 0 crossings, 4 bends, 380px of lines, 1 warning.\nWarnings: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/order-partial.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.121,
+    "file": "svg/order-partial.svg",
+    "bytes": 67610,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "b8d3dee4fe86388fb951e08ad6615c504ed15c96cc18fa287a8671b6bb8bdd0a"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

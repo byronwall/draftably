@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "id": "api",
+      "parent": "root",
+      "x": 0,
+      "y": 0,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "note",
+      "parent": "root",
+      "x": 224,
+      "y": 80,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "store",
+      "parent": "root",
+      "x": 212,
+      "y": 0,
+      "w": 164,
+      "h": 56
+    }
+  ],
+  "routes": [
+    {
+      "id": "read",
+      "points": [
+        {
+          "x": 164,
+          "y": 28
+        },
+        {
+          "x": 212,
+          "y": 28
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "width": 468,
+    "height": 262,
+    "crossings": 0,
+    "bends": 0,
+    "length": 48,
+    "warnings": 0
+  }
+}

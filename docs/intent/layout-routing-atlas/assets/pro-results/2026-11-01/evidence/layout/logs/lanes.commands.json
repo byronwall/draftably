@@ -1,0 +1,60 @@
+{
+  "file": "lanes.draft",
+  "source_sha256": "c503364a4d5e151d52b50f1f6b56f543268a9ee4a1bc4bc4193c4c82c39849c0",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/lanes.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.138
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/lanes.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.163
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 952,
+    "height": 382,
+    "crossings": 0,
+    "bends": 2,
+    "length": 532,
+    "warnings": 0
+  },
+  "node_hash": "f711f55cb71b6dd17cb7213046f4cc2bcec0b21dac08a4610a21d0ce8d2eb260",
+  "route_hash": "2f8e638a4b76370ed55e23981d52db18e101e397dcbc61ad4646a33e60717e1a",
+  "geometry_hash": "6fa3f9e9788fa081fae7471a48c5b7ee536cf1f0b0f5ff6391d668b1a36984ea",
+  "check_output": "Metrics: 952\u00d7382 (aspect 2.49), 0 crossings, 2 bends, 532px of lines, 0 warnings.\nOK: 4 nodes, 2 groups, 3 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/lanes.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.141,
+    "file": "svg/lanes.svg",
+    "bytes": 69727,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "14dc9e04d7b528aacb05c415b5b4bf250f8271142b87783d64f215e68eadaa0e"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

@@ -1,0 +1,283 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "Atlas: same starting arrangement",
+  "graph": {
+    "nodes": [
+      {
+        "id": "entry",
+        "title": "Entry"
+      },
+      {
+        "id": "auth",
+        "title": "Authenticate"
+      },
+      {
+        "id": "browse",
+        "title": "Browse"
+      },
+      {
+        "id": "pay",
+        "title": "Pay"
+      },
+      {
+        "id": "ship",
+        "title": "Ship"
+      },
+      {
+        "id": "done",
+        "title": "Complete"
+      },
+      {
+        "id": "island",
+        "title": "Disconnected"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "entry",
+        "to": "auth",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e2",
+        "from": "auth",
+        "to": "browse",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e3",
+        "from": "browse",
+        "to": "pay",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e4",
+        "from": "pay",
+        "to": "ship",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e5",
+        "from": "ship",
+        "to": "done",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e6",
+        "from": "auth",
+        "to": "pay",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e7",
+        "from": "browse",
+        "to": "ship",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "entry": {
+        "x": 73.413,
+        "y": 128.175,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "auth": {
+        "x": 284.692,
+        "y": 41.719,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "browse": {
+        "x": 499.453,
+        "y": 159.535,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "pay": {
+        "x": 702.956,
+        "y": 54.207,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "ship": {
+        "x": 911.929,
+        "y": 169.278,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "done": {
+        "x": 1128.376,
+        "y": 97.5,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "island": {
+        "x": 486.377,
+        "y": 358.233,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "e1": {
+        "flow": "right"
+      },
+      "e2": {
+        "flow": "right"
+      },
+      "e3": {
+        "flow": "right"
+      },
+      "e4": {
+        "flow": "right"
+      },
+      "e5": {
+        "flow": "right"
+      },
+      "e6": {
+        "flow": "right"
+      },
+      "e7": {
+        "flow": "right"
+      }
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "entry": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "auth": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "browse": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "pay": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "ship": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "done": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "island": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "Atlas: same starting arrangement"
+    }
+  }
+}

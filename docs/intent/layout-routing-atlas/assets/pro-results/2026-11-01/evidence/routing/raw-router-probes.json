@@ -1,0 +1,5273 @@
+[
+  {
+    "file": "bend-penalty-0.draft",
+    "settings": {
+      "bendPenalty": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 26,
+      "length": 4050,
+      "initial": {
+        "crossings": 3,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 23,
+        "length": 3480
+      },
+      "accepted": 0,
+      "repaired": 1,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 279,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 228
+          },
+          {
+            "x": 440,
+            "y": 228
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 116
+          },
+          {
+            "x": 30,
+            "y": 116
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 424,
+            "y": 20
+          },
+          {
+            "x": 424,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "bottom",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 360
+          },
+          {
+            "x": 100,
+            "y": 276
+          },
+          {
+            "x": 14,
+            "y": 276
+          },
+          {
+            "x": 14,
+            "y": 4
+          },
+          {
+            "x": 500,
+            "y": 4
+          },
+          {
+            "x": 500,
+            "y": 20
+          },
+          {
+            "x": 570,
+            "y": 20
+          },
+          {
+            "x": 570,
+            "y": 109
+          },
+          {
+            "x": 500,
+            "y": 109
+          },
+          {
+            "x": 500,
+            "y": 96
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "bottom",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 176,
+            "y": 388
+          },
+          {
+            "x": 176,
+            "y": 404
+          },
+          {
+            "x": 420,
+            "y": 404
+          },
+          {
+            "x": 420,
+            "y": 436
+          },
+          {
+            "x": 570,
+            "y": 436
+          },
+          {
+            "x": 570,
+            "y": 340
+          },
+          {
+            "x": 500,
+            "y": 340
+          },
+          {
+            "x": 500,
+            "y": 256
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "bend-penalty-100.draft",
+    "settings": {
+      "bendPenalty": 100
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 14,
+      "length": 3572,
+      "initial": {
+        "crossings": 4,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 13,
+        "length": 3330
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 2,
+      "edges": 6,
+      "milliseconds": 186,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 60
+          },
+          {
+            "x": 420,
+            "y": 60
+          },
+          {
+            "x": 420,
+            "y": 228
+          },
+          {
+            "x": 440,
+            "y": 228
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 8,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 76
+          },
+          {
+            "x": 404,
+            "y": 76
+          },
+          {
+            "x": 404,
+            "y": 380
+          },
+          {
+            "x": 440,
+            "y": 380
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "left",
+        "toSide": "top",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 40,
+            "y": 228
+          },
+          {
+            "x": 27,
+            "y": 228
+          },
+          {
+            "x": 27,
+            "y": 20
+          },
+          {
+            "x": 500,
+            "y": 20
+          },
+          {
+            "x": 500,
+            "y": 40
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 396
+          },
+          {
+            "x": 440,
+            "y": 396
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "bottom",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 416
+          },
+          {
+            "x": 100,
+            "y": 436
+          },
+          {
+            "x": 573,
+            "y": 436
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "top",
+        "toSide": "bottom",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 360
+          },
+          {
+            "x": 100,
+            "y": 340
+          },
+          {
+            "x": 500,
+            "y": 340
+          },
+          {
+            "x": 500,
+            "y": 256
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "bend-penalty-32.draft",
+    "settings": {
+      "bendPenalty": 32
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 176,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "clearance-10.draft",
+    "settings": {
+      "clearance": 10
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 440,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 440
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 180
+          },
+          {
+            "x": 440,
+            "y": 180
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "clearance-30.draft",
+    "settings": {
+      "clearance": 30
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 480,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 480
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 173,
+            "y": 180
+          },
+          {
+            "x": 173,
+            "y": 90
+          },
+          {
+            "x": 407,
+            "y": 90
+          },
+          {
+            "x": 407,
+            "y": 180
+          },
+          {
+            "x": 440,
+            "y": 180
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "clearance-4.draft",
+    "settings": {
+      "clearance": 4
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 428,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 428
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 147,
+            "y": 180
+          },
+          {
+            "x": 147,
+            "y": 116
+          },
+          {
+            "x": 433,
+            "y": 116
+          },
+          {
+            "x": 433,
+            "y": 180
+          },
+          {
+            "x": 440,
+            "y": 180
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "corner-radius-0.draft",
+    "settings": {
+      "cornerRadius": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 440,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 440
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 180
+          },
+          {
+            "x": 440,
+            "y": 180
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "corner-radius-16.draft",
+    "settings": {
+      "cornerRadius": 16
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 440,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 440
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 180
+          },
+          {
+            "x": 440,
+            "y": 180
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "corner-radius-6.draft",
+    "settings": {
+      "cornerRadius": 6
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 440,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 440
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 110
+          },
+          {
+            "x": 427,
+            "y": 180
+          },
+          {
+            "x": 440,
+            "y": 180
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "crossing-penalty-0.draft",
+    "settings": {
+      "crossingPenalty": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 1,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 6,
+      "length": 960,
+      "initial": {
+        "crossings": 1,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 6,
+        "length": 960
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 2,
+      "milliseconds": 5,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ad",
+        "from": "a",
+        "to": "d",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 300,
+            "y": 68
+          },
+          {
+            "x": 300,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 268
+          },
+          {
+            "x": 173,
+            "y": 268
+          },
+          {
+            "x": 173,
+            "y": 84
+          },
+          {
+            "x": 427,
+            "y": 84
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "crossing-penalty-1200.draft",
+    "settings": {
+      "crossingPenalty": 1200
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 8,
+      "length": 1342,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 8,
+        "length": 1342
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 2,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ad",
+        "from": "a",
+        "to": "d",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 300,
+            "y": 68
+          },
+          {
+            "x": 300,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 268
+          },
+          {
+            "x": 173,
+            "y": 268
+          },
+          {
+            "x": 173,
+            "y": 316
+          },
+          {
+            "x": 570,
+            "y": 316
+          },
+          {
+            "x": 570,
+            "y": 116
+          },
+          {
+            "x": 427,
+            "y": 116
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "crossing-penalty-360.draft",
+    "settings": {
+      "crossingPenalty": 360
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 1,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 6,
+      "length": 960,
+      "initial": {
+        "crossings": 1,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 6,
+        "length": 960
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 2,
+      "milliseconds": 7,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ad",
+        "from": "a",
+        "to": "d",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 300,
+            "y": 68
+          },
+          {
+            "x": 300,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bc",
+        "from": "b",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 268
+          },
+          {
+            "x": 173,
+            "y": 268
+          },
+          {
+            "x": 173,
+            "y": 84
+          },
+          {
+            "x": 427,
+            "y": 84
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "edge-gap-16.draft",
+    "settings": {
+      "portGap": 6,
+      "edgeGap": 16
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 4,
+      "length": 968,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 4,
+        "length": 968
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 2,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ea",
+        "from": "hub",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 204
+          },
+          {
+            "x": 320,
+            "y": 204
+          },
+          {
+            "x": 320,
+            "y": 80
+          },
+          {
+            "x": 440,
+            "y": 80
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "eb",
+        "from": "hub",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "ec",
+        "from": "hub",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 236
+          },
+          {
+            "x": 320,
+            "y": 236
+          },
+          {
+            "x": 320,
+            "y": 360
+          },
+          {
+            "x": 440,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "edge-gap-4.draft",
+    "settings": {
+      "portGap": 6,
+      "edgeGap": 4
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 988,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 988
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ea",
+        "from": "hub",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -6,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 214
+          },
+          {
+            "x": 320,
+            "y": 214
+          },
+          {
+            "x": 320,
+            "y": 80
+          },
+          {
+            "x": 440,
+            "y": 80
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "eb",
+        "from": "hub",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "ec",
+        "from": "hub",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 6,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 226
+          },
+          {
+            "x": 320,
+            "y": 226
+          },
+          {
+            "x": 320,
+            "y": 360
+          },
+          {
+            "x": 440,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "edge-gap-48.draft",
+    "settings": {
+      "portGap": 6,
+      "edgeGap": 48
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 48,
+      "blocked": 0,
+      "bends": 4,
+      "length": 904,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 48,
+        "blocked": 0,
+        "bends": 4,
+        "length": 904
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ea",
+        "from": "hub",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -48,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 172
+          },
+          {
+            "x": 320,
+            "y": 172
+          },
+          {
+            "x": 320,
+            "y": 80
+          },
+          {
+            "x": 440,
+            "y": 80
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "eb",
+        "from": "hub",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "ec",
+        "from": "hub",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 48,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 268
+          },
+          {
+            "x": 320,
+            "y": 268
+          },
+          {
+            "x": 320,
+            "y": 360
+          },
+          {
+            "x": 440,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "fanout-penalty-0.draft",
+    "settings": {
+      "fanoutPenalty": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 2,
+      "laneDeficit": 13,
+      "minimumConflictingGap": 8,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 8,
+      "length": 2200,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 6,
+        "length": 2296
+      },
+      "accepted": 2,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 5,
+      "milliseconds": 50,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "a",
+        "from": "s",
+        "to": "a",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 116,
+            "y": 200
+          },
+          {
+            "x": 116,
+            "y": 28
+          },
+          {
+            "x": 440,
+            "y": 28
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "b",
+        "from": "s",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 212
+          },
+          {
+            "x": 173,
+            "y": 212
+          },
+          {
+            "x": 173,
+            "y": 148
+          },
+          {
+            "x": 440,
+            "y": 148
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "c",
+        "from": "s",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 220
+          },
+          {
+            "x": 300,
+            "y": 220
+          },
+          {
+            "x": 300,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "d",
+        "from": "s",
+        "to": "d",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 173,
+            "y": 228
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "e",
+        "from": "s",
+        "to": "e",
+        "fromSide": "bottom",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 116,
+            "y": 240
+          },
+          {
+            "x": 116,
+            "y": 508
+          },
+          {
+            "x": 440,
+            "y": 508
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "fanout-penalty-160.draft",
+    "settings": {
+      "fanoutPenalty": 160
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 7,
+      "length": 2256,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 6,
+        "length": 2296
+      },
+      "accepted": 2,
+      "repaired": 1,
+      "nudged": 0,
+      "tidied": 2,
+      "edges": 5,
+      "milliseconds": 84,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "a",
+        "from": "s",
+        "to": "a",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 116,
+            "y": 200
+          },
+          {
+            "x": 116,
+            "y": 28
+          },
+          {
+            "x": 440,
+            "y": 28
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "b",
+        "from": "s",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 212
+          },
+          {
+            "x": 300,
+            "y": 212
+          },
+          {
+            "x": 300,
+            "y": 148
+          },
+          {
+            "x": 440,
+            "y": 148
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "c",
+        "from": "s",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 300,
+            "y": 228
+          },
+          {
+            "x": 300,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "d",
+        "from": "s",
+        "to": "d",
+        "fromSide": "bottom",
+        "toSide": "left",
+        "fromOffset": 8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 108,
+            "y": 240
+          },
+          {
+            "x": 108,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "e",
+        "from": "s",
+        "to": "e",
+        "fromSide": "bottom",
+        "toSide": "left",
+        "fromOffset": -8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 92,
+            "y": 240
+          },
+          {
+            "x": 92,
+            "y": 508
+          },
+          {
+            "x": 440,
+            "y": 508
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "fanout-penalty-50.draft",
+    "settings": {
+      "fanoutPenalty": 50
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 2,
+      "laneDeficit": 13,
+      "minimumConflictingGap": 8,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 8,
+      "length": 2200,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 6,
+        "length": 2296
+      },
+      "accepted": 2,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 5,
+      "milliseconds": 49,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "a",
+        "from": "s",
+        "to": "a",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 116,
+            "y": 200
+          },
+          {
+            "x": 116,
+            "y": 28
+          },
+          {
+            "x": 440,
+            "y": 28
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "b",
+        "from": "s",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 212
+          },
+          {
+            "x": 173,
+            "y": 212
+          },
+          {
+            "x": 173,
+            "y": 148
+          },
+          {
+            "x": 440,
+            "y": 148
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "c",
+        "from": "s",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 220
+          },
+          {
+            "x": 300,
+            "y": 220
+          },
+          {
+            "x": 300,
+            "y": 268
+          },
+          {
+            "x": 440,
+            "y": 268
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "d",
+        "from": "s",
+        "to": "d",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 8,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 173,
+            "y": 228
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "e",
+        "from": "s",
+        "to": "e",
+        "fromSide": "bottom",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 116,
+            "y": 240
+          },
+          {
+            "x": 116,
+            "y": 508
+          },
+          {
+            "x": 440,
+            "y": 508
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "parallel-penalty-0.draft",
+    "settings": {
+      "parallelPenalty": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 20,
+      "length": 3828,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 1,
+        "laneDeficit": 9,
+        "minimumConflictingGap": 7,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 19,
+        "length": 3502
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 2,
+      "edges": 6,
+      "milliseconds": 66,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 228
+          },
+          {
+            "x": 440,
+            "y": 228
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "top",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 347
+          },
+          {
+            "x": 500,
+            "y": 347
+          },
+          {
+            "x": 500,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "bottom",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 416
+          },
+          {
+            "x": 100,
+            "y": 448
+          },
+          {
+            "x": 586,
+            "y": 448
+          },
+          {
+            "x": 586,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "bottom",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 432
+          },
+          {
+            "x": 570,
+            "y": 432
+          },
+          {
+            "x": 570,
+            "y": 269
+          },
+          {
+            "x": 500,
+            "y": 269
+          },
+          {
+            "x": 500,
+            "y": 256
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "parallel-penalty-18.draft",
+    "settings": {
+      "parallelPenalty": 18
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 163,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "parallel-penalty-60.draft",
+    "settings": {
+      "parallelPenalty": 60
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 154,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "passes-1.draft",
+    "settings": {
+      "passes": 1
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 18,
+      "length": 3434,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 97,
+      "passes": 1
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 100,
+            "y": 360
+          },
+          {
+            "x": 100,
+            "y": 340
+          },
+          {
+            "x": 420,
+            "y": 340
+          },
+          {
+            "x": 420,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "passes-3.draft",
+    "settings": {
+      "passes": 3
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 148,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "passes-5.draft",
+    "settings": {
+      "passes": 5
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 192,
+      "passes": 5
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "port-gap-16.draft",
+    "settings": {
+      "edgeGap": 4,
+      "portGap": 16
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 968,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 968
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ea",
+        "from": "hub",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 204
+          },
+          {
+            "x": 320,
+            "y": 204
+          },
+          {
+            "x": 320,
+            "y": 80
+          },
+          {
+            "x": 440,
+            "y": 80
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "eb",
+        "from": "hub",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "ec",
+        "from": "hub",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 236
+          },
+          {
+            "x": 320,
+            "y": 236
+          },
+          {
+            "x": 320,
+            "y": 360
+          },
+          {
+            "x": 440,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "port-gap-28.draft",
+    "settings": {
+      "edgeGap": 4,
+      "portGap": 28
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 944,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 944
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ea",
+        "from": "hub",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -28,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 192
+          },
+          {
+            "x": 320,
+            "y": 192
+          },
+          {
+            "x": 320,
+            "y": 80
+          },
+          {
+            "x": 440,
+            "y": 80
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "eb",
+        "from": "hub",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "ec",
+        "from": "hub",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 28,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 248
+          },
+          {
+            "x": 320,
+            "y": 248
+          },
+          {
+            "x": 320,
+            "y": 360
+          },
+          {
+            "x": 440,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "port-gap-6.draft",
+    "settings": {
+      "edgeGap": 4,
+      "portGap": 6
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 988,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 988
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ea",
+        "from": "hub",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -6,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 214
+          },
+          {
+            "x": 320,
+            "y": 214
+          },
+          {
+            "x": 320,
+            "y": 80
+          },
+          {
+            "x": 440,
+            "y": 80
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "eb",
+        "from": "hub",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "ec",
+        "from": "hub",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 6,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 200,
+            "y": 226
+          },
+          {
+            "x": 320,
+            "y": 226
+          },
+          {
+            "x": 320,
+            "y": 360
+          },
+          {
+            "x": 440,
+            "y": 360
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "port-stability-0.draft",
+    "settings": {
+      "portStability": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 145,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "port-stability-150.draft",
+    "settings": {
+      "portStability": 150
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 18,
+      "length": 3434,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 141,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 100,
+            "y": 360
+          },
+          {
+            "x": 100,
+            "y": 340
+          },
+          {
+            "x": 420,
+            "y": 340
+          },
+          {
+            "x": 420,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "port-stability-20.draft",
+    "settings": {
+      "portStability": 20
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 2,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 17,
+      "length": 3386,
+      "initial": {
+        "crossings": 2,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 18,
+        "length": 3434
+      },
+      "accepted": 1,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 1,
+      "edges": 6,
+      "milliseconds": 144,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "ay",
+        "from": "a",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -8,
+        "points": [
+          {
+            "x": 160,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 68
+          },
+          {
+            "x": 420,
+            "y": 220
+          },
+          {
+            "x": 440,
+            "y": 220
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "az",
+        "from": "a",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 16,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 84
+          },
+          {
+            "x": 404,
+            "y": 372
+          },
+          {
+            "x": 440,
+            "y": 372
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bx",
+        "from": "b",
+        "to": "x",
+        "fromSide": "top",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 100,
+            "y": 200
+          },
+          {
+            "x": 100,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 187
+          },
+          {
+            "x": 30,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 20
+          },
+          {
+            "x": 427,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "bz",
+        "from": "b",
+        "to": "z",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 228
+          },
+          {
+            "x": 180,
+            "y": 388
+          },
+          {
+            "x": 440,
+            "y": 388
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cx",
+        "from": "c",
+        "to": "x",
+        "fromSide": "right",
+        "toSide": "right",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 388
+          },
+          {
+            "x": 173,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 426
+          },
+          {
+            "x": 573,
+            "y": 68
+          },
+          {
+            "x": 560,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "cy",
+        "from": "c",
+        "to": "y",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": -16,
+        "toOffset": 8,
+        "points": [
+          {
+            "x": 160,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 372
+          },
+          {
+            "x": 388,
+            "y": 236
+          },
+          {
+            "x": 440,
+            "y": 236
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "shared-penalty-0.draft",
+    "settings": {
+      "parallelPenalty": 0,
+      "edgeGap": 4,
+      "fanoutPenalty": 0,
+      "sharedPenalty": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 3,
+      "shared": 420,
+      "lanePairs": 3,
+      "laneDeficit": 420,
+      "minimumConflictingGap": 0,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 1080,
+      "initial": {
+        "crossings": 3,
+        "shared": 420,
+        "lanePairs": 3,
+        "laneDeficit": 420,
+        "minimumConflictingGap": 0,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 1080
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 23,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "a",
+        "from": "s",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 300,
+            "y": 172
+          },
+          {
+            "x": 300,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "b",
+        "from": "s",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 440,
+            "y": 172
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "c",
+        "from": "s",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 300,
+            "y": 172
+          },
+          {
+            "x": 300,
+            "y": 308
+          },
+          {
+            "x": 440,
+            "y": 308
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "shared-penalty-20.draft",
+    "settings": {
+      "parallelPenalty": 0,
+      "edgeGap": 4,
+      "fanoutPenalty": 0,
+      "sharedPenalty": 20
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 3,
+      "shared": 39,
+      "lanePairs": 3,
+      "laneDeficit": 39,
+      "minimumConflictingGap": 0,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 1080,
+      "initial": {
+        "crossings": 3,
+        "shared": 39,
+        "lanePairs": 3,
+        "laneDeficit": 39,
+        "minimumConflictingGap": 0,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 1080
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 15,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "a",
+        "from": "s",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "b",
+        "from": "s",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 440,
+            "y": 172
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "c",
+        "from": "s",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 308
+          },
+          {
+            "x": 440,
+            "y": 308
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "shared-penalty-8.draft",
+    "settings": {
+      "parallelPenalty": 0,
+      "edgeGap": 4,
+      "fanoutPenalty": 0,
+      "sharedPenalty": 8
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 3,
+      "shared": 39,
+      "lanePairs": 3,
+      "laneDeficit": 39,
+      "minimumConflictingGap": 0,
+      "requestedEdgeGap": 4,
+      "blocked": 0,
+      "bends": 4,
+      "length": 1080,
+      "initial": {
+        "crossings": 3,
+        "shared": 39,
+        "lanePairs": 3,
+        "laneDeficit": 39,
+        "minimumConflictingGap": 0,
+        "requestedEdgeGap": 4,
+        "blocked": 0,
+        "bends": 4,
+        "length": 1080
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 3,
+      "milliseconds": 13,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "a",
+        "from": "s",
+        "to": "a",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 68
+          },
+          {
+            "x": 440,
+            "y": 68
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "b",
+        "from": "s",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": -16,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 440,
+            "y": 172
+          }
+        ],
+        "blocked": false
+      },
+      {
+        "id": "c",
+        "from": "s",
+        "to": "c",
+        "fromSide": "right",
+        "toSide": "left",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 160,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 172
+          },
+          {
+            "x": 173,
+            "y": 308
+          },
+          {
+            "x": 440,
+            "y": 308
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "standoff-0.draft",
+    "settings": {
+      "standoff": 0
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 3,
+      "length": 470,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 3,
+        "length": 470
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "top",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 110
+          },
+          {
+            "x": 490,
+            "y": 110
+          },
+          {
+            "x": 490,
+            "y": 160
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "standoff-20.draft",
+    "settings": {
+      "standoff": 20
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 3,
+      "length": 490,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 3,
+        "length": 490
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 1,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "top",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 100
+          },
+          {
+            "x": 490,
+            "y": 100
+          },
+          {
+            "x": 490,
+            "y": 160
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  },
+  {
+    "file": "standoff-40.draft",
+    "settings": {
+      "standoff": 40
+    },
+    "geometryUnchanged": true,
+    "report": {
+      "crossings": 0,
+      "shared": 0,
+      "lanePairs": 0,
+      "laneDeficit": 0,
+      "minimumConflictingGap": null,
+      "requestedEdgeGap": 16,
+      "blocked": 0,
+      "bends": 3,
+      "length": 470,
+      "initial": {
+        "crossings": 0,
+        "shared": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minimumConflictingGap": null,
+        "requestedEdgeGap": 16,
+        "blocked": 0,
+        "bends": 3,
+        "length": 470
+      },
+      "accepted": 0,
+      "repaired": 0,
+      "nudged": 0,
+      "tidied": 0,
+      "edges": 1,
+      "milliseconds": 0,
+      "passes": 3
+    },
+    "routes": [
+      {
+        "id": "e",
+        "from": "a",
+        "to": "b",
+        "fromSide": "right",
+        "toSide": "top",
+        "fromOffset": 0,
+        "toOffset": 0,
+        "points": [
+          {
+            "x": 140,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 180
+          },
+          {
+            "x": 153,
+            "y": 110
+          },
+          {
+            "x": 490,
+            "y": 110
+          },
+          {
+            "x": 490,
+            "y": 160
+          }
+        ],
+        "blocked": false
+      }
+    ]
+  }
+]

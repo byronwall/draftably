@@ -1,0 +1,3 @@
+warning line 8: stay b gave way by 34 px to keep root clear. Remove line 8, or run format --drop-stale. [relaxed]
+Metrics: 668×250 (aspect 2.67), 0 crossings, 3 bends, 252px of lines, 1 warning.
+Warnings: 3 nodes, 0 groups, 2 connections.

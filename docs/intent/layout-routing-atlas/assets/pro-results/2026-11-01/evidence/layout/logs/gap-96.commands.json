@@ -1,0 +1,60 @@
+{
+  "file": "gap-96.draft",
+  "source_sha256": "ea541913b62c8ce4ba4ebe585fbd53c27544cfd0a4ad73e04be2e6522b197c67",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/gap-96.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.211
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/gap-96.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.149
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 764,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 192,
+    "warnings": 0
+  },
+  "node_hash": "ad60078695657a753971161864605bf3cb9f56e6f0140f525ca13b22cf840c01",
+  "route_hash": "b8c64f1803b2027b7921e0fd2103a7884298b805208ccc8599feeb824e3d95e2",
+  "geometry_hash": "71203b476aa7535dcec7517ab5dda2694cf2bba5f4d46a8d2d0e1b984cd5a275",
+  "check_output": "warning The drawing is 764\u00d7182 (aspect 4.20). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 764\u00d7182 (aspect 4.20), 0 crossings, 0 bends, 192px of lines, 1 warning.\nWarnings: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/gap-96.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.134,
+    "file": "svg/gap-96.svg",
+    "bytes": 67513,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "c3871e1e7ba6c42e9d9dde9a0df44116ae813767af14f16fcb5afc56b2079f1e"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

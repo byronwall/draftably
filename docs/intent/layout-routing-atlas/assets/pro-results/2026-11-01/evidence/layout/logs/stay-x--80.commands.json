@@ -1,0 +1,60 @@
+{
+  "file": "stay-x--80.draft",
+  "source_sha256": "b790a9c5d703465ca07de664d550e0b892e5393f373c3c3dc7ea5ebc4f46c401",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/stay-x--80.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.101
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/stay-x--80.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.094
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 253,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "127020aac7adc3899e0cde17b4ae166359f4efe91b71d5440100f983b1ae85f2",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "3829177dea4dd14f0dd6b54d11de78cee171914bdd683415463ffe7374ff9555",
+  "check_output": "Metrics: 253\u00d7182 (aspect 1.39), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 1 node, 0 groups, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/stay-x--80.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.085,
+    "file": "svg/stay-x--80.svg",
+    "bytes": 66405,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "f8563a63f689eb11d06f6814c85852d120705fc26b1fd6d8320d3abbd93c2d26"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

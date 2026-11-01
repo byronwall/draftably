@@ -1,0 +1,46 @@
+{
+  "file": "repros/cells-fractional-span.draft",
+  "source_sha256": "714c131a1b4efb0b5e8454c58b4c7c9d5d79d0326c47997889e4749c8a33d726",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/cells-fractional-span.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.077
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/cells-fractional-span.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.081
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [
+    "nodes[0].w=null"
+  ],
+  "metrics": {
+    "width": 58,
+    "height": 66,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 1
+  },
+  "node_hash": "6bff12b9e055a4751c09fa51247d6fc5f5c8d126531229a8aa26cda77c2d940a",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "359df01b1b5f491a78989e173fe016c16ddf00dfd096daeb8535df9412291659",
+  "check_output": "warning a sits NaNpx outside its group g. The layout could not avoid it; move or resize a neighbour. [outside-group]\nMetrics: 58\u00d766 (aspect 0.88), 0 crossings, 0 bends, 0px of lines, 1 warning.\nWarnings: 1 node, 1 group, 0 connections.\n",
+  "finite_inspect": false,
+  "svg_ok": true
+}

@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "Small and large alignment errors",
+  "graph": {
+    "nodes": [
+      {
+        "id": "a",
+        "title": "Near source"
+      },
+      {
+        "id": "b",
+        "title": "Near target"
+      },
+      {
+        "id": "c",
+        "title": "Far source"
+      },
+      {
+        "id": "d",
+        "title": "Far target"
+      }
+    ],
+    "edges": [
+      {
+        "id": "ab",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "cd",
+        "from": "c",
+        "to": "d",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "a": {
+        "x": 0,
+        "y": 0,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "b": {
+        "x": 260,
+        "y": 12,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "c": {
+        "x": 0,
+        "y": 240,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "d": {
+        "x": 260,
+        "y": 340,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "ab": {},
+      "cd": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "a": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "b": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "c": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "d": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "Small and large alignment errors"
+    }
+  }
+}

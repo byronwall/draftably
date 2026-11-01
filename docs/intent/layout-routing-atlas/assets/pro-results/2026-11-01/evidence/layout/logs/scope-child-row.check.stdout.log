@@ -1,0 +1,4 @@
+warning cache is 568px from the nearest node it connects to. [stranded]
+warning The drawing is 1284×370 (aspect 3.47). Try draftably vary --fit slide (or page). [aspect]
+Metrics: 1284×370 (aspect 3.47), 0 crossings, 11 bends, 2138px of lines, 2 warnings.
+Warnings: 7 nodes, 4 groups, 6 connections.

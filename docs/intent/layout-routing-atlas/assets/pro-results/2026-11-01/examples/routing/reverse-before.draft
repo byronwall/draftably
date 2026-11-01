@@ -1,0 +1,11 @@
+diagram "Routing: explicit sides" version=1
+# Fixed rectangles: change only the routing line for a causal comparison.
+node a "Start"
+size a width=140 height=80
+pin a x=40 y=80
+node b "End"
+size b width=140 height=80
+pin b x=420 y=240
+edge e a -> b from=right to=left
+# Row is intentional: suppress automatic flow skip/return lanes while pins freeze geometry.
+layout root row

@@ -1,0 +1,109 @@
+{
+  "nodes": [
+    {
+      "id": "answer",
+      "parent": "team",
+      "x": 496,
+      "y": 176,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "customer",
+      "parent": "root",
+      "x": 0,
+      "y": 0,
+      "w": 920,
+      "h": 128
+    },
+    {
+      "id": "receive",
+      "parent": "customer",
+      "x": 732,
+      "y": 48,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "review",
+      "parent": "team",
+      "x": 260,
+      "y": 176,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "submit",
+      "parent": "customer",
+      "x": 24,
+      "y": 48,
+      "w": 164,
+      "h": 56
+    },
+    {
+      "id": "team",
+      "parent": "root",
+      "x": 0,
+      "y": 128,
+      "w": 920,
+      "h": 128
+    }
+  ],
+  "routes": [
+    {
+      "id": "approved",
+      "points": [
+        {
+          "x": 424,
+          "y": 204
+        },
+        {
+          "x": 496,
+          "y": 204
+        }
+      ]
+    },
+    {
+      "id": "returned",
+      "points": [
+        {
+          "x": 578,
+          "y": 176
+        },
+        {
+          "x": 578,
+          "y": 76
+        },
+        {
+          "x": 732,
+          "y": 76
+        }
+      ]
+    },
+    {
+      "id": "sent",
+      "points": [
+        {
+          "x": 188,
+          "y": 76
+        },
+        {
+          "x": 342,
+          "y": 76
+        },
+        {
+          "x": 342,
+          "y": 176
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "width": 1000,
+    "height": 382,
+    "crossings": 0,
+    "bends": 2,
+    "length": 580,
+    "warnings": 0
+  }
+}

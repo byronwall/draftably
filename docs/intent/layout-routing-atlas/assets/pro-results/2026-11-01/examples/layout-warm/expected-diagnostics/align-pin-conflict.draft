@@ -1,0 +1,7 @@
+diagram "A pin conflicts with required alignment" version=1
+node a "Pinned A"
+node c "Pinned C"
+layout root row
+pin a x=0 y=0
+pin c x=400 y=100
+align y a c strength=required

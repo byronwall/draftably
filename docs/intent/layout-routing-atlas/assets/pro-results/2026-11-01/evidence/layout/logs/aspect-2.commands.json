@@ -1,0 +1,60 @@
+{
+  "file": "aspect-2.draft",
+  "source_sha256": "df8ba4dc401d474f3b57ff3887ae64d12bb52f037a69b072286108b28ec08084",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/aspect-2.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.117
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/aspect-2.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.126
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 620,
+    "height": 342,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "5f44000bf4eb97443527ff958bad239d76f9f7e199d6d7eedc63b06ce04cde6e",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "49d54678b3d9dde999c225b71e95e3ffb5e02dff95f1fe8d0266212d764f3b49",
+  "check_output": "Metrics: 620\u00d7342 (aspect 1.81), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 9 nodes, 0 groups, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/aspect-2.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.115,
+    "file": "svg/aspect-2.svg",
+    "bytes": 69407,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "49695edc7ddedb56596a4d15dd96f7865f35c43a4d043fc0dad72038728237c7"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

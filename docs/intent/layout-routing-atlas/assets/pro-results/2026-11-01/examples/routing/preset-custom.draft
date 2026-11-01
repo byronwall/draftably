@@ -1,0 +1,32 @@
+diagram "Routing: a crowded corridor" version=1
+# Fixed rectangles: change only the routing line for a causal comparison.
+node a "A"
+size a width=120 height=56
+pin a x=40 y=40
+node b "B"
+size b width=120 height=56
+pin b x=40 y=200
+node c "C"
+size c width=120 height=56
+pin c x=40 y=360
+node x "X"
+size x width=120 height=56
+pin x x=440 y=40
+node y "Y"
+size y width=120 height=56
+pin y x=440 y=200
+node z "Z"
+size z width=120 height=56
+pin z x=440 y=360
+node wall "Obstacle"
+size wall width=80 height=136
+pin wall x=240 y=160
+edge az a -> z
+edge bx b -> x
+edge cy c -> y
+edge ay a -> y
+edge bz b -> z
+edge cx c -> x
+routing edge-gap=28 standoff=40 passes=1
+# Row is intentional: suppress automatic flow skip/return lanes while pins freeze geometry.
+layout root row

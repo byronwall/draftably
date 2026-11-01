@@ -1,0 +1,8 @@
+diagram "Local refinements" version=1
+node a "A"
+node b "A title with more words to wrap"
+node c "C"
+edge ab a -> b
+edge bc b -> c
+layout root row gap=48
+size b width=120 height=120

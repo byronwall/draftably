@@ -1,0 +1,11 @@
+diagram "Routing: returns and skips" version=1
+node a "A"
+node b "B"
+node c "C"
+node d "D"
+edge ab a -> b
+edge bc b -> c
+edge cd c -> d
+edge back d -> a constraint=false
+edge skip a -> c
+layout root flow direction=down fold=never

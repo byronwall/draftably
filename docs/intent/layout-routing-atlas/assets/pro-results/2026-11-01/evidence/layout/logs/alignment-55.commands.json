@@ -1,0 +1,60 @@
+{
+  "file": "alignment-55.draft",
+  "source_sha256": "50bcbbe5341bca473d88e5d8c8a1667720e1f31d091303ccdad29634a70239d4",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/alignment-55.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 1.635
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/alignment-55.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 1.683
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1393,
+    "height": 658,
+    "crossings": 0,
+    "bends": 11,
+    "length": 2496,
+    "warnings": 0
+  },
+  "node_hash": "c63ae85aa739afff6184eeca3da2363fbb46c0c39c0c385e04708141c98bc379",
+  "route_hash": "b53f769ec905577a24a24ee16dddec4a4bec013e141701b782d927ffafefbace",
+  "geometry_hash": "afc66aeaf3875e35dd14d341231aab6423faf10a5eb693c796bc1ce9f8bbdf81",
+  "check_output": "warning mobile is 489px from the nearest node it connects to. [stranded]\nMetrics: 1393\u00d7658 (aspect 2.12), 0 crossings, 11 bends, 2496px of lines, 1 warning.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/alignment-55.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 1.074,
+    "file": "svg/alignment-55.svg",
+    "bytes": 73364,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "2178d5a86573d1d1915ca2655bd9852d3a40408d14f16fca737141daed2143e8"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

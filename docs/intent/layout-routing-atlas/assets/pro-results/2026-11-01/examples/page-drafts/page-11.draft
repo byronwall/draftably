@@ -1,0 +1,17 @@
+diagram "Routing: distance from an obstacle" version=1
+# Smaller vertical padding keeps labels readable inside the intentionally short fixed boxes.
+theme drafting padding-y=4
+# Fixed rectangles: change only the routing line for a causal comparison.
+node a "Start"
+size a width=100 height=40
+pin a x=40 y=160
+node block "Obstacle"
+size block width=100 height=120
+pin block x=240 y=120
+node b "End"
+size b width=100 height=40
+pin b x=440 y=160
+edge e a -> b from=right to=left
+routing clearance=10
+# Row is intentional: suppress automatic flow skip/return lanes while pins freeze geometry.
+layout root row

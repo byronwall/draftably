@@ -1,0 +1,12 @@
+diagram "Request exchange" version=1
+group clients "Client"
+group servers "Server"
+node app "App" in=clients
+node api "API" in=servers
+node database "Database" in=servers
+edge m1 app -> api "request"
+edge m2 api -> database "read"
+edge m3 database -> database "validate"
+edge m4 database -> api "row" kind=async
+edge m5 api -> app "reply" kind=async
+layout root sequence

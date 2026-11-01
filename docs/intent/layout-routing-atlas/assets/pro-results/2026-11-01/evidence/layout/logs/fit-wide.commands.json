@@ -1,0 +1,60 @@
+{
+  "file": "fit-wide.draft",
+  "source_sha256": "1fd2d1623c5e80cb8ff05c2bec59fe64abfce21d5bd77fc006aac3766970c34a",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-wide.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.603
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-wide.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.733
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 892,
+    "height": 462,
+    "crossings": 0,
+    "bends": 4,
+    "length": 1932,
+    "warnings": 0
+  },
+  "node_hash": "cb9214c96393b0c21c59c37ab8cc936e7318b2c1e0390d399252f3d5c8b52ba1",
+  "route_hash": "22a5a00a5e8ddfea305f5bfca1fdd7b037baa2b7a625391b82873902bcd64cda",
+  "geometry_hash": "89df82e0bbb975ac598c35826789b1d38bc721ca5d1ed48d57f209fe171952dc",
+  "check_output": "info    line 25: fit=wide (aspect 2): drawn reading right, aspect 2.42; 5 layouts tried.\nMetrics: 892\u00d7462 (aspect 1.93), 0 crossings, 4 bends, 1932px of lines, 0 warnings.\nOK: 12 nodes, 0 groups, 11 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-wide.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.548,
+    "file": "svg/fit-wide.svg",
+    "bytes": 72803,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "17992c30509ad64e42664f59d167fb4558b45612979b08d3b4797576ae5f272f"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

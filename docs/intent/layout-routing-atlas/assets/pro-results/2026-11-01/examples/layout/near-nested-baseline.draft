@@ -1,0 +1,7 @@
+diagram "Follow an inner endpoint" version=1
+group services "Services"
+node api "API" in=services
+node jobs "Jobs" in=services
+node note "Job note"
+layout root row gap=32
+layout services column gap=32

@@ -1,0 +1,2127 @@
+{
+  "sweeps": [
+    {
+      "parameter": "clearance",
+      "values": [
+        4,
+        10,
+        30
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c",
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c",
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c"
+      ],
+      "distinct_route_point_sets": 3,
+      "route_hashes": [
+        "0c294ccf78315330f7bf6b8cf6b2cd56d5f9dfc8fd4b167a67ce84ad6597be5e",
+        "1b4c6ce30aa5fc94177804767976a95e2fe1c851167332ea0fb9090a06d7eded",
+        "5fe46db35b959395d915222b1fb57f0693442439b54f21cc4265fc1974d498c2"
+      ],
+      "distinct_svg_route_paths": 3,
+      "svg_path_hashes": [
+        "3027716448a95514dbb745c284760c6950ff08d5ecf68d248ff8ef23608af86f",
+        "63e1a337a933de59fd212dca8ed72430b39a8a508a860eca4e40fa3aa77ec43b",
+        "1701cdbd06a3c5a725847409526a4692dd2590e2a5fabd38440e0f977e7e9825"
+      ],
+      "metrics": [
+        {
+          "width": 580,
+          "height": 254,
+          "crossings": 0,
+          "bends": 4,
+          "length": 428,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 280,
+          "crossings": 0,
+          "bends": 4,
+          "length": 480,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "parameter": "standoff",
+      "values": [
+        0,
+        20,
+        40
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c",
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c",
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "8accee1709095d1184103da06d94b6aa7e0dd09b9429fbd929f911e120e4d30b",
+        "3e159217bf974ebfc44e915ac60fdb8065ea879d5721b86a36c894d3c1f7b248",
+        "8accee1709095d1184103da06d94b6aa7e0dd09b9429fbd929f911e120e4d30b"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "8f4a42fe1dcb34678543bb5adbdd6a30debb505a38ecfcfe4fa16b896dc66f1e",
+        "299271b02fea31df6668e7ddd7dafb1c32d6738058fc7964f74d43027759acae",
+        "8f4a42fe1dcb34678543bb5adbdd6a30debb505a38ecfcfe4fa16b896dc66f1e"
+      ],
+      "metrics": [
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 3,
+          "length": 470,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 270,
+          "crossings": 0,
+          "bends": 3,
+          "length": 490,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 3,
+          "length": 470,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "parameter": "port-gap",
+      "values": [
+        6,
+        16,
+        28
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "79a512b0b08ba5b91397b523851f4c8487d889be428ad5303676deb021799278",
+        "79a512b0b08ba5b91397b523851f4c8487d889be428ad5303676deb021799278",
+        "79a512b0b08ba5b91397b523851f4c8487d889be428ad5303676deb021799278"
+      ],
+      "distinct_route_point_sets": 3,
+      "route_hashes": [
+        "82b417f5006e8455e66a2b4155ff5544601d0cf08f8b59f6b4c6d10af091b51d",
+        "b848ebb0c1de805da58ed05208a9ba23c1f8209abee7dbd3e7b3b61418831f40",
+        "9898035b98271063ef2c3f8a48107f79b328e89f079cddca9f7dcca68a390264"
+      ],
+      "distinct_svg_route_paths": 3,
+      "svg_path_hashes": [
+        "e1da6ff78b410ad7bb037404e8beb7174171c4c572f471f945c8c3f1cff134db",
+        "7f7bb1cb3ff1850b6d1d203626b52e785ea44ab7702e71b34c438b73367de574",
+        "e54dab8f7d8ef3e675251e2a6fe8528bf5c0c1370a311626da4803e64de69269"
+      ],
+      "metrics": [
+        {
+          "width": 640,
+          "height": 486,
+          "crossings": 0,
+          "bends": 4,
+          "length": 988,
+          "warnings": 0
+        },
+        {
+          "width": 640,
+          "height": 486,
+          "crossings": 0,
+          "bends": 4,
+          "length": 968,
+          "warnings": 0
+        },
+        {
+          "width": 640,
+          "height": 486,
+          "crossings": 0,
+          "bends": 4,
+          "length": 944,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "parameter": "edge-gap",
+      "values": [
+        4,
+        16,
+        48
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "79a512b0b08ba5b91397b523851f4c8487d889be428ad5303676deb021799278",
+        "79a512b0b08ba5b91397b523851f4c8487d889be428ad5303676deb021799278",
+        "79a512b0b08ba5b91397b523851f4c8487d889be428ad5303676deb021799278"
+      ],
+      "distinct_route_point_sets": 3,
+      "route_hashes": [
+        "82b417f5006e8455e66a2b4155ff5544601d0cf08f8b59f6b4c6d10af091b51d",
+        "b848ebb0c1de805da58ed05208a9ba23c1f8209abee7dbd3e7b3b61418831f40",
+        "1e3010559986e0bdfa34b826bde7522bece162bb7d1558feb983c195353473cd"
+      ],
+      "distinct_svg_route_paths": 3,
+      "svg_path_hashes": [
+        "e1da6ff78b410ad7bb037404e8beb7174171c4c572f471f945c8c3f1cff134db",
+        "7f7bb1cb3ff1850b6d1d203626b52e785ea44ab7702e71b34c438b73367de574",
+        "7728c89dd75339518d323d12b2224a9aed80cc616bc0caa67381050ca16467f2"
+      ],
+      "metrics": [
+        {
+          "width": 640,
+          "height": 486,
+          "crossings": 0,
+          "bends": 4,
+          "length": 988,
+          "warnings": 0
+        },
+        {
+          "width": 640,
+          "height": 486,
+          "crossings": 0,
+          "bends": 4,
+          "length": 968,
+          "warnings": 0
+        },
+        {
+          "width": 640,
+          "height": 486,
+          "crossings": 0,
+          "bends": 4,
+          "length": 904,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "parameter": "bend-penalty",
+      "values": [
+        0,
+        32,
+        100
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b"
+      ],
+      "distinct_route_point_sets": 3,
+      "route_hashes": [
+        "6cf59738e21209e71d12eac94758de04eb01bfbb0765522f6a23c87ac6af610e",
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460",
+        "1421c8501d745eaccab89d431b33ea07ee145dd07045ea2d496e1bbc4c62672a"
+      ],
+      "distinct_svg_route_paths": 3,
+      "svg_path_hashes": [
+        "3fa4b389fd170badcb67cc4289a32b9b4fdaadbcf4b8bb0ee8a342984136282d",
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d",
+        "41a5eb75ce72921d0b25bee38b19fd7aa7c35a14cceb41d657639d64cc97f89c"
+      ],
+      "metrics": [
+        {
+          "width": 644,
+          "height": 566,
+          "crossings": 0,
+          "bends": 26,
+          "length": 4050,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 634,
+          "height": 550,
+          "crossings": 2,
+          "bends": 14,
+          "length": 3572,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ]
+      ]
+    },
+    {
+      "parameter": "crossing-penalty",
+      "values": [
+        0,
+        360,
+        1200
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "82473baf4b7de4f753532a718c69695e81a21ebecea1771212e6150a5de43ef5",
+        "82473baf4b7de4f753532a718c69695e81a21ebecea1771212e6150a5de43ef5",
+        "82473baf4b7de4f753532a718c69695e81a21ebecea1771212e6150a5de43ef5"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "da11453388abd1a7306bd522496f0e0062851d8477c8af032b236d7d05732ab7",
+        "da11453388abd1a7306bd522496f0e0062851d8477c8af032b236d7d05732ab7",
+        "9c705929a7d2cbefff7e8d3a24e115b65f080106c81014e2c869c49331e86f01"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "0f20bd4609c9f2735395715b9e541bc2e141ec2280c083602efbdeeed9897cf1",
+        "0f20bd4609c9f2735395715b9e541bc2e141ec2280c083602efbdeeed9897cf1",
+        "62a6078f5882ef3959c3cf86b7dc3ab6803942fbc5aa1c5b8086797d026448d7"
+      ],
+      "metrics": [
+        {
+          "width": 600,
+          "height": 382,
+          "crossings": 1,
+          "bends": 6,
+          "length": 960,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 382,
+          "crossings": 1,
+          "bends": 6,
+          "length": 960,
+          "warnings": 0
+        },
+        {
+          "width": 614,
+          "height": 406,
+          "crossings": 0,
+          "bends": 8,
+          "length": 1342,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [
+          "warning Edges ad and bc cross. [crossing]"
+        ],
+        [
+          "warning Edges ad and bc cross. [crossing]"
+        ],
+        []
+      ]
+    },
+    {
+      "parameter": "shared-penalty",
+      "values": [
+        0,
+        8,
+        20
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "efaa25b6601923b3cb88ee5dcfa9a7203af2c8be37985695eff60f474a5817ef",
+        "efaa25b6601923b3cb88ee5dcfa9a7203af2c8be37985695eff60f474a5817ef",
+        "efaa25b6601923b3cb88ee5dcfa9a7203af2c8be37985695eff60f474a5817ef"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "a964e8047be21c47f393c1b15d770d518306a23ee4e6cc04b6aa54beed6f47d3",
+        "b58c91021fccf07905e346e0defe0b608eefb777d75ef614440990944379e671",
+        "b58c91021fccf07905e346e0defe0b608eefb777d75ef614440990944379e671"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "9b71117ef53d162c3ed1427439cff355c39519aed141aa7966508524a23bd0ed",
+        "6fb65fbe83dc93268061b256d94f623d2c21a3d150cabf8f1fd142205e79e5e7",
+        "6fb65fbe83dc93268061b256d94f623d2c21a3d150cabf8f1fd142205e79e5e7"
+      ],
+      "metrics": [
+        {
+          "width": 600,
+          "height": 422,
+          "crossings": 3,
+          "bends": 4,
+          "length": 1080,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 422,
+          "crossings": 3,
+          "bends": 4,
+          "length": 1080,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 422,
+          "crossings": 3,
+          "bends": 4,
+          "length": 1080,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "parameter": "parallel-penalty",
+      "values": [
+        0,
+        18,
+        60
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "cb5efe716fdfdc4ac00a2a5890b1d133b949d71564a6fdaf808a25b0b78df7ac",
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460",
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "1ab4caafdfa9f0b9b787f3b6e8a7345916a2aa6f527f08d4259e6f67a3de5e74",
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d",
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d"
+      ],
+      "metrics": [
+        {
+          "width": 644,
+          "height": 562,
+          "crossings": 0,
+          "bends": 20,
+          "length": 3828,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ]
+      ]
+    },
+    {
+      "parameter": "port-stability",
+      "values": [
+        0,
+        20,
+        150
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460",
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460",
+        "ec27f19a4eb2ed6279d05461ece6147f38c289dedfb5fbe6f9291ba08b1a034a"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d",
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d",
+        "2ecf67663062aecac3c3d423162e7e570405d2cf9b5dd5bd4009fb28a6740566"
+      ],
+      "metrics": [
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 18,
+          "length": 3434,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ]
+      ]
+    },
+    {
+      "parameter": "fanout-penalty",
+      "values": [
+        0,
+        50,
+        160
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "209b98ea549f19775832972244ee29ed739522235d0e455e0a400a68e7ffddac",
+        "209b98ea549f19775832972244ee29ed739522235d0e455e0a400a68e7ffddac",
+        "209b98ea549f19775832972244ee29ed739522235d0e455e0a400a68e7ffddac"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "98658d4b81764881af32f8596b2c8ae081f855957c2a1c50f9ebd126d6593622",
+        "98658d4b81764881af32f8596b2c8ae081f855957c2a1c50f9ebd126d6593622",
+        "c64f700a28ec91d6b0ab1c86c192947b92cfcc454dda5408a52ee4a8a18b65e5"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "b88632f170a760d7bf81c181ce8fa9aff05e578d9bb5a6a91b6a29954fcd85d2",
+        "b88632f170a760d7bf81c181ce8fa9aff05e578d9bb5a6a91b6a29954fcd85d2",
+        "effef1d162b5edcd67a42da6e1562df945e4b58f3979d326ad4fa9d21bba0777"
+      ],
+      "metrics": [
+        {
+          "width": 600,
+          "height": 662,
+          "crossings": 0,
+          "bends": 8,
+          "length": 2200,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 662,
+          "crossings": 0,
+          "bends": 8,
+          "length": 2200,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 662,
+          "crossings": 0,
+          "bends": 7,
+          "length": 2256,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "parameter": "passes",
+      "values": [
+        1,
+        3,
+        5
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b",
+        "b3367fd9a5cb135a39c40306e205700d09329ef4f41c8a4bbf5d46bbc3ecbb1b"
+      ],
+      "distinct_route_point_sets": 2,
+      "route_hashes": [
+        "ec27f19a4eb2ed6279d05461ece6147f38c289dedfb5fbe6f9291ba08b1a034a",
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460",
+        "93fd67aa6c79f38c9dd5e40262fad4c3324dd69f05511fe6cfc528c8db637460"
+      ],
+      "distinct_svg_route_paths": 2,
+      "svg_path_hashes": [
+        "2ecf67663062aecac3c3d423162e7e570405d2cf9b5dd5bd4009fb28a6740566",
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d",
+        "bf7396b4330497f0db8ab553ebeaacb5f1223dd6e6e674daa821f5c03d86515d"
+      ],
+      "metrics": [
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 18,
+          "length": 3434,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ],
+        [
+          "warning Edges az and cy cross. [crossing]",
+          "warning Edges bz and cy cross. [crossing]"
+        ]
+      ]
+    },
+    {
+      "parameter": "corner-radius",
+      "values": [
+        0,
+        6,
+        16
+      ],
+      "geometry_identical": true,
+      "geometry_hashes": [
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c",
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c",
+        "c78cf78ed50c5834342b5629ce434b1f77f445da73c92e185260875accd5065c"
+      ],
+      "distinct_route_point_sets": 1,
+      "route_hashes": [
+        "1b4c6ce30aa5fc94177804767976a95e2fe1c851167332ea0fb9090a06d7eded",
+        "1b4c6ce30aa5fc94177804767976a95e2fe1c851167332ea0fb9090a06d7eded",
+        "1b4c6ce30aa5fc94177804767976a95e2fe1c851167332ea0fb9090a06d7eded"
+      ],
+      "distinct_svg_route_paths": 3,
+      "svg_path_hashes": [
+        "4a9b04db34b81de2328b2aa4e3b7a7f916629ce7e5588557d94d9bebef858a59",
+        "63e1a337a933de59fd212dca8ed72430b39a8a508a860eca4e40fa3aa77ec43b",
+        "5f5fbe6f9189789cc6537510273acd4f595d2bcb335405472243eb2fb16b597c"
+      ],
+      "metrics": [
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        }
+      ],
+      "warnings": [
+        [],
+        [],
+        []
+      ]
+    }
+  ],
+  "channel_trio": {
+    "files": [
+      "channel-reservations-standoff-0.draft",
+      "channel-reservations.draft",
+      "channel-reservations-standoff-40.draft"
+    ],
+    "geometry_identical": false,
+    "default_to_zero": {
+      "p_api": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_app": {
+        "x": [
+          448,
+          432
+        ]
+      },
+      "p_data": {
+        "x": [
+          448,
+          432
+        ]
+      },
+      "p_db": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_edge": {
+        "x": [
+          448,
+          432
+        ]
+      },
+      "p_lb": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_queue": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_worker": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "primary": {
+        "w": [
+          308,
+          252
+        ]
+      },
+      "s_api": {
+        "x": [
+          935,
+          863
+        ]
+      },
+      "s_app": {
+        "x": [
+          911,
+          839
+        ]
+      },
+      "s_data": {
+        "x": [
+          911,
+          839
+        ]
+      },
+      "s_db": {
+        "x": [
+          935,
+          863
+        ]
+      },
+      "s_edge": {
+        "x": [
+          911,
+          839
+        ]
+      },
+      "s_lb": {
+        "x": [
+          935,
+          863
+        ]
+      },
+      "s_queue": {
+        "x": [
+          935,
+          863
+        ]
+      },
+      "s_worker": {
+        "x": [
+          935,
+          863
+        ]
+      },
+      "standby": {
+        "x": [
+          871,
+          815
+        ],
+        "w": [
+          308,
+          252
+        ]
+      }
+    },
+    "default_to_forty": {
+      "p_api": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_app": {
+        "x": [
+          448,
+          432
+        ]
+      },
+      "p_data": {
+        "x": [
+          448,
+          432
+        ]
+      },
+      "p_db": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_edge": {
+        "x": [
+          448,
+          432
+        ]
+      },
+      "p_lb": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_queue": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "p_worker": {
+        "x": [
+          472,
+          456
+        ]
+      },
+      "primary": {
+        "w": [
+          308,
+          332
+        ]
+      },
+      "s_api": {
+        "x": [
+          935,
+          943
+        ]
+      },
+      "s_app": {
+        "x": [
+          911,
+          919
+        ]
+      },
+      "s_data": {
+        "x": [
+          911,
+          919
+        ]
+      },
+      "s_db": {
+        "x": [
+          935,
+          943
+        ]
+      },
+      "s_edge": {
+        "x": [
+          911,
+          919
+        ]
+      },
+      "s_lb": {
+        "x": [
+          935,
+          943
+        ]
+      },
+      "s_queue": {
+        "x": [
+          935,
+          943
+        ]
+      },
+      "s_worker": {
+        "x": [
+          935,
+          943
+        ]
+      },
+      "standby": {
+        "x": [
+          871,
+          895
+        ],
+        "w": [
+          308,
+          260
+        ]
+      }
+    }
+  },
+  "corner_paths": {
+    "0": [
+      "M140,180L153,180L153,110L427,110L427,180L440,180"
+    ],
+    "6": [
+      "M140,180L147,180Q153,180 153,174L153,116Q153,110 159,110L421,110Q427,110 427,116L427,174Q427,180 433,180L440,180"
+    ],
+    "16": [
+      "M140,180L146.5,180Q153,180 153,173.5L153,126Q153,110 169,110L411,110Q427,110 427,126L427,173.5Q427,180 433.5,180L440,180"
+    ]
+  },
+  "narrow_corridor": {
+    "4": {
+      "geometry": {
+        "nodes": [
+          {
+            "id": "a",
+            "parent": "root",
+            "x": 40,
+            "y": 126,
+            "w": 120,
+            "h": 56
+          },
+          {
+            "id": "b",
+            "parent": "root",
+            "x": 520,
+            "y": 126,
+            "w": 120,
+            "h": 56
+          },
+          {
+            "id": "bottom",
+            "parent": "root",
+            "x": 240,
+            "y": 168,
+            "w": 120,
+            "h": 100
+          },
+          {
+            "id": "top",
+            "parent": "root",
+            "x": 240,
+            "y": 40,
+            "w": 120,
+            "h": 100
+          }
+        ],
+        "routes": [
+          {
+            "id": "e",
+            "points": [
+              {
+                "x": 160,
+                "y": 154
+              },
+              {
+                "x": 520,
+                "y": 154
+              }
+            ]
+          }
+        ]
+      },
+      "metrics": {
+        "width": 680,
+        "height": 354,
+        "crossings": 0,
+        "bends": 0,
+        "length": 360,
+        "warnings": 0
+      },
+      "warnings": []
+    },
+    "10": {
+      "geometry": {
+        "nodes": [
+          {
+            "id": "a",
+            "parent": "root",
+            "x": 40,
+            "y": 126,
+            "w": 120,
+            "h": 56
+          },
+          {
+            "id": "b",
+            "parent": "root",
+            "x": 520,
+            "y": 126,
+            "w": 120,
+            "h": 56
+          },
+          {
+            "id": "bottom",
+            "parent": "root",
+            "x": 240,
+            "y": 168,
+            "w": 120,
+            "h": 100
+          },
+          {
+            "id": "top",
+            "parent": "root",
+            "x": 240,
+            "y": 40,
+            "w": 120,
+            "h": 100
+          }
+        ],
+        "routes": [
+          {
+            "id": "e",
+            "points": [
+              {
+                "x": 160,
+                "y": 154
+              },
+              {
+                "x": 520,
+                "y": 154
+              }
+            ]
+          }
+        ]
+      },
+      "metrics": {
+        "width": 680,
+        "height": 354,
+        "crossings": 0,
+        "bends": 0,
+        "length": 360,
+        "warnings": 0
+      },
+      "warnings": []
+    },
+    "30": {
+      "geometry": {
+        "nodes": [
+          {
+            "id": "a",
+            "parent": "root",
+            "x": 40,
+            "y": 126,
+            "w": 120,
+            "h": 56
+          },
+          {
+            "id": "b",
+            "parent": "root",
+            "x": 520,
+            "y": 126,
+            "w": 120,
+            "h": 56
+          },
+          {
+            "id": "bottom",
+            "parent": "root",
+            "x": 240,
+            "y": 168,
+            "w": 120,
+            "h": 100
+          },
+          {
+            "id": "top",
+            "parent": "root",
+            "x": 240,
+            "y": 40,
+            "w": 120,
+            "h": 100
+          }
+        ],
+        "routes": [
+          {
+            "id": "e",
+            "points": [
+              {
+                "x": 160,
+                "y": 154
+              },
+              {
+                "x": 193,
+                "y": 154
+              },
+              {
+                "x": 193,
+                "y": 10
+              },
+              {
+                "x": 487,
+                "y": 10
+              },
+              {
+                "x": 487,
+                "y": 154
+              },
+              {
+                "x": 520,
+                "y": 154
+              }
+            ]
+          }
+        ]
+      },
+      "metrics": {
+        "width": 680,
+        "height": 388,
+        "crossings": 0,
+        "bends": 4,
+        "length": 648,
+        "warnings": 0
+      },
+      "warnings": []
+    }
+  },
+  "raw_router_match": [
+    {
+      "file": "bend-penalty-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "bend-penalty-100.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "bend-penalty-32.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "clearance-10.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "clearance-30.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "clearance-4.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "corner-radius-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "corner-radius-16.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "corner-radius-6.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "crossing-penalty-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "crossing-penalty-1200.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "crossing-penalty-360.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "edge-gap-16.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "edge-gap-4.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "edge-gap-48.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "fanout-penalty-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "fanout-penalty-160.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "fanout-penalty-50.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "parallel-penalty-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "parallel-penalty-18.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "parallel-penalty-60.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "passes-1.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "passes-3.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "passes-5.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "port-gap-16.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "port-gap-28.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "port-gap-6.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "port-stability-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "port-stability-150.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "port-stability-20.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "shared-penalty-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "shared-penalty-20.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "shared-penalty-8.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "standoff-0.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "standoff-20.draft",
+      "route_points_match": true
+    },
+    {
+      "file": "standoff-40.draft",
+      "route_points_match": true
+    }
+  ],
+  "no_effect_groups": {
+    "standoff": {
+      "files": [
+        "no-effect-standoff-0.draft",
+        "no-effect-standoff-20.draft",
+        "no-effect-standoff-40.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 1,
+      "distinct_svg_route_paths": 1,
+      "metrics": [
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        },
+        {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    "shared-penalty": {
+      "files": [
+        "no-effect-shared-penalty-0.draft",
+        "no-effect-shared-penalty-8.draft",
+        "no-effect-shared-penalty-20.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 1,
+      "distinct_svg_route_paths": 1,
+      "metrics": [
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        2,
+        2,
+        2
+      ]
+    },
+    "fanout-penalty": {
+      "files": [
+        "no-effect-fanout-penalty-0.draft",
+        "no-effect-fanout-penalty-50.draft",
+        "no-effect-fanout-penalty-160.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 1,
+      "distinct_svg_route_paths": 1,
+      "metrics": [
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        2,
+        2,
+        2
+      ]
+    }
+  },
+  "equal_metric_groups": {
+    "edge-gap": {
+      "files": [
+        "equal-metrics-edge-gap-4.draft",
+        "equal-metrics-edge-gap-16.draft",
+        "equal-metrics-edge-gap-48.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 600,
+          "height": 382,
+          "crossings": 1,
+          "bends": 6,
+          "length": 960,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 382,
+          "crossings": 1,
+          "bends": 6,
+          "length": 960,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 382,
+          "crossings": 1,
+          "bends": 6,
+          "length": 960,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        1,
+        1,
+        1
+      ]
+    }
+  },
+  "categorical_groups": {
+    "source_sides": {
+      "files": [
+        "port-from-auto.draft",
+        "port-from-left.draft",
+        "port-from-right.draft",
+        "port-from-top.draft",
+        "port-from-bottom.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 4,
+      "distinct_svg_route_paths": 4,
+      "metrics": [
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        },
+        {
+          "width": 617,
+          "height": 366,
+          "crossings": 0,
+          "bends": 3,
+          "length": 596,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 383,
+          "crossings": 0,
+          "bends": 3,
+          "length": 536,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "target_sides": {
+      "files": [
+        "port-to-auto.draft",
+        "port-to-left.draft",
+        "port-to-right.draft",
+        "port-to-top.draft",
+        "port-to-bottom.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 4,
+      "distinct_svg_route_paths": 4,
+      "metrics": [
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        },
+        {
+          "width": 617,
+          "height": 366,
+          "crossings": 0,
+          "bends": 3,
+          "length": 596,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 383,
+          "crossings": 0,
+          "bends": 3,
+          "length": 536,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "kind": {
+      "files": [
+        "edge-kind-sync.draft",
+        "edge-kind-async.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 1,
+      "distinct_svg_route_paths": 1,
+      "metrics": [
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "feedback_simple": {
+      "files": [
+        "feedback-constrained.draft",
+        "return-lanes.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 1,
+      "distinct_svg_route_paths": 1,
+      "metrics": [
+        {
+          "width": 820,
+          "height": 230,
+          "crossings": 0,
+          "bends": 6,
+          "length": 984,
+          "warnings": 0
+        },
+        {
+          "width": 820,
+          "height": 230,
+          "crossings": 0,
+          "bends": 6,
+          "length": 984,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        1,
+        1
+      ]
+    },
+    "feedback_drawn_only_vs_absent": {
+      "files": [
+        "feedback-grouped-drawn-only.draft",
+        "feedback-grouped-no-edge.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 552,
+          "height": 682,
+          "crossings": 0,
+          "bends": 2,
+          "length": 828,
+          "warnings": 0
+        },
+        {
+          "width": 552,
+          "height": 682,
+          "crossings": 0,
+          "bends": 0,
+          "length": 388,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "feedback_ranking": {
+      "files": [
+        "feedback-grouped-ranking.draft",
+        "feedback-grouped-drawn-only.draft"
+      ],
+      "geometry_identical": false,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 413,
+          "height": 967,
+          "crossings": 0,
+          "bends": 3,
+          "length": 707,
+          "warnings": 0
+        },
+        {
+          "width": 552,
+          "height": 682,
+          "crossings": 0,
+          "bends": 2,
+          "length": 828,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "presets": {
+      "files": [
+        "preset-custom.draft",
+        "preset-balanced.draft",
+        "preset-fewer-crossings.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 3,
+      "distinct_svg_route_paths": 3,
+      "metrics": [
+        {
+          "width": 634,
+          "height": 547,
+          "crossings": 3,
+          "bends": 18,
+          "length": 3512,
+          "warnings": 0
+        },
+        {
+          "width": 631,
+          "height": 540,
+          "crossings": 2,
+          "bends": 17,
+          "length": 3386,
+          "warnings": 0
+        },
+        {
+          "width": 650,
+          "height": 546,
+          "crossings": 0,
+          "bends": 20,
+          "length": 3944,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        3,
+        2,
+        0
+      ]
+    },
+    "blocked_side": {
+      "files": [
+        "ports-blocked.draft",
+        "ports-unblocked-auto.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 604,
+          "height": 376,
+          "crossings": 0,
+          "bends": 1,
+          "length": 540,
+          "warnings": 1
+        },
+        {
+          "width": 600,
+          "height": 376,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        1,
+        0
+      ]
+    },
+    "release_sides": {
+      "files": [
+        "ports-fixed-both.draft",
+        "ports-released.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 2,
+          "length": 400,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "reverse": {
+      "files": [
+        "reverse-before.draft",
+        "reverse-after.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 2,
+          "length": 400,
+          "warnings": 0
+        },
+        {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 2,
+          "length": 400,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "frame_or_member": {
+      "files": [
+        "endpoint-frame.draft",
+        "endpoint-member.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 484,
+          "height": 254,
+          "crossings": 0,
+          "bends": 3,
+          "length": 142,
+          "warnings": 0
+        },
+        {
+          "width": 484,
+          "height": 254,
+          "crossings": 0,
+          "bends": 1,
+          "length": 154,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "cell_outer_or_inner": {
+      "files": [
+        "endpoint-outer-cell.draft",
+        "endpoint-inner-cell.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 557,
+          "height": 348,
+          "crossings": 0,
+          "bends": 0,
+          "length": 28,
+          "warnings": 0
+        },
+        {
+          "width": 557,
+          "height": 348,
+          "crossings": 0,
+          "bends": 2,
+          "length": 26,
+          "warnings": 1
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        1
+      ]
+    },
+    "title_band_target": {
+      "files": [
+        "title-band-lower.draft",
+        "title-band-top.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 640,
+          "height": 526,
+          "crossings": 0,
+          "bends": 2,
+          "length": 536,
+          "warnings": 0
+        },
+        {
+          "width": 640,
+          "height": 526,
+          "crossings": 0,
+          "bends": 1,
+          "length": 476,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "title_length": {
+      "files": [
+        "title-band-lower.draft",
+        "title-band-long-title.draft"
+      ],
+      "geometry_identical": false,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 640,
+          "height": 526,
+          "crossings": 0,
+          "bends": 2,
+          "length": 536,
+          "warnings": 0
+        },
+        {
+          "width": 640,
+          "height": 558,
+          "crossings": 0,
+          "bends": 2,
+          "length": 568,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        0
+      ]
+    },
+    "fold": {
+      "files": [
+        "wrap-lanes.draft",
+        "wrap-lanes-never.draft"
+      ],
+      "geometry_identical": false,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 820,
+          "height": 462,
+          "crossings": 0,
+          "bends": 4,
+          "length": 1572,
+          "warnings": 0
+        },
+        {
+          "width": 2356,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 308,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        0,
+        1
+      ]
+    },
+    "return_explicit_side": {
+      "files": [
+        "return-lanes.draft",
+        "return-lanes-fixed-side.draft"
+      ],
+      "geometry_identical": true,
+      "distinct_route_point_sets": 2,
+      "distinct_svg_route_paths": 2,
+      "metrics": [
+        {
+          "width": 820,
+          "height": 230,
+          "crossings": 0,
+          "bends": 6,
+          "length": 984,
+          "warnings": 0
+        },
+        {
+          "width": 820,
+          "height": 230,
+          "crossings": 0,
+          "bends": 5,
+          "length": 1054,
+          "warnings": 0
+        }
+      ],
+      "check_warning_counts": [
+        1,
+        1
+      ]
+    }
+  },
+  "narrow_corridor_summary": {
+    "files": [
+      "narrow-corridor-clearance-4.draft",
+      "narrow-corridor-clearance-10.draft",
+      "narrow-corridor-clearance-30.draft"
+    ],
+    "geometry_identical": true,
+    "distinct_route_point_sets": 2,
+    "distinct_svg_route_paths": 2,
+    "metrics": [
+      {
+        "width": 680,
+        "height": 354,
+        "crossings": 0,
+        "bends": 0,
+        "length": 360,
+        "warnings": 0
+      },
+      {
+        "width": 680,
+        "height": 354,
+        "crossings": 0,
+        "bends": 0,
+        "length": 360,
+        "warnings": 0
+      },
+      {
+        "width": 680,
+        "height": 388,
+        "crossings": 0,
+        "bends": 4,
+        "length": 648,
+        "warnings": 0
+      }
+    ],
+    "check_warning_counts": [
+      0,
+      0,
+      0
+    ]
+  },
+  "svg_xml_valid_count": 98,
+  "warning_semantics": {
+    "inspect_metrics_warnings": "Compiler warnings plus findConflicts; soft-split also counts. Does not include qualityNotes crossing/aspect warnings. Source: src/cli/variants.ts:704\u2013725.",
+    "check_warnings": "Compiler/link/scene conflicts plus qualityNotes crossing/detour/stranded/aspect. Source: src/cli/main.ts:260\u2013276; src/cli/variants.ts:774\u2013805.",
+    "retained": "Crossing warnings demonstrate genuine tradeoffs; wide-aspect warnings document fold/return limits; ports-blocked and endpoint-inner-cell intentionally retain edge-through-node warnings. No text-overflow remains."
+  },
+  "kind_svg_styles": {
+    "sync": [
+      {
+        "d": "M180,120L484,120Q490,120 490,126L490,240",
+        "stroke": "#39414F",
+        "stroke-width": "1.4",
+        "stroke-dasharray": null,
+        "marker-end": "url(#arrow)"
+      }
+    ],
+    "async": [
+      {
+        "d": "M180,120L484,120Q490,120 490,126L490,240",
+        "stroke": "#39414F",
+        "stroke-width": "1.4",
+        "stroke-dasharray": "5 5",
+        "marker-end": "url(#arrow)"
+      }
+    ]
+  },
+  "standoff_cli_minimum_distance_to_obstacle_px": {
+    "0": 10.0,
+    "20": 20.0,
+    "40": 10.0
+  }
+}

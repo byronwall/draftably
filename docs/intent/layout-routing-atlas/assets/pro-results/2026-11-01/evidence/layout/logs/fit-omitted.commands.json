@@ -1,0 +1,60 @@
+{
+  "file": "fit-omitted.draft",
+  "source_sha256": "d6f1d73d00ec2a64608d273457cc05ac741386af588b1b4c2c2c54f172b751ea",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-omitted.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.303
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-omitted.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.344
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 244,
+    "height": 1370,
+    "crossings": 0,
+    "bends": 0,
+    "length": 572,
+    "warnings": 0
+  },
+  "node_hash": "bc9fb7cf92fde176ed28f060ef0285ed9ad56a5152a24d1394bd62feedde109f",
+  "route_hash": "d7b97e4135814a7a6df8a545c76d4cc785627e2d0358ab02b496645db5a8c5be",
+  "geometry_hash": "27701511582ad4ac528fc9221f6b89cfcf5234f2e99ba80f49edbd083ddc0b3d",
+  "check_output": "warning The drawing is 244\u00d71370 (aspect 0.18). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 244\u00d71370 (aspect 0.18), 0 crossings, 0 bends, 572px of lines, 1 warning.\nWarnings: 12 nodes, 0 groups, 11 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-omitted.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.395,
+    "file": "svg/fit-omitted.svg",
+    "bytes": 72680,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "87cc7e9ac0719affa0f9ebfc3716111128cd6693d08c8d1da40fa84d48d64593"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

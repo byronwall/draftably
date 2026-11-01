@@ -1,0 +1,12 @@
+diagram "Ranks and branches" version=1
+node input "Input"
+node validate "Validate"
+node cache "Cache lookup"
+node calculate "Calculate"
+node output "Output"
+edge e1 input -> validate
+edge e2 input -> cache
+edge e3 validate -> calculate
+edge e4 cache -> output
+edge e5 calculate -> output
+layout root engine=layered direction=right ordering=stable

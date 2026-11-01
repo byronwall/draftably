@@ -1,0 +1,1390 @@
+[
+  {
+    "id": "VL02",
+    "reference_by_file": {
+      "rank-gap-24.draft": "rank-gap-52.draft",
+      "rank-gap-52.draft": "rank-gap-52.draft",
+      "rank-gap-120.draft": "rank-gap-52.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "rank-gap-24.draft",
+          "rank-gap-52.draft",
+          "rank-gap-120.draft"
+        ],
+        "reference": "rank-gap-52.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL03",
+    "reference_by_file": {
+      "group-gap-24.draft": "group-gap-48.draft",
+      "group-gap-48.draft": "group-gap-48.draft",
+      "group-gap-120.draft": "group-gap-48.draft",
+      "group-gap-96.draft": "group-gap-48.draft",
+      "group-gap-180.draft": "group-gap-48.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "group-gap-24.draft",
+          "group-gap-48.draft",
+          "group-gap-120.draft",
+          "group-gap-96.draft",
+          "group-gap-180.draft"
+        ],
+        "reference": "group-gap-48.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL04",
+    "reference_by_file": {
+      "node-gap-8.draft": "node-gap-24.draft",
+      "node-gap-24.draft": "node-gap-24.draft",
+      "node-gap-64.draft": "node-gap-24.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "node-gap-8.draft",
+          "node-gap-24.draft",
+          "node-gap-64.draft"
+        ],
+        "reference": "node-gap-24.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL05",
+    "reference_by_file": {
+      "boundary-pull-0.draft": "boundary-pull-65.draft",
+      "boundary-pull-65.draft": "boundary-pull-65.draft",
+      "boundary-pull-100.draft": "boundary-pull-65.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "boundary-pull-0.draft",
+          "boundary-pull-65.draft",
+          "boundary-pull-100.draft"
+        ],
+        "reference": "boundary-pull-65.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL06",
+    "reference_by_file": {
+      "hierarchy-sweeps-1.draft": "hierarchy-sweeps-2.draft",
+      "hierarchy-sweeps-2.draft": "hierarchy-sweeps-2.draft",
+      "hierarchy-sweeps-4.draft": "hierarchy-sweeps-2.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "hierarchy-sweeps-1.draft",
+          "hierarchy-sweeps-2.draft",
+          "hierarchy-sweeps-4.draft"
+        ],
+        "reference": "hierarchy-sweeps-2.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL07",
+    "reference_by_file": {
+      "edge-length-32.draft": "edge-length-88.draft",
+      "edge-length-88.draft": "edge-length-88.draft",
+      "edge-length-176.draft": "edge-length-88.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "edge-length-32.draft",
+          "edge-length-88.draft",
+          "edge-length-176.draft"
+        ],
+        "reference": "edge-length-88.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL08",
+    "reference_by_file": {
+      "repulsion-0.draft": "repulsion-45.draft",
+      "repulsion-45.draft": "repulsion-45.draft",
+      "repulsion-100.draft": "repulsion-45.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "repulsion-0.draft",
+          "repulsion-45.draft",
+          "repulsion-100.draft"
+        ],
+        "reference": "repulsion-45.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL09",
+    "reference_by_file": {
+      "flow-strength-0.draft": "flow-strength-65.draft",
+      "flow-strength-65.draft": "flow-strength-65.draft",
+      "flow-strength-100.draft": "flow-strength-65.draft",
+      "flow-strength-stress-0.draft": "flow-strength-stress-65.draft",
+      "flow-strength-stress-65.draft": "flow-strength-stress-65.draft",
+      "flow-strength-stress-100.draft": "flow-strength-stress-65.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "flow",
+        "title": "Directional flow cold coefficient",
+        "files": [
+          "flow-strength-0.draft",
+          "flow-strength-65.draft",
+          "flow-strength-100.draft"
+        ],
+        "reference": "flow-strength-65.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only flow-strength changes with engine=flow held fixed."
+      },
+      {
+        "id": "stress",
+        "title": "Shared directional objective in Stress descent",
+        "files": [
+          "flow-strength-stress-0.draft",
+          "flow-strength-stress-65.draft",
+          "flow-strength-stress-100.draft"
+        ],
+        "reference": "flow-strength-stress-65.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Separate graph; never diff this series against the flow DAG.",
+        "changed_lines": "Only flow-strength changes with engine=stress held fixed."
+      }
+    ]
+  },
+  {
+    "id": "VL10",
+    "reference_by_file": {
+      "alignment-0.draft": "alignment-55.draft",
+      "alignment-55.draft": "alignment-55.draft",
+      "alignment-100.draft": "alignment-55.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "alignment-0.draft",
+          "alignment-55.draft",
+          "alignment-100.draft"
+        ],
+        "reference": "alignment-55.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ],
+    "native_reference_by_file": {
+      "warm-alignment-0.json": "warm-alignment-55.json",
+      "warm-alignment-55.json": "warm-alignment-55.json",
+      "warm-alignment-100.json": "warm-alignment-55.json",
+      "warm-alignment-before.json": "warm-alignment-before.json"
+    },
+    "native_subcomparisons": [
+      {
+        "id": "native-parameter",
+        "title": "One bounded native pass, parameter contrast",
+        "files": [
+          "warm-alignment-0.json",
+          "warm-alignment-55.json",
+          "warm-alignment-100.json"
+        ],
+        "reference": "warm-alignment-55.json",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Model outputs, not cold source recompilation or UI screenshots.",
+        "changed_lines": "Only the named engine setting differs; each pass restarts from identical before JSON."
+      },
+      {
+        "id": "native-before-after",
+        "title": "One default pass from current geometry",
+        "files": [
+          "warm-alignment-before.json",
+          "warm-alignment-55.json"
+        ],
+        "reference": "warm-alignment-before.json",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only run one bounded pass with the documented common options."
+      }
+    ]
+  },
+  {
+    "id": "VL11",
+    "reference_by_file": {
+      "compactness-0.draft": "compactness-35.draft",
+      "compactness-35.draft": "compactness-35.draft",
+      "compactness-100.draft": "compactness-35.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "compactness-0.draft",
+          "compactness-35.draft",
+          "compactness-100.draft"
+        ],
+        "reference": "compactness-35.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL12",
+    "reference_by_file": {
+      "grid-strength-0.draft": "grid-strength-45.draft",
+      "grid-strength-45.draft": "grid-strength-45.draft",
+      "grid-strength-100.draft": "grid-strength-45.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "grid-strength-0.draft",
+          "grid-strength-45.draft",
+          "grid-strength-100.draft"
+        ],
+        "reference": "grid-strength-45.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ],
+    "native_reference_by_file": {
+      "warm-grid-0.json": "warm-grid-45.json",
+      "warm-grid-45.json": "warm-grid-45.json",
+      "warm-grid-100.json": "warm-grid-45.json",
+      "warm-grid-before.json": "warm-grid-before.json"
+    },
+    "native_subcomparisons": [
+      {
+        "id": "native-parameter",
+        "title": "One bounded native pass, parameter contrast",
+        "files": [
+          "warm-grid-0.json",
+          "warm-grid-45.json",
+          "warm-grid-100.json"
+        ],
+        "reference": "warm-grid-45.json",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Model outputs, not cold source recompilation or UI screenshots.",
+        "changed_lines": "Only the named engine setting differs; each pass restarts from identical before JSON."
+      },
+      {
+        "id": "native-before-after",
+        "title": "One default pass from current geometry",
+        "files": [
+          "warm-grid-before.json",
+          "warm-grid-45.json"
+        ],
+        "reference": "warm-grid-before.json",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only run one bounded pass with the documented common options."
+      }
+    ]
+  },
+  {
+    "id": "VL13",
+    "reference_by_file": {
+      "ordering-stable.draft": "ordering-stable.draft",
+      "ordering-crossings.draft": "ordering-stable.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "ordering-stable.draft",
+          "ordering-crossings.draft"
+        ],
+        "reference": "ordering-stable.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ],
+    "native_reference_by_file": {
+      "warm-ordering-stable.json": "warm-ordering-stable.json",
+      "warm-ordering-crossings.json": "warm-ordering-stable.json",
+      "warm-ordering-before.json": "warm-ordering-before.json"
+    },
+    "native_subcomparisons": [
+      {
+        "id": "native-parameter",
+        "title": "One bounded native pass, parameter contrast",
+        "files": [
+          "warm-ordering-stable.json",
+          "warm-ordering-crossings.json"
+        ],
+        "reference": "warm-ordering-stable.json",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Model outputs, not cold source recompilation or UI screenshots.",
+        "changed_lines": "Only the named engine setting differs; each pass restarts from identical before JSON."
+      },
+      {
+        "id": "native-before-after",
+        "title": "One default pass from current geometry",
+        "files": [
+          "warm-ordering-before.json",
+          "warm-ordering-stable.json"
+        ],
+        "reference": "warm-ordering-before.json",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only run one bounded pass with the documented common options."
+      }
+    ]
+  },
+  {
+    "id": "VL14",
+    "reference_by_file": {
+      "aspect-1.draft": "aspect-1.6.draft",
+      "aspect-1.333.draft": "aspect-1.6.draft",
+      "aspect-1.6.draft": "aspect-1.6.draft",
+      "aspect-2.draft": "aspect-1.6.draft",
+      "aspect-0.75.draft": "aspect-1.6.draft",
+      "aspect-omitted.draft": "aspect-1.6.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "aspect-1.draft",
+          "aspect-1.333.draft",
+          "aspect-1.6.draft",
+          "aspect-2.draft",
+          "aspect-0.75.draft",
+          "aspect-omitted.draft"
+        ],
+        "reference": "aspect-1.6.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL15",
+    "reference_by_file": {
+      "fold-auto.draft": "fold-auto.draft",
+      "fold-never.draft": "fold-auto.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "fold-auto.draft",
+          "fold-never.draft"
+        ],
+        "reference": "fold-auto.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL16",
+    "reference_by_file": {
+      "direction-auto.draft": "direction-auto.draft",
+      "direction-right.draft": "direction-auto.draft",
+      "direction-down.draft": "direction-auto.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "direction-auto.draft",
+          "direction-right.draft",
+          "direction-down.draft"
+        ],
+        "reference": "direction-auto.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL17",
+    "reference_by_file": {
+      "fit-wide.draft": "fit-omitted.draft",
+      "fit-slide.draft": "fit-omitted.draft",
+      "fit-square.draft": "fit-omitted.draft",
+      "fit-page.draft": "fit-omitted.draft",
+      "fit-tall.draft": "fit-omitted.draft",
+      "fit-omitted.draft": "fit-omitted.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "fit-wide.draft",
+          "fit-slide.draft",
+          "fit-square.draft",
+          "fit-page.draft",
+          "fit-tall.draft",
+          "fit-omitted.draft"
+        ],
+        "reference": "fit-omitted.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL18",
+    "reference_by_file": {
+      "recipe-flow.draft": "recipe-flow.draft",
+      "recipe-row.draft": "recipe-flow.draft",
+      "recipe-column.draft": "recipe-flow.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "recipe-flow.draft",
+          "recipe-row.draft",
+          "recipe-column.draft"
+        ],
+        "reference": "recipe-flow.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL19",
+    "reference_by_file": {
+      "gap-8.draft": "gap-28.draft",
+      "gap-28.draft": "gap-28.draft",
+      "gap-96.draft": "gap-28.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "gap-8.draft",
+          "gap-28.draft",
+          "gap-96.draft"
+        ],
+        "reference": "gap-28.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL20",
+    "reference_by_file": {
+      "near-right.draft": "near-right.draft",
+      "near-left.draft": "near-right.draft",
+      "near-above.draft": "near-right.draft",
+      "near-below.draft": "near-right.draft",
+      "near-nested-baseline.draft": "near-nested-baseline.draft",
+      "near-nested-reference.draft": "near-nested-baseline.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "sides",
+        "title": "Four near sides",
+        "files": [
+          "near-right.draft",
+          "near-left.draft",
+          "near-above.draft",
+          "near-below.draft"
+        ],
+        "reference": "near-right.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only near side changes."
+      },
+      {
+        "id": "nested",
+        "title": "Anchor to an inner endpoint",
+        "files": [
+          "near-nested-baseline.draft",
+          "near-nested-reference.draft"
+        ],
+        "reference": "near-nested-baseline.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Different grouped source than the four-side graph.",
+        "changed_lines": "Only add near note jobs side=right gap=32."
+      }
+    ]
+  },
+  {
+    "id": "VL21",
+    "reference_by_file": {
+      "near-gap-0.draft": "near-gap-28.draft",
+      "near-gap-28.draft": "near-gap-28.draft",
+      "near-gap-100.draft": "near-gap-28.draft",
+      "near-offset--80.draft": "near-offset-0.draft",
+      "near-offset-0.draft": "near-offset-0.draft",
+      "near-offset-80.draft": "near-offset-0.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "gap",
+        "title": "Near gap",
+        "files": [
+          "near-gap-0.draft",
+          "near-gap-28.draft",
+          "near-gap-100.draft"
+        ],
+        "reference": "near-gap-28.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only near gap changes."
+      },
+      {
+        "id": "offset",
+        "title": "Signed perpendicular offset",
+        "files": [
+          "near-offset--80.draft",
+          "near-offset-0.draft",
+          "near-offset-80.draft"
+        ],
+        "reference": "near-offset-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only near offset changes."
+      }
+    ]
+  },
+  {
+    "id": "VL22",
+    "reference_by_file": {
+      "near-strength-prefer.draft": "near-strength-prefer.draft",
+      "near-strength-required.draft": "near-strength-prefer.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "near-strength-prefer.draft",
+          "near-strength-required.draft"
+        ],
+        "reference": "near-strength-prefer.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL23",
+    "reference_by_file": {
+      "align-x-prefer.draft": "align-x-prefer.draft",
+      "align-x-required.draft": "align-x-prefer.draft",
+      "align-y-prefer.draft": "align-x-prefer.draft",
+      "align-y-required.draft": "align-y-prefer.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "x-strength",
+        "title": "Strength with x centers aligned",
+        "files": [
+          "align-x-prefer.draft",
+          "align-x-required.draft"
+        ],
+        "reference": "align-x-prefer.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only strength changes; axis=x."
+      },
+      {
+        "id": "y-strength",
+        "title": "Strength with y centers aligned",
+        "files": [
+          "align-y-prefer.draft",
+          "align-y-required.draft"
+        ],
+        "reference": "align-y-prefer.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only strength changes; axis=y."
+      },
+      {
+        "id": "axis",
+        "title": "Axis with prefer held fixed",
+        "files": [
+          "align-x-prefer.draft",
+          "align-y-prefer.draft"
+        ],
+        "reference": "align-x-prefer.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only axis changes; same unequal-size A/C pair."
+      }
+    ]
+  },
+  {
+    "id": "VL24",
+    "reference_by_file": {
+      "stay-weight-1.draft": "stay-weight-8.draft",
+      "stay-weight-8.draft": "stay-weight-8.draft",
+      "stay-weight-100.draft": "stay-weight-8.draft",
+      "stay-x--80.draft": "stay-x-0.draft",
+      "stay-x-0.draft": "stay-x-0.draft",
+      "stay-x-120.draft": "stay-x-0.draft",
+      "stay-y--80.draft": "stay-y-0.draft",
+      "stay-y-0.draft": "stay-y-0.draft",
+      "stay-y-120.draft": "stay-y-0.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "weight",
+        "title": "Stay weight",
+        "files": [
+          "stay-weight-1.draft",
+          "stay-weight-8.draft",
+          "stay-weight-100.draft"
+        ],
+        "reference": "stay-weight-8.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only weight changes on the crowded graph."
+      },
+      {
+        "id": "x",
+        "title": "Stay x",
+        "files": [
+          "stay-x--80.draft",
+          "stay-x-0.draft",
+          "stay-x-120.draft"
+        ],
+        "reference": "stay-x-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Shared world origin is mandatory; autofit hides pure translation.",
+        "changed_lines": "Only x changes on a single-node coordinate graph."
+      },
+      {
+        "id": "y",
+        "title": "Stay y",
+        "files": [
+          "stay-y--80.draft",
+          "stay-y-0.draft",
+          "stay-y-120.draft"
+        ],
+        "reference": "stay-y-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Shared world origin is mandatory.",
+        "changed_lines": "Only y changes on the single-node graph."
+      }
+    ]
+  },
+  {
+    "id": "VL25",
+    "reference_by_file": {
+      "nudge-dx--80.draft": "nudge-dx-0.draft",
+      "nudge-dx-0.draft": "nudge-dx-0.draft",
+      "nudge-dx-80.draft": "nudge-dx-0.draft",
+      "nudge-dy--80.draft": "nudge-dy-0.draft",
+      "nudge-dy-0.draft": "nudge-dy-0.draft",
+      "nudge-dy-80.draft": "nudge-dy-0.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "dx",
+        "title": "Horizontal nudge",
+        "files": [
+          "nudge-dx--80.draft",
+          "nudge-dx-0.draft",
+          "nudge-dx-80.draft"
+        ],
+        "reference": "nudge-dx-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only dx changes."
+      },
+      {
+        "id": "dy",
+        "title": "Vertical nudge",
+        "files": [
+          "nudge-dy--80.draft",
+          "nudge-dy-0.draft",
+          "nudge-dy-80.draft"
+        ],
+        "reference": "nudge-dy-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only dy changes."
+      }
+    ]
+  },
+  {
+    "id": "VL26",
+    "reference_by_file": {
+      "pin.draft": "pin.draft",
+      "pin-x-0.draft": "pin-x-0.draft",
+      "pin-x-120.draft": "pin-x-0.draft",
+      "pin-x-300.draft": "pin-x-0.draft",
+      "pin-y-0.draft": "pin-y-0.draft",
+      "pin-y-120.draft": "pin-y-0.draft",
+      "pin-y-300.draft": "pin-y-0.draft",
+      "pin-parent-x-0.draft": "pin-parent-x-0.draft",
+      "pin-parent-x-240.draft": "pin-parent-x-0.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "pinned-graph",
+        "title": "One pinned object with connections",
+        "files": [
+          "pin.draft"
+        ],
+        "reference": "pin.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Standalone demonstration, not a coefficient contrast."
+      },
+      {
+        "id": "x",
+        "title": "Pin x",
+        "files": [
+          "pin-x-0.draft",
+          "pin-x-120.draft",
+          "pin-x-300.draft"
+        ],
+        "reference": "pin-x-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Shared world origin required.",
+        "changed_lines": "Only x changes."
+      },
+      {
+        "id": "y",
+        "title": "Pin y",
+        "files": [
+          "pin-y-0.draft",
+          "pin-y-120.draft",
+          "pin-y-300.draft"
+        ],
+        "reference": "pin-y-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. Shared world origin required.",
+        "changed_lines": "Only y changes."
+      },
+      {
+        "id": "parent",
+        "title": "Move the parent, keep the local child pin",
+        "files": [
+          "pin-parent-x-0.draft",
+          "pin-parent-x-240.draft"
+        ],
+        "reference": "pin-parent-x-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only parent x changes; child20,20 and world anchor stay fixed."
+      }
+    ]
+  },
+  {
+    "id": "VL27",
+    "reference_by_file": {
+      "size-width-64.draft": "size-width-164.draft",
+      "size-width-164.draft": "size-width-164.draft",
+      "size-width-320.draft": "size-width-164.draft",
+      "size-height-24.draft": "size-height-56.draft",
+      "size-height-56.draft": "size-height-56.draft",
+      "size-height-120.draft": "size-height-56.draft",
+      "size-height-auto.draft": "size-height-56.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "width",
+        "title": "Width with automatic title height",
+        "files": [
+          "size-width-64.draft",
+          "size-width-164.draft",
+          "size-width-320.draft"
+        ],
+        "reference": "size-width-164.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only width changes; height=auto is held fixed."
+      },
+      {
+        "id": "height",
+        "title": "Height with fixed width",
+        "files": [
+          "size-height-24.draft",
+          "size-height-56.draft",
+          "size-height-120.draft",
+          "size-height-auto.draft"
+        ],
+        "reference": "size-height-56.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale. The default56 and low24 intentionally warn about overflow.",
+        "changed_lines": "Only height changes; width120 and long title fixed."
+      }
+    ]
+  },
+  {
+    "id": "VL28",
+    "reference_by_file": {
+      "cells.draft": "cells.draft",
+      "cells-columns-1.draft": "cells.draft",
+      "cells-columns-2.draft": "cells.draft",
+      "cells-columns-4.draft": "cells.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "cells.draft",
+          "cells-columns-1.draft",
+          "cells-columns-2.draft",
+          "cells-columns-4.draft"
+        ],
+        "reference": "cells.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL29",
+    "reference_by_file": {
+      "cells-unit-byte.draft": "cells-unit-byte.draft",
+      "cells-unit-bit.draft": "cells-unit-byte.draft",
+      "cells-unit-byte-default-columns.draft": "cells-unit-byte.draft",
+      "cells-unit-bit-default-columns.draft": "cells-unit-bit.draft",
+      "unit-spanning-field.draft": "cells-unit-byte.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "unit",
+        "title": "Bit versus byte with eight columns",
+        "files": [
+          "cells-unit-byte.draft",
+          "cells-unit-bit.draft"
+        ],
+        "reference": "cells-unit-byte.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only unit changes; each unit-specific unit-width default is allowed to follow it."
+      },
+      {
+        "id": "byte-default-columns",
+        "title": "Byte default row capacity",
+        "files": [
+          "cells-unit-byte.draft",
+          "cells-unit-byte-default-columns.draft"
+        ],
+        "reference": "cells-unit-byte.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only remove columns=8; default becomes16."
+      },
+      {
+        "id": "bit-default-columns",
+        "title": "Bit default row capacity",
+        "files": [
+          "cells-unit-bit.draft",
+          "cells-unit-bit-default-columns.draft"
+        ],
+        "reference": "cells-unit-bit.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only remove columns=8; default becomes32."
+      },
+      {
+        "id": "spanning-field",
+        "title": "A unit field continues on another row",
+        "files": [
+          "cells-unit-byte.draft",
+          "unit-spanning-field.draft"
+        ],
+        "reference": "cells-unit-byte.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only checksum span4\u219212; columns8 fixed."
+      }
+    ]
+  },
+  {
+    "id": "VL30",
+    "reference_by_file": {
+      "unit-width-8.draft": "unit-width-48.draft",
+      "unit-width-48.draft": "unit-width-48.draft",
+      "unit-width-96.draft": "unit-width-48.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "unit-width-8.draft",
+          "unit-width-48.draft",
+          "unit-width-96.draft"
+        ],
+        "reference": "unit-width-48.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL31",
+    "reference_by_file": {
+      "ruler-on.draft": "ruler-on.draft",
+      "ruler-off.draft": "ruler-on.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "ruler-on.draft",
+          "ruler-off.draft"
+        ],
+        "reference": "ruler-on.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL32",
+    "reference_by_file": {
+      "group-frame-box.draft": "group-frame-box.draft",
+      "group-frame-soft.draft": "group-frame-box.draft",
+      "group-frame-none.draft": "group-frame-box.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "group-frame-box.draft",
+          "group-frame-soft.draft",
+          "group-frame-none.draft"
+        ],
+        "reference": "group-frame-box.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL33",
+    "reference_by_file": {
+      "tall-group.draft": "group-fold-auto.draft",
+      "group-fold-never.draft": "group-fold-auto.draft",
+      "group-fold-auto.draft": "group-fold-auto.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "tall-group.draft",
+          "group-fold-never.draft",
+          "group-fold-auto.draft"
+        ],
+        "reference": "group-fold-auto.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL34",
+    "reference_by_file": {
+      "scope-root.draft": "scope-root.draft",
+      "scope-child-engine.draft": "scope-root.draft",
+      "scope-child-row.draft": "scope-root.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "scope-root.draft",
+          "scope-child-engine.draft",
+          "scope-child-row.draft"
+        ],
+        "reference": "scope-root.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL35",
+    "reference_by_file": {
+      "refine.draft": "refine.draft",
+      "order-reverse.draft": "refine.draft",
+      "order-partial.draft": "refine.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "refine.draft",
+          "order-reverse.draft",
+          "order-partial.draft"
+        ],
+        "reference": "refine.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL36",
+    "reference_by_file": {
+      "min-width-0.draft": "min-width-0.draft",
+      "min-width-300.draft": "min-width-0.draft",
+      "min-width-600.draft": "min-width-0.draft",
+      "min-height-0.draft": "min-height-0.draft",
+      "min-height-300.draft": "min-height-0.draft",
+      "min-height-600.draft": "min-height-0.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "width",
+        "title": "Minimum group width",
+        "files": [
+          "min-width-0.draft",
+          "min-width-300.draft",
+          "min-width-600.draft"
+        ],
+        "reference": "min-width-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only min-width changes."
+      },
+      {
+        "id": "height",
+        "title": "Minimum group height",
+        "files": [
+          "min-height-0.draft",
+          "min-height-300.draft",
+          "min-height-600.draft"
+        ],
+        "reference": "min-height-0.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only min-height changes."
+      }
+    ]
+  },
+  {
+    "id": "VL37",
+    "reference_by_file": {
+      "cell-span-1.draft": "cell-span-1.draft",
+      "cell-span-2.draft": "cell-span-1.draft",
+      "cell-span-4.draft": "cell-span-1.draft",
+      "marker-right.draft": "marker-right.draft",
+      "marker-down.draft": "marker-right.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "span",
+        "title": "Ordinary span on a four-column grid",
+        "files": [
+          "cell-span-1.draft",
+          "cell-span-2.draft",
+          "cell-span-4.draft"
+        ],
+        "reference": "cell-span-1.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only payload span changes; columns4 fixed."
+      },
+      {
+        "id": "marker-direction",
+        "title": "Marker in a row or column",
+        "files": [
+          "marker-right.draft",
+          "marker-down.draft"
+        ],
+        "reference": "marker-right.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only cells direction changes; seam marker present in both."
+      }
+    ]
+  },
+  {
+    "id": "VL38",
+    "reference_by_file": {
+      "sequence.draft": "sequence.draft",
+      "sequence-no-phases.draft": "sequence.draft",
+      "sequence-reordered-messages.draft": "sequence.draft",
+      "sequence-reordered-participants.draft": "sequence.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "phases",
+        "title": "Show or omit phases",
+        "files": [
+          "sequence.draft",
+          "sequence-no-phases.draft"
+        ],
+        "reference": "sequence.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only phase statements removed."
+      },
+      {
+        "id": "message-order",
+        "title": "Chronological message order",
+        "files": [
+          "sequence.draft",
+          "sequence-reordered-messages.draft"
+        ],
+        "reference": "sequence.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only edge declaration order changes."
+      },
+      {
+        "id": "participant-order",
+        "title": "Participant order",
+        "files": [
+          "sequence.draft",
+          "sequence-reordered-participants.draft"
+        ],
+        "reference": "sequence.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only node declaration order changes; all edge/phase lines stay fixed."
+      }
+    ]
+  },
+  {
+    "id": "VL39",
+    "reference_by_file": {
+      "lanes.draft": "lanes.draft",
+      "lanes-down.draft": "lanes.draft",
+      "lanes-order.draft": "lanes.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "direction",
+        "title": "Lane direction",
+        "files": [
+          "lanes.draft",
+          "lanes-down.draft"
+        ],
+        "reference": "lanes.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only direction changes."
+      },
+      {
+        "id": "lane-order",
+        "title": "Responsibility band order",
+        "files": [
+          "lanes.draft",
+          "lanes-order.draft"
+        ],
+        "reference": "lanes.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only explicit lane order changes."
+      }
+    ]
+  },
+  {
+    "id": "VL41",
+    "reference_by_file": {
+      "shape-box.draft": "shape-box.draft",
+      "shape-pill.draft": "shape-box.draft",
+      "shape-circle.draft": "shape-box.draft",
+      "shape-diamond.draft": "shape-box.draft",
+      "shape-text.draft": "shape-box.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "shape-box.draft",
+          "shape-pill.draft",
+          "shape-circle.draft",
+          "shape-diamond.draft",
+          "shape-text.draft"
+        ],
+        "reference": "shape-box.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL42",
+    "reference_by_file": {
+      "diagram-width-160.draft": "diagram-width-omitted.draft",
+      "diagram-width-800.draft": "diagram-width-omitted.draft",
+      "diagram-width-1600.draft": "diagram-width-omitted.draft",
+      "diagram-width-omitted.draft": "diagram-width-omitted.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "diagram-width-160.draft",
+          "diagram-width-800.draft",
+          "diagram-width-1600.draft",
+          "diagram-width-omitted.draft"
+        ],
+        "reference": "diagram-width-omitted.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL43",
+    "reference_by_file": {
+      "tree-root-automatic.draft": "tree-root-automatic.draft",
+      "tree-root-top.draft": "tree-root-automatic.draft",
+      "tree-root-left.draft": "tree-root-automatic.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "tree-root-automatic.draft",
+          "tree-root-top.draft",
+          "tree-root-left.draft"
+        ],
+        "reference": "tree-root-automatic.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL44",
+    "reference_by_file": {
+      "family-network-stress.draft": "family-network-force.draft",
+      "family-network-force.draft": "family-network-force.draft",
+      "family-network-flow.draft": "family-network-force.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "family-network-stress.draft",
+          "family-network-force.draft",
+          "family-network-flow.draft"
+        ],
+        "reference": "family-network-force.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL45",
+    "reference_by_file": {
+      "family-forest-tree.draft": "family-forest-tree.draft",
+      "family-forest-layered.draft": "family-forest-tree.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "primary",
+        "title": "One named control on one graph",
+        "files": [
+          "family-forest-tree.draft",
+          "family-forest-layered.draft"
+        ],
+        "reference": "family-forest-tree.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Use each companion's exact changed_lines; reference is the actual default or omitted state where available."
+      }
+    ]
+  },
+  {
+    "id": "VL46",
+    "reference_by_file": {
+      "compare-merged.draft": "compare-merged.draft",
+      "compare-auto.draft": "compare-default.draft",
+      "compare-default.draft": "compare-merged.draft",
+      "compare-right.draft": "compare-auto.draft",
+      "compare-down.draft": "compare-auto.draft",
+      "compare-aspect-0.25.draft": "compare-aspect-1.6.draft",
+      "compare-aspect-1.6.draft": "compare-aspect-1.6.draft",
+      "compare-aspect-8.draft": "compare-aspect-1.6.draft",
+      "compare-right-aspect-0.25.draft": "compare-right.draft",
+      "compare-right-aspect-8.draft": "compare-right.draft"
+    },
+    "subcomparisons": [
+      {
+        "id": "composition",
+        "title": "Merged versus two-panel drawing",
+        "files": [
+          "compare-merged.draft",
+          "compare-auto.draft"
+        ],
+        "reference": "compare-merged.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only add compare with named labels and auto direction."
+      },
+      {
+        "id": "labels",
+        "title": "Default versus named panel labels",
+        "files": [
+          "compare-default.draft",
+          "compare-auto.draft"
+        ],
+        "reference": "compare-default.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Panel labels become Current/Proposed; explicit auto equals omitted auto."
+      },
+      {
+        "id": "direction",
+        "title": "All panel directions",
+        "files": [
+          "compare-auto.draft",
+          "compare-right.draft",
+          "compare-down.draft"
+        ],
+        "reference": "compare-auto.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only compare direction changes; graph layout direction stays down."
+      },
+      {
+        "id": "aspect",
+        "title": "Continuous numeric panel aspect",
+        "files": [
+          "compare-aspect-0.25.draft",
+          "compare-aspect-1.6.draft",
+          "compare-aspect-8.draft"
+        ],
+        "reference": "compare-aspect-1.6.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only compare aspect changes; direction=auto stays fixed."
+      },
+      {
+        "id": "explicit-direction",
+        "title": "Aspect has no effect with explicit right",
+        "files": [
+          "compare-right.draft",
+          "compare-right-aspect-0.25.draft",
+          "compare-right-aspect-8.draft"
+        ],
+        "reference": "compare-right.draft",
+        "fixed": "Within this subcomparison keep graph, labels, membership, node sizes, all unrelated attributes, compile context and theme fixed. Only the stated source change varies. Use one world scale.",
+        "changed_lines": "Only aspect request added/changed; explicit right constrains the candidate set to one."
+      }
+    ]
+  }
+]

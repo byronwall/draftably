@@ -1,0 +1,60 @@
+{
+  "file": "pin-parent-x-240.draft",
+  "source_sha256": "46cefdef4da1183fc5e4664f82b1ed41e731eae221d74e0936afff71eee98c0f",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/pin-parent-x-240.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.086
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/pin-parent-x-240.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.138
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 552,
+    "height": 542,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "1824cd733a7ef108fa227719866203a39d56c17b2cf9b9ca7a4e03020fea5f46",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "d47dabf235aada8e3ba1b88143fcf381bf480128255f2f9fb31d6ee0e80ac3c8",
+  "check_output": "Metrics: 552\u00d7542 (aspect 1.02), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 1 group, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/pin-parent-x-240.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.097,
+    "file": "svg/pin-parent-x-240.svg",
+    "bytes": 68031,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "ec55f8cee3de6068a0b8744f4289e891a7ae00eff1d0ff2aa16322427ef72faa"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

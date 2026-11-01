@@ -1,0 +1,1074 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "execution": "Actual baseline compile/projectScene, LayoutLab.compute, canonicalGeometry, RouteLab.compute and renderSvg loaded by Vite SSR. Native model results, not editor UI screenshots.",
+  "reproduction": "node work/layout-warm-validation/render-warm.mjs",
+  "routing": "Actual exported scenes route with previous:[], without UI route-cache history.",
+  "families": [
+    {
+      "id": "VL10",
+      "name": "alignment",
+      "algorithm": "tidy",
+      "key": "alignment",
+      "values": [
+        0,
+        55,
+        100
+      ],
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "startSource": "layout-warm-validation/sources/warm-alignment-start.draft",
+      "startJson": "layout-warm-validation/json/warm-alignment-before.json",
+      "diagnostics": [],
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "commonWorldRectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 424,
+        "h": 396
+      }
+    },
+    {
+      "id": "VL12",
+      "name": "grid",
+      "algorithm": "grid",
+      "key": "gridStrength",
+      "values": [
+        0,
+        45,
+        100
+      ],
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "startSource": "layout-warm-validation/sources/warm-grid-start.draft",
+      "startJson": "layout-warm-validation/json/warm-grid-before.json",
+      "diagnostics": [],
+      "options": {
+        "algorithm": "grid",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "commonWorldRectangle": {
+        "x": -12,
+        "y": 0,
+        "w": 386,
+        "h": 396
+      }
+    },
+    {
+      "id": "VL13",
+      "name": "ordering",
+      "algorithm": "layered",
+      "key": "ordering",
+      "values": [
+        "stable",
+        "crossings"
+      ],
+      "maxMove": 192,
+      "stability": 0,
+      "iterations": 96,
+      "startSource": "layout-warm-validation/sources/warm-ordering-start.draft",
+      "startJson": "layout-warm-validation/json/warm-ordering-before.json",
+      "diagnostics": [],
+      "options": {
+        "algorithm": "layered",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 192,
+        "stability": 0,
+        "iterations": 96,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "commonWorldRectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 1064,
+        "h": 196
+      }
+    }
+  ],
+  "rows": [
+    {
+      "name": "warm-alignment-before",
+      "document": "layout-warm-validation/json/warm-alignment-before.json",
+      "svg": "layout-warm-validation/svg/warm-alignment-before.svg",
+      "geometry": "layout-warm-validation/geometry/warm-alignment-before.json",
+      "geometry_sha256": "3b96cdcaa7166845f60d1c8ccfd18a0a112b0dac84589445704eac4a6320ccc7",
+      "metrics": {
+        "width": 504,
+        "height": 522,
+        "crossings": 0,
+        "bends": 2,
+        "length": 292
+      },
+      "visual_ids": [
+        "VL10"
+      ],
+      "operation": "shared starting document",
+      "source": "layout-warm-validation/sources/warm-alignment-start.draft"
+    },
+    {
+      "name": "warm-alignment-0",
+      "document": "layout-warm-validation/json/warm-alignment-0.json",
+      "svg": "layout-warm-validation/svg/warm-alignment-0.svg",
+      "geometry": "layout-warm-validation/geometry/warm-alignment-0.json",
+      "geometry_sha256": "17501e83c7e63da00102edb2bd19c82c6a5eabbeb05176843a3979b789d3fc41",
+      "metrics": {
+        "width": 460,
+        "height": 477,
+        "crossings": 0,
+        "bends": 2,
+        "length": 162.68
+      },
+      "visual_ids": [
+        "VL10"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "alignment",
+      "value": 0,
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 0,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 2,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 4,
+        "maxDisplacement": 37.46,
+        "rmsDisplacement": 29.4,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 424,
+          "height": 396,
+          "aspect": 1.07,
+          "area": 167904,
+          "linkLength": 539
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 378,
+          "height": 350,
+          "aspect": 1.08,
+          "area": 132435,
+          "linkLength": 437
+        },
+        "warnings": [],
+        "milliseconds": 6,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-alignment-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-alignment-before.json"
+    },
+    {
+      "name": "warm-alignment-55",
+      "document": "layout-warm-validation/json/warm-alignment-55.json",
+      "svg": "layout-warm-validation/svg/warm-alignment-55.svg",
+      "geometry": "layout-warm-validation/geometry/warm-alignment-55.json",
+      "geometry_sha256": "590c08e21ab28d4ecbba738b79fa8653d8202363ac126f09a4fcc591a063bc53",
+      "metrics": {
+        "width": 460,
+        "height": 475,
+        "crossings": 0,
+        "bends": 2,
+        "length": 162.68
+      },
+      "visual_ids": [
+        "VL10"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "alignment",
+      "value": 55,
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 2,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 4,
+        "maxDisplacement": 37.39,
+        "rmsDisplacement": 29.5,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 424,
+          "height": 396,
+          "aspect": 1.07,
+          "area": 167904,
+          "linkLength": 539
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 378,
+          "height": 348,
+          "aspect": 1.09,
+          "area": 131636,
+          "linkLength": 437
+        },
+        "warnings": [],
+        "milliseconds": 5,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-alignment-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-alignment-before.json"
+    },
+    {
+      "name": "warm-alignment-100",
+      "document": "layout-warm-validation/json/warm-alignment-100.json",
+      "svg": "layout-warm-validation/svg/warm-alignment-100.svg",
+      "geometry": "layout-warm-validation/geometry/warm-alignment-100.json",
+      "geometry_sha256": "e81b9ba9c6f81cdad197315a7cce8d6f8ac1e61a45a19584f6235ac90df79d41",
+      "metrics": {
+        "width": 460,
+        "height": 474,
+        "crossings": 0,
+        "bends": 2,
+        "length": 162.67
+      },
+      "visual_ids": [
+        "VL10"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "alignment",
+      "value": 100,
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 100,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 2,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 4,
+        "maxDisplacement": 37.38,
+        "rmsDisplacement": 29.53,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 424,
+          "height": 396,
+          "aspect": 1.07,
+          "area": 167904,
+          "linkLength": 539
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 378,
+          "height": 347,
+          "aspect": 1.09,
+          "area": 131446,
+          "linkLength": 437
+        },
+        "warnings": [],
+        "milliseconds": 5,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-alignment-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-alignment-before.json"
+    },
+    {
+      "name": "warm-grid-before",
+      "document": "layout-warm-validation/json/warm-grid-before.json",
+      "svg": "layout-warm-validation/svg/warm-grid-before.svg",
+      "geometry": "layout-warm-validation/geometry/warm-grid-before.json",
+      "geometry_sha256": "78f93a93e414d669fc708c8d5649ef15c5f2912ecb2ded1144277e382fdd2897",
+      "metrics": {
+        "width": 466,
+        "height": 522,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0
+      },
+      "visual_ids": [
+        "VL12"
+      ],
+      "operation": "shared starting document",
+      "source": "layout-warm-validation/sources/warm-grid-start.draft"
+    },
+    {
+      "name": "warm-grid-0",
+      "document": "layout-warm-validation/json/warm-grid-0.json",
+      "svg": "layout-warm-validation/svg/warm-grid-0.svg",
+      "geometry": "layout-warm-validation/geometry/warm-grid-0.json",
+      "geometry_sha256": "a4d96422173084775642bd49c71fcd6f5e9875fa1b5cddcc846870db92da2194",
+      "metrics": {
+        "width": 454,
+        "height": 503,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0
+      },
+      "visual_ids": [
+        "VL12"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "gridStrength",
+      "value": 0,
+      "options": {
+        "algorithm": "grid",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 0,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 0,
+        "feedbackEdges": 0,
+        "algorithm": "grid",
+        "name": "Soft grid",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 9,
+        "maxDisplacement": 15.56,
+        "rmsDisplacement": 9.65,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 386,
+          "height": 396,
+          "aspect": 0.97,
+          "area": 152856,
+          "linkLength": 0
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 373,
+          "height": 376,
+          "aspect": 0.99,
+          "area": 140507,
+          "linkLength": 0
+        },
+        "warnings": [],
+        "milliseconds": 7,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-grid-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-grid-before.json"
+    },
+    {
+      "name": "warm-grid-45",
+      "document": "layout-warm-validation/json/warm-grid-45.json",
+      "svg": "layout-warm-validation/svg/warm-grid-45.svg",
+      "geometry": "layout-warm-validation/geometry/warm-grid-45.json",
+      "geometry_sha256": "e545f1b21d3a1e4c4670abb41a052386e81c63925fc8f2704806156b9d8318c4",
+      "metrics": {
+        "width": 446,
+        "height": 504,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0
+      },
+      "visual_ids": [
+        "VL12"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "gridStrength",
+      "value": 45,
+      "options": {
+        "algorithm": "grid",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 0,
+        "feedbackEdges": 0,
+        "algorithm": "grid",
+        "name": "Soft grid",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 9,
+        "maxDisplacement": 18,
+        "rmsDisplacement": 11.99,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 386,
+          "height": 396,
+          "aspect": 0.97,
+          "area": 152856,
+          "linkLength": 0
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 364,
+          "height": 376,
+          "aspect": 0.97,
+          "area": 137045,
+          "linkLength": 0
+        },
+        "warnings": [],
+        "milliseconds": 5,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-grid-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-grid-before.json"
+    },
+    {
+      "name": "warm-grid-100",
+      "document": "layout-warm-validation/json/warm-grid-100.json",
+      "svg": "layout-warm-validation/svg/warm-grid-100.svg",
+      "geometry": "layout-warm-validation/geometry/warm-grid-100.json",
+      "geometry_sha256": "372cedd798b75185a90e207d23c22040068e429d62961cfd167f89525fe8b7ac",
+      "metrics": {
+        "width": 442,
+        "height": 504,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0
+      },
+      "visual_ids": [
+        "VL12"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "gridStrength",
+      "value": 100,
+      "options": {
+        "algorithm": "grid",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 100,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 0,
+        "feedbackEdges": 0,
+        "algorithm": "grid",
+        "name": "Soft grid",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 9,
+        "maxDisplacement": 21.36,
+        "rmsDisplacement": 13.46,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 386,
+          "height": 396,
+          "aspect": 0.97,
+          "area": 152856,
+          "linkLength": 0
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 360,
+          "height": 376,
+          "aspect": 0.96,
+          "area": 135469,
+          "linkLength": 0
+        },
+        "warnings": [],
+        "milliseconds": 6,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-grid-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-grid-before.json"
+    },
+    {
+      "name": "warm-ordering-before",
+      "document": "layout-warm-validation/json/warm-ordering-before.json",
+      "svg": "layout-warm-validation/svg/warm-ordering-before.svg",
+      "geometry": "layout-warm-validation/geometry/warm-ordering-before.json",
+      "geometry_sha256": "0fd4768f1e4329213aa335d0ea9791b9b252eb39b7fa5430d80b31a3db2662e5",
+      "metrics": {
+        "width": 1144,
+        "height": 346,
+        "crossings": 0,
+        "bends": 6,
+        "length": 1208
+      },
+      "visual_ids": [
+        "VL13"
+      ],
+      "operation": "shared starting document",
+      "source": "layout-warm-validation/sources/warm-ordering-start.draft"
+    },
+    {
+      "name": "warm-ordering-stable",
+      "document": "layout-warm-validation/json/warm-ordering-stable.json",
+      "svg": "layout-warm-validation/svg/warm-ordering-stable.svg",
+      "geometry": "layout-warm-validation/geometry/warm-ordering-stable.json",
+      "geometry_sha256": "909e9aa2a5197dee4358c2010e244ae965c1d36c15c01e9517da2fd60227a919",
+      "metrics": {
+        "width": 762,
+        "height": 311,
+        "crossings": 0,
+        "bends": 6,
+        "length": 750.78
+      },
+      "visual_ids": [
+        "VL13"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "ordering",
+      "value": "stable",
+      "options": {
+        "algorithm": "layered",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 192,
+        "stability": 0,
+        "iterations": 96,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 2,
+        "feedbackEdges": 0,
+        "algorithm": "layered",
+        "name": "Layered + fold",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 4,
+        "maxDisplacement": 192,
+        "rmsDisplacement": 192,
+        "movementLimit": 192,
+        "iterations": 96,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1064,
+          "height": 196,
+          "aspect": 5.43,
+          "area": 208544,
+          "linkLength": 1206
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 681,
+          "height": 162,
+          "aspect": 4.2,
+          "area": 110701,
+          "linkLength": 808
+        },
+        "warnings": [],
+        "milliseconds": 11,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 96,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-ordering-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-ordering-before.json"
+    },
+    {
+      "name": "warm-ordering-crossings",
+      "document": "layout-warm-validation/json/warm-ordering-crossings.json",
+      "svg": "layout-warm-validation/svg/warm-ordering-crossings.svg",
+      "geometry": "layout-warm-validation/geometry/warm-ordering-crossings.json",
+      "geometry_sha256": "bf409b774df15b3a1e9e13fab5af4428c53dfacd4a9a3bcbbbdae01dd228380d",
+      "metrics": {
+        "width": 771,
+        "height": 290,
+        "crossings": 0,
+        "bends": 4,
+        "length": 567.98
+      },
+      "visual_ids": [
+        "VL13"
+      ],
+      "operation": "one bounded native pass",
+      "parameter": "ordering",
+      "value": "crossings",
+      "options": {
+        "algorithm": "layered",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 192,
+        "stability": 0,
+        "iterations": 96,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "crossings",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "warmStart": true,
+        "settle": false,
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        }
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 2,
+        "feedbackEdges": 0,
+        "algorithm": "layered",
+        "name": "Layered + fold",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 4,
+        "maxDisplacement": 192,
+        "rmsDisplacement": 192,
+        "movementLimit": 192,
+        "iterations": 96,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1064,
+          "height": 196,
+          "aspect": 5.43,
+          "area": 208544,
+          "linkLength": 1206
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 690,
+          "height": 162,
+          "aspect": 4.25,
+          "area": 112080,
+          "linkLength": 785
+        },
+        "warnings": [],
+        "milliseconds": 12,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 96,
+            "reason": "iteration limit"
+          }
+        ]
+      },
+      "source": "layout-warm-validation/sources/warm-ordering-start.draft",
+      "startingJson": "layout-warm-validation/json/warm-ordering-before.json"
+    }
+  ],
+  "expected_diagnostics": [
+    {
+      "source": "layout-warm-validation/sources/expected-diagnostics/align-pin-conflict.draft",
+      "svg": "layout-warm-validation/svg/align-pin-conflict.svg",
+      "geometry": "layout-warm-validation/geometry/align-pin-conflict.json",
+      "visual_ids": [
+        "VL23",
+        "VL26"
+      ],
+      "check_exit": 1,
+      "inspect_json_exit": 0,
+      "inspect_metrics_exit": 1,
+      "svg_exit": 0,
+      "classification": "Expected incompatible hard constraints, not a product bug",
+      "message": "Pins conflict with required y alignment in root. The pins were kept.",
+      "evidence": "layout-warm-validation/diagnostic-results.json"
+    }
+  ]
+}

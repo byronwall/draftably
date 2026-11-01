@@ -1,0 +1,60 @@
+{
+  "file": "near-gap-0.draft",
+  "source_sha256": "6cd364e2767fb0cd01e998b2d985b52af937238f8266f403dba3a58d1a35ec00",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-gap-0.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.13
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-gap-0.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.128
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 456,
+    "height": 250,
+    "crossings": 0,
+    "bends": 2,
+    "length": 141,
+    "warnings": 0
+  },
+  "node_hash": "c87047702b51114132bdedfe148b9d8af0075e8aa77464185d5bf80061ad0076",
+  "route_hash": "14e84bd03157bd1b0b9aca4e6e53511c7b1cd78a42acf90fa72484ffa2b04ce2",
+  "geometry_hash": "7d06783c1f6c056ea063717d3391bb536dbb18d405727efb60fed14b9deda1f9",
+  "check_output": "info    line 8: near c gave way by 2 px to keep root clear.\nMetrics: 456\u00d7250 (aspect 1.82), 0 crossings, 2 bends, 141px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-gap-0.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.104,
+    "file": "svg/near-gap-0.svg",
+    "bytes": 67580,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "3f3e69091d4f685c4a0097976b68d8fb9932e1ab7e67e45427dab516f0e9ed82"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

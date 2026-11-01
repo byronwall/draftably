@@ -1,0 +1,6 @@
+diagram "A declared sibling order" version=1
+node draft "Draft"
+node review "Review"
+node publish "Publish"
+layout root row gap=40
+order root review draft publish

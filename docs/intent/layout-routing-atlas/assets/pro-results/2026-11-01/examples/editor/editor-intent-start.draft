@@ -1,0 +1,20 @@
+diagram "Atlas: placement preferences" version=1
+node hub "Hub"
+node a "Branch A"
+node b "Branch B"
+node c "Branch C"
+node a2 "A detail"
+node b2 "B detail"
+node c2 "C detail"
+node finish "Finish"
+edge e1 hub -> a
+edge e2 hub -> b
+edge e3 hub -> c
+edge e4 a -> a2
+edge e5 b -> b2
+edge e6 c -> c2
+edge e7 a2 -> finish
+edge e8 b2 -> finish
+edge e9 c2 -> finish
+edge e10 finish -> hub
+layout root engine=tree direction=right fold=never

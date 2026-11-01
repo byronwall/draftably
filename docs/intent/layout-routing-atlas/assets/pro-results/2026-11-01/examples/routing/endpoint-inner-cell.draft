@@ -1,0 +1,15 @@
+diagram "Routing: a cell on the outline or behind other cells" version=1
+group packet "Packet"
+node a "A" in=packet
+node b "B" in=packet
+node c "C" in=packet
+node d "D" in=packet
+node e "E" in=packet
+node f "F" in=packet
+node g "G" in=packet
+node h "H" in=packet
+node i "I" in=packet
+node reader "Reader"
+edge read reader -> e
+layout packet cells columns=3
+layout root column

@@ -1,0 +1,60 @@
+{
+  "file": "near-offset--80.draft",
+  "source_sha256": "238f42b4d8e0fc7f23a030a1a10c9a1ed2bc59a9c2558b9ee5e548b866985881",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-offset--80.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.118
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-offset--80.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.099
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 536,
+    "height": 266,
+    "crossings": 0,
+    "bends": 2,
+    "length": 252,
+    "warnings": 0
+  },
+  "node_hash": "d7761d03ef8229445be773b0ccd16e852a3c0451b8ee41ec4f1b1702d5971af9",
+  "route_hash": "144fcd91b6020926826390a7708f9f18d3dd6b534f273333cc261cfd11e8fba6",
+  "geometry_hash": "af0f88948a0ba3f6a878e4123eb10d0aa83ca26d4e7c96305b38c5fba4bbc6c8",
+  "check_output": "Metrics: 536\u00d7266 (aspect 2.02), 0 crossings, 2 bends, 252px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-offset--80.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.101,
+    "file": "svg/near-offset--80.svg",
+    "bytes": 67591,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "7e53efb5e1fb549f8f98b956e2dd153d82b71b6717ec7e5da1ea3594a7ad54a2"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

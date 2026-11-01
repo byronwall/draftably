@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "A perturbed grid",
+  "graph": {
+    "nodes": [
+      {
+        "id": "a",
+        "title": "One"
+      },
+      {
+        "id": "b",
+        "title": "Two"
+      },
+      {
+        "id": "c",
+        "title": "Three"
+      },
+      {
+        "id": "d",
+        "title": "Four"
+      },
+      {
+        "id": "e",
+        "title": "Five"
+      },
+      {
+        "id": "f",
+        "title": "Six"
+      },
+      {
+        "id": "g",
+        "title": "Seven"
+      },
+      {
+        "id": "h",
+        "title": "Eight"
+      },
+      {
+        "id": "i",
+        "title": "Nine"
+      }
+    ],
+    "edges": [],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "a": {
+        "x": 4.293,
+        "y": 12.878,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "b": {
+        "x": 195.512,
+        "y": 16.625,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "c": {
+        "x": 7.182,
+        "y": 92.916,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "d": {
+        "x": 195.332,
+        "y": 96.775,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "e": {
+        "x": 0.683,
+        "y": 173.066,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "f": {
+        "x": 199.122,
+        "y": 177.653,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "g": {
+        "x": 7.182,
+        "y": 253.104,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "h": {
+        "x": 195.332,
+        "y": 257.803,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "i": {
+        "x": -1.122,
+        "y": 333.123,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {},
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "a": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "b": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "c": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "d": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "e": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "f": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "g": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "h": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "i": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "grid",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "A perturbed grid"
+    }
+  }
+}

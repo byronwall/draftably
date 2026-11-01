@@ -1,0 +1,60 @@
+{
+  "file": "group-gap-180.draft",
+  "source_sha256": "03cd09c806c002504b8cd2807da0cfb234be0b5811de2b252d4332c299ba80ca",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/group-gap-180.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.686
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/group-gap-180.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.708
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1172,
+    "height": 474,
+    "crossings": 1,
+    "bends": 10,
+    "length": 1696,
+    "warnings": 0
+  },
+  "node_hash": "915cf066fa5838a199eb1b716c4a0532dc38fe50d6b871a828ed91190a4933e4",
+  "route_hash": "d106d9fc0cb9078cd336e5930979dc0a824ca2909a9dd27d286f4e898f8b94cf",
+  "geometry_hash": "9fe615e7d46e7af0edbdb2a0b4b60aa26b3cf47865856f76cf84b560bf88a827",
+  "check_output": "warning Edges e5 and e6 cross. [crossing]\nMetrics: 1172\u00d7474 (aspect 2.47), 1 crossing, 10 bends, 1696px of lines, 1 warning.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/group-gap-180.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.645,
+    "file": "svg/group-gap-180.svg",
+    "bytes": 73334,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "f63d82c557fb4d397ed4377abf081c4cc05f4aa54dacb1de244c5991e1b38b71"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

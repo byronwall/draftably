@@ -1,0 +1,4 @@
+warning line 9: stay b gave way by 32 px to keep root clear. Remove line 9, or run format --drop-stale. [relaxed]
+warning line 8: near c gave way by 44 px to keep root clear. Remove line 8, or run format --drop-stale. [relaxed]
+Metrics: 416×334 (aspect 1.25), 0 crossings, 3 bends, 330px of lines, 2 warnings.
+Warnings: 3 nodes, 0 groups, 2 connections.

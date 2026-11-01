@@ -1,0 +1,913 @@
+[
+  {
+    "source": "examples/editor-probes/fold-before-explicit-never.draft",
+    "source_sha256": "1b1155ea2fe929539a84a20d9cdda6bfd3cc57191d89d74c46e064d19aa53094",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/editor-probes/fold-before-explicit-never.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit_code": 0,
+    "geometry": {
+      "nodes": [
+        {
+          "id": "n0",
+          "parent": "root",
+          "x": 0,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n1",
+          "parent": "root",
+          "x": 216,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n10",
+          "parent": "root",
+          "x": 2160,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n11",
+          "parent": "root",
+          "x": 2376,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n2",
+          "parent": "root",
+          "x": 432,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n3",
+          "parent": "root",
+          "x": 648,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n4",
+          "parent": "root",
+          "x": 864,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n5",
+          "parent": "root",
+          "x": 1080,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n6",
+          "parent": "root",
+          "x": 1296,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n7",
+          "parent": "root",
+          "x": 1512,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n8",
+          "parent": "root",
+          "x": 1728,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n9",
+          "parent": "root",
+          "x": 1944,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        }
+      ],
+      "routes": [
+        {
+          "id": "e0",
+          "points": [
+            {
+              "x": 164,
+              "y": 28
+            },
+            {
+              "x": 216,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e1",
+          "points": [
+            {
+              "x": 380,
+              "y": 28
+            },
+            {
+              "x": 432,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e10",
+          "points": [
+            {
+              "x": 2324,
+              "y": 28
+            },
+            {
+              "x": 2376,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e2",
+          "points": [
+            {
+              "x": 596,
+              "y": 28
+            },
+            {
+              "x": 648,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e3",
+          "points": [
+            {
+              "x": 812,
+              "y": 28
+            },
+            {
+              "x": 864,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e4",
+          "points": [
+            {
+              "x": 1028,
+              "y": 28
+            },
+            {
+              "x": 1080,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e5",
+          "points": [
+            {
+              "x": 1244,
+              "y": 28
+            },
+            {
+              "x": 1296,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e6",
+          "points": [
+            {
+              "x": 1460,
+              "y": 28
+            },
+            {
+              "x": 1512,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e7",
+          "points": [
+            {
+              "x": 1676,
+              "y": 28
+            },
+            {
+              "x": 1728,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e8",
+          "points": [
+            {
+              "x": 1892,
+              "y": 28
+            },
+            {
+              "x": 1944,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e9",
+          "points": [
+            {
+              "x": 2108,
+              "y": 28
+            },
+            {
+              "x": 2160,
+              "y": 28
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "width": 2620,
+        "height": 182,
+        "crossings": 0,
+        "bends": 0,
+        "length": 572,
+        "warnings": 0
+      }
+    },
+    "stderr": ""
+  },
+  {
+    "source": "examples/editor-probes/fold-after-ui-never.draft",
+    "source_sha256": "9f0a0cb550e26e4a9a09822f893c5953f87fcc8443c92d6e41c944f48803f856",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/editor-probes/fold-after-ui-never.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit_code": 0,
+    "geometry": {
+      "nodes": [
+        {
+          "id": "n0",
+          "parent": "root",
+          "x": 0,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n1",
+          "parent": "root",
+          "x": 216,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n10",
+          "parent": "root",
+          "x": 432,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n11",
+          "parent": "root",
+          "x": 648,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n2",
+          "parent": "root",
+          "x": 432,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n3",
+          "parent": "root",
+          "x": 648,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n4",
+          "parent": "root",
+          "x": 0,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n5",
+          "parent": "root",
+          "x": 216,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n6",
+          "parent": "root",
+          "x": 432,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n7",
+          "parent": "root",
+          "x": 648,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n8",
+          "parent": "root",
+          "x": 0,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n9",
+          "parent": "root",
+          "x": 216,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        }
+      ],
+      "routes": [
+        {
+          "id": "e0",
+          "points": [
+            {
+              "x": 164,
+              "y": 28
+            },
+            {
+              "x": 216,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e1",
+          "points": [
+            {
+              "x": 380,
+              "y": 28
+            },
+            {
+              "x": 432,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e10",
+          "points": [
+            {
+              "x": 596,
+              "y": 308
+            },
+            {
+              "x": 648,
+              "y": 308
+            }
+          ]
+        },
+        {
+          "id": "e2",
+          "points": [
+            {
+              "x": 596,
+              "y": 28
+            },
+            {
+              "x": 648,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e3",
+          "points": [
+            {
+              "x": 730,
+              "y": 56
+            },
+            {
+              "x": 730,
+              "y": 98
+            },
+            {
+              "x": 82,
+              "y": 98
+            },
+            {
+              "x": 82,
+              "y": 140
+            }
+          ]
+        },
+        {
+          "id": "e4",
+          "points": [
+            {
+              "x": 164,
+              "y": 168
+            },
+            {
+              "x": 216,
+              "y": 168
+            }
+          ]
+        },
+        {
+          "id": "e5",
+          "points": [
+            {
+              "x": 380,
+              "y": 168
+            },
+            {
+              "x": 432,
+              "y": 168
+            }
+          ]
+        },
+        {
+          "id": "e6",
+          "points": [
+            {
+              "x": 596,
+              "y": 168
+            },
+            {
+              "x": 648,
+              "y": 168
+            }
+          ]
+        },
+        {
+          "id": "e7",
+          "points": [
+            {
+              "x": 730,
+              "y": 196
+            },
+            {
+              "x": 730,
+              "y": 238
+            },
+            {
+              "x": 82,
+              "y": 238
+            },
+            {
+              "x": 82,
+              "y": 280
+            }
+          ]
+        },
+        {
+          "id": "e8",
+          "points": [
+            {
+              "x": 164,
+              "y": 308
+            },
+            {
+              "x": 216,
+              "y": 308
+            }
+          ]
+        },
+        {
+          "id": "e9",
+          "points": [
+            {
+              "x": 380,
+              "y": 308
+            },
+            {
+              "x": 432,
+              "y": 308
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "width": 892,
+        "height": 462,
+        "crossings": 0,
+        "bends": 4,
+        "length": 1932,
+        "warnings": 0
+      }
+    },
+    "stderr": ""
+  },
+  {
+    "source": "examples/editor-probes/fold-after-ui-auto.draft",
+    "source_sha256": "acc1b896bf0ee101869f3f7e9bf65cf38f90c342c5f720d119e6c6853964654e",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/editor-probes/fold-after-ui-auto.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit_code": 0,
+    "geometry": {
+      "nodes": [
+        {
+          "id": "n0",
+          "parent": "root",
+          "x": 0,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n1",
+          "parent": "root",
+          "x": 216,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n10",
+          "parent": "root",
+          "x": 432,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n11",
+          "parent": "root",
+          "x": 648,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n2",
+          "parent": "root",
+          "x": 432,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n3",
+          "parent": "root",
+          "x": 648,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n4",
+          "parent": "root",
+          "x": 0,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n5",
+          "parent": "root",
+          "x": 216,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n6",
+          "parent": "root",
+          "x": 432,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n7",
+          "parent": "root",
+          "x": 648,
+          "y": 140,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n8",
+          "parent": "root",
+          "x": 0,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "n9",
+          "parent": "root",
+          "x": 216,
+          "y": 280,
+          "w": 164,
+          "h": 56
+        }
+      ],
+      "routes": [
+        {
+          "id": "e0",
+          "points": [
+            {
+              "x": 164,
+              "y": 28
+            },
+            {
+              "x": 216,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e1",
+          "points": [
+            {
+              "x": 380,
+              "y": 28
+            },
+            {
+              "x": 432,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e10",
+          "points": [
+            {
+              "x": 596,
+              "y": 308
+            },
+            {
+              "x": 648,
+              "y": 308
+            }
+          ]
+        },
+        {
+          "id": "e2",
+          "points": [
+            {
+              "x": 596,
+              "y": 28
+            },
+            {
+              "x": 648,
+              "y": 28
+            }
+          ]
+        },
+        {
+          "id": "e3",
+          "points": [
+            {
+              "x": 730,
+              "y": 56
+            },
+            {
+              "x": 730,
+              "y": 98
+            },
+            {
+              "x": 82,
+              "y": 98
+            },
+            {
+              "x": 82,
+              "y": 140
+            }
+          ]
+        },
+        {
+          "id": "e4",
+          "points": [
+            {
+              "x": 164,
+              "y": 168
+            },
+            {
+              "x": 216,
+              "y": 168
+            }
+          ]
+        },
+        {
+          "id": "e5",
+          "points": [
+            {
+              "x": 380,
+              "y": 168
+            },
+            {
+              "x": 432,
+              "y": 168
+            }
+          ]
+        },
+        {
+          "id": "e6",
+          "points": [
+            {
+              "x": 596,
+              "y": 168
+            },
+            {
+              "x": 648,
+              "y": 168
+            }
+          ]
+        },
+        {
+          "id": "e7",
+          "points": [
+            {
+              "x": 730,
+              "y": 196
+            },
+            {
+              "x": 730,
+              "y": 238
+            },
+            {
+              "x": 82,
+              "y": 238
+            },
+            {
+              "x": 82,
+              "y": 280
+            }
+          ]
+        },
+        {
+          "id": "e8",
+          "points": [
+            {
+              "x": 164,
+              "y": 308
+            },
+            {
+              "x": 216,
+              "y": 308
+            }
+          ]
+        },
+        {
+          "id": "e9",
+          "points": [
+            {
+              "x": 380,
+              "y": 308
+            },
+            {
+              "x": 432,
+              "y": 308
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "width": 892,
+        "height": 462,
+        "crossings": 0,
+        "bends": 4,
+        "length": 1932,
+        "warnings": 0
+      }
+    },
+    "stderr": ""
+  },
+  {
+    "source": "examples/editor-probes/refinement-drift-cleaned.draft",
+    "source_sha256": "44fd086406e38a97dbf9d6a7b4afca830c528d4c242a955898ca326466bb46f9",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/editor-probes/refinement-drift-cleaned.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit_code": 0,
+    "geometry": {
+      "nodes": [
+        {
+          "id": "a",
+          "parent": "root",
+          "x": 0,
+          "y": 0,
+          "w": 120,
+          "h": 72
+        },
+        {
+          "id": "b",
+          "parent": "root",
+          "x": 168,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        },
+        {
+          "id": "c",
+          "parent": "root",
+          "x": 380,
+          "y": 0,
+          "w": 164,
+          "h": 56
+        }
+      ],
+      "routes": [
+        {
+          "id": "e1",
+          "points": [
+            {
+              "x": 120,
+              "y": 36
+            },
+            {
+              "x": 168,
+              "y": 36
+            }
+          ]
+        },
+        {
+          "id": "e2",
+          "points": [
+            {
+              "x": 332,
+              "y": 28
+            },
+            {
+              "x": 380,
+              "y": 28
+            }
+          ]
+        }
+      ],
+      "metrics": {
+        "width": 624,
+        "height": 198,
+        "crossings": 0,
+        "bends": 0,
+        "length": 96,
+        "warnings": 0
+      }
+    },
+    "stderr": ""
+  }
+]

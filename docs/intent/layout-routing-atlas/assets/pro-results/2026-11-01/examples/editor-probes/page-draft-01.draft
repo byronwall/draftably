@@ -1,0 +1,8 @@
+node source "Source"
+node parse "Parse"
+node validate "Validate"
+node publish "Publish"
+edge a source -> parse
+edge b parse -> validate
+edge c validate -> publish
+layout root engine=layered direction=right fold=never

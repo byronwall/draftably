@@ -1,0 +1,11 @@
+diagram "Atlas: align and distribute" version=1
+node a "A"
+node b "B"
+node c "C"
+size a width=100 height=56
+size b width=140 height=60
+size c width=120 height=80
+layout root row gap=64
+stay a x=0 y=0
+stay b x=260 y=120
+stay c x=620 y=40

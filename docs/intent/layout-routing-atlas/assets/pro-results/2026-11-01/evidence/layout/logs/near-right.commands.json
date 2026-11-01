@@ -1,0 +1,60 @@
+{
+  "file": "near-right.draft",
+  "source_sha256": "c4c428936e2a5463cc4d34f570f2eb3226baec6a23857c78378e61f05f895a52",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-right.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.091
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-right.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.113
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 456,
+    "height": 250,
+    "crossings": 0,
+    "bends": 2,
+    "length": 117,
+    "warnings": 0
+  },
+  "node_hash": "6d45ef290a4429adc5ca713fd6eb90bc77cab4616f398729b2526978c7124234",
+  "route_hash": "b86bc660586065c7b5065f28a9d37139b33f4e5434237470d09ce5729cbdd033",
+  "geometry_hash": "5bfdf7ad43fb6b7f002558455e030d9e2831b29b922ee83da8a1870b374c952a",
+  "check_output": "info    line 8: near c gave way by 11 px to keep root clear.\nMetrics: 456\u00d7250 (aspect 1.82), 0 crossings, 2 bends, 117px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-right.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.091,
+    "file": "svg/near-right.svg",
+    "bytes": 67602,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "4632115e646c02af664211c4740338509468f217f84077c47bf2553f7658b758"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

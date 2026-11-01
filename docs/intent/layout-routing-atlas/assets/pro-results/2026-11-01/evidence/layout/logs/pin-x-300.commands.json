@@ -1,0 +1,60 @@
+{
+  "file": "pin-x-300.draft",
+  "source_sha256": "ba126ee9855887047eeb40a5a3a1fe8b522e96f2623a4165bfc295d7a8fda32d",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/pin-x-300.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.097
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/pin-x-300.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.084
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 253,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "cc449942a5d4f05c3285608c529e55a201e6b59d1846fda42150fa4816540295",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "d61579cf03a44ebbceb64bd1d0fdb406eb2808ef5933b52add1c6194b970ef26",
+  "check_output": "Metrics: 253\u00d7182 (aspect 1.39), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 1 node, 0 groups, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/pin-x-300.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.076,
+    "file": "svg/pin-x-300.svg",
+    "bytes": 66406,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "e9bd74d84f680fc50882ca42bfe121b812551cc67892d08855cf8fc8e478764c"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

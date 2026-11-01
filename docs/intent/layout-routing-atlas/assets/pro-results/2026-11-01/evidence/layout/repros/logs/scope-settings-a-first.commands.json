@@ -1,0 +1,44 @@
+{
+  "file": "repros/scope-settings-a-first.draft",
+  "source_sha256": "a8d8ac42a4deb10727bdd30664ea238c497b4b8b601e4fb43f8c4a073722d42e",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/scope-settings-a-first.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.156
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/scope-settings-a-first.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.155
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 2236,
+    "height": 254,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "3bbfb61c9922a85214bcb1699a7ca68ec2355c48ef976ba1a3fb4b515e2da2de",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "32f3cfd857417f9dbf2c2609cf8708a15a4f93299e29ebd6d944064d5b57e823",
+  "check_output": "warning The drawing is 2236\u00d7254 (aspect 8.80). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 2236\u00d7254 (aspect 8.80), 0 crossings, 0 bends, 0px of lines, 1 warning.\nWarnings: 8 nodes, 2 groups, 0 connections.\n",
+  "finite_inspect": true,
+  "svg_ok": true
+}
