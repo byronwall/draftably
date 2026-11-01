@@ -57,8 +57,8 @@ Each module owns one concern and exposes signals plus the actions that change th
 
 ## import/ — foreign diagram source
 
-`import/` detects supported text formats and converts DOT graphs to validated native source.
-It reports unsupported meaning and loss before a caller opens the result. The CLI `import`
+`import/` detects supported text formats and converts DOT graphs and Mermaid flowchart
+snapshots to validated native source. It reports unsupported meaning and loss before opening. The CLI `import`
 command writes a new `.draft` file. Viewer entry points are planned separately.
 
 ## dsl/ and cli/ — diagram files
