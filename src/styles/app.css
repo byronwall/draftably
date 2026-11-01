@@ -591,6 +591,46 @@ input[type='range'] {
   }
 }
 
+/* --- Tooltips --------------------------------------------------------------------------------- */
+
+.tip {
+  position: fixed;
+  z-index: 110;
+  max-width: 260px;
+  padding: 6px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--ink-on);
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  pointer-events: none;
+  box-shadow: var(--shadow);
+}
+
+.tip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tip strong {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tip p {
+  margin-top: 2px;
+  opacity: 0.78;
+}
+
+.tip kbd {
+  border: 0;
+  background: color-mix(in srgb, var(--ink-on) 16%, transparent);
+  color: inherit;
+}
+
 /* --- Shell ------------------------------------------------------------------------------------ */
 
 .app {

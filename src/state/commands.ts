@@ -61,6 +61,8 @@ export interface Command {
   /** Shortcut shown in menus. */
   keys?: string;
   icon?: string;
+  /** What it does, in a sentence: shown in tooltips and the palette. */
+  hint?: string;
   run: () => unknown;
   /** Allowed while a timeline preview is open. */
   duringTimeline?: boolean;
@@ -137,6 +139,7 @@ function openStart() {
 
 export const commands = {
   undo: {
+    hint: 'Step back through your last edit.',
     label: 'Undo',
     keys: '⌘Z',
     icon: 'undo',
@@ -144,7 +147,14 @@ export const commands = {
     duringTimeline: true,
     enabled: canUndo,
   },
-  redo: { label: 'Redo', keys: '⇧⌘Z', icon: 'redo', run: redoCommand, enabled: canRedo },
+  redo: {
+    hint: 'Put back the edit you just undid.',
+    label: 'Redo',
+    keys: '⇧⌘Z',
+    icon: 'redo',
+    run: redoCommand,
+    enabled: canRedo,
+  },
 
   'add-node': {
     label: 'Add box',
@@ -162,6 +172,7 @@ export const commands = {
     run: () => actions.quickExtend(),
   },
   'quick-build': {
+    hint: 'Type or paste an indented list and get connected shapes.',
     label: 'Build from a list…',
     keys: 'B',
     icon: 'layers',
@@ -221,6 +232,7 @@ export const commands = {
   'mark-end': { label: 'End here', run: () => actions.markSelectedAs('end') },
 
   layout: {
+    hint: 'Nudge shapes into line with small moves. Your arrangement stays.',
     label: 'Tidy positions',
     keys: 'L',
     icon: 'layout',
@@ -240,10 +252,17 @@ export const commands = {
   },
   'layout-accept': { label: 'Keep layout', run: acceptPreview },
   'layout-discard': { label: 'Discard', run: discardPreview },
-  'layout-menu': { label: 'Layout options', keys: '⌥L', run: toggleLayoutLab, endsBrush: true },
+  'layout-menu': {
+    hint: 'Choose an arrangement, preview it and keep it if you like it.',
+    label: 'Layout options',
+    keys: '⌥L',
+    run: toggleLayoutLab,
+    endsBrush: true,
+  },
   'layout-checkpoint': { label: 'Capture checkpoint', run: captureCheckpoint },
   'layout-restore': { label: 'Restore checkpoint', run: restoreCheckpoint },
   'compare-layouts': {
+    hint: 'See other arrangements side by side, then apply one.',
     label: 'Compare layouts',
     keys: '⌥E',
     run: () => openComparison('layout'),
@@ -254,7 +273,13 @@ export const commands = {
     run: () => openComparison('routing'),
     endsBrush: true,
   },
-  reroute: { label: 'Reroute now', keys: '⌥R', icon: 'branch', run: () => actions.reroute() },
+  reroute: {
+    hint: 'Redraw every connection. Shapes stay where they are.',
+    label: 'Reroute now',
+    keys: '⌥R',
+    icon: 'branch',
+    run: () => actions.reroute(),
+  },
   'auto-ports': {
     label: 'Use auto ports on selection',
     keys: '⌥⇧R',
@@ -262,6 +287,7 @@ export const commands = {
   },
 
   'timeline-toggle': {
+    hint: 'Step through arrangements from here to a tidy result and pick one.',
     label: 'Layout timeline',
     keys: '⌥T',
     icon: 'journey',
@@ -281,6 +307,7 @@ export const commands = {
     duringTimeline: true,
   },
   'brush-toggle': {
+    hint: 'Paint over shapes to tidy only that part of the drawing.',
     label: 'Layout brush',
     keys: 'W',
     icon: 'brush',
@@ -288,7 +315,14 @@ export const commands = {
     duringTimeline: true,
   },
 
-  fit: { label: 'Fit diagram', keys: '1', icon: 'fit', run: fitView, duringTimeline: true },
+  fit: {
+    hint: 'Zoom so the whole diagram fills the view.',
+    label: 'Fit diagram',
+    keys: '1',
+    icon: 'fit',
+    run: fitView,
+    duringTimeline: true,
+  },
   'zoom-in': {
     label: 'Zoom in',
     keys: '+',
@@ -310,6 +344,7 @@ export const commands = {
     duringTimeline: true,
   },
   'toggle-objects': {
+    hint: 'List every shape and container, with search.',
     label: 'Objects',
     keys: '[',
     icon: 'panel-left',
@@ -317,6 +352,7 @@ export const commands = {
     duringTimeline: true,
   },
   'toggle-files': {
+    hint: 'List the diagrams in the open folder.',
     label: 'Diagrams in this folder',
     keys: 'F',
     icon: 'folder',
@@ -333,6 +369,7 @@ export const commands = {
     duringTimeline: true,
   },
   'toggle-inspector': {
+    hint: 'Edit the selected shape or connection, or the diagram.',
     label: 'Inspector',
     keys: ']',
     icon: 'panel-right',
@@ -346,6 +383,7 @@ export const commands = {
     duringTimeline: true,
   },
   help: {
+    hint: 'See every shortcut.',
     label: 'Keyboard shortcuts',
     keys: '?',
     icon: 'help',

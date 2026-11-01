@@ -14,6 +14,7 @@ import { ObjectsPanel } from './components/ObjectsPanel';
 import { StartScreen } from './components/StartScreen';
 import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
+import { Tips } from './components/Tips';
 import { Toolbar } from './components/Toolbar';
 import { finishInlineEdit } from './state/actions';
 import { setFilePicker } from './state/commands';
@@ -173,6 +174,7 @@ export default function App() {
       <Dialogs />
       <ComparisonDialog />
       <Toast />
+      <Tips />
       <Show when={startOpen()}>
         <StartScreen variant="dialog" />
       </Show>

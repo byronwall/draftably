@@ -1,6 +1,6 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import { setTool } from '../state/actions';
-import { commandEnabled, runCommand, type CommandId } from '../state/commands';
+import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
 import { doc, saveStatus, transact } from '../state/document';
 import {
   exampleMode,
@@ -15,21 +15,23 @@ import { brushActive, timelineOpen } from '../state/sculpt';
 import { filesShown, inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
 import { workspace } from '../state/launch';
 import { AppNav, Brand } from './Brand';
-import { IconButton } from './controls';
+import { CommandButton, IconButton, tip } from './controls';
 import { Icon } from './Icon';
 import './toolbar.css';
 
-const NAV_TOOLS: [Tool, string, string, string][] = [
-  ['select', 'cursor', 'Edit / select', 'V'],
-  ['pan', 'hand', 'Navigate', 'H'],
+type ToolInfo = [Tool, string, string, string, string];
+
+const NAV_TOOLS: ToolInfo[] = [
+  ['select', 'cursor', 'Select', 'V', 'Click to select, drag to move. Dragging empty space pans.'],
+  ['pan', 'hand', 'Pan', 'H', 'Drag anywhere to move around. Nothing can be edited by accident.'],
 ];
-const DRAW_TOOLS: [Tool, string, string, string][] = [
-  ['box', 'box', 'Rectangle', 'R'],
-  ['diamond', 'diamond', 'Diamond', 'D'],
-  ['circle', 'circle', 'Ellipse', 'O'],
-  ['text', 'text', 'Text', 'T'],
-  ['container', 'group', 'Container', 'G'],
-  ['connect', 'connect', 'Connect', 'C'],
+const DRAW_TOOLS: ToolInfo[] = [
+  ['box', 'box', 'Rectangle', 'R', 'Click or drag on the canvas to add a rectangle.'],
+  ['diamond', 'diamond', 'Diamond', 'D', 'Click or drag to add a decision diamond.'],
+  ['circle', 'circle', 'Ellipse', 'O', 'Click or drag to add an ellipse.'],
+  ['text', 'text', 'Text', 'T', 'Click to add a label with no box.'],
+  ['container', 'group', 'Container', 'G', 'Drag around shapes to group them in a frame.'],
+  ['connect', 'connect', 'Connect', 'C', 'Click one shape, then another, to draw a line.'],
 ];
 
 export function Toolbar() {
@@ -47,6 +49,7 @@ export function Toolbar() {
         <IconButton
           icon="menu"
           label="File and examples"
+          hint="New and open diagrams, examples and help."
           aria-haspopup="menu"
           aria-expanded={menuOpen('file')}
           onClick={menuButton('file')}
@@ -62,24 +65,12 @@ export function Toolbar() {
         </div>
         <span class="divider" />
         <div class="toolbar-group">
-          <IconButton
-            icon="undo"
-            label="Undo"
-            keys="⌘Z"
-            disabled={!commandEnabled('undo')}
-            onClick={run('undo')}
-          />
-          <IconButton
-            icon="redo"
-            label="Redo"
-            keys="⇧⌘Z"
-            disabled={!commandEnabled('redo')}
-            onClick={run('redo')}
-          />
+          <CommandButton command="undo" />
+          <CommandButton command="redo" />
           <button
             type="button"
             class="button ghost"
-            title="Duplicate, group, align, pin, delete"
+            {...tip('Edit', undefined, 'Duplicate, group, align, pin and delete the selection.')}
             aria-haspopup="menu"
             aria-expanded={menuOpen('edit')}
             onClick={menuButton('edit')}
@@ -87,12 +78,7 @@ export function Toolbar() {
             Edit
             <Icon name="chevron" />
           </button>
-          <IconButton
-            icon="layers"
-            label="Build from a list"
-            keys="B"
-            onClick={run('quick-build')}
-          />
+          <CommandButton command="quick-build" label="Build from a list" />
         </div>
 
         <span class="grow" />
@@ -110,7 +96,11 @@ export function Toolbar() {
               <button
                 type="button"
                 class="button primary"
-                title={`Small moves in ${layoutTarget()}. Undo restores them · L`}
+                {...tip(
+                  'Tidy positions',
+                  'L',
+                  `Small moves in ${layoutTarget()}. Undo restores them.`,
+                )}
                 disabled={locked() || !commandEnabled('layout')}
                 onClick={run('layout')}
               >
@@ -124,6 +114,7 @@ export function Toolbar() {
               icon="chevron"
               label="Layout options"
               keys="⌥L"
+              hint={commands['layout-menu'].hint}
               aria-expanded={layoutLabOpen()}
               onClick={run('layout-menu')}
             />
@@ -131,7 +122,7 @@ export function Toolbar() {
           <button
             type="button"
             class="button"
-            title="Set automatic layout"
+            {...tip('Automatic layout', '⌥L', commands['layout-menu'].hint)}
             aria-expanded={layoutLabOpen()}
             onClick={run('layout-menu')}
           >
@@ -140,39 +131,29 @@ export function Toolbar() {
           <button
             type="button"
             class="button ghost"
-            title="Layout timeline · ⌥T"
+            {...tip('Layout timeline', '⌥T', commands['timeline-toggle'].hint)}
             aria-pressed={timelineOpen()}
             onClick={run('timeline-toggle')}
           >
             <Icon name="journey" />
             <span class="label">Timeline</span>
           </button>
-          <IconButton
-            icon="brush"
-            label="Layout brush"
-            keys="W"
-            pressed={brushActive()}
-            onClick={run('brush-toggle')}
-          />
+          <CommandButton command="brush-toggle" pressed={brushActive()} />
           <button
             type="button"
             class="button ghost"
-            title="Compare layouts and routing parameters · ⌥E"
+            {...tip('Compare layouts', '⌥E', commands['compare-layouts'].hint)}
             onClick={run('compare-layouts')}
           >
             <Icon name="compare" />
             <span class="label">Compare</span>
           </button>
           <div class="split-button">
-            <IconButton
-              icon="branch"
-              label="Reroute connections"
-              keys="⌥R"
-              onClick={run('reroute')}
-            />
+            <CommandButton command="reroute" label="Reroute connections" />
             <IconButton
               icon="chevron"
               label="Routing options"
+              hint="Tune how connections choose sides and lanes."
               aria-haspopup="menu"
               aria-expanded={menuOpen('routing')}
               onClick={menuButton('routing')}
@@ -186,38 +167,26 @@ export function Toolbar() {
         <IconButton
           icon="palette"
           label="Appearance"
+          hint="Choose the diagram's theme and node padding."
           aria-haspopup="menu"
           aria-expanded={menuOpen('appearance')}
           onClick={menuButton('appearance')}
         />
         <Show when={workspace()}>
-          <IconButton
-            icon="folder"
-            label="Diagrams in this folder"
-            keys="F"
-            pressed={filesShown()}
-            onClick={run('toggle-files')}
-          />
+          <CommandButton command="toggle-files" pressed={filesShown()} />
         </Show>
-        <IconButton
-          icon="panel-left"
-          label="Objects"
-          keys="["
-          pressed={objectsOpen()}
-          onClick={run('toggle-objects')}
-        />
-        <IconButton
-          icon="panel-right"
-          label="Inspector"
-          keys="]"
-          pressed={inspectorOpen()}
-          onClick={run('toggle-inspector')}
-        />
-        <IconButton icon="help" label="Keyboard shortcuts" keys="?" onClick={run('help')} />
+        <CommandButton command="toggle-objects" pressed={objectsOpen()} />
+        <CommandButton command="toggle-inspector" pressed={inspectorOpen()} />
+        <CommandButton command="help" />
         <button
           type="button"
           class="button ghost"
           aria-label="Save and export"
+          {...tip(
+            'Save and export',
+            undefined,
+            'Save the file, copy an image or export a picture.',
+          )}
           aria-haspopup="menu"
           aria-expanded={menuOpen('export')}
           onClick={menuButton('export')}
@@ -269,14 +238,15 @@ export function Toolbar() {
   );
 }
 
-function ToolButtons(props: { tools: [Tool, string, string, string][]; disabled: boolean }) {
+function ToolButtons(props: { tools: ToolInfo[]; disabled: boolean }) {
   return (
     <For each={props.tools}>
-      {([id, icon, label, key]) => (
+      {([id, icon, label, key, hint]) => (
         <IconButton
           icon={icon}
           label={label}
           keys={key}
+          hint={hint}
           pressed={tool() === id}
           disabled={props.disabled}
           onClick={() => setTool(id)}
