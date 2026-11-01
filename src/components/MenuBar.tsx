@@ -15,8 +15,12 @@ const barMenuOpen = () => {
   return anchor instanceof HTMLElement && !!anchor.closest('.menubar');
 };
 
+/** A click this soon after hover opened the menu was aimed at opening it, not at closing it. */
+const HOVER_GRACE = 400;
+
 /** Every command by name. Once one menu is open, hovering its neighbours opens them. */
 export function MenuBar() {
+  let hoverOpened = -Infinity;
   return (
     <nav class="menubar" aria-label="Menus">
       <For each={MENUS}>
@@ -26,9 +30,13 @@ export function MenuBar() {
             class="menubar-item"
             aria-haspopup="menu"
             aria-expanded={menu()?.id === id}
-            onClick={e => openMenu(id, e.currentTarget)}
+            onClick={e => {
+              if (performance.now() - hoverOpened > HOVER_GRACE) openMenu(id, e.currentTarget);
+            }}
             onPointerEnter={e => {
-              if (barMenuOpen() && menu()?.id !== id) openMenu(id, e.currentTarget);
+              if (!barMenuOpen() || menu()?.id === id) return;
+              hoverOpened = performance.now();
+              openMenu(id, e.currentTarget);
             }}
           >
             {label}
