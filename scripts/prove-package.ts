@@ -70,7 +70,7 @@ for (const [name, source] of [
     timeout: 60000,
     env: { ...process.env, DRAFTABLY_NO_UPDATE_CHECK: '1' },
   });
-  assert.match(run('check', output), /2 nodes, 0 groups, 1 connections/);
+  assert.match(run('check', output), /2 nodes, 0 groups, 1 connection\./);
   assert.equal(fs.readFileSync(input, 'utf8'), source);
   fs.unlinkSync(input);
   fs.unlinkSync(output);
