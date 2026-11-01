@@ -20,10 +20,12 @@ const HINTS: Record<Tool, string> = {
   text: 'Click to add text',
 };
 
+const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`;
+
 export function StatusBar() {
   const counts = () => {
     const vg = visibleScene();
-    return `${vg.nodes.length} shapes · ${vg.edges.length} connections${selection().size ? ` · ${selection().size} selected` : ''}`;
+    return `${count(vg.nodes.length, 'shape')} · ${count(vg.edges.length, 'connection')}${selection().size ? ` · ${selection().size} selected` : ''}`;
   };
   const hint = () => {
     if (drag()?.resizingContainer) return 'Resizing container only · contents stay in place';
@@ -41,7 +43,7 @@ export function StatusBar() {
   const engine = () => {
     if (layoutBusy()) return 'Arranging…';
     const blocked = blockedRouteIds().length;
-    if (blocked) return `${blocked} obstructed routes`;
+    if (blocked) return count(blocked, 'obstructed route');
     if (pinnedCount()) return `${pinnedCount()} pinned · P to toggle`;
     const r = layoutReport();
     if (r)

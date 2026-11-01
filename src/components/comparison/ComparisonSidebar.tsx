@@ -28,7 +28,7 @@ import {
   type CameraMode,
 } from '../../state/comparison';
 import { exportComparisonSvg, exportExperiment } from '../../state/comparison-export';
-import { Checkbox, Field, IconButton, Select, SelectField } from '../controls';
+import { Checkbox, Field, IconButton, Select, SelectField, tip } from '../controls';
 
 export function ComparisonSidebar() {
   const config = () => comparison.config!;
@@ -223,7 +223,7 @@ function Settings() {
           <div class="checkbox-grid" role="group" aria-label="Approaches to compare">
             <For each={LayoutLab.algorithms}>
               {a => (
-                <label class="checkbox" title={a.short}>
+                <label class="checkbox" {...tip(a.name, undefined, a.short)}>
                   <input
                     type="checkbox"
                     checked={config().algorithms.includes(a.id)}
@@ -365,7 +365,7 @@ function LayerControls() {
                 type="button"
                 class="layer-name"
                 aria-pressed={i === comparison.overlay.active}
-                title={`Emphasize ${c().title}`}
+                {...tip(`Emphasize ${c().title}`)}
                 onClick={() => emphasizeLayer(i)}
               >
                 <span class="color-dot" />

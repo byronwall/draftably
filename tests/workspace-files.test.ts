@@ -31,7 +31,7 @@ describe('recent diagram times', () => {
 });
 
 describe('folder view', () => {
-  it('lists the root first, then each folder before its sub-folders', () => {
+  it('lists each folder before its sub-folders, and the root last', () => {
     const files = [
       'z.draft',
       'deploy/railway/b.draft',
@@ -42,12 +42,12 @@ describe('folder view', () => {
     ].map(path => ({ path, title: path, modified: 0 }));
     const groups = groupByFolder(sortFiles(files, 'folder'));
     expect(groups.map(g => [g.folder, g.depth])).toEqual([
-      ['', 0],
       ['deploy', 1],
       ['deploy/aws', 2],
       ['deploy/railway', 2],
       ['deploy-old', 1],
+      ['', 0],
     ]);
-    expect(groups[0].files.map(f => f.path)).toEqual(['a.draft', 'z.draft']);
+    expect(groups.at(-1)!.files.map(f => f.path)).toEqual(['a.draft', 'z.draft']);
   });
 });

@@ -80,6 +80,7 @@ const state = createRoot(() => {
   const [quickBuildText, setQuickBuildText] = createSignal('');
   const [layoutLabOpen, setLayoutLabOpen] = createSignal(false);
   const [creatingFile, setCreatingFile] = createSignal(false);
+  const [savingExample, setSavingExample] = createSignal(false);
   createEffect(() => {
     try {
       localStorage.setItem(
@@ -121,6 +122,8 @@ const state = createRoot(() => {
     setLayoutLabOpen,
     creatingFile,
     setCreatingFile,
+    savingExample,
+    setSavingExample,
   };
 });
 
@@ -138,6 +141,8 @@ export const {
   setLayoutLabOpen,
   creatingFile,
   setCreatingFile,
+  savingExample,
+  setSavingExample,
 } = state;
 
 /** The files panel is on screen: open, with a served folder to list. */

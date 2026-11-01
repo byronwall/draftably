@@ -15,7 +15,7 @@ import {
   togglePlayback,
   type GhostMode,
 } from '../../state/sculpt';
-import { IconButton, Select } from '../controls';
+import { IconButton, Select, tip } from '../controls';
 
 /** Scrub recorded layout steps, bookmark one as a restore source, and keep a step. */
 export function TimelineDeck() {
@@ -42,7 +42,11 @@ export function TimelineDeck() {
               <button
                 type="button"
                 class="button ghost"
-                title="Fit every recorded arrangement using one steady camera"
+                {...tip(
+                  'Fit path',
+                  undefined,
+                  'Fit every recorded arrangement in one steady camera.',
+                )}
                 onClick={() => fitTimelinePath(deck.offsetHeight)}
               >
                 Fit path
@@ -153,7 +157,7 @@ function TimelineTrack() {
                 <button
                   type="button"
                   style={{ left: `${max() ? (b.index / max()) * 100 : 0}%` }}
-                  title={b.title}
+                  {...tip(b.title)}
                   aria-label={`Jump to ${b.title}`}
                   onClick={() => go(b.index)}
                 />
@@ -186,7 +190,7 @@ function TimelineTrack() {
         <button
           type="button"
           class="button"
-          title="Use this step as a local restore source later"
+          {...tip('Bookmark for restore', undefined, 'Use this step as a restore source later.')}
           onClick={bookmarkStep}
         >
           Bookmark for restore

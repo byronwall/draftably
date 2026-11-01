@@ -74,7 +74,12 @@ export function Modal(props: {
 }) {
   let el!: HTMLDialogElement;
   const previousFocus = document.activeElement as HTMLElement | null;
-  onMount(() => el.showModal());
+  onMount(() => {
+    el.tabIndex = -1;
+    el.showModal();
+    // A dialog opens at rest: Close gets focus only when Tab reaches it. A text field keeps it.
+    if (document.activeElement?.matches('.modal-head .button')) el.focus();
+  });
   onCleanup(() => {
     if (el.open) el.close();
     if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
@@ -205,8 +210,6 @@ function QuickBuildDialog() {
   const [title, setTitle] = createSignal('');
   const [continueFrom, setContinueFrom] = createSignal(true);
   const [error, setError] = createSignal('');
-  let textarea!: HTMLTextAreaElement;
-  onMount(() => textarea.focus());
 
   const build = () => {
     const lines = text()
@@ -255,7 +258,7 @@ function QuickBuildDialog() {
         <label class="field">
           <span class="field-label">Shape titles</span>
           <textarea
-            ref={textarea}
+            autofocus
             class="quick-lines"
             rows={9}
             value={text()}

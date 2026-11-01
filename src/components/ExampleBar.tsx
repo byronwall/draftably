@@ -1,4 +1,4 @@
-import { createSignal, Show } from 'solid-js';
+import { createEffect, createSignal, Show } from 'solid-js';
 import { downloadText } from '../lib/svg-export';
 import {
   currentSource,
@@ -17,6 +17,7 @@ import {
   startUrl,
   workspace,
 } from '../state/launch';
+import { savingExample, setSavingExample } from '../state/ui';
 import { Icon } from './Icon';
 
 /**
@@ -24,17 +25,16 @@ import { Icon } from './Icon';
  * the ways out: save the example as a new file, reset it, or go back to the start screen.
  */
 export function ExampleBar() {
-  const [saving, setSaving] = createSignal(false);
   const [path, setPath] = createSignal('');
   const [error, setError] = createSignal('');
   const id = () => fileSession()?.example ?? 'example';
   const fromPlay = cameFromPlayground();
 
-  const startSave = () => {
+  createEffect(() => {
+    if (!savingExample()) return;
     setPath(`${id()}.draft`);
     setError('');
-    setSaving(true);
-  };
+  });
   const save = async (e: Event) => {
     e.preventDefault();
     setError('');
@@ -55,14 +55,10 @@ export function ExampleBar() {
         {scratchName()}
       </span>
       <Show
-        when={saving()}
+        when={savingExample()}
         fallback={
           <>
             <span class="example-text">
-              {/* A draft is renamed in the toolbar, so only an example's name stays true here. */}
-              <Show when={scratchName() === 'Example'}>
-                <strong>{fileSession()?.name}</strong>
-              </Show>
               <span class="example-note">
                 {exampleRestored() && exampleEdited()
                   ? 'Restored your unsaved edits from this browser. Save as a file to keep them.'
@@ -88,7 +84,11 @@ export function ExampleBar() {
                   </button>
                 }
               >
-                <button type="button" class="button small primary" onClick={startSave}>
+                <button
+                  type="button"
+                  class="button small primary"
+                  onClick={() => setSavingExample(true)}
+                >
                   <Icon name="file" />
                   Save as file…
                 </button>
@@ -140,14 +140,18 @@ export function ExampleBar() {
               })
             }
             onInput={e => setPath(e.currentTarget.value)}
-            onKeyDown={e => e.key === 'Escape' && setSaving(false)}
+            onKeyDown={e => e.key === 'Escape' && setSavingExample(false)}
           />
           <span class="example-note">in {workspace()?.root}</span>
           <span class="example-error" role="alert">
             {error()}
           </span>
           <span class="example-actions">
-            <button type="button" class="button small ghost" onClick={() => setSaving(false)}>
+            <button
+              type="button"
+              class="button small ghost"
+              onClick={() => setSavingExample(false)}
+            >
               Cancel
             </button>
             <button type="submit" class="button small primary" disabled={!path().trim()}>

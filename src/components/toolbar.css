@@ -16,7 +16,7 @@
 }
 
 .menubar-item {
-  height: 26px;
+  height: var(--control-height);
   padding: 0 8px;
   border: 0;
   border-radius: var(--radius-sm);
@@ -78,7 +78,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: clamp(130px, 18vw, 300px);
+  width: clamp(150px, 15vw, 300px);
 }
 
 .title-input {
@@ -139,14 +139,14 @@
 }
 
 /* The name gives way while the tools share its row; the mark stays as the link home. */
-@media (min-width: 1101px) and (max-width: 1500px), (max-width: 720px) {
+@media (min-width: 1101px) and (max-width: 1500px), (max-width: 1000px) {
   .toolbar .brand-name {
     display: none;
   }
 }
 
 /* The site links take spare room only. The menus keep Home, Docs and the Playground. */
-@media (min-width: 1101px) and (max-width: 1900px), (max-width: 720px) {
+@media (min-width: 1101px) and (max-width: 1900px), (max-width: 1000px) {
   .toolbar .app-nav {
     display: none;
   }
@@ -166,8 +166,16 @@
     height: 40px;
   }
 
-  .toolbar-panels {
-    margin-left: auto;
+  .toolbar > .toolbar-group:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .title-block {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+    max-width: 420px;
   }
 }
 
