@@ -448,7 +448,7 @@ export const commands = {
     duringTimeline: true,
   },
   'new-diagram': {
-    label: 'New diagram…',
+    label: 'New diagram',
     icon: 'plus',
     run: newDiagram,
     hint: 'Start an empty diagram.',
