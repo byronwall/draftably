@@ -33,7 +33,7 @@ import {
   setInspectorOpen,
   setInspectorWidth,
 } from '../state/ui';
-import { Checkbox, Field, IconButton, NumberField, SelectField } from './controls';
+import { Checkbox, Field, IconButton, NumberField, SelectField, tip } from './controls';
 import { ResizeHandle } from './ResizeHandle';
 import { describeLink, openLink } from '../state/links';
 
@@ -69,15 +69,13 @@ export function Inspector() {
         onResize={setInspectorWidth}
         onReset={resetInspectorWidth}
       />
-      <footer class="panel-footer">
-        <span>Toggle panels</span>
-        <kbd>\</kbd>
-      </footer>
     </aside>
   );
 }
 
 const edit = (label: string, fn: Parameters<typeof transact>[1]) => transact(label, fn);
+
+const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
 function Section(props: { title?: string; children: JSX.Element }) {
   return (
@@ -140,7 +138,7 @@ function Swatches(props: { selected?: ColorKey; shade?: Shade; group?: boolean }
               classList={{ selected: props.selected === key, auto: key === 'auto' }}
               aria-label={key === 'auto' ? 'Theme default' : key}
               aria-pressed={props.selected === key}
-              title={key === 'auto' ? 'Theme default' : key}
+              {...tip(key === 'auto' ? 'Theme default' : capitalize(key))}
               style={{ background: preview(key).fill, 'border-color': preview(key).stroke }}
               onClick={() => setColor(key)}
             />
@@ -170,7 +168,11 @@ function ShadePicker(props: { family: string; shade?: Shade; group?: boolean }) 
               role="radio"
               aria-checked={current() === shade}
               classList={{ selected: current() === shade }}
-              title={`${props.family} ${shade}${shade === fallback() ? ' (default)' : ''}`}
+              {...tip(
+                `${capitalize(props.family)} ${shade}`,
+                undefined,
+                shade === fallback() ? 'Default shade' : undefined,
+              )}
               style={{ background: swatch().fill, color: swatch().ink }}
               onClick={() => setShade(shade === fallback() ? undefined : shade)}
             >
@@ -194,11 +196,10 @@ function TextField(props: { label: string; value: string; onCommit: (value: stri
 function NothingSelected() {
   return (
     <>
-      <IntentSummary />
-      <div class="blank-state">
-        <strong>Select a shape, connection, or container.</strong>
-        <p>Its appearance and geometry will be available here.</p>
-      </div>
+      <p class="hint">Select a shape, connection or container to edit it.</p>
+      <Show when={doc.layout.intent.start || doc.layout.intent.end}>
+        <IntentSummary />
+      </Show>
       <Section>
         <Checkbox
           label="Snap to nearby shapes"
@@ -211,14 +212,9 @@ function NothingSelected() {
           onChange={v => edit('Edit showManual', d => void (d.settings.showManual = v))}
         />
       </Section>
-      <div class="stack">
-        <CommandButton command="layout-menu" class="full">
-          Layout options
-        </CommandButton>
-        <CommandButton command="help" class="ghost full">
-          Keyboard shortcuts <kbd>?</kbd>
-        </CommandButton>
-      </div>
+      <CommandButton command="layout-menu" class="full">
+        Layout options
+      </CommandButton>
     </>
   );
 }
@@ -226,7 +222,7 @@ function NothingSelected() {
 function MultipleSelected(props: { count: number }) {
   return (
     <>
-      <Heading title={`${props.count} selected`} pill="Selection" />
+      <Heading title={`${props.count} selected`} />
       <Section>
         <div class="fields-2">
           <CommandButton command="layout">Arrange</CommandButton>
@@ -258,7 +254,9 @@ function MultipleSelected(props: { count: number }) {
   );
 }
 
-const SIDE_OPTIONS: PortSide[] = ['auto', 'left', 'right', 'top', 'bottom'];
+const SIDE_OPTIONS = (['auto', 'left', 'right', 'top', 'bottom'] as PortSide[]).map(
+  side => [side, capitalize(side)] as const,
+);
 
 function EdgeInspector(props: { id: string }) {
   const edge = () => findEdge(doc, props.id)!;
@@ -353,7 +351,7 @@ function ObjectInspector(props: { id: string }) {
             <div class="field link-field">
               <span class="field-label">Link</span>
               <div class="link-row">
-                <span class="link-target" title={describeLink(href())}>
+                <span class="link-target" {...tip(href(), undefined, describeLink(href()))}>
                   {href()}
                 </span>
                 <button type="button" class="button small" onClick={() => openLink(href())}>
@@ -497,13 +495,13 @@ function ShapeSections(props: { id: string }) {
         <SelectField
           label="Label position"
           value={labelMode()}
-          options={LABEL_MODES}
+          options={LABEL_MODES.map(mode => [mode, capitalize(mode)] as const)}
           onChange={mode => edit('Edit mode', d => edits.setLabelMode(d, props.id, mode))}
         />
         <SelectField
           label="Icon"
           value={style().icon || ''}
-          options={[['', 'None'], ...NODE_ICONS.map(i => [i, i] as const)]}
+          options={[['', 'None'], ...NODE_ICONS.map(i => [i, capitalize(i)] as const)]}
           onChange={icon => edit('Edit icon', d => edits.setStyle(d, props.id, { icon }))}
         />
         <Show when={style().shape === 'image'}>
