@@ -1,0 +1,109 @@
+{
+  "status": "needs-review",
+  "format": "dot",
+  "family": "graph",
+  "diagnostics": [
+    {
+      "code": "DOT_SHAPE",
+      "message": "Shape cylinder becomes box.",
+      "severity": "warning",
+      "impact": "appearance",
+      "line": 4,
+      "foreignIds": [
+        "a"
+      ]
+    },
+    {
+      "code": "DOT_RESOURCE_OMITTED",
+      "message": "a: image is not mapped; no resource was loaded or link activated.",
+      "severity": "warning",
+      "impact": "security",
+      "line": 4,
+      "foreignIds": [
+        "a"
+      ]
+    },
+    {
+      "code": "DOT_EDGE_STYLE",
+      "message": "Edge style bold becomes a regular native stroke.",
+      "severity": "warning",
+      "impact": "appearance",
+      "line": 5
+    },
+    {
+      "code": "DOT_ATTRIBUTE_OMITTED",
+      "message": "edge_1: color is not mapped.",
+      "severity": "warning",
+      "impact": "appearance",
+      "line": 5,
+      "foreignIds": [
+        "edge_1"
+      ]
+    },
+    {
+      "code": "DOT_LAYOUT_DIRECTION",
+      "message": "Native layout supports right/down; RL becomes right without reversing edge meaning.",
+      "severity": "warning",
+      "impact": "layout"
+    },
+    {
+      "code": "IMPORT_NATIVE_LAYOUT",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Native layout will compute all geometry; Graphviz positions and routing are not imported."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "node",
+      "foreign": "b",
+      "native": "b"
+    },
+    {
+      "kind": "edge",
+      "foreign": "1",
+      "native": "edge_1"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"Appearance\" version=1\nnode a \"a\"\nnode b \"b\"\nedge edge_1 a -> b \"\"\nlayout root flow direction=right\n",
+  "facts": {
+    "title": "Appearance",
+    "objects": [
+      {
+        "kind": "node",
+        "id": "a",
+        "label": "a",
+        "shape": "box"
+      },
+      {
+        "kind": "node",
+        "id": "b",
+        "label": "b",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge_1",
+        "from": "a",
+        "to": "b",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "right"
+      }
+    ],
+    "colors": []
+  }
+}

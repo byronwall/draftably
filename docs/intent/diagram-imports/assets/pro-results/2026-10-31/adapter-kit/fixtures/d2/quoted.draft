@@ -1,0 +1,11 @@
+diagram "D2 quoted" version=1
+node a "A"
+group _u22_a.b_u22_ "Dotted"
+node _u22_a.b_u22_._u22_x.y_u22_ "Leaf" in=_u22_a.b_u22_
+group _u22_a.b_u22_.inner "inner" in=_u22_a.b_u22_
+node _u22_a.b_u22_.inner.z "z" in=_u22_a.b_u22_.inner
+edge d2_edge_1 a -> _u22_a.b_u22_._u22_x.y_u22_ ""
+edge d2_edge_2 _u22_a.b_u22_.inner.z -> _u22_a.b_u22_._u22_x.y_u22_ ""
+layout root flow direction=down
+layout _u22_a.b_u22_ flow direction=down
+layout _u22_a.b_u22_.inner flow direction=down

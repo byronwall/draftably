@@ -1,0 +1,1 @@
+digraph G { node[shape=box]; subgraph service { cluster=true; label="Service"; a; b; } }

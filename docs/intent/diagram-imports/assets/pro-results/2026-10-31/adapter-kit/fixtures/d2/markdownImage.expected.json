@@ -1,0 +1,57 @@
+{
+  "status": "needs-review",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_LABEL_MARKUP_LITERAL",
+      "severity": "warning",
+      "impact": "appearance",
+      "message": "The \"markdown\" label is retained as literal text.",
+      "foreignIds": [
+        "a"
+      ]
+    },
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 markdownImage\" version=1\nnode a \"![do not fetch](https://importer-probe.invalid/never-fetch.png)\" shape=text\nlayout root flow direction=down\n",
+  "facts": {
+    "title": "D2 markdownImage",
+    "objects": [
+      {
+        "id": "a",
+        "kind": "node",
+        "label": "![do not fetch](https://importer-probe.invalid/never-fetch.png)",
+        "shape": "text"
+      }
+    ],
+    "edges": [],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

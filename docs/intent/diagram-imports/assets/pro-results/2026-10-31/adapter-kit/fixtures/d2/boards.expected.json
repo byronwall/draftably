@@ -1,0 +1,15 @@
+{
+  "status": "failed",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_BOARD_SELECTION_REQUIRED",
+      "severity": "error",
+      "impact": "semantics",
+      "message": "This file has layers, scenarios, or steps. Select one board explicitly; this companion does not merge or discard boards."
+    }
+  ],
+  "ids": [],
+  "requires": []
+}

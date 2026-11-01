@@ -1,0 +1,7 @@
+diagram "Scopes" version=1
+node a "Shared identity"
+node b "Local default"
+node c "Root default"
+edge edge_1 a -> b "explicit endpoint beats default" from=right to=bottom
+edge edge_2 b -> c "non-ranking" constraint=false to=top
+layout root flow direction=down

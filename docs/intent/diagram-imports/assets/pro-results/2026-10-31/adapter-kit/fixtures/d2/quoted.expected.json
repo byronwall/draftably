@@ -1,0 +1,128 @@
+{
+  "status": "ready",
+  "format": "d2",
+  "family": "general graph",
+  "diagnostics": [
+    {
+      "code": "D2_SNAPSHOT_MODE",
+      "severity": "info",
+      "impact": "semantics",
+      "message": "The native document contains computed graph values; D2 source, comments, and source-program editing are not retained."
+    },
+    {
+      "code": "D2_LAYOUT_RECOMPUTED",
+      "severity": "info",
+      "impact": "layout",
+      "message": "Foreign coordinates and routes are omitted; native layout must run after emission."
+    }
+  ],
+  "ids": [
+    {
+      "kind": "node",
+      "foreign": "a",
+      "native": "a"
+    },
+    {
+      "kind": "group",
+      "foreign": "\"a.b\"",
+      "native": "_u22_a.b_u22_"
+    },
+    {
+      "kind": "node",
+      "foreign": "\"a.b\".\"x.y\"",
+      "native": "_u22_a.b_u22_._u22_x.y_u22_"
+    },
+    {
+      "kind": "group",
+      "foreign": "\"a.b\".inner",
+      "native": "_u22_a.b_u22_.inner"
+    },
+    {
+      "kind": "node",
+      "foreign": "\"a.b\".inner.z",
+      "native": "_u22_a.b_u22_.inner.z"
+    },
+    {
+      "kind": "edge",
+      "foreign": "(a -> \"a.b\".\"x.y\")[0]",
+      "native": "d2_edge_1"
+    },
+    {
+      "kind": "edge",
+      "foreign": "\"a.b\".(inner.z -> \"x.y\")[0]",
+      "native": "d2_edge_2"
+    }
+  ],
+  "requires": [],
+  "nativeSource": "diagram \"D2 quoted\" version=1\nnode a \"A\"\ngroup _u22_a.b_u22_ \"Dotted\"\nnode _u22_a.b_u22_._u22_x.y_u22_ \"Leaf\" in=_u22_a.b_u22_\ngroup _u22_a.b_u22_.inner \"inner\" in=_u22_a.b_u22_\nnode _u22_a.b_u22_.inner.z \"z\" in=_u22_a.b_u22_.inner\nedge d2_edge_1 a -> _u22_a.b_u22_._u22_x.y_u22_ \"\"\nedge d2_edge_2 _u22_a.b_u22_.inner.z -> _u22_a.b_u22_._u22_x.y_u22_ \"\"\nlayout root flow direction=down\nlayout _u22_a.b_u22_ flow direction=down\nlayout _u22_a.b_u22_.inner flow direction=down\n",
+  "facts": {
+    "title": "D2 quoted",
+    "objects": [
+      {
+        "id": "a",
+        "kind": "node",
+        "label": "A",
+        "shape": "box"
+      },
+      {
+        "id": "_u22_a.b_u22_",
+        "kind": "group",
+        "label": "Dotted"
+      },
+      {
+        "id": "_u22_a.b_u22_._u22_x.y_u22_",
+        "kind": "node",
+        "label": "Leaf",
+        "parent": "_u22_a.b_u22_",
+        "shape": "box"
+      },
+      {
+        "id": "_u22_a.b_u22_.inner",
+        "kind": "group",
+        "label": "inner",
+        "parent": "_u22_a.b_u22_"
+      },
+      {
+        "id": "_u22_a.b_u22_.inner.z",
+        "kind": "node",
+        "label": "z",
+        "parent": "_u22_a.b_u22_.inner",
+        "shape": "box"
+      }
+    ],
+    "edges": [
+      {
+        "id": "d2_edge_1",
+        "from": "a",
+        "to": "_u22_a.b_u22_._u22_x.y_u22_",
+        "label": "",
+        "directed": true
+      },
+      {
+        "id": "d2_edge_2",
+        "from": "_u22_a.b_u22_.inner.z",
+        "to": "_u22_a.b_u22_._u22_x.y_u22_",
+        "label": "",
+        "directed": true
+      }
+    ],
+    "layouts": [
+      {
+        "scope": "root",
+        "kind": "flow",
+        "direction": "down"
+      },
+      {
+        "scope": "_u22_a.b_u22_",
+        "kind": "flow",
+        "direction": "down"
+      },
+      {
+        "scope": "_u22_a.b_u22_.inner",
+        "kind": "flow",
+        "direction": "down"
+      }
+    ],
+    "colors": []
+  }
+}

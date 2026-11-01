@@ -1,0 +1,13 @@
+diagram "Pipeline" version=1
+theme-color import_1 shade=500 fill="#dbeafe" stroke="#2563eb" ink="#172033"
+group cluster_backend "Backend"
+group cluster_data "Data" in=cluster_backend
+node api "API" in=cluster_backend color=import_1 shade=500
+node db "Store" in=cluster_data shape=circle
+node user "user"
+edge edge_1 user -> api "request"
+edge edge_2 api -> db "read"
+edge edge_3 api -> db "write" kind=async
+layout root flow direction=right
+layout cluster_backend flow direction=right
+layout cluster_data flow direction=right

@@ -1,0 +1,15 @@
+digraph Pipeline {
+  rankdir=LR;
+  node [shape=box];
+  subgraph cluster_backend {
+    label="Backend";
+    api [label="API",style=filled,fillcolor="#dbeafe",color="#2563eb",fontcolor="#172033"];
+    subgraph cluster_data {
+      label="Data";
+      db [label="Store",shape=circle];
+    }
+  }
+  user -> api [label="request"];
+  api -> db [label="read"];
+  api -> db [label="write",style=dashed];
+}

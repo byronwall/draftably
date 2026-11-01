@@ -1,0 +1,27 @@
+{
+  "name": "draftably-importer-research-kit",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.25.0",
+  "engines": { "node": "^22.22.2 || ^24.15.0 || >=26.0.0" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "pnpm build && node --import ./d2-deny-network.mjs --test --test-reporter=spec --test-isolation=none --test-concurrency=1 dist/*.test.js",
+    "test:native": "node --import tsx native-validation.ts",
+    "fixtures": "node dist/make-dot-fixtures.js && node dist/make-mermaid-fixtures.js && node --import ./d2-deny-network.mjs dist/make-d2-fixtures.js",
+    "demo": "node --import tsx dist/import-demo.js"
+  },
+  "dependencies": {
+    "@ts-graphviz/ast": "3.0.10",
+    "mermaid": "12.2.0",
+    "jsdom": "30.1.3"
+  },
+  "optionalDependencies": { "@d2lang/d2": "0.1.34" },
+  "devDependencies": {
+    "@types/jsdom": "30.0.0",
+    "@types/node": "26.6.6",
+    "typescript": "5.8.3",
+    "tsx": "4.23.15"
+  }
+}

@@ -1,0 +1,13 @@
+diagram "Sets" version=1
+node a "a"
+node b "b"
+node c "c"
+node d "d"
+node e "e"
+edge edge_1 a -> c "work"
+edge edge_2 a -> d "work"
+edge edge_3 b -> c "work"
+edge edge_4 b -> d "work"
+edge edge_5 c -> e "work"
+edge edge_6 d -> e "work"
+layout root flow direction=down

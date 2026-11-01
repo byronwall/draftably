@@ -1,0 +1,6 @@
+digraph Appearance {
+  rankdir=RL;
+  node [shape=box];
+  a [shape=cylinder,image="https://import.invalid/logo.svg"];
+  a -> b [color="#ff0000",style=bold];
+}
