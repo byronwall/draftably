@@ -1,5 +1,58 @@
 # draftably
 
+## 0.9.0
+
+### Minor Changes
+
+- ce7f656: Open DOT, Mermaid flowchart and D2 files as editable native diagrams in the browser.
+- 066a132: Add a read-only DOT import command that creates native diagram files and reports unsupported meaning.
+- 1ed934b: Press ⌘K in the editor to search every command, the folder's diagrams and the examples by name or
+  by what they do, and run one with Enter.
+- 0537b28: The editor has a menu bar: File, Edit, View, Layout and Help. File changes with where you are. With
+  a folder open it creates diagrams in that folder, lists recent ones and exports the folder; without
+  one it opens and saves files. Examples and every layout tool have one named home, the toolbar keeps
+  only drawing tools and Tidy positions, and Edit disables commands that need a selection. ⌘O goes
+  to a diagram when a folder is open.
+- 791dd10: The editor's sidebar and inspector can be resized: drag the edge, use the arrow keys, or
+  double-click to reset. The width is remembered. Diagrams and Objects now share one sidebar as tabs,
+  so they no longer take two columns.
+- 74c452a: Import Mermaid flowcharts and D2 graphs into new native files from the CLI.
+
+### Patch Changes
+
+- f1bdf2e: The docs now say when to pick each layout engine, add a Fix a layout path, and match the Editor's routing menu names.
+- 2f210ce: Use lowercase draftably in documentation, the website, editor labels, and CLI messages.
+- ff5e015: The editor toolbar and start screen now show the draftably logo, which links back home, and the site's Playground, Docs and GitHub links. The landing page offers to continue the diagram kept in this browser.
+- f6bca86: `vary --try direction` works on a file with no `layout` line. `check` no longer warns about a cell
+  marker, and `check --metrics` counts every warning that it prints. The parser now refuses
+  attributes that had no effect: `kind`, `detail` and `priority` on nodes and groups, `importance` on
+  edges, and `kind=data`. The hosted Editor no longer offers Export PDF.
+- b82d70d: Keep Playground edits on immediate reload without overriding incoming shared links.
+- 058fd34: Clarify that returning to Playground opens its separate copy.
+- 900da88: Add D2 graph mapping to validated native source. Runtime controls and import entry points follow in a later change.
+- 6d9ef67: The CLI reference in `draftably docs` uses commands that a reader can run, and the Examples section lists every example.
+- c13e879: The language guide in `draftably docs` has headings for notes, links, shades, the legend and side-by-side panels. It lists the values and ranges of more attributes, and its Refinements and Emphasis states samples run as whole files.
+- 97c2f02: The editor's diagram list is denser: one line per diagram, folders that fold, and search that
+  marks the matching words. The full path shows on hover, and the folder name above the canvas links
+  back to all of its diagrams.
+- f14d9b8: Tighten the editor: a denser Inspector, one tooltip everywhere, folders first and remembered in the diagram list, a Save as file command for examples, and a toolbar that stays on two rows at 800 px.
+- 8efddd0: The editor's buttons, menus and form controls have a new look: graphite keys with a pressed state,
+  tighter corners and softer shadows. Violet now marks only what is selected on the canvas.
+- 6972e2b: Toolbar buttons in the editor now show an instant tooltip with their name, shortcut and what they
+  do, on hover and on keyboard focus.
+- 7d03d01: The hosted Editor no longer requests a local workspace that does not exist there.
+- 869fc25: Add the first DOT import adapter and native source validation. The import command and editor controls follow in later changes.
+- 624fafc: Layout actions in the Edit menu state what they change, with the scope from the live selection, and how to reverse them. The Layout tools docs compare them.
+- e8c972a: Add Mermaid flowchart parsing and conversion into validated native diagram source. Import controls follow in a later change.
+- 7a76d11: The Editor shows where work is kept on phone-width screens.
+- d973a6b: Native edge declarations accept directed=false for undirected connections. Formatting, visual edits, comparison, layout projection, and SVG output preserve the flag.
+- cfa1f11: New from an example opens one blank draft from every entry point. The draft has its own name and no longer promises a browser save it does not make.
+
+  The start dialog opens at once. Example thumbnails draw one at a time as they scroll into view.
+
+- 61ccd09: Space activates a focused Editor button again. Space-drag still pans on the canvas and after a toolbar click.
+- 1819b87: The Editor's start dialog names `npx draftably open`, the command a visitor can run.
+
 ## 0.8.0
 
 ### Minor Changes
