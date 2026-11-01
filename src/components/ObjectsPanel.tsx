@@ -3,6 +3,7 @@ import { ancestors, childrenOf, isGroup, styleOf } from '../model/graph';
 import { doc, selectItems, selection } from '../state/document';
 import { centerSelection } from '../state/editor';
 import { Icon } from './Icon';
+import { tip } from './controls';
 
 interface Row {
   id: string;
@@ -75,7 +76,7 @@ export function ObjectsPanel() {
               <button
                 type="button"
                 class="tree-label"
-                title={row.title}
+                {...tip(row.title)}
                 onClick={e => selectItems([row.id], { add: e.shiftKey, toggle: e.shiftKey })}
                 onDblClick={centerSelection}
               >

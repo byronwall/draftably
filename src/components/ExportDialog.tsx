@@ -16,7 +16,7 @@ import {
 } from '../state/files';
 import { workspace } from '../state/launch';
 import { closeDialog } from '../state/ui';
-import { IconButton } from './controls';
+import { IconButton, tip } from './controls';
 import { Modal } from './Dialogs';
 import { baseName, folderOf } from './workspace-files';
 import './export.css';
@@ -48,7 +48,7 @@ function Choice<T extends string | number>(props: {
         {([id, text, hint]) => (
           <button
             type="button"
-            title={hint}
+            {...(hint ? tip(text, undefined, hint) : {})}
             aria-pressed={props.value === id}
             onClick={() => props.onChange(id)}
           >

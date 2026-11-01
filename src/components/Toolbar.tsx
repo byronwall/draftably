@@ -229,7 +229,7 @@ function DocumentTitle() {
       />
       <span
         class="save-status"
-        title={fileSession()?.path || undefined}
+        {...(fileSession()?.path ? tip(fileSession()!.path!, undefined, status()) : {})}
         classList={{
           'on-disk': fileMode() && !exampleMode(),
           'in-example': exampleMode(),

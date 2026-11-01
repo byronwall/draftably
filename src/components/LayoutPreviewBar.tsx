@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 import { runCommand } from '../state/commands';
 import { holdPreviewBefore, layoutPreview } from '../state/layout';
+import { tip } from './controls';
 
 /** Shown while a layout preview waits to be kept or discarded. */
 export function LayoutPreviewBar() {
@@ -16,7 +17,7 @@ export function LayoutPreviewBar() {
           <button
             type="button"
             class="button"
-            title="Hold to compare"
+            {...tip('Hold to compare')}
             aria-label="Hold to see previous layout"
             onPointerDown={e => {
               e.preventDefault();
