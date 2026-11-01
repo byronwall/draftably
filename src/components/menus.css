@@ -69,6 +69,14 @@
 
 .menu-label {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.menu-item.has-note .menu-label {
+  white-space: normal;
 }
 
 .menu-item.has-note {
@@ -105,6 +113,27 @@
   gap: 1px;
   max-height: 260px;
   overflow: auto;
+}
+
+.flyout {
+  width: 250px;
+  overflow: auto;
+}
+
+.submenu-row {
+  width: 100%;
+}
+
+.submenu-row .icon:last-child {
+  width: 13px;
+  height: 13px;
+  color: var(--muted);
+}
+
+.menu-item .file-time {
+  flex: none;
+  color: var(--muted);
+  font-size: var(--text-xs);
 }
 
 @media (max-width: 720px) {

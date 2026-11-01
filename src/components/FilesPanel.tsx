@@ -12,7 +12,7 @@ import {
   watchWorkspace,
   workspace,
 } from '../state/launch';
-import { setFilesOpen } from '../state/ui';
+import { creatingFile, setCreatingFile, setFilesOpen } from '../state/ui';
 import { IconButton } from './controls';
 import { Icon } from './Icon';
 import {
@@ -35,7 +35,6 @@ import {
 export function FilesPanel() {
   const [query, setQuery] = createSignal('');
   const [active, setActive] = createSignal(0);
-  const [creating, setCreating] = createSignal(false);
   const current = () => fileSession()?.file;
   const all = () => workspace()?.files ?? [];
   const files = createMemo(() => sortFiles(matchFiles(all(), query()), shownOrder(all())));
@@ -79,7 +78,7 @@ export function FilesPanel() {
           Diagrams <span class="count">{workspace()?.files.length ?? 0}</span>
         </h2>
         <span class="files-header-actions">
-          <IconButton icon="plus" label="New diagram" onClick={() => setCreating(true)} />
+          <IconButton icon="plus" label="New diagram" onClick={() => setCreatingFile(true)} />
           <IconButton
             icon="file"
             label="Export these diagrams as one PDF"
@@ -94,8 +93,8 @@ export function FilesPanel() {
           />
         </span>
       </header>
-      <Show when={creating()}>
-        <NewFileRow onDone={() => setCreating(false)} />
+      <Show when={creatingFile()}>
+        <NewFileRow onDone={() => setCreatingFile(false)} />
       </Show>
       <div class="panel-search files-search">
         <input

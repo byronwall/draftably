@@ -40,6 +40,9 @@ export const ICONS: Record<string, string> = {
     '<path d="M7 3H3v4m14-4h4v4M3 17v4h4m14-4v4h-4"/><rect x="7" y="7" width="10" height="10" rx="1.5"/>',
   'box-select': '<path stroke-dasharray="3 3" d="M3 3h18v18H3z"/>',
   help: '<circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 0c0 2-3 2-3 5m0 3v1"/>',
+  tree: '<path d="M5 4v14h5M5 11h5"/><rect x="10" y="8.5" width="10" height="5" rx="1.5"/><rect x="10" y="15.5" width="10" height="5" rx="1.5"/><rect x="2.5" y="2" width="9" height="4" rx="1.5"/>',
+  sliders:
+    '<path d="M4 7h9m6 0h1M4 17h1m6 0h9"/><circle cx="16" cy="7" r="2.5"/><circle cx="8" cy="17" r="2.5"/>',
   'panel-left': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
   'panel-right': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/>',
   user: '<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',
