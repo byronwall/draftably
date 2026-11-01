@@ -436,7 +436,6 @@ function FileMenu() {
           <>
             <Show when={!fileMode()}>
               <MenuItem command="open" />
-              <MenuItem command="import-diagram" />
               <MenuItem command="insert-image" />
               <MenuItem command="export-json" />
             </Show>
@@ -451,6 +450,7 @@ function FileMenu() {
           </>
         )}
       </Show>
+      <MenuItem command="import-diagram" />
       <hr />
       <Show when={workspace()}>
         <RecentFiles />
