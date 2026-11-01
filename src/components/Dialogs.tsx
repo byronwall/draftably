@@ -47,7 +47,7 @@ export function Dialogs() {
               </>
             }
           >
-            <p>{request().message}</p>
+            <p class="confirm-message">{request().message}</p>
           </Modal>
         )}
       </Match>

@@ -23,7 +23,7 @@ import { installDebugApi } from './state/debug-api';
 import { doc, persistNow, restoreSavedDocument, watchOtherTabs } from './state/document';
 import { fitView, setReducedMotion, setSpaceHeld } from './state/editor';
 import { exampleEdited, exampleMode, fileMode, leaveAgreed } from './state/file-session';
-import { openFile } from './state/files';
+import { importForeignText, openFile } from './state/files';
 import { onLeaveFile, setStartOpen, startOpen } from './state/launch';
 import { handleCopy, handleKeyDown, handleKeyUp, handlePaste } from './state/keyboard';
 import { cancelLayout } from './state/layout';
@@ -51,21 +51,33 @@ export default function App() {
   let diagramInput!: HTMLInputElement;
   let imageInput!: HTMLInputElement;
   let replaceImageId: string | null = null;
+  let foreignOnly = false;
 
   setFilePicker((replaceId, accept) => {
     replaceImageId = replaceId;
+    foreignOnly = accept === 'foreign';
     const input = accept === 'image' ? imageInput : diagramInput;
+    if (input === diagramInput)
+      input.accept = foreignOnly
+        ? '.dot,.gv,.mmd,.mermaid,.d2,.md,.txt'
+        : '.json,.svg,.dot,.gv,.mmd,.mermaid,.d2,image/png,image/jpeg,image/webp,image/gif';
     input.value = '';
     input.click();
   });
 
   const onFiles = async (e: Event & { currentTarget: HTMLInputElement }) => {
     try {
-      for (const file of e.currentTarget.files ?? []) await openFile(file, replaceImageId);
+      for (const file of e.currentTarget.files ?? []) {
+        if (foreignOnly) {
+          if (file.size > 256 * 1024) throw Error('Use a diagram smaller than 256 KB.');
+          await importForeignText(await file.text(), file.name);
+        } else await openFile(file, replaceImageId);
+      }
     } catch (error) {
       showError(error instanceof Error ? error.message : String(error));
     } finally {
       replaceImageId = null;
+      foreignOnly = false;
     }
   };
 
@@ -182,7 +194,7 @@ export default function App() {
         ref={diagramInput}
         type="file"
         hidden
-        accept=".json,.svg,image/png,image/jpeg,image/webp,image/gif"
+        accept=".json,.svg,.dot,.gv,.mmd,.mermaid,.d2,image/png,image/jpeg,image/webp,image/gif"
         onChange={onFiles}
       />
       <input

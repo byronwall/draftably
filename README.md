@@ -122,7 +122,7 @@ The agent edits text and checks the result with the CLI. You can refine the draw
 and return the same file to the agent. Read the [skill](skills/draftably/SKILL.md) or the
 [agent guide](https://draftably.dev/docs/agent-skill) for the full workflow.
 
-Import DOT files as editable native diagrams with the [import command](docs/IMPORTING.md).
+Import DOT, Mermaid flowcharts and D2 graphs as editable native diagrams. See [Import diagrams](docs/IMPORTING.md).
 
 ## Develop
 

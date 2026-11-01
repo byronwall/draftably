@@ -27,6 +27,7 @@ function spaFallback(): Plugin {
  * set it to `/` once the site has its own domain.
  */
 export default defineConfig({
+  worker: { format: 'es' },
   root: 'site',
   base: process.env.SITE_BASE ?? '/draftably/',
   plugins: [solid({ hot: false }), spaFallback()],

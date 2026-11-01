@@ -1,5 +1,7 @@
 /** Opening, importing and exporting diagrams and images. */
 import { batch, createSignal } from 'solid-js';
+import { detectSource } from '../import/detect';
+import { keepImportedSource } from '../import/scratch';
 import { isLegacyDiagram } from '../model/document';
 import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
@@ -23,6 +25,7 @@ import { addNode, finishInlineEdit, openDocument } from './actions';
 import {
   clearSelection,
   doc,
+  prepareForEdit,
   selection,
   setDoc,
   setSelection,
@@ -34,6 +37,8 @@ import {
   currentSource,
   fileMode,
   fileSession,
+  fileStatus,
+  exampleMode,
   openExampleSession,
   settleSave,
 } from './file-session';
@@ -42,7 +47,7 @@ import { routes, sceneRects, viewerFrame, visibleScene } from './scene';
 import { drawingBounds } from '../model/bounds';
 import { FRAME_PAD } from '../model/frame';
 import { toast } from './toast';
-import { openDialog } from './ui';
+import { confirmAction, openDialog, showError } from './ui';
 import type { PdfOptions } from '../cli/pdf';
 
 const IMAGE_TYPES = /^image\/(png|jpeg|webp|gif)$/;
@@ -212,7 +217,60 @@ export async function openFile(file: File | undefined, replaceImageId: string | 
   if (!replaceImageId && (await openImageSource(file))) return;
   if (IMAGE_TYPES.test(file.type)) return insertImage(file, replaceImageId);
   if (file.size > 24 * 1024 * 1024) throw Error('Use a diagram smaller than 24 MB.');
-  await importText(await file.text(), file.name);
+  const text = await file.text();
+  const detected = detectSource(text, { filename: file.name });
+  if (detected.status === 'detected' && ['dot', 'mermaid', 'd2'].includes(detected.format)) {
+    await importForeignText(text, file.name);
+    return;
+  }
+  if (detected.status === 'choose-fence')
+    throw Error('This file has more than one diagram. Open one diagram at a time.');
+  await importText(text, file.name);
+}
+
+let importRequest = 0;
+
+/** Convert before switching files; failed or cancelled imports leave the current work in place. */
+export async function importForeignText(text: string, name = '') {
+  const request = ++importRequest;
+  prepareForEdit();
+  await settleSave();
+  if (fileMode() && !exampleMode() && fileStatus() !== 'saved')
+    throw Error('Resolve the current file’s save status before importing another diagram.');
+  const address = location.href;
+  const original = fileMode() ? currentSource() : snapshot();
+  const { importBrowser } = await import('../import/browser');
+  const result = await importBrowser(text, name);
+  if (request !== importRequest) return;
+  const errors = result.diagnostics.filter(item => item.severity === 'error');
+  if (!result.nativeSource || errors.length)
+    throw Error(errors.map(item => item.message).join('\n') || 'Could not import this diagram.');
+  const source = result.nativeSource;
+  const open = async () => {
+    await settleSave();
+    if (
+      request !== importRequest ||
+      location.href !== address ||
+      (fileMode() ? currentSource() : snapshot()) !== original
+    )
+      throw Error('The current diagram changed during import. Import again to continue.');
+    if (fileMode() && !exampleMode() && fileStatus() !== 'saved')
+      throw Error('Resolve the current file’s save status before importing another diagram.');
+    const id = keepImportedSource(source);
+    location.assign(`${location.pathname}?import=${encodeURIComponent(id)}`);
+  };
+  const warnings = result.diagnostics.filter(item => item.severity === 'warning');
+  if (warnings.length) {
+    confirmAction({
+      title: 'Review import changes',
+      message: warnings.map(item => item.message).join('\n'),
+      confirmLabel: 'Open imported diagram',
+      onConfirm: () =>
+        void open().catch(error =>
+          showError(error instanceof Error ? error.message : String(error)),
+        ),
+    });
+  } else await open();
 }
 
 /**
