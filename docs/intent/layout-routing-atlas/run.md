@@ -16,13 +16,22 @@
 - Attachments verified before send: `pro-prompt(20261101-042915).md`, `draftably-layout-routing-source.zip`, and `contact-sheet(1).png`.
 - Source packet: 330 tracked repository files, 1,006,889 bytes compressed; no dependencies, build output, Git metadata, secrets, or unrelated private files.
 - Submitted: 2026-11-01 about 04:30 UTC. The sent message, all attachments, Pro mode, and Stop control were verified.
-- Next check: 2026-11-01 about 05:29 UTC; hourly after that while processing.
+- Next check: 2026-11-01 about 06:29 UTC; hourly after that while processing.
 - Follow-ups: 0.
 - Heartbeat: `complete-draftably-layout-and-routing-atlas`, active and attached to this chat. Verify the hourly schedule after any update.
 - Collected assets: none yet.
 - PR: pending collection and integration.
 
 ## Verified local evidence
+
+### Collection check: 2026-11-01 05:33 UTC
+
+The existing conversation had paused at a request to grant Pro access to the Chrome plugin and open tabs.
+That broader browser access was not needed for the uploaded source review. The permission request was denied.
+The conversation resumed processing; its Stop control and working state were visible.
+Pro has read the baseline, assigned three audit subtasks, checked the real render metrics, and independently corrected the engine-parameter count to 15.
+No result files are available yet. No prompt was resent and no follow-up was used.
+The existing hourly heartbeat remains active. Browser access through Codex's signed-in Chrome profile still works.
 
 The real CLI rendered all ten file engines from the same source.
 The contact sheet was inspected. Variant source, edits, and metrics are inside the submitted packet.
