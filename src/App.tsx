@@ -6,11 +6,10 @@ import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
 import { ExampleBar } from './components/ExampleBar';
 import { FileBanner } from './components/FileBanner';
-import { FilesPanel } from './components/FilesPanel';
 import { Inspector } from './components/Inspector';
 import { LayoutLab } from './components/LayoutLab';
 import { Menus } from './components/Menus';
-import { ObjectsPanel } from './components/ObjectsPanel';
+import { Sidebar } from './components/Sidebar';
 import { StartScreen } from './components/StartScreen';
 import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
@@ -30,7 +29,15 @@ import { cancelLayout } from './state/layout';
 import { resetModifiers } from './state/pointer';
 import { restoreArchive, sculptBeforeUnload, sculptBlur } from './state/sculpt';
 import { toast } from './state/toast';
-import { filesShown, inspectorOpen, layoutLabOpen, objectsOpen, showError } from './state/ui';
+import {
+  filesShown,
+  inspectorOpen,
+  inspectorWidth,
+  layoutLabOpen,
+  objectsOpen,
+  showError,
+  sidebarWidth,
+} from './state/ui';
 import './styles/app.css';
 
 /** Add an event listener and return a function that removes it. */
@@ -153,6 +160,10 @@ export default function App() {
   return (
     <div
       class="app"
+      style={{
+        '--sidebar-width': `${sidebarWidth()}px`,
+        '--inspector-width': `${inspectorWidth()}px`,
+      }}
       classList={{
         'objects-open': objectsOpen(),
         'inspector-open': inspectorOpen(),
@@ -166,11 +177,8 @@ export default function App() {
         </Show>
       </div>
       <div class="workspace">
-        <Show when={filesShown()}>
-          <FilesPanel />
-        </Show>
-        <Show when={objectsOpen()}>
-          <ObjectsPanel />
+        <Show when={filesShown() || objectsOpen()}>
+          <Sidebar />
         </Show>
         <Canvas />
         <FileBanner />

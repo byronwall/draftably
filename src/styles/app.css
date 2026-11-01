@@ -759,19 +759,127 @@ input[type='range'] {
 .panel {
   display: flex;
   flex-direction: column;
+  position: relative;
   flex: none;
   width: var(--panel-width);
   min-height: 0;
   background: var(--surface);
 }
 
-.objects-panel {
-  width: 248px;
+.sidebar {
+  width: var(--sidebar-width);
   border-right: 1px solid var(--line);
 }
 
 .inspector-panel {
+  width: var(--inspector-width);
   border-left: 1px solid var(--line);
+}
+
+.sidebar-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sidebar-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 2px;
+  height: 36px;
+  padding: 0 4px 0 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.sidebar-tabs {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+  height: 100%;
+}
+
+.sidebar-tabs button {
+  position: relative;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  font-weight: 550;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.12s;
+}
+
+.sidebar-tabs button:hover {
+  color: var(--text);
+}
+
+.sidebar-tabs button[aria-selected='true'] {
+  color: var(--text);
+}
+
+.sidebar-tabs button[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  bottom: -1px;
+  left: 6px;
+  height: 2px;
+  background: var(--ink);
+}
+
+.sidebar-tabs .count {
+  margin-left: 2px;
+  color: var(--muted);
+  font-weight: 450;
+}
+
+/* Sits over the panel's edge, wide enough to grab, showing a line only when it can be used. */
+.resize-handle {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  bottom: 0;
+  width: 9px;
+  cursor: col-resize;
+  touch-action: none;
+}
+
+.resize-handle.right {
+  right: -5px;
+}
+
+.resize-handle.left {
+  left: -5px;
+}
+
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 3px;
+  background: transparent;
+  transition: background-color 0.12s;
+}
+
+.resize-handle:hover::after,
+.resize-handle.dragging::after,
+.resize-handle:focus-visible::after {
+  background: var(--line-strong);
+}
+
+.resize-handle.dragging::after {
+  background: var(--ink);
+}
+
+.resize-handle:focus-visible {
+  outline: none;
 }
 
 .panel-header {
@@ -811,26 +919,7 @@ input[type='range'] {
   padding: 10px 12px;
 }
 
-.panel-footer {
-  display: flex;
-  justify-content: space-between;
-  padding: 8px 16px;
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-  font-size: var(--text-xs);
-}
-
 /* Files panel: the served folder's diagrams */
-
-.files-panel {
-  width: 240px;
-  border-right: 1px solid var(--line);
-}
-
-.files-header-actions {
-  display: flex;
-  gap: 2px;
-}
 
 .files-search {
   display: flex;
@@ -976,33 +1065,6 @@ input[type='range'] {
 .file-time.changed {
   color: var(--success);
   font-weight: 600;
-}
-
-.files-footer {
-  justify-content: flex-start;
-  align-items: center;
-  gap: 6px;
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.files-footer:hover {
-  background: var(--hover);
-  color: var(--text);
-}
-
-.files-footer .icon {
-  flex: none;
-  width: 14px;
-  height: 14px;
-}
-
-.files-footer-name {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 /* Objects tree */
@@ -1388,6 +1450,10 @@ details.inspector-section[open] > summary {
 @media (max-width: 720px) {
   .workspace {
     flex-direction: column;
+  }
+
+  .resize-handle {
+    display: none;
   }
 
   .workspace > :is(.panel, .layout-lab) {

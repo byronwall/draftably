@@ -32,18 +32,36 @@ export interface ConfirmRequest {
 
 const compactPanels = matchMedia('(max-width: 1100px)');
 
+const SIDEBAR_WIDTH = 248;
+const INSPECTOR_WIDTH = 280;
+const MIN_PANEL = 200;
+/** The canvas keeps at least this much of the window, whatever the panels ask for. */
+const MIN_CANVAS = 360;
+
+const clampPanel = (width: number) =>
+  Math.round(Math.max(MIN_PANEL, Math.min(width, Math.min(640, innerWidth - MIN_CANVAS))));
+
 function readPanels() {
   try {
     const saved = JSON.parse(localStorage.getItem(UI_STORAGE) || 'null');
     const right = saved?.rightClosed === false;
     const files = saved?.filesClosed !== true && !(compactPanels.matches && right);
     return {
+      // The two left panels share one sidebar. The files tab wins only with a folder to list.
       left: saved?.leftClosed === false && !(compactPanels.matches && (right || files)),
       right,
       files,
+      sidebarWidth: saved?.sidebarWidth ?? SIDEBAR_WIDTH,
+      inspectorWidth: saved?.inspectorWidth ?? INSPECTOR_WIDTH,
     };
   } catch {
-    return { left: false, right: false, files: true };
+    return {
+      left: false,
+      right: false,
+      files: true,
+      sidebarWidth: SIDEBAR_WIDTH,
+      inspectorWidth: INSPECTOR_WIDTH,
+    };
   }
 }
 
@@ -53,6 +71,8 @@ const state = createRoot(() => {
   // The served folder's diagrams. Open unless closed, and only shown when a folder is served.
   const [filesOpen, setFilesOpen] = createSignal(initial.files);
   const [inspectorOpen, setInspectorOpen] = createSignal(initial.right);
+  const [sidebarWidth, setSidebarWidth] = createSignal<number>(initial.sidebarWidth);
+  const [inspectorWidth, setInspectorWidth] = createSignal<number>(initial.inspectorWidth);
   const [menu, setMenu] = createSignal<MenuState | null>(null);
   const [dialog, setDialog] = createSignal<DialogId | null>(null);
   const [confirmRequest, setConfirmRequest] = createSignal<ConfirmRequest | null>(null);
@@ -68,6 +88,8 @@ const state = createRoot(() => {
           leftClosed: !objectsOpen(),
           rightClosed: !inspectorOpen(),
           filesClosed: !filesOpen(),
+          sidebarWidth: sidebarWidth(),
+          inspectorWidth: inspectorWidth(),
         }),
       );
     } catch {
@@ -81,6 +103,10 @@ const state = createRoot(() => {
     setFilesOpen,
     inspectorOpen,
     setInspectorOpen,
+    sidebarWidth,
+    setSidebarWidth,
+    inspectorWidth,
+    setInspectorWidth,
     menu,
     setMenu,
     dialog,
@@ -99,9 +125,10 @@ const state = createRoot(() => {
 });
 
 export const {
-  objectsOpen,
   filesOpen,
   inspectorOpen,
+  sidebarWidth,
+  inspectorWidth,
   menu,
   dialog,
   confirmRequest,
@@ -113,23 +140,35 @@ export const {
   setCreatingFile,
 } = state;
 
+/** The files panel is on screen: open, with a served folder to list. */
+export const filesShown = () => state.filesOpen() && !!workspace();
+
+/** The objects panel is on screen. It shares the sidebar with the files panel, which comes first. */
+export const objectsOpen = () => state.objectsOpen() && !filesShown();
+
+export const setSidebarWidth = (width: number) => state.setSidebarWidth(clampPanel(width));
+export const resetSidebarWidth = () => state.setSidebarWidth(SIDEBAR_WIDTH);
+export const setInspectorWidth = (width: number) => state.setInspectorWidth(clampPanel(width));
+export const resetInspectorWidth = () => state.setInspectorWidth(INSPECTOR_WIDTH);
+
 export function setObjectsOpen(open: boolean) {
-  if (open && compactPanels.matches) {
-    state.setInspectorOpen(false);
-    state.setLayoutLabOpen(false);
+  if (open) {
     state.setFilesOpen(false);
+    if (compactPanels.matches) {
+      state.setInspectorOpen(false);
+      state.setLayoutLabOpen(false);
+    }
   }
   state.setObjectsOpen(open);
 }
 
-/** The files panel is on screen: open, with a served folder to list. */
-export const filesShown = () => state.filesOpen() && !!workspace();
-
 export function setFilesOpen(open: boolean) {
-  if (open && compactPanels.matches) {
-    state.setInspectorOpen(false);
-    state.setLayoutLabOpen(false);
+  if (open) {
     state.setObjectsOpen(false);
+    if (compactPanels.matches) {
+      state.setInspectorOpen(false);
+      state.setLayoutLabOpen(false);
+    }
   }
   state.setFilesOpen(open);
 }
@@ -160,9 +199,9 @@ let hiddenPanels: { left: boolean; right: boolean; files: boolean } | null = nul
 
 /** Hide the side panels, or bring back the ones that were open. */
 export function togglePanels() {
-  if (state.objectsOpen() || state.inspectorOpen() || filesShown()) {
+  if (objectsOpen() || state.inspectorOpen() || filesShown()) {
     hiddenPanels = {
-      left: state.objectsOpen(),
+      left: objectsOpen(),
       right: state.inspectorOpen(),
       files: filesShown(),
     };
@@ -170,8 +209,8 @@ export function togglePanels() {
     state.setInspectorOpen(false);
     state.setFilesOpen(false);
   } else {
-    if (workspace()) setFilesOpen(hiddenPanels?.files ?? true);
-    setObjectsOpen(hiddenPanels?.left ?? true);
+    if (hiddenPanels?.left || !workspace()) setObjectsOpen(hiddenPanels?.left ?? true);
+    else setFilesOpen(hiddenPanels?.files ?? true);
     setInspectorOpen(hiddenPanels?.right ?? true);
   }
 }
