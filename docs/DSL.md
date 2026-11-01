@@ -197,6 +197,19 @@ A group inside a lane follows its own `frame=`: a boxed group takes one place, a
 members rank on their own. Position refinements inside a lane (`near`, `stay`, `nudge`, `pin`)
 do not apply yet. Lines that run back against the order take the long way round the lanes.
 
+### Undirected connections
+
+`edge relation a -> b "related" directed=false` joins two endpoints without an arrowhead.
+The existing `->` separates the endpoints; `directed=false` makes the connection undirected.
+Omitting the attribute, or setting `directed=true`, keeps the usual directed connection.
+The same flag survives formatting, visual edits, JSON projection, and SVG export.
+
+Undirected connections do not impose a reading order in the built-in flow or swim-lane recipes.
+Layout engines still receive them as undirected adjacency and can use them to keep connected
+objects near one another. For a relationship graph, try `layout root engine=stress`.
+Use `constraint=false` independently to remove an edge from the layout engine altogether.
+This does not add two-ended arrowheads or new foreign syntax to native files.
+
 ## Sequence diagrams
 
 A sequence diagram shows the messages between participants in time order, from top to bottom.
