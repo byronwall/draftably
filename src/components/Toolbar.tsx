@@ -13,8 +13,8 @@ import { tool, type Tool } from '../state/editor';
 import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
 import { filesShown, inspectorOpen, menu, objectsOpen, openMenu } from '../state/ui';
-import { workspace } from '../state/launch';
 import { AppNav, Brand } from './Brand';
+import { startUrl, workspace } from '../state/launch';
 import { CommandButton, IconButton, tip } from './controls';
 import { Icon } from './Icon';
 import { MenuBar } from './MenuBar';
@@ -142,7 +142,7 @@ export function Toolbar() {
           aria-pressed={inspectorOpen()}
           onClick={run('toggle-inspector')}
         >
-          <Icon name="panel-right" />
+          <Icon name="sliders" />
           Properties
         </button>
         <button type="button" class="button ghost" onClick={run('fit')}>
@@ -240,7 +240,21 @@ function DocumentTitle() {
         aria-live="polite"
       >
         <Show when={fileMode()}>
-          <Icon name={exampleMode() ? 'spark' : 'file'} size={10} />
+          <Icon name={exampleMode() ? 'spark' : 'file'} size={11} />
+        </Show>
+        <Show when={fileMode() && !exampleMode() && workspace()}>
+          {info => (
+            <>
+              <a
+                class="status-folder"
+                href={startUrl()}
+                {...tip(`All diagrams in ${info().name}`, undefined, info().root)}
+              >
+                {info().name}
+              </a>
+              {' / '}
+            </>
+          )}
         </Show>
         {status()}
       </span>
