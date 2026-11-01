@@ -1,6 +1,13 @@
 import { useLocation, useNavigate, type RouteSectionProps } from '@solidjs/router';
 import { createEffect, createSignal, on, onCleanup, onMount, Show } from 'solid-js';
-import { deliver, readDiagramFile, readPastedText, REOPEN_HINT, unreadableFile } from './reopen';
+import {
+  deliver,
+  ImportCancelled,
+  readDiagramFile,
+  readPastedText,
+  REOPEN_HINT,
+  unreadableFile,
+} from './reopen';
 
 const editable = (target: EventTarget | null) =>
   target instanceof HTMLElement &&
@@ -38,9 +45,14 @@ export function Shell(props: RouteSectionProps) {
     if (!location.pathname.endsWith('/play')) navigate('/play');
   };
   const openFile = async (file: File) => {
-    const source = await readDiagramFile(file);
-    if (source == null) fail(unreadableFile(file.name));
-    else open(source);
+    try {
+      const source = await readDiagramFile(file);
+      if (source == null) fail(unreadableFile(file.name));
+      else open(source);
+    } catch (error) {
+      if (!(error instanceof ImportCancelled))
+        fail(error instanceof Error ? error.message : String(error));
+    }
   };
 
   const hasFiles = (e: DragEvent) => !!e.dataTransfer?.types.includes('Files');
@@ -68,8 +80,13 @@ export function Shell(props: RouteSectionProps) {
     }
     // Pasted SVG markup counts only outside text fields, where pasting text means typing it.
     if (editable(e.target)) return;
-    const source = await readPastedText(e.clipboardData?.getData('text/plain') ?? '');
-    if (source != null) open(source);
+    try {
+      const source = await readPastedText(e.clipboardData?.getData('text/plain') ?? '');
+      if (source != null) open(source);
+    } catch (error) {
+      if (!(error instanceof ImportCancelled))
+        fail(error instanceof Error ? error.message : String(error));
+    }
   };
 
   onMount(() => {

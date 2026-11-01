@@ -20,7 +20,14 @@ import { DiagramView } from '../live/DiagramView';
 import { addedLines, moveNote, moveObject } from '../live/move';
 import type { Scene } from '../../src/dsl/compile';
 import { embedPngSource, embedSvgSource } from '../../src/model/embed';
-import { deliver, incoming, readDiagramFile, REOPEN_HINT, unreadableFile } from '../reopen';
+import {
+  deliver,
+  ImportCancelled,
+  incoming,
+  readDiagramFile,
+  REOPEN_HINT,
+  unreadableFile,
+} from '../reopen';
 import { BLANK, ExamplePicker } from './ExamplePicker';
 
 const BASE = import.meta.env.BASE_URL;
@@ -133,9 +140,13 @@ export function Playground() {
   let fromLink = false;
   onMount(async () => {
     const start = await startingSource();
-    fromLink = start.id === 'shared' && !untrack(incoming);
+    fromLink = start.id === 'shared';
     setExampleId(start.id);
     setSource(start.source);
+    if (untrack(incoming)) {
+      const hash = await encodeSource(start.source);
+      history.replaceState(null, '', `${location.pathname}#${hash}`);
+    }
     setFitKey(`${start.id}:0`);
     setTab(isCustom(start.source) ? 'source' : 'diagram');
     setReady(true);
@@ -253,17 +264,33 @@ export function Playground() {
     const handed = incoming();
     if (!handed || handed.at === seen || !ready()) return;
     seen = handed.at;
-    setExampleId('shared');
-    setFitKey(`file:${handed.at}`);
-    editor?.replace(handed.source);
+    const prev = source();
+    void (async () => {
+      if (isCustom(prev)) {
+        clearTimeout(hashTimer);
+        await writeHash();
+        if (source() !== prev || incoming()?.at !== handed.at) return;
+        saveDraft();
+        history.pushState(null, '', location.href);
+        setReplaced(prev);
+      } else setReplaced(null);
+      fromLink = true;
+      setExampleId('shared');
+      setFitKey(`file:${handed.at}`);
+      editor?.replace(handed.source);
+    })();
   });
   const [fileError, setFileError] = createSignal('');
   const openFile = async (file: File) => {
-    const text = await readDiagramFile(file);
-    if (text == null) {
-      setFileError(unreadableFile(file.name));
+    try {
+      const text = await readDiagramFile(file);
+      if (text == null) throw Error(unreadableFile(file.name));
+      deliver(text);
+    } catch (error) {
+      if (error instanceof ImportCancelled) return;
+      setFileError(error instanceof Error ? error.message : String(error));
       setTimeout(() => setFileError(''), 3500);
-    } else deliver(text);
+    }
   };
 
   const theme = () => THEME_LINE.exec(source())?.[1] ?? 'drafting';

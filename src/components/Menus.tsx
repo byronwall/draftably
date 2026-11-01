@@ -253,6 +253,7 @@ function FileMenu() {
       </Show>
       <MenuItem command="quick-build" />
       <MenuItem command="open" />
+      <MenuItem command="import-diagram" />
       <MenuItem command="insert-image" />
       <hr />
       <MenuItem command="timeline-reopen" />

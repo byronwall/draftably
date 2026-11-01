@@ -617,6 +617,59 @@ const journeys = {
     await home.context().close();
   },
 
+  async 'text diagram imports'() {
+    for (const [name, text, label] of [
+      ['graph.dot', 'digraph { a [label="Dot source"]; a -> b }', 'Dot source'],
+      ['graph.mmd', 'flowchart LR\n  A[Mermaid source] --> B[Store]', 'Mermaid source'],
+      ['graph.d2', 'a: D2 source\na -> b', 'D2 source'],
+    ]) {
+      const page = await open('');
+      page.setDefaultTimeout(30000);
+      await page.setInputFiles('.hero-reopen input[type="file"]', {
+        name,
+        mimeType: 'text/plain',
+        buffer: Buffer.from(text),
+      });
+      await page.waitForSelector('.cm-content', { timeout: 30000 });
+      await wait(
+        page,
+        () => document.querySelector('.cm-content')?.textContent.includes('source'),
+        'imported source',
+        30000,
+      );
+      check(`${name} opens as native source`, (await sourceText(page)).includes(label));
+      await page.reload();
+      await page.waitForSelector('.cm-content');
+      check(`${name} survives reload`, (await sourceText(page)).includes(label));
+      if (name === 'graph.mmd')
+        await page.screenshot({ path: path.join(proof.out, 'import-mermaid.png') });
+      await page.context().close();
+    }
+  },
+
+  async 'editor import warnings and failures'() {
+    const page = await open('app/?example=checkout');
+    page.setDefaultTimeout(30000);
+    await editorReady(page);
+    const before = page.url();
+    const choose = async (name, text) => {
+      await page.click(FILE);
+      const pending = page.waitForEvent('filechooser');
+      await page.getByRole('menuitem', { name: 'Import text diagram…' }).click();
+      const chooser = await pending;
+      await chooser.setFiles({ name, mimeType: 'text/plain', buffer: Buffer.from(text) });
+    };
+    await choose('warning.dot', 'digraph { a -> b }');
+    await page.getByText('Review import changes').waitFor();
+    await page.screenshot({ path: path.join(proof.out, 'import-warning.png') });
+    await page.getByRole('button', { name: 'Cancel' }).click();
+    check('cancel keeps the current editor document', page.url() === before);
+    await choose('unsupported.mmd', 'sequenceDiagram\n Alice->>Bob: Hello');
+    await page.getByText('Could not open file').waitFor();
+    check('unsupported input keeps the current editor document', page.url() === before);
+    await page.context().close();
+  },
+
   async 'search answers tasks'() {
     const page = await open('docs');
     await page.waitForSelector('.docs-search-button');

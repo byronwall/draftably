@@ -25,7 +25,8 @@ import {
   tool,
   type Tool,
 } from './editor';
-import { importText, insertImage } from './files';
+import { importForeignText, importText, insertImage } from './files';
+import { detectSource } from '../import/detect';
 import { cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layout';
 import { cancelGesture } from './pointer';
 import { visibleScene } from './scene';
@@ -255,6 +256,16 @@ export async function handlePaste(e: ClipboardEvent) {
       return;
     }
     const text = e.clipboardData.getData('text/plain').trim();
+    const detected = detectSource(text);
+    if (detected.status === 'detected' && ['dot', 'mermaid', 'd2'].includes(detected.format)) {
+      e.preventDefault();
+      await importForeignText(text);
+      return;
+    }
+    if (detected.status === 'choose-fence') {
+      e.preventDefault();
+      throw Error('This text has more than one diagram. Paste one diagram at a time.');
+    }
     if (text.includes('\n') && !text.startsWith('{')) {
       e.preventDefault();
       openQuickBuild(text);

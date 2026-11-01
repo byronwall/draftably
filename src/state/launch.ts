@@ -11,6 +11,7 @@
  */
 import { createRoot, createSignal } from 'solid-js';
 import { decodeSource, encodeSource } from '../lib/source-hash';
+import { readImportedSource } from '../import/scratch';
 import { findExample } from '../model/examples';
 import type { WorkspaceFile, WorkspaceInfo } from '../server/workspace';
 import { clearSelection, prepareForEdit, setDoc } from './document';
@@ -172,6 +173,16 @@ async function chooseLaunch(): Promise<LaunchMode> {
       return 'example';
     }
     state.setLaunchNotice(`There is no example named ${exampleId}.`);
+  }
+  const imported = params.get('import');
+  if (imported) {
+    const source = readImportedSource(imported);
+    if (source != null) {
+      const title = /^diagram\s+"([^"]*)"/m.exec(source)?.[1] || 'Imported diagram';
+      await openExampleSession(DRAFT_ID, title, source, `import:${imported}`);
+      return 'example';
+    }
+    state.setLaunchNotice('This imported diagram is no longer available in this browser.');
   }
   const shared = await decodeSource(location.hash);
   if (shared != null) {

@@ -7,5 +7,5 @@
 - Prompt: `docs/intent/diagram-imports/pro-prompt.md`; sent inline, no attachments.
 - Pro conversation: https://chatgpt.com/c/6ae55efc-831c-83e9-aa06-3df3d1ae526b
 - Model: Pro, power 5/5. Submitted 2026-10-31 03:22 UTC. Processing was verified.
-- Phase: research PR #332 and native undirected-edge PR #333 are open in stack #334. DOT conversion is open as PR #335. DOT CLI import is open as PR #336. Mermaid flowchart mapping is open as PR #337. D2 graph mapping is open as PR #338. The `codex/diagram-import-runtimes` layer adds supervised Mermaid and D2 CLI import; a fresh installed package converted both formats. Browser entry points remain to be built. Continue Mermaid and D2 integration; do not merge.
+- Phase: stack #334 contains research #332, undirected edges #333, DOT conversion #335, DOT CLI #336, Mermaid mapping #337, D2 mapping #338, Mermaid/D2 CLI runtimes #339, and browser import #361. The stack was rebased onto main `af70d831`; site proof passed 103 checks. Push the rebased layers and verify GitHub checks. Do not merge.
 - Heartbeat: `continue-diagram-import-research`, active hourly. Byron explicitly approved automatic continuation through implementation and a PR after the first automatic review rejected it.

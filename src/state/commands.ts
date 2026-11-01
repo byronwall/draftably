@@ -71,7 +71,8 @@ export interface Command {
   enabled?: () => boolean;
 }
 
-let fileInput: ((replaceImageId: string | null, accept: 'diagram' | 'image') => void) | null = null;
+let fileInput:
+  ((replaceImageId: string | null, accept: 'diagram' | 'image' | 'foreign') => void) | null = null;
 /** Set by the app shell, which owns the hidden file inputs. */
 export const setFilePicker = (fn: typeof fileInput) => (fileInput = fn);
 
@@ -408,6 +409,11 @@ export const commands = {
     keys: '⌘O',
     icon: 'folder',
     run: () => fileInput?.(null, 'diagram'),
+  },
+  'import-diagram': {
+    label: 'Import text diagram…',
+    icon: 'folder',
+    run: () => fileInput?.(null, 'foreign'),
   },
   'insert-image': { label: 'Insert image…', icon: 'image', run: () => fileInput?.(null, 'image') },
   'replace-image': {

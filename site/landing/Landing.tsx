@@ -6,7 +6,7 @@ import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/example
 import { appUrl, paperOf } from '../draw';
 import { A, useLocation, useNavigate } from '@solidjs/router';
 import { demoEditorUrl, LiveEditor } from '../live/LiveEditor';
-import { deliver, readDiagramFile, unreadableFile } from '../reopen';
+import { deliver, ImportCancelled, readDiagramFile, unreadableFile } from '../reopen';
 import { Points } from './Points';
 import { drawSvg, enqueue, whenSeen } from './render';
 
@@ -318,20 +318,25 @@ function ReopenLine() {
   const [error, setError] = createSignal('');
   const choose = async (file: File) => {
     setError('');
-    const source = await readDiagramFile(file);
-    if (source == null) return setError(unreadableFile(file.name));
-    deliver(source);
-    navigate('/play');
+    try {
+      const source = await readDiagramFile(file);
+      if (source == null) throw Error(unreadableFile(file.name));
+      deliver(source);
+      navigate('/play');
+    } catch (error) {
+      if (!(error instanceof ImportCancelled))
+        setError(error instanceof Error ? error.message : String(error));
+    }
   };
   return (
     <p class="hero-reopen" classList={{ 'is-error': !!error() }}>
       <span role="alert">{error()}</span>{' '}
-      <Show when={!error()}>Have a draftably PNG or SVG? Drop or paste it anywhere, or </Show>
+      <Show when={!error()}>Have a diagram file? Drop or paste it anywhere, or </Show>
       <label class="hero-reopen-pick">
         {error() ? 'Choose another file' : 'choose a file'}
         <input
           type="file"
-          accept=".draft,.png,.svg,image/png,image/svg+xml"
+          accept=".draft,.png,.svg,.dot,.gv,.mmd,.mermaid,.d2,image/png,image/svg+xml"
           class="sr-only"
           onChange={e => {
             const file = e.currentTarget.files?.[0];

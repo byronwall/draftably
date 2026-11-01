@@ -76,6 +76,10 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
             )}
           </Show>
           <span class="grow" />
+          <button type="button" class="button small" onClick={() => runCommand('import-diagram')}>
+            <Icon name="folder" />
+            Import text diagram…
+          </button>
           <AppNav />
           <Show when={props.variant === 'dialog'}>
             <IconButton icon="close" label="Close" onClick={() => setStartOpen(false)} />
