@@ -60,7 +60,7 @@ const open = async (url, viewport = { width: 1440, height: 900 }, device = {}) =
   await page.goto(`${site}${url}`);
   return page;
 };
-const FILE = '[aria-label="File and examples"]';
+const FILE = '.menubar-item:has-text("File")';
 const editorReady = page =>
   wait(page, () => !!document.querySelector('.canvas [data-id], .start'), 'the editor', 10000);
 const focused = page =>
@@ -285,7 +285,7 @@ const journeys = {
     const tabToFile = async () => {
       for (let i = 0; i < 12; i++) {
         await page.keyboard.press('Tab');
-        if ((await focused(page)) === 'File and examples') return;
+        if ((await focused(page)) === 'File') return;
       }
     };
     await tabToFile();
@@ -341,7 +341,7 @@ const journeys = {
       () =>
         new Promise(done => {
           const item = [...document.querySelectorAll('.popover .menu-item')].find(b =>
-            b.textContent.startsWith('New, open or example'),
+            b.textContent.startsWith('Start screen'),
           );
           const from = performance.now();
           item.click();
@@ -395,7 +395,8 @@ const journeys = {
     const page = await open('app/?example=checkout');
     await editorReady(page);
     const button = page.locator('.toolbar button:has-text("Tidy positions")');
-    await page.click('[aria-label^="Layout options"]');
+    await page.click('.menubar-item:has-text("Layout")');
+    await page.click('.popover .menu-item:has-text("Automatic layout")');
     const panel = page.locator('.hint', { hasText: 'Tidy positions changes' });
     check(
       '#307 nothing selected means the whole diagram',
@@ -416,6 +417,7 @@ const journeys = {
     const phone = await open('app/?example=checkout', { width: 390, height: 844 });
     await editorReady(phone);
     await phone.click('.toolbar button:has-text("More")');
+    await phone.click('.popover .menu-item:has-text("Layout")');
     const menu = await phone.locator('.popover').textContent();
     check('#307 the phone menu states the scope', /Small moves in the whole diagram/.test(menu));
     check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
@@ -687,9 +689,11 @@ const journeys = {
     const page = await open('app/?example=checkout');
     await editorReady(page);
     await page.click(FILE);
-    const menu = await page.locator('.popover').textContent();
-    check('U09 the File menu reaches the docs', /Docs/.test(menu), menu.slice(0, 80));
-    check('U09 the File menu reaches the Playground', /Playground/.test(menu));
+    const file = await page.locator('.popover').textContent();
+    check('U09 the File menu reaches the Playground', /Playground/.test(file));
+    await page.click('.menubar-item:has-text("Help")');
+    const help = await page.locator('.popover').textContent();
+    check('U09 the Help menu reaches the docs', /Docs/.test(help), help.slice(0, 80));
     await page.context().close();
   },
 

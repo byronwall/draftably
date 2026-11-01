@@ -5,7 +5,14 @@
 import * as actions from './actions';
 import { canRedo, canUndo, doc, redo, selectedIds, undo } from './document';
 import { fitView, zoomAt } from './editor';
-import { copyImage, exportDocument, openExport, type CopyAs, type ExportKind } from './files';
+import {
+  copyImage,
+  exportDocument,
+  openExport,
+  openPdfExport,
+  type CopyAs,
+  type ExportKind,
+} from './files';
 import {
   acceptPreview,
   captureCheckpoint,
@@ -48,6 +55,7 @@ import {
   confirmAction,
   openDialog,
   openQuickBuild,
+  setCreatingFile,
   setFilesOpen,
   setInspectorOpen,
   setObjectsOpen,
@@ -121,12 +129,16 @@ function findFile() {
 }
 
 /**
- * A served folder makes the new diagram a file, from its start page. The static site replaces the
+ * A served folder names the new diagram in its files panel. The static site replaces the
  * browser copy; from an example there, a blank scratch copy opens instead, like the Playground's.
  */
 async function newDiagram() {
   if (!fileMode()) return actions.newDocument();
-  if (workspace()) return openStart();
+  if (workspace()) {
+    setFilesOpen(true);
+    setCreatingFile(true);
+    return;
+  }
   // `?new` makes this a page load even from a shared copy, whose URL differs only in the hash.
   // The time keeps each blank's stored edits apart (see `openExampleSession`).
   const hash = await encodeSource(newDiagramSource(''));
@@ -137,6 +149,8 @@ function openStart() {
   if (workspace()) void go(startUrl());
   else setStartOpen(true);
 }
+
+const hasSelection = () => selectedIds().length > 0;
 
 export const commands = {
   undo: {
@@ -186,13 +200,32 @@ export const commands = {
       if (id) actions.insertStep(id);
     },
   },
-  duplicate: { label: 'Duplicate', keys: '⌘D', icon: 'copy', run: actions.duplicateSelection },
-  group: { label: 'Wrap in container', keys: '⌘G', icon: 'group', run: actions.wrapSelection },
-  ungroup: { label: 'Ungroup', keys: '⇧⌘G', run: actions.ungroupSelection },
-  pin: { label: 'Toggle pin', keys: 'P', icon: 'pin', run: actions.togglePin },
+  duplicate: {
+    enabled: hasSelection,
+    label: 'Duplicate',
+    keys: '⌘D',
+    icon: 'copy',
+    run: actions.duplicateSelection,
+  },
+  group: {
+    enabled: hasSelection,
+    label: 'Wrap in container',
+    keys: '⌘G',
+    icon: 'group',
+    run: actions.wrapSelection,
+  },
+  ungroup: { enabled: hasSelection, label: 'Ungroup', keys: '⇧⌘G', run: actions.ungroupSelection },
+  pin: {
+    enabled: hasSelection,
+    label: 'Toggle pin',
+    keys: 'P',
+    icon: 'pin',
+    run: actions.togglePin,
+  },
   'release-manual': { label: 'Clear manual markers', run: actions.clearManualMarkers },
   delete: {
     label: 'Delete selection',
+    enabled: hasSelection,
     keys: '⌫',
     icon: 'trash',
     run: () => actions.deleteSelection(),
@@ -202,19 +235,34 @@ export const commands = {
     keys: '⇧⌫',
     run: () => actions.deleteSelection(true),
   },
-  'align-left': { label: 'Align left', run: () => actions.alignSelection('left') },
-  'align-top': { label: 'Align top', run: () => actions.alignSelection('top') },
+  'align-left': {
+    label: 'Align left',
+    enabled: hasSelection,
+    run: () => actions.alignSelection('left'),
+  },
+  'align-top': {
+    label: 'Align top',
+    enabled: hasSelection,
+    run: () => actions.alignSelection('top'),
+  },
   'align-center': {
     label: 'Align horizontal centers',
+    enabled: hasSelection,
     run: () => actions.alignSelection('center'),
   },
-  'align-middle': { label: 'Align vertical centers', run: () => actions.alignSelection('middle') },
+  'align-middle': {
+    label: 'Align vertical centers',
+    enabled: hasSelection,
+    run: () => actions.alignSelection('middle'),
+  },
   'distribute-x': {
     label: 'Distribute horizontally',
+    enabled: hasSelection,
     run: () => actions.alignSelection('distribute-x'),
   },
   'distribute-y': {
     label: 'Distribute vertically',
+    enabled: hasSelection,
     run: () => actions.alignSelection('distribute-y'),
   },
   'fit-container': { label: 'Fit contents', run: actions.fitSelectedContainer },
@@ -255,7 +303,7 @@ export const commands = {
   'layout-discard': { label: 'Discard', run: discardPreview },
   'layout-menu': {
     hint: 'Choose an arrangement, preview it and keep it if you like it.',
-    label: 'Layout options',
+    label: 'Automatic layout…',
     keys: '⌥L',
     run: toggleLayoutLab,
     endsBrush: true,
@@ -348,7 +396,7 @@ export const commands = {
     hint: 'List every shape and container, with search.',
     label: 'Objects',
     keys: '[',
-    icon: 'panel-left',
+    icon: 'tree',
     run: () => setObjectsOpen(!objectsOpen()),
     duringTimeline: true,
   },
@@ -373,7 +421,7 @@ export const commands = {
     hint: 'Edit the selected shape or connection, or the diagram.',
     label: 'Inspector',
     keys: ']',
-    icon: 'panel-right',
+    icon: 'sliders',
     run: () => setInspectorOpen(!inspectorOpen()),
     duringTimeline: true,
   },
@@ -393,7 +441,7 @@ export const commands = {
   },
 
   start: {
-    label: 'New, open or example…',
+    label: 'Start screen…',
     icon: 'folder',
     // With a served folder the start page lists its files; otherwise it opens over the editor.
     run: openStart,
@@ -403,6 +451,7 @@ export const commands = {
     label: 'New diagram',
     icon: 'plus',
     run: newDiagram,
+    hint: 'Start an empty diagram.',
   },
   open: {
     label: 'Open diagram…',
@@ -426,6 +475,12 @@ export const commands = {
     icon: 'download',
     run: () => exportCommand('json'),
   },
+  'export-folder': {
+    label: 'Export folder as PDF…',
+    icon: 'file',
+    enabled: () => !!workspace()?.files.length,
+    run: () => openPdfExport((workspace()?.files ?? []).map(f => f.path)),
+  },
   'export-png': { label: 'Export PNG…', icon: 'image', run: () => openExportCommand('png') },
   'export-svg': { label: 'Export SVG…', icon: 'export', run: () => openExportCommand('svg') },
   'export-pdf': { label: 'Export PDF…', icon: 'file', run: () => openExportCommand('pdf') },
@@ -438,7 +493,7 @@ export const commands = {
   'copy-svg': { label: 'SVG markup', icon: 'code', run: () => copyCommand('svg') },
   'copy-source': { label: 'draftably source', icon: 'file', run: () => copyCommand('source') },
   'copy-link': { label: 'Link to this diagram', icon: 'globe', run: () => copyCommand('link') },
-  theme: { label: 'Toggle light / dark', icon: 'sun', run: actions.toggleTheme },
+  theme: { label: 'Light or dark editor', icon: 'sun', run: actions.toggleTheme },
   home: {
     label: 'Home',
     icon: 'home',

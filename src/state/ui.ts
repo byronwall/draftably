@@ -4,7 +4,17 @@ import { workspace } from './launch';
 
 const UI_STORAGE = 'diagram-studio-v5-ui';
 
-export type MenuId = 'file' | 'edit' | 'export' | 'routing' | 'context' | 'appearance' | 'tools';
+export type MenuId =
+  | 'file'
+  | 'edit'
+  | 'view'
+  | 'layout'
+  | 'help'
+  | 'export'
+  | 'routing'
+  | 'context'
+  | 'appearance'
+  | 'tools';
 export type DialogId = 'help' | 'quick-build' | 'confirm' | 'error' | 'export';
 
 export interface MenuState {
@@ -49,6 +59,7 @@ const state = createRoot(() => {
   const [errorMessage, setErrorMessage] = createSignal('');
   const [quickBuildText, setQuickBuildText] = createSignal('');
   const [layoutLabOpen, setLayoutLabOpen] = createSignal(false);
+  const [creatingFile, setCreatingFile] = createSignal(false);
   createEffect(() => {
     try {
       localStorage.setItem(
@@ -82,6 +93,8 @@ const state = createRoot(() => {
     setQuickBuildText,
     layoutLabOpen,
     setLayoutLabOpen,
+    creatingFile,
+    setCreatingFile,
   };
 });
 
@@ -96,6 +109,8 @@ export const {
   quickBuildText,
   layoutLabOpen,
   setLayoutLabOpen,
+  creatingFile,
+  setCreatingFile,
 } = state;
 
 export function setObjectsOpen(open: boolean) {

@@ -9,6 +9,33 @@
   background: var(--surface);
 }
 
+.menubar {
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+}
+
+.menubar-item {
+  height: 26px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.12s;
+}
+
+.menubar-item:hover,
+.menubar-item[aria-expanded='true'] {
+  background: var(--hover);
+}
+
+.menubar-item[aria-expanded='true'] {
+  background: var(--pressed);
+}
+
 .toolbar-group {
   display: flex;
   flex: none;
@@ -51,8 +78,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: clamp(120px, 13vw, 220px);
-  margin-left: 2px;
+  width: clamp(130px, 13vw, 200px);
 }
 
 .title-input {
@@ -102,54 +128,6 @@
   font-weight: 600;
 }
 
-.algorithm-select {
-  width: 160px;
-}
-
-.split-button {
-  display: flex;
-}
-
-.split-button > .button:first-child {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.split-button > .button:last-child {
-  width: 24px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-.split-button > .button.primary:last-child {
-  margin-left: -1px;
-  border-left-color: color-mix(in srgb, var(--ink-on) 28%, transparent);
-}
-
-.split-button > .button.ghost:last-child .icon {
-  width: 14px;
-}
-
-.layout-group {
-  gap: 4px;
-}
-
-@media (max-width: 1560px) {
-  .toolbar .label:not(.keep) {
-    display: none;
-  }
-
-  .toolbar .button kbd {
-    display: none;
-  }
-}
-
-@media (max-width: 1500px) {
-  .algorithm-select {
-    display: none;
-  }
-}
-
 /* The name gives way while the tools share its row; the mark stays as the link home. */
 @media (min-width: 1101px) and (max-width: 1500px), (max-width: 720px) {
   .toolbar .brand-name {
@@ -157,7 +135,7 @@
   }
 }
 
-/* The site links take spare room only. The file menu keeps Home, Docs and the Playground. */
+/* The site links take spare room only. The menus keep Home, Docs and the Playground. */
 @media (min-width: 1101px) and (max-width: 1900px), (max-width: 720px) {
   .toolbar .app-nav {
     display: none;
@@ -188,7 +166,8 @@
     display: none;
   }
 
-  .toolbar-panels > .button:not([aria-label='Save and export']) {
+  .toolbar-panels > .button:not([aria-label='Save and export']),
+  .menubar {
     display: none;
   }
 

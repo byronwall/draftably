@@ -124,7 +124,8 @@ export function handleKeyDown(e: KeyboardEvent) {
       d: () => runCommand('duplicate'),
       g: () => runCommand(e.shiftKey ? 'ungroup' : 'group'),
       s: () => runCommand('export-json'),
-      o: () => runCommand('open'),
+      // A served folder has no file dialog; its way to open a diagram is the same as ⌘P.
+      o: () => runCommand(commandEnabled('find-file') ? 'find-file' : 'open'),
     };
     // ⇧⌘C copies the diagram, or the selection, as an image; ⌘C stays an object copy.
     if (key === 'c' && e.shiftKey) shortcuts.c = () => runCommand('copy-image');

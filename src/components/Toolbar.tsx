@@ -1,6 +1,6 @@
 import { createEffect, createSignal, For, Show } from 'solid-js';
 import { setTool } from '../state/actions';
-import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
+import { commandEnabled, runCommand, type CommandId } from '../state/commands';
 import { doc, saveStatus, transact } from '../state/document';
 import {
   exampleMode,
@@ -12,11 +12,12 @@ import {
 import { tool, type Tool } from '../state/editor';
 import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
 import { brushActive, timelineOpen } from '../state/sculpt';
-import { filesShown, inspectorOpen, layoutLabOpen, menu, objectsOpen, openMenu } from '../state/ui';
+import { filesShown, inspectorOpen, menu, objectsOpen, openMenu } from '../state/ui';
 import { workspace } from '../state/launch';
 import { AppNav, Brand } from './Brand';
 import { CommandButton, IconButton, tip } from './controls';
 import { Icon } from './Icon';
+import { MenuBar } from './MenuBar';
 import './toolbar.css';
 
 type ToolInfo = [Tool, string, string, string, string];
@@ -46,15 +47,8 @@ export function Toolbar() {
       <div class="toolbar-group">
         <Brand />
         <span class="divider" />
-        <IconButton
-          icon="menu"
-          label="File and examples"
-          hint="New and open diagrams, examples and help."
-          aria-haspopup="menu"
-          aria-expanded={menuOpen('file')}
-          onClick={menuButton('file')}
-        />
         <DocumentTitle />
+        <MenuBar />
       </div>
 
       <div class="toolbar-scroll">
@@ -62,104 +56,36 @@ export function Toolbar() {
           <ToolButtons tools={NAV_TOOLS} disabled={locked()} />
           <span class="divider" />
           <ToolButtons tools={DRAW_TOOLS} disabled={locked()} />
+          <span class="divider" />
+          <CommandButton command="brush-toggle" pressed={brushActive()} />
         </div>
         <span class="divider" />
         <div class="toolbar-group">
           <CommandButton command="undo" />
           <CommandButton command="redo" />
-          <button
-            type="button"
-            class="button ghost"
-            {...tip('Edit', undefined, 'Duplicate, group, align, pin and delete the selection.')}
-            aria-haspopup="menu"
-            aria-expanded={menuOpen('edit')}
-            onClick={menuButton('edit')}
-          >
-            Edit
-            <Icon name="chevron" />
-          </button>
-          <CommandButton command="quick-build" label="Build from a list" />
         </div>
 
         <span class="grow" />
 
-        <div class="toolbar-group layout-group">
-          <div class="split-button">
-            <Show
-              when={!layoutBusy()}
-              fallback={
-                <button type="button" class="button danger" onClick={cancelLayout}>
-                  Cancel
-                </button>
-              }
-            >
-              <button
-                type="button"
-                class="button primary"
-                {...tip(
-                  'Tidy positions',
-                  'L',
-                  `Small moves in ${layoutTarget()}. Undo restores them.`,
-                )}
-                disabled={locked() || !commandEnabled('layout')}
-                onClick={run('layout')}
-              >
-                <Icon name="layout" />
-                <span class="label keep">Tidy positions</span>
-                <kbd>L</kbd>
-              </button>
-            </Show>
-            <IconButton
-              variant="primary"
-              icon="chevron"
-              label="Layout options"
-              keys="⌥L"
-              hint={commands['layout-menu'].hint}
-              aria-expanded={layoutLabOpen()}
-              onClick={run('layout-menu')}
-            />
-          </div>
+        <Show
+          when={!layoutBusy()}
+          fallback={
+            <button type="button" class="button danger" onClick={cancelLayout}>
+              Cancel
+            </button>
+          }
+        >
           <button
             type="button"
-            class="button"
-            {...tip('Automatic layout', '⌥L', commands['layout-menu'].hint)}
-            aria-expanded={layoutLabOpen()}
-            onClick={run('layout-menu')}
+            class="button primary"
+            {...tip('Tidy positions', 'L', `Small moves in ${layoutTarget()}. Undo restores them.`)}
+            disabled={locked() || !commandEnabled('layout')}
+            onClick={run('layout')}
           >
-            Automatic layout…
+            <Icon name="layout" />
+            Tidy positions
           </button>
-          <button
-            type="button"
-            class="button ghost"
-            {...tip('Layout timeline', '⌥T', commands['timeline-toggle'].hint)}
-            aria-pressed={timelineOpen()}
-            onClick={run('timeline-toggle')}
-          >
-            <Icon name="journey" />
-            <span class="label">Timeline</span>
-          </button>
-          <CommandButton command="brush-toggle" pressed={brushActive()} />
-          <button
-            type="button"
-            class="button ghost"
-            {...tip('Compare layouts', '⌥E', commands['compare-layouts'].hint)}
-            onClick={run('compare-layouts')}
-          >
-            <Icon name="compare" />
-            <span class="label">Compare</span>
-          </button>
-          <div class="split-button">
-            <CommandButton command="reroute" label="Reroute connections" />
-            <IconButton
-              icon="chevron"
-              label="Routing options"
-              hint="Tune how connections choose sides and lanes."
-              aria-haspopup="menu"
-              aria-expanded={menuOpen('routing')}
-              onClick={menuButton('routing')}
-            />
-          </div>
-        </div>
+        </Show>
       </div>
 
       <div class="toolbar-group toolbar-panels">
@@ -177,7 +103,6 @@ export function Toolbar() {
         </Show>
         <CommandButton command="toggle-objects" pressed={objectsOpen()} />
         <CommandButton command="toggle-inspector" pressed={inspectorOpen()} />
-        <CommandButton command="help" />
         <button
           type="button"
           class="button ghost"
