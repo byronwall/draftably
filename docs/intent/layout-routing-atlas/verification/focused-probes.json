@@ -1,0 +1,44 @@
+{
+  "sibling_scope_settings": {
+    "files": [
+      "layout/repros/scope-settings-a-first.draft",
+      "layout/repros/scope-settings-b-first.draft"
+    ],
+    "rectangles_equal": false,
+    "frames": [{}, {}]
+  },
+  "cold_ordering": {
+    "files": ["layout/ordering-stable.draft", "layout/ordering-crossings.draft"],
+    "rectangles_equal": true,
+    "frames": [{}, {}]
+  },
+  "group_gap": {
+    "files": ["layout/group-gap-96.draft", "layout/group-gap-120.draft"],
+    "rectangles_equal": true,
+    "frames": [{}, {}]
+  },
+  "fractional_columns": {
+    "check_exit": 1,
+    "check_out": "",
+    "check_err": "Invalid array length",
+    "inspect_exit": 1,
+    "null_fields": []
+  },
+  "fractional_span": {
+    "check_exit": 0,
+    "check_out": "warning a sits NaNpx outside its group g. The layout could not avoid it; move or resize a neighbour. [outside-group]\nWarnings: 1 node, 1 group, 0 connections.",
+    "check_err": "",
+    "inspect_exit": 0,
+    "null_fields": [["/nodes/0/w", null]]
+  },
+  "empty_sequence_band": {
+    "check_exit": 0,
+    "check_out": "OK: 2 nodes, 1 group, 1 connection.",
+    "check_err": "",
+    "inspect_exit": 0,
+    "null_fields": [
+      ["/nodes/2/x", null],
+      ["/nodes/2/w", null]
+    ]
+  }
+}

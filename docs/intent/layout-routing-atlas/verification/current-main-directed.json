@@ -1,0 +1,131 @@
+{
+  "current_main": "ce7f65648e7e63021bd93f7d38a7bcc81db9fd68",
+  "results": {
+    "directed-omitted": {
+      "check_exit": 0,
+      "geometry": {
+        "nodes": [
+          {
+            "id": "source",
+            "parent": "root",
+            "x": 245,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "target",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "relation",
+            "points": [
+              {
+                "x": 164,
+                "y": 28
+              },
+              {
+                "x": 245,
+                "y": 28
+              }
+            ]
+          }
+        ]
+      },
+      "geometry_exit": 0,
+      "viewBox": "-40 -86 489 182",
+      "svg_exit": 0
+    },
+    "directed-true": {
+      "check_exit": 0,
+      "geometry": {
+        "nodes": [
+          {
+            "id": "source",
+            "parent": "root",
+            "x": 245,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "target",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "relation",
+            "points": [
+              {
+                "x": 164,
+                "y": 28
+              },
+              {
+                "x": 245,
+                "y": 28
+              }
+            ]
+          }
+        ]
+      },
+      "geometry_exit": 0,
+      "viewBox": "-40 -86 489 182",
+      "svg_exit": 0
+    },
+    "directed-false": {
+      "check_exit": 0,
+      "geometry": {
+        "nodes": [
+          {
+            "id": "source",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "target",
+            "parent": "root",
+            "x": 245,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "relation",
+            "points": [
+              {
+                "x": 245,
+                "y": 28
+              },
+              {
+                "x": 164,
+                "y": 28
+              }
+            ]
+          }
+        ]
+      },
+      "geometry_exit": 0,
+      "viewBox": "-40 -86 489 182",
+      "svg_exit": 0
+    }
+  },
+  "default_equals_true": true,
+  "false_removes_arrowhead": true,
+  "ranking_changes_as_documented": true
+}

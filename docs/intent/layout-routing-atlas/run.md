@@ -9,18 +9,41 @@
 - Baseline: `af70d8317797d5a522acffdd604819376a3ec893`.
 - Prompt: [pro-prompt.md](pro-prompt.md).
 - Preparation: [preparation.md](preparation.md).
-- Phase: submitted; Pro is processing and has extracted the source archive.
+- Phase: Pro complete; originals preserved, findings checked, summary and plan integrated; final validation and PR in progress.
 - Conversation: https://chatgpt.com/c/6ae6c01c-babc-83e9-bf65-d92651191324
 - Model: Pro, effort 5 of 5, verified in the live selector.
 - Browser: Chrome extension browser 2, profile `byroni.us`; signed-in account state verified.
 - Attachments verified before send: `pro-prompt(20261101-042915).md`, `draftably-layout-routing-source.zip`, and `contact-sheet(1).png`.
 - Source packet: 330 tracked repository files, 1,006,889 bytes compressed; no dependencies, build output, Git metadata, secrets, or unrelated private files.
 - Submitted: 2026-11-01 about 04:30 UTC. The sent message, all attachments, Pro mode, and Stop control were verified.
-- Next check: 2026-11-01 about 06:29 UTC; hourly after that while processing.
+- Collection check: 2026-11-01 about 06:32 UTC. Pro had completed; the response showed 47m 56s of work.
 - Follow-ups: 0.
 - Heartbeat: `complete-draftably-layout-and-routing-atlas`, active and attached to this chat. Verify the hourly schedule after any update.
-- Collected assets: none yet.
-- PR: pending collection and integration.
+- Collected assets: [2,457 original files](assets-index.md) under `assets/pro-results/2026-11-01/`; all supplied hashes passed.
+- PR: pending final validation and creation.
+
+## Collection and integration
+
+Downloaded `draftably-layout-routing-atlas.zip` through the original conversation.
+Archive paths and entry types passed inspection before extraction.
+The result ZIP and its supplied input ZIP remain in ignored `tmp/pro/layout-routing-atlas/`.
+Original reports, examples, SVGs, images, metadata, and helper programs retain their bytes and paths.
+All 2,457 manifest hashes passed; the omitted input ZIP and unlisted self-manifest are explained in the asset index.
+
+Two bounded Luna High workers reviewed report coverage and verified fixtures/source claims.
+All 323 positive companions passed check, JSON inspection, and SVG export: 969 commands.
+All 13 complete page examples passed the same checks. All 17 frozen-routing triplets retained equal rectangles.
+Focused repros confirmed invalid structural geometry, sibling settings leakage, cold ordering equality, and the group-gap cap.
+Other findings were checked against the controlling code paths. Model/browser lifecycle limits remain explicit.
+
+The original Pro package has 197 entries and 34 recommendations.
+The local review found missing native Arrow coverage and current-main `directed=false` support.
+The addendum brings the reviewed scope to 198 entries and adds LR-035 without editing originals.
+Three current-main source companions passed nine CLI commands; omitted and true match, while false removes the arrowhead.
+
+This branch was rebased onto current main `ce7f65648e7e63021bd93f7d38a7bcc81db9fd68`.
+The `.prettierignore` conflict preserved both initiatives' original-asset exclusions.
+Locked dependencies were installed after the rebase. Product implementation remains in the reviewed plan.
 
 ## Verified local evidence
 
@@ -47,6 +70,15 @@ The original restricted install finished with a network error; the approved inst
 No dependency or product files changed.
 
 ## Preparation validation
+
+### Final integration checks
+
+`pnpm check` passed on the rebased branch: typecheck, lint, formatting, 73 test files / 480 tests,
+195 layout assertions, 55 sculpt checks, 320 engine parity comparisons, and the production build.
+The build retained its bundle-size advisory.
+All 2,457 preserved original hashes, 35 dispositions, authored local links, and ZIP exclusion checks passed.
+The three directed-state addendum companions passed nine CLI commands on current main.
+Only review documents, evidence, companion data, and original-asset formatting/lint exclusions change in this PR.
 
 All full-check components passed across the initial run and bounded reruns.
 Typecheck, lint, formatting, and 62 unit suites passed in the sandbox.

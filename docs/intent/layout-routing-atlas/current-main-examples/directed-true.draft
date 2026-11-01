@@ -1,0 +1,4 @@
+diagram "Directed connection: explicit true" version=1
+node source "Source"
+node target "Target"
+edge relation target -> source "related" directed=true

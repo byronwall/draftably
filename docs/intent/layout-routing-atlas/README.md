@@ -3,14 +3,21 @@
 Make every supported layout and routing choice visible, understandable, and easy to select.
 
 This initiative covers source recipes, layout engines, routing controls, editor operations, and CLI comparisons.
-The Pro review checks the complete option inventory and proposes documentation and product fixes.
+The completed Pro review supplies a visual documentation design, complete page drafts, and proposed fixes.
+
+- [Reviewed summary](summary.md): main findings and scope.
+- [Implementation plan](implementation-plan.md): buildable milestones and acceptance checks.
+- [Recommendation dispositions](dispositions.md): all 34 Pro recommendations and one local addition.
+- [Original assets](assets-index.md): all reports, examples, visuals, and companions.
+- [Local verification](verification.md): independent fixture and source checks.
+- [Current-main addendum](current-main-addendum.md): directed connections and Arrow coverage.
 
 - [Pro mission](pro-prompt.md): ranked questions, evidence rules, and six deliverables.
 - [Preparation](preparation.md): source findings, design choices, and baseline render results.
 - [Baseline options](baseline-options.json): machine-read settings and engine metadata at the pinned source commit.
 - [Baseline renders](baseline-renders.json): exact source and measured results for all ten file engines on one graph.
 - [Run record](run.md): conversation, progress, collection, and PR status.
-- [Pro conversation](https://chatgpt.com/c/6ae6c01c-babc-83e9-bf65-d92651191324): processing at submission.
+- [Pro conversation](https://chatgpt.com/c/6ae6c01c-babc-83e9-bf65-d92651191324): completed review and original downloads.
 
 ## Completion criteria
 
