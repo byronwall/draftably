@@ -1,0 +1,240 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "command": "pnpm draftably vary grouped.draft --try engine=compound-flow,boundary-align,compound-spring,tidy,stress,force,flow,layered,tree,grid --budget 60s --out tmp/atlas",
+  "source": "333894f315d09560",
+  "recommended": "v0",
+  "tried": 10,
+  "variants": [
+    {
+      "id": "v0",
+      "title": "current",
+      "why": "the file as it is",
+      "lines": [],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0,
+        "moved": 0
+      },
+      "tags": ["recommended", "smallest"]
+    },
+    {
+      "id": "v1",
+      "title": "compound-flow",
+      "why": "--try engine=compound-flow",
+      "lines": [],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0,
+        "moved": 0
+      },
+      "tags": ["same as v0"]
+    },
+    {
+      "id": "v2",
+      "title": "boundary-align",
+      "why": "--try engine=boundary-align",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=boundary-align"
+        }
+      ],
+      "metrics": {
+        "width": 1277,
+        "height": 606,
+        "crossings": 0,
+        "bends": 9,
+        "length": 1989,
+        "warnings": 0,
+        "moved": 225
+      },
+      "tags": ["fewest crossings", "fewest bends"]
+    },
+    {
+      "id": "v3",
+      "title": "compound-spring",
+      "why": "--try engine=compound-spring",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=compound-spring"
+        }
+      ],
+      "metrics": {
+        "width": 1131,
+        "height": 721,
+        "crossings": 0,
+        "bends": 9,
+        "length": 1499,
+        "warnings": 0,
+        "moved": 222
+      },
+      "tags": ["fewest crossings", "fewest bends"]
+    },
+    {
+      "id": "v4",
+      "title": "tidy",
+      "why": "--try engine=tidy",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=tidy"
+        }
+      ],
+      "metrics": {
+        "width": 1252,
+        "height": 372,
+        "crossings": 2,
+        "bends": 11,
+        "length": 1209,
+        "warnings": 0,
+        "moved": 182
+      },
+      "tags": []
+    },
+    {
+      "id": "v5",
+      "title": "stress",
+      "why": "--try engine=stress",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=stress"
+        }
+      ],
+      "metrics": {
+        "width": 1260,
+        "height": 372,
+        "crossings": 2,
+        "bends": 11,
+        "length": 1240,
+        "warnings": 0,
+        "moved": 183
+      },
+      "tags": []
+    },
+    {
+      "id": "v6",
+      "title": "force",
+      "why": "--try engine=force",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=force"
+        }
+      ],
+      "metrics": {
+        "width": 1281,
+        "height": 614,
+        "crossings": 1,
+        "bends": 9,
+        "length": 1831,
+        "warnings": 0,
+        "moved": 208
+      },
+      "tags": ["fewest bends"]
+    },
+    {
+      "id": "v7",
+      "title": "flow",
+      "why": "--try engine=flow",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=flow"
+        }
+      ],
+      "metrics": {
+        "width": 1252,
+        "height": 372,
+        "crossings": 2,
+        "bends": 11,
+        "length": 1243,
+        "warnings": 0,
+        "moved": 179
+      },
+      "tags": ["least moved"]
+    },
+    {
+      "id": "v8",
+      "title": "layered",
+      "why": "--try engine=layered",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=layered"
+        }
+      ],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0,
+        "moved": 0
+      },
+      "tags": ["same as v0"]
+    },
+    {
+      "id": "v9",
+      "title": "tree",
+      "why": "--try engine=tree",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=tree"
+        }
+      ],
+      "metrics": {
+        "width": 1252,
+        "height": 386,
+        "crossings": 1,
+        "bends": 9,
+        "length": 1296,
+        "warnings": 0,
+        "moved": 179
+      },
+      "tags": ["fewest bends", "least moved"]
+    },
+    {
+      "id": "v10",
+      "title": "grid",
+      "why": "--try engine=grid",
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=grid"
+        }
+      ],
+      "metrics": {
+        "width": 1058,
+        "height": 650,
+        "crossings": 1,
+        "bends": 11,
+        "length": 1672,
+        "warnings": 0,
+        "moved": 211
+      },
+      "tags": []
+    }
+  ],
+  "note": "Actual CLI results on one fixture. The recommendation balances crossings and area; it does not choose the fewest crossings alone."
+}
