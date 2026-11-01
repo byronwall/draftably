@@ -1,0 +1,60 @@
+{
+  "file": "fit-tall.draft",
+  "source_sha256": "9561d2b82c04fa4f1557f10ccc073c7a5a83f36a1e7a0e748f671f626100567a",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-tall.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.518
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-tall.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.719
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 492,
+    "height": 722,
+    "crossings": 0,
+    "bends": 2,
+    "length": 1144,
+    "warnings": 0
+  },
+  "node_hash": "3a9469ebb663ab575c821e65eb1628348b4ac803f360ee9ce32eb969c6bd5138",
+  "route_hash": "a34b8562fbf5720e70340bf3a15f4bdd85fb410aa6d245e04d466c4d4e9004c4",
+  "geometry_hash": "bbaa53552c207021ecacb9fb068f9fa2610fb93de96c2952c21ab65d9fbdfd9e",
+  "check_output": "info    line 25: fit=tall (aspect 0.6): drawn reading down, aspect 0.69; 5 layouts tried.\nMetrics: 492\u00d7722 (aspect 0.68), 0 crossings, 2 bends, 1144px of lines, 0 warnings.\nOK: 12 nodes, 0 groups, 11 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fit-tall.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.523,
+    "file": "svg/fit-tall.svg",
+    "bytes": 72753,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "c3a5eecb65fa3d4f211ed19db7e52ae525d34af35d0b45a3a1acea0cd8fe79b3"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

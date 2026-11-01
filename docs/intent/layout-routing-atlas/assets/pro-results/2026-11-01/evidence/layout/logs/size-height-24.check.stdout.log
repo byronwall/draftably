@@ -1,0 +1,4 @@
+warning line 8: b's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]
+warning The drawing is 624×194 (aspect 3.22). Try draftably vary --fit slide (or page). [aspect]
+Metrics: 624×194 (aspect 3.22), 0 crossings, 2 bends, 112px of lines, 2 warnings.
+Warnings: 3 nodes, 0 groups, 2 connections.

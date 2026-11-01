@@ -1,0 +1,60 @@
+{
+  "file": "nudge-dx-0.draft",
+  "source_sha256": "75d00bfe4e85649042a7a8cbbd754885963de782f47906793fde4cacdcd2afcf",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/nudge-dx-0.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.109
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/nudge-dx-0.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.117
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 668,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 96,
+    "warnings": 0
+  },
+  "node_hash": "1e206136a929d0598b64a3ace816398c9f9b88463bae1dfba824a2b8f78a22f2",
+  "route_hash": "2a10b7a1431e1301743a628ce256b8468f0a6c3a35f28e3d18e34bf64068a8d6",
+  "geometry_hash": "c005e0b723d909b5604681cca0e91d1e6ca5f93d81ad30c5973de51e3ba3ec33",
+  "check_output": "warning The drawing is 668\u00d7182 (aspect 3.67). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 668\u00d7182 (aspect 3.67), 0 crossings, 0 bends, 96px of lines, 1 warning.\nWarnings: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/nudge-dx-0.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.126,
+    "file": "svg/nudge-dx-0.svg",
+    "bytes": 67531,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "92653e6b0d9296e832bcc4c2b2d299bc63663c24e5af09af4c69428bb0a9caa8"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

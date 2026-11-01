@@ -1,0 +1,388 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "algorithms": [
+    {
+      "id": "compound-flow",
+      "name": "Compound flow",
+      "family": "Cross-hierarchy layered",
+      "short": "Order nested blocks by all their connections; bring inputs and outputs toward the relevant boundary.",
+      "controls": ["rankGap", "groupGap", "boundaryPull", "hierarchySweeps", "ordering", "fold"],
+      "detail": "Bottom-up projected sibling graphs plus global terminal ranks and exact-endpoint boundary forces. Alternating hierarchy sweeps let inner and outer levels inform each other. An original heuristic, not ELK."
+    },
+    {
+      "id": "boundary-align",
+      "name": "Boundary alignment",
+      "family": "Cross-hierarchy local repair",
+      "short": "Line up connected endpoints across containers without rebuilding the whole structure.",
+      "controls": ["boundaryPull", "hierarchySweeps", "alignment", "groupGap"],
+      "detail": "Warm-start transverse endpoint alignment and mild link-length relaxation, applied to leaves and translated subtrees. No hard rank assignment during improvement passes. Scope, pins and total displacement caps remain in force."
+    },
+    {
+      "id": "compound-spring",
+      "name": "Compound spring",
+      "family": "Hierarchical force-directed",
+      "short": "Relax nested systems using the actual connected children, rather than container centres.",
+      "controls": ["edgeLength", "boundaryPull", "hierarchySweeps", "groupGap", "compactness"],
+      "detail": "Size-aware springs at actual leaf endpoints transfer force to their direct sibling owners. External neighbours act as temporary boundary anchors. Rectangular separation and alternating hierarchy sweeps constrain the result. Not CoSE or fCoSE."
+    },
+    {
+      "id": "tidy",
+      "name": "Local tidy",
+      "family": "Local optimisation",
+      "short": "Shorten stretched links and align nearby neighbours. Keep the overall arrangement.",
+      "controls": ["edgeLength", "alignment", "compactness"],
+      "detail": "A warm-start spring / alignment hybrid with a displacement anchor and rectangular separation. Designed for small repairs, not global crossing optimisation."
+    },
+    {
+      "id": "stress",
+      "name": "Stress descent",
+      "family": "Distance optimisation",
+      "short": "Balance the whole network using graph distances, without restarting it.",
+      "controls": ["edgeLength", "compactness"],
+      "detail": "Weighted all-pairs shortest-path stress, solved with diagonal-preconditioned gradient steps. Anchored and projected; not an implementation of the full stress-majorisation algorithm."
+    },
+    {
+      "id": "force",
+      "name": "Spring network",
+      "family": "Force-directed",
+      "short": "Let connected clusters find an organic, compact arrangement.",
+      "controls": ["edgeLength", "repulsion", "compactness"],
+      "detail": "Fruchterman–Reingold-style attraction and repulsion with cooling and rectangular collision projection. Quadratic pair evaluation, not Barnes–Hut."
+    },
+    {
+      "id": "flow",
+      "name": "Directional flow",
+      "family": "Constraint relaxation",
+      "short": "Encourage a reading direction without forcing rows or columns.",
+      "controls": ["edgeLength", "flowStrength", "alignment"],
+      "detail": "Soft directed separation constraints on a cycle-broken graph, plus edge springs and neighbour alignment. Feedback edges remain rendered; they do not impose contradictory directional constraints."
+    },
+    {
+      "id": "layered",
+      "name": "Layered + fold",
+      "family": "Hierarchical",
+      "short": "Ranks and crossing sweeps, with optional aspect-aware folding.",
+      "controls": ["rankGap", "ordering", "fold"],
+      "detail": "A local Sugiyama-style pipeline: deterministic feedback-edge handling, longest-path ranks, barycentric sweeps, dimension-aware coordinates and optional row folding. Not ELK or Graphviz."
+    },
+    {
+      "id": "tree",
+      "name": "Subtree tree",
+      "family": "Tree drawing",
+      "short": "Centre parents above their children and give each subtree its own space.",
+      "controls": ["rankGap", "rootId"],
+      "detail": "Builds a deterministic breadth-first spanning forest, reserves subtree spans, and centres parents over their children. Non-tree edges are kept. This is a span-based implementation, not Buchheim’s linear-time tidy-tree algorithm."
+    },
+    {
+      "id": "grid",
+      "name": "Soft grid",
+      "family": "Assignment + relaxation",
+      "short": "Attract boxes toward nearby free cells, without a permanently rigid grid.",
+      "controls": ["gridStrength", "compactness"],
+      "detail": "Stable greedy nearest-free-cell assignment around the current centre, followed by soft attraction and rectangular separation. Manual movement remains unrestricted. Not globally optimal matching."
+    },
+    {
+      "id": "separate",
+      "name": "Separate overlaps",
+      "family": "Geometric repair",
+      "short": "Move only colliding neighbours. Leave clean regions alone.",
+      "controls": [],
+      "detail": "Pairwise minimum-axis translations of padded rectangles, with hard pins, boundary constraints and a per-action movement limit. Does not optimise connectivity or promise a globally minimum displacement."
+    }
+  ],
+  "engineDefaults": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48
+  },
+  "engineParams": [
+    {
+      "attribute": "rank-gap",
+      "key": "rankGap"
+    },
+    {
+      "attribute": "group-gap",
+      "key": "groupGap"
+    },
+    {
+      "attribute": "node-gap",
+      "key": "nodeGap"
+    },
+    {
+      "attribute": "boundary-pull",
+      "key": "boundaryPull"
+    },
+    {
+      "attribute": "hierarchy-sweeps",
+      "key": "hierarchySweeps"
+    },
+    {
+      "attribute": "edge-length",
+      "key": "edgeLength"
+    },
+    {
+      "attribute": "repulsion",
+      "key": "repulsion"
+    },
+    {
+      "attribute": "flow-strength",
+      "key": "flowStrength"
+    },
+    {
+      "attribute": "alignment",
+      "key": "alignment"
+    },
+    {
+      "attribute": "compactness",
+      "key": "compactness"
+    },
+    {
+      "attribute": "grid-strength",
+      "key": "gridStrength"
+    },
+    {
+      "attribute": "ordering",
+      "key": "ordering"
+    },
+    {
+      "attribute": "fold",
+      "key": "fold"
+    },
+    {
+      "attribute": "aspect",
+      "key": "aspect"
+    },
+    {
+      "attribute": "root",
+      "key": "rootId"
+    }
+  ],
+  "routingDefaults": {
+    "clearance": 10,
+    "portGap": 16,
+    "edgeGap": 16,
+    "bendPenalty": 32,
+    "crossingPenalty": 360,
+    "sharedPenalty": 8,
+    "parallelPenalty": 18,
+    "portStability": 20,
+    "fanoutPenalty": 50,
+    "passes": 3,
+    "cornerRadius": 6,
+    "standoff": 20
+  },
+  "routingParams": [
+    {
+      "attribute": "clearance",
+      "key": "clearance"
+    },
+    {
+      "attribute": "port-gap",
+      "key": "portGap"
+    },
+    {
+      "attribute": "edge-gap",
+      "key": "edgeGap"
+    },
+    {
+      "attribute": "bend-penalty",
+      "key": "bendPenalty"
+    },
+    {
+      "attribute": "crossing-penalty",
+      "key": "crossingPenalty"
+    },
+    {
+      "attribute": "shared-penalty",
+      "key": "sharedPenalty"
+    },
+    {
+      "attribute": "parallel-penalty",
+      "key": "parallelPenalty"
+    },
+    {
+      "attribute": "port-stability",
+      "key": "portStability"
+    },
+    {
+      "attribute": "fanout-penalty",
+      "key": "fanoutPenalty"
+    },
+    {
+      "attribute": "passes",
+      "key": "passes"
+    },
+    {
+      "attribute": "corner-radius",
+      "key": "cornerRadius"
+    },
+    {
+      "attribute": "standoff",
+      "key": "standoff"
+    }
+  ],
+  "comparisonLayoutParams": {
+    "direction": {
+      "name": "Flow direction",
+      "values": ["RIGHT", "DOWN"]
+    },
+    "nodeGap": {
+      "name": "Shape gap",
+      "values": [12, 24, 44]
+    },
+    "rankGap": {
+      "name": "Rank gap",
+      "values": [28, 52, 88]
+    },
+    "edgeLength": {
+      "name": "Link length",
+      "values": [48, 88, 144]
+    },
+    "aspect": {
+      "name": "Target aspect",
+      "values": ["1", "1.6", "2"]
+    },
+    "respectDirection": {
+      "name": "Respect arrows",
+      "values": [true, false]
+    },
+    "flowStrength": {
+      "name": "Forward pressure",
+      "values": [25, 65, 100]
+    },
+    "ordering": {
+      "name": "Rank ordering",
+      "values": ["stable", "crossings"]
+    },
+    "fold": {
+      "name": "Sequence folding",
+      "values": ["never", "auto"]
+    },
+    "alignment": {
+      "name": "Alignment",
+      "values": [20, 55, 90]
+    },
+    "compactness": {
+      "name": "Compactness",
+      "values": [10, 35, 80]
+    },
+    "repulsion": {
+      "name": "Repulsion",
+      "values": [20, 45, 80]
+    },
+    "gridStrength": {
+      "name": "Grid attraction",
+      "values": [20, 45, 90]
+    },
+    "boundaryPull": {
+      "name": "Boundary pull",
+      "values": [25, 65, 100]
+    },
+    "hierarchySweeps": {
+      "name": "Hierarchy sweeps",
+      "values": [1, 2, 4]
+    },
+    "groupGap": {
+      "name": "Container gap",
+      "values": [24, 48, 80]
+    },
+    "growContainers": {
+      "name": "Grow frames",
+      "values": [false, true]
+    },
+    "respectManual": {
+      "name": "Protect manual placement",
+      "values": [false, true]
+    },
+    "maxMove": {
+      "name": "Pass movement cap",
+      "values": [24, 48, 96],
+      "passOnly": true
+    },
+    "stability": {
+      "name": "Pass stability",
+      "values": [20, 65, 90],
+      "passOnly": true
+    },
+    "iterations": {
+      "name": "Pass iterations",
+      "values": [16, 32, 64],
+      "passOnly": true
+    }
+  },
+  "comparisonRouteParams": {
+    "edgeGap": {
+      "name": "Parallel edge gap",
+      "values": [10, 18, 28]
+    },
+    "bendPenalty": {
+      "name": "Bend cost",
+      "values": [16, 64]
+    },
+    "clearance": {
+      "name": "Shape clearance",
+      "values": [6, 12, 22]
+    },
+    "portGap": {
+      "name": "Port spacing",
+      "values": [10, 18, 26]
+    },
+    "crossingPenalty": {
+      "name": "Crossing cost",
+      "values": [100, 360, 900]
+    },
+    "parallelPenalty": {
+      "name": "Lane separation cost",
+      "values": [6, 18, 40]
+    },
+    "sharedPenalty": {
+      "name": "Shared-path cost",
+      "values": [2, 8, 16]
+    },
+    "fanoutPenalty": {
+      "name": "Fan-out cost",
+      "values": [0, 50, 120]
+    },
+    "portStability": {
+      "name": "Previous-side stability",
+      "values": [0, 40, 100]
+    },
+    "passes": {
+      "name": "Refinement passes",
+      "values": [1, 3, 5]
+    },
+    "cornerRadius": {
+      "name": "Corner radius",
+      "values": [0, 6, 12]
+    }
+  },
+  "brushDefaults": {
+    "radius": 190,
+    "strength": 35,
+    "softness": 75,
+    "step": 18,
+    "mode": "tidy",
+    "holdRestored": true
+  }
+}

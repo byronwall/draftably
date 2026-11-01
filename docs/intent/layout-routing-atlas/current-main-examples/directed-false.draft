@@ -1,0 +1,4 @@
+diagram "Undirected connection" version=1
+node source "Source"
+node target "Target"
+edge relation target -> source "related" directed=false

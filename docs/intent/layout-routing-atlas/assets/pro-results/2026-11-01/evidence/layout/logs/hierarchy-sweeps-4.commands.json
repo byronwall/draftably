@@ -1,0 +1,60 @@
+{
+  "file": "hierarchy-sweeps-4.draft",
+  "source_sha256": "cc65a575b03c501a2dafd31313eca2e8ca97c5422f6190ea8a760b13ec81d7fe",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/hierarchy-sweeps-4.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 1.345
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/hierarchy-sweeps-4.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 1.278
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1465,
+    "height": 745,
+    "crossings": 1,
+    "bends": 11,
+    "length": 2887,
+    "warnings": 0
+  },
+  "node_hash": "e7322777438f0cfb3d978d825dd6c6e355496ddebe900a4109d0f79e1e38ddd3",
+  "route_hash": "4c177f5390eef7577c20a3ab0f7019aafe71e5343a137987c86cb005aa021ef8",
+  "geometry_hash": "6a67311c1a5fc5d0a2abb3943f753ff5809a03b760456bbc4f9f77b49e0628c6",
+  "check_output": "warning Edges e1 and e2 cross. [crossing]\nwarning mobile is 622px from the nearest node it connects to. [stranded]\nMetrics: 1465\u00d7745 (aspect 1.97), 1 crossing, 11 bends, 2887px of lines, 2 warnings.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/hierarchy-sweeps-4.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.979,
+    "file": "svg/hierarchy-sweeps-4.svg",
+    "bytes": 73414,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "3ffa72626d89507cae111eba7342c148758588c9267916f9bd12ea5bfd90d2ae"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

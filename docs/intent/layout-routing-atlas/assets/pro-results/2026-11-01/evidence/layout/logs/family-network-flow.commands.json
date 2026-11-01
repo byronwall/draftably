@@ -1,0 +1,60 @@
+{
+  "file": "family-network-flow.draft",
+  "source_sha256": "3402036f031d9f057e63c5a9ec37196c630f58939c4adc20998613cd38749b6d",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/family-network-flow.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.297
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/family-network-flow.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.395
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1316,
+    "height": 302,
+    "crossings": 0,
+    "bends": 12,
+    "length": 2560,
+    "warnings": 0
+  },
+  "node_hash": "42003b312478e36c4caf4b39bb1a513997ea0eafb2f5537ce9b3415b4ce15a47",
+  "route_hash": "0b1ab6186586c7b8068192630e000a17714b6863a6e1bcf0b041782a52b90c16",
+  "geometry_hash": "ef4cc35bbc266617fca76fd13096625bf05f01c911ea00ab72be1e25acc7a1e1",
+  "check_output": "warning The drawing is 1316\u00d7302 (aspect 4.36). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1316\u00d7302 (aspect 4.36), 0 crossings, 12 bends, 2560px of lines, 1 warning.\nWarnings: 7 nodes, 0 groups, 8 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/family-network-flow.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.317,
+    "file": "svg/family-network-flow.svg",
+    "bytes": 70525,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "2db522d607543666c341ac05132072a15c415945dfd09e3b512d11a269c41e69"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

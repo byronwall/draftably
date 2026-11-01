@@ -1,0 +1,135 @@
+{
+  "file": "/workspace/scratch/bf0bcb720732/deliverables/examples/routing/corner-radius-6.draft",
+  "source": "e847780952d1b402",
+  "mode": "try",
+  "prefer": "fewer-crossings",
+  "recommended": "v0",
+  "failed": [],
+  "tried": 3,
+  "skipped": 0,
+  "shape": {
+    "nodes": 3,
+    "groups": 0,
+    "ranks": 2,
+    "tree": false,
+    "labels": 0,
+    "scope": "root",
+    "layout": "row",
+    "direction": "auto"
+  },
+  "variants": [
+    {
+      "id": "v0",
+      "title": "current",
+      "why": "the file as it is",
+      "edits": [],
+      "lines": [],
+      "metrics": {
+        "width": 580,
+        "height": 260,
+        "crossings": 0,
+        "bends": 4,
+        "length": 440,
+        "warnings": 0,
+        "moved": 0
+      },
+      "tags": [
+        "recommended"
+      ],
+      "png": "/workspace/scratch/bf0bcb720732/work/final-vary-radius/v0.png"
+    },
+    {
+      "id": "v1",
+      "title": "corner-radius=0",
+      "why": "--try corner-radius=0",
+      "edits": [
+        {
+          "kind": "routing",
+          "attrs": {
+            "corner-radius": "0"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 15,
+          "before": "routing corner-radius=6",
+          "after": "routing corner-radius=0"
+        }
+      ],
+      "tags": [
+        "same as v0"
+      ],
+      "metrics": {
+        "width": 580,
+        "height": 260,
+        "crossings": 0,
+        "bends": 4,
+        "length": 440,
+        "warnings": 0,
+        "moved": 0
+      },
+      "png": "/workspace/scratch/bf0bcb720732/work/final-vary-radius/v1.png"
+    },
+    {
+      "id": "v2",
+      "title": "corner-radius=6",
+      "why": "--try corner-radius=6",
+      "edits": [
+        {
+          "kind": "routing",
+          "attrs": {
+            "corner-radius": "6"
+          }
+        }
+      ],
+      "lines": [],
+      "tags": [
+        "same as v0"
+      ],
+      "metrics": {
+        "width": 580,
+        "height": 260,
+        "crossings": 0,
+        "bends": 4,
+        "length": 440,
+        "warnings": 0,
+        "moved": 0
+      },
+      "png": "/workspace/scratch/bf0bcb720732/work/final-vary-radius/v2.png"
+    },
+    {
+      "id": "v3",
+      "title": "corner-radius=16",
+      "why": "--try corner-radius=16",
+      "edits": [
+        {
+          "kind": "routing",
+          "attrs": {
+            "corner-radius": "16"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 15,
+          "before": "routing corner-radius=6",
+          "after": "routing corner-radius=16"
+        }
+      ],
+      "tags": [
+        "same as v0"
+      ],
+      "metrics": {
+        "width": 580,
+        "height": 260,
+        "crossings": 0,
+        "bends": 4,
+        "length": 440,
+        "warnings": 0,
+        "moved": 0
+      },
+      "png": "/workspace/scratch/bf0bcb720732/work/final-vary-radius/v3.png"
+    }
+  ]
+}

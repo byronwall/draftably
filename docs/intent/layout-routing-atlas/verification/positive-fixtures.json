@@ -1,0 +1,4285 @@
+{
+  "positive_count": 323,
+  "all_draft_count": 349,
+  "excluded_count": 26,
+  "excluded": [
+    "examples/editor-probes/cli-attempt-corner-radius-0.draft",
+    "examples/editor-probes/compare-edge-gap-requested-1-effective-4.draft",
+    "examples/editor-probes/direction-explicit-right.draft",
+    "examples/editor-probes/direction-omitted-auto.draft",
+    "examples/editor-probes/fold-after-ui-auto.draft",
+    "examples/editor-probes/fold-after-ui-never.draft",
+    "examples/editor-probes/fold-before-explicit-never.draft",
+    "examples/editor-probes/page-draft-01.draft",
+    "examples/editor-probes/pass-kept-stays.draft",
+    "examples/editor-probes/radius-v0.draft",
+    "examples/editor-probes/radius-v1.draft",
+    "examples/editor-probes/radius-v2.draft",
+    "examples/editor-probes/radius-v3.draft",
+    "examples/editor-probes/refinement-drift-cleaned.draft",
+    "examples/editor-probes/scoped-rebuild-tree.draft",
+    "examples/layout/repros/cells-fractional-columns.draft",
+    "examples/layout/repros/cells-fractional-span.draft",
+    "examples/layout/repros/cells-ignored-ruler.draft",
+    "examples/layout/repros/outside-tree-root.draft",
+    "examples/layout/repros/root-minima.draft",
+    "examples/layout/repros/scope-settings-a-first.draft",
+    "examples/layout/repros/scope-settings-b-first.draft",
+    "examples/layout/repros/sequence-empty-group.draft",
+    "examples/layout/repros/sequence-group-endpoint.draft",
+    "examples/layout/repros/sequence-ignored-controls.draft",
+    "examples/layout-warm/expected-diagnostics/align-pin-conflict.draft"
+  ],
+  "failures": [],
+  "positive_results": [
+    {
+      "path": "examples/editor/editor-align-start.draft",
+      "sha256": "255ee8aa0daa7cdab5c93798d1e9fc84170fe755257d0261ffd55888d5ecd462",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 820.0, 306.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-change-marks.draft",
+      "sha256": "d6de3405828b166c72d5c722a4e1577324efd383f034cd82817ec0326bf46b69",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -104.0, 1090.0, 487.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-compare-start.draft",
+      "sha256": "a805eb6b48e3075a5ee94091c437ca353b955e3f27b897f670d1c93a03bf464e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 64,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 796.0, 334.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-intent-start.draft",
+      "sha256": "4c76457165abb74cde4623fc4d72004ef70c505bace492cbbb037a994a713934",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 892.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-pass-start.draft",
+      "sha256": "863e63eb5ce1d724461c19597844d5d76d7d881e3cd596351123aa24b79f06d8",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 80,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1444.0, 542.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-refined-groups.draft",
+      "sha256": "61f752666c06b5178c29ace145ae72d2c3e14bc8f2203b312614f52eb08232ba",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 66,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1264.0, 554.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-refinement-drift.draft",
+      "sha256": "7a7fc0f1fa6bc26828ee1285ecc2b40b2973aea33c06dd87337226976f416da1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 26,
+      "finite_geometry": true,
+      "svg_viewBox": [-62.0, -118.0, 416.0, 334.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-scope-start.draft",
+      "sha256": "64dc43618f297a4c0577c43067424afafd9c4ba31a02a79aabfaa71f378bb512",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 64,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1220.0, 390.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/editor/editor-ten-engine-grouped.draft",
+      "sha256": "333894f315d09560e73059f0e7ee5a0e197a184f1b608b8555871cfae5a28bc5",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1060.0, 402.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/boundary-align.draft",
+      "sha256": "92ba4ab7464f1da05b90e899915b662695c5e1690926b65c5575fe249ab27770",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-55.0, -86.0, 1277.0, 606.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/compound-flow.draft",
+      "sha256": "333894f315d09560e73059f0e7ee5a0e197a184f1b608b8555871cfae5a28bc5",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1060.0, 402.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/compound-spring.draft",
+      "sha256": "dc68277eb34cd95a27f568384db4b5494feef7662e92fd743b59a7c2c69f2d25",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-77.0, -109.0, 1131.0, 721.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/flow.draft",
+      "sha256": "1f50b363466283c21013d57469305d07b1aad367adc8377b4122f4695ddce036",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1252.0, 372.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/force.draft",
+      "sha256": "b3ad7d8d920b72a3fba522549eccb60f2dd2195f219d62ab2d86ba9b418ad593",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1281.0, 614.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/grid.draft",
+      "sha256": "def41746ee3c571084cbdcfca04032c8465f15000b2fe81d36462750e508d721",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-74.0, -86.0, 1058.0, 650.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/layered.draft",
+      "sha256": "85af750b04ec9fda243bcad8c74b1f3a947de76236ab8033f2197d4500729df1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1060.0, 402.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/stress.draft",
+      "sha256": "cfe6c54f475921bcd4a772ea36c21dd2b398b4f4bccfd0e53a2babb1eef5fdef",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1260.0, 372.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/tidy.draft",
+      "sha256": "da42b8d9be13336e3913b1291630431aed21168ac534c81fb1a9c6b4396f0784",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1252.0, 372.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/engines/tree.draft",
+      "sha256": "042c275e1e3d7fad8412276ba2416aa7bdd86b6e48b5ffd983d25e2543f6d475",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1252.0, 386.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/align-x-prefer.draft",
+      "sha256": "66c6a804f1c068f253165957a60aa8a76318c02904f669618746ca85210932d5",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -120.0, 456.0, 290.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/align-x-required.draft",
+      "sha256": "29f8379d54613303b190bab8ebefae39a53e5ed9702baa131756436639ac0bcf",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [161.0, -154.0, 255.0, 358.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/align-y-prefer.draft",
+      "sha256": "718739ec81a46442b8b865176fb28d5ff4a7adf43f819fbf1efb5f8d9033a62e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -106.0, 624.0, 222.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/align-y-required.draft",
+      "sha256": "5205171063f70c1939e00e436a640a2d23c140dda9cdb4e676c4638104c472ce",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -96.0, 624.0, 222.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/alignment-0.draft",
+      "sha256": "4ffceb715dcb45e7ac52fd845a8e0f91c805b9989806901b71cdd03e915dfebd",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -87.0, 1393.0, 657.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/alignment-100.draft",
+      "sha256": "87b70aa603ff8dd4a06e22e6414743b099ff4c73cc5b0b41745a12ca50726580",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -87.0, 1390.0, 658.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/alignment-55.draft",
+      "sha256": "50bcbbe5341bca473d88e5d8c8a1667720e1f31d091303ccdad29634a70239d4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 90,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -87.0, 1393.0, 658.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/aspect-0.75.draft",
+      "sha256": "0bb4dc50a5839e7892abf71a53c162dc7e5d2d9aaf229b5f0466b8310669202a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/aspect-1.333.draft",
+      "sha256": "f496a128f7c3d7269e4f9fb972f88f972214c2a8aa1ff3b86a7718895d75f313",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/aspect-1.6.draft",
+      "sha256": "d84e8dc026bbc0aa82e7c89a2a150d3f69ad4d674f46c6109db04719d1e4cba4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/aspect-1.draft",
+      "sha256": "4fb5fdfe3a9311ba6a13a4a5e16524359c37efc1902ef7ee9229c5033ac6829d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/aspect-2.draft",
+      "sha256": "df8ba4dc401d474f3b57ff3887ae64d12bb52f037a69b072286108b28ec08084",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 620.0, 342.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/aspect-omitted.draft",
+      "sha256": "69d57d582f617c0f4edad842960fd496acf568198793b05c052fab2111bb02b9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/boundary-pull-0.draft",
+      "sha256": "d7d3c6be40004b7c8f0e4b769071fab863a2f5553c3dd675a5786d10d6a57753",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 94,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1300.0, 408.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/boundary-pull-100.draft",
+      "sha256": "ec95319b2524c9ba69b88ec8d478883ed037ea5a961a1e00a9250356c741be94",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-93.0, -105.0, 1403.0, 678.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/boundary-pull-65.draft",
+      "sha256": "c7f1252da205cf78d5c3758bf2bca93831dae33d0fd2093ca5816697574965cb",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 90,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -87.0, 1393.0, 658.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cell-span-1.draft",
+      "sha256": "553366ed4bad1e0b26315182feb53d78052b288f5a5e6424e084ac79a2eba583",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 374.0, 192.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cell-span-2.draft",
+      "sha256": "96476fdfc20c25ce6c76b9c1947a35c2001edfb096f0bef756c71f296c36163e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 310.0, 228.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cell-span-4.draft",
+      "sha256": "43bb3a9596f39a322d43c6409f78366678ec9f9621a1089e7f8934e52d91234a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 235.0, 264.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-columns-1.draft",
+      "sha256": "8d702ee4beb9ae7a710dd02219f80423250e2a19c15336cd7146064cd190562a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 200.0, 300.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-columns-2.draft",
+      "sha256": "428bfff14f959fff3c55dcca25075ce97e7707574a1be459c1d5bfd5b94c23a2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 246.0, 228.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-columns-4.draft",
+      "sha256": "c30eb0c97a5839da5c070ea56be57ffe26dd16eab9c81afeacaaaf00af554449",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 374.0, 192.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-unit-bit-default-columns.draft",
+      "sha256": "f9de110c540f4e5a5b2030d6655f48e360ee7c10bf0c52c18e10511ad93408c2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-48.0, -86.0, 856.0, 345.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-unit-bit.draft",
+      "sha256": "cf15b4c5c0523f3738e30b61d1a1f05add86285d747b3e8b2a896e64018a0c8f",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-48.0, -86.0, 280.0, 345.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-unit-byte-default-columns.draft",
+      "sha256": "16f636298fe9d55f93be61c0c7b37a77b6623da1be40fb9e0845e1a60bca8d38",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 848.0, 249.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells-unit-byte.draft",
+      "sha256": "3f9d9798c66bade54f57f82acb06800dd3bb8d01d564a27451ff9ed063dfbb02",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 464.0, 249.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/cells.draft",
+      "sha256": "bbb8c3de645ee16214c68ac664b97a173d5ed20f32abe1d76bf31456572eb1b5",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 374.0, 192.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/chain.draft",
+      "sha256": "61ff271f0730de0c7dece34eed8c2f9e0ef70e11643d7c1dc440d9642517fac4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 100,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 820.0, 462.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compactness-0.draft",
+      "sha256": "db1a9c4daab8cb2ad286823e02d28ff6b4ea113ed4a33d4e58fd8b5ec7135a8c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 1379.0, 296.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compactness-100.draft",
+      "sha256": "2115cb976e040d08363b2acf4d62ecf3b1b34bdde8a85a5066a6d389115269d6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-57.0, -126.0, 1258.0, 318.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compactness-35.draft",
+      "sha256": "d918675b18bfeaba48249ae16690ac5aed6dca3004b026c85f493710627a05b8",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -104.0, 1260.0, 296.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-aspect-0.25.draft",
+      "sha256": "1acee5937b63bc1a57e1c689676451da33d6ea655edbc12d8e0f88adfc430edf",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 448.0, 785.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-aspect-1.6.draft",
+      "sha256": "18d2f7436684b6ec0463de1dc25f0a450eb3336f077099c917472f6cbdef1b88",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-aspect-8.draft",
+      "sha256": "4c2916183cdca9516fe0609f5639e4e03e716e7d93aa7fefb4b7cd4781a1f986",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-auto.draft",
+      "sha256": "c42573bed3e2289768e3dc1774ed54d2889f7ea734c32030b4fd04f6b0efb27a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-default.draft",
+      "sha256": "58a18e26b8ca1c2355b4460d99d8b6393ea686b87c8d856da9b2f65486fa8d07",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-down.draft",
+      "sha256": "6bf0737fa9a996a972e9493067344e7b652cd44b453f8807ff306a564cce217d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 448.0, 785.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-merged.draft",
+      "sha256": "4552e62582ae49a4c0786c198e1cc6703a41b1c543148756f26dcb84bf822443",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 448.0, 409.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-right-aspect-0.25.draft",
+      "sha256": "9c926b763342801fed3e26621df18eb80fd76b5a087a79a79aeb23dc5bce83ab",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-right-aspect-8.draft",
+      "sha256": "e46eb85f9eae26465044195755f479d51b170235fa18aa731ffeeb94aef37e7d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/compare-right.draft",
+      "sha256": "1ed9c573c00c0896708d4bf35079735614e8a157745d98e6de76cc0cf5056fda",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/diagram-width-160.draft",
+      "sha256": "43aee1ba3764f63af5fbc219e7b368d17661c76a0967ddedfc2abc4050881796",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 436.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/diagram-width-1600.draft",
+      "sha256": "374193fbfe2a53130bb6657125e666baf78783affa09a9fd888002ad1b06f20c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1600.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/diagram-width-800.draft",
+      "sha256": "bbd6138a565e043f4069b87d1c824e0f1e6d006772c16e01c8f17297ddfc43b0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 800.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/diagram-width-omitted.draft",
+      "sha256": "f1911089b96a33048c1f5da7e31852a5aa5547cf8d5cb90ef36d6798ea88cf6a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 436.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/direction-auto.draft",
+      "sha256": "da59074a2159bbb0a9adf1c038d9274537060aa0064e22eef697b5016411769b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/direction-down.draft",
+      "sha256": "d752db088f37976c2135494980a0322fc6ce120a4bfc1dc3e0bcf7fee6366f24",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 506.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/direction-right.draft",
+      "sha256": "afd847e17ea8b0975f418948bff9efd7af24e7c44f13a2c0abb2d630b55acac9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/edge-length-176.draft",
+      "sha256": "0720aace1ff1a31d74d91503728f9b7828c9de1c0722034380cd8b800fc43deb",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -126.0, 1339.0, 474.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/edge-length-32.draft",
+      "sha256": "b93aadebd19c207ab60410f30ec4a4ca2a309f667f901fe74fc7e2329ca74193",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 80,
+      "finite_geometry": true,
+      "svg_viewBox": [-64.0, -126.0, 1270.0, 324.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/edge-length-88.draft",
+      "sha256": "2a88f57f7add779112aede5f204e459e75b1a3e9439faae403b738337f669ba0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -104.0, 1260.0, 296.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/family-forest-layered.draft",
+      "sha256": "810b6e3fa44e443d926d64ece2ad4576bad1057b536f41b168a9d595b07bf452",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 70,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 506.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/family-forest-tree.draft",
+      "sha256": "4a88680e8017479abd27c0dd1045f542744fbdb8d5d709466284047ec6d607e6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 72,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 836.0, 499.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/family-network-flow.draft",
+      "sha256": "3402036f031d9f057e63c5a9ec37196c630f58939c4adc20998613cd38749b6d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -126.0, 1316.0, 302.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/family-network-force.draft",
+      "sha256": "b8fb8cea6b33f92d6040983467cdcb177d9971d56e7a194d4a75c76aed6047ab",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -104.0, 1260.0, 296.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/family-network-stress.draft",
+      "sha256": "ef52caec93c48475208e13b06bea38c108b163e8b5a28ed4078d5a864e92a47e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -121.0, 1239.0, 303.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fit-omitted.draft",
+      "sha256": "d6f1d73d00ec2a64608d273457cc05ac741386af588b1b4c2c2c54f172b751ea",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 244.0, 1370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fit-page.draft",
+      "sha256": "a33785918b525a17f8883035173e2afd116fec87c15d492de974c40ebfab6854",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 96,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 492.0, 722.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fit-slide.draft",
+      "sha256": "f75eab8d81ea9f20ad424057c65a392084d61c8b5e4eeaa76997f657d6dfc5fa",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 100,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 462.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fit-square.draft",
+      "sha256": "5511198d640e4b8d0262f00aa75cafa983ca8dd4449238b87d912ccc8a569896",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 96,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 492.0, 722.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fit-tall.draft",
+      "sha256": "9561d2b82c04fa4f1557f10ccc073c7a5a83f36a1e7a0e748f671f626100567a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 96,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 492.0, 722.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fit-wide.draft",
+      "sha256": "1fd2d1623c5e80cb8ff05c2bec59fe64abfce21d5bd77fc006aac3766970c34a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 100,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 462.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flat-dag.draft",
+      "sha256": "afd847e17ea8b0975f418948bff9efd7af24e7c44f13a2c0abb2d630b55acac9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flow-strength-0.draft",
+      "sha256": "540392281af13b4592192715e7e933a1b18c7fd234b800d5c5576008bd4808cd",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 56,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 881.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flow-strength-100.draft",
+      "sha256": "d44c82df410eda44638ccb28281ef9eca19041eebf615bb2108e3c1562a21846",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 56,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 883.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flow-strength-65.draft",
+      "sha256": "0c34c39c9d7d3c78ebf39176e831288b117bff8abc9274d4f33b33b872d3d365",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 56,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 882.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flow-strength-stress-0.draft",
+      "sha256": "f21f6de9a969ce02ae382215351384e63b0c5d41c7e2d417ad38af3d27255e49",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-54.0, -126.0, 1252.0, 302.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flow-strength-stress-100.draft",
+      "sha256": "c3882c35202f2262c897b26b3cf628f1375767e1b04c237bcad6b12d60fc6a29",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -123.0, 1241.0, 303.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/flow-strength-stress-65.draft",
+      "sha256": "3d563db5c78bf8484b3882f833b2cbbbfef1f9b4b5d799d4f521434fca6267e3",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 82,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -121.0, 1239.0, 303.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fold-auto.draft",
+      "sha256": "3be3fe7627213abf8dbbf51c8a215fb7fd56e673bde5778822ad6d989ded1f02",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 100,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 462.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/fold-never.draft",
+      "sha256": "ccc394fcd334d83526022b88a0216e3c1f282576eefcdd395e42f0a2513300ba",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 2620.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/forest.draft",
+      "sha256": "758ffba8226b044b51b9685f50dac1d1a66a447bee0c34ca23e3cde1872a8064",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 72,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 836.0, 499.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/gap-28.draft",
+      "sha256": "1eec6359b21a121b31b96257cc2c05e72af5cf129bacbfe3f9c326ae1846a141",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 628.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/gap-8.draft",
+      "sha256": "ef5ddc1ebace69f4a86073abf61bd43d477680395a8928db5484c44065682261",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-44.0, -86.0, 596.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/gap-96.draft",
+      "sha256": "ea541913b62c8ce4ba4ebe585fbd53c27544cfd0a4ad73e04be2e6522b197c67",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 764.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/grid-strength-0.draft",
+      "sha256": "ab7faa3dd0223ccb65e552e79cbfe1617a01eafe06e7496c668df6c424f5b53b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/grid-strength-100.draft",
+      "sha256": "8bb219d679401abda06c793a52ed5d9a35fc89d03adda54d12ae45b4984b8822",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/grid-strength-45.draft",
+      "sha256": "1e7f89d301157d54a567952dbd3248bd516fb256c1bc031d516f800e6fdce862",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/grid.draft",
+      "sha256": "69d57d582f617c0f4edad842960fd496acf568198793b05c052fab2111bb02b9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 432.0, 502.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-fold-auto.draft",
+      "sha256": "b00d8f3f7d0f3b08b3422a37e69a5eed2bc87681430c8fb793a68c784da1dd93",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 808.0, 578.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-fold-never.draft",
+      "sha256": "0b5ced9b628ee23e7a6320523e8f0b4f8609aaabde3a241323aa0a7259bd85ad",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 80,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 552.0, 1010.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-frame-box.draft",
+      "sha256": "3158bb0f47e536f59a30039ff80dd3da8522023eca0a341b19e0575d60e51427",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 94,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1288.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-frame-none.draft",
+      "sha256": "312bb2a53baa7d80a81443831498de40e55cef1e5bdbd765a498ee5a7a9cfc71",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 98,
+      "finite_geometry": true,
+      "svg_viewBox": [-50.0, -86.0, 1250.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-frame-soft.draft",
+      "sha256": "181bd6bffd0536f57ff1947912a83dabae2ced592eb21a240e7eb4772b9a7601",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 98,
+      "finite_geometry": true,
+      "svg_viewBox": [-50.0, -86.0, 1250.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-gap-120.draft",
+      "sha256": "b0954158fe3c3dc4088395fecdedea5ed83b7b163794463a2752c91bd240eb16",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1172.0, 474.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-gap-180.draft",
+      "sha256": "03cd09c806c002504b8cd2807da0cfb234be0b5811de2b252d4332c299ba80ca",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1172.0, 474.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-gap-24.draft",
+      "sha256": "4e899d286dcc9596aa1d2ff9dcb582253479313489d65ee2151ec66576c0dbd2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1076.0, 474.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-gap-48.draft",
+      "sha256": "531dcf687950ad3f832d162dfc67afb9dd46f71b66aac4a1253a3d48958429e8",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1076.0, 474.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/group-gap-96.draft",
+      "sha256": "fcf0524666cea3c6897c678586a645ec9b4f52f629d7c742e799c32fa3dd3f07",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1172.0, 474.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/hierarchy-sweeps-1.draft",
+      "sha256": "52804af9ed0cd767255914bfab63228ce6c2f3e466975aaa10a9d535f9350536",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -120.0, 1204.0, 700.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/hierarchy-sweeps-2.draft",
+      "sha256": "0da51fc2e1560893597fc3013432cad49e6a92dedffa19a4040e46787109f9c9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -143.0, 1204.0, 745.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/hierarchy-sweeps-4.draft",
+      "sha256": "cc65a575b03c501a2dafd31313eca2e8ca97c5422f6190ea8a760b13ec81d7fe",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 90,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -135.0, 1465.0, 745.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/lanes-down.draft",
+      "sha256": "8555d02f12abeb370cae7e3c44bdc7fb5b3eab738b8a7ea82ff5da1f51a02de5",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 42,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 504.0, 590.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/lanes-order.draft",
+      "sha256": "805558bffb779441d2e8b31a410bb5451690491660b47824d79ea6240918a45d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 952.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/lanes.draft",
+      "sha256": "c503364a4d5e151d52b50f1f6b56f543268a9ee4a1bc4bc4193c4c82c39849c0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 952.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/marker-down.draft",
+      "sha256": "00b92262e75788ca7ed4a179815ea8b3bebb9c27bef5dd0cde4c8e2d85c110e4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-57.0, -86.0, 223.0, 300.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/marker-right.draft",
+      "sha256": "68d3d09ed73640200e5afa20b65d4703760f876974a82341153801fc72f58ed0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -118.0, 374.0, 240.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/min-height-0.draft",
+      "sha256": "f0a706b0b56d99debcf009bb5a3084c7ed68af8e55c7bd8bf6a17284a12afe2e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 292.0, 338.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/min-height-300.draft",
+      "sha256": "44b3e2afe719e49aeb88a09ae1568a3692e0b57dca534a5e2cb0e6b1d08c37f6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 292.0, 426.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/min-height-600.draft",
+      "sha256": "aa2018c722f991c5aca735257a7ba5536c35be872ea15acb9cdae594249e264d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 292.0, 726.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/min-width-0.draft",
+      "sha256": "e8e9ba8f2c708e305c461a039ce31683c2befceb68b37194981b6c1ea95aea7c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 292.0, 338.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/min-width-300.draft",
+      "sha256": "56a6dcdc8ee8d7ccb264aa3baabc357ec58f36911db63e7381348d9299aa9969",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 380.0, 338.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/min-width-600.draft",
+      "sha256": "3405c5aea2ff9052507d4fe348fd3d6b2933da0d19526b15afd58ef5136370c9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 680.0, 338.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-above.draft",
+      "sha256": "06875c156e07fbec1f0981c95a2c8de3afc365dd32cb6ee6620c8b1286f8cd0b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -190.0, 456.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-below.draft",
+      "sha256": "6de586838193b7db68a582be83aa9f0d21c070529ec254ff624fd6d70b1e7c31",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-gap-0.draft",
+      "sha256": "6cd364e2767fb0cd01e998b2d985b52af937238f8266f403dba3a58d1a35ec00",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -96.0, 456.0, 250.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-gap-100.draft",
+      "sha256": "298325c0fd411d031ca456b3a37e4fe3da3eff426c89a2397a471884b7f108fe",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 338.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-gap-28.draft",
+      "sha256": "42e6277947bdaa3cd783053dfea78d4376c57fa2ebc81b04e6a31ac74ac7542d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 266.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-left.draft",
+      "sha256": "9cd91d9cab588ab0641906cf4b3e9f9d538514a5d349ae783a2f3bb967002df6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-252.0, -86.0, 668.0, 206.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-nested-baseline.draft",
+      "sha256": "695bbf022f9247ce3172016b767f10449809ff150b8bb20d9f85a39a38fe7d9b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 488.0, 342.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-nested-reference.draft",
+      "sha256": "0344f55938e1f125ae07853ecad61d77f1a244520a6f50c5f742ce1a3b6b26c6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 488.0, 342.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-offset--80.draft",
+      "sha256": "238f42b4d8e0fc7f23a030a1a10c9a1ed2bc59a9c2558b9ee5e548b866985881",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-120.0, -86.0, 536.0, 266.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-offset-0.draft",
+      "sha256": "5a5bb7cd3aeca50f94980af4250d4e76fb49a304103fbd121e8605d69ee8d81c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 266.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-offset-80.draft",
+      "sha256": "78d81076ef981f27d975b4d698fe3864273735a68a81e097a4550e41ff778eac",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 456.0, 266.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-right.draft",
+      "sha256": "c4c428936e2a5463cc4d34f570f2eb3226baec6a23857c78378e61f05f895a52",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -143.0, 456.0, 250.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-strength-prefer.draft",
+      "sha256": "3ba9a09e4696a6fc3266cbd0f50d62911cc4726610b143a43f081ed5994d5f47",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 285.0, 322.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/near-strength-required.draft",
+      "sha256": "23d23a02a5d26167b5a69c483dd7efb259186b003cbef6b8f1b66888877e9549",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -118.0, 285.0, 354.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nested.draft",
+      "sha256": "6cd434f551206a9c1e5d30383ef2dc25d23ec1c119277c1b36e77ef6c81912ec",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 94,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1288.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/network.draft",
+      "sha256": "b8fb8cea6b33f92d6040983467cdcb177d9971d56e7a194d4a75c76aed6047ab",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -104.0, 1260.0, 296.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/node-gap-24.draft",
+      "sha256": "a83c2645553ecdabbc5daf61d12267465a0638d94c04dab234e9f00fe4a1c161",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 76,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 878.0, 450.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/node-gap-64.draft",
+      "sha256": "3998c5ccb5cd4a0fa7a8559edd718d531488ea0af367d0f0db212f1f2d06fef4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 76,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 908.0, 530.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/node-gap-8.draft",
+      "sha256": "6288dd3d6c158e8dbdcf3655ed3c5d4be20271a5b05a03d09ace98b5c6ed54bc",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 76,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -90.0, 878.0, 422.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nudge-dx--80.draft",
+      "sha256": "552de0a55263197ee230381a78a4f0966a4594032928c89664f39745c9125be3",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-75.0, -86.0, 703.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nudge-dx-0.draft",
+      "sha256": "75d00bfe4e85649042a7a8cbbd754885963de782f47906793fde4cacdcd2afcf",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nudge-dx-80.draft",
+      "sha256": "c1af54a94e2edb1c627a2526d39ce3e2ddec6bd8597ef3160e412785f5e2315c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 703.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nudge-dy--80.draft",
+      "sha256": "1fb57206edb9b6ebcf5794721d63ecbc05b903805c44dd9c2acbb0dc744e1e75",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -166.0, 668.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nudge-dy-0.draft",
+      "sha256": "75d00bfe4e85649042a7a8cbbd754885963de782f47906793fde4cacdcd2afcf",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/nudge-dy-80.draft",
+      "sha256": "61b8b679a1d4629a3af38745b1f94cf35c53be5dbeb9aa686c6e282ea2ce797c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/order-partial.draft",
+      "sha256": "ad4b475c1c9da3bc44a63ed03dacd71ce44f4a4bf03eb3c23e799b383e116447",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 206.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/order-reverse.draft",
+      "sha256": "eafcd917bb681202c4bcfebee065c6c80fe1e42c2026bd76fbb7729cb9780230",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/ordering-crossings.draft",
+      "sha256": "91ace8a55476fae56bd518820e78f4d49268eb6c54f21f6fde2b9068e9dee9cd",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/ordering-stable.draft",
+      "sha256": "68a1f24613af436b77dbac9df3a2184227d492473c303d6a229c5a9f52ee948b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 892.0, 286.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-parent-x-0.draft",
+      "sha256": "8a7e237dcaa040cadafc70dfd1899f180d3bc3a77149e18737d85944b0ea6e82",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 425.0, 542.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-parent-x-240.draft",
+      "sha256": "46cefdef4da1183fc5e4664f82b1ed41e731eae221d74e0936afff71eee98c0f",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 552.0, 542.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-x-0.draft",
+      "sha256": "edd58951117097aeb8f75e99c0cb0f6520e388af6faaf3efeaf078c2ce40f816",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-x-120.draft",
+      "sha256": "0a974741fb1cc920b78b8b31bb20f6be99821760b3e1d4190e9f16a94046d591",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [80.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-x-300.draft",
+      "sha256": "ba126ee9855887047eeb40a5a3a1fe8b522e96f2623a4165bfc295d7a8fda32d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [260.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-y-0.draft",
+      "sha256": "757664a47b503a8e73d8bc50a65144680534de4345dea4c80e811af7c1838ad2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-y-120.draft",
+      "sha256": "c608eaf83c489cb6919869594d0889ea4fa0b3e11c4c076f513a9246c3fe7c75",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, 34.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin-y-300.draft",
+      "sha256": "03763288309422210526ba81514bb91978ae62c2b54db5caf5d4f7c325196256",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, 214.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/pin.draft",
+      "sha256": "8ea4bcd12094e17980967b28e39e97426f3ce2602c2acfa98df5e53c7571f9ec",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 302.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/rank-gap-120.draft",
+      "sha256": "b12b541fce4216e9e001d844f7294ddd6dfaeb0aa97bf68d3ab7600d580e818b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 76,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1077.0, 518.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/rank-gap-24.draft",
+      "sha256": "e099921d9c788f8b8a71f0d5d12e3cf0065c86f240d212644115cc5aaa26f4a1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 76,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 803.0, 422.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/rank-gap-52.draft",
+      "sha256": "f09b5d43a9e539f4b72dc71b46e1d5c20bff6d4583a9b5921943832cf738bd8b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 76,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 878.0, 450.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/recipe-column.draft",
+      "sha256": "9b93ae961a01cea79222c20cdfa0467ca98a3b42fb4587276cd99d6d5bf12c8c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [-57.0, -86.0, 285.0, 598.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/recipe-flow.draft",
+      "sha256": "6760d4fcd7e692668b846c04b1939c9c211d36b4d649b766629b1644d5511d44",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 50,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 880.0, 310.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/recipe-row.draft",
+      "sha256": "f84e81b39ac8719517018c65ca2a1daa8470fcb5e6d2dbc6f762f7abed2d8fdc",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 64,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 1092.0, 230.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/refine.draft",
+      "sha256": "4cd374f90e349e9db156c059284d14733f57d44a29d39bc3a840a0777240d9b4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/repulsion-0.draft",
+      "sha256": "fda59a05040e56f8aa1f46761c2d7b80febd12864ae44f07c000041fd87df1c2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-64.0, -126.0, 1269.0, 326.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/repulsion-100.draft",
+      "sha256": "e2d6be9771bd2cc0f66f15bed6400426016caaceac1cf2e33c80b73cbff38306",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -126.0, 1306.0, 387.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/repulsion-45.draft",
+      "sha256": "9e591f60e79646ab2a1380bf84308ce7df88ac834d18d4e183ceccdecc2b665e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -104.0, 1260.0, 296.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/ruler-off.draft",
+      "sha256": "53d597b7e7732b62abfa9e0ac8a990c088e3a9871deccbdbd56b5965167206a0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 464.0, 228.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/ruler-on.draft",
+      "sha256": "34008683822c0c365a26b213dcd8104aa79b2780f4040219de0a439c4777d1a3",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 464.0, 249.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/scope-child-engine.draft",
+      "sha256": "93825da6e2fa1b76533c5089ea7426117c6ab5bdb9c8589b0f97ae30e5f3e6b1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 90,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 1288.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/scope-child-row.draft",
+      "sha256": "bf4652584a72a09a63fe98adbf3c0dcfc29ba21e1cb5493d43e669777aeb2a59",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 90,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 1284.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/scope-root.draft",
+      "sha256": "6cd434f551206a9c1e5d30383ef2dc25d23ec1c119277c1b36e77ef6c81912ec",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 94,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1288.0, 370.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/sequence-no-phases.draft",
+      "sha256": "dd8fbee8bc0fe82eaf739acc44f79329ce7cfc0f36c00f3b29d786163e4c19e6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 44,
+      "finite_geometry": true,
+      "svg_viewBox": [-76.0, -106.0, 608.0, 512.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/sequence-reordered-messages.draft",
+      "sha256": "567d9fcd1694e6f2ef1189500e6ee5b28e74753e1b06a0cd9a80fbce64047182",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 44,
+      "finite_geometry": true,
+      "svg_viewBox": [-60.0, -106.0, 653.0, 512.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/sequence-reordered-participants.draft",
+      "sha256": "1b66a29481bf85fcaca5dfccfd38f237c5dc922ab72860bb5e6967c7c7c68db6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 44,
+      "finite_geometry": true,
+      "svg_viewBox": [-60.0, -106.0, 653.0, 512.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/sequence.draft",
+      "sha256": "5214a0d36ec945e141c9d51fabee8275d9597e5167cf0a0b60845080f1d772ff",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 44,
+      "finite_geometry": true,
+      "svg_viewBox": [-60.0, -106.0, 653.0, 512.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/shape-box.draft",
+      "sha256": "5bc0d7adb1c086832a999d36751e536dc361093478ef0845c593647f480dd433",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 436.0, 198.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/shape-circle.draft",
+      "sha256": "65bd4f650f66b3fef4d40c1cf7a684cfe302ca569b75f7ddbe2ba0266c103520",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 352.0, 264.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/shape-diamond.draft",
+      "sha256": "eb0e44bcf8bf647a3fb21478e9288dc13ae8bd79e8e8dfb4b2b58e7453c532f9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 408.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/shape-pill.draft",
+      "sha256": "3a44eac54630d4cbd77835687e2b6731a6334b4f3a3b75ec599cb49873b7c7f7",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 436.0, 198.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/shape-text.draft",
+      "sha256": "73a17fb1c85575e8aa835d3acb961613a74631265d443f8343d9294405ea2dee",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 436.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-height-120.draft",
+      "sha256": "554de82dfd1639fca7eb981bef62a2b9364e7765e40f1ba8da097d31f253c162",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 624.0, 246.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-height-24.draft",
+      "sha256": "0813f2b6c5c85161094dc8dbd9d904d73eaaae7d4c0feeff7928801207d02e4b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -98.0, 624.0, 194.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-height-56.draft",
+      "sha256": "b8711b933ff8eccb6c6eba1d8606dd4029525d9078f2c7102d8e11e99aa81635",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 624.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-height-auto.draft",
+      "sha256": "a99f58a3c90911965c4a10693897d964dc18eeca7d7bdfb306cc69131d7f1d2b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 624.0, 214.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-width-164.draft",
+      "sha256": "8a0ae6a211baae3885a239abc9fa50c494c9140792b0c4dd3cf7af453c678292",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 668.0, 198.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-width-320.draft",
+      "sha256": "0e50c1a6ec800f8cba52f5a38c8e4963617af358a7016b562227fe064012a8d4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 824.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/size-width-64.draft",
+      "sha256": "94eeb65874792ea378d749475a1bab52f58d01f48e83e0d35302b2fd9ef34d16",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 568.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-weight-1.draft",
+      "sha256": "b73f07f12687e21284b0b925fdf3a174c68a5a2632a56d6907640729c8764e24",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 26,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -120.0, 668.0, 250.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-weight-100.draft",
+      "sha256": "f4b2c55c1df1bc2364660bb4f980db18f43ef32a77f663268ddef212e2de11ac",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -153.0, 668.0, 250.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-weight-8.draft",
+      "sha256": "7d86c1674b557af4239d11234fc13a2a7085bcea7c3d53e6487e165ecefa9232",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -146.0, 668.0, 250.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-x--80.draft",
+      "sha256": "b790a9c5d703465ca07de664d550e0b892e5393f373c3c3dc7ea5ebc4f46c401",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-120.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-x-0.draft",
+      "sha256": "55d507397fe1b86966c568fb79a2c72b12237ed7e8489cd4f1a44ef68bdd364d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-x-120.draft",
+      "sha256": "18237c22edb157dbdb597d5db815c537a2077d21f1176d9f4d857b4743bfc971",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [80.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-y--80.draft",
+      "sha256": "5e741ac88f6042d65b62e03115f07f96111d7e3aa65187f1688d0ec7ae797056",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -166.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-y-0.draft",
+      "sha256": "851080cdf64b3b11b5cb00c1bf9cd8702e6bfbfc192e66eac2a0c703d02cbe57",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/stay-y-120.draft",
+      "sha256": "0aaecf8a0b2a2e9e27efccfc48127a5b78f46f6186619990b97517b86bfdf250",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 4,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, 34.0, 253.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/tall-group.draft",
+      "sha256": "17c4c64a8938360ce400a0ade08b1630fbabe4515e92c4dc155dddebabbc4263",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 84,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 808.0, 578.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/tree-root-automatic.draft",
+      "sha256": "4a88680e8017479abd27c0dd1045f542744fbdb8d5d709466284047ec6d607e6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 72,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 836.0, 499.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/tree-root-left.draft",
+      "sha256": "98ba80dfdd4ed4b39b748f7c82aeed2f96075c505474edf38b06753c5d8c4630",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 68,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 864.0, 500.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/tree-root-top.draft",
+      "sha256": "758ffba8226b044b51b9685f50dac1d1a66a447bee0c34ca23e3cde1872a8064",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 72,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 836.0, 499.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/unit-spanning-field.draft",
+      "sha256": "c544bf26a0e22e9c3baa23753e56935d30e0ecef4db073b708eea3637336ff02",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 464.0, 285.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/unit-width-48.draft",
+      "sha256": "9b56896047f8ccba13e4ddfe1658d2706e050f86fec4c569df5f1a8492c96a32",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 464.0, 249.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/unit-width-8.draft",
+      "sha256": "a48d2e65187b73f44681ef5186c1d13112560c0968a7fc7ccec239514d524b81",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-56.0, -86.0, 183.0, 409.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/unit-width-96.draft",
+      "sha256": "31c1dcf7361cedea025f86042e4f0e79726c13a9b322f56994108f10bac9b3e0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 848.0, 249.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout/units.draft",
+      "sha256": "3f9d9798c66bade54f57f82acb06800dd3bb8d01d564a27451ff9ed063dfbb02",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 464.0, 249.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout-warm/warm-alignment-start.draft",
+      "sha256": "efa41a6585617c4f29d12feaf03d833900eb411df84bf36f3f4c3c46a3f09732",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 504.0, 522.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout-warm/warm-grid-start.draft",
+      "sha256": "df5b5d1766270ad024755c62a1758a870cab62fe85f40d42f3e7c67dbe692195",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-52.0, -86.0, 466.0, 522.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/layout-warm/warm-ordering-start.draft",
+      "sha256": "c7da3da820d628e60b2aa608662813656104ea06b70198cf6d8528ad0a307395",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 1144.0, 346.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-01.draft",
+      "sha256": "b1b1daad24fdd29d8ac8ac6dcaa681e9e663acd2eda175904fc81e9f535f5a52",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 32,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -91.0, 698.0, 291.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-02.draft",
+      "sha256": "41f86f593c2e1949de7c06a0d19d34d584680e4dc67e6f26d40eef7a34f883d2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 928.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-03.draft",
+      "sha256": "8c06f21c261f3b3facd4a562633a4be414f3a2f4915a89b192292364bb851c92",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 56,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 764.0, 362.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-04.draft",
+      "sha256": "48a74c9c3c45553884bbf0a794c08a71c47a5c9a6eb60355a0f8b4705f8d3f46",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 12,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 652.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-05.draft",
+      "sha256": "523b282845bea7b6b8a703660bbf7eae9d989c5410a8d5f8ec946e1d67a4dc6e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 1000.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-06.draft",
+      "sha256": "b9fe4853fbf67edc608a5fcb6a1cd4782131227f759dbd1241dae205fdbc3247",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [-60.0, -106.0, 637.0, 464.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-07.draft",
+      "sha256": "f996ed40dcb4c3165aecb6b5455fde5c29e0d853acd169ab1216254a67ab54f8",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 210.0, 228.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-08.draft",
+      "sha256": "a5586dfcc1e850fcab9d98cf507bdc158002099a85a6ea358839d2dead58db40",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 400.0, 213.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-09.draft",
+      "sha256": "cec52d13dcdc62c65a6838ae8e0393053efee90eda646627059ba355a8062f1a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 468.0, 262.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-10.draft",
+      "sha256": "18d2f7436684b6ec0463de1dc25f0a450eb3336f077099c917472f6cbdef1b88",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 692.0, 433.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-11.draft",
+      "sha256": "d1d2a6f38b313c96c538e4b196aa11882ead1a1ba1293a89997707736adff5c2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-12.draft",
+      "sha256": "a7b9a5ee3327228773e25b8f71018a7869e6f4c8e6f125987bf1ca2ebdd363c1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/page-drafts/page-13.draft",
+      "sha256": "efaa675f83dc7c584ffbfd7cdb1d3b3a2f098465ea861efe76c7dac87db9c34b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -40.0, 892.0, 136.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/bend-penalty-0.draft",
+      "sha256": "34ffd0942cfac0127958287320602abaf530471ca9936ef14486bcc157d35596",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 104,
+      "finite_geometry": true,
+      "svg_viewBox": [-30.0, -86.0, 644.0, 566.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/bend-penalty-100.draft",
+      "sha256": "a811c11dd112994f0b3f207e42c1788ad65b3e8be7cb18069679c83f4bb07309",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 80,
+      "finite_geometry": true,
+      "svg_viewBox": [-17.0, -70.0, 634.0, 550.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/bend-penalty-32.draft",
+      "sha256": "972dc5c49a75f1df30d8093604eea2d1ec938c890bc37a1282ae21250821cf4d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/channel-reservations-standoff-0.draft",
+      "sha256": "a25bd88f2c64268dd6dad67d00485d873ce3460b5f4b69cdfcd722ecb1f505db",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 174,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -124.0, 1147.0, 828.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/channel-reservations-standoff-40.draft",
+      "sha256": "07c5168e921660dc9d5cf184a41ca7ae61a9f6c2c2e35255c5bde7d8368fd27b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 172,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -124.0, 1235.0, 828.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/channel-reservations.draft",
+      "sha256": "9a7fa2a830ae7ea01dac0993c94b59986bfd6bab7c649cc85c9c2fa3b7c132f2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 170,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -124.0, 1259.0, 828.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/clearance-10.draft",
+      "sha256": "d1d2a6f38b313c96c538e4b196aa11882ead1a1ba1293a89997707736adff5c2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/clearance-30.draft",
+      "sha256": "1200e9aef626c1d3fb405ca965af4e052c545e84fb70b2dcb49022a5840128e6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 0.0, 580.0, 280.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/clearance-4.draft",
+      "sha256": "f4593f369dcae9b3930744af39bb5f6a6e1171da1bcc5e7e11b97ba807486193",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 26.0, 580.0, 254.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/corner-radius-0.draft",
+      "sha256": "492bd24cd74d1f2b2c30d26d7e884362bbb35113ee04d701fb3360d6190cd980",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/corner-radius-16.draft",
+      "sha256": "c9da667a386dd08944a0460e8112c9a1cd5d974898f52d38ffcfef044315f3eb",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/corner-radius-6.draft",
+      "sha256": "e847780952d1b4021a6c0a5133d27177062da5d48b6eba7ab0e6dc2cf6d05e0c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/crossing-penalty-0.draft",
+      "sha256": "5464b4258b27f154781df7006085e8add60e6a69115d6233cffe347d16a16663",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/crossing-penalty-1200.draft",
+      "sha256": "699560cbad66e93df510de484e5f0fbd383ca4dc76dbefd1657d26ace0e79512",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 40,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 614.0, 406.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/crossing-penalty-360.draft",
+      "sha256": "cf541e0cca85c39a8822b0b3a6fb7e3a9f39b94ab41e5b64037f62ea0e783866",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/edge-gap-16.draft",
+      "sha256": "dec4e71f803aa9125e6924130f14a028a3f8e60475e4fae9391402c7c3445bea",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/edge-gap-4.draft",
+      "sha256": "ff6df2190f30134a8a93a4cbe459287f08f59c5f1dc1561240cb1aeed3aa23fb",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/edge-gap-48.draft",
+      "sha256": "4c0132358a411fc05703523ccb4dbed4f6238fd4f460e783b82c7d30fb62aa6b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/edge-kind-async.draft",
+      "sha256": "89e51c17a28109cc18ed1694efdae8698e8a8237d65d563f2f6381ba13f1c9f6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/edge-kind-sync.draft",
+      "sha256": "e465b1a3e3992feb88c3429adb4da97f46edaf89d721a1c54ca9ae4f6b1d85b1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/endpoint-frame.draft",
+      "sha256": "07ec0f90b545b46188cf1e4fa439b9edf4c347199089e0f7130450df0c961d41",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 484.0, 254.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/endpoint-inner-cell.draft",
+      "sha256": "71c1312ca509ce916d82761986a58c7d4e8e68cf39c7778b1a1a80f864e9f822",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 56,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 557.0, 348.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/endpoint-member.draft",
+      "sha256": "d98bbe4fee3b210caf358cb7da8e92e055f5d778ea4e9e6027ae13f4a2caaaf2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 484.0, 254.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/endpoint-outer-cell.draft",
+      "sha256": "469b7fff4f21891282a879e1a0e308cd357d0110076c4d883823dcdd464989f2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 48,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 557.0, 348.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/equal-metrics-edge-gap-16.draft",
+      "sha256": "4ab5b3405957ac121d081e52ae5f26a52eaa3b5b687781d38b1203dc566b7338",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/equal-metrics-edge-gap-4.draft",
+      "sha256": "4e26a444fcb7f679197a5054af4e7f4d08082607784a525e1b95e2eabf53eff9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/equal-metrics-edge-gap-48.draft",
+      "sha256": "161790b499eb790228a6d13cfa0315f0bd420b0ea0b14a14db692081bc895d58",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/fanout-penalty-0.draft",
+      "sha256": "129afe4eab71f0162539baaeeab4860d7bfaa49cf621ead5fccbff1f72b85e66",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 60,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -86.0, 600.0, 662.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/fanout-penalty-160.draft",
+      "sha256": "31dd8f42a648e17fc5eda2f4ddd4a8d2395f1d500ec42edb2b6f96d44f0ad26e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 58,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -86.0, 600.0, 662.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/fanout-penalty-50.draft",
+      "sha256": "2207d190919abddf27e726927e423ed17dec676f54eb35c09b48647296a2d7ad",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 60,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -86.0, 600.0, 662.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/feedback-constrained.draft",
+      "sha256": "a802c46e8f2bd3462fcd58c169e1b28808133774f04b839e7db9c38533616866",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 48,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 820.0, 230.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/feedback-grouped-drawn-only.draft",
+      "sha256": "65f333fc01ea9e6fb0902da78a5c26975e0fdd99d61065e1e5fef378e75d074a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 64,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 552.0, 682.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/feedback-grouped-no-edge.draft",
+      "sha256": "eeab9982e3ad8915d64a5bf5f85ac442eb51ac97bd51fc0ba087f5494ae608fa",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 56,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 552.0, 682.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/feedback-grouped-ranking.draft",
+      "sha256": "006bc270312fe119483b3de223bee845c1854b5ec167b4ebb08ae3f91f530ccd",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 66,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 413.0, 967.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/frozen-crossing.draft",
+      "sha256": "e3a7056a85e2014e58506b806094cd6cea90ff1839e03e71f4f875b8377923f4",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 382.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/frozen-dense.draft",
+      "sha256": "e1576fb7b81ac4eaac7d5bed77c9ea7b650e760bc1e5a034ecc0d53f0198b779",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/frozen-fan.draft",
+      "sha256": "07d0a2ea82023be95728d9a29e74a414b0149521df69105bb63a3a39e1cd27ae",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/frozen-obstacle.draft",
+      "sha256": "1f0764bf1f3f64df201e2104eaf1d801bbaf6511c4da07037425b43dd3f10b7f",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/frozen-shared.draft",
+      "sha256": "b16c9bb46a9198dacf4c75abe52da1fc7f63a63e2df3d8fb797ace5510380493",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 422.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/frozen-small-fan.draft",
+      "sha256": "2e19ea0496478bda4d6d80e01746b4b03f983fe0dca859914188411a3bf060fa",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 60,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -86.0, 600.0, 662.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/narrow-corridor-clearance-10.draft",
+      "sha256": "85fb0db572f3eaedcb843a13212768b7e25f8b8651a90d529c2a8266d3a3caf6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 680.0, 354.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/narrow-corridor-clearance-30.draft",
+      "sha256": "db3e07252fb387d1c983e4f7136182da2d48a477d6494e1613388a8f511a87ee",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 28,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -80.0, 680.0, 388.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/narrow-corridor-clearance-4.draft",
+      "sha256": "ff16f3ad4651ff94444f23a4f4a10cf7da5d5cc41910ddaf6e02535a9a61f746",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 20,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 680.0, 354.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-fanout-penalty-0.draft",
+      "sha256": "0127f68efbd7df35e6f7bc0ed45207341cd8fabb53ba7251ef5166ab1cf11cc8",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-fanout-penalty-160.draft",
+      "sha256": "731663737bdac8247934f081fac5d1a4d5a7874c18ecaf3359f7f7dba4cda75e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-fanout-penalty-50.draft",
+      "sha256": "a28872deda4188a3fbeb4f75906210a815d8a16ab274a6d1cb63a1bff9e2397c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-shared-penalty-0.draft",
+      "sha256": "795f551437a78c0973090ac76edcd7eb2b536186274e0fb9dee39dd5e1f40568",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-shared-penalty-20.draft",
+      "sha256": "d6a95b0833d83ce6a1c1933c77033cffbbaffc9c6d31b7fbd8587b617ebe3037",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-shared-penalty-8.draft",
+      "sha256": "fa978f09d1601e7b194f78c73a22c755032fee73cd17391330e5c6a6f54002e3",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-standoff-0.draft",
+      "sha256": "2b58c209105de39acded57c32af228ea97ff27078798cf02fc47706603e39613",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-standoff-20.draft",
+      "sha256": "913efcb97d2972692049772370bb100a7f965edb937cbe1b75ed579c2e39dd99",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/no-effect-standoff-40.draft",
+      "sha256": "4632633ecafc5ecd28461148d7edbe5d60175d0853dd1144ae5395513a8a438e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/parallel-penalty-0.draft",
+      "sha256": "7bfa3b9a51468ef68bdab5925014075cffc3be7568d3bec3a2eca9b59d653cff",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 644.0, 562.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/parallel-penalty-18.draft",
+      "sha256": "76a8678e8b5a623055f7f99d0066fb34e4cccd5fdce2de93443408b7d09e9b6e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/parallel-penalty-60.draft",
+      "sha256": "a477b4b5a7beda0b9fd7e521c7a36261c920ff00924ff4b711489c3bad89eead",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/passes-1.draft",
+      "sha256": "c912c6590dd57391325f54d926fb7ab6dcf097afacebffd991035600147cd2bc",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/passes-3.draft",
+      "sha256": "ea5b22b5fd06fd357c98359634ccdcbd2d1b4e4d3153e8384b9ef2e5a5f878e6",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/passes-5.draft",
+      "sha256": "54f9d9e63084fb04d9814e36aab163f02c2dbd0c4a4d7bcc6eae36cd152b11dc",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-from-auto.draft",
+      "sha256": "8c043a047554915e584e4cdcb2b7713d9d16d2f39a6985f23914eb38cf150112",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-from-bottom.draft",
+      "sha256": "0adf349e97924581669d0b3f3a99fd782eecece0bc1d9fe188afbae5adde7f1f",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-from-left.draft",
+      "sha256": "d6c2ee251b180d88d726cf86b20afd101e95a54939b5305b48ca4aca7696c872",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [-17.0, -6.0, 617.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-from-right.draft",
+      "sha256": "8bb62953fb93c2b51219c6321619a55eac390e879cee5fc0bc28104f0eb70ed2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-from-top.draft",
+      "sha256": "3d435d8e7aef1b41a461e8d47c1dccef303ff6b4b61e19e90a6ef5c8b13da295",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -23.0, 600.0, 383.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-gap-16.draft",
+      "sha256": "00f6721715ea5a31c78b3f35726488c9d75bbde17a1457028d34e27993210bfd",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-gap-28.draft",
+      "sha256": "6e899872f22cee6f19f314ac99daccccefcf782581fdf7798cb5d8902be1795c",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-gap-6.draft",
+      "sha256": "ac4cf734079ecb8c0be57afce2e7e1812f9c43251ff439f36296c1f4e4f7eb98",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 486.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-stability-0.draft",
+      "sha256": "0b88ffcefd608e4944c913964c22139a3cda0cf40e8c0f43ca3ab2e7deb61573",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-stability-150.draft",
+      "sha256": "53f395dc149fd4a637deb7596c61838880ec8e17ab518cd88b1b7b45dd41de5d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-stability-20.draft",
+      "sha256": "cbebd68ba02b8011abcf8b6d76325b5c58678f035f3b20790a7f8817183a3346",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-to-auto.draft",
+      "sha256": "bc50ec2f9545a221dcbf100535578fe1e89eb8ffbf7f8c824d0d367e2456a9dc",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-to-bottom.draft",
+      "sha256": "9c23c7762c113b48e5f81f27f90cd843d16e938e0fd862958369eeca6470ba1e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 383.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-to-left.draft",
+      "sha256": "274c6731834b8f3b07ab4422dc2e1c994e8398e9add85feb113e5618fa93cce9",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-to-right.draft",
+      "sha256": "061aa68ac2db388e511078a8ccb0fe28fc9774b92dd52191c82e5819ba529c4d",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 617.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/port-to-top.draft",
+      "sha256": "a7b9a5ee3327228773e25b8f71018a7869e6f4c8e6f125987bf1ca2ebdd363c1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/ports-base.draft",
+      "sha256": "9e860019319a3fbd76ffa101653bd027259591ee7a9ba23a1d67446646c59fba",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/ports-blocked.draft",
+      "sha256": "ab3c9e8b453e75ba35d5a1251b453819532eda7b0794b6117b0c34f8155c1e3e",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -16.0, 604.0, 376.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/ports-fixed-both.draft",
+      "sha256": "ff03a0db34931b1289885d087ab62db8220d18a550b8dc944ba8552a8e9b03de",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/ports-released.draft",
+      "sha256": "9e860019319a3fbd76ffa101653bd027259591ee7a9ba23a1d67446646c59fba",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 14,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/ports-unblocked-auto.draft",
+      "sha256": "bcf3279e25707f41e786283bb8cb0307d55421cca8cbc6848cc421000addc9c0",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 18,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -16.0, 600.0, 376.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/preset-balanced.draft",
+      "sha256": "e1576fb7b81ac4eaac7d5bed77c9ea7b650e760bc1e5a034ecc0d53f0198b779",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 86,
+      "finite_geometry": true,
+      "svg_viewBox": [-14.0, -70.0, 631.0, 540.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/preset-custom.draft",
+      "sha256": "88c3491893b8661baef8ca8f99b208e9622a2dfa5eb85c5d8e1de59a9d0b1c72",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 88,
+      "finite_geometry": true,
+      "svg_viewBox": [-17.0, -91.0, 634.0, 547.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/preset-fewer-crossings.draft",
+      "sha256": "45c0a75cd22de37ae59351145a6c9648226d11a642dbfe248a05521aca206859",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-33.0, -76.0, 650.0, 546.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/return-lanes-down.draft",
+      "sha256": "289ddabfa81d0905f173527a06ec5386483531772103641c22b1ab30d912354b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 48,
+      "finite_geometry": true,
+      "svg_viewBox": [-64.0, -86.0, 334.0, 434.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/return-lanes-fixed-side.draft",
+      "sha256": "236aab1526c69594ecb396614a6b4a038d39c7e93701acb339f370bfc8731a49",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 46,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 820.0, 230.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/return-lanes.draft",
+      "sha256": "d6883fa02e17865c33b5791e401ab23e68a0556a13bbc5cad0e8dc309c931dcc",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 48,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -110.0, 820.0, 230.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/reverse-after.draft",
+      "sha256": "414b586ca4a7925771820a764c9eb6b98a38f6897f52eb8c2b580e2c251173c8",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/reverse-before.draft",
+      "sha256": "ff03a0db34931b1289885d087ab62db8220d18a550b8dc944ba8552a8e9b03de",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 16,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -6.0, 600.0, 366.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/shared-penalty-0.draft",
+      "sha256": "c13b1f422847a6782379d24f57a8df5f608c45fd4de043f8b48bdab4aa85beb2",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 422.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/shared-penalty-20.draft",
+      "sha256": "dc474c039f74a34b21fa05bb36d62f4e05d95ee9b8a983f393f215d24b29254a",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 422.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/shared-penalty-8.draft",
+      "sha256": "4732154b665a37fda59ef22a8258743d57e6447bd809c67af51f8af959aa6b42",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 36,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 600.0, 422.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/standoff-0.draft",
+      "sha256": "29113f182997b7d79b66caf8b32c12d0e8892def9a74b783432195e533c8caca",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/standoff-20.draft",
+      "sha256": "ef4978a75866f8b5491a586e3ef8434539d35e23068998216c83840880202f8b",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 10.0, 580.0, 270.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/standoff-40.draft",
+      "sha256": "a3eeaa93a5236e77b81466dd9a5dc22aef3eff385ee4e125d4bf47dc48b2d579",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, 20.0, 580.0, 260.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/title-band-long-title.draft",
+      "sha256": "c9e1456936cdf06113843d8af3c9816c385c43c53c8dc506995a6b04ed66fe65",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 558.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/title-band-lower.draft",
+      "sha256": "f72a1f8ba0536158c7cf9d8603b50b090d26e1f008ea2c159eb567f8e62eea94",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 24,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 526.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/title-band-top.draft",
+      "sha256": "f974b7de9e9ab8e3d6f98f8d3adcefafab81f35c65dec2c63abc3d3a8d4b10f1",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 22,
+      "finite_geometry": true,
+      "svg_viewBox": [0.0, -46.0, 640.0, 526.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/wrap-lanes-never.draft",
+      "sha256": "05c855fafd84323290a3816fa82285fd7aacf857d376b3acbeed2f6bbe07e2ae",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 92,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 2356.0, 182.0],
+      "finite_svg_frame": true
+    },
+    {
+      "path": "examples/routing/wrap-lanes.draft",
+      "sha256": "cceb62a8416de736c79ec9fe6043ee1edbcf09cd16f1b310fe1159f076347845",
+      "check_exit": 0,
+      "inspect_json_exit": 0,
+      "inspect_svg_exit": 0,
+      "geometry_numbers": 100,
+      "finite_geometry": true,
+      "svg_viewBox": [-40.0, -86.0, 820.0, 462.0],
+      "finite_svg_frame": true
+    }
+  ],
+  "page_fences": {
+    "count": 13,
+    "results": [
+      {
+        "fence": 1,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "b1b1daad24fdd29d8ac8ac6dcaa681e9e663acd2eda175904fc81e9f535f5a52",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 2,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "41f86f593c2e1949de7c06a0d19d34d584680e4dc67e6f26d40eef7a34f883d2",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 3,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "8c06f21c261f3b3facd4a562633a4be414f3a2f4915a89b192292364bb851c92",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 4,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "48a74c9c3c45553884bbf0a794c08a71c47a5c9a6eb60355a0f8b4705f8d3f46",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 5,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "523b282845bea7b6b8a703660bbf7eae9d989c5410a8d5f8ec946e1d67a4dc6e",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 6,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "b9fe4853fbf67edc608a5fcb6a1cd4782131227f759dbd1241dae205fdbc3247",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 7,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "f996ed40dcb4c3165aecb6b5455fde5c29e0d853acd169ab1216254a67ab54f8",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 8,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "a5586dfcc1e850fcab9d98cf507bdc158002099a85a6ea358839d2dead58db40",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 9,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "cec52d13dcdc62c65a6838ae8e0393053efee90eda646627059ba355a8062f1a",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 10,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "18d2f7436684b6ec0463de1dc25f0a450eb3336f077099c917472f6cbdef1b88",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 11,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "d1d2a6f38b313c96c538e4b196aa11882ead1a1ba1293a89997707736adff5c2",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 12,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "a7b9a5ee3327228773e25b8f71018a7869e6f4c8e6f125987bf1ca2ebdd363c1",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      },
+      {
+        "fence": 13,
+        "check_exit": 0,
+        "inspect_json_exit": 0,
+        "inspect_svg_exit": 0,
+        "sha256": "efaa675f83dc7c584ffbfd7cdb1d3b3a2f098465ea861efe76c7dac87db9c34b",
+        "json_valid": true,
+        "finite_json": true,
+        "finite_svg_frame": true
+      }
+    ],
+    "failures": []
+  },
+  "frozen_comparisons": [
+    {
+      "group": "V-R01",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/clearance-4.draft",
+        "examples/routing/clearance-10.draft",
+        "examples/routing/clearance-30.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ]
+      ]
+    },
+    {
+      "group": "V-R01",
+      "subcomparison": "counterexample",
+      "files": [
+        "examples/routing/narrow-corridor-clearance-4.draft",
+        "examples/routing/narrow-corridor-clearance-10.draft",
+        "examples/routing/narrow-corridor-clearance-30.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 126, 120, 56],
+          ["b", "root", 520, 126, 120, 56],
+          ["bottom", "root", 240, 168, 120, 100],
+          ["top", "root", 240, 40, 120, 100]
+        ],
+        [
+          ["a", "root", 40, 126, 120, 56],
+          ["b", "root", 520, 126, 120, 56],
+          ["bottom", "root", 240, 168, 120, 100],
+          ["top", "root", 240, 40, 120, 100]
+        ],
+        [
+          ["a", "root", 40, 126, 120, 56],
+          ["b", "root", 520, 126, 120, 56],
+          ["bottom", "root", 240, 168, 120, 100],
+          ["top", "root", 240, 40, 120, 100]
+        ]
+      ]
+    },
+    {
+      "group": "V-R02",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/standoff-0.draft",
+        "examples/routing/standoff-20.draft",
+        "examples/routing/standoff-40.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ]
+      ]
+    },
+    {
+      "group": "V-R02",
+      "subcomparison": "counterexample",
+      "files": [
+        "examples/routing/no-effect-standoff-0.draft",
+        "examples/routing/no-effect-standoff-20.draft",
+        "examples/routing/no-effect-standoff-40.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ]
+      ]
+    },
+    {
+      "group": "V-R03",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/port-gap-6.draft",
+        "examples/routing/port-gap-16.draft",
+        "examples/routing/port-gap-28.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 440, 40, 160, 80],
+          ["b", "root", 440, 180, 160, 80],
+          ["c", "root", 440, 320, 160, 80],
+          ["hub", "root", 40, 160, 160, 120]
+        ],
+        [
+          ["a", "root", 440, 40, 160, 80],
+          ["b", "root", 440, 180, 160, 80],
+          ["c", "root", 440, 320, 160, 80],
+          ["hub", "root", 40, 160, 160, 120]
+        ],
+        [
+          ["a", "root", 440, 40, 160, 80],
+          ["b", "root", 440, 180, 160, 80],
+          ["c", "root", 440, 320, 160, 80],
+          ["hub", "root", 40, 160, 160, 120]
+        ]
+      ]
+    },
+    {
+      "group": "V-R04",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/edge-gap-4.draft",
+        "examples/routing/edge-gap-16.draft",
+        "examples/routing/edge-gap-48.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 440, 40, 160, 80],
+          ["b", "root", 440, 180, 160, 80],
+          ["c", "root", 440, 320, 160, 80],
+          ["hub", "root", 40, 160, 160, 120]
+        ],
+        [
+          ["a", "root", 440, 40, 160, 80],
+          ["b", "root", 440, 180, 160, 80],
+          ["c", "root", 440, 320, 160, 80],
+          ["hub", "root", 40, 160, 160, 120]
+        ],
+        [
+          ["a", "root", 440, 40, 160, 80],
+          ["b", "root", 440, 180, 160, 80],
+          ["c", "root", 440, 320, 160, 80],
+          ["hub", "root", 40, 160, 160, 120]
+        ]
+      ]
+    },
+    {
+      "group": "V-R04",
+      "subcomparison": "counterexample",
+      "files": [
+        "examples/routing/equal-metrics-edge-gap-4.draft",
+        "examples/routing/equal-metrics-edge-gap-16.draft",
+        "examples/routing/equal-metrics-edge-gap-48.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 240, 120, 56],
+          ["c", "root", 440, 40, 120, 56],
+          ["d", "root", 440, 240, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 240, 120, 56],
+          ["c", "root", 440, 40, 120, 56],
+          ["d", "root", 440, 240, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 240, 120, 56],
+          ["c", "root", 440, 40, 120, 56],
+          ["d", "root", 440, 240, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R05",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/bend-penalty-0.draft",
+        "examples/routing/bend-penalty-32.draft",
+        "examples/routing/bend-penalty-100.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R06",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/crossing-penalty-0.draft",
+        "examples/routing/crossing-penalty-360.draft",
+        "examples/routing/crossing-penalty-1200.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 240, 120, 56],
+          ["c", "root", 440, 40, 120, 56],
+          ["d", "root", 440, 240, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 240, 120, 56],
+          ["c", "root", 440, 40, 120, 56],
+          ["d", "root", 440, 240, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 240, 120, 56],
+          ["c", "root", 440, 40, 120, 56],
+          ["d", "root", 440, 240, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R07",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/shared-penalty-0.draft",
+        "examples/routing/shared-penalty-8.draft",
+        "examples/routing/shared-penalty-20.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 440, 40, 120, 56],
+          ["b", "root", 440, 160, 120, 56],
+          ["c", "root", 440, 280, 120, 56],
+          ["s", "root", 40, 160, 120, 24]
+        ],
+        [
+          ["a", "root", 440, 40, 120, 56],
+          ["b", "root", 440, 160, 120, 56],
+          ["c", "root", 440, 280, 120, 56],
+          ["s", "root", 40, 160, 120, 24]
+        ],
+        [
+          ["a", "root", 440, 40, 120, 56],
+          ["b", "root", 440, 160, 120, 56],
+          ["c", "root", 440, 280, 120, 56],
+          ["s", "root", 40, 160, 120, 24]
+        ]
+      ]
+    },
+    {
+      "group": "V-R07",
+      "subcomparison": "counterexample",
+      "files": [
+        "examples/routing/no-effect-shared-penalty-0.draft",
+        "examples/routing/no-effect-shared-penalty-8.draft",
+        "examples/routing/no-effect-shared-penalty-20.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R08",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/parallel-penalty-0.draft",
+        "examples/routing/parallel-penalty-18.draft",
+        "examples/routing/parallel-penalty-60.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R09",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/port-stability-0.draft",
+        "examples/routing/port-stability-20.draft",
+        "examples/routing/port-stability-150.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R10",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/fanout-penalty-0.draft",
+        "examples/routing/fanout-penalty-50.draft",
+        "examples/routing/fanout-penalty-160.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 440, 0, 120, 56],
+          ["b", "root", 440, 120, 120, 56],
+          ["c", "root", 440, 240, 120, 56],
+          ["d", "root", 440, 360, 120, 56],
+          ["e", "root", 440, 480, 120, 56],
+          ["s", "root", 40, 200, 120, 40]
+        ],
+        [
+          ["a", "root", 440, 0, 120, 56],
+          ["b", "root", 440, 120, 120, 56],
+          ["c", "root", 440, 240, 120, 56],
+          ["d", "root", 440, 360, 120, 56],
+          ["e", "root", 440, 480, 120, 56],
+          ["s", "root", 40, 200, 120, 40]
+        ],
+        [
+          ["a", "root", 440, 0, 120, 56],
+          ["b", "root", 440, 120, 120, 56],
+          ["c", "root", 440, 240, 120, 56],
+          ["d", "root", 440, 360, 120, 56],
+          ["e", "root", 440, 480, 120, 56],
+          ["s", "root", 40, 200, 120, 40]
+        ]
+      ]
+    },
+    {
+      "group": "V-R10",
+      "subcomparison": "counterexample",
+      "files": [
+        "examples/routing/no-effect-fanout-penalty-0.draft",
+        "examples/routing/no-effect-fanout-penalty-50.draft",
+        "examples/routing/no-effect-fanout-penalty-160.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R11",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/passes-1.draft",
+        "examples/routing/passes-3.draft",
+        "examples/routing/passes-5.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ],
+        [
+          ["a", "root", 40, 40, 120, 56],
+          ["b", "root", 40, 200, 120, 56],
+          ["c", "root", 40, 360, 120, 56],
+          ["wall", "root", 240, 160, 80, 136],
+          ["x", "root", 440, 40, 120, 56],
+          ["y", "root", 440, 200, 120, 56],
+          ["z", "root", 440, 360, 120, 56]
+        ]
+      ]
+    },
+    {
+      "group": "V-R12",
+      "subcomparison": "primary",
+      "files": [
+        "examples/routing/corner-radius-0.draft",
+        "examples/routing/corner-radius-6.draft",
+        "examples/routing/corner-radius-16.draft"
+      ],
+      "all_match": true,
+      "rectangles": [
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ],
+        [
+          ["a", "root", 40, 160, 100, 40],
+          ["b", "root", 440, 160, 100, 40],
+          ["block", "root", 240, 120, 100, 120]
+        ]
+      ]
+    }
+  ]
+}

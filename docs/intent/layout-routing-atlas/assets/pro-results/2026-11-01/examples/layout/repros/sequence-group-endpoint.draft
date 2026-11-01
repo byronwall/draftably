@@ -1,0 +1,5 @@
+group g "Group"
+node a "A" in=g
+node b "B"
+edge e b -> g "send"
+layout root sequence

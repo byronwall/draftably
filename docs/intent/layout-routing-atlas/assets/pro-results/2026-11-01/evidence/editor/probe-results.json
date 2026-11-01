@@ -1,0 +1,455 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "execution": "Actual pinned TypeScript/JavaScript loaded by Vite SSR; no browser interaction and no baseline edits.",
+  "probes": {
+    "fold": {
+      "uiDefault": "never",
+      "beforeLines": [
+        "layout root engine=layered fold=never"
+      ],
+      "afterNeverLines": [
+        "layout root engine=layered"
+      ],
+      "afterAutoLines": [
+        "layout root engine=layered fold=auto"
+      ],
+      "beforeBox": {
+        "x": 0,
+        "y": 0,
+        "w": 2540,
+        "h": 56
+      },
+      "neverBox": {
+        "x": 0,
+        "y": 0,
+        "w": 812,
+        "h": 336
+      },
+      "autoBox": {
+        "x": 0,
+        "y": 0,
+        "w": 812,
+        "h": 336
+      },
+      "beforeGeometry": "6994817828515d18d651d3526305ba594d1c1d9c8bceea7cfb3956d608ba2578",
+      "neverGeometry": "ef75917362bd82b7b5a997c9cb79706020a596fa70fb8c223bf8a73e7e0e7541",
+      "autoGeometry": "ef75917362bd82b7b5a997c9cb79706020a596fa70fb8c223bf8a73e7e0e7541",
+      "neverEqualsAuto": true,
+      "neverPreservesExplicitBefore": false,
+      "projectedSettings": {
+        "before": "never",
+        "afterNever": "never",
+        "afterAuto": "auto"
+      }
+    },
+    "sourceIgnoredAxes": [
+      {
+        "axis": "respectDirection",
+        "offeredByCompare": true,
+        "variants": [
+          {
+            "requested": true,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": true
+          },
+          {
+            "requested": false,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": true
+          }
+        ],
+        "sameSource": true,
+        "sameGeometry": true
+      },
+      {
+        "axis": "respectManual",
+        "offeredByCompare": true,
+        "variants": [
+          {
+            "requested": false,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": false
+          },
+          {
+            "requested": true,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": false
+          }
+        ],
+        "sameSource": true,
+        "sameGeometry": true
+      },
+      {
+        "axis": "growContainers",
+        "offeredByCompare": true,
+        "variants": [
+          {
+            "requested": false,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": false
+          },
+          {
+            "requested": true,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": false
+          }
+        ],
+        "sameSource": true,
+        "sameGeometry": true
+      },
+      {
+        "axis": "flowStrength",
+        "offeredByCompare": true,
+        "variants": [
+          {
+            "requested": 25,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": 65
+          },
+          {
+            "requested": 100,
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": 65
+          }
+        ],
+        "sameSource": true,
+        "sameGeometry": true
+      },
+      {
+        "axis": "aspect",
+        "offeredByCompare": true,
+        "variants": [
+          {
+            "requested": "1.6",
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": "1.6"
+          },
+          {
+            "requested": "canvas",
+            "lines": [
+              "layout root engine=layered"
+            ],
+            "sourceHash": "68ae0ed485df28bc289698685ee9ce6d313f5043298161800b2241f051089c0e",
+            "geometryHash": "05c6a91e7982020385d6e3c833ae191c4a348dd6b3b05a8f8b9257604d4e7283",
+            "projectedValue": "1.6"
+          }
+        ],
+        "sameSource": true,
+        "sameGeometry": true
+      }
+    ],
+    "sourceClamp": {
+      "parsedValue": 1,
+      "nativeError": "Value for edgeGap is outside the supported range.",
+      "sourceLines": [
+        "routing edge-gap=4 corner-radius=0",
+        "layout root row"
+      ],
+      "preservedSpec": {
+        "key": "cell-0",
+        "title": "Parallel edge gap = 1",
+        "subtitle": "One-parameter sweep",
+        "patch": {
+          "edgeGap": 1
+        }
+      },
+      "effectiveEdgeGap": 4,
+      "report": null
+    },
+    "releasePorts": {
+      "source": "routing-fixtures/ports-fixed-both.draft",
+      "before": {
+        "e": {
+          "fromSide": "right",
+          "toSide": "left"
+        }
+      },
+      "nativeAfter": {
+        "e": {
+          "fromSide": "auto",
+          "toSide": "auto"
+        }
+      },
+      "sourceAfter": {
+        "e": {
+          "fromSide": "right",
+          "toSide": "left"
+        }
+      },
+      "sourceEqualsBefore": true
+    },
+    "direction": {
+      "explicitEdges": {
+        "e0": {
+          "flow": "right"
+        },
+        "e1": {
+          "flow": "right"
+        },
+        "e2": {
+          "flow": "right"
+        },
+        "e3": {
+          "flow": "right"
+        },
+        "e4": {
+          "flow": "right"
+        },
+        "e5": {
+          "flow": "right"
+        },
+        "e6": {
+          "flow": "right"
+        },
+        "e7": {
+          "flow": "right"
+        },
+        "e8": {
+          "flow": "right"
+        },
+        "e9": {
+          "flow": "right"
+        },
+        "e10": {
+          "flow": "right"
+        },
+        "feedback": {
+          "flow": "right",
+          "lane": {
+            "y": 76,
+            "enter": 188,
+            "out": true
+          }
+        }
+      },
+      "omittedEdges": {
+        "e0": {},
+        "e1": {},
+        "e2": {},
+        "e3": {},
+        "e4": {},
+        "e5": {},
+        "e6": {},
+        "e7": {},
+        "e8": {},
+        "e9": {},
+        "e10": {},
+        "feedback": {
+          "lane": {
+            "y": 76,
+            "enter": 188,
+            "out": true
+          }
+        }
+      },
+      "sameNodeGeometry": true,
+      "sameRoutes": true,
+      "uiRightAttrs": [
+        [
+          "engine",
+          "layered"
+        ]
+      ]
+    },
+    "radiusVary": {
+      "mode": "try",
+      "recommended": "v0",
+      "tried": 3,
+      "failed": [],
+      "variants": [
+        {
+          "id": "v0",
+          "title": "current",
+          "why": "the file as it is",
+          "edits": [],
+          "lines": [],
+          "metrics": {
+            "width": 580,
+            "height": 260,
+            "crossings": 0,
+            "bends": 4,
+            "length": 440,
+            "warnings": 0,
+            "moved": 0
+          },
+          "tags": [
+            "recommended"
+          ],
+          "svgHash": "45162b67d078f7f7fbebf789efc4c5abf83d80e749d3f97e97b3d2d1b0171883",
+          "geometryKey": "580x260|a:13,15|block:63,15|b:113,15|35,45 38,45 38,28 107,28 107,45 110,45"
+        },
+        {
+          "id": "v1",
+          "title": "corner-radius=0",
+          "why": "--try corner-radius=0",
+          "edits": [
+            {
+              "kind": "routing",
+              "attrs": {
+                "corner-radius": "0"
+              }
+            }
+          ],
+          "lines": [],
+          "tags": [
+            "same as v0"
+          ],
+          "metrics": {
+            "width": 580,
+            "height": 260,
+            "crossings": 0,
+            "bends": 4,
+            "length": 440,
+            "warnings": 0,
+            "moved": 0
+          },
+          "svgHash": "45162b67d078f7f7fbebf789efc4c5abf83d80e749d3f97e97b3d2d1b0171883",
+          "geometryKey": "580x260|a:13,15|block:63,15|b:113,15|35,45 38,45 38,28 107,28 107,45 110,45"
+        },
+        {
+          "id": "v2",
+          "title": "corner-radius=6",
+          "why": "--try corner-radius=6",
+          "edits": [
+            {
+              "kind": "routing",
+              "attrs": {
+                "corner-radius": "6"
+              }
+            }
+          ],
+          "lines": [
+            {
+              "line": 15,
+              "before": "routing corner-radius=0",
+              "after": "routing corner-radius=6"
+            }
+          ],
+          "tags": [
+            "same as v0"
+          ],
+          "metrics": {
+            "width": 580,
+            "height": 260,
+            "crossings": 0,
+            "bends": 4,
+            "length": 440,
+            "warnings": 0,
+            "moved": 0
+          },
+          "svgHash": "c88e8e0ed37cde624c034aaf006363cb780e0ccdb4d81b51baa3f97e2caf3301",
+          "geometryKey": "580x260|a:13,15|block:63,15|b:113,15|35,45 38,45 38,28 107,28 107,45 110,45"
+        },
+        {
+          "id": "v3",
+          "title": "corner-radius=16",
+          "why": "--try corner-radius=16",
+          "edits": [
+            {
+              "kind": "routing",
+              "attrs": {
+                "corner-radius": "16"
+              }
+            }
+          ],
+          "lines": [
+            {
+              "line": 15,
+              "before": "routing corner-radius=0",
+              "after": "routing corner-radius=16"
+            }
+          ],
+          "tags": [
+            "same as v0"
+          ],
+          "metrics": {
+            "width": 580,
+            "height": 260,
+            "crossings": 0,
+            "bends": 4,
+            "length": 440,
+            "warnings": 0,
+            "moved": 0
+          },
+          "svgHash": "49c2091fae92c103028667835b81bbebb4fd4354538a3147e0b808398e0c5575",
+          "geometryKey": "580x260|a:13,15|block:63,15|b:113,15|35,45 38,45 38,28 107,28 107,45 110,45"
+        }
+      ],
+      "allGeometryKeysEqual": true,
+      "svgHashes": [
+        "45162b67d078f7f7fbebf789efc4c5abf83d80e749d3f97e97b3d2d1b0171883",
+        "45162b67d078f7f7fbebf789efc4c5abf83d80e749d3f97e97b3d2d1b0171883",
+        "c88e8e0ed37cde624c034aaf006363cb780e0ccdb4d81b51baa3f97e2caf3301",
+        "49c2091fae92c103028667835b81bbebb4fd4354538a3147e0b808398e0c5575"
+      ],
+      "distinctSvgCount": 3
+    }
+  },
+  "companions": [
+    {
+      "source": "editor-fixtures/editor-pass-start.draft",
+      "nativeJson": "editor-validation/json/editor-pass-start.json",
+      "svg": "editor-validation/svg/editor-pass-start.svg",
+      "diagnostics": [],
+      "geometryHash": "596815570e1480d975a32461f3624639c467162284664f280998b5627bfb4c42"
+    },
+    {
+      "source": "editor-fixtures/editor-scope-start.draft",
+      "nativeJson": "editor-validation/json/editor-scope-start.json",
+      "svg": "editor-validation/svg/editor-scope-start.svg",
+      "diagnostics": [],
+      "geometryHash": "0fe996f28cab0ceaa326481c525130efbbc5d18fb03c2fada1a11f95a3f04357"
+    },
+    {
+      "source": "editor-fixtures/editor-intent-start.draft",
+      "nativeJson": "editor-validation/json/editor-intent-start.json",
+      "svg": "editor-validation/svg/editor-intent-start.svg",
+      "diagnostics": [],
+      "geometryHash": "7d0ce389dcc1352a8a8c376b9b3f2ecfab2ee9d0ecfccd516ff12ae63a9bc835"
+    },
+    {
+      "source": "editor-fixtures/editor-compare-start.draft",
+      "nativeJson": "editor-validation/json/editor-compare-start.json",
+      "svg": "editor-validation/svg/editor-compare-start.svg",
+      "diagnostics": [],
+      "geometryHash": "8a6e00d19cd0a38d03562640c648596988b60a67362c9169dabdd6a6cec12b33"
+    }
+  ],
+  "routing_probe_provenance": "Final radius/clamp artifacts were re-executed by portable probe on final routing companions (theme drafting padding-y=4), preserving frozen geometry and eliminating accidental short-label overflow. The earlier actual CLI attempt source is saved separately as sources/cli-attempt-corner-radius-0.draft."
+}

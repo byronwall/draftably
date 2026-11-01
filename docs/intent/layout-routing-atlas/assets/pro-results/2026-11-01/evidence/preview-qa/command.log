@@ -1,0 +1,23 @@
+{
+  "sourceVisits": 347,
+  "nativeVisits": 36,
+  "keyboardValue": "2",
+  "groups": 109,
+  "mobile": {
+    "viewport": 390,
+    "bodyWidth": 390,
+    "documentWidth": 390,
+    "activePanels": [
+      {
+        "width": 354,
+        "left": 18
+      },
+      {
+        "width": 354,
+        "left": 18
+      }
+    ]
+  },
+  "searchCount": 4,
+  "errors": []
+}

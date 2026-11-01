@@ -1,0 +1,37 @@
+{
+  "file": "repros/cells-fractional-columns.draft",
+  "source_sha256": "52d8714b5b9d72f8ba19723abc2a98b8a5729b061aedfe801bc63c69083f2b1a",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/cells-fractional-columns.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 1,
+    "seconds": 0.067
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/cells-fractional-columns.draft",
+      "--metrics"
+    ],
+    "exit": 1,
+    "seconds": 0.072
+  },
+  "inspect_json_error": "Expecting value: line 1 column 1 (char 0)",
+  "invalid_geometry": [],
+  "metrics": null,
+  "node_hash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+  "route_hash": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+  "geometry_hash": "8fd4446eaac1dd9adbd1f279e94be1e2ce0a384fc0f696db104d1a8d55a41f87",
+  "check_output": "Invalid array length\n",
+  "finite_inspect": false,
+  "svg_ok": true
+}

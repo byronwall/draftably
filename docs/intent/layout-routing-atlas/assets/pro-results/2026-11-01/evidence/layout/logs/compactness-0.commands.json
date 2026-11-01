@@ -1,0 +1,60 @@
+{
+  "file": "compactness-0.draft",
+  "source_sha256": "db1a9c4daab8cb2ad286823e02d28ff6b4ea113ed4a33d4e58fd8b5ec7135a8c",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/compactness-0.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.427
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/compactness-0.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.412
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1379,
+    "height": 296,
+    "crossings": 1,
+    "bends": 12,
+    "length": 2314,
+    "warnings": 0
+  },
+  "node_hash": "17f5ac851f60f8f7610c8906682b6704048d8d3957f0c1b00e72dec01b985ec1",
+  "route_hash": "d4bd727e8c9f99d8409dc1b5652f0a5fcaa6365479ff3386e85adb24c0ed7474",
+  "geometry_hash": "416a3f681565f8561ad560db30eeae3c8f2038613b3132d404f6b1946640a8b1",
+  "check_output": "warning Edges bd and ca cross. [crossing]\nwarning The drawing is 1379\u00d7296 (aspect 4.66). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1379\u00d7296 (aspect 4.66), 1 crossing, 12 bends, 2314px of lines, 2 warnings.\nWarnings: 7 nodes, 0 groups, 8 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/compactness-0.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.472,
+    "file": "svg/compactness-0.svg",
+    "bytes": 70674,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "b9ee9540809674b3dadab08c17001b248e94f136022601fafb558a945ff8a7ea"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

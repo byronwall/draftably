@@ -1,0 +1,332 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "Checkout: add refunds",
+  "graph": {
+    "nodes": [
+      {
+        "id": "api",
+        "title": "API gateway",
+        "parentId": "platform"
+      },
+      {
+        "id": "orders",
+        "title": "Orders service",
+        "was": "Orders",
+        "parentId": "platform"
+      },
+      {
+        "id": "payments",
+        "title": "Payments",
+        "parentId": "platform"
+      },
+      {
+        "id": "refunds",
+        "title": "Refunds",
+        "parentId": "platform"
+      },
+      {
+        "id": "audit",
+        "title": "Audit log",
+        "parentId": "platform"
+      },
+      {
+        "id": "db",
+        "title": "Postgres"
+      },
+      {
+        "id": "hook",
+        "title": "Legacy webhook"
+      }
+    ],
+    "edges": [
+      {
+        "id": "dispatch",
+        "from": "api",
+        "to": "orders",
+        "label": "create order",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "charge",
+        "from": "orders",
+        "to": "payments",
+        "label": "authorize",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "refund",
+        "from": "orders",
+        "to": "refunds",
+        "label": "refund",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false,
+        "status": "added"
+      },
+      {
+        "id": "ledger",
+        "from": "refunds",
+        "to": "db",
+        "label": "record",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false,
+        "status": "added"
+      },
+      {
+        "id": "persist",
+        "from": "orders",
+        "to": "db",
+        "label": "persist",
+        "directed": true,
+        "emphasis": false,
+        "dashed": true
+      },
+      {
+        "id": "notify",
+        "from": "payments",
+        "to": "hook",
+        "label": "notify",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false,
+        "status": "removed"
+      },
+      {
+        "id": "trail",
+        "from": "orders",
+        "to": "audit",
+        "label": "log",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false,
+        "status": "context"
+      }
+    ],
+    "groups": [
+      {
+        "id": "platform",
+        "title": "Commerce platform"
+      }
+    ]
+  },
+  "layout": {
+    "nodes": {
+      "platform": {
+        "x": 0,
+        "y": 0,
+        "w": 749,
+        "h": 308,
+        "manual": false,
+        "pinned": false
+      },
+      "api": {
+        "x": 24,
+        "y": 148,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "orders": {
+        "x": 297,
+        "y": 148,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "payments": {
+        "x": 561,
+        "y": 68,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "refunds": {
+        "x": 561,
+        "y": 148,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "audit": {
+        "x": 561,
+        "y": 228,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "db": {
+        "x": 829,
+        "y": 86,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "hook": {
+        "x": 829,
+        "y": 166,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "dispatch": {
+        "flow": "right"
+      },
+      "charge": {
+        "flow": "right"
+      },
+      "refund": {
+        "flow": "right"
+      },
+      "ledger": {
+        "flow": "right"
+      },
+      "persist": {
+        "flow": "right"
+      },
+      "notify": {
+        "flow": "right"
+      },
+      "trail": {
+        "flow": "right"
+      }
+    },
+    "labels": {},
+    "containers": {
+      "platform": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      }
+    },
+    "intent": {}
+  },
+  "styles": {
+    "platform": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "api": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "orders": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "",
+      "status": "changed"
+    },
+    "payments": {
+      "shape": "box",
+      "color": "blue",
+      "icon": ""
+    },
+    "refunds": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "",
+      "status": "added"
+    },
+    "audit": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "",
+      "status": "context"
+    },
+    "db": {
+      "shape": "box",
+      "color": "violet",
+      "icon": ""
+    },
+    "hook": {
+      "shape": "box",
+      "color": "auto",
+      "icon": "",
+      "status": "removed"
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "layered",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "Checkout: add refunds",
+      "subtitle": "Refunds get their own service; the legacy webhook goes away"
+    },
+    "legend": [
+      {
+        "family": "blue",
+        "label": "Our services"
+      },
+      {
+        "family": "violet",
+        "label": "Data stores"
+      }
+    ]
+  }
+}

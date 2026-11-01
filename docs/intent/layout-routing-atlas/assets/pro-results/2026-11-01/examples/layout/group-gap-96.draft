@@ -1,0 +1,19 @@
+diagram "Connections across boundaries" version=1
+group clients "Clients"
+node desktop "Desktop" in=clients
+node mobile "Mobile" in=clients
+group services "Services"
+group workers "Workers" in=services
+node validate "Validate" in=workers
+node process "Process" in=workers
+node api "API" in=services
+group data "Data"
+node store "Store" in=data
+node cache "Cache" in=data
+edge e1 desktop -> api
+edge e2 mobile -> validate
+edge e3 api -> process
+edge e4 validate -> process
+edge e5 process -> store
+edge e6 api -> cache
+layout root engine=compound-flow direction=right group-gap=96

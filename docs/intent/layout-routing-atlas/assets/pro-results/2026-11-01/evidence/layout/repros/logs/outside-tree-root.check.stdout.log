@@ -1,0 +1,5 @@
+warning Edges e1 and e2 cross. [crossing]
+warning cache is 556px from the nearest node it connects to. [stranded]
+warning The drawing is 1252×354 (aspect 3.54). Try draftably vary --fit slide (or page). [aspect]
+Metrics: 1252×354 (aspect 3.54), 1 crossing, 14 bends, 1710px of lines, 3 warnings.
+Warnings: 7 nodes, 4 groups, 6 connections.

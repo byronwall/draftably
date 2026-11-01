@@ -1,0 +1,6 @@
+diagram "A byte record" version=1
+group packet "Packet"
+node tag "Tag" in=packet span=1
+node length "Length" in=packet span=2
+node data "Data" in=packet span=var
+layout packet cells unit=byte columns=8 unit-width=40 ruler=on

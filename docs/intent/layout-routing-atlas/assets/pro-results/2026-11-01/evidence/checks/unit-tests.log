@@ -1,0 +1,174 @@
+$ vitest run
+
+ RUN  v5.0.3 /workspace/scratch/bf0bcb720732/baseline
+
+ ❯ tests/theme-slots.test.ts (0 test)
+ ❯ tests/growth-order.test.ts (3 tests | 2 failed) 54ms
+   ❯ growth keeps the fold (3)
+     × keeps the held-out capture flow in order after its new exit 4ms
+     × keeps the authored order within ranks when a layered pipeline grows 1ms
+ ❯ tests/add-changeset.test.ts (1 test | 1 failed) 5ms
+   ❯ pnpm changeset:add (1)
+     × writes a file that passes format:check 4ms
+ ❯ tests/workspace.test.ts (7 tests | 4 skipped) 10311ms
+ ❯ tests/open-port.test.ts (3 tests | 3 failed) 10017ms
+   ❯ open port selection (3)
+     × moves past a default port held on IPv6 5010ms
+     × refuses an explicit port held on IPv6 5003ms
+     × lets the OS choose for port 0 3ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/theme-slots.test.ts [ tests/theme-slots.test.ts ]
+Error: ENOENT: no such file or directory, open '/workspace/scratch/bf0bcb720732/baseline/docs/intent/diagram-quality/corpus/srcly-release/v0.draft'
+ ❯ read tests/theme-slots.test.ts:7:32
+      5| import { THEME_IDS } from '../src/model/appearance';
+      6|
+      7| const read = (file: string) => readFileSync(path.join(__dirname, '..',…
+       |                                ^
+      8| const withTheme = (source: string, theme: string) =>
+      9|   /^theme .*$/m.test(source)
+ ❯ tests/theme-slots.test.ts:43:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/workspace.test.ts > workspace server
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ tests/workspace.test.ts:40:3
+     38|   let root: string, workspace: Workspace, server: http.Server, base: s…
+     39|
+     40|   beforeAll(async () => {
+       |   ^
+     41|     root = fs.mkdtempSync(path.join(os.tmpdir(), 'draft-workspace-'));
+     42|     fs.mkdirSync(path.join(root, 'docs'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/add-changeset.test.ts > pnpm changeset:add > writes a file that passes format:check
+Error: ENOENT: no such file or directory, scandir '.changeset'
+ ❯ tests/add-changeset.test.ts:7:28
+      5| describe('pnpm changeset:add', () => {
+      6|   it('writes a file that passes format:check', () => {
+      7|     const before = new Set(readdirSync('.changeset'));
+       |                            ^
+      8|     execFileSync('node', [
+      9|       'scripts/add-changeset.ts',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/growth-order.test.ts > growth keeps the fold > keeps the held-out capture flow in order after its new exit
+Error: ENOENT: no such file or directory, open '/workspace/scratch/bf0bcb720732/baseline/docs/intent/diagram-quality/heldout/regionshot-capture/v0.draft'
+ ❯ read tests/growth-order.test.ts:6:32
+      4| import { checkSource, type Scene } from '../src/dsl/compile';
+      5|
+      6| const read = (file: string) => readFileSync(path.join(__dirname, '..',…
+       |                                ^
+      7|
+      8| /** Pairs of objects in both scenes that swapped sides by more than 20…
+ ❯ tests/growth-order.test.ts:48:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/growth-order.test.ts > growth keeps the fold > keeps the authored order within ranks when a layered pipeline grows
+Error: ENOENT: no such file or directory, open '/workspace/scratch/bf0bcb720732/baseline/docs/intent/diagram-quality/heldout/v2ctx-pipeline/v0.draft'
+ ❯ read tests/growth-order.test.ts:6:32
+      4| import { checkSource, type Scene } from '../src/dsl/compile';
+      5|
+      6| const read = (file: string) => readFileSync(path.join(__dirname, '..',…
+       |                                ^
+      7|
+      8| /** Pairs of objects in both scenes that swapped sides by more than 20…
+ ❯ tests/growth-order.test.ts:55:32
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/open-port.test.ts > open port selection > moves past a default port held on IPv6
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/open-port.test.ts:20:3
+     18|
+     19| describe('open port selection', () => {
+     20|   it('moves past a default port held on IPv6', async () => {
+       |   ^
+     21|     const held = await decoy();
+     22|     const server = http.createServer();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  tests/open-port.test.ts > open port selection > refuses an explicit port held on IPv6
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/open-port.test.ts:28:3
+     26|   });
+     27|
+     28|   it('refuses an explicit port held on IPv6', async () => {
+       |   ^
+     29|     const held = await decoy();
+     30|     const server = http.createServer();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  tests/open-port.test.ts > open port selection > lets the OS choose for port 0
+Error: listen EPERM: operation not permitted 127.0.0.1
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 3 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:2368:21
+ ❯ listenInCluster node:net:2499:12
+ ❯ node:net:2728:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:90:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/workspace.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted ::1
+ ❯ Server.setupListenHandle [as _listen2] node:net:2368:21
+ ❯ listenInCluster node:net:2499:12
+ ❯ node:net:2728:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:90:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '::1' }
+This error originated in "tests/open-port.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "moves past a default port held on IPv6". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted ::1
+ ❯ Server.setupListenHandle [as _listen2] node:net:2368:21
+ ❯ listenInCluster node:net:2499:12
+ ❯ node:net:2728:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:90:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '::1' }
+This error originated in "tests/open-port.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "refuses an explicit port held on IPv6". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  5 failed | 59 passed | 1 skipped (65)
+      Tests  6 failed | 413 passed | 8 skipped (427)
+     Errors  3 errors
+   Start at  07:38:54
+   Duration  14.88s (tests 78%, transform 11%, import 10%, worker 1%)
+
+    Isolate  65 workers spawned · ~141ms startup each (spawn + environment, per file)
+             at least ~1.17s faster with isolate: false — reuses workers across files instead of one per file
+
+[ELIFECYCLE] Command failed with exit code 1.

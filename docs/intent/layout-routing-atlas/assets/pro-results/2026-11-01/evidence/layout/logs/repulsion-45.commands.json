@@ -1,0 +1,60 @@
+{
+  "file": "repulsion-45.draft",
+  "source_sha256": "9e591f60e79646ab2a1380bf84308ce7df88ac834d18d4e183ceccdecc2b665e",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repulsion-45.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.486
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repulsion-45.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.527
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1260,
+    "height": 296,
+    "crossings": 1,
+    "bends": 13,
+    "length": 2236,
+    "warnings": 0
+  },
+  "node_hash": "a8aa96ed884b8877688864a5fb6d534871554454843768057c769b4228ea6dc1",
+  "route_hash": "7bdf454865441b9b9e12eaab0fe63838b16afda609839a76353ab2091bf2e027",
+  "geometry_hash": "9f6520149b6a8f3169a240e755ff6cf0d06e811beef2a9eb279b4ce39bf98348",
+  "check_output": "warning Edges bd and ca cross. [crossing]\nwarning The drawing is 1260\u00d7296 (aspect 4.26). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1260\u00d7296 (aspect 4.26), 1 crossing, 13 bends, 2236px of lines, 2 warnings.\nWarnings: 7 nodes, 0 groups, 8 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repulsion-45.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.643,
+    "file": "svg/repulsion-45.svg",
+    "bytes": 70686,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "b8ce0eb57fb0fc8a62bc6a224836e730008ee5870a270c8e463c841046e36335"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

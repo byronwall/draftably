@@ -1,0 +1,44 @@
+{
+  "file": "repros/sequence-ignored-controls.draft",
+  "source_sha256": "ac2f958b5c5264917a7b09f1f71d700e8e95a1f9de7b435c5113defac691748f",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/sequence-ignored-controls.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.112
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/sequence-ignored-controls.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.105
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 653,
+    "height": 512,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "3e621d5e25dc73e8f5fba561f4611dfd58b4066beeb9c62622ae52b39ecddcbb",
+  "route_hash": "1f62283865bc5402c07baaee922ee6e9c82798d79e6733592f379dff187149ad",
+  "geometry_hash": "333f64debf6b2869178b6a35ec4ea3065e70e027525f9652d3aaa6f8cac9e09c",
+  "check_output": "Metrics: 653\u00d7512 (aspect 1.28), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 2 groups, 5 connections.\n",
+  "finite_inspect": true,
+  "svg_ok": true
+}

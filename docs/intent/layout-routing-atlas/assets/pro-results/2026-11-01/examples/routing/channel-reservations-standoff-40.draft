@@ -1,0 +1,44 @@
+diagram "Multi-region failover" version=1
+
+# Two mirrored regions, each split into tiers. Replication crosses region boundaries.
+node dns "Global DNS" shape=pill color=slate
+node health "Health checks" shape=diamond color=amber
+
+group primary "us-east-1 · primary" color=blue
+group p_edge "Edge" in=primary
+node p_lb "Load balancer" in=p_edge
+group p_app "App tier" in=primary
+node p_api "API" in=p_app
+node p_worker "Workers" in=p_app
+group p_data "Data tier" in=primary
+node p_db "Postgres primary" in=p_data
+node p_queue "Queue" in=p_data
+
+group standby "us-west-2 · standby" color=slate
+group s_edge "Edge" in=standby
+node s_lb "Load balancer" in=s_edge
+group s_app "App tier" in=standby
+node s_api "API (scaled down)" in=s_app
+node s_worker "Workers (paused)" in=s_app
+group s_data "Data tier" in=standby
+node s_db "Postgres replica" in=s_data
+node s_queue "Queue" in=s_data
+
+edge route dns -> p_lb "active"
+edge fail dns -> s_lb "on failover" kind=async
+edge probe health -> dns
+edge p1 p_lb -> p_api
+edge p2 p_api -> p_db
+edge p3 p_api -> p_queue
+edge p4 p_queue -> p_worker
+edge s1 s_lb -> s_api
+edge s2 s_api -> s_db
+edge s3 s_api -> s_queue
+edge s4 s_queue -> s_worker
+edge repl p_db -> s_db "streaming replication" kind=async
+
+layout root flow gap=56 direction=right
+layout primary column gap=24
+layout standby column gap=24
+
+routing standoff=40

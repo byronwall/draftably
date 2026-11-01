@@ -1,0 +1,60 @@
+{
+  "file": "fold-never.draft",
+  "source_sha256": "ccc394fcd334d83526022b88a0216e3c1f282576eefcdd395e42f0a2513300ba",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fold-never.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.505
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fold-never.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.398
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 2620,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 572,
+    "warnings": 0
+  },
+  "node_hash": "e2c17aee952a412adf47cd0be806b34c381af2bc64133fde0f6364cd46d21e3d",
+  "route_hash": "4e782333b1217814cc054d13642e2f6c4f8a73b62e9379cbea6224b3af290505",
+  "geometry_hash": "feb19a4114775a11edbbcf307705b0643637c7d561dec0074822649172bb9928",
+  "check_output": "warning The drawing is 2620\u00d7182 (aspect 14.40). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 2620\u00d7182 (aspect 14.40), 0 crossings, 0 bends, 572px of lines, 1 warning.\nWarnings: 12 nodes, 0 groups, 11 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/fold-never.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.269,
+    "file": "svg/fold-never.svg",
+    "bytes": 72719,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "076da7d217c7c5954a7d0d536ceb13d72d59cf3105432c3bfc9df421910f41d5"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

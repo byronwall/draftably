@@ -1,0 +1,60 @@
+{
+  "file": "boundary-pull-0.draft",
+  "source_sha256": "d7d3c6be40004b7c8f0e4b769071fab863a2f5553c3dd675a5786d10d6a57753",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/boundary-pull-0.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.57
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/boundary-pull-0.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.462
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1300,
+    "height": 408,
+    "crossings": 1,
+    "bends": 13,
+    "length": 1932,
+    "warnings": 0
+  },
+  "node_hash": "d1023a916f4d301a4cb52586163a5243d40c973a0dd5699a3e5fd0e3cf47bd81",
+  "route_hash": "125d7cb5484af8a65cf1b12419c1a77e11452ed31cc2fc4cd918b573624c78b9",
+  "geometry_hash": "15a37c691644a6f96e1a20643bda55c818273b932c4adbe324fcc1fc9a6eacb5",
+  "check_output": "warning Edges e1 and e2 cross. [crossing]\nwarning cache is 580px from the nearest node it connects to. [stranded]\nwarning The drawing is 1300\u00d7408 (aspect 3.19). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1300\u00d7408 (aspect 3.19), 1 crossing, 13 bends, 1932px of lines, 3 warnings.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/boundary-pull-0.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.45,
+    "file": "svg/boundary-pull-0.svg",
+    "bytes": 73439,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "7f5c3cc0d68b321cd06f5acb5cbb62a141c037184401aff5360ae894c1334792"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

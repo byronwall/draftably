@@ -1,0 +1,60 @@
+{
+  "file": "shape-box.draft",
+  "source_sha256": "5bc0d7adb1c086832a999d36751e536dc361093478ef0845c593647f480dd433",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-box.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.109
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-box.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.101
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 436,
+    "height": 198,
+    "crossings": 0,
+    "bends": 0,
+    "length": 28,
+    "warnings": 0
+  },
+  "node_hash": "66aa64c04d0255cd9db5fb591cd7a47eb98c014290026a135e64a13014c9b03c",
+  "route_hash": "52923182e38a5834a9ccc27fc50aa8579c45708c77da288aeb35285dec59b894",
+  "geometry_hash": "e71543f635b94ce431721fac07afa7c708a2630e0cf1ce78addc6363a404d6ee",
+  "check_output": "Metrics: 436\u00d7198 (aspect 2.20), 0 crossings, 0 bends, 28px of lines, 0 warnings.\nOK: 2 nodes, 0 groups, 1 connection.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-box.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.107,
+    "file": "svg/shape-box.svg",
+    "bytes": 67052,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "969a80d94c1c14306a24ccd99c4fe09ecc45aa3b2b75cb8081b3679463d50754"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

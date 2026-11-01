@@ -1,0 +1,18 @@
+diagram "Atlas baseline: grouped services" version=1
+group web "Web"
+group svc "Services"
+group data "Data"
+node ui "App" in=web
+node cdn "CDN" in=web
+node api "API" in=svc
+node jobs "Jobs" in=svc
+node auth "Auth" in=svc
+node db "Postgres" in=data
+node cache "Redis" in=data
+edge e1 cdn -> ui
+edge e2 ui -> api
+edge e3 api -> auth
+edge e4 api -> db
+edge e5 auth -> cache
+edge e6 jobs -> db
+layout root engine=stress

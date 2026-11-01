@@ -1,0 +1,12 @@
+diagram "Small and large alignment errors" version=1
+node a "Near source"
+node b "Near target"
+node c "Far source"
+node d "Far target"
+edge ab a -> b
+edge cd c -> d
+layout root row
+stay a x=0 y=0
+stay b x=260 y=12
+stay c x=0 y=240
+stay d x=260 y=340

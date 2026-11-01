@@ -1,0 +1,5 @@
+diagram "Shape sizing" version=1
+node a "A decision or a longer service title" shape=text
+node b "Next"
+edge e a -> b
+layout root flow

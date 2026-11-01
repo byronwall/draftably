@@ -1,0 +1,44 @@
+{
+  "file": "repros/sequence-group-endpoint.draft",
+  "source_sha256": "002c338eca96d8270deaa6cc0404503c3dd959d429b27fd4932711c0848196cd",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/sequence-group-endpoint.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.101
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/sequence-group-endpoint.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.125
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 448,
+    "height": 300,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "8631541031f09c37ad584ba1dc231093cba53831af830f95cbc0b1a9ee720a5c",
+  "route_hash": "051a65374354e62d7cd025faf8efb3998ffa77cd5faf80a85fdd18dc3903fbd9",
+  "geometry_hash": "0efd99a5508c4afd079f42f8e8abeae4af57a6c04435fa0f745234147495c385",
+  "check_output": "Metrics: 448\u00d7300 (aspect 1.49), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 2 nodes, 1 group, 1 connection.\n",
+  "finite_inspect": true,
+  "svg_ok": true
+}

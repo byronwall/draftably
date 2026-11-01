@@ -1,0 +1,44 @@
+{
+  "file": "repros/cells-ignored-ruler.draft",
+  "source_sha256": "862436a06bc46662a89360fc8b7ea060c22636b8f21e1f721aabd56c1a0e8c03",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/cells-ignored-ruler.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.083
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/cells-ignored-ruler.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.12
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 144,
+    "height": 146,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "4ef0e24cdebe38f2e02c756850078b46db3d2900dc66652e3b81b2787abed826",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "b3845f65f4aa722b453e0010b8e63d4908d4c453af7d34312ad88fc01ae4c5a1",
+  "check_output": "Metrics: 144\u00d7146 (aspect 0.99), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 1 node, 1 group, 0 connections.\n",
+  "finite_inspect": true,
+  "svg_ok": true
+}

@@ -1,0 +1,60 @@
+{
+  "file": "recipe-flow.draft",
+  "source_sha256": "6760d4fcd7e692668b846c04b1939c9c211d36b4d649b766629b1644d5511d44",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/recipe-flow.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.165
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/recipe-flow.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.199
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 880,
+    "height": 310,
+    "crossings": 0,
+    "bends": 5,
+    "length": 786,
+    "warnings": 0
+  },
+  "node_hash": "80da92295084ca3d846490f8d0f4f83a804ed031d0c8fe71c711b7f5588686a8",
+  "route_hash": "628bff122994c75c24bdfc178297022b89da08c860fb5405c59dfc720d33f79d",
+  "geometry_hash": "82b5f20e79b192e12003fadd850ba87f4df01e6b07a495cc13e20abb10b29cc6",
+  "check_output": "Metrics: 880\u00d7310 (aspect 2.84), 0 crossings, 5 bends, 786px of lines, 0 warnings.\nOK: 5 nodes, 0 groups, 5 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/recipe-flow.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.19,
+    "file": "svg/recipe-flow.svg",
+    "bytes": 69112,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "4ed32ecb1ec0bd9214ad20c80eb51adb345006bf995fcb1f43e9975ee75f7959"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

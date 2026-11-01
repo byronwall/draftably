@@ -1,0 +1,7 @@
+diagram "Record cells" version=1
+group record "Record"
+node id "ID" in=record
+node kind "Kind" in=record
+node payload "Payload" in=record
+node checksum "Checksum" in=record
+layout record cells columns=2

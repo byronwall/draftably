@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 2,
+  "id": "draft-file",
+  "title": "Atlas baseline: grouped services",
+  "graph": {
+    "nodes": [
+      {
+        "id": "ui",
+        "title": "App",
+        "parentId": "web"
+      },
+      {
+        "id": "cdn",
+        "title": "CDN",
+        "parentId": "web"
+      },
+      {
+        "id": "api",
+        "title": "API",
+        "parentId": "svc"
+      },
+      {
+        "id": "jobs",
+        "title": "Jobs",
+        "parentId": "svc"
+      },
+      {
+        "id": "auth",
+        "title": "Auth",
+        "parentId": "svc"
+      },
+      {
+        "id": "db",
+        "title": "Postgres",
+        "parentId": "data"
+      },
+      {
+        "id": "cache",
+        "title": "Redis",
+        "parentId": "data"
+      }
+    ],
+    "edges": [
+      {
+        "id": "e1",
+        "from": "cdn",
+        "to": "ui",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e2",
+        "from": "ui",
+        "to": "api",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e3",
+        "from": "api",
+        "to": "auth",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e4",
+        "from": "api",
+        "to": "db",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e5",
+        "from": "auth",
+        "to": "cache",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "e6",
+        "from": "jobs",
+        "to": "db",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": [
+      {
+        "id": "web",
+        "title": "Web"
+      },
+      {
+        "id": "svc",
+        "title": "Services"
+      },
+      {
+        "id": "data",
+        "title": "Data"
+      }
+    ]
+  },
+  "layout": {
+    "nodes": {
+      "web": {
+        "x": 0,
+        "y": 0,
+        "w": 212,
+        "h": 276,
+        "manual": false,
+        "pinned": false
+      },
+      "svc": {
+        "x": 276,
+        "y": 24,
+        "w": 428,
+        "h": 228,
+        "manual": false,
+        "pinned": false
+      },
+      "data": {
+        "x": 768,
+        "y": 34,
+        "w": 212,
+        "h": 208,
+        "manual": false,
+        "pinned": false
+      },
+      "ui": {
+        "x": 24,
+        "y": 196,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "cdn": {
+        "x": 24,
+        "y": 48,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "api": {
+        "x": 300,
+        "y": 92,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "jobs": {
+        "x": 300,
+        "y": 172,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "auth": {
+        "x": 516,
+        "y": 92,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "db": {
+        "x": 792,
+        "y": 82,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "cache": {
+        "x": 792,
+        "y": 162,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "e1": {
+        "lane": {
+          "y": 150
+        }
+      },
+      "e2": {},
+      "e3": {},
+      "e4": {},
+      "e5": {},
+      "e6": {}
+    },
+    "labels": {},
+    "containers": {
+      "web": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      },
+      "svc": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      },
+      "data": {
+        "direction": "inherit",
+        "padding": 24,
+        "manualSize": true
+      }
+    },
+    "intent": {}
+  },
+  "styles": {
+    "web": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "svc": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "data": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "ui": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "cdn": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "api": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "jobs": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "auth": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "db": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    },
+    "cache": {
+      "shape": "box",
+      "color": "auto",
+      "icon": ""
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "compound-flow",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "camera": {
+    "x": 0,
+    "y": 0,
+    "k": 1
+  },
+  "theme": "light",
+  "appearance": {
+    "theme": "drafting",
+    "overrides": {},
+    "colors": [],
+    "heading": {
+      "title": "Atlas baseline: grouped services"
+    }
+  }
+}

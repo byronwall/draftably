@@ -1,0 +1,6 @@
+diagram "Group minimum size" version=1
+group g "Panel"
+node a "A" in=g
+node b "B" in=g
+layout root row
+layout g column min-width=300

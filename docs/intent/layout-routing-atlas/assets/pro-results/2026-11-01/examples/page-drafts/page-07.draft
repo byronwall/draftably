@@ -1,0 +1,7 @@
+diagram "A record" version=1
+group record "Record"
+node key "Key" in=record
+node value "Value" in=record span=2
+node state "State" in=record
+node owner "Owner" in=record
+layout record cells columns=3

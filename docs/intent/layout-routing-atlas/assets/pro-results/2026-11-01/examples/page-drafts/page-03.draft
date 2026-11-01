@@ -1,0 +1,15 @@
+diagram "Local layout choices" version=1
+group clients "Clients"
+node desktop "Desktop" in=clients
+node mobile "Mobile" in=clients
+group services "Services"
+node api "API" in=services
+node jobs "Jobs" in=services
+node cache "Cache" in=services
+edge call desktop -> api
+edge notify mobile -> api
+edge enqueue api -> jobs
+edge read api -> cache
+layout root row gap=72
+layout clients column gap=24
+layout services engine=tree root=api direction=down

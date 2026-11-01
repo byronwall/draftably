@@ -1,0 +1,60 @@
+{
+  "file": "group-fold-never.draft",
+  "source_sha256": "0b5ced9b628ee23e7a6320523e8f0b4f8609aaabde3a241323aa0a7259bd85ad",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/group-fold-never.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.284
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/group-fold-never.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.288
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 552,
+    "height": 1010,
+    "crossings": 0,
+    "bends": 0,
+    "length": 416,
+    "warnings": 0
+  },
+  "node_hash": "8bae01ff339034ce72ac9d82870164b1f38f25ecc90f66492bfc53b1704b6799",
+  "route_hash": "525366229fd8a80c23501cecd111afeebccba35d3a0600d8b231629493070786",
+  "geometry_hash": "801d6e90ca72761d7829bebe0c35a06fcc1c73fd55aac5fa033b071619139319",
+  "check_output": "Metrics: 552\u00d71010 (aspect 0.55), 0 crossings, 0 bends, 416px of lines, 0 warnings.\nOK: 10 nodes, 2 groups, 8 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/group-fold-never.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.236,
+    "file": "svg/group-fold-never.svg",
+    "bytes": 72736,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "2fb746c6b6970b1529878d53f23cdbfc4e44351876a6a2575b75380655b17c6d"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

@@ -1,0 +1,60 @@
+{
+  "file": "rank-gap-120.draft",
+  "source_sha256": "b12b541fce4216e9e001d844f7294ddd6dfaeb0aa97bf68d3ab7600d580e818b",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/rank-gap-120.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.203
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/rank-gap-120.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.188
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1077,
+    "height": 518,
+    "crossings": 0,
+    "bends": 12,
+    "length": 1295,
+    "warnings": 0
+  },
+  "node_hash": "bed30c06d9bf5e80c5dc23912dd1ccb948c4ff30e794ae0accddc4bea6ee4bac",
+  "route_hash": "005d1d221778cbfe94f43d687e74c6711dc63434b543ebe97e3aee3c9c96af40",
+  "geometry_hash": "a2f78e8929eb34813e1cd78c4a06f907aaf3aaaa826b2d32962a0a5bc0c1c98d",
+  "check_output": "Metrics: 1077\u00d7518 (aspect 2.08), 0 crossings, 12 bends, 1295px of lines, 0 warnings.\nOK: 7 nodes, 0 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/rank-gap-120.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.179,
+    "file": "svg/rank-gap-120.svg",
+    "bytes": 70380,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "6d114df2aa131e39a847b15c038a76fe781a53549b655256add7f26f54cbde1a"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

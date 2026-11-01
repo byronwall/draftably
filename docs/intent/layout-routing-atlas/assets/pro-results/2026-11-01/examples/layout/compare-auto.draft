@@ -1,0 +1,11 @@
+diagram "One layout, two versions" version=1
+compare "Current" "Proposed" direction=auto
+node gateway "Gateway"
+-node legacy "Legacy"
++node service "Service"
+node storage "Storage"
+-edge old_in gateway -> legacy
+-edge old_out legacy -> storage
++edge new_in gateway -> service
++edge new_out service -> storage
+layout root flow direction=down fold=never gap=40

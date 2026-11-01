@@ -1,0 +1,12 @@
+diagram "Read a record" version=1
+node app "App"
+node api "API"
+node database "Database"
+edge request app -> api "request"
+edge query api -> database "read"
+edge check database -> database "validate"
+edge row database -> api "row" kind=async
+edge reply api -> app "reply" kind=async
+phase access "Read" request query check
+phase response "Respond" row reply
+layout root sequence

@@ -1,0 +1,60 @@
+{
+  "file": "scope-root.draft",
+  "source_sha256": "6cd434f551206a9c1e5d30383ef2dc25d23ec1c119277c1b36e77ef6c81912ec",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/scope-root.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.709
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/scope-root.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.671
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1288,
+    "height": 370,
+    "crossings": 1,
+    "bends": 13,
+    "length": 2016,
+    "warnings": 0
+  },
+  "node_hash": "a914c56be65cd150275f6361375443941120f556099f57266f2b8abe7bf22a5f",
+  "route_hash": "c0d38659a14b8409cb8c3c10fb84b172bb3a77e1d0af01d8354c09a9bcac7b52",
+  "geometry_hash": "3367fd220c65ca527819dd1cc0e10d1639e72ad534b88d843337f45f08437cbd",
+  "check_output": "warning Edges e2 and e6 cross. [crossing]\nwarning cache is 572px from the nearest node it connects to. [stranded]\nwarning The drawing is 1288\u00d7370 (aspect 3.48). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1288\u00d7370 (aspect 3.48), 1 crossing, 13 bends, 2016px of lines, 3 warnings.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/scope-root.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.556,
+    "file": "svg/scope-root.svg",
+    "bytes": 73400,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "ba66dcff51607c5358bd5994955d5d6ecea763736b508a1c133f2e9441e50218"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

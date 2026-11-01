@@ -1,0 +1,10 @@
+diagram "Atlas: explain a relaxed refinement" version=1
+node a "Collect the inputs"
+node b "Build the package"
+node c "Publish"
+edge e1 a -> b
+edge e2 b -> c
+layout root flow direction=right gap=48
+near c a side=below gap=4
+stay b x=60 y=0
+size a width=120 height=auto

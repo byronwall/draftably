@@ -1,0 +1,15 @@
+diagram "Trees, forest, and a cross-link" version=1
+node top "Root"
+node left "Left branch"
+node right "Right branch"
+node left_a "Left A"
+node left_b "Left B"
+node right_a "Right A"
+node detached "Detached"
+edge e1 top -> left
+edge e2 top -> right
+edge e3 left -> left_a
+edge e4 left -> left_b
+edge e5 right -> right_a
+edge cross left_b -> right_a
+layout root engine=tree direction=right rank-gap=24

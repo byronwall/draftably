@@ -1,0 +1,53 @@
+{
+  "nodes": [
+    {
+      "id": "key",
+      "parent": "record",
+      "x": 0,
+      "y": 30,
+      "w": 64,
+      "h": 36
+    },
+    {
+      "id": "owner",
+      "parent": "record",
+      "x": 64,
+      "y": 66,
+      "w": 66,
+      "h": 36
+    },
+    {
+      "id": "record",
+      "parent": "root",
+      "x": 0,
+      "y": 0,
+      "w": 130,
+      "h": 102
+    },
+    {
+      "id": "state",
+      "parent": "record",
+      "x": 0,
+      "y": 66,
+      "w": 64,
+      "h": 36
+    },
+    {
+      "id": "value",
+      "parent": "record",
+      "x": 64,
+      "y": 30,
+      "w": 66,
+      "h": 36
+    }
+  ],
+  "routes": [],
+  "metrics": {
+    "width": 210,
+    "height": 228,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  }
+}

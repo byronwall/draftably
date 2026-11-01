@@ -1,0 +1,60 @@
+{
+  "file": "flow-strength-100.draft",
+  "source_sha256": "d44c82df410eda44638ccb28281ef9eca19041eebf615bb2108e3c1562a21846",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/flow-strength-100.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.375
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/flow-strength-100.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.314
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 883,
+    "height": 262,
+    "crossings": 0,
+    "bends": 8,
+    "length": 586,
+    "warnings": 0
+  },
+  "node_hash": "2707a71f01c5b544f7b1592381d7400e5c86f79c95161b96ff7bcd6045bdf65c",
+  "route_hash": "651fdc1704bbd3fd27b024740475f00ef4476af0f0c64379e3dc54f6350e1fe1",
+  "geometry_hash": "245bc842871f3c1e9441ca151c4d6664532cb40aeb983ecd12f69dfe5741315b",
+  "check_output": "warning The drawing is 883\u00d7262 (aspect 3.37). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 883\u00d7262 (aspect 3.37), 0 crossings, 8 bends, 586px of lines, 1 warning.\nWarnings: 5 nodes, 0 groups, 5 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/flow-strength-100.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.198,
+    "file": "svg/flow-strength-100.svg",
+    "bytes": 69218,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "210cc1f0b1913885557cc809292b0f9b429d2c1037b3eb2ab21df167ccfdc641"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

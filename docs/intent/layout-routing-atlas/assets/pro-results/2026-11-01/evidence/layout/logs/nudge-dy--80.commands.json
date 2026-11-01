@@ -1,0 +1,60 @@
+{
+  "file": "nudge-dy--80.draft",
+  "source_sha256": "1fb57206edb9b6ebcf5794721d63ecbc05b903805c44dd9c2acbb0dc744e1e75",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/nudge-dy--80.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.131
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/nudge-dy--80.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.099
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 668,
+    "height": 262,
+    "crossings": 0,
+    "bends": 4,
+    "length": 256,
+    "warnings": 0
+  },
+  "node_hash": "4a46eb46b84958f889c4dd3e6a7b82ce74e0f311fb0ea606328d1844ad92cc5a",
+  "route_hash": "4509bbaa767cee2385542fdbfc017e7b21ddb3415eae396ea9c2197d813c59a6",
+  "geometry_hash": "f124b902a535ed4c2a7aa48ccba88548a62216aa4a1d02f831f3876c6d7e2038",
+  "check_output": "Metrics: 668\u00d7262 (aspect 2.55), 0 crossings, 4 bends, 256px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/nudge-dy--80.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.118,
+    "file": "svg/nudge-dy--80.svg",
+    "bytes": 67631,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "7560c3cef9357850b85ed9cb048c5ca8fd262b2122f334fa53dbd2c485ef1b41"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

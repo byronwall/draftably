@@ -1,0 +1,17 @@
+diagram "Network with cycles" version=1
+node a "Catalog"
+node b "Billing"
+node c "Identity"
+node d "Gateway"
+node e "Telemetry"
+node f "Worker"
+node isolated "Offline"
+edge ab a -> b
+edge bc b -> c
+edge ca c -> a
+edge ad a -> d
+edge bd b -> d
+edge ce c -> e
+edge ef e -> f
+edge fd f -> d
+layout root engine=force direction=right edge-length=176

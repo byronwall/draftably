@@ -1,0 +1,359 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "execution": "Pure pinned model, translation and compiler modules; session viewState reconstructed as in file-session.ts, not a browser test",
+  "changes": [
+    {
+      "label": "Edit direction",
+      "key": "container.direction",
+      "sourceChanged": false,
+      "before": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "requested": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "DOWN",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "reprojected": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "geometrySame": true
+    },
+    {
+      "label": "Edit padding",
+      "key": "container.padding",
+      "sourceChanged": false,
+      "before": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "requested": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 80,
+          "manualSize": true
+        }
+      },
+      "reprojected": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "geometrySame": true
+    },
+    {
+      "label": "Edit snap",
+      "key": "snap",
+      "sourceChanged": false,
+      "before": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "requested": {
+        "settings": {
+          "snap": false,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "reprojected": {
+        "settings": {
+          "snap": false,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "geometrySame": true
+    },
+    {
+      "label": "Edit showManual",
+      "key": "showManual",
+      "sourceChanged": false,
+      "before": {
+        "settings": {
+          "snap": true,
+          "showManual": true
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "requested": {
+        "settings": {
+          "snap": true,
+          "showManual": false
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "reprojected": {
+        "settings": {
+          "snap": true,
+          "showManual": false
+        },
+        "west": {
+          "direction": "inherit",
+          "padding": 24,
+          "manualSize": true
+        }
+      },
+      "geometrySame": true
+    }
+  ],
+  "companions": [
+    {
+      "source": "editor-fixtures/editor-align-start.draft",
+      "json": "editor-validation/json/editor-align-start.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-change-marks.draft",
+      "json": "editor-validation/json/editor-change-marks.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-compare-start.draft",
+      "json": "editor-validation/json/editor-compare-start.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-intent-start.draft",
+      "json": "editor-validation/json/editor-intent-start.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-pass-start.draft",
+      "json": "editor-validation/json/editor-pass-start.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-refined-groups.draft",
+      "json": "editor-validation/json/editor-refined-groups.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-refinement-drift.draft",
+      "json": "editor-validation/json/editor-refinement-drift.json",
+      "diagnostics": [
+        {
+          "level": "warning",
+          "code": "relaxed",
+          "message": "stay b gave way by 32 px to keep root clear. Remove line 9, or run format --drop-stale.",
+          "line": 9,
+          "ids": [
+            "b"
+          ]
+        },
+        {
+          "level": "warning",
+          "code": "relaxed",
+          "message": "near c gave way by 44 px to keep root clear. Remove line 8, or run format --drop-stale.",
+          "line": 8,
+          "ids": [
+            "c"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "editor-fixtures/editor-scope-start.draft",
+      "json": "editor-validation/json/editor-scope-start.json",
+      "diagnostics": []
+    },
+    {
+      "source": "editor-fixtures/editor-ten-engine-grouped.draft",
+      "json": "editor-validation/json/editor-ten-engine-grouped.json",
+      "diagnostics": [],
+      "provenance": "Portable persistence probe, same pinned modules and exact fixture"
+    }
+  ],
+  "pass": {
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "scope": "all",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "viewport": {
+        "w": 1440,
+        "h": 1000
+      }
+    },
+    "placed": [
+      "entry",
+      "auth",
+      "browse",
+      "pay",
+      "ship",
+      "done",
+      "island"
+    ],
+    "anchored": [],
+    "sourceBefore": "diagram \"Atlas: same starting arrangement\" version=1\nnode entry \"Entry\"\nnode auth \"Authenticate\"\nnode browse \"Browse\"\nnode pay \"Pay\"\nnode ship \"Ship\"\nnode done \"Complete\"\nnode island \"Disconnected\"\nedge e1 entry -> auth\nedge e2 auth -> browse\nedge e3 browse -> pay\nedge e4 pay -> ship\nedge e5 ship -> done\nedge e6 auth -> pay\nedge e7 browse -> ship\nlayout root engine=layered direction=right fold=never\nstay entry x=0 y=150\nstay auth x=240 y=0\nstay browse x=480 y=180\nstay pay x=720 y=40\nstay ship x=960 y=200\nstay done x=1200 y=80\nstay island x=480 y=360\n",
+    "sourceAfter": "diagram \"Atlas: same starting arrangement\" version=1\nnode entry \"Entry\"\nnode auth \"Authenticate\"\nnode browse \"Browse\"\nnode pay \"Pay\"\nnode ship \"Ship\"\nnode done \"Complete\"\nnode island \"Disconnected\"\nedge e1 entry -> auth\nedge e2 auth -> browse\nedge e3 browse -> pay\nedge e4 pay -> ship\nedge e5 ship -> done\nedge e6 auth -> pay\nedge e7 browse -> ship\nlayout root engine=layered direction=right fold=never\nstay entry x=46 y=135\nstay auth x=280 y=25\nstay browse x=495 y=158\nstay pay x=703 y=55\nstay ship x=917 y=180\nstay done x=1154 y=92\nstay island x=493 y=356\n",
+    "report": {
+      "intent": [],
+      "backwardEdges": 0,
+      "directedEdges": 7,
+      "feedbackEdges": 0,
+      "algorithm": "tidy",
+      "name": "Local tidy",
+      "mode": "pass",
+      "scope": "all",
+      "moved": 7,
+      "maxDisplacement": 48,
+      "rmsDisplacement": 38.83,
+      "movementLimit": 48,
+      "iterations": 32,
+      "batches": 1,
+      "before": {
+        "overlaps": 0,
+        "overlapArea": 0,
+        "width": 1364,
+        "height": 416,
+        "aspect": 3.28,
+        "area": 567424,
+        "linkLength": 2380
+      },
+      "after": {
+        "overlaps": 0,
+        "overlapArea": 0,
+        "width": 1272,
+        "height": 387,
+        "aspect": 3.29,
+        "area": 491727,
+        "linkLength": 2090
+      },
+      "warnings": [],
+      "milliseconds": 6,
+      "deterministic": false,
+      "termination": "bounded pass",
+      "solverStops": [
+        {
+          "parentId": null,
+          "iterations": 32,
+          "reason": "iteration limit"
+        }
+      ]
+    },
+    "recompileDeltas": [
+      {
+        "id": "entry",
+        "dx": 0.3200000000000003,
+        "dy": -0.26400000000001,
+        "dw": 0,
+        "dh": 0
+      },
+      {
+        "id": "auth",
+        "dx": -0.34199999999998454,
+        "dy": -0.48900000000000077,
+        "dw": 0,
+        "dh": 0
+      },
+      {
+        "id": "browse",
+        "dx": -0.3480000000000132,
+        "dy": 0.18799999999998818,
+        "dw": 0,
+        "dh": 0
+      },
+      {
+        "id": "pay",
+        "dx": -0.47900000000004184,
+        "dy": 0.2539999999999978,
+        "dw": 0,
+        "dh": 0
+      },
+      {
+        "id": "ship",
+        "dx": 0.4109999999999445,
+        "dy": -0.24600000000000932,
+        "dw": 0,
+        "dh": 0
+      },
+      {
+        "id": "done",
+        "dx": 0.42000000000007276,
+        "dy": -0.20600000000000307,
+        "dw": 0,
+        "dh": 0
+      },
+      {
+        "id": "island",
+        "dx": 0.26400000000001,
+        "dy": -0.09699999999997999,
+        "dw": 0,
+        "dh": 0
+      }
+    ],
+    "maxRecompileCoordinateDelta": 0.48900000000000077
+  },
+  "scopedRebuild": {
+    "removed": 2,
+    "before": "diagram \"Atlas: scopes and protection\" version=1\ngroup west \"West\"\ngroup east \"East\"\nnode w1 \"Receive\" in=west\nnode w2 \"Validate\" in=west\nnode w3 \"Store\" in=west\nnode e1 \"Process\" in=east\nnode e2 \"Publish\" in=east\nnode external \"External\"\nedge a w1 -> w2\nedge b w2 -> w3\nedge c w2 -> e1\nedge d e1 -> e2\nedge e e2 -> external\nlayout root engine=compound-flow direction=right fold=never\nlayout west row gap=64\nlayout east column gap=80\nstay w1 x=0 y=180\nnear w2 w1 side=below gap=64\npin w3 x=500 y=0\n",
+    "after": "diagram \"Atlas: scopes and protection\" version=1\ngroup west \"West\"\ngroup east \"East\"\nnode w1 \"Receive\" in=west\nnode w2 \"Validate\" in=west\nnode w3 \"Store\" in=west\nnode e1 \"Process\" in=east\nnode e2 \"Publish\" in=east\nnode external \"External\"\nedge a w1 -> w2\nedge b w2 -> w3\nedge c w2 -> e1\nedge d e1 -> e2\nedge e e2 -> external\nlayout root engine=compound-flow direction=right fold=never\nlayout west engine=tree direction=down\nlayout east column gap=80\npin w3 x=500 y=0\n",
+    "pinKept": true,
+    "outsideEastRecipeKept": true
+  }
+}

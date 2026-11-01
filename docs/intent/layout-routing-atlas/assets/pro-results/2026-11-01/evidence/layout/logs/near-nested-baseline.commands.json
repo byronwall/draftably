@@ -1,0 +1,60 @@
+{
+  "file": "near-nested-baseline.draft",
+  "source_sha256": "695bbf022f9247ce3172016b767f10449809ff150b8bb20d9f85a39a38fe7d9b",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-nested-baseline.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.114
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-nested-baseline.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.113
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 488,
+    "height": 342,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "24f60bb69977c24bb4aca7ddab9fb487048da6254cd3dac2ae63e329cb393dd7",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "fb52e5a657c1aa1c54f12f8655f9a48c50f134d3c4814d599fd2b90c3bd9be70",
+  "check_output": "Metrics: 488\u00d7342 (aspect 1.43), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 1 group, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-nested-baseline.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.101,
+    "file": "svg/near-nested-baseline.svg",
+    "bytes": 67883,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "a5c55e76ae07a0a5d1f94f1def8b6f2e279408d48629bf599f982b6399b5ae68"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

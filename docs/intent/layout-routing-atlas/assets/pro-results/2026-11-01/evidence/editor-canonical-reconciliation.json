@@ -1,0 +1,81 @@
+{
+  "surface_row_count": 90,
+  "surface_counts": {
+    "Editor": 73,
+    "CLI": 17
+  },
+  "visual_rows": 81,
+  "justified_nonvisual_rows": 9,
+  "proposed_canonical_merge": [
+    {
+      "from": "E010",
+      "into": "L030",
+      "reason": "Canvas is an additional state of the aspect control already listed by L030, not an independent parameter.",
+      "add_visual_ids": [
+        "V-E06"
+      ],
+      "required_context_text": "Numeric states persist in source; canvas is a native editor setting derived from viewport ratio clamped0.5..3, omitted from source. File preview compiles in the compiler context.",
+      "retain_alias_for_traceability": true
+    }
+  ],
+  "canonical_editor_contribution_after_merge": 89,
+  "near_duplicates_to_retain": [
+    {
+      "ids": [
+        "E001",
+        "L007",
+        "L008",
+        "L016"
+      ],
+      "reason": "Diagram type is a separate user-facing shortcut control; it adds no new engine. Keep preset mapping without counting it as an engine."
+    },
+    {
+      "ids": [
+        "E003",
+        "E037",
+        "L032",
+        "E077"
+      ],
+      "reason": "Layout lab scope, Compare scope, file recipe scope and CLI scope have different value sets, capture time, defaults and persistence. Merge only with a multi-context schema that preserves every distinction."
+    },
+    {
+      "ids": [
+        "E011",
+        "E012",
+        "E013"
+      ],
+      "reason": "Immediate pass, pass preview and source/native rebuild have different commit and persistence behavior."
+    },
+    {
+      "ids": [
+        "E035",
+        "E036"
+      ],
+      "reason": "Columns is required; rows can be none and changes grid cardinality. Both are public controls."
+    },
+    {
+      "ids": [
+        "E006",
+        "E038"
+      ],
+      "reason": "Pass iterations versus settled-solve maximum effort have different modes, ranges and source applicability."
+    },
+    {
+      "ids": [
+        "E078",
+        "L030",
+        "L036"
+      ],
+      "reason": "CLI fit, engine aspect and DSL fit serve different stages; do not merge because the labels resemble one another."
+    }
+  ],
+  "excluded_internal_or_aliases": [
+    "LayoutLab.settings legacy aliases radial\u2192tree and compact\u2192layered are not file engines or menu choices.",
+    "LayoutOptions trace/settle/warmStart/rebuild are invocation plumbing; user operations are inventoried instead.",
+    "fixedIds/selected/containerId/viewport are execution inputs behind public scope/holds/canvas controls, not free-form user fields.",
+    "SculptLab step defaults18, clamp1..64, has no public UI/DSL setting; describe only in contributor provenance.",
+    "Layout animation duration180ms and reduced-motion/hidden-page branches are automatic behavior, not an animation preference.",
+    "Worker/thread/cancellation/caches/trace phases are implementation details, not extra atlas controls.",
+    "General file/theme/search/clipboard/export pixel-density and check quiet flags are outside layout/routing control scope; selected export contracts are included because they retain these experiments."
+  ]
+}

@@ -1,0 +1,8 @@
+diagram "Local refinements" version=1
+node a "A"
+node b "B"
+node c "C"
+edge ab a -> b
+edge bc b -> c
+layout root row gap=48
+pin b x=240 y=120

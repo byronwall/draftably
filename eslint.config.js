@@ -15,6 +15,8 @@ export default tseslint.config(
       'docs/intent/diagram-imports/assets/pro-results/2026-10-31',
       'tmp',
       'src/engines/*.js',
+      // Keep supplied research companions unchanged; they are not application code.
+      'docs/intent/layout-routing-atlas/assets/pro-results/2026-11-01',
     ],
   },
   js.configs.recommended,

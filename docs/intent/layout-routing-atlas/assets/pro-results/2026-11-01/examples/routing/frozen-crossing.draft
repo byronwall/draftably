@@ -1,0 +1,18 @@
+diagram "Routing: crossing and detour" version=1
+# Fixed rectangles: change only the routing line for a causal comparison.
+node a "A"
+size a width=120 height=56
+pin a x=40 y=40
+node b "B"
+size b width=120 height=56
+pin b x=40 y=240
+node c "C"
+size c width=120 height=56
+pin c x=440 y=40
+node d "D"
+size d width=120 height=56
+pin d x=440 y=240
+edge ad a -> d from=right to=left
+edge bc b -> c from=right to=left
+# Row is intentional: suppress automatic flow skip/return lanes while pins freeze geometry.
+layout root row

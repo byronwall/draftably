@@ -1,0 +1,6 @@
+diagram "Routing: frame and member endpoints" version=1
+group g "Service"
+node member "Member" in=g
+node out "Caller"
+edge e out -> g
+layout root row

@@ -1,0 +1,60 @@
+{
+  "file": "near-nested-reference.draft",
+  "source_sha256": "0344f55938e1f125ae07853ecad61d77f1a244520a6f50c5f742ce1a3b6b26c6",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-nested-reference.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.146
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-nested-reference.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.111
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 488,
+    "height": 342,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "d034b0262466c572cb1809f50dd09957a622797e4d1f6dd30e763174e555a4d5",
+  "route_hash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "geometry_hash": "c5990687f070f1631fef6c1923cf30e4f4cc5b8cdec52c1c499ea7f47cd0c021",
+  "check_output": "Metrics: 488\u00d7342 (aspect 1.43), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 1 group, 0 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/near-nested-reference.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.112,
+    "file": "svg/near-nested-reference.svg",
+    "bytes": 67919,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "a14fbe2fcbc4c6235540273f15a98bd6d364ee41049f30ec3182c1f0e13a31eb"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

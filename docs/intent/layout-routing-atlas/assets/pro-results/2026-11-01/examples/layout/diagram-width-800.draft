@@ -1,0 +1,5 @@
+diagram "Frame width" version=1 width=800
+node a "A"
+node b "B"
+edge e a -> b
+layout root flow

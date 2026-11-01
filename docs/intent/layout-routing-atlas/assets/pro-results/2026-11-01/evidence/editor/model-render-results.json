@@ -1,0 +1,975 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "execution": "Actual LayoutLab.compute / SculptLab.journey / SculptLab.dab and src/cli/svg.ts renderSvg. Native model execution, not editor UI screenshots.",
+  "reproduce": "node work/editor-validation/render-model.mjs",
+  "source": "editor-fixtures/editor-pass-start.draft",
+  "startingJson": "editor-validation/json/editor-pass-start.json",
+  "routing": "SVG rendering uses the baseline renderer with previous:[]; it does not reproduce UI route-cache history.",
+  "timeline": {
+    "file": "editor-validation/json/model-timeline-full.json",
+    "frameCount": 13,
+    "selectedFrames": [
+      0,
+      6,
+      12
+    ],
+    "report": {
+      "intent": [],
+      "backwardEdges": 0,
+      "directedEdges": 7,
+      "feedbackEdges": 0,
+      "algorithm": "tidy",
+      "name": "Local tidy",
+      "mode": "rebuild",
+      "scope": "all",
+      "moved": 7,
+      "maxDisplacement": 76.59,
+      "rmsDisplacement": 52.95,
+      "movementLimit": null,
+      "iterations": 86,
+      "batches": 1,
+      "before": {
+        "overlaps": 0,
+        "overlapArea": 0,
+        "width": 1364,
+        "height": 416,
+        "aspect": 3.28,
+        "area": 567424,
+        "linkLength": 2380
+      },
+      "after": {
+        "overlaps": 0,
+        "overlapArea": 0,
+        "width": 1219,
+        "height": 373,
+        "aspect": 3.27,
+        "area": 454081,
+        "linkLength": 2000
+      },
+      "warnings": [],
+      "milliseconds": 11,
+      "deterministic": false,
+      "termination": "objective plateau",
+      "solverStops": [
+        {
+          "parentId": null,
+          "iterations": 86,
+          "reason": "objective plateau"
+        }
+      ]
+    }
+  },
+  "families": [
+    {
+      "name": "cold-warm-pass",
+      "names": [
+        "model-layout-before",
+        "model-layout-cold",
+        "model-layout-warm",
+        "model-layout-pass"
+      ],
+      "commonWorldRectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 1364,
+        "h": 416
+      }
+    },
+    {
+      "name": "timeline",
+      "names": [
+        "model-timeline-first",
+        "model-timeline-middle",
+        "model-timeline-last"
+      ],
+      "commonWorldRectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 1364,
+        "h": 416
+      }
+    },
+    {
+      "name": "brush",
+      "names": [
+        "model-brush-before",
+        "model-brush-tidy",
+        "model-brush-flow",
+        "model-brush-space",
+        "model-brush-restore",
+        "model-brush-protect"
+      ],
+      "commonWorldRectangle": {
+        "x": 0,
+        "y": 0,
+        "w": 1364,
+        "h": 422.3
+      }
+    }
+  ],
+  "rows": [
+    {
+      "name": "model-layout-before",
+      "document": "editor-validation/json/model-layout-before.json",
+      "svg": "editor-validation/svg/model-layout-before.svg",
+      "geometry": "editor-validation/geometry/model-layout-before.json",
+      "geometry_sha256": "596815570e1480d975a32461f3624639c467162284664f280998b5627bfb4c42",
+      "metrics": {
+        "width": 1444,
+        "height": 542,
+        "crossings": 0,
+        "bends": 12,
+        "length": 1890
+      },
+      "visual_ids": [
+        "V-E17"
+      ],
+      "operation": "baseline"
+    },
+    {
+      "name": "model-layout-cold",
+      "document": "editor-validation/json/model-layout-cold.json",
+      "svg": "editor-validation/svg/model-layout-cold.svg",
+      "geometry": "editor-validation/geometry/model-layout-cold.json",
+      "geometry_sha256": "99c2c80a180d469deb5597a1542db3734927839e33e93f7d3ad3e11ee2f00a61",
+      "metrics": {
+        "width": 1312,
+        "height": 263,
+        "crossings": 0,
+        "bends": 9,
+        "length": 1004.55
+      },
+      "visual_ids": [
+        "V-E17"
+      ],
+      "operation": "cold",
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "rebuild",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "snap": true,
+        "showManual": true,
+        "routing": {
+          "clearance": 10,
+          "portGap": 16,
+          "edgeGap": 16,
+          "bendPenalty": 32,
+          "crossingPenalty": 360,
+          "sharedPenalty": 8,
+          "parallelPenalty": 18,
+          "portStability": 20,
+          "fanoutPenalty": 50,
+          "passes": 3,
+          "cornerRadius": 6,
+          "standoff": 20
+        },
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        },
+        "warmStart": false,
+        "settle": true,
+        "maxIterations": 640
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 7,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 7,
+        "maxDisplacement": 462.77,
+        "rmsDisplacement": 194.55,
+        "movementLimit": null,
+        "iterations": 81,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1364,
+          "height": 416,
+          "aspect": 3.28,
+          "area": 567424,
+          "linkLength": 2380
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1230,
+          "height": 136,
+          "aspect": 9.04,
+          "area": 167495,
+          "linkLength": 1911
+        },
+        "warnings": [],
+        "milliseconds": 16,
+        "deterministic": true,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 81,
+            "reason": "objective plateau"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model-layout-warm",
+      "document": "editor-validation/json/model-layout-warm.json",
+      "svg": "editor-validation/svg/model-layout-warm.svg",
+      "geometry": "editor-validation/geometry/model-layout-warm.json",
+      "geometry_sha256": "1e27a576577b971a5a9d7d148187cf69155570339792c0ad9019b54ba86c7267",
+      "metrics": {
+        "width": 1300,
+        "height": 500,
+        "crossings": 0,
+        "bends": 12,
+        "length": 1367.95
+      },
+      "visual_ids": [
+        "V-E17"
+      ],
+      "operation": "warm",
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "rebuild",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "snap": true,
+        "showManual": true,
+        "routing": {
+          "clearance": 10,
+          "portGap": 16,
+          "edgeGap": 16,
+          "bendPenalty": 32,
+          "crossingPenalty": 360,
+          "sharedPenalty": 8,
+          "parallelPenalty": 18,
+          "portStability": 20,
+          "fanoutPenalty": 50,
+          "passes": 3,
+          "cornerRadius": 6,
+          "standoff": 20
+        },
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        },
+        "warmStart": true,
+        "settle": true,
+        "maxIterations": 640
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 7,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "rebuild",
+        "scope": "all",
+        "moved": 7,
+        "maxDisplacement": 76.59,
+        "rmsDisplacement": 52.95,
+        "movementLimit": null,
+        "iterations": 86,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1364,
+          "height": 416,
+          "aspect": 3.28,
+          "area": 567424,
+          "linkLength": 2380
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1219,
+          "height": 373,
+          "aspect": 3.27,
+          "area": 454081,
+          "linkLength": 2000
+        },
+        "warnings": [],
+        "milliseconds": 13,
+        "deterministic": false,
+        "termination": "objective plateau",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 86,
+            "reason": "objective plateau"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model-layout-pass",
+      "document": "editor-validation/json/model-layout-pass.json",
+      "svg": "editor-validation/svg/model-layout-pass.svg",
+      "geometry": "editor-validation/geometry/model-layout-pass.json",
+      "geometry_sha256": "093b2968320b4ed9c280b3fbc5fab8203f53c22ce0dafb8d69f26a705adb2e3c",
+      "metrics": {
+        "width": 1353,
+        "height": 514,
+        "crossings": 0,
+        "bends": 8,
+        "length": 1454.97
+      },
+      "visual_ids": [
+        "V-E17"
+      ],
+      "operation": "pass",
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "snap": true,
+        "showManual": true,
+        "routing": {
+          "clearance": 10,
+          "portGap": 16,
+          "edgeGap": 16,
+          "bendPenalty": 32,
+          "crossingPenalty": 360,
+          "sharedPenalty": 8,
+          "parallelPenalty": 18,
+          "portStability": 20,
+          "fanoutPenalty": 50,
+          "passes": 3,
+          "cornerRadius": 6,
+          "standoff": 20
+        },
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        },
+        "warmStart": false,
+        "settle": false,
+        "maxIterations": 640
+      },
+      "report": {
+        "intent": [],
+        "backwardEdges": 0,
+        "directedEdges": 7,
+        "feedbackEdges": 0,
+        "algorithm": "tidy",
+        "name": "Local tidy",
+        "mode": "pass",
+        "scope": "all",
+        "moved": 7,
+        "maxDisplacement": 48,
+        "rmsDisplacement": 38.83,
+        "movementLimit": 48,
+        "iterations": 32,
+        "batches": 1,
+        "before": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1364,
+          "height": 416,
+          "aspect": 3.28,
+          "area": 567424,
+          "linkLength": 2380
+        },
+        "after": {
+          "overlaps": 0,
+          "overlapArea": 0,
+          "width": 1272,
+          "height": 387,
+          "aspect": 3.29,
+          "area": 491727,
+          "linkLength": 2090
+        },
+        "warnings": [],
+        "milliseconds": 5,
+        "deterministic": false,
+        "termination": "bounded pass",
+        "solverStops": [
+          {
+            "parentId": null,
+            "iterations": 32,
+            "reason": "iteration limit"
+          }
+        ]
+      }
+    },
+    {
+      "name": "model-timeline-first",
+      "document": "editor-validation/json/model-timeline-first.json",
+      "svg": "editor-validation/svg/model-timeline-first.svg",
+      "geometry": "editor-validation/geometry/model-timeline-first.json",
+      "geometry_sha256": "596815570e1480d975a32461f3624639c467162284664f280998b5627bfb4c42",
+      "metrics": {
+        "width": 1444,
+        "height": 542,
+        "crossings": 0,
+        "bends": 12,
+        "length": 1890
+      },
+      "visual_ids": [
+        "V-E23",
+        "V-E24"
+      ],
+      "operation": "recorded frame",
+      "frameIndex": 0,
+      "frameCount": 13,
+      "iteration": 0,
+      "phase": "Your arrangement",
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "snap": true,
+        "showManual": true,
+        "routing": {
+          "clearance": 10,
+          "portGap": 16,
+          "edgeGap": 16,
+          "bendPenalty": 32,
+          "crossingPenalty": 360,
+          "sharedPenalty": 8,
+          "parallelPenalty": 18,
+          "portStability": 20,
+          "fanoutPenalty": 50,
+          "passes": 3,
+          "cornerRadius": 6,
+          "standoff": 20
+        },
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        },
+        "maxIterations": 640
+      }
+    },
+    {
+      "name": "model-timeline-middle",
+      "document": "editor-validation/json/model-timeline-middle.json",
+      "svg": "editor-validation/svg/model-timeline-middle.svg",
+      "geometry": "editor-validation/geometry/model-timeline-middle.json",
+      "geometry_sha256": "6a9a785ea63f984467d21e50309f7db2137b718db848d05e195cacfe8a06ec0d",
+      "metrics": {
+        "width": 1279,
+        "height": 462,
+        "crossings": 0,
+        "bends": 8,
+        "length": 1040.19
+      },
+      "visual_ids": [
+        "V-E23",
+        "V-E24"
+      ],
+      "operation": "recorded frame",
+      "frameIndex": 6,
+      "frameCount": 13,
+      "iteration": 48,
+      "phase": "Refining diagram",
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "snap": true,
+        "showManual": true,
+        "routing": {
+          "clearance": 10,
+          "portGap": 16,
+          "edgeGap": 16,
+          "bendPenalty": 32,
+          "crossingPenalty": 360,
+          "sharedPenalty": 8,
+          "parallelPenalty": 18,
+          "portStability": 20,
+          "fanoutPenalty": 50,
+          "passes": 3,
+          "cornerRadius": 6,
+          "standoff": 20
+        },
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        },
+        "maxIterations": 640
+      }
+    },
+    {
+      "name": "model-timeline-last",
+      "document": "editor-validation/json/model-timeline-last.json",
+      "svg": "editor-validation/svg/model-timeline-last.svg",
+      "geometry": "editor-validation/geometry/model-timeline-last.json",
+      "geometry_sha256": "1e27a576577b971a5a9d7d148187cf69155570339792c0ad9019b54ba86c7267",
+      "metrics": {
+        "width": 1300,
+        "height": 500,
+        "crossings": 0,
+        "bends": 12,
+        "length": 1367.95
+      },
+      "visual_ids": [
+        "V-E23",
+        "V-E24"
+      ],
+      "operation": "recorded frame",
+      "frameIndex": 12,
+      "frameCount": 13,
+      "iteration": 86,
+      "phase": "Computed finish",
+      "options": {
+        "algorithm": "tidy",
+        "direction": "RIGHT",
+        "mode": "pass",
+        "maxMove": 48,
+        "stability": 65,
+        "iterations": 32,
+        "nodeGap": 24,
+        "rankGap": 52,
+        "edgeLength": 88,
+        "repulsion": 45,
+        "flowStrength": 65,
+        "alignment": 55,
+        "compactness": 35,
+        "gridStrength": 45,
+        "aspect": "1.6",
+        "fold": "never",
+        "respectDirection": true,
+        "ordering": "stable",
+        "rootId": "",
+        "respectManual": false,
+        "growContainers": false,
+        "boundaryPull": 65,
+        "hierarchySweeps": 2,
+        "groupGap": 48,
+        "snap": true,
+        "showManual": true,
+        "routing": {
+          "clearance": 10,
+          "portGap": 16,
+          "edgeGap": 16,
+          "bendPenalty": 32,
+          "crossingPenalty": 360,
+          "sharedPenalty": 8,
+          "parallelPenalty": 18,
+          "portStability": 20,
+          "fanoutPenalty": 50,
+          "passes": 3,
+          "cornerRadius": 6,
+          "standoff": 20
+        },
+        "scope": "all",
+        "selected": [],
+        "fixedIds": [],
+        "viewport": {
+          "w": 1440,
+          "h": 1000
+        },
+        "maxIterations": 640
+      }
+    },
+    {
+      "name": "model-brush-before",
+      "document": "editor-validation/json/model-brush-before.json",
+      "svg": "editor-validation/svg/model-brush-before.svg",
+      "geometry": "editor-validation/geometry/model-brush-before.json",
+      "geometry_sha256": "449df9d517efd110e78dd21001d3466e6e96fac188fbe1b6fb13fa9b6b64a444",
+      "metrics": {
+        "width": 1444,
+        "height": 542,
+        "crossings": 0,
+        "bends": 13,
+        "length": 2144
+      },
+      "visual_ids": [
+        "V-E27",
+        "V-E28"
+      ],
+      "operation": "brush baseline",
+      "setup": {
+        "sourceJson": "editor-validation/json/editor-pass-start.json",
+        "referenceCapturedBeforePerturbation": true,
+        "edits": [
+          {
+            "id": "browse",
+            "x": 560,
+            "y": 320
+          }
+        ],
+        "cameraScale": 1
+      }
+    },
+    {
+      "name": "model-brush-tidy",
+      "document": "editor-validation/json/model-brush-tidy.json",
+      "svg": "editor-validation/svg/model-brush-tidy.svg",
+      "geometry": "editor-validation/geometry/model-brush-tidy.json",
+      "geometry_sha256": "617fc74b5dceb11ab9d300e5ff331de89387d486cc44cff453dd54d0c042e4ef",
+      "metrics": {
+        "width": 1444,
+        "height": 549,
+        "crossings": 0,
+        "bends": 13,
+        "length": 2124.24
+      },
+      "visual_ids": [
+        "V-E27",
+        "V-E28"
+      ],
+      "operation": "one dab",
+      "options": {
+        "radius": 190,
+        "strength": 35,
+        "softness": 75,
+        "step": 18,
+        "mode": "tidy",
+        "holdRestored": true,
+        "point": {
+          "x": 642,
+          "y": 348
+        },
+        "worldRadius": 190,
+        "protectedIds": [],
+        "reference": "editor-validation/json/model-brush-reference.json"
+      },
+      "result": {
+        "weights": {
+          "browse": 1,
+          "island": 1
+        },
+        "locked": [],
+        "moved": [
+          "browse",
+          "island"
+        ],
+        "maxDisplacement": 6.300000000000011,
+        "blocked": false,
+        "attenuation": 1
+      },
+      "editorSessionHoldsAfter": [],
+      "holdsNote": "Hold IDs follow src/state/sculpt.ts brushDab; holds are session state, not a field in this Diagram JSON."
+    },
+    {
+      "name": "model-brush-flow",
+      "document": "editor-validation/json/model-brush-flow.json",
+      "svg": "editor-validation/svg/model-brush-flow.svg",
+      "geometry": "editor-validation/geometry/model-brush-flow.json",
+      "geometry_sha256": "e354c5ac94798700b79e7b67d4217e4637ed14efac43d5cde420164b123f524c",
+      "metrics": {
+        "width": 1444,
+        "height": 549,
+        "crossings": 0,
+        "bends": 13,
+        "length": 2124.45
+      },
+      "visual_ids": [
+        "V-E27",
+        "V-E28"
+      ],
+      "operation": "one dab",
+      "options": {
+        "radius": 190,
+        "strength": 35,
+        "softness": 75,
+        "step": 18,
+        "mode": "flow",
+        "holdRestored": true,
+        "point": {
+          "x": 642,
+          "y": 348
+        },
+        "worldRadius": 190,
+        "protectedIds": [],
+        "reference": "editor-validation/json/model-brush-reference.json"
+      },
+      "result": {
+        "weights": {
+          "browse": 1,
+          "island": 1
+        },
+        "locked": [],
+        "moved": [
+          "browse",
+          "island"
+        ],
+        "maxDisplacement": 6.300000000000011,
+        "blocked": false,
+        "attenuation": 1
+      },
+      "editorSessionHoldsAfter": [],
+      "holdsNote": "Hold IDs follow src/state/sculpt.ts brushDab; holds are session state, not a field in this Diagram JSON."
+    },
+    {
+      "name": "model-brush-space",
+      "document": "editor-validation/json/model-brush-space.json",
+      "svg": "editor-validation/svg/model-brush-space.svg",
+      "geometry": "editor-validation/geometry/model-brush-space.json",
+      "geometry_sha256": "67622f564ebdeb8109b130cb21a2d5fa08bab20393daa0d45dfcb75132d0a1f9",
+      "metrics": {
+        "width": 1444,
+        "height": 549,
+        "crossings": 0,
+        "bends": 13,
+        "length": 2125.1
+      },
+      "visual_ids": [
+        "V-E27",
+        "V-E28"
+      ],
+      "operation": "one dab",
+      "options": {
+        "radius": 190,
+        "strength": 35,
+        "softness": 75,
+        "step": 18,
+        "mode": "space",
+        "holdRestored": true,
+        "point": {
+          "x": 642,
+          "y": 348
+        },
+        "worldRadius": 190,
+        "protectedIds": [],
+        "reference": "editor-validation/json/model-brush-reference.json"
+      },
+      "result": {
+        "weights": {
+          "browse": 1,
+          "island": 1
+        },
+        "locked": [],
+        "moved": [
+          "browse",
+          "island"
+        ],
+        "maxDisplacement": 6.300000000000011,
+        "blocked": false,
+        "attenuation": 1
+      },
+      "editorSessionHoldsAfter": [],
+      "holdsNote": "Hold IDs follow src/state/sculpt.ts brushDab; holds are session state, not a field in this Diagram JSON."
+    },
+    {
+      "name": "model-brush-restore",
+      "document": "editor-validation/json/model-brush-restore.json",
+      "svg": "editor-validation/svg/model-brush-restore.svg",
+      "geometry": "editor-validation/geometry/model-brush-restore.json",
+      "geometry_sha256": "81ad26bc765d2c2310c90b6539fdcd025d99fb172708e5fa8c5911063673cfad",
+      "metrics": {
+        "width": 1444,
+        "height": 542,
+        "crossings": 0,
+        "bends": 13,
+        "length": 2130.72
+      },
+      "visual_ids": [
+        "V-E27",
+        "V-E28"
+      ],
+      "operation": "one dab",
+      "options": {
+        "radius": 190,
+        "strength": 35,
+        "softness": 75,
+        "step": 18,
+        "mode": "restore",
+        "holdRestored": true,
+        "point": {
+          "x": 642,
+          "y": 348
+        },
+        "worldRadius": 190,
+        "protectedIds": [],
+        "reference": "editor-validation/json/model-brush-reference.json"
+      },
+      "result": {
+        "weights": {
+          "browse": 1,
+          "island": 1
+        },
+        "locked": [],
+        "moved": [
+          "browse"
+        ],
+        "maxDisplacement": 6.299999999999967,
+        "blocked": false,
+        "attenuation": 1
+      },
+      "editorSessionHoldsAfter": [
+        "browse"
+      ],
+      "holdsNote": "Hold IDs follow src/state/sculpt.ts brushDab; holds are session state, not a field in this Diagram JSON."
+    },
+    {
+      "name": "model-brush-protect",
+      "document": "editor-validation/json/model-brush-protect.json",
+      "svg": "editor-validation/svg/model-brush-protect.svg",
+      "geometry": "editor-validation/geometry/model-brush-protect.json",
+      "geometry_sha256": "449df9d517efd110e78dd21001d3466e6e96fac188fbe1b6fb13fa9b6b64a444",
+      "metrics": {
+        "width": 1444,
+        "height": 542,
+        "crossings": 0,
+        "bends": 13,
+        "length": 2144
+      },
+      "visual_ids": [
+        "V-E27",
+        "V-E28"
+      ],
+      "operation": "one dab",
+      "options": {
+        "radius": 190,
+        "strength": 35,
+        "softness": 75,
+        "step": 18,
+        "mode": "protect",
+        "holdRestored": true,
+        "point": {
+          "x": 642,
+          "y": 348
+        },
+        "worldRadius": 190,
+        "protectedIds": [],
+        "reference": "editor-validation/json/model-brush-reference.json"
+      },
+      "result": {
+        "weights": {
+          "browse": 1,
+          "island": 1
+        },
+        "locked": [],
+        "moved": [],
+        "maxDisplacement": 0,
+        "blocked": false
+      },
+      "editorSessionHoldsAfter": [
+        "browse",
+        "island"
+      ],
+      "holdsNote": "Hold IDs follow src/state/sculpt.ts brushDab; holds are session state, not a field in this Diagram JSON."
+    }
+  ]
+}

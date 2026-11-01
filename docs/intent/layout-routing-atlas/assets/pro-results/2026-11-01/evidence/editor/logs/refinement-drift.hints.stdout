@@ -1,0 +1,7 @@
+warning line 9: stay b gave way by 32 px to keep root clear. Remove line 9, or run format --drop-stale. [relaxed]
+warning line 8: near c gave way by 44 px to keep root clear. Remove line 8, or run format --drop-stale. [relaxed]
+id  refinement    raw x,y  final x,y  delta
+c   near line 8   424,0    -22,120    462px
+b   stay line 9   212,0    60,-32     155px
+a   size line 10  0,0      0,36       36px
+Warnings: 3 nodes, 0 groups, 2 connections.

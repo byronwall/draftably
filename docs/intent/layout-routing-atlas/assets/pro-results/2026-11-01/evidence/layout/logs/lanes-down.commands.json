@@ -1,0 +1,60 @@
+{
+  "file": "lanes-down.draft",
+  "source_sha256": "8555d02f12abeb370cae7e3c44bdc7fb5b3eab738b8a7ea82ff5da1f51a02de5",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/lanes-down.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.165
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/lanes-down.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.179
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 504,
+    "height": 590,
+    "crossings": 0,
+    "bends": 3,
+    "length": 538,
+    "warnings": 0
+  },
+  "node_hash": "1154512ec6ddaa15536b15e25cec1fd921f084e2a31588f32315a9508a7f69e9",
+  "route_hash": "7cf9db7b44f0b8a1e5f82afdb0a2326348b3a22a35d94906cdb227dd176346f9",
+  "geometry_hash": "0eadabcd2fb96362227508a629e371d16dbc003cbce56e914abf91307097b074",
+  "check_output": "Metrics: 504\u00d7590 (aspect 0.85), 0 crossings, 3 bends, 538px of lines, 0 warnings.\nOK: 4 nodes, 2 groups, 3 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/lanes-down.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.161,
+    "file": "svg/lanes-down.svg",
+    "bytes": 69751,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "55351a2516bc645f5a30af0556c79bc0a03be3b78566bc55d980440b10d3aeba"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

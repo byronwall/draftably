@@ -1,0 +1,375 @@
+{
+  "file": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/grouped.draft",
+  "source": "333894f315d09560",
+  "mode": "try",
+  "prefer": "fewer-crossings",
+  "recommended": "v0",
+  "failed": [],
+  "tried": 10,
+  "skipped": 0,
+  "shape": {
+    "nodes": 7,
+    "groups": 3,
+    "ranks": 5,
+    "tree": false,
+    "labels": 0,
+    "scope": "root",
+    "layout": "compound-flow",
+    "engine": "compound-flow",
+    "direction": "auto"
+  },
+  "variants": [
+    {
+      "id": "v0",
+      "title": "current",
+      "why": "the file as it is",
+      "edits": [],
+      "lines": [],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0,
+        "moved": 0
+      },
+      "tags": [
+        "recommended",
+        "smallest"
+      ],
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v0.png"
+    },
+    {
+      "id": "v1",
+      "title": "compound-flow",
+      "why": "--try engine=compound-flow",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "compound-flow"
+          }
+        }
+      ],
+      "lines": [],
+      "tags": [
+        "same as v0"
+      ],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0,
+        "moved": 0
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v1.png"
+    },
+    {
+      "id": "v2",
+      "title": "boundary-align",
+      "why": "--try engine=boundary-align",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "boundary-align"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=boundary-align"
+        }
+      ],
+      "tags": [
+        "fewest crossings",
+        "fewest bends"
+      ],
+      "metrics": {
+        "width": 1277,
+        "height": 606,
+        "crossings": 0,
+        "bends": 9,
+        "length": 1989,
+        "warnings": 0,
+        "moved": 225
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v2.png"
+    },
+    {
+      "id": "v3",
+      "title": "compound-spring",
+      "why": "--try engine=compound-spring",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "compound-spring"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=compound-spring"
+        }
+      ],
+      "tags": [
+        "fewest crossings",
+        "fewest bends"
+      ],
+      "metrics": {
+        "width": 1131,
+        "height": 721,
+        "crossings": 0,
+        "bends": 9,
+        "length": 1499,
+        "warnings": 0,
+        "moved": 222
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v3.png"
+    },
+    {
+      "id": "v4",
+      "title": "tidy",
+      "why": "--try engine=tidy",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "tidy"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=tidy"
+        }
+      ],
+      "tags": [],
+      "metrics": {
+        "width": 1252,
+        "height": 372,
+        "crossings": 2,
+        "bends": 11,
+        "length": 1209,
+        "warnings": 0,
+        "moved": 182
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v4.png"
+    },
+    {
+      "id": "v5",
+      "title": "stress",
+      "why": "--try engine=stress",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "stress"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=stress"
+        }
+      ],
+      "tags": [],
+      "metrics": {
+        "width": 1260,
+        "height": 372,
+        "crossings": 2,
+        "bends": 11,
+        "length": 1240,
+        "warnings": 0,
+        "moved": 183
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v5.png"
+    },
+    {
+      "id": "v6",
+      "title": "force",
+      "why": "--try engine=force",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "force"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=force"
+        }
+      ],
+      "tags": [
+        "fewest bends"
+      ],
+      "metrics": {
+        "width": 1281,
+        "height": 614,
+        "crossings": 1,
+        "bends": 9,
+        "length": 1831,
+        "warnings": 0,
+        "moved": 208
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v6.png"
+    },
+    {
+      "id": "v7",
+      "title": "flow",
+      "why": "--try engine=flow",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "flow"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=flow"
+        }
+      ],
+      "tags": [
+        "least moved"
+      ],
+      "metrics": {
+        "width": 1252,
+        "height": 372,
+        "crossings": 2,
+        "bends": 11,
+        "length": 1243,
+        "warnings": 0,
+        "moved": 179
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v7.png"
+    },
+    {
+      "id": "v8",
+      "title": "layered",
+      "why": "--try engine=layered",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "layered"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=layered"
+        }
+      ],
+      "tags": [
+        "same as v0"
+      ],
+      "metrics": {
+        "width": 1060,
+        "height": 402,
+        "crossings": 1,
+        "bends": 12,
+        "length": 1340,
+        "warnings": 0,
+        "moved": 0
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v8.png"
+    },
+    {
+      "id": "v9",
+      "title": "tree",
+      "why": "--try engine=tree",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "tree"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=tree"
+        }
+      ],
+      "tags": [
+        "fewest bends",
+        "least moved"
+      ],
+      "metrics": {
+        "width": 1252,
+        "height": 386,
+        "crossings": 1,
+        "bends": 9,
+        "length": 1296,
+        "warnings": 0,
+        "moved": 179
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v9.png"
+    },
+    {
+      "id": "v10",
+      "title": "grid",
+      "why": "--try engine=grid",
+      "edits": [
+        {
+          "kind": "layout",
+          "scope": "root",
+          "attrs": {
+            "engine": "grid"
+          }
+        }
+      ],
+      "lines": [
+        {
+          "line": 18,
+          "before": "layout root engine=compound-flow",
+          "after": "layout root engine=grid"
+        }
+      ],
+      "tags": [],
+      "metrics": {
+        "width": 1058,
+        "height": 650,
+        "crossings": 1,
+        "bends": 11,
+        "length": 1672,
+        "warnings": 0,
+        "moved": 211
+      },
+      "png": "/Users/byronwall/.codex/worktrees/4094/diagram-studio/tmp/pro/layout-routing-atlas/engine-baseline/v10.png"
+    }
+  ]
+}

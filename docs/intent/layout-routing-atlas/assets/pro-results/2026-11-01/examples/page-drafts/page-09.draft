@@ -1,0 +1,7 @@
+diagram "A side note" version=1
+node api "API"
+node store "Store"
+node note "Read path"
+edge read api -> store
+layout root flow gap=48
+near note store side=below gap=24 offset=12

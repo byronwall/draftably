@@ -1,0 +1,60 @@
+{
+  "file": "shape-diamond.draft",
+  "source_sha256": "eb0e44bcf8bf647a3fb21478e9288dc13ae8bd79e8e8dfb4b2b58e7453c532f9",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-diamond.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.105
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-diamond.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.097
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 408,
+    "height": 262,
+    "crossings": 0,
+    "bends": 2,
+    "length": 68,
+    "warnings": 0
+  },
+  "node_hash": "e25032b77ef8da8d28d2e4f2ee982e24e0bdd49847372c0fda89f7e0169fd7e3",
+  "route_hash": "7a87781910246d6e8a0b8b729adea6c3fec1bb81864b1d1bd2b374ee6a0dcdf5",
+  "geometry_hash": "8fffed7e802c03325a1da3068b5694b42cc1206b60f10d8b46350cf73e14ed94",
+  "check_output": "Metrics: 408\u00d7262 (aspect 1.56), 0 crossings, 2 bends, 68px of lines, 0 warnings.\nOK: 2 nodes, 0 groups, 1 connection.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-diamond.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.127,
+    "file": "svg/shape-diamond.svg",
+    "bytes": 67118,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "96af7f828a6f2b194e92d131610d2f1c5a20847c076d7faf3cd8f0128ac13046"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

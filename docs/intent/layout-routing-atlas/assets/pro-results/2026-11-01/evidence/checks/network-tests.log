@@ -1,0 +1,9 @@
+
+ RUN  v5.0.3 /workspace/scratch/bf0bcb720732/baseline
+
+
+ Test Files  2 passed (2)
+      Tests  10 passed (10)
+   Start at  07:40:39
+   Duration  803ms (transform 62%, tests 20%, import 17%, worker 1%)
+

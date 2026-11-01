@@ -1,0 +1,791 @@
+{
+  "sourceVisits": 347,
+  "nativeVisits": 36,
+  "keyboardValue": "2",
+  "browser": "156.0.8078.80",
+  "groups": 109,
+  "observations": [
+    {
+      "id": "VL01",
+      "kind": "layout",
+      "sourceCount": 10,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "VL02",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL03",
+      "kind": "layout",
+      "sourceCount": 5,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL04",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL05",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL06",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL07",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL08",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL09",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL10",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL11",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL12",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL13",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL14",
+      "kind": "layout",
+      "sourceCount": 6,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL15",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL16",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL17",
+      "kind": "layout",
+      "sourceCount": 6,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL18",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL19",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL20",
+      "kind": "layout",
+      "sourceCount": 4,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL21",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL22",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL23",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 4,
+      "ok": true
+    },
+    {
+      "id": "VL24",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 3,
+      "ok": true
+    },
+    {
+      "id": "VL25",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL26",
+      "kind": "layout",
+      "sourceCount": 1,
+      "subcomparisons": 5,
+      "ok": true
+    },
+    {
+      "id": "VL27",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL28",
+      "kind": "layout",
+      "sourceCount": 4,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL29",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 4,
+      "ok": true
+    },
+    {
+      "id": "VL30",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL31",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL32",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL33",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL34",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL35",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL36",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL37",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL38",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 3,
+      "ok": true
+    },
+    {
+      "id": "VL39",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "VL41",
+      "kind": "layout",
+      "sourceCount": 5,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL42",
+      "kind": "layout",
+      "sourceCount": 4,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL43",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL44",
+      "kind": "layout",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL45",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "VL46",
+      "kind": "layout",
+      "sourceCount": 2,
+      "subcomparisons": 5,
+      "ok": true
+    },
+    {
+      "id": "V-R01",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R02",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R03",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R04",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R05",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R06",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R07",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R08",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R09",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R10",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R11",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R12",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R13",
+      "kind": "routing",
+      "sourceCount": 5,
+      "subcomparisons": 3,
+      "ok": true
+    },
+    {
+      "id": "V-R14",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R15",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 3,
+      "ok": true
+    },
+    {
+      "id": "V-R16",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R17",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R18",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R19",
+      "kind": "routing",
+      "sourceCount": 3,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R20",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R21",
+      "kind": "routing",
+      "sourceCount": 1,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R22",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-R23",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "V-R24",
+      "kind": "routing",
+      "sourceCount": 2,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-E01",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E02",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E03",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E04",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E05",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-E06",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E07",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E08",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 3,
+      "ok": true
+    },
+    {
+      "id": "V-E09",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E10",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E11",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E12",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E13",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E14",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E15",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E16",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E17",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E18",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-E19",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E20",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E21",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E22",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E23",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E24",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E25",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E26",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E27",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E28",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E29",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E30",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E31",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-E32",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 2,
+      "ok": true
+    },
+    {
+      "id": "V-E33",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E34",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E35",
+      "kind": "editor",
+      "sourceCount": 1,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "V-E36",
+      "kind": "editor",
+      "sourceCount": 2,
+      "subcomparisons": 1,
+      "ok": true
+    },
+    {
+      "id": "NV-E01",
+      "kind": "nonvisual",
+      "sourceCount": 0,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "NV-E02",
+      "kind": "nonvisual",
+      "sourceCount": 0,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "NV-E03",
+      "kind": "nonvisual",
+      "sourceCount": 0,
+      "subcomparisons": 0,
+      "ok": true
+    },
+    {
+      "id": "NV-E04",
+      "kind": "nonvisual",
+      "sourceCount": 0,
+      "subcomparisons": 0,
+      "ok": true
+    }
+  ],
+  "mobile": {
+    "viewport": 390,
+    "bodyWidth": 390,
+    "documentWidth": 390,
+    "activePanels": [
+      {
+        "width": 354,
+        "left": 18
+      },
+      {
+        "width": 354,
+        "left": 18
+      }
+    ]
+  },
+  "searchCount": 4,
+  "originalSvgDownloadExact": true,
+  "errors": [],
+  "atlas_preview_sha256": "1072265fc04826f9bc17884cca89555e081e14c8f0ea3c181e96b7bcb8b49157"
+}

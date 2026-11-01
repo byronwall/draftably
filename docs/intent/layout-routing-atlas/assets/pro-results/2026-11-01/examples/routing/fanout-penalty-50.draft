@@ -1,0 +1,30 @@
+diagram "Routing: a fan that exceeds side capacity" version=1
+# Smaller vertical padding keeps labels readable inside the intentionally short fixed boxes.
+theme drafting padding-y=4
+# Fixed rectangles: change only the routing line for a causal comparison.
+node s "Hub"
+size s width=120 height=40
+pin s x=40 y=200
+node a "A"
+size a width=120 height=56
+pin a x=440 y=0
+node b "B"
+size b width=120 height=56
+pin b x=440 y=120
+node c "C"
+size c width=120 height=56
+pin c x=440 y=240
+node d "D"
+size d width=120 height=56
+pin d x=440 y=360
+node e "E"
+size e width=120 height=56
+pin e x=440 y=480
+edge a s -> a
+edge b s -> b
+edge c s -> c
+edge d s -> d
+edge e s -> e
+routing fanout-penalty=50
+# Row is intentional: suppress automatic flow skip/return lanes while pins freeze geometry.
+layout root row

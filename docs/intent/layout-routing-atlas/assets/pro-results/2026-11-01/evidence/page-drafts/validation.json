@@ -1,0 +1,1769 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "positive_sources": 13,
+  "commands": 39,
+  "failures": [],
+  "frozen_geometry_failures": [],
+  "frozen_comparisons": [],
+  "warning_contract": "Warnings are retained; intentional quality warnings do not fail the runner. Inspect counts and check quality notes have distinct scopes.",
+  "results": [
+    {
+      "source": "examples/page-drafts/page-01.draft",
+      "source_sha256": "b1b1daad24fdd29d8ac8ac6dcaa681e9e663acd2eda175904fc81e9f535f5a52",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-01.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.137
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-01.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.123
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-01.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.124
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 698\u00d7291 (aspect 2.40), 0 crossings, 2 bends, 300px of lines, 0 warnings.\nOK: 4 nodes, 0 groups, 3 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "receive",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "reject",
+            "parent": "root",
+            "x": 454,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "store",
+            "parent": "root",
+            "x": 454,
+            "y": 104,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "validate",
+            "parent": "root",
+            "x": 212,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "invalid",
+            "points": [
+              {
+                "x": 376,
+                "y": 20
+              },
+              {
+                "x": 454,
+                "y": 20
+              }
+            ]
+          },
+          {
+            "id": "request",
+            "points": [
+              {
+                "x": 164,
+                "y": 28
+              },
+              {
+                "x": 212,
+                "y": 28
+              }
+            ]
+          },
+          {
+            "id": "valid",
+            "points": [
+              {
+                "x": 376,
+                "y": 36
+              },
+              {
+                "x": 415,
+                "y": 36
+              },
+              {
+                "x": 415,
+                "y": 132
+              },
+              {
+                "x": 454,
+                "y": 132
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 698,
+          "height": 291,
+          "crossings": 0,
+          "bends": 2,
+          "length": 300,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 698,
+        "height": 291,
+        "crossings": 0,
+        "bends": 2,
+        "length": 300,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-01.svg",
+      "svg_sha256": "6c012e58009b1271f7c14a4a651d469d32a52d2c672a6bf8687ec84953ff514a"
+    },
+    {
+      "source": "examples/page-drafts/page-02.draft",
+      "source_sha256": "41f86f593c2e1949de7c06a0d19d34d584680e4dc67e6f26d40eef7a34f883d2",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-02.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.128
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-02.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.134
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-02.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.131
+        }
+      ],
+      "problems": [],
+      "check_output": "warning The drawing is 928\u00d7182 (aspect 5.10). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 928\u00d7182 (aspect 5.10), 0 crossings, 0 bends, 192px of lines, 1 warning.\nWarnings: 4 nodes, 0 groups, 3 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "ingest",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "parse",
+            "parent": "root",
+            "x": 228,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "store",
+            "parent": "root",
+            "x": 684,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "validate",
+            "parent": "root",
+            "x": 456,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "ip",
+            "points": [
+              {
+                "x": 164,
+                "y": 28
+              },
+              {
+                "x": 228,
+                "y": 28
+              }
+            ]
+          },
+          {
+            "id": "pv",
+            "points": [
+              {
+                "x": 392,
+                "y": 28
+              },
+              {
+                "x": 456,
+                "y": 28
+              }
+            ]
+          },
+          {
+            "id": "vs",
+            "points": [
+              {
+                "x": 620,
+                "y": 28
+              },
+              {
+                "x": 684,
+                "y": 28
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 928,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 192,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 928,
+        "height": 182,
+        "crossings": 0,
+        "bends": 0,
+        "length": 192,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-02.svg",
+      "svg_sha256": "b5dd73ad8769e38efd0cb8e63b827aead010013c5298ad691c8b7dd82968eaec"
+    },
+    {
+      "source": "examples/page-drafts/page-03.draft",
+      "source_sha256": "8c06f21c261f3b3facd4a562633a4be414f3a2f4915a89b192292364bb851c92",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-03.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.154
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-03.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.143
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-03.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.165
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 764\u00d7362 (aspect 2.11), 0 crossings, 6 bends, 776px of lines, 0 warnings.\nOK: 5 nodes, 2 groups, 4 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "api",
+            "parent": "services",
+            "x": 402,
+            "y": 48,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "cache",
+            "parent": "services",
+            "x": 496,
+            "y": 156,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "clients",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 212,
+            "h": 208
+          },
+          {
+            "id": "desktop",
+            "parent": "clients",
+            "x": 24,
+            "y": 48,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "jobs",
+            "parent": "services",
+            "x": 308,
+            "y": 156,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "mobile",
+            "parent": "clients",
+            "x": 24,
+            "y": 128,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "services",
+            "parent": "root",
+            "x": 284,
+            "y": 0,
+            "w": 400,
+            "h": 236
+          }
+        ],
+        "routes": [
+          {
+            "id": "call",
+            "points": [
+              {
+                "x": 188,
+                "y": 68
+              },
+              {
+                "x": 402,
+                "y": 68
+              }
+            ]
+          },
+          {
+            "id": "enqueue",
+            "points": [
+              {
+                "x": 476,
+                "y": 104
+              },
+              {
+                "x": 476,
+                "y": 130
+              },
+              {
+                "x": 390,
+                "y": 130
+              },
+              {
+                "x": 390,
+                "y": 156
+              }
+            ]
+          },
+          {
+            "id": "notify",
+            "points": [
+              {
+                "x": 188,
+                "y": 156
+              },
+              {
+                "x": 232,
+                "y": 156
+              },
+              {
+                "x": 232,
+                "y": 84
+              },
+              {
+                "x": 402,
+                "y": 84
+              }
+            ]
+          },
+          {
+            "id": "read",
+            "points": [
+              {
+                "x": 492,
+                "y": 104
+              },
+              {
+                "x": 492,
+                "y": 130
+              },
+              {
+                "x": 578,
+                "y": 130
+              },
+              {
+                "x": 578,
+                "y": 156
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 764,
+          "height": 362,
+          "crossings": 0,
+          "bends": 6,
+          "length": 776,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 764,
+        "height": 362,
+        "crossings": 0,
+        "bends": 6,
+        "length": 776,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-03.svg",
+      "svg_sha256": "da37e12461b1c71a12d721d7c0e222a1f0ba1a6c36cd13cd251d1bfb39d9fb7e"
+    },
+    {
+      "source": "examples/page-drafts/page-04.draft",
+      "source_sha256": "48a74c9c3c45553884bbf0a794c08a71c47a5c9a6eb60355a0f8b4705f8d3f46",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-04.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.072
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-04.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.08
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-04.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.071
+        }
+      ],
+      "problems": [],
+      "check_output": "warning The drawing is 652\u00d7182 (aspect 3.58). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 652\u00d7182 (aspect 3.58), 0 crossings, 0 bends, 0px of lines, 1 warning.\nWarnings: 3 nodes, 0 groups, 0 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "draft",
+            "parent": "root",
+            "x": 204,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "publish",
+            "parent": "root",
+            "x": 408,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "review",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [],
+        "metrics": {
+          "width": 652,
+          "height": 182,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 652,
+        "height": 182,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-04.svg",
+      "svg_sha256": "ab006b9effeef260d19f472cb947d31ce0204f7813aa97c331179dd3ee48e97d"
+    },
+    {
+      "source": "examples/page-drafts/page-05.draft",
+      "source_sha256": "523b282845bea7b6b8a703660bbf7eae9d989c5410a8d5f8ec946e1d67a4dc6e",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-05.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.112
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-05.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.14
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-05.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.125
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 1000\u00d7382 (aspect 2.62), 0 crossings, 2 bends, 580px of lines, 0 warnings.\nOK: 4 nodes, 2 groups, 3 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "answer",
+            "parent": "team",
+            "x": 496,
+            "y": 176,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "customer",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 920,
+            "h": 128
+          },
+          {
+            "id": "receive",
+            "parent": "customer",
+            "x": 732,
+            "y": 48,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "review",
+            "parent": "team",
+            "x": 260,
+            "y": 176,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "submit",
+            "parent": "customer",
+            "x": 24,
+            "y": 48,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "team",
+            "parent": "root",
+            "x": 0,
+            "y": 128,
+            "w": 920,
+            "h": 128
+          }
+        ],
+        "routes": [
+          {
+            "id": "approved",
+            "points": [
+              {
+                "x": 424,
+                "y": 204
+              },
+              {
+                "x": 496,
+                "y": 204
+              }
+            ]
+          },
+          {
+            "id": "returned",
+            "points": [
+              {
+                "x": 578,
+                "y": 176
+              },
+              {
+                "x": 578,
+                "y": 76
+              },
+              {
+                "x": 732,
+                "y": 76
+              }
+            ]
+          },
+          {
+            "id": "sent",
+            "points": [
+              {
+                "x": 188,
+                "y": 76
+              },
+              {
+                "x": 342,
+                "y": 76
+              },
+              {
+                "x": 342,
+                "y": 176
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 1000,
+          "height": 382,
+          "crossings": 0,
+          "bends": 2,
+          "length": 580,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 1000,
+        "height": 382,
+        "crossings": 0,
+        "bends": 2,
+        "length": 580,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-05.svg",
+      "svg_sha256": "689621a17e741a626c2acda8671a2f304a2dafccea7264090ce56f3045b08752"
+    },
+    {
+      "source": "examples/page-drafts/page-06.draft",
+      "source_sha256": "b9fe4853fbf67edc608a5fcb6a1cd4782131227f759dbd1241dae205fdbc3247",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-06.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.107
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-06.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.089
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-06.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.089
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 637\u00d7464 (aspect 1.37), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 5 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "api",
+            "parent": "root",
+            "x": 238,
+            "y": 0,
+            "w": 104,
+            "h": 56
+          },
+          {
+            "id": "app",
+            "parent": "root",
+            "x": 94,
+            "y": 0,
+            "w": 104,
+            "h": 56
+          },
+          {
+            "id": "database",
+            "parent": "root",
+            "x": 382,
+            "y": 0,
+            "w": 104,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "check",
+            "points": [
+              {
+                "x": 434,
+                "y": 164
+              },
+              {
+                "x": 470,
+                "y": 164
+              },
+              {
+                "x": 470,
+                "y": 186
+              },
+              {
+                "x": 434,
+                "y": 186
+              }
+            ]
+          },
+          {
+            "id": "query",
+            "points": [
+              {
+                "x": 290,
+                "y": 128
+              },
+              {
+                "x": 434,
+                "y": 128
+              }
+            ]
+          },
+          {
+            "id": "reply",
+            "points": [
+              {
+                "x": 290,
+                "y": 258
+              },
+              {
+                "x": 146,
+                "y": 258
+              }
+            ]
+          },
+          {
+            "id": "request",
+            "points": [
+              {
+                "x": 146,
+                "y": 92
+              },
+              {
+                "x": 290,
+                "y": 92
+              }
+            ]
+          },
+          {
+            "id": "row",
+            "points": [
+              {
+                "x": 434,
+                "y": 222
+              },
+              {
+                "x": 290,
+                "y": 222
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 637,
+          "height": 464,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 637,
+        "height": 464,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-06.svg",
+      "svg_sha256": "3d80f454b6c51b7301338343b62ba0fa87cb8559efbce17ad6a0fe6ecb5bf035"
+    },
+    {
+      "source": "examples/page-drafts/page-07.draft",
+      "source_sha256": "f996ed40dcb4c3165aecb6b5455fde5c29e0d853acd169ab1216254a67ab54f8",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-07.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.102
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-07.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.087
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-07.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.077
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 210\u00d7228 (aspect 0.92), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 4 nodes, 1 group, 0 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "key",
+            "parent": "record",
+            "x": 0,
+            "y": 30,
+            "w": 64,
+            "h": 36
+          },
+          {
+            "id": "owner",
+            "parent": "record",
+            "x": 64,
+            "y": 66,
+            "w": 66,
+            "h": 36
+          },
+          {
+            "id": "record",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 130,
+            "h": 102
+          },
+          {
+            "id": "state",
+            "parent": "record",
+            "x": 0,
+            "y": 66,
+            "w": 64,
+            "h": 36
+          },
+          {
+            "id": "value",
+            "parent": "record",
+            "x": 64,
+            "y": 30,
+            "w": 66,
+            "h": 36
+          }
+        ],
+        "routes": [],
+        "metrics": {
+          "width": 210,
+          "height": 228,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 210,
+        "height": 228,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-07.svg",
+      "svg_sha256": "e88d146a20b07193e15f2cc4995b27300cfee6a95237cfec46124d44c8fae017"
+    },
+    {
+      "source": "examples/page-drafts/page-08.draft",
+      "source_sha256": "a5586dfcc1e850fcab9d98cf507bdc158002099a85a6ea358839d2dead58db40",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-08.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.086
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-08.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.083
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-08.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.095
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 400\u00d7213 (aspect 1.88), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 1 group, 0 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "data",
+            "parent": "packet",
+            "x": 120,
+            "y": 51,
+            "w": 200,
+            "h": 36
+          },
+          {
+            "id": "length",
+            "parent": "packet",
+            "x": 40,
+            "y": 51,
+            "w": 80,
+            "h": 36
+          },
+          {
+            "id": "packet",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 87
+          },
+          {
+            "id": "tag",
+            "parent": "packet",
+            "x": 0,
+            "y": 51,
+            "w": 40,
+            "h": 36
+          }
+        ],
+        "routes": [],
+        "metrics": {
+          "width": 400,
+          "height": 213,
+          "crossings": 0,
+          "bends": 0,
+          "length": 0,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 400,
+        "height": 213,
+        "crossings": 0,
+        "bends": 0,
+        "length": 0,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-08.svg",
+      "svg_sha256": "6d7abcf71a535a7d4fe06b9bbdd4893d44da174cc8a23acb644c8009ee19500e"
+    },
+    {
+      "source": "examples/page-drafts/page-09.draft",
+      "source_sha256": "cec52d13dcdc62c65a6838ae8e0393053efee90eda646627059ba355a8062f1a",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-09.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.088
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-09.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.107
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-09.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.095
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 468\u00d7262 (aspect 1.79), 0 crossings, 0 bends, 48px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 1 connection.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "api",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "note",
+            "parent": "root",
+            "x": 224,
+            "y": 80,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "store",
+            "parent": "root",
+            "x": 212,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "read",
+            "points": [
+              {
+                "x": 164,
+                "y": 28
+              },
+              {
+                "x": 212,
+                "y": 28
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 468,
+          "height": 262,
+          "crossings": 0,
+          "bends": 0,
+          "length": 48,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 468,
+        "height": 262,
+        "crossings": 0,
+        "bends": 0,
+        "length": 48,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-09.svg",
+      "svg_sha256": "7d4ec071492b9ed18d03ae138fcd61ef66577bcbeae234ce94067de4cd3b4a29"
+    },
+    {
+      "source": "examples/page-drafts/page-10.draft",
+      "source_sha256": "18d2f7436684b6ec0463de1dc25f0a450eb3336f077099c917472f6cbdef1b88",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-10.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.131
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-10.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.113
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-10.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.118
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 692\u00d7433 (aspect 1.60), 0 crossings, 4 bends, 552px of lines, 0 warnings.\nOK: 4 nodes, 0 groups, 4 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "gateway",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "legacy",
+            "parent": "root",
+            "x": 0,
+            "y": 96,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "service",
+            "parent": "root",
+            "x": 204,
+            "y": 96,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "storage",
+            "parent": "root",
+            "x": 0,
+            "y": 192,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "new_in",
+            "points": [
+              {
+                "x": 90,
+                "y": 56
+              },
+              {
+                "x": 90,
+                "y": 76
+              },
+              {
+                "x": 286,
+                "y": 76
+              },
+              {
+                "x": 286,
+                "y": 96
+              }
+            ]
+          },
+          {
+            "id": "new_out",
+            "points": [
+              {
+                "x": 286,
+                "y": 152
+              },
+              {
+                "x": 286,
+                "y": 172
+              },
+              {
+                "x": 90,
+                "y": 172
+              },
+              {
+                "x": 90,
+                "y": 192
+              }
+            ]
+          },
+          {
+            "id": "old_in",
+            "points": [
+              {
+                "x": 74,
+                "y": 56
+              },
+              {
+                "x": 74,
+                "y": 96
+              }
+            ]
+          },
+          {
+            "id": "old_out",
+            "points": [
+              {
+                "x": 74,
+                "y": 152
+              },
+              {
+                "x": 74,
+                "y": 192
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 692,
+          "height": 433,
+          "crossings": 0,
+          "bends": 4,
+          "length": 552,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 692,
+        "height": 433,
+        "crossings": 0,
+        "bends": 4,
+        "length": 552,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-10.svg",
+      "svg_sha256": "62be814ba6cf3b25883b374732c713dede05a24b032cd3102b15be28523c6f80"
+    },
+    {
+      "source": "examples/page-drafts/page-11.draft",
+      "source_sha256": "d1d2a6f38b313c96c538e4b196aa11882ead1a1ba1293a89997707736adff5c2",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-11.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.103
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-11.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.089
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-11.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.092
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 580\u00d7260 (aspect 2.23), 0 crossings, 4 bends, 440px of lines, 0 warnings.\nOK: 3 nodes, 0 groups, 1 connection.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "a",
+            "parent": "root",
+            "x": 40,
+            "y": 160,
+            "w": 100,
+            "h": 40
+          },
+          {
+            "id": "b",
+            "parent": "root",
+            "x": 440,
+            "y": 160,
+            "w": 100,
+            "h": 40
+          },
+          {
+            "id": "block",
+            "parent": "root",
+            "x": 240,
+            "y": 120,
+            "w": 100,
+            "h": 120
+          }
+        ],
+        "routes": [
+          {
+            "id": "e",
+            "points": [
+              {
+                "x": 140,
+                "y": 180
+              },
+              {
+                "x": 153,
+                "y": 180
+              },
+              {
+                "x": 153,
+                "y": 110
+              },
+              {
+                "x": 427,
+                "y": 110
+              },
+              {
+                "x": 427,
+                "y": 180
+              },
+              {
+                "x": 440,
+                "y": 180
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 580,
+          "height": 260,
+          "crossings": 0,
+          "bends": 4,
+          "length": 440,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 580,
+        "height": 260,
+        "crossings": 0,
+        "bends": 4,
+        "length": 440,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-11.svg",
+      "svg_sha256": "df747923f93909d6db1a50f965691987aa7d26120ade91cff55891434a4e8924"
+    },
+    {
+      "source": "examples/page-drafts/page-12.draft",
+      "source_sha256": "a7b9a5ee3327228773e25b8f71018a7869e6f4c8e6f125987bf1ca2ebdd363c1",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-12.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.103
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-12.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.099
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-12.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.098
+        }
+      ],
+      "problems": [],
+      "check_output": "Metrics: 600\u00d7366 (aspect 1.64), 0 crossings, 1 bend, 430px of lines, 0 warnings.\nOK: 2 nodes, 0 groups, 1 connection.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "a",
+            "parent": "root",
+            "x": 40,
+            "y": 80,
+            "w": 140,
+            "h": 80
+          },
+          {
+            "id": "b",
+            "parent": "root",
+            "x": 420,
+            "y": 240,
+            "w": 140,
+            "h": 80
+          }
+        ],
+        "routes": [
+          {
+            "id": "e",
+            "points": [
+              {
+                "x": 180,
+                "y": 120
+              },
+              {
+                "x": 490,
+                "y": 120
+              },
+              {
+                "x": 490,
+                "y": 240
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 600,
+          "height": 366,
+          "crossings": 0,
+          "bends": 1,
+          "length": 430,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 600,
+        "height": 366,
+        "crossings": 0,
+        "bends": 1,
+        "length": 430,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-12.svg",
+      "svg_sha256": "3d01e9c4d8af9d312b24da83bf9b8168be31b5bf0e56bc346e07efbd257af1e6"
+    },
+    {
+      "source": "examples/page-drafts/page-13.draft",
+      "source_sha256": "efaa675f83dc7c584ffbfd7cdb1d3b3a2f098465ea861efe76c7dac87db9c34b",
+      "commands": [
+        {
+          "label": "check",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "check",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-13.draft",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.118
+        },
+        {
+          "label": "inspect",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-13.draft",
+            "--json",
+            "--metrics"
+          ],
+          "exit_code": 0,
+          "seconds": 0.122
+        },
+        {
+          "label": "svg",
+          "command": [
+            "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "/workspace/scratch/bf0bcb720732/baseline/dist-cli/main.js",
+            "inspect",
+            "/workspace/scratch/bf0bcb720732/deliverables/examples/page-drafts/page-13.draft",
+            "--svg"
+          ],
+          "exit_code": 0,
+          "seconds": 0.124
+        }
+      ],
+      "problems": [],
+      "check_output": "warning The drawing is 892\u00d7136 (aspect 6.56). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 892\u00d7136 (aspect 6.56), 0 crossings, 0 bends, 156px of lines, 1 warning.\nWarnings: 4 nodes, 0 groups, 3 connections.\n",
+      "geometry": {
+        "nodes": [
+          {
+            "id": "parse",
+            "parent": "root",
+            "x": 216,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "publish",
+            "parent": "root",
+            "x": 648,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "source",
+            "parent": "root",
+            "x": 0,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          },
+          {
+            "id": "validate",
+            "parent": "root",
+            "x": 432,
+            "y": 0,
+            "w": 164,
+            "h": 56
+          }
+        ],
+        "routes": [
+          {
+            "id": "a",
+            "points": [
+              {
+                "x": 164,
+                "y": 28
+              },
+              {
+                "x": 216,
+                "y": 28
+              }
+            ]
+          },
+          {
+            "id": "b",
+            "points": [
+              {
+                "x": 380,
+                "y": 28
+              },
+              {
+                "x": 432,
+                "y": 28
+              }
+            ]
+          },
+          {
+            "id": "c",
+            "points": [
+              {
+                "x": 596,
+                "y": 28
+              },
+              {
+                "x": 648,
+                "y": 28
+              }
+            ]
+          }
+        ],
+        "metrics": {
+          "width": 892,
+          "height": 136,
+          "crossings": 0,
+          "bends": 0,
+          "length": 156,
+          "warnings": 0
+        }
+      },
+      "metrics": {
+        "width": 892,
+        "height": 136,
+        "crossings": 0,
+        "bends": 0,
+        "length": 156,
+        "warnings": 0
+      },
+      "svg": "svg/examples__page-drafts__page-13.svg",
+      "svg_sha256": "edeb0222e3f3b1ede500d7d32a5a5a5d813b8ded5e579915a31457bdd9158ecc"
+    }
+  ]
+}

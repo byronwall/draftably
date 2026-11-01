@@ -1,0 +1,15 @@
+diagram "Routing: a title band is not an empty corridor" version=1
+group g "A long service boundary title that occupies the header"
+node top "Upper member" in=g
+node low "Lower member" in=g
+node out "Caller"
+size top width=160 height=56
+size low width=160 height=56
+size out width=160 height=56
+pin g x=40 y=200
+pin top x=0 y=0
+pin low x=0 y=112
+pin out x=440 y=40
+edge e out -> low
+layout root row
+layout g column

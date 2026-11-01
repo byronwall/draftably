@@ -1,0 +1,60 @@
+{
+  "file": "size-height-56.draft",
+  "source_sha256": "b8711b933ff8eccb6c6eba1d8606dd4029525d9078f2c7102d8e11e99aa81635",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/size-height-56.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.085
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/size-height-56.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.128
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 624,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 96,
+    "warnings": 1
+  },
+  "node_hash": "34df5458141246ad42cde5d9c1a12725d3ec326077e506c3fdf6a577fc7f3554",
+  "route_hash": "2f3f99b6d3700474aa30e353206962ad84ab2dbcd4dc8496cfdc89526bf55fe9",
+  "geometry_hash": "87f39d2db3c225d59abc781a4e65c6b5949f58ec5b578d8bce2705d5bebfd4e3",
+  "check_output": "warning line 8: b's title does not fit in its requested size. Make it larger or remove the size line. [text-overflow]\nwarning The drawing is 624\u00d7182 (aspect 3.43). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 624\u00d7182 (aspect 3.43), 0 crossings, 0 bends, 96px of lines, 2 warnings.\nWarnings: 3 nodes, 0 groups, 2 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/size-height-56.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.101,
+    "file": "svg/size-height-56.svg",
+    "bytes": 67660,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "d2be9d1dc6d382d8a87b949652c38b5c15d0add9e51c1730efa3bafd0c1968df"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

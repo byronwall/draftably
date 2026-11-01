@@ -1,0 +1,272 @@
+[
+  {
+    "id": "boundary-align",
+    "source": "examples/engines/boundary-align.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/boundary-align.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1277,
+      "height": 606,
+      "crossings": 0,
+      "bends": 9,
+      "length": 1989,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "92ba4ab7464f1da05b90e899915b662695c5e1690926b65c5575fe249ab27770",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/boundary-align.svg",
+    "viewBox": "-55 -86 1277 606",
+    "svg_sha256": "bae234539d8a86e12a72716c83c8ed6ce1bda02c685f8f7de47c2b897658dfad"
+  },
+  {
+    "id": "compound-flow",
+    "source": "examples/engines/compound-flow.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/compound-flow.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1060,
+      "height": 402,
+      "crossings": 1,
+      "bends": 12,
+      "length": 1340,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "333894f315d09560e73059f0e7ee5a0e197a184f1b608b8555871cfae5a28bc5",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/compound-flow.svg",
+    "viewBox": "-40 -86 1060 402",
+    "svg_sha256": "6b306d61705c61a02f662eed198e10e8583e27d49e64d91c468d27bc59ffe41e"
+  },
+  {
+    "id": "compound-spring",
+    "source": "examples/engines/compound-spring.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/compound-spring.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1131,
+      "height": 721,
+      "crossings": 0,
+      "bends": 9,
+      "length": 1499,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "dc68277eb34cd95a27f568384db4b5494feef7662e92fd743b59a7c2c69f2d25",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/compound-spring.svg",
+    "viewBox": "-77 -109 1131 721",
+    "svg_sha256": "5019cfd718b396a7ddda0d91c37ebe25d578980c562be36aa2828a35102324bb"
+  },
+  {
+    "id": "flow",
+    "source": "examples/engines/flow.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/flow.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1252,
+      "height": 372,
+      "crossings": 2,
+      "bends": 11,
+      "length": 1243,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "1f50b363466283c21013d57469305d07b1aad367adc8377b4122f4695ddce036",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/flow.svg",
+    "viewBox": "-40 -86 1252 372",
+    "svg_sha256": "8f9a9b8fc1da9136a1df87e5b5496d888cc3786d490b33c6951129e99d8cdf2d"
+  },
+  {
+    "id": "force",
+    "source": "examples/engines/force.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/force.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1281,
+      "height": 614,
+      "crossings": 1,
+      "bends": 9,
+      "length": 1831,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "b3ad7d8d920b72a3fba522549eccb60f2dd2195f219d62ab2d86ba9b418ad593",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/force.svg",
+    "viewBox": "-40 -86 1281 614",
+    "svg_sha256": "ef61620e57d078f84262d7f15a905522908fb8da7c91737064b528f92ce02ca9"
+  },
+  {
+    "id": "grid",
+    "source": "examples/engines/grid.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/grid.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1058,
+      "height": 650,
+      "crossings": 1,
+      "bends": 11,
+      "length": 1672,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "def41746ee3c571084cbdcfca04032c8465f15000b2fe81d36462750e508d721",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/grid.svg",
+    "viewBox": "-74 -86 1058 650",
+    "svg_sha256": "f606274bc1a14ed3c0347cb6af71169ab4795e6187549c83bb6843831a7d24d8"
+  },
+  {
+    "id": "layered",
+    "source": "examples/engines/layered.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/layered.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1060,
+      "height": 402,
+      "crossings": 1,
+      "bends": 12,
+      "length": 1340,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "85af750b04ec9fda243bcad8c74b1f3a947de76236ab8033f2197d4500729df1",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/layered.svg",
+    "viewBox": "-40 -86 1060 402",
+    "svg_sha256": "d56edd021d81cf0eaf8cfa47dc3c758ec80862cabc39a0a1e4e6c5161c500c0a"
+  },
+  {
+    "id": "stress",
+    "source": "examples/engines/stress.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/stress.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1260,
+      "height": 372,
+      "crossings": 2,
+      "bends": 11,
+      "length": 1240,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "cfe6c54f475921bcd4a772ea36c21dd2b398b4f4bccfd0e53a2babb1eef5fdef",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/stress.svg",
+    "viewBox": "-40 -86 1260 372",
+    "svg_sha256": "fcf502a6dc59101661e081f4c37ff2e94a017b8b8b39f3c8e41e401e8ed9c32c"
+  },
+  {
+    "id": "tidy",
+    "source": "examples/engines/tidy.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/tidy.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1252,
+      "height": 372,
+      "crossings": 2,
+      "bends": 11,
+      "length": 1209,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "da42b8d9be13336e3913b1291630431aed21168ac534c81fb1a9c6b4396f0784",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/tidy.svg",
+    "viewBox": "-40 -86 1252 372",
+    "svg_sha256": "f97c84bb3ef360f46aebed561b4b1d8dc4f1e57420098a1d6b269449f2b2aab1"
+  },
+  {
+    "id": "tree",
+    "source": "examples/engines/tree.draft",
+    "command": [
+      "node",
+      "/workspace/scratch/bf0bcb720732/baseline/scripts/draftably.mjs",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/deliverables/examples/engines/tree.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "metrics": {
+      "width": 1252,
+      "height": 386,
+      "crossings": 1,
+      "bends": 9,
+      "length": 1296,
+      "warnings": 0
+    },
+    "matches_supplied_metrics": true,
+    "source_sha256": "042c275e1e3d7fad8412276ba2416aa7bdd86b6e48b5ffd983d25e2543f6d475",
+    "svg_exit": 0,
+    "svg_path": "renders/engines/tree.svg",
+    "viewBox": "-40 -86 1252 386",
+    "svg_sha256": "3c913a168228dcd00ecfd9e61e74e4b0fbf9dff6cd46cf34059f5bd405ef7a1e"
+  }
+]

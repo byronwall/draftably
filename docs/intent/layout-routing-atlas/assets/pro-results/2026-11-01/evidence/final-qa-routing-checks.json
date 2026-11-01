@@ -1,0 +1,52 @@
+{
+  "manifest_routing_families": 24,
+  "manifest_variant_occurrences_checked": 78,
+  "bundled_sources_and_SVGs_checked": 98,
+  "numeric_defaults_ranges_checked": 12,
+  "categorical_states": {
+    "from=auto": true,
+    "from=left": true,
+    "from=right": true,
+    "from=top": true,
+    "from=bottom": true,
+    "to=auto": true,
+    "to=left": true,
+    "to=right": true,
+    "to=top": true,
+    "to=bottom": true,
+    "kind=sync": true,
+    "kind=async": true
+  },
+  "integrity_issues": [],
+  "unmapped_before_reassembly": [
+    "equal-metrics-edge-gap-16.draft",
+    "equal-metrics-edge-gap-4.draft",
+    "equal-metrics-edge-gap-48.draft",
+    "frozen-crossing.draft",
+    "frozen-dense.draft",
+    "frozen-fan.draft",
+    "frozen-obstacle.draft",
+    "frozen-shared.draft",
+    "frozen-small-fan.draft",
+    "narrow-corridor-clearance-10.draft",
+    "narrow-corridor-clearance-30.draft",
+    "narrow-corridor-clearance-4.draft",
+    "no-effect-fanout-penalty-0.draft",
+    "no-effect-fanout-penalty-160.draft",
+    "no-effect-fanout-penalty-50.draft",
+    "no-effect-shared-penalty-0.draft",
+    "no-effect-shared-penalty-20.draft",
+    "no-effect-shared-penalty-8.draft",
+    "no-effect-standoff-0.draft",
+    "no-effect-standoff-20.draft",
+    "no-effect-standoff-40.draft"
+  ],
+  "post_fix_expected_unmapped": [
+    "frozen-crossing.draft",
+    "frozen-dense.draft",
+    "frozen-fan.draft",
+    "frozen-obstacle.draft",
+    "frozen-shared.draft",
+    "frozen-small-fan.draft"
+  ]
+}

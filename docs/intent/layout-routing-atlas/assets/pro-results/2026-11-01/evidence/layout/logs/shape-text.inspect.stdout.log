@@ -1,0 +1,1 @@
+{"nodes":[{"id":"a","parent":"root","x":0,"y":0,"w":164,"h":54},{"id":"b","parent":"root","x":192,"y":0,"w":164,"h":56}],"routes":[{"id":"e","points":[{"x":164,"y":27},{"x":192,"y":27}]}],"metrics":{"width":436,"height":182,"crossings":0,"bends":0,"length":28,"warnings":0}}

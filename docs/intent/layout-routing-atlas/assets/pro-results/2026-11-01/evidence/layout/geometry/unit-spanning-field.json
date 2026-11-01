@@ -1,0 +1,53 @@
+{
+  "nodes": [
+    {
+      "id": "body",
+      "parent": "packet",
+      "x": 144,
+      "y": 51,
+      "w": 240,
+      "h": 36
+    },
+    {
+      "id": "checksum",
+      "parent": "packet",
+      "x": 0,
+      "y": 87,
+      "w": 384,
+      "h": 36
+    },
+    {
+      "id": "kind",
+      "parent": "packet",
+      "x": 0,
+      "y": 51,
+      "w": 48,
+      "h": 36
+    },
+    {
+      "id": "length",
+      "parent": "packet",
+      "x": 48,
+      "y": 51,
+      "w": 96,
+      "h": 36
+    },
+    {
+      "id": "packet",
+      "parent": "root",
+      "x": 0,
+      "y": 0,
+      "w": 384,
+      "h": 159
+    }
+  ],
+  "routes": [],
+  "metrics": {
+    "width": 464,
+    "height": 285,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  }
+}

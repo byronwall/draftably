@@ -1,0 +1,44 @@
+{
+  "file": "repros/outside-tree-root.draft",
+  "source_sha256": "eaad7dfa20e3533d2685cd01c296fe6691685874ec8d986b7eb7df4d36b5353e",
+  "expected_failure_fixture": true,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/outside-tree-root.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.427
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/repros/outside-tree-root.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.418
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1252,
+    "height": 354,
+    "crossings": 1,
+    "bends": 14,
+    "length": 1710,
+    "warnings": 0
+  },
+  "node_hash": "16fcc3eb2c339fb25e1074fda875808153bc6f8ae32081b5f736a81a43647a48",
+  "route_hash": "13a89bf51bd005f1591132635dba9c991b972a08fa65d2b0634255bdeace1727",
+  "geometry_hash": "3ae984f29df1bf50608397f2b6ecbb77258db66cb927f02f787f4ca5ef3f7761",
+  "check_output": "warning Edges e1 and e2 cross. [crossing]\nwarning cache is 556px from the nearest node it connects to. [stranded]\nwarning The drawing is 1252\u00d7354 (aspect 3.54). Try draftably vary --fit slide (or page). [aspect]\nMetrics: 1252\u00d7354 (aspect 3.54), 1 crossing, 14 bends, 1710px of lines, 3 warnings.\nWarnings: 7 nodes, 4 groups, 6 connections.\n",
+  "finite_inspect": true,
+  "svg_ok": true
+}

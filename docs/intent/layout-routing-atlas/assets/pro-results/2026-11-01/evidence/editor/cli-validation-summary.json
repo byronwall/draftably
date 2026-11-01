@@ -1,0 +1,54 @@
+{
+  "fixtures": 9,
+  "fences": 1,
+  "commands": 30,
+  "failures": 0,
+  "diagnostics": {
+    "work/editor-fixtures/editor-align-start.draft": [
+      "Metrics: 820\u00d7306 (aspect 2.68), 0 crossings, 0 bends, 0px of lines, 0 warnings.",
+      "OK: 3 nodes, 0 groups, 0 connections."
+    ],
+    "work/editor-fixtures/editor-change-marks.draft": [
+      "Metrics: 1090\u00d7487 (aspect 2.24), 0 crossings, 13 bends, 1839px of lines, 0 warnings.",
+      "OK: 7 nodes, 1 group, 7 connections."
+    ],
+    "work/editor-fixtures/editor-compare-start.draft": [
+      "warning Edges e4 and e5 cross. [crossing]",
+      "Metrics: 796\u00d7334 (aspect 2.38), 1 crossing, 6 bends, 688px of lines, 1 warning.",
+      "Warnings: 6 nodes, 2 groups, 5 connections."
+    ],
+    "work/editor-fixtures/editor-intent-start.draft": [
+      "Metrics: 892\u00d7366 (aspect 2.44), 0 crossings, 10 bends, 1572px of lines, 0 warnings.",
+      "OK: 8 nodes, 0 groups, 10 connections."
+    ],
+    "work/editor-fixtures/editor-pass-start.draft": [
+      "Metrics: 1444\u00d7542 (aspect 2.66), 0 crossings, 12 bends, 1890px of lines, 0 warnings.",
+      "OK: 7 nodes, 0 groups, 7 connections."
+    ],
+    "work/editor-fixtures/editor-refined-groups.draft": [
+      "Metrics: 1264\u00d7554 (aspect 2.28), 0 crossings, 7 bends, 1776px of lines, 0 warnings.",
+      "OK: 6 nodes, 2 groups, 5 connections."
+    ],
+    "work/editor-fixtures/editor-refinement-drift.draft": [
+      "warning line 9: stay b gave way by 32 px to keep root clear. Remove line 9, or run format --drop-stale. [relaxed]",
+      "warning line 8: near c gave way by 44 px to keep root clear. Remove line 8, or run format --drop-stale. [relaxed]",
+      "Metrics: 416\u00d7334 (aspect 1.25), 0 crossings, 3 bends, 330px of lines, 2 warnings.",
+      "Warnings: 3 nodes, 0 groups, 2 connections."
+    ],
+    "work/editor-fixtures/editor-scope-start.draft": [
+      "warning The drawing is 1220\u00d7390 (aspect 3.13). Try draftably vary --fit slide (or page). [aspect]",
+      "Metrics: 1220\u00d7390 (aspect 3.13), 0 crossings, 6 bends, 754px of lines, 1 warning.",
+      "Warnings: 6 nodes, 2 groups, 5 connections."
+    ],
+    "work/editor-fixtures/editor-ten-engine-grouped.draft": [
+      "warning Edges e5 and e6 cross. [crossing]",
+      "Metrics: 1060\u00d7402 (aspect 2.64), 1 crossing, 12 bends, 1340px of lines, 1 warning.",
+      "Warnings: 7 nodes, 3 groups, 6 connections."
+    ],
+    "work/editor-validation/sources/page-draft-01.draft": [
+      "warning The drawing is 892\u00d7136 (aspect 6.56). Try draftably vary --fit slide (or page). [aspect]",
+      "Metrics: 892\u00d7136 (aspect 6.56), 0 crossings, 0 bends, 156px of lines, 1 warning.",
+      "Warnings: 4 nodes, 0 groups, 3 connections."
+    ]
+  }
+}

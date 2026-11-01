@@ -1,0 +1,65 @@
+{
+  "baseline": "af70d8317797d5a522acffdd604819376a3ec893",
+  "command": "node work/portable-scripts/render-layout-warm.mjs --repo /workspace/scratch/bf0bcb720732/baseline --examples /workspace/scratch/bf0bcb720732/deliverables/examples --out /tmp/layout-warm-portable-smoke",
+  "exit_code": 0,
+  "row_count": 11,
+  "geometry_hashes_match": true,
+  "stderr": "",
+  "rows": [
+    {
+      "name": "warm-alignment-before",
+      "geometry_sha256": "3b96cdcaa7166845f60d1c8ccfd18a0a112b0dac84589445704eac4a6320ccc7",
+      "matches_original": true
+    },
+    {
+      "name": "warm-alignment-0",
+      "geometry_sha256": "17501e83c7e63da00102edb2bd19c82c6a5eabbeb05176843a3979b789d3fc41",
+      "matches_original": true
+    },
+    {
+      "name": "warm-alignment-55",
+      "geometry_sha256": "590c08e21ab28d4ecbba738b79fa8653d8202363ac126f09a4fcc591a063bc53",
+      "matches_original": true
+    },
+    {
+      "name": "warm-alignment-100",
+      "geometry_sha256": "e81b9ba9c6f81cdad197315a7cce8d6f8ac1e61a45a19584f6235ac90df79d41",
+      "matches_original": true
+    },
+    {
+      "name": "warm-grid-before",
+      "geometry_sha256": "78f93a93e414d669fc708c8d5649ef15c5f2912ecb2ded1144277e382fdd2897",
+      "matches_original": true
+    },
+    {
+      "name": "warm-grid-0",
+      "geometry_sha256": "a4d96422173084775642bd49c71fcd6f5e9875fa1b5cddcc846870db92da2194",
+      "matches_original": true
+    },
+    {
+      "name": "warm-grid-45",
+      "geometry_sha256": "e545f1b21d3a1e4c4670abb41a052386e81c63925fc8f2704806156b9d8318c4",
+      "matches_original": true
+    },
+    {
+      "name": "warm-grid-100",
+      "geometry_sha256": "372cedd798b75185a90e207d23c22040068e429d62961cfd167f89525fe8b7ac",
+      "matches_original": true
+    },
+    {
+      "name": "warm-ordering-before",
+      "geometry_sha256": "0fd4768f1e4329213aa335d0ea9791b9b252eb39b7fa5430d80b31a3db2662e5",
+      "matches_original": true
+    },
+    {
+      "name": "warm-ordering-stable",
+      "geometry_sha256": "909e9aa2a5197dee4358c2010e244ae965c1d36c15c01e9517da2fd60227a919",
+      "matches_original": true
+    },
+    {
+      "name": "warm-ordering-crossings",
+      "geometry_sha256": "bf409b774df15b3a1e9e13fab5af4428c53dfacd4a9a3bcbbbdae01dd228380d",
+      "matches_original": true
+    }
+  ]
+}

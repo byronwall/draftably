@@ -1,0 +1,60 @@
+{
+  "fixture": "/workspace/scratch/bf0bcb720732/work/layout-warm-validation/sources/align-pin-conflict.draft",
+  "classification": "Expected constraint error, not a product bug or happy-path example",
+  "visual_ids": [
+    "VL23",
+    "VL26"
+  ],
+  "results": [
+    {
+      "command": [
+        "node",
+        "dist-cli/main.js",
+        "inspect",
+        "/workspace/scratch/bf0bcb720732/work/layout-warm-validation/sources/align-pin-conflict.draft",
+        "--json",
+        "--metrics"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Pins conflict with required y alignment in root. The pins were kept.\n"
+    },
+    {
+      "command": [
+        "node",
+        "dist-cli/main.js",
+        "check",
+        "/workspace/scratch/bf0bcb720732/work/layout-warm-validation/sources/align-pin-conflict.draft",
+        "--metrics"
+      ],
+      "exit": 1,
+      "stdout": "error   line 7: Pins conflict with required y alignment in root. The pins were kept.\nProblems: 2 nodes, 0 groups, 0 connections.\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist-cli/main.js",
+        "inspect",
+        "/workspace/scratch/bf0bcb720732/work/layout-warm-validation/sources/align-pin-conflict.draft",
+        "--svg"
+      ],
+      "exit": 0,
+      "stdout": "align-pin-conflict.svg.svg",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "node",
+        "dist-cli/main.js",
+        "inspect",
+        "/workspace/scratch/bf0bcb720732/work/layout-warm-validation/sources/align-pin-conflict.draft",
+        "--json"
+      ],
+      "exit": 0,
+      "stdout": "{\"nodes\":[{\"id\":\"a\",\"parent\":\"root\",\"x\":0,\"y\":0,\"w\":164,\"h\":56},{\"id\":\"c\",\"parent\":\"root\",\"x\":400,\"y\":100,\"w\":164,\"h\":56}],\"routes\":[]}\n",
+      "stderr": ""
+    }
+  ],
+  "svg": "align-pin-conflict.svg"
+}

@@ -1,0 +1,4 @@
+warning Edges e1 and e2 cross. [crossing]
+warning mobile is 622px from the nearest node it connects to. [stranded]
+Metrics: 1465×745 (aspect 1.97), 1 crossing, 11 bends, 2887px of lines, 2 warnings.
+Warnings: 7 nodes, 4 groups, 6 connections.

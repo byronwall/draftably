@@ -1,0 +1,11 @@
+diagram "Who handles the request" version=1
+group customer "Customer"
+node submit "Submit" in=customer
+node receive "Receive" in=customer
+group team "Team"
+node review "Review" in=team
+node answer "Answer" in=team
+edge sent submit -> review
+edge approved review -> answer
+edge returned answer -> receive
+layout root lanes direction=right gap=72

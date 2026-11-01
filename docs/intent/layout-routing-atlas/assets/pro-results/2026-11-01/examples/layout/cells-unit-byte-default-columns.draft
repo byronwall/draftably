@@ -1,0 +1,7 @@
+diagram "Byte fields" version=1
+group packet "Packet"
+node kind "Type" in=packet span=1
+node length "Length" in=packet span=2
+node body "Payload" in=packet span=var
+node checksum "Checksum" in=packet span=4
+layout packet cells unit=byte

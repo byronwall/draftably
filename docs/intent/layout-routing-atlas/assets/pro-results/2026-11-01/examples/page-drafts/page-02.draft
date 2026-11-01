@@ -1,0 +1,9 @@
+diagram "Explicit engine controls" version=1
+node ingest "Ingest"
+node parse "Parse"
+node validate "Validate"
+node store "Store"
+edge ip ingest -> parse
+edge pv parse -> validate
+edge vs validate -> store
+layout root engine=layered direction=right rank-gap=64 node-gap=32 fold=never

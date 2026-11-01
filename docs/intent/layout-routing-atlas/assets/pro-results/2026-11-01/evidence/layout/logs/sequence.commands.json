@@ -1,0 +1,60 @@
+{
+  "file": "sequence.draft",
+  "source_sha256": "5214a0d36ec945e141c9d51fabee8275d9597e5167cf0a0b60845080f1d772ff",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/sequence.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.121
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/sequence.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.108
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 653,
+    "height": 512,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "3e621d5e25dc73e8f5fba561f4611dfd58b4066beeb9c62622ae52b39ecddcbb",
+  "route_hash": "1f62283865bc5402c07baaee922ee6e9c82798d79e6733592f379dff187149ad",
+  "geometry_hash": "333f64debf6b2869178b6a35ec4ea3065e70e027525f9652d3aaa6f8cac9e09c",
+  "check_output": "Metrics: 653\u00d7512 (aspect 1.28), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 2 groups, 5 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/sequence.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.091,
+    "file": "svg/sequence.svg",
+    "bytes": 72540,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "d4c92e907bdef03943ec2e07c00a90bcdbb224cdf63d547769a6902128e5af04"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

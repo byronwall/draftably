@@ -1,0 +1,20 @@
+diagram "Routing: ports and fan capacity" version=1
+# Fixed rectangles: change only the routing line for a causal comparison.
+node hub "Hub"
+size hub width=160 height=120
+pin hub x=40 y=160
+node a "Top"
+size a width=160 height=80
+pin a x=440 y=40
+node b "Middle"
+size b width=160 height=80
+pin b x=440 y=180
+node c "Bottom"
+size c width=160 height=80
+pin c x=440 y=320
+edge ea hub -> a from=right to=left
+edge eb hub -> b from=right to=left
+edge ec hub -> c from=right to=left
+routing edge-gap=4 port-gap=6
+# Row is intentional: suppress automatic flow skip/return lanes while pins freeze geometry.
+layout root row

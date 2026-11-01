@@ -1,0 +1,4 @@
+info    line 8: nudge b gave way by 9 px to keep root clear.
+warning The drawing is 703×182 (aspect 3.86). Try draftably vary --fit slide (or page). [aspect]
+Metrics: 703×182 (aspect 3.86), 0 crossings, 0 bends, 131px of lines, 1 warning.
+Warnings: 3 nodes, 0 groups, 2 connections.

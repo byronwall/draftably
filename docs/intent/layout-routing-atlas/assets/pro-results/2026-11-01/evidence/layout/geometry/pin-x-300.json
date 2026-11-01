@@ -1,0 +1,21 @@
+{
+  "nodes": [
+    {
+      "id": "a",
+      "parent": "root",
+      "x": 300,
+      "y": 0,
+      "w": 164,
+      "h": 56
+    }
+  ],
+  "routes": [],
+  "metrics": {
+    "width": 253,
+    "height": 182,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  }
+}

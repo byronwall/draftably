@@ -1,0 +1,12 @@
+diagram "Within-rank order before a pass" version=1
+node a "Source A"
+node b "Source B"
+node c "Target C"
+node d "Target D"
+edge ad a -> d
+edge bc b -> c
+layout root row
+stay a x=0 y=0
+stay b x=0 y=140
+stay c x=260 y=0
+stay d x=900 y=140

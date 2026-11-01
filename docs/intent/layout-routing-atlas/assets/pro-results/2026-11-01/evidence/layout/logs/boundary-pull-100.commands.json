@@ -1,0 +1,60 @@
+{
+  "file": "boundary-pull-100.draft",
+  "source_sha256": "ec95319b2524c9ba69b88ec8d478883ed037ea5a961a1e00a9250356c741be94",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/boundary-pull-100.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 1.268
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/boundary-pull-100.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 1.063
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 1403,
+    "height": 678,
+    "crossings": 0,
+    "bends": 10,
+    "length": 2089,
+    "warnings": 0
+  },
+  "node_hash": "36208ba50aba2dd88e0db53fcb229e8febf6e786bce607653c7ee0de6d6ea103",
+  "route_hash": "b1f355e6a8a8d4962d2e988a8fbc444dd3238e56984567430fa73c0f87cfde99",
+  "geometry_hash": "fdb38ce2102c945d3bf914249c73bba0f203c87a6db9c31d1d8a3effd39c0cd7",
+  "check_output": "Metrics: 1403\u00d7678 (aspect 2.07), 0 crossings, 10 bends, 2089px of lines, 0 warnings.\nOK: 7 nodes, 4 groups, 6 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/boundary-pull-100.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.682,
+    "file": "svg/boundary-pull-100.svg",
+    "bytes": 73348,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "701e45ce562965f7fcb909bddc4ad140493d67d57fc3360eebeab5c8e787208d"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

@@ -1,0 +1,16 @@
+diagram "Feedback across grouped triggers" version=1
+group t1 "Trigger 1" color=teal
+node open "Open the record" in=t1 shape=pill
+node key "Cache key" in=t1
+node get "Fetch" in=t1
+group t2 "Trigger 2" color=blue
+node click "Click save" in=t2 shape=pill
+node save "Save job" in=t2
+node store "Store" color=slate
+node sync "Sync to clients" color=slate
+edge a open -> key
+edge b key -> get
+edge c click -> save
+edge d save -> store
+edge e store -> sync
+layout root engine=layered direction=down

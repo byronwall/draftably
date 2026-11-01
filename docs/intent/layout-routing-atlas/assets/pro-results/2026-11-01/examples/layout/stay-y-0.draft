@@ -1,0 +1,3 @@
+diagram "Local coordinates" version=1
+node a "A"
+stay a y=0 x=0

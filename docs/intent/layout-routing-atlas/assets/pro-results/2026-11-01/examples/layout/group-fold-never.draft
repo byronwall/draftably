@@ -1,0 +1,22 @@
+diagram "Unequal groups" version=1
+group brief "Short task"
+node b1 "Open" in=brief
+node b2 "Close" in=brief
+edge eb b1 -> b2
+group long "Long task" fold=never
+node l0 "Step 1" in=long
+node l1 "Step 2" in=long
+node l2 "Step 3" in=long
+node l3 "Step 4" in=long
+node l4 "Step 5" in=long
+node l5 "Step 6" in=long
+node l6 "Step 7" in=long
+node l7 "Step 8" in=long
+edge el0 l0 -> l1
+edge el1 l1 -> l2
+edge el2 l2 -> l3
+edge el3 l3 -> l4
+edge el4 l4 -> l5
+edge el5 l5 -> l6
+edge el6 l6 -> l7
+layout root engine=layered direction=down

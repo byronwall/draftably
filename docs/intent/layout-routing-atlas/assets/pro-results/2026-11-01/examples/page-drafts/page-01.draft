@@ -1,0 +1,9 @@
+diagram "A ranked process" version=1
+node receive "Receive"
+node validate "Validate"
+node reject "Reject"
+node store "Store"
+edge request receive -> validate
+edge valid validate -> store "valid"
+edge invalid validate -> reject "invalid"
+layout root flow direction=right gap=48

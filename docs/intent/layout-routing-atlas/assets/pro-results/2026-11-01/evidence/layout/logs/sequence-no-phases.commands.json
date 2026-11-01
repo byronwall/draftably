@@ -1,0 +1,60 @@
+{
+  "file": "sequence-no-phases.draft",
+  "source_sha256": "dd8fbee8bc0fe82eaf739acc44f79329ce7cfc0f36c00f3b29d786163e4c19e6",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/sequence-no-phases.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.137
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/sequence-no-phases.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.126
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 608,
+    "height": 512,
+    "crossings": 0,
+    "bends": 0,
+    "length": 0,
+    "warnings": 0
+  },
+  "node_hash": "bc2c6f325ef5671c8a017b766868c6f446a4cf9400c4bfcd5be67c3b10f7051b",
+  "route_hash": "8c935080e0f7b1ddd9cfff6d9fbbae7a24752ab0a4c1817cc7914e1530eea751",
+  "geometry_hash": "61ac651ac5af36c279c195c999c06adbe94efb5a05a22b3138abe909a6d583f4",
+  "check_output": "Metrics: 608\u00d7512 (aspect 1.19), 0 crossings, 0 bends, 0px of lines, 0 warnings.\nOK: 3 nodes, 2 groups, 5 connections.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/sequence-no-phases.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.106,
+    "file": "svg/sequence-no-phases.svg",
+    "bytes": 71737,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "fc7b7f69677ae2714686ef111f8ddc4c944d9fbe241a1b361cc15c631cd2a948"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}

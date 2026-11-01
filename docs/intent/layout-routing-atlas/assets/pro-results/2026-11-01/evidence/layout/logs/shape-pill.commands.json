@@ -1,0 +1,60 @@
+{
+  "file": "shape-pill.draft",
+  "source_sha256": "3a44eac54630d4cbd77835687e2b6731a6334b4f3a3b75ec599cb49873b7c7f7",
+  "expected_failure_fixture": false,
+  "inspect": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-pill.draft",
+      "--json",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.091
+  },
+  "check": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "check",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-pill.draft",
+      "--metrics"
+    ],
+    "exit": 0,
+    "seconds": 0.095
+  },
+  "inspect_json_error": null,
+  "invalid_geometry": [],
+  "metrics": {
+    "width": 436,
+    "height": 198,
+    "crossings": 0,
+    "bends": 0,
+    "length": 28,
+    "warnings": 0
+  },
+  "node_hash": "66aa64c04d0255cd9db5fb591cd7a47eb98c014290026a135e64a13014c9b03c",
+  "route_hash": "52923182e38a5834a9ccc27fc50aa8579c45708c77da288aeb35285dec59b894",
+  "geometry_hash": "e71543f635b94ce431721fac07afa7c708a2630e0cf1ce78addc6363a404d6ee",
+  "check_output": "Metrics: 436\u00d7198 (aspect 2.20), 0 crossings, 0 bends, 28px of lines, 0 warnings.\nOK: 2 nodes, 0 groups, 1 connection.\n",
+  "svg": {
+    "command": [
+      "node",
+      "dist-cli/main.js",
+      "inspect",
+      "/workspace/scratch/bf0bcb720732/work/layout-fixtures/shape-pill.draft",
+      "--svg"
+    ],
+    "exit": 0,
+    "seconds": 0.093,
+    "file": "svg/shape-pill.svg",
+    "bytes": 67054,
+    "contains_svg": true,
+    "nonfinite_token": false,
+    "visible_svg_hash": "6bcf040d2aee0c76403abbb103aa21253debe10bb6f2f065e0dd16375305e101"
+  },
+  "finite_inspect": true,
+  "svg_ok": true
+}
