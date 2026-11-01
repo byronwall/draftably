@@ -9,7 +9,7 @@
 - Baseline: `af70d8317797d5a522acffdd604819376a3ec893`.
 - Prompt: [pro-prompt.md](pro-prompt.md).
 - Preparation: [preparation.md](preparation.md).
-- Phase: Pro complete; originals preserved, findings checked, summary and plan integrated; final validation and PR in progress.
+- Phase: complete; originals preserved, findings checked, summary and plan integrated, and review PR open and verified.
 - Conversation: https://chatgpt.com/c/6ae6c01c-babc-83e9-bf65-d92651191324
 - Model: Pro, effort 5 of 5, verified in the live selector.
 - Browser: Chrome extension browser 2, profile `byroni.us`; signed-in account state verified.
@@ -18,9 +18,20 @@
 - Submitted: 2026-11-01 about 04:30 UTC. The sent message, all attachments, Pro mode, and Stop control were verified.
 - Collection check: 2026-11-01 about 06:32 UTC. Pro had completed; the response showed 47m 56s of work.
 - Follow-ups: 0.
-- Heartbeat: `complete-draftably-layout-and-routing-atlas`, active and attached to this chat. Verify the hourly schedule after any update.
+- Heartbeat: `complete-draftably-layout-and-routing-atlas`, deleted after collection, integration, and PR verification.
 - Collected assets: [2,457 original files](assets-index.md) under `assets/pro-results/2026-11-01/`; all supplied hashes passed.
-- PR: pending final validation and creation.
+- PR: https://github.com/byronwall/draftably/pull/370
+- PR verification: targets `main` from `codex/layout-routing-visual-docs`; saved body, branch links, and GitHub screenshot URL verified.
+- Paginated PR inventory: 2,479 files, including all 2,457 originals; no ZIPs or ignored screenshot files.
+- GitHub workflows: tracked on the PR. Local full checks passed as recorded below.
+
+## Review handoff
+
+Start with [the summary](summary.md), [implementation plan](implementation-plan.md), and [dispositions](dispositions.md).
+The [asset index](assets-index.md) links all original reports and companions.
+The [verification report](verification.md) separates independent runtime checks, source review, and Pro's evidence.
+The review includes 198 coverage entries and 35 dispositions after the local Arrow addition.
+No follow-up Pro message was needed. No merge, deployment, or product implementation was performed.
 
 ## Collection and integration
 
