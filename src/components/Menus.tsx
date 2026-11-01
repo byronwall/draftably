@@ -412,7 +412,7 @@ function RecentFiles() {
               <Icon name="file" />
             </span>
             <span class="menu-label">{file.title || baseName(file.path)}</span>
-            <FileTime modified={file.modified} />
+            <FileTime modified={file.modified} short />
           </button>
         )}
       </For>
@@ -430,6 +430,9 @@ function FileMenu() {
   return (
     <>
       <MenuItem command="new-diagram" />
+      <Show when={commandEnabled('save-example')}>
+        <MenuItem command="save-example" />
+      </Show>
       <Show
         when={workspace()}
         fallback={

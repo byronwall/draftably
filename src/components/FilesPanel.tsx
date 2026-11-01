@@ -13,7 +13,7 @@ import {
   workspace,
 } from '../state/launch';
 import { creatingFile, setCreatingFile } from '../state/ui';
-import { Highlight, IconButton, tip } from './controls';
+import { Highlight, tip } from './controls';
 import { Icon } from './Icon';
 import {
   ago,
@@ -25,6 +25,7 @@ import {
   changedSinceOpen,
   hasFolders,
   matchFiles,
+  openFoldersOf,
   parentClosed,
   setFileOrder,
   shortAgo,
@@ -53,8 +54,10 @@ export function FilesPanel() {
     return groupByFolder(files()).flatMap(({ folder, files: inFolder }) => {
       if (!searching && parentClosed(folder)) return [];
       const open = searching || !folderClosed(folder);
-      const heading = folder ? [{ folder, count: inFolder.length }] : [];
-      return [...heading, ...(open ? inFolder.map(file => ({ file })) : [])];
+      return [
+        { folder, count: inFolder.length },
+        ...(open ? inFolder.map(file => ({ file })) : []),
+      ];
     });
   });
   const shown = () => entries().flatMap(entry => ('file' in entry ? [entry.file] : []));
@@ -62,6 +65,7 @@ export function FilesPanel() {
 
   onMount(() => {
     onCleanup(watchWorkspace());
+    if (current()) openFoldersOf(current()!);
     list.querySelector('.file-row.current')?.scrollIntoView({ block: 'center' });
   });
 
@@ -105,13 +109,6 @@ export function FilesPanel() {
           onKeyDown={onKeyDown}
         />
         <FileOrderSwitch class="files-order" compact />
-        <Show when={query().trim() && files().length}>
-          <IconButton
-            icon="file"
-            label={`Export ${files().length === 1 ? 'this diagram' : `these ${files().length} diagrams`} as one PDF`}
-            onClick={() => openPdfExport(files().map(f => f.path))}
-          />
-        </Show>
       </div>
       <div class="panel-scroll files-list" ref={list}>
         <For
@@ -135,11 +132,7 @@ export function FilesPanel() {
                 {...tip(entry.file.title || baseName(entry.file.path), undefined, entry.file.path)}
                 style={
                   byFolder()
-                    ? {
-                        '--depth': folderOf(entry.file.path)
-                          ? folderOf(entry.file.path).split('/').length
-                          : 0,
-                      }
+                    ? { '--depth': folderOf(entry.file.path).split('/').length }
                     : undefined
                 }
               >
@@ -156,6 +149,16 @@ export function FilesPanel() {
             )
           }
         </For>
+        <Show when={query().trim() && files().length}>
+          <button
+            type="button"
+            class="link-button files-export"
+            onClick={() => openPdfExport(files().map(f => f.path))}
+          >
+            Export {files().length === 1 ? 'this diagram' : `these ${files().length} diagrams`} as
+            one PDF
+          </button>
+        </Show>
       </div>
     </div>
   );

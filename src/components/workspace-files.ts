@@ -28,7 +28,26 @@ export function setFileOrder(next: FileOrder) {
   }
 }
 
-const [closed, setClosed] = createSignal<ReadonlySet<string>>(new Set());
+const FOLDER_STORAGE = 'diagram-studio-closed-folders';
+
+function readClosed() {
+  try {
+    return new Set<string>(JSON.parse(localStorage.getItem(FOLDER_STORAGE) ?? '[]'));
+  } catch {
+    return new Set<string>();
+  }
+}
+
+const [closed, setClosedSignal] = createSignal<ReadonlySet<string>>(readClosed());
+
+function setClosed(next: ReadonlySet<string>) {
+  setClosedSignal(next);
+  try {
+    localStorage.setItem(FOLDER_STORAGE, JSON.stringify([...next]));
+  } catch {
+    // Folding is a convenience only.
+  }
+}
 
 /** A folder folded shut in the files panel, or one inside such a folder. */
 export const folderClosed = (folder: string) => closed().has(folder);
@@ -37,12 +56,20 @@ export const parentClosed = (folder: string): boolean => {
   return !!parent && (closed().has(parent) || parentClosed(parent));
 };
 export function toggleFolder(folder: string) {
-  setClosed(current => {
-    const next = new Set(current);
-    if (next.has(folder)) next.delete(folder);
-    else next.add(folder);
-    return next;
-  });
+  const next = new Set(closed());
+  if (next.has(folder)) next.delete(folder);
+  else next.add(folder);
+  setClosed(next);
+}
+
+/** Unfolds every folder above a file, so the open diagram is never folded away on arrival. */
+export function openFoldersOf(path: string) {
+  const next = new Set(closed());
+  for (let folder = folderOf(path); ; folder = folderOf(folder)) {
+    next.delete(folder);
+    if (!folder) break;
+  }
+  if (next.size !== closed().size) setClosed(next);
 }
 
 /** Files whose title or path contain every word of the query. */
@@ -67,10 +94,10 @@ export function sortFiles(files: WorkspaceFile[], by: FileOrder) {
   return files.sort((a, b) => a.path.localeCompare(b.path));
 }
 
-/** Folders in tree order: the root first, then each folder followed by its own sub-folders. */
+/** Folders in tree order: each folder followed by its own sub-folders, and the root last. */
 function compareFolders(a: string, b: string) {
   if (a === b) return 0;
-  if (!a || !b) return a ? 1 : -1;
+  if (!a || !b) return a ? -1 : 1;
   const as = a.split('/'),
     bs = b.split('/');
   for (let i = 0; i < Math.min(as.length, bs.length); i++) {

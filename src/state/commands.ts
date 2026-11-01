@@ -34,7 +34,7 @@ import {
   timelineOpen,
   toggleBrush,
 } from './sculpt';
-import { fileMode, reflowSelectedGroup } from './file-session';
+import { exampleMode, fileMode, reflowSelectedGroup } from './file-session';
 import { encodeSource } from '../lib/source-hash';
 import {
   go,
@@ -59,6 +59,7 @@ import {
   setFilesOpen,
   setInspectorOpen,
   setObjectsOpen,
+  setSavingExample,
   toggleLayoutLab,
   togglePanels,
 } from './ui';
@@ -492,6 +493,13 @@ export const commands = {
     keys: '⌘O',
     icon: 'folder',
     run: () => fileInput?.(null, 'diagram'),
+  },
+  'save-example': {
+    hint: 'Write this scratch copy to a new file in the folder.',
+    label: 'Save as file…',
+    icon: 'file',
+    enabled: () => exampleMode() && !!workspace(),
+    run: () => setSavingExample(true),
   },
   'import-diagram': {
     hint: 'Turn a Mermaid, DOT or D2 file into a diagram.',
