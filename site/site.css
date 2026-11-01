@@ -220,6 +220,17 @@ main {
   gap: 10px;
 }
 
+/* A long diagram title stays on one line. The link's title shows all of it. */
+.hero-open {
+  max-width: 300px;
+}
+
+.hero-open span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hero .live {
   height: clamp(460px, calc(100vh - 280px), 760px);
 }
@@ -3529,6 +3540,10 @@ kbd {
 /* Phones: the docs and playground headers keep the nav by showing the mark without its name and
    search as an icon. */
 @media (max-width: 560px) {
+  .site-nav-editor {
+    display: none !important;
+  }
+
   .docs-top {
     gap: 8px;
   }

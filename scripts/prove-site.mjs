@@ -375,6 +375,12 @@ const journeys = {
     await copy.fill('.title-input', 'Browser copy');
     await copy.keyboard.press('Enter');
     await sleep(800);
+    await copy.goto(new URL('..', copy.url()).href);
+    await copy.waitForSelector('.hero');
+    const resume = await copy.locator('.hero-actions .button.primary').textContent();
+    check('the landing page offers the diagram left in the editor', /Browser copy/.test(resume));
+    await copy.screenshot({ path: path.join(proof.out, 'landing-resume.png') });
+    await copy.goBack();
     await copy.reload();
     await copy.waitForSelector('.title-input');
     await sleep(300);

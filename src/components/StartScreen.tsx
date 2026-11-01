@@ -20,7 +20,7 @@ import {
   workspace,
 } from '../state/launch';
 import type { WorkspaceFile } from '../server/workspace';
-import { Brand } from './Brand';
+import { AppNav, Brand } from './Brand';
 import { IconButton } from './controls';
 import { FileOrderSwitch, FileTime, FolderHeading } from './FilesPanel';
 import { Icon } from './Icon';
@@ -76,6 +76,7 @@ export function StartScreen(props: { variant: 'page' | 'dialog' }) {
             )}
           </Show>
           <span class="grow" />
+          <AppNav />
           <Show when={props.variant === 'dialog'}>
             <IconButton icon="close" label="Close" onClick={() => setStartOpen(false)} />
           </Show>

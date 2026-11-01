@@ -1,6 +1,7 @@
 import { createEffect, createSignal, For, on, onCleanup, onMount, Show } from 'solid-js';
 import { Logo } from '../Logo';
 import { SiteNav } from '../SiteNav';
+import { savedTitle } from '../../src/lib/saved-diagram';
 import { EXAMPLES, findExample, type ExampleInfo } from '../../src/model/examples';
 import { appUrl, paperOf } from '../draw';
 import { A, useLocation, useNavigate } from '@solidjs/router';
@@ -44,6 +45,8 @@ const TITLE = 'draftably: diagrams from plain text';
 const heroEditorUrl = () => (demoEditorUrl().includes('#') ? demoEditorUrl() : appUrl());
 
 export function Landing() {
+  // Back from the editor, the button names the diagram it reopens. An edited demo takes priority.
+  const resume = () => (demoEditorUrl().includes('#') ? '' : savedTitle());
   // Arriving from another page keeps that page's title; name this one.
   onMount(() => (document.title = TITLE));
   // The router changes the hash without scrolling, so a link to a section of this page (or to
@@ -78,8 +81,15 @@ export function Landing() {
               </p>
             </div>
             <div class="hero-actions">
-              <a class="button primary" href={heroEditorUrl()} rel="external">
-                Open the editor
+              <a
+                class="button primary hero-open"
+                href={heroEditorUrl()}
+                rel="external"
+                title={resume() || undefined}
+              >
+                <Show when={resume()} fallback="Open the editor">
+                  <span>Continue “{resume()}”</span>
+                </Show>
               </a>
               <CopyCommand text="npx draftably open" class="button" />
             </div>
