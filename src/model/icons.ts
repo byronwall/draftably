@@ -43,6 +43,8 @@ export const ICONS: Record<string, string> = {
   tree: '<path d="M5 4v14h5M5 11h5"/><rect x="10" y="8.5" width="10" height="5" rx="1.5"/><rect x="10" y="15.5" width="10" height="5" rx="1.5"/><rect x="2.5" y="2" width="9" height="4" rx="1.5"/>',
   sliders:
     '<path d="M4 7h9m6 0h1M4 17h1m6 0h9"/><circle cx="16" cy="7" r="2.5"/><circle cx="8" cy="17" r="2.5"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  sort: '<path d="M4 6h16M4 12h10M4 18h5"/>',
   'panel-left': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>',
   'panel-right': '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M15 4v16"/>',
   user: '<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>',

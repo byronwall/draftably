@@ -28,6 +28,23 @@ export function setFileOrder(next: FileOrder) {
   }
 }
 
+const [closed, setClosed] = createSignal<ReadonlySet<string>>(new Set());
+
+/** A folder folded shut in the files panel, or one inside such a folder. */
+export const folderClosed = (folder: string) => closed().has(folder);
+export const parentClosed = (folder: string): boolean => {
+  const parent = folderOf(folder);
+  return !!parent && (closed().has(parent) || parentClosed(parent));
+};
+export function toggleFolder(folder: string) {
+  setClosed(current => {
+    const next = new Set(current);
+    if (next.has(folder)) next.delete(folder);
+    else next.add(folder);
+    return next;
+  });
+}
+
 /** Files whose title or path contain every word of the query. */
 export function matchFiles(files: readonly WorkspaceFile[], query: string) {
   const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
@@ -105,6 +122,17 @@ export const ago = (ms: number) => {
       hour: 'numeric',
       minute: '2-digit',
     });
+  return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+};
+
+/** The same in as few characters as it reads clearly, for a narrow column. */
+export const shortAgo = (ms: number) => {
+  const minutes = Math.round((Date.now() - ms) / 60000);
+  if (minutes < 1) return 'now';
+  if (minutes < 60) return `${minutes}m`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  if (hours < 24 * 7) return new Date(ms).toLocaleString(undefined, { weekday: 'short' });
   return new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 };
 

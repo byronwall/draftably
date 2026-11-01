@@ -32,7 +32,7 @@ export interface ConfirmRequest {
 
 const compactPanels = matchMedia('(max-width: 1100px)');
 
-const SIDEBAR_WIDTH = 248;
+const SIDEBAR_WIDTH = 264;
 const INSPECTOR_WIDTH = 280;
 const MIN_PANEL = 200;
 /** The canvas keeps at least this much of the window, whatever the panels ask for. */

@@ -916,20 +916,19 @@ input[type='range'] {
 }
 
 .panel-search {
-  padding: 10px 12px;
+  padding: 6px 8px;
 }
 
 /* Files panel: the served folder's diagrams */
 
 .files-search {
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
 }
 
-/* The order switch drops below the search when three options leave it too little room. */
 .files-search input {
-  flex: 1 1 110px;
+  flex: 1;
   min-width: 0;
 }
 
@@ -938,8 +937,15 @@ input[type='range'] {
 }
 
 .files-order button {
-  padding: 0 7px;
-  font-size: var(--text-xs);
+  display: grid;
+  width: 24px;
+  padding: 0;
+  place-items: center;
+}
+
+.files-order .icon {
+  width: 14px;
+  height: 14px;
 }
 
 .files-new {
@@ -973,12 +979,13 @@ input[type='range'] {
 
 .file-row {
   display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 5px 8px;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 8px;
   border-radius: var(--radius-sm);
   color: var(--text);
   text-decoration: none;
+  transition: background-color 0.1s;
 }
 
 .file-row:hover,
@@ -994,15 +1001,34 @@ input[type='range'] {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 8px;
+  width: 100%;
+  margin-top: 6px;
   padding: 3px 8px 3px calc(8px + (var(--depth) - 1) * 12px);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
   color: var(--muted);
   font-size: var(--text-xs);
   font-weight: 600;
+  text-align: left;
 }
 
 .folder-heading:first-child {
   margin-top: 0;
+}
+
+button.folder-heading {
+  cursor: pointer;
+}
+
+button.folder-heading:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+
+.folder-heading .count {
+  margin-left: auto;
+  font-weight: 450;
 }
 
 .folder-heading svg {
@@ -1026,39 +1052,28 @@ input[type='range'] {
 }
 
 .file-row-title {
-  overflow: hidden;
+  flex: 1;
+  min-width: 0;
   font-size: var(--text-sm);
   font-weight: 500;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .file-row.current .file-row-title {
   font-weight: 650;
 }
 
-.file-row-meta {
-  display: flex;
-  gap: 8px;
+.file-row-folder {
+  margin-left: 6px;
+  white-space: nowrap;
   color: var(--muted);
   font-size: var(--text-xs);
-}
-
-.file-row-path {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  font-family: var(--mono);
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.file-row-folder {
-  opacity: 0.75;
+  font-weight: 450;
 }
 
 .file-time {
   flex: none;
+  color: var(--muted);
+  font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
 }
 

@@ -75,6 +75,10 @@
   white-space: nowrap;
 }
 
+.menu-item .menu-note {
+  padding: 0;
+}
+
 .menu-item.has-note .menu-label {
   white-space: normal;
 }
@@ -138,6 +142,7 @@
 
 @media (max-width: 720px) {
   .popover .menu-item {
+    height: auto;
     min-height: 44px;
   }
 }

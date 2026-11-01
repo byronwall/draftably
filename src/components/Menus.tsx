@@ -125,7 +125,7 @@ function Popover(props: { state: MenuState }) {
       ref={el}
       class="popover"
       classList={{
-        wide: ['routing', 'appearance', 'tools'].includes(props.state.id),
+        wide: ['routing', 'appearance', 'tools', 'file', 'layout'].includes(props.state.id),
       }}
       role="menu"
       onKeyDown={onKeyDown}
