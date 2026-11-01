@@ -1,6 +1,7 @@
 import { Show } from 'solid-js';
 import { findNode } from '../model/graph';
 import { fileMode } from '../state/file-session';
+import { tip } from './controls';
 import { FileNotes } from './FileNotes';
 import { runCommand } from '../state/commands';
 import { doc, selection } from '../state/document';
@@ -66,7 +67,7 @@ export function StatusBar() {
       <button
         type="button"
         class="button ghost small"
-        title="Keyboard shortcuts"
+        {...tip('Keyboard shortcuts', '?')}
         onClick={() => runCommand('help')}
       >
         ?

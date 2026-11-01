@@ -2,14 +2,20 @@
 
 :root {
   color-scheme: light;
-  --bg: #f5f6f9;
+  --bg: #f4f4f1;
   --surface: #ffffff;
-  --surface-2: #f7f8fa;
-  --hover: #eff1f5;
-  --line: #e3e6ec;
-  --line-strong: #c9cfda;
-  --text: #20253a;
-  --muted: #677086;
+  --surface-2: #f8f8f6;
+  --hover: #efefeb;
+  --line: #e4e3de;
+  --line-strong: #cdccc5;
+  --text: #22232a;
+  --muted: #666770;
+  /* Controls are ink on paper. The accent is kept for what is selected on the canvas. */
+  --ink: #26272e;
+  --ink-hover: #3a3b44;
+  --ink-on: #fbfbf9;
+  --pressed: #e6e5e0;
+  --key-edge: #d6d5ce;
   --accent: #6650d9;
   --accent-hover: #5741c9;
   --accent-soft: #efebfd;
@@ -27,8 +33,8 @@
   --example-ink: #ffffff;
 
   --shadow-sm: 0 1px 2px #1d1b3010;
-  --shadow: 0 6px 24px #25213b14;
-  --shadow-lg: 0 16px 56px #25213b26;
+  --shadow: 0 2px 10px #24241f14;
+  --shadow-lg: 0 8px 28px #24241f24;
   --node-shadow: 0 3px 8px #28334e09;
 
   --font: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
@@ -44,24 +50,29 @@
   --space-4: 16px;
   --space-5: 24px;
 
-  --radius-sm: 6px;
-  --radius: 8px;
-  --radius-lg: 12px;
-  --control-height: 30px;
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 8px;
+  --control-height: 28px;
   --toolbar-height: 48px;
   --panel-width: 280px;
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #15171f;
-  --surface: #1f222d;
-  --surface-2: #252935;
-  --hover: #2b2f3d;
-  --line: #333847;
-  --line-strong: #4d5469;
-  --text: #e8eaf3;
-  --muted: #a3abc0;
+  --bg: #16171a;
+  --surface: #1f2024;
+  --surface-2: #26272c;
+  --hover: #2c2d33;
+  --line: #36373e;
+  --line-strong: #50515a;
+  --text: #e9e9e6;
+  --muted: #a5a6ad;
+  --ink: #e9e9e6;
+  --ink-hover: #ffffff;
+  --ink-on: #1a1b1f;
+  --pressed: #3a3b42;
+  --key-edge: #121316;
   --accent: #a898ff;
   --accent-hover: #bbaeff;
   --accent-soft: #352f4c;
@@ -78,8 +89,8 @@
   --example-soft: #3a2f1e;
   --example-ink: #15171f;
   --shadow-sm: 0 1px 2px #0004;
-  --shadow: 0 6px 24px #0005;
-  --shadow-lg: 0 16px 56px #0008;
+  --shadow: 0 2px 10px #0005;
+  --shadow-lg: 0 8px 28px #0007;
   --node-shadow: 0 3px 8px #0002;
 }
 
@@ -167,18 +178,28 @@ details > summary {
   gap: 6px;
   height: var(--control-height);
   padding: 0 10px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--text);
   font-size: var(--text-sm);
   font-weight: 550;
+  letter-spacing: -0.003em;
   white-space: nowrap;
   cursor: pointer;
+  /* A key with a bottom edge: pressing takes the edge away and sets the key down by a pixel. */
+  box-shadow: 0 1px 0 var(--key-edge);
   transition:
     background-color 0.12s,
     border-color 0.12s,
-    color 0.12s;
+    color 0.12s,
+    box-shadow 0.12s,
+    transform 0.06s;
+}
+
+.button:active:not(:disabled) {
+  box-shadow: none;
+  transform: translateY(1px);
 }
 
 a.button {
@@ -190,24 +211,30 @@ a.button {
 }
 
 .button:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
+  box-shadow: none;
   cursor: default;
 }
 
+/* A switched-on control reads as a key held down: flat, and a step darker than its surroundings. */
 .button[aria-pressed='true'] {
-  background: var(--accent-soft);
+  background: var(--pressed);
   border-color: transparent;
-  color: var(--accent);
+  box-shadow: none;
 }
 
 .button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-ink);
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow:
+    inset 0 1px 0 #ffffff24,
+    0 1px 0 var(--key-edge);
+  color: var(--ink-on);
 }
 
 .button.primary:hover:not(:disabled) {
-  background: var(--accent-hover);
+  background: var(--ink-hover);
+  border-color: var(--ink-hover);
 }
 
 .button.primary kbd {
@@ -219,14 +246,19 @@ a.button {
 .button.ghost {
   background: transparent;
   border-color: transparent;
+  box-shadow: none;
 }
 
 .button.ghost:hover:not(:disabled) {
   background: var(--hover);
 }
 
+.button.ghost:active:not(:disabled) {
+  background: var(--pressed);
+}
+
 .button.ghost[aria-pressed='true'] {
-  background: var(--accent-soft);
+  background: var(--pressed);
 }
 
 .button.danger {
@@ -259,7 +291,7 @@ a.button {
   flex: none;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -285,7 +317,7 @@ a.button {
 .segmented {
   display: inline-flex;
   padding: 2px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   background: var(--hover);
 }
 
@@ -295,21 +327,28 @@ a.button {
 
 .segmented button {
   flex: 1;
-  height: 26px;
-  padding: 0 12px;
+  height: 24px;
+  padding: 0 10px;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 3px;
   background: transparent;
   color: var(--muted);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: 550;
   cursor: pointer;
+  transition:
+    background-color 0.12s,
+    color 0.12s;
+}
+
+.segmented button:hover {
+  color: var(--text);
 }
 
 .segmented button[aria-pressed='true'] {
   background: var(--surface);
   color: var(--text);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 0 0 1px var(--line-strong);
 }
 
 /* --- Form controls ---------------------------------------------------------------------------- */
@@ -333,8 +372,8 @@ a.button {
 
 :where(input, select, textarea):focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  border-color: var(--ink);
+  box-shadow: 0 0 0 1px var(--ink);
 }
 
 :where(input, select, textarea):disabled {
@@ -343,7 +382,7 @@ a.button {
 
 input[type='checkbox'],
 input[type='range'] {
-  accent-color: var(--accent);
+  accent-color: var(--ink);
 }
 
 input[type='checkbox'] {
@@ -431,7 +470,7 @@ input[type='range'] {
 }
 
 .eyebrow {
-  color: var(--accent);
+  color: var(--muted);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -449,8 +488,8 @@ input[type='range'] {
 }
 
 .pill.accent {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--pressed);
+  color: var(--text);
 }
 
 .stack {
@@ -550,6 +589,46 @@ input[type='range'] {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* --- Tooltips --------------------------------------------------------------------------------- */
+
+.tip {
+  position: fixed;
+  z-index: 110;
+  max-width: 260px;
+  padding: 6px 9px;
+  border-radius: var(--radius-sm);
+  background: var(--ink);
+  color: var(--ink-on);
+  font-size: var(--text-xs);
+  line-height: 1.35;
+  pointer-events: none;
+  box-shadow: var(--shadow);
+}
+
+.tip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tip strong {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tip p {
+  margin-top: 2px;
+  opacity: 0.78;
+}
+
+.tip kbd {
+  border: 0;
+  background: color-mix(in srgb, var(--ink-on) 16%, transparent);
+  color: inherit;
 }
 
 /* --- Shell ------------------------------------------------------------------------------------ */
@@ -854,7 +933,7 @@ input[type='range'] {
 }
 
 .file-row.current {
-  background: var(--accent-soft);
+  background: var(--pressed);
 }
 
 .file-row-title {
@@ -866,8 +945,7 @@ input[type='range'] {
 }
 
 .file-row.current .file-row-title {
-  color: var(--accent);
-  font-weight: 600;
+  font-weight: 650;
 }
 
 .file-row-meta {
@@ -948,8 +1026,8 @@ input[type='range'] {
 }
 
 .tree-row.active {
-  background: var(--accent-soft);
-  color: var(--accent);
+  background: var(--pressed);
+  font-weight: 600;
 }
 
 .tree-toggle,
@@ -1127,9 +1205,9 @@ details.inspector-section[open] > summary {
 
 .intent-role {
   padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--pressed);
+  color: var(--text);
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
@@ -1189,7 +1267,7 @@ details.inspector-section[open] > summary {
 
 .recipe-line.next {
   border-color: transparent;
-  background: var(--accent-soft);
+  background: var(--pressed);
 }
 
 .lab-footer {

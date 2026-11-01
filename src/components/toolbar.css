@@ -37,8 +37,14 @@
 }
 
 .toolbar .button .icon {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
+}
+
+/* The active drawing tool is the one strong mark in the bar: solid ink, as if inked in. */
+.toolbar [aria-label='Drawing tools'] .button[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--ink-on);
 }
 
 .title-block {
@@ -64,7 +70,7 @@
 }
 
 .title-input:focus {
-  border-color: var(--accent);
+  border-color: var(--ink);
   background: var(--surface);
 }
 
@@ -116,7 +122,8 @@
 }
 
 .split-button > .button.primary:last-child {
-  border-left-color: #fff4;
+  margin-left: -1px;
+  border-left-color: color-mix(in srgb, var(--ink-on) 28%, transparent);
 }
 
 .split-button > .button.ghost:last-child .icon {

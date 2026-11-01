@@ -1,28 +1,67 @@
 /** Small form and button primitives shared by panels, menus and dialogs. */
 import { For, Show, splitProps, type JSX } from 'solid-js';
+import {
+  commandEnabled,
+  commands,
+  runCommand,
+  type Command,
+  type CommandId,
+} from '../state/commands';
 import { Icon } from './Icon';
+
+/** Attributes that give an element the shared tooltip. See `Tips`. */
+export const tip = (label: string, keys?: string, hint?: string) => ({
+  'data-tip': label,
+  'data-tip-keys': keys,
+  'data-tip-hint': hint,
+});
 
 export function IconButton(
   props: {
     icon: string;
     label: string;
     keys?: string;
+    hint?: string;
     pressed?: boolean;
     variant?: 'ghost' | 'primary';
   } & Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'children'>,
 ) {
-  const [own, rest] = splitProps(props, ['icon', 'label', 'keys', 'pressed', 'class', 'variant']);
+  const [own, rest] = splitProps(props, [
+    'icon',
+    'label',
+    'keys',
+    'hint',
+    'pressed',
+    'class',
+    'variant',
+  ]);
   return (
     <button
       type="button"
       class={`button icon-only ${own.variant ?? 'ghost'} ${own.class ?? ''}`}
       aria-label={own.label}
-      title={own.keys ? `${own.label} · ${own.keys}` : own.label}
       aria-pressed={own.pressed}
+      {...tip(own.label, own.keys, own.hint)}
       {...rest}
     >
       <Icon name={own.icon} />
     </button>
+  );
+}
+
+/** An icon button that runs a command and explains itself from the command's own words. */
+export function CommandButton(props: { command: CommandId; label?: string; pressed?: boolean }) {
+  const command = (): Command => commands[props.command];
+  return (
+    <IconButton
+      icon={command().icon ?? 'cube'}
+      label={props.label ?? command().label}
+      keys={command().keys}
+      hint={command().hint}
+      pressed={props.pressed}
+      disabled={!commandEnabled(props.command)}
+      onClick={() => runCommand(props.command)}
+    />
   );
 }
 

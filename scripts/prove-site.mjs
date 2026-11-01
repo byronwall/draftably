@@ -408,7 +408,7 @@ const journeys = {
     );
     check(
       '#307 the toolbar tooltip agrees',
-      /the selection|this group/.test(await button.getAttribute('title')),
+      /the selection|this group/.test(await button.getAttribute('data-tip-hint')),
     );
     await page.screenshot({ path: path.join(proof.out, 'layout-panel.png') });
     await page.context().close();
