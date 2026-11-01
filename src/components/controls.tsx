@@ -65,6 +65,25 @@ export function CommandButton(props: { command: CommandId; label?: string; press
   );
 }
 
+/** Text with each word of a query marked where it matches. */
+export function Highlight(props: { text: string; query: string }) {
+  const parts = () => {
+    const words = props.query.trim().split(/\s+/).filter(Boolean);
+    if (!words.length) return [props.text];
+    const escaped = words.map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    return props.text.split(new RegExp(`(${escaped.join('|')})`, 'gi'));
+  };
+  return (
+    <For each={parts()}>
+      {(part, i) => (
+        <Show when={i() % 2} fallback={part}>
+          <mark>{part}</mark>
+        </Show>
+      )}
+    </For>
+  );
+}
+
 export function Field(props: {
   label: string;
   hint?: JSX.Element;

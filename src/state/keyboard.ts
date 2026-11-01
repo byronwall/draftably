@@ -107,6 +107,8 @@ export function handleKeyDown(e: KeyboardEvent) {
     focusCanvas();
     return;
   }
+  // Finding a command works from anywhere, even while typing in a field.
+  if (mod && key === 'k') return (e.preventDefault(), runCommand('palette'));
   if (isEditable(target)) return;
 
   if (e.code === 'Space' && keepsSpace(target)) return;

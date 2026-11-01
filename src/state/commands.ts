@@ -172,6 +172,7 @@ export const commands = {
   },
 
   'add-node': {
+    hint: 'Add a box to the canvas and start typing its label.',
     label: 'Add box',
     keys: 'N',
     icon: 'plus',
@@ -181,6 +182,7 @@ export const commands = {
     },
   },
   'add-connected': {
+    hint: 'Add a box joined to the selected shape.',
     label: 'Add connected box',
     keys: '⇧ Enter',
     icon: 'connect',
@@ -201,6 +203,7 @@ export const commands = {
     },
   },
   duplicate: {
+    hint: 'Copy the selection beside itself.',
     enabled: hasSelection,
     label: 'Duplicate',
     keys: '⌘D',
@@ -208,22 +211,35 @@ export const commands = {
     run: actions.duplicateSelection,
   },
   group: {
+    hint: 'Frame the selection in a new container.',
     enabled: hasSelection,
     label: 'Wrap in container',
     keys: '⌘G',
     icon: 'group',
     run: actions.wrapSelection,
   },
-  ungroup: { enabled: hasSelection, label: 'Ungroup', keys: '⇧⌘G', run: actions.ungroupSelection },
+  ungroup: {
+    hint: 'Remove the container and keep its contents.',
+    enabled: hasSelection,
+    label: 'Ungroup',
+    keys: '⇧⌘G',
+    run: actions.ungroupSelection,
+  },
   pin: {
+    hint: 'Stop layout tools from moving the selection.',
     enabled: hasSelection,
     label: 'Toggle pin',
     keys: 'P',
     icon: 'pin',
     run: actions.togglePin,
   },
-  'release-manual': { label: 'Clear manual markers', run: actions.clearManualMarkers },
+  'release-manual': {
+    hint: 'Forget that shapes were moved by hand.',
+    label: 'Clear manual markers',
+    run: actions.clearManualMarkers,
+  },
   delete: {
+    hint: 'Remove the selection and keep the contents of containers.',
     label: 'Delete selection',
     enabled: hasSelection,
     keys: '⌫',
@@ -267,6 +283,7 @@ export const commands = {
   },
   'fit-container': { label: 'Fit contents', run: actions.fitSelectedContainer },
   'reflow-group': {
+    hint: 'Rearrange the contents of the selected container.',
     label: 'Reflow group',
     run: () => {
       const id = selectedIds().find(id => isGroup(doc, id));
@@ -289,6 +306,7 @@ export const commands = {
     endsBrush: true,
   },
   'layout-rebuild': {
+    hint: 'Preview a new arrangement of the whole diagram.',
     label: 'Preview automatic layout',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
@@ -318,6 +336,7 @@ export const commands = {
     endsBrush: true,
   },
   'compare-routes': {
+    hint: 'See other connection routes side by side, then apply one.',
     label: 'Compare ports & routes',
     run: () => openComparison('routing'),
     endsBrush: true,
@@ -330,6 +349,7 @@ export const commands = {
     run: () => actions.reroute(),
   },
   'auto-ports': {
+    hint: 'Let the router choose sides for the selected lines.',
     label: 'Use auto ports on selection',
     keys: '⌥⇧R',
     run: () => actions.reroute({ auto: true }),
@@ -344,12 +364,14 @@ export const commands = {
     duringTimeline: true,
   },
   'timeline-reopen': {
+    hint: 'Open the last layout timeline again.',
     label: 'Reopen last layout timeline',
     icon: 'journey',
     run: reopenTimeline,
     duringTimeline: true,
   },
   'timeline-save': {
+    hint: 'Download the last layout timeline as a file.',
     label: 'Save layout timeline…',
     icon: 'download',
     run: saveTimelineFile,
@@ -410,6 +432,7 @@ export const commands = {
     duringTimeline: true,
   },
   'find-file': {
+    hint: 'Jump to a diagram in the open folder.',
     label: 'Go to diagram…',
     keys: '⌘P',
     icon: 'search',
@@ -426,9 +449,18 @@ export const commands = {
     duringTimeline: true,
   },
   'toggle-panels': {
+    hint: 'Give the canvas the whole window, or bring the panels back.',
     label: 'Hide or restore panels',
     keys: '\\',
     run: togglePanels,
+    duringTimeline: true,
+  },
+  palette: {
+    label: 'Find a command',
+    keys: '⌘K',
+    icon: 'search',
+    hint: 'Search every command, diagram and example by name.',
+    run: () => openDialog('palette'),
     duringTimeline: true,
   },
   help: {
@@ -441,6 +473,7 @@ export const commands = {
   },
 
   start: {
+    hint: 'See new, recent and example diagrams.',
     label: 'Start screen…',
     icon: 'folder',
     // With a served folder the start page lists its files; otherwise it opens over the editor.
@@ -454,37 +487,62 @@ export const commands = {
     hint: 'Start an empty diagram.',
   },
   open: {
+    hint: 'Open a saved diagram, SVG or image.',
     label: 'Open diagram…',
     keys: '⌘O',
     icon: 'folder',
     run: () => fileInput?.(null, 'diagram'),
   },
   'import-diagram': {
+    hint: 'Turn a Mermaid, DOT or D2 file into a diagram.',
     label: 'Import text diagram…',
     icon: 'folder',
     run: () => fileInput?.(null, 'foreign'),
   },
-  'insert-image': { label: 'Insert image…', icon: 'image', run: () => fileInput?.(null, 'image') },
+  'insert-image': {
+    hint: 'Place a picture on the canvas.',
+    label: 'Insert image…',
+    icon: 'image',
+    run: () => fileInput?.(null, 'image'),
+  },
   'replace-image': {
     label: 'Replace image',
     run: () => fileInput?.(selectedIds().find(id => findNode(doc, id)) ?? null, 'image'),
   },
   'export-json': {
+    hint: 'Save the diagram to a file on this computer.',
     label: 'Save diagram',
     keys: '⌘S',
     icon: 'download',
     run: () => exportCommand('json'),
   },
   'export-folder': {
+    hint: 'Put every diagram in the folder into one PDF.',
     label: 'Export folder as PDF…',
     icon: 'file',
     enabled: () => !!workspace()?.files.length,
     run: () => openPdfExport((workspace()?.files ?? []).map(f => f.path)),
   },
-  'export-png': { label: 'Export PNG…', icon: 'image', run: () => openExportCommand('png') },
-  'export-svg': { label: 'Export SVG…', icon: 'export', run: () => openExportCommand('svg') },
-  'export-pdf': { label: 'Export PDF…', icon: 'file', run: () => openExportCommand('pdf') },
+  'export-png': {
+    hint: 'Save a picture, with size and background options.',
+    label: 'Export PNG…',
+    icon: 'image',
+    run: () => openExportCommand('png'),
+  },
+  'export-svg': {
+    hint: 'Save a scalable drawing that opens again as a diagram.',
+    label: 'Export SVG…',
+    icon: 'export',
+    run: () => openExportCommand('svg'),
+  },
+  'export-pdf': {
+    hint: 'Save this diagram as a PDF page.',
+    label: 'Export PDF…',
+    icon: 'file',
+    run: () => openExportCommand('pdf'),
+  },
   'copy-image': {
+    hint: 'Copy the diagram or selection to the clipboard as a picture.',
     label: 'Copy image',
     keys: '⇧⌘C',
     icon: 'copy',
@@ -493,14 +551,21 @@ export const commands = {
   'copy-svg': { label: 'SVG markup', icon: 'code', run: () => copyCommand('svg') },
   'copy-source': { label: 'draftably source', icon: 'file', run: () => copyCommand('source') },
   'copy-link': { label: 'Link to this diagram', icon: 'globe', run: () => copyCommand('link') },
-  theme: { label: 'Light or dark editor', icon: 'sun', run: actions.toggleTheme },
+  theme: {
+    hint: 'Switch the editor between light and dark. The diagram keeps its theme.',
+    label: 'Light or dark editor',
+    icon: 'sun',
+    run: actions.toggleTheme,
+  },
   home: {
+    hint: 'Go to the start of this folder or to the draftably site.',
     label: 'Home',
     icon: 'home',
     run: () => void go(homeUrl()),
     duringTimeline: true,
   },
   docs: {
+    hint: 'Open the draftably docs in a new tab.',
     label: 'Docs',
     icon: 'globe',
     // A new tab, so the diagram here stays as it is.
@@ -508,6 +573,7 @@ export const commands = {
     duringTimeline: true,
   },
   'open-playground': {
+    hint: 'Edit a copy of this source next to its drawing.',
     label: 'Open in Playground',
     icon: 'code',
     // Only a file or an example has source to carry.

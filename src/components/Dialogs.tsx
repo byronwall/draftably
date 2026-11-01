@@ -9,12 +9,16 @@ import { closeDialog, confirmRequest, dialog, errorMessage, quickBuildText } fro
 import { IconButton } from './controls';
 import { ExportDialog } from './ExportDialog';
 import { Icon } from './Icon';
+import { Palette } from './Palette';
 import './dialogs.css';
 
 /** The single modal dialog that is open, if any. */
 export function Dialogs() {
   return (
     <Switch>
+      <Match when={dialog() === 'palette'}>
+        <Palette />
+      </Match>
       <Match when={dialog() === 'help'}>
         <HelpDialog />
       </Match>
@@ -136,6 +140,7 @@ const SHORTCUTS: [string, string][] = [
   ['Delete / with children', 'Delete / Shift Delete'],
   ['Fit / 100%', '1 / 0'],
   ['Diagrams in this folder', 'F'],
+  ['Find any command', 'Ctrl/⌘ K'],
   ['Go to diagram', 'Ctrl/⌘ P'],
   ['Objects / inspector', '[ / ]'],
   ['Hide / restore panels', '\\'],

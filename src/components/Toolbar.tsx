@@ -90,6 +90,7 @@ export function Toolbar() {
 
       <div class="toolbar-group toolbar-panels">
         <AppNav />
+        <CommandButton command="palette" />
         <IconButton
           icon="palette"
           label="Appearance"

@@ -565,6 +565,7 @@ function LayoutMenu() {
 function HelpMenu() {
   return (
     <>
+      <MenuItem command="palette" />
       <MenuItem command="help" />
       <MenuItem command="home" />
       <MenuItem command="docs" />
