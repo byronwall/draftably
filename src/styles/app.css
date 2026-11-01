@@ -485,6 +485,25 @@ input[type='range'] {
   white-space: nowrap;
 }
 
+/* Matches the site's .wordmark. */
+.brand {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 5px;
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+
+.brand:hover {
+  background: var(--hover);
+}
+
 .divider {
   flex: none;
   width: 1px;
@@ -512,6 +531,7 @@ input[type='range'] {
 
 .app {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   height: 100dvh;
 }

@@ -31,6 +31,7 @@ import { fileMode, reflowSelectedGroup } from './file-session';
 import { encodeSource } from '../lib/source-hash';
 import {
   go,
+  homeUrl,
   newDiagramSource,
   openInPlayground,
   playgroundNote,
@@ -394,6 +395,12 @@ export const commands = {
   'copy-source': { label: 'draftably source', icon: 'file', run: () => copyCommand('source') },
   'copy-link': { label: 'Link to this diagram', icon: 'globe', run: () => copyCommand('link') },
   theme: { label: 'Toggle light / dark', icon: 'sun', run: actions.toggleTheme },
+  home: {
+    label: 'Home',
+    icon: 'home',
+    run: () => void go(homeUrl()),
+    duringTimeline: true,
+  },
   docs: {
     label: 'Docs',
     icon: 'globe',

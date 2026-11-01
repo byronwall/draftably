@@ -71,6 +71,9 @@ const onSite = () => /\/app\/(index\.html)?$/.test(location.pathname);
 export const siteUrl = (path = '') =>
   new URL(path, onSite() ? new URL('..', location.href) : 'https://draftably.dev/').href;
 
+/** Home: the served folder's start page, or the public site's landing page. */
+export const homeUrl = () => (state.workspace() ? startUrl() : siteUrl());
+
 /** The editor was opened from the Playground, as its "Open in the editor" does. */
 export const cameFromPlayground = () => {
   try {
