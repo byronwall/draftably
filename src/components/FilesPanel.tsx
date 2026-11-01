@@ -8,11 +8,10 @@ import {
   fileUrl,
   go,
   newDiagramSource,
-  startUrl,
   watchWorkspace,
   workspace,
 } from '../state/launch';
-import { creatingFile, setCreatingFile, setFilesOpen } from '../state/ui';
+import { creatingFile, setCreatingFile } from '../state/ui';
 import { IconButton } from './controls';
 import { Icon } from './Icon';
 import {
@@ -72,27 +71,7 @@ export function FilesPanel() {
   };
 
   return (
-    <aside class="panel files-panel" aria-label="Diagrams in this folder">
-      <header class="panel-header">
-        <h2>
-          Diagrams <span class="count">{workspace()?.files.length ?? 0}</span>
-        </h2>
-        <span class="files-header-actions">
-          <IconButton icon="plus" label="New diagram" onClick={() => setCreatingFile(true)} />
-          <IconButton
-            icon="file"
-            label="Export these diagrams as one PDF"
-            disabled={!files().length}
-            onClick={() => openPdfExport(files().map(f => f.path))}
-          />
-          <IconButton
-            icon="close"
-            label="Close diagrams"
-            keys="F"
-            onClick={() => setFilesOpen(false)}
-          />
-        </span>
-      </header>
+    <div class="sidebar-body files-panel" role="tabpanel" aria-label="Diagrams in this folder">
       <Show when={creatingFile()}>
         <NewFileRow onDone={() => setCreatingFile(false)} />
       </Show>
@@ -101,7 +80,6 @@ export function FilesPanel() {
           type="search"
           aria-label="Go to diagram"
           placeholder="Go to diagram"
-          title="Go to diagram (⌘P)"
           value={query()}
           onInput={e => {
             setQuery(e.currentTarget.value);
@@ -110,6 +88,13 @@ export function FilesPanel() {
           onKeyDown={onKeyDown}
         />
         <FileOrderSwitch class="files-order" />
+        <Show when={query().trim() && files().length}>
+          <IconButton
+            icon="file"
+            label={`Export ${files().length === 1 ? 'this diagram' : `these ${files().length} diagrams`} as one PDF`}
+            onClick={() => openPdfExport(files().map(f => f.path))}
+          />
+        </Show>
       </div>
       <div class="panel-scroll files-list" ref={list}>
         <For
@@ -155,11 +140,7 @@ export function FilesPanel() {
           )}
         </For>
       </div>
-      <a class="panel-footer files-footer" href={startUrl()} title={workspace()?.root}>
-        <Icon name="folder" />
-        <span class="files-footer-name">All diagrams in {workspace()?.name}</span>
-      </a>
-    </aside>
+    </div>
   );
 }
 

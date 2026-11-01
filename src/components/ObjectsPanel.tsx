@@ -2,8 +2,6 @@ import { createMemo, createSignal, For, Show } from 'solid-js';
 import { ancestors, childrenOf, isGroup, styleOf } from '../model/graph';
 import { doc, selectItems, selection } from '../state/document';
 import { centerSelection } from '../state/editor';
-import { setObjectsOpen } from '../state/ui';
-import { IconButton } from './controls';
 import { Icon } from './Icon';
 
 interface Row {
@@ -44,18 +42,7 @@ export function ObjectsPanel() {
     });
 
   return (
-    <aside class="panel objects-panel" aria-label="Objects">
-      <header class="panel-header">
-        <h2>
-          Objects <span class="count">{doc.graph.nodes.length + doc.graph.groups.length}</span>
-        </h2>
-        <IconButton
-          icon="close"
-          label="Close objects"
-          keys="["
-          onClick={() => setObjectsOpen(false)}
-        />
-      </header>
+    <div class="sidebar-body objects-panel" role="tabpanel" aria-label="Objects">
       <div class="panel-search">
         <input
           type="search"
@@ -102,6 +89,6 @@ export function ObjectsPanel() {
           )}
         </For>
       </div>
-    </aside>
+    </div>
   );
 }

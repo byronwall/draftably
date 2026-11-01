@@ -27,8 +27,14 @@ import { doc, selectedIds, selectItems, transact } from '../state/document';
 import { fileMode } from '../state/file-session';
 import { geometry, routesById } from '../state/scene';
 import { timelineOpen } from '../state/sculpt';
-import { setInspectorOpen } from '../state/ui';
+import {
+  inspectorWidth,
+  resetInspectorWidth,
+  setInspectorOpen,
+  setInspectorWidth,
+} from '../state/ui';
 import { Checkbox, Field, IconButton, NumberField, SelectField } from './controls';
+import { ResizeHandle } from './ResizeHandle';
 import { describeLink, openLink } from '../state/links';
 
 /** Properties of the selection, or diagram-wide preferences when nothing is selected. */
@@ -56,6 +62,13 @@ export function Inspector() {
           <Match when={ids().length === 1 && ids()[0]}>{id => <ObjectInspector id={id()} />}</Match>
         </Switch>
       </fieldset>
+      <ResizeHandle
+        edge="left"
+        label="Resize inspector"
+        width={inspectorWidth()}
+        onResize={setInspectorWidth}
+        onReset={resetInspectorWidth}
+      />
       <footer class="panel-footer">
         <span>Toggle panels</span>
         <kbd>\</kbd>
