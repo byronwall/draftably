@@ -15,7 +15,7 @@ export type MenuId =
   | 'context'
   | 'appearance'
   | 'tools';
-export type DialogId = 'help' | 'quick-build' | 'confirm' | 'error' | 'export';
+export type DialogId = 'help' | 'palette' | 'quick-build' | 'confirm' | 'error' | 'export';
 
 export interface MenuState {
   id: MenuId;
