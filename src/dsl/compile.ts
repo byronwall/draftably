@@ -434,7 +434,7 @@ function sequenced(scene: Scene): Scene {
       panel: framed,
       phases,
       ...(phaseX !== undefined ? { phaseX } : {}),
-      ...(drawn.length ? { notes: margins } : {}),
+      ...(drawn.length ? { notes: margins, inner: panel } : {}),
     },
   };
 }

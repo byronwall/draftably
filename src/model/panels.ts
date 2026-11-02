@@ -56,11 +56,20 @@ export function oldDoc(doc: Diagram): Diagram {
   };
 }
 
+/** Panels repeat the drawing and put its notes in the frame, so a sequence drops its margins. */
+export function withoutMargins(doc: Diagram): Diagram {
+  const seq = doc.layout.sequence;
+  if (!seq?.inner) return doc;
+  const { inner, notes: _notes, phaseX: _phaseX, ...rest } = seq;
+  return { ...doc, layout: { ...doc.layout, sequence: { ...rest, panel: inner } } };
+}
+
 /** The document as it was (`before`: no added objects, old values) or is (`after`: no removed). */
 export function panelDoc(doc: Diagram, side: PanelSide): Diagram {
   const hidden = side === 'before' ? 'added' : 'removed',
     keep = (id: string) => doc.styles[id]?.status !== hidden,
-    version = side === 'before' ? oldDoc(doc) : doc;
+    plain = withoutMargins(doc),
+    version = side === 'before' ? oldDoc(plain) : plain;
   const nodes = version.graph.nodes.filter(n => keep(n.id));
   const ids = new Set(nodes.map(n => n.id));
   return fitFrames(

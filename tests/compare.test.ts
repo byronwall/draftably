@@ -276,6 +276,32 @@ layout root sequence
     expect(svg).toContain('Drawn as new: a (color)');
   });
 
+  it('drops the note margins from panels, whose notes sit in the frame', () => {
+    const file = (lines: string) => `diagram "Notes" version=1
+layout root sequence
+node a "A"
+node b "B"
+${lines}
+~edge m1 a -> b "Now" was="Then"
+phase p "Start" m1
+note "Right side" near=m1
+note "Left side" near=m1 side=left
+`;
+    const panel = (svg: string) =>
+      /class="sequence-panel" x="([^"]+)" y="[^"]+" width="([^"]+)"/
+        .exec(svg)!
+        .slice(1)
+        .map(Number);
+    const compared = projectScene(checkSource(file('compare'))),
+      seq = compared.layout.sequence!;
+    expect(seq.panel.w).toBeGreaterThan(seq.inner!.w);
+    expect(panel(renderSvg(compared))).toEqual([seq.inner!.x, seq.inner!.w]);
+    const states = projectScene(checkSource(file('state s "One" a')));
+    expect(panel(renderSvg(states, { states: true }))).toEqual([seq.inner!.x, seq.inner!.w]);
+    // One drawing keeps its margins.
+    expect(panel(renderSvg(states))).toEqual([seq.panel.x, seq.panel.w]);
+  });
+
   it('keeps was-order through format, and refuses it where it means nothing', () => {
     const file = SWAP([M2, M3].join('\n')) + 'was-order m3 m2\n';
     expect(formatSource(file)).toBe(file);
