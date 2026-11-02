@@ -13,7 +13,8 @@ const WARM_FOR = 500;
 
 /**
  * The one tooltip. Anything with `data-tip` shows its name, shortcut and what it does, on hover or
- * keyboard focus. It sits above everything and never moves the layout.
+ * keyboard focus. It sits above everything, modal dialogs included, and never moves the layout.
+ * With `data-tip-cut`, it shows an element's own text, and only when that text is cut off.
  */
 export function Tips() {
   const [tip, setTip] = createSignal<Tip | null>(null);
@@ -26,7 +27,9 @@ export function Tips() {
     clearTimeout(timer);
     current = target;
     const open = () => {
-      const { tip: label, tipKeys: keys, tipHint: hint } = target.dataset;
+      const { tip, tipKeys: keys, tipHint: hint, tipCut } = target.dataset;
+      const cut = target.scrollWidth > target.clientWidth;
+      const label = tipCut === undefined ? tip : cut ? (target.textContent ?? '') : '';
       if (target.isConnected && label)
         setTip({ label, keys, hint, anchor: target.getBoundingClientRect() });
     };
@@ -88,10 +91,15 @@ export function Tips() {
         <div
           ref={node => {
             el = node;
-            queueMicrotask(() => el && place(el, shown.anchor));
+            queueMicrotask(() => {
+              if (!el) return;
+              el.showPopover();
+              place(el, shown.anchor);
+            });
           }}
           class="tip"
           role="tooltip"
+          popover="manual"
         >
           <div class="tip-head">
             <strong>{shown.label}</strong>

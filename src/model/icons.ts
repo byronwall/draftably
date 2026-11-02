@@ -42,6 +42,7 @@ export const ICONS: Record<string, string> = {
   download: '<path d="M12 3v13m-5-5 5 5 5-5M4 18v3h16v-3"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 1v2m0 18v2M1 12h2m18 0h2M4 4l2 2m12 12 2 2M4 20l2-2M18 6l2-2"/>',
   fit: '<path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><rect x="8" y="8" width="8" height="8" rx="1"/>',
+  expand: '<path d="M14 3h7v7M10 21H3v-7M21 3l-7 7M3 21l7-7"/>',
   layout:
     '<rect x="2" y="8" width="6" height="8" rx="1.5"/><rect x="16" y="2" width="6" height="7" rx="1.5"/><rect x="16" y="15" width="6" height="7" rx="1.5"/><path d="M8 12h4V5h4m-4 7v7h4"/>',
   connect:
