@@ -114,6 +114,15 @@ layout root flow gap=48
     expect(before.layout.nodes).toEqual(after.layout.nodes);
   });
 
+  it('keeps reporting a changed line end, which has no old version', () => {
+    const { merged, unshown } = compareDetailed(
+      'node a "A"\nnode b "B"\nedge e a -> b\n',
+      'node a "A"\nnode b "B"\nedge e a -> b head=triangle tail=diamond\n',
+    );
+    expect(merged).toContain('~edge e a -> b head=triangle tail=diamond\n');
+    expect(unshown).toEqual(['e (head, tail)']);
+  });
+
   it('keeps reporting a change to a marker, whose box can hold no other shape', () => {
     const lines = (shape: string) =>
       `group g "G"\nnode a "A" in=g\nnode c "C" in=g${shape}\nlayout g cells\n`;
@@ -192,10 +201,53 @@ layout root flow gap=48
   it('writes no order line when only additions and removals change the rows', () => {
     const { merged, reordered } = compareDetailed(
       SWAP([M1, M2, M3].join('\n')),
-      SWAP([M2, 'edge m9 a -> b', M3].join('\n')),
+      SWAP([M2, M3, 'edge m9 a -> b'].join('\n')),
     );
     expect(merged).not.toContain('was-order');
     expect(reordered).toBe(false);
+  });
+
+  it('lengthens the older panel when its order draws longer', () => {
+    const tall = 'edge m2 a -> b "a label long enough to wrap onto a few lines of text in its row"';
+    const { merged } = compareDetailed(
+      SWAP([M1, tall].join('\n'), 'm2'),
+      SWAP([tall, M1].join('\n'), 'm2'),
+    );
+    const doc = projectScene(checkSource(merged)),
+      before = panelDoc(doc, 'before'),
+      grow = doc.layout.sequence!.before!.grow,
+      a = before.graph.nodes[0];
+    expect(grow).toBeGreaterThan(0);
+    expect(a.lifeline).toBe(doc.graph.nodes[0].lifeline! + grow);
+    expect(before.layout.sequence!.panel.h).toBe(doc.layout.sequence!.panel.h + grow);
+    expect(doc.layout.nodes.a.y + doc.layout.nodes.a.h + a.lifeline!).toBeGreaterThan(
+      before.layout.edges.m2.row!,
+    );
+  });
+
+  it('keeps a phase whose removed message sat inside it', () => {
+    const before = SWAP([M2, 'edge m9 a -> b', M3].join('\n'), 'm2 m9 m3');
+    const { merged, unshown } = compareDetailed(before, SWAP([M2, M3].join('\n')));
+    expect(merged).toContain('-edge m9 a -> b\n');
+    expect(unshown).toEqual(['phase p']);
+  });
+
+  it('draws a note on a moved message in the frame, on no row of either panel', () => {
+    const file = (order: string) => SWAP(order, 'm2') + 'compare\nnote "Why" near=m2\n';
+    const { merged, unshown } = compareDetailed(
+      file([M2, M3].join('\n')),
+      file([M3, M2].join('\n')),
+    );
+    expect(unshown).toEqual([]);
+    const doc = projectScene(checkSource(merged));
+    doc.appearance.compare!.undrawn = 'a (color)';
+    const svg = renderSvg(doc),
+      note = /class="diagram-note"><rect x="[^"]+" y="([^"]+)"/.exec(svg)!,
+      label = />Before<\/text>/.exec(svg)!,
+      labelY = Number(/y="([^"]+)"[^>]*$/.exec(svg.slice(0, label.index))![1]);
+    expect(svg.split('class="diagram-note"')).toHaveLength(2);
+    expect(Number(note[1])).toBeLessThan(labelY);
+    expect(svg).toContain('Drawn as new: a (color)');
   });
 
   it('keeps was-order through format, and refuses it where it means nothing', () => {

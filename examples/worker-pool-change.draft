@@ -1,0 +1,18 @@
+diagram "Order intake: check cards first" version=1
+subtitle "The card check becomes a decision, and the pool grows by one worker"
+compare "main" "PR 412" direction=right
+
+# was-shape= and was-count= keep the old values, so the main panel draws them.
+
+node intake "Intake"
+~node gate "Valid card?" shape=diamond was-shape=circle
+~node workers "Order worker" count=3 was-count=2
++node refuse "Refuse order"
+node store "Orders"
+
+edge in intake -> gate
+edge pass gate -> workers "yes"
++edge stop gate -> refuse "no"
+edge save workers -> store
+
+layout root engine=layered direction=right

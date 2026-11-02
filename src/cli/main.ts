@@ -466,11 +466,9 @@ export async function main(argv: string[]): Promise<number> {
           console.error(
             `Groups moved to another container: ${moved.join(', ')}. Both panels draw them where they are now.`,
           );
-        // A picture leaves stderr behind, so panels carry the same list in a note of the frame.
+        // A picture leaves stderr behind, so panels carry the same list beside the older label.
         if (unshown.length && doc.appearance.compare)
-          (doc.appearance.notes ??= []).push({
-            text: `Both panels draw the new version of: ${unshown.join(', ')}.`,
-          });
+          doc.appearance.compare.undrawn = unshown.join(', ');
         if (await maybePng(draw, rest, embed(merged))) return 0;
         if (out) {
           fs.writeFileSync(path.resolve(out), merged);

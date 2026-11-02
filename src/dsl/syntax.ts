@@ -1117,7 +1117,8 @@ function validateReferences(m: Model) {
     const at = m.edges.flatMap((e, i) => (p.ids.includes(e.id) ? [i] : [])),
       skipped = m.edges
         .slice(at[0], at[at.length - 1] + 1)
-        .filter(e => !p.ids.includes(e.id))
+        // A `-` message is only the older version's, so it breaks no run of the newer one.
+        .filter(e => !p.ids.includes(e.id) && e.status !== 'removed')
         .map(e => e.id);
     assert(
       !skipped.length,

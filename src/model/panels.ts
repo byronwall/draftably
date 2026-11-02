@@ -15,25 +15,40 @@ export type PanelSide = 'before' | 'after';
  */
 export function oldDoc(doc: Diagram): Diagram {
   const styles = { ...doc.styles },
-    seq = doc.layout.sequence;
+    seq = doc.layout.sequence,
+    grow = seq?.before?.grow ?? 0;
   for (const n of doc.graph.nodes)
     if (n.wasShape) styles[n.id] = { ...styles[n.id], shape: n.wasShape };
-  const edges = { ...doc.layout.edges };
+  const edges = { ...doc.layout.edges },
+    boxes = { ...doc.layout.nodes };
   for (const [id, row] of Object.entries(seq?.before?.rows ?? {}))
     edges[id] = { ...edges[id], row };
+  // A sequence's groups are column bands, as long as its lifelines.
+  if (grow)
+    for (const g of doc.graph.groups) boxes[g.id] = { ...boxes[g.id], h: boxes[g.id].h + grow };
   return {
     ...doc,
     styles,
     layout: {
       ...doc.layout,
       edges,
-      ...(seq?.before ? { sequence: { ...seq, phases: seq.before.phases } } : {}),
+      nodes: boxes,
+      ...(seq?.before
+        ? {
+            sequence: {
+              ...seq,
+              phases: seq.before.phases,
+              panel: { ...seq.panel, h: seq.panel.h + grow },
+            },
+          }
+        : {}),
     },
     graph: {
       nodes: doc.graph.nodes.map(n => ({
         ...n,
         title: n.was ?? n.title,
         ...(n.wasCount !== undefined ? { count: n.wasCount === 1 ? undefined : n.wasCount } : {}),
+        ...(n.lifeline ? { lifeline: n.lifeline + grow } : {}),
       })),
       groups: doc.graph.groups.map(g => ({ ...g, title: g.was ?? g.title })),
       edges: doc.graph.edges.map(e => ({ ...e, label: e.was ?? e.label })),

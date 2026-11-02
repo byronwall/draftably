@@ -40,7 +40,7 @@ and groups. References may point to later lines.
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `diagram "title" version=1`        | Optional title. At most one. Exports and the Editor draw it above the drawing. `width=` (160–8000) sets the frame's width. See [Title and subtitle](#title-and-subtitle).                                                                                                                                                                                                  |
 | `compare "before" "after"`         | Draw the change marks as two aligned panels. `direction=auto\|right\|down`, `aspect=` (0.25–8). At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                            |
-| `was-order m2 m1`                  | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                             |
+| `was-order m2 m1`                  | The older message order of a sequence diagram. At most one. See [Side by side](#side-by-side).                                                                                                                                                                                                                                                                             |
 | `subtitle "text"`                  | One line under the title. At most one.                                                                                                                                                                                                                                                                                                                                     |
 | `node id "label"`                  | A shape. `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=`.                                                                                                                                                                                                                                                              |
 | `group id "label"`                 | A container. `in=group`, `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never`. See [Soft groups](#soft-groups).                                                                                                                                                                                                                                                       |
@@ -527,7 +527,8 @@ can draw:
 `Changes with no old version to draw: a (color), layout root, participant order.` That list covers
 other changed attributes, a shape change to or from a `marker`, statements other than
 declarations, and participant order in a sequence. Both panels draw the new version of these, so
-read a Before panel with that line. An image with panels carries the same list as a note.
+read a Before panel with that line. An image with panels carries the same list in small grey
+text beside the Before label: `Drawn as new: a (color), layout root`.
 
 Unmarked lines are unchanged.
 
@@ -572,7 +573,8 @@ a changed phase is on the `compare` report. List every message of the older vers
 aren't in the list, and they keep their own rows, so the old panel leaves a gap there. `check`
 refuses `was-order` outside a sequence, a repeated message and a `+` message. It only warns on an
 unknown or missing message, so a visual edit that adds or deletes a message leaves the file open;
-a missing message stays on its new row in the old panel.
+a missing message stays on its new row in the old panel. Panels draw every note in the frame, so a
+note on a message sits on no row in either panel.
 
 ## Emphasis states
 
@@ -1254,6 +1256,7 @@ draftably comes with these diagrams. Select a name to open a copy in the Editor.
 ### Marks, states and themes
 
 - [Checkout: add refunds](https://draftably.dev/app/?example=checkout-change): Change marks: `+` added, `-` removed, `~` changed, `.` unchanged context.
+- [Order intake: check cards first](https://draftably.dev/app/?example=worker-pool-change): Before and After panels that draw the old shape and count from `was-shape=` and `was-count=`.
 - [Order service paths](https://draftably.dev/app/?example=emphasis): Emphasis states: one diagram drawn three ways, for the write path, the read path and events.
 - [Field service intake](https://draftably.dev/app/?example=theme-proof): The `fieldnotes` theme: serif titles, wrapped labels, a diamond and nested groups.
 

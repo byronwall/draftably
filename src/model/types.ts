@@ -278,8 +278,11 @@ export interface SequenceLayout {
   phaseX?: number;
   /** Spots of the notes that sit in a side margin, by index in `appearance.notes`. */
   notes?: Array<Rect | null>;
-  /** From `was-order`: each message's row and the phase bands in the older message order. */
-  before?: { rows: Record<string, number>; phases: SequencePhase[] };
+  /**
+   * From `was-order`: each message's row and the phase bands in the older message order, and how
+   * much further that order runs down the panel.
+   */
+  before?: { rows: Record<string, number>; phases: SequencePhase[]; grow: number };
 }
 
 export type SequencePhase = { id: string; label: string; y: number; h: number };

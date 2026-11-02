@@ -573,6 +573,13 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       out.push(
         `<text x="${px + 40}" y="${py + 36}" dominant-baseline="central" ${font(look.groupTitle)} fill="${look.text}">${esc(name)}</text>`,
       );
+      if (!i && compare.undrawn) {
+        const from = px + 40 + measureText(name, look.groupTitle) + 12,
+          room = (stacked ? bw : spans[0].size) - (from - px) - 40;
+        out.push(
+          `<text x="${from}" y="${py + 36}" dominant-baseline="central" ${font(look.annotation)} fill="${look.muted}"><title>${esc(compare.undrawn)}</title>${esc(truncateText(`Drawn as new: ${compare.undrawn}`, room, look.annotation))}</text>`,
+        );
+      }
       if (i)
         out.push(
           stacked
