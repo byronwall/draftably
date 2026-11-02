@@ -580,7 +580,7 @@ function placeSelection(
       (Math.abs(is.x - was.x) > 0.5 || Math.abs(is.y - was.y) > 0.5)
     ) {
       if (!reorderLanes(input, compiled.parent)) keptLane = true;
-      else notes.push(`reordered ${compiled.parent}`);
+      else notes.push('reordered the lanes');
     }
     if (label === 'Clear manual markers' && compiled) {
       removeWhere(
