@@ -39,11 +39,22 @@ export const STATUS_LABELS: Partial<Record<Status, string>> = {
 
 export interface StatusCount {
   status: Status;
+  /** Objects with the mark. */
   count: number;
+  /** Connections with the mark. */
+  lines: number;
 }
 
-/** A legend entry's text: how many objects and connections carry the mark, then what it means. */
-export const statusLabel = ({ status, count }: StatusCount) => `${count} ${STATUS_LABELS[status]}`;
+const linesText = (n: number) => `${n} line${n === 1 ? '' : 's'}`;
+
+/**
+ * A legend entry's text: how many objects carry the mark and what it means, then how many
+ * connections, so five added boxes and their five lines read "5 added · 5 lines", not "10 added".
+ */
+export const statusLabel = ({ status, count, lines }: StatusCount) =>
+  count
+    ? `${count} ${STATUS_LABELS[status]}${lines ? ` · ${linesText(lines)}` : ''}`
+    : `${linesText(lines)} ${STATUS_LABELS[status]}`;
 
 /** The color family each status is drawn in. */
 const HUES: Partial<Record<Status, string>> = { added: 'green', changed: 'amber', removed: 'red' };
@@ -203,15 +214,16 @@ export function withState(doc: Diagram, id: string): Diagram {
  */
 export function usedStatuses(doc: Diagram): StatusCount[] {
   const ids = new Set([...doc.graph.nodes, ...doc.graph.groups].map(o => o.id)),
-    marks = [
-      ...Object.entries(doc.styles)
-        .filter(([id]) => ids.has(id))
-        .map(([, s]) => s.status),
-      ...doc.graph.edges.map(e => e.status),
-    ];
+    marks = Object.entries(doc.styles)
+      .filter(([id]) => ids.has(id))
+      .map(([, s]) => s.status);
   return (Object.keys(STATUS_LABELS) as Status[])
-    .map(status => ({ status, count: marks.filter(m => m === status).length }))
-    .filter(c => c.count);
+    .map(status => ({
+      status,
+      count: marks.filter(m => m === status).length,
+      lines: doc.graph.edges.filter(e => e.status === status).length,
+    }))
+    .filter(c => c.count || c.lines);
 }
 
 /** The color key's rows: a diff draws no family colors, so it lists only its statuses. */
