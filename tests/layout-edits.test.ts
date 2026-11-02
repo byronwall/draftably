@@ -6,8 +6,10 @@ import { RouteLab } from '../src/engines/routing-engine.js';
 import { checkSource, compile } from '../src/dsl/compile';
 import {
   currentRecipe,
+  layoutShape,
   recipeText,
   setLayoutRecipe,
+  setLayoutShape,
   setRouting,
   UnstorableLayout,
   writeArrangement,
@@ -62,6 +64,34 @@ describe('layout recipes', () => {
     const source = readSource(fitted);
     setLayoutRecipe(source, checkSource(fitted), 'root', settings({ algorithm: 'tree' }), 'right');
     expect(printSource(source)).toContain('layout root engine=tree direction=right fit=slide\n');
+  });
+
+  it('changes direction and format on the line and keeps its recipe', () => {
+    const source = readSource(checkout + 'stay db x=10 y=10\n');
+    const removed = setLayoutShape(source, checkSource(checkout), 'root', {
+      direction: 'down',
+      fit: 'slide',
+    });
+    const text = printSource(source);
+    expect(removed).toBe(1);
+    expect(text).toContain('layout root flow gap=48 direction=down fit=slide\n');
+    expect(layoutShape(text, 'root')).toMatchObject({
+      recipe: 'flow',
+      direction: 'down',
+      fit: 'slide',
+      gap: 48,
+    });
+  });
+
+  it('clears a direction and swaps a row for a column', () => {
+    const text = checkout.replace('layout root flow gap=48', 'layout root flow direction=down');
+    const source = readSource(text);
+    setLayoutShape(source, checkSource(text), 'root', { direction: 'auto' });
+    setLayoutShape(source, checkSource(text), 'services', { direction: 'down' });
+    const after = printSource(source);
+    expect(after).toContain('layout root flow\n');
+    expect(after).toContain('layout services column gap=56\n');
+    expect(layoutShape(after, 'services').direction).toBe('down');
   });
 
   it('keeps reserved group sizes and adds a line for a scope without one', () => {

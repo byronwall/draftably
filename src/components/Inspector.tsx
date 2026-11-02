@@ -27,49 +27,24 @@ import { doc, selectedIds, selectItems, transact } from '../state/document';
 import { fileMode } from '../state/file-session';
 import { geometry, routesById } from '../state/scene';
 import { timelineOpen } from '../state/sculpt';
-import {
-  inspectorWidth,
-  resetInspectorWidth,
-  setInspectorOpen,
-  setInspectorWidth,
-} from '../state/ui';
 import { Checkbox, Field, IconButton, NumberField, SelectField, tip } from './controls';
-import { ResizeHandle } from './ResizeHandle';
 import { describeLink, openLink } from '../state/links';
 
 /** Properties of the selection, or diagram-wide preferences when nothing is selected. */
 export function Inspector() {
   const ids = () => selectedIds();
   return (
-    <aside class="panel inspector-panel" aria-label="Inspector">
-      <header class="panel-header">
-        <h2>Inspector</h2>
-        <IconButton
-          icon="close"
-          label="Close inspector"
-          keys="]"
-          onClick={() => setInspectorOpen(false)}
-        />
-      </header>
-      <fieldset class="panel-scroll inspector" disabled={timelineOpen()}>
-        <Switch fallback={<NothingSelected />}>
-          <Match when={ids().length > 1}>
-            <MultipleSelected count={ids().length} />
-          </Match>
-          <Match when={ids().length === 1 && findEdge(doc, ids()[0]) && ids()[0]}>
-            {id => <EdgeInspector id={id()} />}
-          </Match>
-          <Match when={ids().length === 1 && ids()[0]}>{id => <ObjectInspector id={id()} />}</Match>
-        </Switch>
-      </fieldset>
-      <ResizeHandle
-        edge="left"
-        label="Resize inspector"
-        width={inspectorWidth()}
-        onResize={setInspectorWidth}
-        onReset={resetInspectorWidth}
-      />
-    </aside>
+    <fieldset class="panel-scroll inspector" disabled={timelineOpen()}>
+      <Switch fallback={<NothingSelected />}>
+        <Match when={ids().length > 1}>
+          <MultipleSelected count={ids().length} />
+        </Match>
+        <Match when={ids().length === 1 && findEdge(doc, ids()[0]) && ids()[0]}>
+          {id => <EdgeInspector id={id()} />}
+        </Match>
+        <Match when={ids().length === 1 && ids()[0]}>{id => <ObjectInspector id={id()} />}</Match>
+      </Switch>
+    </fieldset>
   );
 }
 
@@ -212,9 +187,6 @@ function NothingSelected() {
           onChange={v => edit('Edit showManual', d => void (d.settings.showManual = v))}
         />
       </Section>
-      <CommandButton command="layout-menu" class="full">
-        Layout options
-      </CommandButton>
     </>
   );
 }
@@ -225,7 +197,7 @@ function MultipleSelected(props: { count: number }) {
       <Heading title={`${props.count} selected`} />
       <Section>
         <div class="fields-2">
-          <CommandButton command="layout">Arrange</CommandButton>
+          <CommandButton command="layout">Improve</CommandButton>
           <CommandButton command="group">Wrap container</CommandButton>
           <CommandButton command="duplicate">Duplicate</CommandButton>
           <CommandButton command="pin">Pin</CommandButton>
@@ -620,7 +592,7 @@ function IntentSection(props: { id: string }) {
   );
 }
 
-/** Start and end preferences for the whole diagram. Also shown in the layout lab. */
+/** Start and end preferences for the whole diagram. Also shown in the Arrange panel. */
 export function IntentSummary() {
   const entries = () =>
     (['start', 'end'] as const).flatMap(role =>

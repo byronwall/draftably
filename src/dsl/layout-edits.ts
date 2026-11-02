@@ -25,11 +25,13 @@ import {
 import {
   bare,
   ENGINE_PARAMS,
+  FITS,
   printStatement,
   readSource,
   ENGINES,
   paramAttr,
   ROUTING_PARAMS,
+  type Fit,
   type SourceDoc,
   type Statement,
   type Word,
@@ -77,6 +79,79 @@ export function recipeText(scope: string, settings: LayoutSettings): string {
 export function currentRecipe(source: string, scope: string): string | null {
   const s = layoutStatement(readSource(source), scope);
   return s ? printStatement({ ...s, comment: undefined }) : null;
+}
+
+/** What a scope's `layout` line says about the drawing, as the Arrange panel shows it. */
+export interface LayoutShape {
+  /** The built-in recipe, or the engine when the line names one. */
+  recipe: string;
+  engine: boolean;
+  direction: 'auto' | 'right' | 'down';
+  fit: Fit | null;
+  gap: number | null;
+  fold: 'auto' | 'never';
+}
+
+export type ShapeChange = Partial<Pick<LayoutShape, 'direction' | 'fit' | 'gap' | 'fold'>>;
+
+const AXIS_RECIPES: Record<string, 'right' | 'down'> = { row: 'right', column: 'down' };
+
+/** Read a scope's layout line. A scope without one uses the built-in recipe. */
+export function layoutShape(source: string, scope: string): LayoutShape {
+  const s = layoutStatement(readSource(source), scope),
+    engine = s && getAttr(s, 'engine')?.value,
+    recipe = engine ?? s?.args[1]?.value ?? (scope === 'root' ? 'flow' : 'column'),
+    fit = s && getAttr(s, 'fit')?.value,
+    gap = s && getAttr(s, 'gap')?.value;
+  return {
+    recipe,
+    engine: !!engine,
+    direction:
+      AXIS_RECIPES[recipe] ??
+      ((s && getAttr(s, 'direction')?.value) as LayoutShape['direction'] | undefined) ??
+      'auto',
+    fit: fit && fit in FITS ? (fit as Fit) : null,
+    gap: gap ? Number(gap) : null,
+    fold: s && getAttr(s, 'fold')?.value === 'never' ? 'never' : 'auto',
+  };
+}
+
+/**
+ * Change what a scope's `layout` line says, keeping its recipe or engine. A `row` or `column`
+ * states its direction by name, so it swaps with the other. Soft refinements inside the scope are
+ * removed so the new shape shows; the count is returned. With no change, that is all it does.
+ */
+export function setLayoutShape(
+  source: SourceDoc,
+  scene: Scene,
+  scope: string,
+  change: ShapeChange,
+): number {
+  const line = layoutLine(source, scope);
+  const axis = AXIS_RECIPES[line.args[1]?.value ?? ''];
+  if (change.direction && axis && change.direction !== 'auto')
+    line.args[1] = bare(change.direction === 'right' ? 'row' : 'column');
+  else if (change.direction)
+    setAttr(line, 'direction', change.direction === 'auto' ? undefined : bare(change.direction));
+  if ('fit' in change) setAttr(line, 'fit', change.fit ? bare(change.fit) : undefined);
+  if (change.gap !== undefined) setAttr(line, 'gap', change.gap ? value(change.gap) : undefined);
+  if (change.fold) setAttr(line, 'fold', change.fold === 'never' ? bare('never') : undefined);
+  return removeRefinements(source, scene, scope);
+}
+
+/** A scope's `layout` line, added with the built-in recipe when it has none. */
+function layoutLine(source: SourceDoc, scope: string) {
+  const existing = layoutStatement(source, scope);
+  if (existing) return existing;
+  const line = statement('layout', [bare(scope), bare(scope === 'root' ? 'flow' : 'column')]);
+  placeLayout(source, line);
+  return line;
+}
+
+function placeLayout(source: SourceDoc, line: Statement) {
+  if (statements(source).some(s => s.command === 'layout'))
+    insertAfter(source, line, s => s.command === 'layout');
+  else insertAfter(source, line, s => s.command === 'edge' || s.command === 'node');
 }
 
 /** Ids inside a scope's subtree (not the scope itself). */
@@ -132,9 +207,7 @@ export function setLayoutRecipe(
   if (existing) {
     next.comment = existing.comment;
     source.lines[source.lines.indexOf(existing)] = next;
-  } else if (statements(source).some(s => s.command === 'layout'))
-    insertAfter(source, next, s => s.command === 'layout');
-  else insertAfter(source, next, s => s.command === 'edge' || s.command === 'node');
+  } else placeLayout(source, next);
   return removeRefinements(source, scene, scope);
 }
 

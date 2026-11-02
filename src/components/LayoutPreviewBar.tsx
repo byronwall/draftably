@@ -58,7 +58,7 @@ export function LayoutPreviewBar() {
             Discard <kbd>Esc</kbd>
           </button>
           <button type="button" class="button primary" onClick={() => runCommand('layout-accept')}>
-            Keep
+            Keep <kbd>Enter</kbd>
           </button>
         </div>
       )}

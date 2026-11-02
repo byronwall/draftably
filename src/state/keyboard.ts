@@ -27,7 +27,7 @@ import {
 } from './editor';
 import { importForeignText, importText, insertImage } from './files';
 import { detectSource } from '../import/detect';
-import { cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layout';
+import { acceptPreview, cancelLayout, layoutBusy, layoutPreview, discardPreview } from './layout';
 import { cancelGesture } from './pointer';
 import { visibleScene } from './scene';
 import { sculptKey } from './sculpt';
@@ -142,6 +142,13 @@ export function handleKeyDown(e: KeyboardEvent) {
 
   const onCanvas = target === document.querySelector('.canvas') || !!target.closest?.('[data-id]');
   const focusedId = focusedObject(target);
+
+  // Keep from anywhere, including the Arrange button that started the preview.
+  if (e.key === 'Enter' && layoutPreview() && !target.closest?.('.layout-preview')) {
+    e.preventDefault();
+    acceptPreview();
+    return;
+  }
 
   const quickAdd = target.closest?.('[data-quick-add]') as SVGElement | null;
   if (e.key === 'Enter' && quickAdd) {

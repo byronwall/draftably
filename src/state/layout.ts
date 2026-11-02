@@ -9,7 +9,8 @@ import {
 import { normalize } from '../model/document';
 import { clamp, clone } from '../model/geometry';
 import { findGroup, selectionRoots } from '../model/graph';
-import type { Diagram, NodeGeometry } from '../model/types';
+import { layoutShape, type ShapeChange } from '../dsl/layout-edits';
+import type { Diagram, LayoutAlgorithmId, NodeGeometry } from '../model/types';
 import { CancelledError, startEngineTask, type RunningTask } from '../lib/engine-tasks';
 import {
   commit,
@@ -28,11 +29,13 @@ import { diagramClipped, fitView, reducedMotion, stageSize } from './editor';
 import {
   changedLine,
   commitSource,
+  currentSource,
   fileBlocked,
   fileMode,
   projectSource,
   sourceScope,
   sourceWithRecipe,
+  sourceWithShape,
   UnstorableLayout,
 } from './file-session';
 import { resetRoutes, setAnimationGeometry } from './scene';
@@ -52,6 +55,8 @@ interface LayoutPreview {
     message: string;
     line: string | null;
     removed: number;
+    /** The direction and format asked for so far. A further choice builds on them. */
+    shape?: ShapeChange;
   };
 }
 
@@ -60,6 +65,8 @@ const state = createRoot(() => {
   const [report, setReport] = createSignal<LayoutReport | null>(null);
   const [preview, setPreview] = createSignal<LayoutPreview | null>(null);
   const [labScope, setLabScope] = createSignal<LabScope>('auto');
+  /** In a diagram file: the engine to rebuild with, when it is not what the file says. */
+  const [labEngine, setLabEngine] = createSignal<LayoutAlgorithmId | null>(null);
   const [checkpoint, setCheckpoint] = createSignal<Diagram | null>(null);
   return {
     busy,
@@ -70,6 +77,8 @@ const state = createRoot(() => {
     setPreview,
     labScope,
     setLabScope,
+    labEngine,
+    setLabEngine,
     checkpoint,
     setCheckpoint,
   };
@@ -82,6 +91,8 @@ export const {
   preview: layoutPreview,
   labScope,
   setLabScope,
+  labEngine,
+  setLabEngine,
   checkpoint: layoutCheckpoint,
 } = state;
 
@@ -222,25 +233,37 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
     if (error instanceof UnstorableLayout || error instanceof Error) return fail(error.message);
     throw error;
   }
-  prepareForEdit();
-  const before = snapshot(),
+  const name = engineName(settings.algorithm),
+    where = scope === 'root' ? 'the diagram' : scope;
+  return showRecipe(
+    {
+      source: next.source,
+      label: `Layout: ${name}`,
+      message:
+        `${where} uses ${name}` +
+        (next.removed ? ` · removed ${next.removed} position refinements` : ''),
+      line: changedLine(next.source),
+      removed: next.removed,
+    },
+    { preview, fit },
+  );
+}
+
+/** Show a new `layout` line on the canvas: as a preview, or saved. */
+async function showRecipe(
+  file: NonNullable<LayoutPreview['file']>,
+  { preview, fit }: { preview?: boolean; fit?: boolean },
+): Promise<LayoutOutcome> {
+  // One preview replaces another, so the drawing to go back to stays the first one.
+  const held = preview ? state.preview() : null;
+  if (!held) prepareForEdit();
+  const before = held?.before ?? snapshot(),
     startRevision = revision(),
     thisJob = ++job,
-    whole = !diagramClipped(),
-    name = engineName(settings.algorithm);
-  const where = scope === 'root' ? 'the diagram' : scope;
-  const file = {
-    source: next.source,
-    label: `Layout: ${name}`,
-    message:
-      `${where} uses ${name}` +
-      (next.removed ? ` · removed ${next.removed} position refinements` : ''),
-    line: changedLine(next.source),
-    removed: next.removed,
-  };
+    whole = !diagramClipped();
   state.setBusy(true);
   try {
-    const projected = await projectSource(next.source);
+    const projected = await projectSource(file.source);
     if (job !== thisJob || revision() !== startRevision) return { status: 'cancelled' };
     const old = clone(doc.layout.nodes);
     if (preview) {
@@ -254,7 +277,6 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
     await animateLayout(old, clone(doc.layout.nodes));
     // A preview, or a result that grew past a diagram shown whole, is fitted so all of it shows.
     if (fit || ((preview || whole) && diagramClipped())) fitView();
-    if (preview) toast(`Preview · ${where} with ${name} · Keep saves it to the file`);
     return { status: preview ? 'recipe-preview' : 'recipe', source: file.source };
   } finally {
     if (thisJob === job) state.setBusy(false);
@@ -263,8 +285,62 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
 
 /** Run with the lab's scope. `mode` is a bounded pass or a full rebuild. */
 export function runLabLayout(mode: 'pass' | 'rebuild' = 'pass', preview = false) {
+  const scope = state.labScope(),
+    engine = state.labEngine();
+  if (fileMode() && mode === 'rebuild' && !engine) return previewShape({});
+  return runLayout({
+    ...(scope === 'auto' ? currentScope() : { scope }),
+    mode,
+    preview,
+    ...(engine ? { algorithm: engine } : {}),
+  });
+}
+
+/** The source scope the Arrange panel acts on, or null for a loose selection. */
+export function arrangeScope() {
   const scope = state.labScope();
-  return runLayout({ ...(scope === 'auto' ? currentScope() : { scope }), mode, preview });
+  return sourceScope(scope === 'auto' ? currentScope() : { ...currentScope(), scope });
+}
+
+/**
+ * Preview a change to the scope's `layout` line, on top of any direction or format already being
+ * previewed. A choice that returns to the file ends the preview. With no change, this removes the
+ * scope's hand placements, so the recipe alone draws it.
+ */
+export async function previewShape(change: ShapeChange): Promise<LayoutOutcome> {
+  const blocked = fileBlocked(),
+    scope = arrangeScope();
+  if (blocked || !scope) {
+    const message = blocked ?? 'A layout line arranges the whole diagram or one group.';
+    toast(message);
+    return { status: 'error', message };
+  }
+  const file = layoutShape(currentSource(), scope),
+    shape: ShapeChange = { ...state.preview()?.file?.shape, ...change };
+  for (const key of Object.keys(shape) as Array<keyof ShapeChange>)
+    if (shape[key] === file[key]) delete shape[key];
+  const fresh = !Object.keys(change).length;
+  if (!Object.keys(shape).length && !fresh) {
+    discardPreview();
+    return { status: 'cancelled' };
+  }
+  const next = sourceWithShape(scope, shape);
+  if (fresh && !next.removed) {
+    toast('Nothing to reset: the recipe already draws this.');
+    return { status: 'cancelled' };
+  }
+  const line = changedLine(next.source);
+  return showRecipe(
+    {
+      source: next.source,
+      label: 'Arrange',
+      message: line ?? 'Removed hand placements',
+      line,
+      removed: next.removed,
+      shape,
+    },
+    { preview: true },
+  );
 }
 
 /** Ease shapes from their old to new positions. Edits during the animation stop it. */

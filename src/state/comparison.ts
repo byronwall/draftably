@@ -32,7 +32,7 @@ import {
 import { resetRoutes, routes, setAdoptedRoutes } from './scene';
 import { setComparisonCloser } from './sculpt';
 import { toast } from './toast';
-import { closeMenu, setLayoutLabOpen } from './ui';
+import { closeMenu } from './ui';
 import {
   changedLine,
   commitSource,
@@ -184,7 +184,6 @@ export function openComparison(mode: ComparisonMode = 'layout') {
   finishInlineEdit(true);
   if (layoutBusy()) cancelLayout();
   closeMenu();
-  setLayoutLabOpen(false);
   if (cmp.open) {
     setCmp('config', { ...defaultConfig(mode), priorRoutes: cmp.config!.priorRoutes });
     return;
