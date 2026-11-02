@@ -401,7 +401,7 @@ function openSvg(
       '</defs>',
     `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
     // The title and subtitle sit above the drawing, left-aligned with the legend under it.
-    headingMarkup(look, doc.appearance.heading, heading.x, heading.y),
+    headingMarkup(look, doc.appearance.heading, heading.x, heading.y, heading.wrap),
   ];
 }
 

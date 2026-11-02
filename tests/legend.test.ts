@@ -31,6 +31,21 @@ legend violet "Unused family"
     ]);
   });
 
+  it('warns on heading prose: a long subtitle and a note with no near=', () => {
+    const notes = legendNotes(
+      parseModel(`diagram "K" version=1
+subtitle "${'word '.repeat(40)}"
+note "Context the drawing should say"
+note "Beside the API" near=api
+node api "API"
+`),
+    );
+    expect(notes.map(n => [n.code, n.line])).toEqual([
+      ['heading-prose', undefined],
+      ['heading-prose', 3],
+    ]);
+  });
+
   it('reads entries in file order, with optional shades', () => {
     expect(parseModel(SOURCE).appearance.legend).toEqual([
       { family: 'blue', label: 'Public entry points' },
