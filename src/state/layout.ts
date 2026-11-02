@@ -26,6 +26,7 @@ import {
 } from './document';
 import { diagramClipped, fitView, reducedMotion, stageSize } from './editor';
 import {
+  changedLine,
   commitSource,
   fileBlocked,
   fileMode,
@@ -42,8 +43,16 @@ export type LabScope = 'auto' | LayoutScope;
 interface LayoutPreview {
   before: string;
   mode: 'pass' | 'rebuild';
-  /** In a diagram file: the source that Keep saves, and what it says once saved. */
-  file?: { source: string; label: string; message: string };
+  /** Objects a bounded pass moved; a rebuild's preview is a new drawing, so it has no count. */
+  moved?: number;
+  /** In a diagram file: the source that Keep saves, the line it changes, what it says once saved. */
+  file?: {
+    source: string;
+    label: string;
+    message: string;
+    line: string | null;
+    removed: number;
+  };
 }
 
 const state = createRoot(() => {
@@ -156,7 +165,11 @@ export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutO
       resetRoutes();
     });
     if (preview) {
-      state.setPreview({ before, mode: result.report.mode === 'rebuild' ? 'rebuild' : 'pass' });
+      state.setPreview({
+        before,
+        mode: result.report.mode === 'rebuild' ? 'rebuild' : 'pass',
+        moved: result.report.moved,
+      });
       setPersistenceBlocked(true);
     } else commit(before, 'Layout: ' + result.report.name, 'arrangement');
     await animateLayout(old, clone(doc.layout.nodes));
@@ -222,6 +235,8 @@ async function runRecipe(options: RunLayoutOptions): Promise<LayoutOutcome> {
     message:
       `${where} uses ${name}` +
       (next.removed ? ` · removed ${next.removed} position refinements` : ''),
+    line: changedLine(next.source),
+    removed: next.removed,
   };
   state.setBusy(true);
   try {

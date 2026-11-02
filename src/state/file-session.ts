@@ -568,10 +568,20 @@ export function sourceScope(scope: { scope: string; containerId?: string }): str
  * The current source with `scope` arranged by the engine in `settings`. Throws
  * `UnstorableLayout` for an engine a file cannot name.
  */
-export function sourceWithRecipe(scope: string, settings: LayoutSettings) {
+export function sourceWithRecipe(
+  scope: string,
+  settings: LayoutSettings,
+  direction?: 'right' | 'down',
+) {
   const source = readSource(localSource),
-    removed = setLayoutRecipe(source, state.scene()!, scope, settings);
+    removed = setLayoutRecipe(source, state.scene()!, scope, settings, direction);
   return { source: printSource(source), removed };
+}
+
+/** The `layout` or `routing` line that `source` adds to the file, as saving it would write. */
+export function changedLine(source: string) {
+  const now = new Set(localSource.split('\n'));
+  return source.split('\n').find(l => /^(layout|routing)\b/.test(l) && !now.has(l)) ?? null;
 }
 
 /** The current source with these router settings. */

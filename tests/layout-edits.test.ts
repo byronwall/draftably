@@ -51,6 +51,19 @@ describe('layout recipes', () => {
     expect(group.text).toContain('layout services engine=grid direction=down\n');
   });
 
+  it('keeps the fit and direction the author wrote, unless a new direction is asked for', () => {
+    const fitted = checkout.replace(
+      'layout root flow gap=48',
+      'layout root flow gap=48 direction=down fit=slide',
+    );
+    expect(withRecipe(fitted, 'root', { algorithm: 'tree' }).text).toContain(
+      'layout root engine=tree direction=down fit=slide\n',
+    );
+    const source = readSource(fitted);
+    setLayoutRecipe(source, checkSource(fitted), 'root', settings({ algorithm: 'tree' }), 'right');
+    expect(printSource(source)).toContain('layout root engine=tree direction=right fit=slide\n');
+  });
+
   it('keeps reserved group sizes and adds a line for a scope without one', () => {
     const sized = checkout.replace(
       'layout services row gap=56',

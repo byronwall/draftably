@@ -103,13 +103,10 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
   // The file decides routing, and its root engine recipe is what layout tools start from.
   doc.settings.routing = { ...DEFAULT_SETTINGS.routing, ...scene.model.routing };
   const root = scene.model.layouts.find(l => l.scope === 'root');
+  // `auto` reads left to right in the compiler's landscape render context.
+  if (root) doc.settings.direction = root.direction === 'down' ? 'DOWN' : 'RIGHT';
   if (root?.engine)
-    Object.assign(
-      doc.settings,
-      // `auto` reads left to right in the compiler's landscape render context.
-      { algorithm: root.engine.algorithm, direction: root.direction === 'down' ? 'DOWN' : 'RIGHT' },
-      root.engine.params,
-    );
+    Object.assign(doc.settings, { algorithm: root.engine.algorithm }, root.engine.params);
   if (view.camera) doc.camera = { ...view.camera };
   if (view.theme) doc.theme = view.theme;
   return doc;
