@@ -15,7 +15,8 @@ export type ComparisonRun = 'rebuild' | 'warm' | 'pass';
 
 export interface ComparisonConfig {
   mode: ComparisonMode;
-  kind: 'algorithms' | 'parameters';
+  /** Engines, the suggested routing alternatives, or a grid of parameter values. */
+  kind: 'algorithms' | 'routes' | 'parameters';
   algorithm: LayoutAlgorithmId;
   algorithms: LayoutAlgorithmId[];
   axisA: string;
