@@ -9,6 +9,7 @@ import { RouteLab } from '../engines/routing-engine.js';
 import type { Diagram, LayoutSettings, Rect, RoutingSettings } from '../model/types';
 import { layoutView, type Scene, type SceneObject } from './compile';
 import { contentOrigin, GROUP_INSET } from './frame';
+import { UnsupportedEdit } from './translate';
 import { groupHeaderFor } from '../model/labels';
 import {
   addRefinement,
@@ -157,6 +158,10 @@ export function setRouting(source: SourceDoc, routing: RoutingSettings) {
 
 // --- Arrangements ----------------------------------------------------------------------------
 
+/** Why the position tools stop in a sequence. */
+export const LANES_HOLD =
+  'A sequence keeps its lanes and rows, so layout tools have nothing to move.';
+
 /** Set an object's soft `stay`, updating an existing one in place to keep the diff small. */
 function setStay(source: SourceDoc, id: string, x: number, y: number) {
   const existing = statements(source).find(s => s.command === 'stay' && s.args[0]?.value === id);
@@ -187,9 +192,11 @@ function setStay(source: SourceDoc, id: string, x: number, y: number) {
  *
  * Groups are fitted to their contents first, as the compiler sizes them, so a group whose
  * children moved left or up moves with them instead of clipping them. Pinned objects never move.
- * Returns the ids that were given a position.
+ * Returns the ids that were given a position. A sequence draws from its lanes and rows, so it
+ * takes no positions.
  */
 export function writeArrangement(source: SourceDoc, drawn: Scene, after: Diagram): string[] {
+  if (drawn.sequence) throw new UnsupportedEdit(LANES_HOLD);
   // Soft groups have no position; their members are placed in the container that lays them out.
   const scene = layoutView(drawn);
   const children = new Map<string, SceneObject[]>();
