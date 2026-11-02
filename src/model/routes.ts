@@ -89,6 +89,9 @@ interface LabelSpot extends EdgeLabelBox {
   score: number;
 }
 
+/** `r` grown by `d` on every side. */
+const grown = (r: Rect, d: number) => ({ x: r.x - d, y: r.y - d, w: r.w + 2 * d, h: r.h + 2 * d });
+
 /** Room a label wants between itself and another edge's line. */
 const LINE_CLEARANCE = 8;
 
@@ -116,12 +119,6 @@ function labelSpots(
       route,
       shared: !!start && !!route[0] && manhattan(route[0], start) < 1,
     }));
-  const grown = (r: Rect, d: number) => ({
-    x: r.x - d,
-    y: r.y - d,
-    w: r.w + 2 * d,
-    h: r.h + 2 * d,
-  });
   // The text itself, inside the label's padding: 8px each side, its lines of the annotation type.
   const ink =
     look.annotation.size + (edgeLabelLines(label, look).length - 1) * look.annotation.lineHeight;
@@ -620,6 +617,86 @@ export function routeInput(doc: Diagram, vg: VisibleGraph, all: Map<string, Rect
   };
 }
 
+/** Line a label wants left showing at each end of its run, as the compiler sizes a gap. */
+const LABEL_RUN = 14;
+/** Shortest run a slid bend leaves at the other end, for the corner and an arrowhead. */
+const BEND_STUB = 16;
+/** Closest a slid segment may run beside another line. */
+const BEND_PARALLEL = 8;
+
+/**
+ * A labelled route with no run the label clears slides one bend along, so one run holds the label
+ * away from the bend; a label on the corner reads as part of neither run. `w` and `h` are the
+ * label's box. The bend moves the least that gives a run the label plus `LABEL_RUN` at each end,
+ * or as close to that as the route allows while the label still clears both ends. The move stands
+ * only when the route stays out of every box, crosses no more lines and runs beside no more.
+ */
+export function roomForLabel(
+  points: Point[],
+  w: number,
+  h: number,
+  boxes: Rect[],
+  others: Point[][],
+): Point[] {
+  const level = (a: Point, b: Point) => Math.abs(a.y - b.y) < 0.5,
+    // A label sits beside a level run, which must clear its width; an upright run passes through
+    // the label and must show `LABEL_RUN` of line above and below it.
+    clear = (ps: Point[]) =>
+      ps
+        .slice(1)
+        .some((b, i) => manhattan(ps[i], b) >= (level(ps[i], b) ? w + 8 : h + 2 * LABEL_RUN));
+  if (clear(points)) return points;
+  // Another line crossing a segment, or running beside it closer than `BEND_PARALLEL`.
+  const beside = (s: Seg, t: Seg) => {
+    if (level(...s) !== level(...t)) return false;
+    const c = level(...s) ? 'y' : 'x',
+      d = c === 'y' ? 'x' : 'y';
+    return (
+      Math.abs(s[0][c] - t[0][c]) < BEND_PARALLEL &&
+      Math.min(Math.max(s[0][d], s[1][d]), Math.max(t[0][d], t[1][d])) >
+        Math.max(Math.min(s[0][d], s[1][d]), Math.min(t[0][d], t[1][d]))
+    );
+  };
+  const conflicts = (ps: Point[]) =>
+    segsOf(ps).reduce(
+      (n, s) =>
+        n +
+        others.reduce(
+          (m, o) => m + segsOf(o).filter(t => crossing(s, t) || beside(s, t)).length,
+          0,
+        ),
+      0,
+    );
+  const before = conflicts(points);
+  let best: Point[] | null = null,
+    moved = Infinity;
+  // Segment `i` runs from points[i] to points[i + 1]; it moves across itself, which lengthens one
+  // neighbouring run and shortens the other.
+  for (let i = 1; i + 2 < points.length; i++) {
+    const [p, a, b, q] = points.slice(i - 1, i + 3),
+      c = level(a, b) ? 'y' : 'x',
+      need = (level(a, b) ? h : w) + 2 * LABEL_RUN,
+      enough = (level(a, b) ? h : w) + 8,
+      span = Math.abs(q[c] - p[c]) - BEND_STUB;
+    // Both neighbours must run the same way, so the bend can slide between their far ends.
+    if (Math.sign(a[c] - p[c]) !== Math.sign(q[c] - b[c]) || span < enough) continue;
+    const dir = Math.sign(q[c] - p[c]),
+      run = Math.min(need, span);
+    for (const v of [p[c] + dir * run, q[c] - dir * run]) {
+      const next = points.map((pt, j) => (j === i || j === i + 1 ? { ...pt, [c]: v } : pt)),
+        changed = next.slice(i - 1, i + 3);
+      if (Math.abs(v - a[c]) >= moved || Math.abs(v - a[c]) < 0.5) continue;
+      // The ends keep their ports; the slid segment itself keeps clear of boxes and borders.
+      if (segsOf(changed).some(([s, t]) => boxes.some(r => segmentHits(s, t, r)))) continue;
+      if (boxes.some(r => segmentHits(next[i], next[i + 1], grown(r, BEND_PARALLEL)))) continue;
+      if (conflicts(next) > before) continue;
+      best = next;
+      moved = Math.abs(v - a[c]);
+    }
+  }
+  return best ?? points;
+}
+
 /** Add label positions and SVG paths to raw routes. */
 export function drawRoutes(
   doc: Diagram,
@@ -647,6 +724,7 @@ export function drawRoutes(
     byEdge = new Map(vg.edges.map(e => [e.id, e])),
     radius = doc.settings.routing?.cornerRadius ?? 6,
     { crosses } = cellEnds(doc, vg, rects);
+  const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
   // A line to a cell with no free side runs on from its stub across the cells to that cell.
   result = {
     ...result,
@@ -671,13 +749,39 @@ export function drawRoutes(
       }),
     ],
   };
+  // A label too long for every run of its line gets a run of its own: the bend slides along,
+  // unless the label's best spot on the moved line crosses or crowds more than it did.
+  result = {
+    ...result,
+    routes: result.routes.map((route, i) => {
+      const label = byEdge.get(route.id)?.label;
+      if (
+        !label ||
+        route.blocked ||
+        message(route) ||
+        doc.layout.edges[route.id]?.waypoints?.length
+      )
+        return route;
+      const { w, h } = edgeLabelSize(label, look),
+        others = result.routes.filter((_, j) => j !== i).map(r => r.points),
+        points = roomForLabel(route.points, w, h, [...obstacles, ...borders], others),
+        best = (ps: Point[]) =>
+          Math.min(
+            ...labelSpots(label, ps, obstacles, look, { routes: others, borders }).spots.map(
+              s => s.cost,
+            ),
+          );
+      return points === route.points || best(points) > best(route.points)
+        ? route
+        : { ...route, points };
+    }),
+  };
   // A plain arrow claims no room, so a diagram without markers places its labels as it did.
   const marks = result.routes.flatMap(route => {
     const edge = findEdge(doc, route.id);
     return edge && hasMarkers(edge) ? markerRects(route.points, edge) : [];
   });
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
-  const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
   const labelled = result.routes.filter(route => byEdge.get(route.id)!.label && !message(route)),
     boxes = placeEdgeLabels(
       labelled.map(route => {
