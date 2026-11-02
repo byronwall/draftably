@@ -394,13 +394,13 @@ const journeys = {
   async 'layout actions say what they change'() {
     const page = await open('app/?example=checkout');
     await editorReady(page);
-    const button = page.locator('.toolbar button:has-text("Tidy positions")');
+    const button = page.locator('.toolbar button:has-text("Improve")');
     await page.click('.menubar-item:has-text("Layout")');
-    await page.click('.popover .menu-item:has-text("Automatic layout")');
-    const panel = page.locator('.hint', { hasText: 'Tidy positions changes' });
+    await page.click('.popover .menu-item:has-text("Arrange")');
+    const panel = page.locator('.arrange-subject strong');
     check(
       '#307 nothing selected means the whole diagram',
-      /the whole diagram/.test(await panel.textContent()),
+      /Whole diagram/.test(await panel.textContent()),
     );
     await page.locator('[data-id="web"]').first().click({ force: true });
     check(

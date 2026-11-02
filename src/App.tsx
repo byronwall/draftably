@@ -6,11 +6,10 @@ import { ComparisonDialog } from './components/comparison/ComparisonDialog';
 import { Dialogs } from './components/Dialogs';
 import { ExampleBar } from './components/ExampleBar';
 import { FileBanner } from './components/FileBanner';
-import { Inspector } from './components/Inspector';
-import { LayoutLab } from './components/LayoutLab';
 import { Menus } from './components/Menus';
 import { Sidebar } from './components/Sidebar';
 import { StartScreen } from './components/StartScreen';
+import { RightPanel } from './components/RightPanel';
 import { StatusBar } from './components/StatusBar';
 import { Toast } from './components/Toast';
 import { Tips } from './components/Tips';
@@ -33,7 +32,6 @@ import {
   filesShown,
   inspectorOpen,
   inspectorWidth,
-  layoutLabOpen,
   objectsOpen,
   showError,
   sidebarWidth,
@@ -183,10 +181,7 @@ export default function App() {
         <Canvas />
         <FileBanner />
         <Show when={inspectorOpen()}>
-          <Inspector />
-        </Show>
-        <Show when={layoutLabOpen()}>
-          <LayoutLab />
+          <RightPanel />
         </Show>
       </div>
       <StatusBar />
