@@ -10,17 +10,25 @@ import type { Diagram } from './types';
 export type PanelSide = 'before' | 'after';
 
 /**
- * The merged document with each change as it was: old labels, shapes and counts. Every object
- * stays in its place and every line stays in, so routing this gives the older panel lines that
- * differ from the newer panel's only where a change needs it.
+ * The merged document with each change as it was: old labels, shapes, counts, rows and phase
+ * bands. Every object stays in its place and every line stays in.
  */
 export function oldDoc(doc: Diagram): Diagram {
-  const styles = { ...doc.styles };
+  const styles = { ...doc.styles },
+    seq = doc.layout.sequence;
   for (const n of doc.graph.nodes)
     if (n.wasShape) styles[n.id] = { ...styles[n.id], shape: n.wasShape };
+  const edges = { ...doc.layout.edges };
+  for (const [id, row] of Object.entries(seq?.before?.rows ?? {}))
+    edges[id] = { ...edges[id], row };
   return {
     ...doc,
     styles,
+    layout: {
+      ...doc.layout,
+      edges,
+      ...(seq?.before ? { sequence: { ...seq, phases: seq.before.phases } } : {}),
+    },
     graph: {
       nodes: doc.graph.nodes.map(n => ({
         ...n,

@@ -85,6 +85,7 @@ const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s
  * Merge two plain versions into one marked file. `moved` lists groups that changed container:
  * they keep one position, so the older panel draws them in their new container. `unshown` lists
  * the other changes with no old version in the file, which both panels draw as they are now.
+ * `reordered` says a sequence's messages changed order, which `was-order` records.
  */
 export function compareSources(before: string, after: string): string {
   return compareDetailed(before, after).merged;
@@ -94,7 +95,7 @@ export function compareDetailed(before: string, after: string) {
   const docs = [readSource(before), readSource(after)];
   for (const doc of docs)
     for (const s of doc.lines)
-      if (s.kind === 'statement' && s.mark)
+      if (s.kind === 'statement' && (s.mark || s.command === 'was-order'))
         throw new DslError('Compare plain files; this one already has change marks.', s.line);
   const [old, next] = [parseModel(docs[0]), parseModel(docs[1])];
   const [was, now] = [old, next].map(
@@ -136,11 +137,12 @@ export function compareDetailed(before: string, after: string) {
         .map(e => 'edge:' + e.id),
     ]);
   // A removed line, joined to the old copies of moved nodes; a split one also takes a spare ID.
+  const spares = new Map<string, string>();
   const removedLine = (line: Statement): Statement => {
     const args = line.args.map(w => ({ ...w })),
       own = split.has(keyOf(line));
     if (line.command === 'edge') {
-      if (own) args[0].value = spare('edge:', args[0].value);
+      if (own) spares.set(line.args[0].value, (args[0].value = spare('edge:', args[0].value)));
       for (const i of [1, 3]) args[i].value = movedNodes.get(args[i].value) ?? args[i].value;
     } else if (own) args[0].value = movedNodes.get(args[0].value)!;
     return { ...line, args, mark: '-', comment: undefined };
@@ -217,11 +219,24 @@ export function compareDetailed(before: string, after: string) {
   const [gone, kept] = [undeclared(docs[0].lines), undeclared(out)];
   for (const [text, name] of [...gone, ...kept])
     if (!gone.has(text) || !kept.has(text)) unshown.push(name);
+  let reordered = false;
   if (isSequence(old) && isSequence(next)) {
     if (!sameOrder(nodesOf(old), nodesOf(next))) unshown.push('participant order');
-    if (!sameOrder(old.edges, next.edges)) unshown.push('message order');
+    // Rows come from file order, so the older order needs a line when the merged file loses it.
+    const edges = out.filter((l): l is Statement => l.kind === 'statement' && l.command === 'edge'),
+      order = old.edges.map(e => spares.get(e.id) ?? e.id);
+    if (edges.filter(l => l.mark !== '+').some((l, i) => l.args[0].value !== order[i])) {
+      reordered = true;
+      out.splice(out.indexOf(edges.at(-1)!) + 1, 0, {
+        kind: 'statement',
+        command: 'was-order',
+        args: order.map(bare),
+        attrs: [],
+        line: 0,
+      });
+    }
   }
   const merged = printSource({ lines: out });
   parseModel(merged);
-  return { merged, moved, unshown: [...new Set(unshown)] };
+  return { merged, moved, unshown: [...new Set(unshown)], reordered };
 }

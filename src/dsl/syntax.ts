@@ -373,6 +373,8 @@ export interface Model {
   stateLines: Map<string, number>;
   /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
   phases: Array<{ id: string; label: string; ids: string[]; line: number }>;
+  /** Sequence diagrams: the `was-order` statement, the older version's message order. */
+  wasOrder?: { ids: string[]; line: number };
   /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
   warnings: { code: string; message: string; line: number }[];
 }
@@ -660,6 +662,12 @@ export function parseModel(source: string | SourceDoc): Model {
         m.phases.push({ id: pid, label: args[1].value, ids: args.slice(2).map(w => id(w)), line });
         break;
       }
+      case 'was-order':
+        assert(args.length, 'was-order lists the older message order: was-order m2 m1.');
+        allow([]);
+        once('was-order');
+        m.wasOrder = { ids: args.map(w => id(w)), line };
+        break;
       case 'subtitle':
         count(1);
         allow([]);
@@ -1116,6 +1124,24 @@ function validateReferences(m: Model) {
       `Phase ${p.id} skips ${skipped.join(', ')}: a phase is a run of consecutive messages. Include it or split the phase.`,
       p.line,
     );
+  }
+  if (m.wasOrder) {
+    const { ids, line } = m.wasOrder,
+      edge = (id: string) => m.edges.find(e => e.id === id),
+      warn = (message: string) => m.warnings.push({ code: 'was-order', message, line });
+    assert(
+      m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'),
+      'was-order gives the older order of a sequence diagram; use layout root sequence.',
+      line,
+    );
+    assert(new Set(ids).size === ids.length, 'was-order lists a message twice.', line);
+    for (const x of ids) {
+      assert(edge(x)?.status !== 'added', `${x} is added, so was-order can't list it.`, line);
+      if (!edge(x)) warn(`was-order lists ${x}, which is not a message. The panels skip it.`);
+    }
+    for (const e of m.edges)
+      if (e.status !== 'added' && !ids.includes(e.id))
+        warn(`was-order leaves out ${e.id}, so the older panel keeps it on its new row.`);
   }
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {

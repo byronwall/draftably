@@ -27,6 +27,7 @@ import type {
   EdgeLayout,
   NodeLayout,
   SequenceLayout,
+  SequencePhase,
   ShapeKind,
 } from './types';
 
@@ -373,15 +374,21 @@ export function normalize(input: unknown): Diagram {
     seq &&
     ['x', 'y', 'w', 'h'].every(k => finite((seq.panel as Raw | undefined)?.[k])) &&
     Array.isArray(seq.phases)
-  )
+  ) {
+    const phases = (list: SequencePhase[]) =>
+      list
+        .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
+        .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h }));
     out.layout.sequence = {
       panel: { ...seq.panel },
-      phases: seq.phases
-        .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
-        .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h })),
+      phases: phases(seq.phases),
       ...(finite(seq.phaseX) ? { phaseX: seq.phaseX } : {}),
       ...(Array.isArray(seq.notes) ? { notes: seq.notes } : {}),
+      ...(seq.before && Array.isArray(seq.before.phases)
+        ? { before: { rows: { ...seq.before.rows }, phases: phases(seq.before.phases) } }
+        : {}),
     };
+  }
   out.collapsed = Array.isArray(data.collapsed)
     ? data.collapsed.filter((id: string) => groups.has(id))
     : [];

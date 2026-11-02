@@ -159,7 +159,7 @@ export async function compile(source: string): Promise<Scene> {
 function compileModel(m: Model) {
   const flat = dissolved(m);
   return engineArrangement(flat).then(arranged =>
-    sequenced(withSoftGroups(layoutModel(flat, arranged), m)),
+    withOldOrder(sequenced(withSoftGroups(layoutModel(flat, arranged), m))),
   );
 }
 
@@ -199,7 +199,7 @@ function fitVariants(root: ModelLayout) {
  */
 export function checkSource(source: string): Scene {
   const m = parseModel(source);
-  return sequenced(withSoftGroups(layoutModel(dissolved(m)), m));
+  return withOldOrder(sequenced(withSoftGroups(layoutModel(dissolved(m)), m)));
 }
 
 /**
@@ -417,6 +417,31 @@ function sequenced(scene: Scene): Scene {
       phases,
       ...(phaseX !== undefined ? { phaseX } : {}),
       ...(drawn.length ? { notes: margins } : {}),
+    },
+  };
+}
+
+/**
+ * With `was-order`: the rows and phase bands of the older message order, for the older panel. The
+ * listed messages take each other's places, so the row count and the panel's height stay as they
+ * are, and the same run of `sequenced` keeps one rule for rows and bands.
+ */
+function withOldOrder(scene: Scene): Scene {
+  const listed = scene.model.wasOrder?.ids.flatMap(id => scene.edges.filter(e => e.id === id));
+  if (!listed || !scene.sequence) return scene;
+  const rest = [...listed],
+    old = sequenced({
+      ...scene,
+      edges: scene.edges.map(e => (listed.includes(e) ? rest.shift()! : e)),
+    });
+  return {
+    ...scene,
+    sequence: {
+      ...scene.sequence,
+      before: {
+        rows: Object.fromEntries(old.edges.map(e => [e.id, e.row!])),
+        phases: old.sequence!.phases,
+      },
     },
   };
 }

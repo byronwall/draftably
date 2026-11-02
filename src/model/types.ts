@@ -273,12 +273,16 @@ export type NodeGeometry = Record<string, NodeLayout>;
 /** The panel a sequence diagram is drawn on, and a row band for each `phase`. */
 export interface SequenceLayout {
   panel: Rect;
-  phases: Array<{ id: string; label: string; y: number; h: number }>;
+  phases: SequencePhase[];
   /** Left edge for phase labels, when a note in the left margin widens the panel past them. */
   phaseX?: number;
   /** Spots of the notes that sit in a side margin, by index in `appearance.notes`. */
   notes?: Array<Rect | null>;
+  /** From `was-order`: each message's row and the phase bands in the older message order. */
+  before?: { rows: Record<string, number>; phases: SequencePhase[] };
 }
+
+export type SequencePhase = { id: string; label: string; y: number; h: number };
 
 /** Any object that can be selected: a shape, a container, or a connection. */
 export type Entity = DiagramNode | DiagramGroup | DiagramEdge;
