@@ -42,6 +42,12 @@ const ROUTE_PARAMS = {
   passes: { name: 'Refinement passes', values: [1, 3, 5] },
   cornerRadius: { name: 'Corner radius', values: [0, 6, 12] },
 };
+/* Routing alternatives that together covered every feasible case in the layout-config study. */
+const ROUTE_ALTERNATIVES = [
+  { title: 'Tighter clearance', subtitle: 'clearance=4', patch: { clearance: 4 } },
+  { title: 'More clearance', subtitle: 'clearance=22', patch: { clearance: 22 } },
+  { title: 'Wider endpoints', subtitle: 'port-gap=28', patch: { portGap: 28 } },
+];
 function parseValues(key, text, mode = 'layout') {
   const def = (mode === 'routing' ? ROUTE_PARAMS : LAYOUT_PARAMS)[key];
   if (!def) throw Error('Unknown parameter: ' + key);
@@ -101,7 +107,9 @@ function effectiveParams(algorithm, run) {
 function specs(config) {
   const mode = config.mode === 'routing' ? 'routing' : 'layout',
     result = [];
-  if (mode === 'layout' && config.kind === 'algorithms') {
+  if (mode === 'routing' && config.kind === 'routes') {
+    ROUTE_ALTERNATIVES.forEach((spec, i) => result.push({ key: 'route-' + i, ...spec }));
+  } else if (mode === 'layout' && config.kind === 'algorithms') {
     const ids = [...new Set(config.algorithms || [])];
     if (!ids.length) throw Error('Choose at least one approach.');
     for (const id of ids) {

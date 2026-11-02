@@ -1375,6 +1375,14 @@ lines stay. **Exact layout** has every engine and spacing setting, and **Exact r
 `routing` value. Corner rounding is in **Appearance**, because it changes how lines look and not
 where they go.
 
+**Compare alternatives** opens on the current drawing and up to three others. Every engine runs, and
+drawings that match the current one or each other are left out. Each card says what it gains and
+costs against the current drawing, from its crossings, area, line length and bends, and a drawing
+with a blocked line or an overlap comes last. Those numbers are a guide: look at the drawing. **More**
+shows every other result, including any that failed. The sliders button holds the method list,
+parameter grids, cameras and export. For connections, **Compare** tries `clearance=4`, `clearance=22`
+and `port-gap=28`. Each is a trade: more clearance can block a route in a tight drawing.
+
 **Improve**, a kept **timeline** step, a **brush** stroke, and warm-start or pass candidates in
 Compare all start from the current drawing, so a recipe could not reproduce them. They are saved as an arrangement instead: each object that moved gets a soft `stay` at its
 new position relative to its parent (an existing `stay` is updated in place), and the objects
