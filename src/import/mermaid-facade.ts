@@ -64,8 +64,36 @@ export type FlowSnapshot = {
   defaultEdgeStyle: string[];
   defaultEdgeInterpolate?: string;
 };
+/** One entry of Mermaid's ordered sequence log; `kind` is its LINETYPE name. */
+export type SequenceEvent = {
+  kind: string;
+  from?: string;
+  to?: string;
+  text: string;
+  placement?: 'left' | 'right' | 'over';
+  central: boolean;
+};
+export type SequenceActor = {
+  id: string;
+  name: string;
+  type: string;
+  box?: number;
+  links: string[];
+};
+export type SequenceBox = { name?: string; fill?: string };
+export type SequenceSnapshot = {
+  format: 'mermaid';
+  family: 'sequence';
+  parserVersion: typeof MERMAID_VERSION;
+  title?: string;
+  actors: SequenceActor[];
+  boxes: SequenceBox[];
+  events: SequenceEvent[];
+  created: string[];
+  destroyed: string[];
+};
 export type ParseFlowResult =
-  | { ok: true; snapshot: FlowSnapshot; diagnostics: ParserDiagnostic[] }
+  | { ok: true; snapshot: FlowSnapshot | SequenceSnapshot; diagnostics: ParserDiagnostic[] }
   | { ok: false; diagnostics: ParserDiagnostic[] };
 
 type MermaidApi = Pick<(typeof import('mermaid'))['default'], 'initialize' | 'mermaidAPI'>;
@@ -164,13 +192,13 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
   // A conservative family check, not a Mermaid grammar replacement.
   const firstCodeLine =
     normalized.split('\n').find(line => line.trim() && !line.trimStart().startsWith('%%')) ?? '';
-  if (!/^\s*(?:flowchart|graph)\b/.test(firstCodeLine)) {
+  if (!/^\s*(?:flowchart|graph|sequenceDiagram)\b/.test(firstCodeLine)) {
     return [
       {
         code: 'MERMAID_FAMILY_UNSUPPORTED',
         severity: 'error',
         message:
-          'This adapter supports Mermaid flowcharts only. Sequence, class, ER, state, chart and other families require separate semantic adapters.',
+          'This adapter supports Mermaid flowcharts and sequence diagrams only. Class, ER, state, chart and other families require separate semantic adapters.',
       },
     ];
   }
@@ -187,6 +215,68 @@ export function preflightMermaidFlow(source: string): ParserDiagnostic[] {
     }
   }
   return diagnostics;
+}
+
+/** Read the sequence DB. It holds one ordered log of messages, notes and block markers. */
+function sequenceSnapshot(
+  db: Record<string, unknown>,
+  call: (name: string) => unknown,
+): SequenceSnapshot {
+  const lineTypes = new Map(
+    Object.entries(object(db.LINETYPE)).map(([name, value]) => [value, name]),
+  );
+  const places = new Map(
+    Object.entries(object(db.PLACEMENT)).map(([name, value]) => [value, name]),
+  );
+  const boxes = array(call('getBoxes'));
+  const actors = call('getActors');
+  if (!(actors instanceof Map)) throw new Error('Expected a Mermaid Map.');
+  const present = (name: string) =>
+    new Set(call(name) instanceof Map ? (call(name) as Map<string, unknown>).keys() : []);
+  return {
+    format: 'mermaid',
+    family: 'sequence',
+    parserVersion: MERMAID_VERSION,
+    title: optionalString(call('getDiagramTitle')) || undefined,
+    actors: strings(call('getActorKeys')).map((id): SequenceActor => {
+      const a = object(actors.get(id));
+      return {
+        id,
+        name: string(a.description, string(a.name, id)),
+        type: string(a.type, 'participant'),
+        box: a.box ? boxes.indexOf(a.box) : undefined,
+        links: Object.keys(object(a.links ?? {})),
+      };
+    }),
+    boxes: boxes.map((value): SequenceBox => {
+      const b = object(value);
+      return { name: optionalString(b.name), fill: optionalString(b.fill) };
+    }),
+    events: array(call('getMessages')).map((value): SequenceEvent => {
+      const m = object(value);
+      const place = places.get(m.placement);
+      return {
+        kind: lineTypes.get(m.type) ?? 'UNKNOWN',
+        from: optionalString(m.from),
+        to: optionalString(m.to),
+        // `autonumber` stores its numbering object here.
+        text: typeof m.message === 'string' ? m.message : '',
+        ...(m.placement == null
+          ? {}
+          : {
+              placement:
+                place === 'LEFTOF'
+                  ? ('left' as const)
+                  : place === 'RIGHTOF'
+                    ? ('right' as const)
+                    : ('over' as const),
+            }),
+        central: Boolean(m.centralConnection),
+      };
+    }),
+    created: [...present('getCreatedActors')].map(String),
+    destroyed: [...present('getDestroyedActors')].map(String),
+  };
 }
 
 /** Each factory owns a serialized queue because Mermaid maintains parser/configuration state. */
@@ -209,7 +299,7 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
         });
         phase = 'parse';
         const diagram = await mermaid.mermaidAPI.getDiagramFromText(source.replace(/^\uFEFF/, ''));
-        if (!['flowchart', 'flowchart-v2'].includes(diagram.type)) {
+        if (!['flowchart', 'flowchart-v2', 'sequence'].includes(diagram.type)) {
           return {
             ok: false,
             diagnostics: [
@@ -229,6 +319,23 @@ export function createMermaidFlowParser(load: () => Promise<MermaidApi>) {
             throw new Error(`Mermaid ${MERMAID_VERSION} boundary missing ${name}().`);
           return (db[name] as () => unknown).call(db);
         };
+        if (diagram.type === 'sequence') {
+          const snapshot = sequenceSnapshot(db, call);
+          if (snapshot.actors.length > MAX_ENTITIES || snapshot.events.length > MAX_EDGES) {
+            return {
+              ok: false,
+              diagnostics: [
+                ...diagnostics,
+                {
+                  code: 'IMPORT_GRAPH_LIMIT',
+                  severity: 'error',
+                  message: 'Parsed sequence exceeds the import entity or event limit.',
+                },
+              ],
+            };
+          }
+          return { ok: true, diagnostics, snapshot };
+        }
         const rawEdges = call('getEdges');
         const vertices = mapValues(call('getVertices')).map((value): FlowVertex => {
           const n = object(value);

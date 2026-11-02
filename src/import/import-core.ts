@@ -45,12 +45,25 @@ export interface NativeColor {
   stroke: string;
   ink: string;
 }
+export interface NativePhase {
+  id: string;
+  label: string;
+  members: string[];
+}
+export interface NativeNote {
+  text: string;
+  near?: string;
+  side?: 'left' | 'right' | 'above' | 'below';
+}
 export interface NativePlan {
   title: string;
   objects: NativeObject[];
   edges: NativeEdge[];
   layouts: NativeLayout[];
   colors: NativeColor[];
+  /** Sequence diagrams only. */
+  phases?: NativePhase[];
+  notes?: NativeNote[];
 }
 export interface IdMapping {
   kind: string;
@@ -223,6 +236,14 @@ export function finish(
     lines.push(
       'layout ' + l.scope + ' ' + l.kind + (l.direction ? ' direction=' + l.direction : ''),
     );
+  for (const p of plan.phases ?? [])
+    lines.push(['phase', p.id, quote(p.label), ...p.members].join(' '));
+  for (const n of plan.notes ?? []) {
+    let s = 'note ' + quote(n.text);
+    if (n.near) s += ' near=' + n.near;
+    if (n.side) s += ' side=' + n.side;
+    lines.push(s);
+  }
   const nativeSource = lines.join('\n') + '\n';
   if (nativeSource.length > LIMITS.nativeSourceChars)
     error(
