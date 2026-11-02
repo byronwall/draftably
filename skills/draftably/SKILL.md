@@ -103,6 +103,8 @@ node db "Postgres" color=violet
 legend blue "Clients"
 legend mint "Our services"
 legend violet "Data stores"
+legend line solid "Request path"
+legend line dashed "Background write"
 
 edge checkout web -> api "HTTPS"
 edge native mobile -> api "HTTPS"
@@ -124,7 +126,7 @@ layout services row gap=56
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                                                                                                                                                                                                                                                                          |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                                                                                                                                                                                                                                          |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                                                                                                                                                                                                                                 |
-| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                                                                                                                                                                                                                                                                          |
+| `legend family "meaning"`          | `shade=`. One entry of the key drawn under the diagram; one per accent color you use. `legend line dashed\|solid "meaning"` explains a line style                                                                                                                                                                                                                                                                              |
 | `note "text"`                      | A sentence that never moves layout. `near=id side=below\|above\|left\|right` places it beside an object or sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (280 default)                                                                                                                                                                                               |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                                                                                                                                                                                                                                                                                    |
 | `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout; `head=`/`tail=` `arrow\|none\|triangle\|open-triangle\|diamond\|open-diamond\|circle\|cross` mark its ends; a long label wraps to about 140px and `\n` breaks a line                                          |
@@ -300,9 +302,14 @@ content area.
   - Give the most common role a pale shade (100–200) and save strong shades for the few
     things that should stand out. `amber` and `orange` at 400–500 are bright fills with dark
     text, good for one highlight.
-  - Say what each color means with one `legend family "meaning"` line per color; the viewer and
-    exports draw them as a key. The swatch is shade 500 unless the line sets `shade=`, so match
-    it to the nodes' shade; `check` warns when no node of that family uses it.
+  - Say what each color means with one `legend family "meaning"` line per accent color; the
+    viewer and exports draw them as a key under the drawing. A key that names some colors and
+    not others misleads, so give every accent color a row (`check` warns `legend-missing`). The
+    swatch is shade 500 unless the line sets `shade=`, so match it to the nodes' shade; `check`
+    warns when no node of that family uses it.
+  - When dashed (`kind=async`) and solid lines both mean something, say what with
+    `legend line dashed "meaning"` and `legend line solid "meaning"` (`check` notes
+    `legend-lines` when they are missing).
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
     unless they encode opposites.
   - Color the outer group and let members inherit (`color=auto`); nested groups of one family
@@ -314,7 +321,7 @@ content area.
   write two near-identical diagrams for the reader to compare. Marked files draw in change colors
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
   `draftably compare old.draft new.draft --write diff.draft` writes the marked file and prints
-  the change's size (`3 added, 1 changed, 2 removed.`) on stderr, then any
+  the change's size (`3 added · 2 lines, 1 changed, 2 removed.`) on stderr, then any
   `Changes with no old version to draw: …`, which both panels show as they are now; say so when
   you hand the diagram back. `compare` writes the `was` words for you. In a sequence, `was-order`
   lists the older message order (`was-order m1 m2 m3`), and it leaves out `+` messages. To mark a
