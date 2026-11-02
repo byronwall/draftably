@@ -145,18 +145,22 @@ function routesOf(doc: Diagram) {
 
 /**
  * The older panel's lines: the merged routes, so a line runs where it does in the newer panel,
- * except where an end changed shape. Routing all of them as they were would move other lines
- * too, since lines from one box share a turn. A sequence's messages share nothing, and each label
- * sits by its own size, so they all take their older routes.
+ * except where an end changed shape or the label changed, so the old label sits by its own size.
+ * Routing all of them as they were would move other lines too, since lines from one box share a
+ * turn. A sequence's messages share nothing, and each label sits by its own size, so they all
+ * take their older routes.
  */
 function oldRoutes(doc: Diagram, merged: Route[]) {
   const shaped = new Set(doc.graph.nodes.filter(n => n.wasShape).map(n => n.id)),
+    relabeled = new Set(doc.graph.edges.filter(e => e.was !== undefined).map(e => e.id)),
     rows = !!doc.layout.sequence;
-  if (!rows && !shaped.size) return merged;
+  if (!rows && !shaped.size && !relabeled.size) return merged;
   const old = routesOf(oldDoc(doc));
   return merged.map(r => {
     const e = doc.graph.edges.find(x => x.id === r.id)!;
-    return rows || shaped.has(e.from) || shaped.has(e.to) ? old.find(x => x.id === r.id)! : r;
+    return rows || shaped.has(e.from) || shaped.has(e.to) || relabeled.has(e.id)
+      ? old.find(x => x.id === r.id)!
+      : r;
   });
 }
 
