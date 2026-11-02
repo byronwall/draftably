@@ -41,6 +41,7 @@ import {
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
+import { haloPieces, labelCards, panelDrawn, phaseOpacity, type Surface } from '../model/surface';
 import { LIFELINE, SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
 
 import { fontFaceCss } from '../lib/font-data';
@@ -254,9 +255,13 @@ function sceneMarkup(
       tail = tailOf(edge);
     out.push(
       `<g data-id="${esc(edge.id)}"${fade(p)}>`,
-      route.halo
-        ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="${HALO_WIDTH}"/>`
-        : '',
+      ...haloPieces(doc, look, route.halo).flatMap(({ surface, d }) =>
+        paintSurface(
+          surface,
+          s => `<path d="${d}" fill="none" stroke-width="${HALO_WIDTH}" ${s}/>`,
+          'stroke',
+        ),
+      ),
       `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
     );
     const l = route.label,
@@ -265,7 +270,13 @@ function sceneMarkup(
       lines = edgeLabelLines(edge.label, look, message);
     if (l)
       out.push(
-        `<rect x="${l.x - l.w / 2}" y="${l.y - l.h / 2}" width="${l.w}" height="${l.h}" rx="4" fill="${look.canvas}"/>`,
+        ...labelCards(doc, look, l).flatMap((c, _, all) =>
+          paintSurface(
+            c.surface,
+            s =>
+              `<rect x="${c.x}" y="${l.y - l.h / 2}" width="${c.w}" height="${l.h}" rx="${all.length > 1 ? 0 : 4}" ${s}/>`,
+          ),
+        ),
         `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
       );
     out.push('</g>');
@@ -484,15 +495,25 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
     tab = seq.phaseX ?? panel.x;
   return {
     panel: [
-      `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
-    ],
+      panelDrawn(doc) &&
+        `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
+    ].filter(Boolean) as string[],
     // Alternate phases are tinted, so neighbours read apart even without their divider.
     phases: seq.phases.flatMap((ph, i) => [
-      `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${i % 2 ? 0.03 : 0.12}"/>`,
+      `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${phaseOpacity(i)}"/>`,
       `<line x1="${panel.x}" x2="${panel.x + panel.w}" y1="${ph.y}" y2="${ph.y}" stroke="${band.stroke}" stroke-opacity="0.5"/>`,
       `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
     ]),
   };
+}
+
+/** Markup painted with a surface: its fill, then a phase band's tint over it. */
+function paintSurface(surface: Surface, mark: (paint: string) => string, attr = 'fill') {
+  const t = surface.tint;
+  return [
+    mark(`${attr}="${surface.fill}"`),
+    t ? mark(`${attr}="${t.fill}" ${attr}-opacity="${t.opacity}"`) : '',
+  ];
 }
 
 /** Inset of a phase label from its band's top left corner. */

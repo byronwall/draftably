@@ -13,6 +13,7 @@ import {
   type EndMarker,
 } from '../../model/markers';
 import { edgeInk, isDiff, statusPaint } from '../../model/status';
+import { haloPieces, labelCards } from '../../model/surface';
 import type { Diagram } from '../../model/types';
 
 export interface EdgeViewProps {
@@ -77,6 +78,7 @@ export function EdgeView(props: EdgeViewProps) {
   const message = () => props.doc.layout.edges[props.route.id]?.row !== undefined;
   const labelType = () => edgeLabelType(look(), message());
   const labelLines = () => edgeLabelLines(edge().label, look(), message());
+  const halos = () => (props.route.halo ? haloPieces(props.doc, look(), props.route.halo) : []);
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
   const tailId = () => `${props.idPrefix ?? ''}tail-${props.route.id}`;
   const markerInk = () => (props.selected ? 'var(--accent)' : stroke());
@@ -122,18 +124,34 @@ export function EdgeView(props: EdgeViewProps) {
       <Show when={props.interactive}>
         <path class="edge-hit" d={props.route.path} />
       </Show>
-      {/* A canvas-colored halo breaks container borders and other lines where this line
+      {/* A halo in the color under it breaks container borders and other lines where this line
           crosses them, so the connection reads as the stronger mark. Only there: along its whole
           length it reads as a doubled line, inside a tinted group most of all. */}
-      <Show when={props.route.halo}>
-        <path
-          class="edge-halo"
-          d={props.route.halo}
-          stroke={look().canvas}
-          stroke-width={HALO_WIDTH}
-          fill="none"
-        />
-      </Show>
+      <For each={halos()}>
+        {piece => (
+          <>
+            <path
+              class="edge-halo"
+              d={piece.d}
+              stroke={piece.surface.fill}
+              stroke-width={HALO_WIDTH}
+              fill="none"
+            />
+            <Show when={piece.surface.tint}>
+              {t => (
+                <path
+                  class="edge-halo"
+                  d={piece.d}
+                  stroke={t().fill}
+                  stroke-opacity={t().opacity}
+                  stroke-width={HALO_WIDTH}
+                  fill="none"
+                />
+              )}
+            </Show>
+          </>
+        )}
+      </For>
       <path
         class="edge-line"
         d={props.route.path}
@@ -148,15 +166,35 @@ export function EdgeView(props: EdgeViewProps) {
       <Show when={props.route.label}>
         {label => (
           <g data-edge-label>
-            <rect
-              class="edge-label-bg"
-              x={label().x - label().w / 2}
-              y={label().y - label().h / 2}
-              width={label().w}
-              height={label().h}
-              rx={4}
-              fill={look().canvas}
-            />
+            <For each={labelCards(props.doc, look(), label())}>
+              {(card, i) => (
+                <>
+                  <rect
+                    class="edge-label-bg"
+                    x={card.x}
+                    y={label().y - label().h / 2}
+                    width={card.w}
+                    height={label().h}
+                    rx={i() || card.w < label().w ? 0 : 4}
+                    fill={card.surface.fill}
+                  />
+                  <Show when={card.surface.tint}>
+                    {t => (
+                      <rect
+                        class="edge-label-bg"
+                        x={card.x}
+                        y={label().y - label().h / 2}
+                        width={card.w}
+                        height={label().h}
+                        rx={i() || card.w < label().w ? 0 : 4}
+                        fill={t().fill}
+                        fill-opacity={t().opacity}
+                      />
+                    )}
+                  </Show>
+                </>
+              )}
+            </For>
             <text
               class="edge-label"
               x={label().x}
