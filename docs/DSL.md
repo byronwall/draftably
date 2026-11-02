@@ -415,6 +415,12 @@ version, and the merged drawing shows the move. A group that moved keeps one pos
 panels draw it in its new container; `compare` names those groups on stderr. A tool that generates
 diagrams only has to write two plain files.
 
+Every changed attribute marks its line `~`, but the file keeps only the old label. `compare`
+reports everything else with no old version on stderr, such as
+`Changes with no old version to draw: a (shape), layout root, message order.` That list covers
+changed attributes, statements other than declarations, and message or participant order in a
+sequence. Both panels draw the new version of these, so read a Before panel with that line.
+
 Unmarked lines are unchanged. `was="old label"` on a `~` line records the label before the
 change.
 

@@ -83,6 +83,40 @@ layout root flow gap=48
     expect(after.b).toEqual(doc.layout.nodes.b);
   });
 
+  it('marks any changed attribute and names what has no old version to draw', () => {
+    const { merged, unshown } = compareDetailed(
+      'node a "A" count=2 shape=circle\nnode b "B"\nedge e a -> b\n',
+      'node a "A" shape=diamond count=3\nnode b "B"\nedge e a -> b kind=async\n',
+    );
+    expect(merged).toBe(
+      '~node a "A" shape=diamond count=3\nnode b "B"\n~edge e a -> b kind=async\n',
+    );
+    expect(unshown).toEqual(['a (count, shape)', 'e (kind)']);
+  });
+
+  it('leaves a label change, which the older panel can draw, out of the list', () => {
+    expect(compareDetailed('node a "A"\n', 'node a "B"\n').unshown).toEqual([]);
+  });
+
+  it('reports changes outside declarations, and order in a sequence', () => {
+    const before =
+      'layout root sequence\nnode a "A"\nnode b "B"\nedge m1 a -> b\nedge m2 b -> a\nphase p "P" m1\n';
+    const after =
+      'layout root sequence\nnode a "A"\nnode b "B"\nedge m2 b -> a\nedge m1 a -> b\nphase p "P" m2\nnote "N" near=a\n';
+    const { merged, unshown } = compareDetailed(before, after);
+    expect(merged).toBe(after);
+    expect(unshown).toEqual(['phase p', 'note', 'message order']);
+  });
+
+  it('counts the same file with other comments and attribute order as unchanged', () => {
+    const { merged, unshown } = compareDetailed(
+      'layout root flow gap=48 direction=down\nnode a "A" shape=box\n',
+      'layout root flow direction=down gap=48 # tidy\nnode a "A"\n',
+    );
+    expect(merged).not.toMatch(/^~/m);
+    expect(unshown).toEqual([]);
+  });
+
   it('refuses files that already carry marks', () => {
     expect(() => compareSources('+node a "A"\n', AFTER)).toThrow(/already has change marks/);
   });
