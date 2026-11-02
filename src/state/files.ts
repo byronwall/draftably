@@ -345,8 +345,13 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
     const markup =
       picked.size || !look.heading
         ? ''
-        : headingMarkup(theme, doc.appearance.heading, frame.heading.x, frame.heading.y) +
-          legendMarkup(theme, legend, frame.legend.x, frame.legend.y, statuses);
+        : headingMarkup(
+            theme,
+            doc.appearance.heading,
+            frame.heading.x,
+            frame.heading.y,
+            frame.heading.wrap,
+          ) + legendMarkup(theme, legend, frame.legend.x, frame.legend.y, statuses);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,
