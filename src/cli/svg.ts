@@ -134,12 +134,13 @@ function routesOf(doc: Diagram) {
 
 /**
  * The older panel's lines: the merged routes, so a line runs where it does in the newer panel,
- * except where an end changed shape or the messages changed rows. Routing all of them as they
- * were would move other lines too, since lines from one box share a turn.
+ * except where an end changed shape. Routing all of them as they were would move other lines
+ * too, since lines from one box share a turn. A sequence's messages share nothing, and each label
+ * sits by its own size, so they all take their older routes.
  */
 function oldRoutes(doc: Diagram, merged: Route[]) {
   const shaped = new Set(doc.graph.nodes.filter(n => n.wasShape).map(n => n.id)),
-    rows = !!doc.layout.sequence?.before;
+    rows = !!doc.layout.sequence;
   if (!rows && !shaped.size) return merged;
   const old = routesOf(oldDoc(doc));
   return merged.map(r => {
