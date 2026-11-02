@@ -1,0 +1,58 @@
+{
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "validationScope": "Independent collection-time data parsing, artifact integrity and acceptance arithmetic; no downloaded program executed and no new geometry trials run.",
+  "canonicalTrials": 8203,
+  "rawTerminalRows": 8210,
+  "canonicalStatuses": {
+    "ok": 7731,
+    "timed_out": 452,
+    "failed": 20
+  },
+  "successfulGeometryArtifactsParsed": 7731,
+  "heldoutAcceptanceRowsIndependentlyChecked": 6360,
+  "checkedPolicyCounts": {
+    "k5-prelayout-selector-validity-guard": {
+      "readable": 5,
+      "compact": 4,
+      "traceable": 3,
+      "stable": 3,
+      "specialist": 3
+    },
+    "current-authored": {
+      "readable": 3,
+      "compact": 3,
+      "traceable": 2,
+      "stable": 2,
+      "specialist": 2
+    },
+    "frozen-minimum-configuration-oracle": {
+      "readable": 10,
+      "compact": 12,
+      "traceable": 10,
+      "stable": 8,
+      "specialist": 8
+    }
+  },
+  "sixEngineCommonCountsCrossChecked": [11, 12, 11, 10, 10],
+  "corpusBases": 72,
+  "developmentBases": 48,
+  "heldoutBases": 24,
+  "families": 12,
+  "inventoryRows": 175,
+  "inventoryDecisions": {
+    "Hide": 61,
+    "Keep": 74,
+    "Merge": 18,
+    "Automate": 21,
+    "Remove": 1
+  },
+  "visualPairs": 63,
+  "limitations": [
+    "Did not rerun all trials or execute downloaded harnesses.",
+    "Acceptance arithmetic uses saved profile scores and raw oracle geometry metrics; this does not validate all metric definitions.",
+    "Six-engine summary cross-check uses archived subset evaluation; not a new exhaustive portfolio fit."
+  ],
+  "geometrySignaturesIndependentlyVerified": 7731,
+  "preservedResultFilesVerified": 21706,
+  "integrationRelativeLinksVerified": 58
+}

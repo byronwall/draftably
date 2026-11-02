@@ -2,40 +2,61 @@
 
 - Mission: measure the useful layout/routing portfolio and reduce editing UI choices.
 - Mode: Evaluation loop, Methods, and Design.
-- Completion: collect all Pro artifacts, review decisive claims, integrate dispositions and a
-  buildable plan, run required checks, and open a verified PR. Do not implement, merge, or deploy.
+- Completion: collect originals, review claims, integrate dispositions and a plan, validate, and open
+  a verified PR. Research only; no product implementation, merge, or deployment.
 - Repository: https://github.com/byronwall/draftably
-- Baseline: `f14d9b891adba75de6cc172b190017ea5a5ca091` (initial detached HEAD, clean).
+- Baseline: `f14d9b891adba75de6cc172b190017ea5a5ca091` (initial clean detached HEAD).
 - Branch: `codex/layout-config-evaluation`.
 - Checkout: `/Users/byronwall/.codex/worktrees/8ee0/diagram-studio`.
-- Prompt: [pro-prompt.md](pro-prompt.md).
-- Evaluation contract: [evaluation-protocol.md](evaluation-protocol.md).
-- Source packet: `tmp/pro/layout-config-evaluation/source-packet.zip`, 450 unmodified baseline
-  files, 1,263,665 bytes. Source, tests, scripts, examples, relevant docs and font assets only.
-  Archive integrity, path safety, and entry count checked. Input packet stays ignored.
-- Attachments shown by ChatGPT: `source-packet(8).zip`, `pro-prompt(20261101-224920).md`,
-  `evaluation-protocol.md`. Upload completion and sent attachment chips verified.
+- Prompt: [pro-prompt.md](pro-prompt.md); contract: [evaluation-protocol.md](evaluation-protocol.md).
+- Input packet: ignored `tmp/pro/layout-config-evaluation/source-packet.zip`, 450 baseline files
+  plus packet metadata. ZIP size 1,263,665 bytes. Archive paths and integrity checked.
+- Shown attachments: `source-packet(8).zip`, `pro-prompt(20261101-224920).md`,
+  `evaluation-protocol.md`. Upload completion and sent attachments verified.
 - Conversation: https://chatgpt.com/c/6ae7c1f0-6374-83e8-b87d-d1c7d398226d
-- Model/effort: live selector verified Pro, power 5/5, Chrome profile `byroni.us`.
-- Submission: 2026-11-01 about 22:50 UTC. Sent message, durable conversation URL, Thinking and
-  Stop control verified. Pro acknowledged the source/execution check and complete deliverables.
-- Next check: intended about 23:53 UTC (18:53 America/Indiana/Indianapolis); not scheduled.
-- Phase: Pro running; continuation schedule awaits explicit approval.
-- Follow-up count: 0.
-- Heartbeat: creation rejected by automatic approval review. No automation was created.
-- Blocker: reviewer said hourly downloads, checkout edits, pushes and PR creation exceed the
-  one-time request and have an unbounded recurring effect. User was asked explicitly to approve
-  this evaluation's continuation. Do not retry without approval or bypass the rejection.
-- Validation: dependency installation completed. Initial sandboxed `pnpm check` failed server/Chrome
-  tests with EPERM. Approved rerun completed with exit 0: typecheck, lint, formatting, 480 unit
-  tests, engine suites (195 named assertions, 55 broad cases, sculpt checks, 320 parity comparisons),
-  and editor build. See ignored `tmp/pro/layout-config-evaluation/check.log`.
-- Submission proof: ignored `tmp/pro/layout-config-evaluation/submitted.png`.
-- Last observed Pro progress (not independently verified results): 72 bases, 120 edit variants,
-  approximately 5,000 planned configurations; 984 routing sensitivity and 432 interaction trials
-  reported complete. Development engine sweeps remain active; no final outputs yet. Pro reports
-  shipped engine tests passed and production compiler/router/SVG execution works. Pro reports
-  layout browser proof 15/15, file proof 22/23 with browser-cache qualification. Website source
-  files are omitted from the curated packet, so unrelated site checks there are incomplete.
-- Collected artifacts: none yet.
-- PR: pending collection and integration.
+- Model: Pro, live power 5/5 selector verified; signed-in Chrome profile `byroni.us`.
+- Submission: 2026-11-01 about 22:50 UTC. Sent message, durable URL, Thinking and Stop verified.
+- Pro completed: 129m 49s displayed. Main trials ended 2026-11-02 00:29 UTC; results packaged 00:55 UTC.
+- Collection: 2026-11-02 about 02:49 UTC, after the user requested an immediate check.
+- Phase: results collected and integrated; final validation and PR pending.
+- Follow-up count: 0. No material follow-up needed; limitations are explicit and deliverables usable.
+- Heartbeat: `collect-draftably-layout-evaluation`, ACTIVE, hourly at minute 49 in this chat.
+  Stop when the PR is verified or essential user input is needed. No further Pro wait is required.
+- Approval history: initial automation request was rejected as an unbounded recurring side effect.
+  The user explicitly approved scheduling, collection, integration, and the PR on 2026-11-01.
+  Automation creation then succeeded; saved schedule and target chat were verified.
+- Blockers: none.
+
+## Collected evidence
+
+- Ignored archive: `tmp/pro/layout-config-evaluation/draftably-evaluation-2026-11-02.zip`.
+  110,644,078 bytes; SHA-256 `73f28b3957493a6815ccfa4399393603e969e65e7ff0c033e267dab7a89515a3`.
+- All 21,705 archived content hashes verified. Safe paths, no archive symlinks, CRC check passed.
+- Preserved assets: [index](assets/pro-results/2026-11-01/README.md). All result originals retain
+  names, paths and bytes. One input source ZIP stays ignored; the separate verification companion
+  is preserved. The result set is about 386 MB plus collection metadata. No ZIP is committed.
+- Original study: 72 bases, 48/24 development/heldout, 12 families, 8,203 registered trials,
+  7,731 completed, 452 timeouts, 20 failures, 7 duplicate attempts, 63 blinded pairs, 175 inventory rows.
+- Independent collection review: all canonical counts and successful artifacts checked;
+  all 7,731 saved geometry signatures verified; 6,360 acceptance rows independently checked.
+  See [collection-validation.json](collection-validation.json). Downloaded programs were not executed.
+- Source review confirmed ignored file `autoPorts`, dropped `fit=`, cold ordering behavior,
+  fixed compiler effort, and direction/fit search. Primary-source spot checks: ELK constraints,
+  Rice report metadata, Nielsen disclosure guidance. Visual spot checks include the chart,
+  proposed UI, crossing/detour witness P004, and packet annotation witness P048.
+- Integration: [summary](README.md), [plan](implementation-plan.md),
+  [dispositions](dispositions.md), and all 175 IDs in [dispositions.csv](dispositions.csv).
+  The diagram-quality NEXT page links the new study without mixing metric scales.
+
+## Validation and delivery
+
+- Before collection: approved `pnpm check` passed typecheck, lint, format, 480 unit tests,
+  engine suites (195 named assertions, 55 broad cases, sculpt checks, 320 parity comparisons),
+  and editor build. Initial sandbox run failed server/Chrome tests with EPERM; approved rerun passed.
+- After collection: required `pnpm check` passed with exit 0: types, lint, formatting, 480 unit
+  tests, engine suites, 320 parity comparisons, and editor build. Log:
+  `tmp/pro/layout-config-evaluation/collection-check.log`.
+- Original assets are excluded from formatting/lint to preserve their bytes. Typecheck and Vitest
+  already target source/site/tests, so archived source companions are not executed.
+- PR: pending. Use one docs/research PR, preserve all original assets, and verify body/file inventory.
+- Automation shutdown: pending verified PR.
