@@ -15,4 +15,7 @@ edge m5 auth -> auth "check password hash"
 edge m6 auth -> app "session token" kind=async
 edge m7 app -> user "signed in" kind=async
 
+# A note on a message sits level with its row, in the margin, and moves nothing.
+note "The token lasts 15 minutes." near=m6
+
 layout root sequence

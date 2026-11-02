@@ -270,6 +270,10 @@ export type NodeGeometry = Record<string, NodeLayout>;
 export interface SequenceLayout {
   panel: Rect;
   phases: Array<{ id: string; label: string; y: number; h: number }>;
+  /** Left edge for phase labels, when a note in the left margin widens the panel past them. */
+  phaseX?: number;
+  /** Spots of the notes that sit in a side margin, by index in `appearance.notes`. */
+  notes?: Array<Rect | null>;
 }
 
 /** Any object that can be selected: a shape, a container, or a connection. */

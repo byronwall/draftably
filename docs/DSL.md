@@ -46,7 +46,7 @@ and groups. References may point to later lines.
 | `theme name`                       | The diagram's theme and diagram-wide overrides. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                               |
 | `theme-color family`               | One shade of a color family. See [Themes and colors](#themes-and-colors).                                                                                                                                                                                                                                                                                                  |
 | `legend family "meaning"`          | One row of the color key: a swatch of `family` (`shade=` optional, 500 by default) and what it means. See [Legend](#legend).                                                                                                                                                                                                                                               |
-| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object; without `near` it sits under the subtitle. `width=` (80–1200). See [Notes](#notes).                                                                                                                                                                |
+| `note "text"`                      | A sentence on the diagram that never moves anything. `near=id side=below\|above\|left\|right` puts it beside an object or a sequence message; without `near` it sits under the subtitle. `width=` (80–1200). See [Notes](#notes).                                                                                                                                          |
 | `edge id source -> target "label"` | A connection between two nodes, or a node and a boxed group (the line ends on the group's frame). `kind=async` draws it dashed; `from=`/`to=` choose sides (`auto\|left\|right\|top\|bottom`); `constraint=false` draws it without letting it rank or order anything (for feedback edges); `head=` and `tail=` choose the marks at its ends (see [Line ends](#line-ends)). |
 | `layout scope flow\|row\|column`   | How a scope (`root` or a group) arranges its direct children. `gap=` (8–300), `direction=auto\|right\|down`, `min-width=` and `min-height=` (0–10000).                                                                                                                                                                                                                     |
 | `layout root lanes`                | Swim lanes: each top-level group is a lane. See [Swim lanes](#swim-lanes).                                                                                                                                                                                                                                                                                                 |
@@ -95,8 +95,11 @@ defines a term or explains the drawing. Like the legend, a note never moves anyt
 `near=` it sits in the frame under the subtitle; several notes stack in file order. With
 `near=id` it is placed after layout beside that node or group: `side=below` (the default),
 `above`, `left` or `right`, at the first spot along that side that is clear of shapes, lines,
-group borders and other notes. A note wraps at 280px; `width=80..1200` changes that. `check`
-warns (`note-overlap`) when an anchored note found no clear spot.
+group borders and other notes. In a sequence, `near=` also takes a message ID (see
+[Sequence reference](#sequence-reference)). A note wraps at 280px; `width=80..1200` changes that.
+`check` warns (`note-overlap`) when an anchored note found no clear spot. A note has no ID and no
+leader line. If you delete its object or message, the note keeps its text and moves under the
+subtitle.
 
 ```text
 note "Seats are billed monthly." near=seat side=below width=220
@@ -340,8 +343,30 @@ A phase is a run of consecutive messages. A listed run can't skip a message, so 
 `m1 m3` around `m2`: include `m2` or split the phase. A message belongs to at most one phase, and
 messages outside every phase are fine. Deleting a message takes it out of its phase, and deleting
 a phase's last message removes the phase. Change marks
-work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`),
-activations and notes are not supported yet.
+work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`)
+and activations are not supported yet.
+
+`note "text" near=m1` anchors a note to a message. Like every note, it moves no lane and no row.
+
+```draft
+node user "User"
+node app "Web app"
+edge m1 user -> app "sign in"
+edge m2 app -> user "welcome" kind=async
+note "Sent over TLS only." near=m1 side=left
+note "The session lasts 15 minutes." near=m2
+layout root sequence
+```
+
+- `side=right` (the default) and `side=left` put the note in the margin past the outer lanes,
+  level with the row. The panel grows round the note. Two notes that would touch stack down the
+  margin in row order.
+- `side=above` and `side=below` put the note next to the row, at the first clear spot along it.
+  Rows are close together, so a clear spot often does not exist. `check` then warns
+  (`note-overlap`); use a side margin.
+
+Outside a sequence, a message ID in `near=` is an error. If a node and a message share an ID, the
+note goes beside the node.
 
 ## Cells
 
@@ -1114,14 +1139,14 @@ Recommended: v1. Apply: draftably vary plan.draft --apply v1
 them on their own, so a conflict usually comes from a refinement. Each warning ends with its
 rule:
 
-| Rule                 | Meaning                                                             |
-| -------------------- | ------------------------------------------------------------------- |
-| `edge-through-node`  | A line runs through a box that is not one of its ends.              |
-| `edge-through-title` | A line crosses a group's title.                                     |
-| `node-overlap`       | Two boxes overlap (across scopes; siblings are an `overlap` error). |
-| `label-collision`    | An edge label covers a box or another label.                        |
-| `outside-group`      | A box sits outside its group's frame.                               |
-| `note-overlap`       | A `note` with `near=` found no clear spot beside its object.        |
+| Rule                 | Meaning                                                                 |
+| -------------------- | ----------------------------------------------------------------------- |
+| `edge-through-node`  | A line runs through a box that is not one of its ends.                  |
+| `edge-through-title` | A line crosses a group's title.                                         |
+| `node-overlap`       | Two boxes overlap (across scopes; siblings are an `overlap` error).     |
+| `label-collision`    | An edge label covers a box or another label.                            |
+| `outside-group`      | A box sits outside its group's frame.                                   |
+| `note-overlap`       | A `note` with `near=` found no clear spot beside its object or message. |
 
 When a refinement on one of the objects caused it, the warning names its line and a fix:
 

@@ -463,7 +463,8 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
   const seq = doc.layout.sequence;
   if (!seq) return { panel: [], phases: [] };
   const { panel } = seq,
-    band = swatchFor(look, 'slate', 100, 'group');
+    band = swatchFor(look, 'slate', 100, 'group'),
+    tab = seq.phaseX ?? panel.x;
   return {
     panel: [
       `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
@@ -472,7 +473,7 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
     phases: seq.phases.flatMap((ph, i) => [
       `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${i % 2 ? 0.03 : 0.12}"/>`,
       `<line x1="${panel.x}" x2="${panel.x + panel.w}" y1="${ph.y}" y2="${ph.y}" stroke="${band.stroke}" stroke-opacity="0.5"/>`,
-      `<text x="${panel.x + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
+      `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
     ]),
   };
 }

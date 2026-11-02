@@ -97,6 +97,7 @@ export function removeReferences(doc: SourceDoc, id: string) {
     if (s.command === 'order' || s.command === 'align')
       s.args = s.args.filter((w, i) => i === 0 || w.value !== id);
   removeFromStates(doc, id);
+  unanchorNotes(doc, id);
   // An alignment needs at least two members, and an order at least one.
   removeWhere(
     doc,
@@ -113,13 +114,24 @@ export function removeFromStates(doc: SourceDoc, id: string) {
   removeWhere(doc, s => s.command === 'state' && !s.args.slice(1).some(w => !w.quoted));
 }
 
+/** A note on a deleted object or message keeps its words and moves to the frame. */
+function unanchorNotes(doc: SourceDoc, id: string) {
+  for (const s of statements(doc))
+    if (s.command === 'note' && getAttr(s, 'near')?.value === id) {
+      setAttr(s, 'near', undefined);
+      setAttr(s, 'side', undefined);
+    }
+}
+
 /**
- * Remove a connection and each mention of it, so its `phase` and `state` lines still compile. A
- * phase left with no messages goes too; a comment on its line stays, on a line of its own.
+ * Remove a connection and each mention of it, so its `phase`, `state` and `note` lines still
+ * compile. A phase left with no messages goes too; a comment on its line stays, on a line of its
+ * own.
  */
 export function removeEdge(doc: SourceDoc, id: string) {
   removeWhere(doc, s => s.command === 'edge' && s.args[0]?.value === id);
   removeFromStates(doc, id);
+  unanchorNotes(doc, id);
   for (const s of statements(doc))
     if (s.command === 'phase') s.args = s.args.filter((w, i) => i < 2 || w.value !== id);
   doc.lines = doc.lines.flatMap(line =>
