@@ -1,8 +1,8 @@
 # Draftably: gaps worth closing
 
 > **Snapshot as of 2026-10-28.** Attached notes and PDF export shipped after this research, and
-> foreign-format import shipped against REC-19. [The plan](../../intent/diagram-library-coverage/plan.md)
-> holds the current decisions.
+> foreign-format import shipped against REC-19. [The closure record](../../initiative-history.json)
+> holds the outcome and what stays open.
 
 Improve the depth of current diagrams before adding many new diagram families. Start with truthful
 before/after comparisons. Then add relationship ends, typed field rows, attached notes, and sequence
