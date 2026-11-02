@@ -232,19 +232,23 @@ function MultipleSelected(props: { count: number }) {
           <CommandButton command="layout">Arrange</CommandButton>
           <CommandButton command="group">Wrap container</CommandButton>
           <CommandButton command="duplicate">Duplicate</CommandButton>
-          <CommandButton command="pin">Pin</CommandButton>
+          <Show when={!doc.layout.sequence}>
+            <CommandButton command="pin">Pin</CommandButton>
+          </Show>
         </div>
       </Section>
-      <Section title="Align">
-        <div class="fields-2">
-          <CommandButton command="align-left">Left</CommandButton>
-          <CommandButton command="align-top">Top</CommandButton>
-          <CommandButton command="align-center">Horizontal center</CommandButton>
-          <CommandButton command="align-middle">Vertical center</CommandButton>
-          <CommandButton command="distribute-x">Distribute X</CommandButton>
-          <CommandButton command="distribute-y">Distribute Y</CommandButton>
-        </div>
-      </Section>
+      <Show when={!doc.layout.sequence}>
+        <Section title="Align">
+          <div class="fields-2">
+            <CommandButton command="align-left">Left</CommandButton>
+            <CommandButton command="align-top">Top</CommandButton>
+            <CommandButton command="align-center">Horizontal center</CommandButton>
+            <CommandButton command="align-middle">Vertical center</CommandButton>
+            <CommandButton command="distribute-x">Distribute X</CommandButton>
+            <CommandButton command="distribute-y">Distribute Y</CommandButton>
+          </div>
+        </Section>
+      </Show>
       <Section title="Color">
         <Swatches
           selected={styleOf(doc, selectedIds()[0]).color}
@@ -357,11 +361,15 @@ function ObjectInspector(props: { id: string }) {
   const object = () => findNode(doc, props.id) ?? findGroup(doc, props.id)!;
   const style = () => styleOf(doc, props.id);
   const rect = () => geometry(props.id);
+  // A sequence places everything in lanes, so only a participant's size is the file's to set.
+  const lanes = () => !!doc.layout.sequence;
   return (
     <>
       <Heading
         title={container() ? 'Container' : 'Shape'}
-        pill={rect().pinned ? 'Pinned' : rect().manual ? 'Manual' : 'Automatic'}
+        pill={
+          lanes() ? undefined : rect().pinned ? 'Pinned' : rect().manual ? 'Manual' : 'Automatic'
+        }
         pinned={rect().pinned}
       />
       <Section>
@@ -419,10 +427,29 @@ function ObjectInspector(props: { id: string }) {
           )}
         </Show>
       </Section>
-      <Section title="Position">
-        <GeometryFields id={props.id} />
-        <PinControl id={props.id} />
-      </Section>
+      <Show
+        when={!lanes()}
+        fallback={
+          <Show when={!container()}>
+            <Section title="Size">
+              <div class="fields-2">
+                <GeometryField id={props.id} label="Width" field="w" />
+                <GeometryField id={props.id} label="Height" field="h" />
+              </div>
+            </Section>
+          </Show>
+        }
+      >
+        <Section title="Position">
+          <div class="fields-2">
+            <GeometryField id={props.id} label="X" field="x" />
+            <GeometryField id={props.id} label="Y" field="y" />
+            <GeometryField id={props.id} label="Width" field="w" />
+            <GeometryField id={props.id} label="Height" field="h" />
+          </div>
+          <PinControl id={props.id} />
+        </Section>
+      </Show>
       <Show when={container()} fallback={<ShapeSections id={props.id} />}>
         <ContainerSections id={props.id} />
       </Show>
@@ -436,22 +463,15 @@ function ObjectInspector(props: { id: string }) {
   );
 }
 
-function GeometryFields(props: { id: string }) {
-  const r = () => geometry(props.id);
-  const field = (label: string, key: 'x' | 'y' | 'w' | 'h') => (
-    <NumberField
-      label={label}
-      value={Math.round(r()[key])}
-      onChange={v => edit('Edit ' + key, d => edits.setGeometry(d, props.id, key, v))}
-    />
-  );
+function GeometryField(props: { id: string; label: string; field: 'x' | 'y' | 'w' | 'h' }) {
   return (
-    <div class="fields-2">
-      {field('X', 'x')}
-      {field('Y', 'y')}
-      {field('Width', 'w')}
-      {field('Height', 'h')}
-    </div>
+    <NumberField
+      label={props.label}
+      value={Math.round(geometry(props.id)[props.field])}
+      onChange={v =>
+        edit('Edit ' + props.field, d => edits.setGeometry(d, props.id, props.field, v))
+      }
+    />
   );
 }
 
@@ -513,7 +533,9 @@ function ShapeSections(props: { id: string }) {
     nodeLabel(doc, props.id, findNode(doc, props.id)!.title, geometry(props.id)).mode;
   return (
     <>
-      <IntentSection id={props.id} />
+      <Show when={!doc.layout.sequence}>
+        <IntentSection id={props.id} />
+      </Show>
       <details class="inspector-section">
         <summary>Label & icon</summary>
         <SelectField
