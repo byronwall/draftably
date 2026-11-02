@@ -1,3 +1,5 @@
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { defineConfig, type Plugin } from 'vitest/config';
 import solid from 'vite-plugin-solid';
@@ -35,7 +37,22 @@ function workspace(root: string | undefined, file: string | undefined): Plugin |
   };
 }
 
+/** The published package's version, plus the commit for any build that is not a release. */
+function buildVersion() {
+  const pkg = JSON.parse(readFileSync('packages/cli/package.json', 'utf8')) as { version: string };
+  let commit = '';
+  if (!process.env.DRAFTABLY_RELEASE) {
+    try {
+      commit = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    } catch {
+      // Not a git checkout: show the version alone.
+    }
+  }
+  return { version: pkg.version, commit };
+}
+
 export default defineConfig({
+  define: { __DRAFTABLY_BUILD__: JSON.stringify(buildVersion()) },
   worker: { format: 'es' },
   // Relative asset paths let the static build run from any subdirectory.
   base: './',

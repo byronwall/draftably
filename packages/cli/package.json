@@ -8,7 +8,7 @@
     "draftably": "dist/cli/main.js"
   },
   "scripts": {
-    "build": "pnpm --dir ../.. build && node ../../scripts/build-cli.ts",
+    "build": "DRAFTABLY_RELEASE=1 pnpm --dir ../.. build && node ../../scripts/build-cli.ts",
     "test": "node ../../scripts/check-cli-package.ts"
   },
   "repository": {
