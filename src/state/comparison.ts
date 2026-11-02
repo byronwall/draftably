@@ -3,7 +3,7 @@
  * inspect them side by side or overlaid, and apply one as a single undo step.
  * Candidates never touch the editor until Apply.
  */
-import { batch, createRoot } from 'solid-js';
+import { batch, createMemo, createRoot } from 'solid-js';
 import { createStore, produce, reconcile } from 'solid-js/store';
 import {
   ExplorerLab,
@@ -12,13 +12,14 @@ import {
   type ComparisonMode,
 } from '../engines/explorer-engine.js';
 import { LANES_HOLD } from '../dsl/layout-edits';
+import { holdSlots, measure, pickCandidates, type Measure } from '../model/candidates';
 import { documentIdentity, normalize, routingFingerprint } from '../model/document';
 import { clamp, clone, rectUnion } from '../model/geometry';
 import { findGroup, findNode } from '../model/graph';
 import { fitCamera, type ViewCamera } from '../model/camera';
 import { anchorPoint, buildStaticScene, type StaticScene } from '../model/static-scene';
 import type { Diagram, IntentRole } from '../model/types';
-import { CancelledError, startEngineTask, type RunningTask } from '../lib/engine-tasks';
+import { CancelledError, inPool, startEngineTask, type RunningTask } from '../lib/engine-tasks';
 import { finishInlineEdit, setTool } from './actions';
 import { doc, selection, setSelection, snapshot, transact, prepareForEdit } from './document';
 import { fitView, stageSize, setConnectFrom } from './editor';
@@ -33,8 +34,9 @@ import {
 import { resetRoutes, routes, setAdoptedRoutes } from './scene';
 import { setComparisonCloser } from './sculpt';
 import { toast } from './toast';
-import { closeMenu, setLayoutLabOpen } from './ui';
+import { closeMenu } from './ui';
 import {
+  changedLine,
   commitSource,
   currentSource,
   fileBlocked,
@@ -47,6 +49,13 @@ import { LayoutLab } from '../engines/layout-engine.js';
 import { RouteLab } from '../engines/routing-engine.js';
 import type { CandidateSpec } from '../engines/explorer-engine.js';
 
+const CURRENT: CandidateSpec = {
+  key: 'current',
+  title: 'Current drawing',
+  subtitle: '',
+  patch: {},
+};
+
 export type Presentation = 'grid' | 'overlay';
 export type CameraMode = 'sync' | 'focus' | 'independent';
 export type { ViewCamera };
@@ -56,6 +65,9 @@ export interface Candidate {
   subtitle: string;
   status: 'pending' | 'ready' | 'error';
   error?: string;
+  /** The drawing as it is now. The others are read against it, and it has nothing to apply. */
+  current?: boolean;
+  measure?: Measure;
   result?: CandidateResult;
   /** In a diagram file: the source this candidate compiles from, which Apply saves. */
   source?: string;
@@ -80,12 +92,28 @@ interface ComparisonState {
   busy: boolean;
   progress: { text: string; error: boolean };
   expanded: number | null;
+  /** Every candidate is on screen, not only the few chosen to show. */
+  showAll: boolean;
   userCameraMoved: boolean;
   /** Measured size of each candidate viewport; index -1 is the overlay. */
   viewports: Record<number, { width: number; height: number }>;
 }
 
-const DEFAULT_ALGORITHMS = ['compound-flow', 'layered', 'flow', 'tree', 'stress', 'force'] as const;
+/** Alternatives shown beside the current drawing. More shows the rest. */
+const SHOWN = 3;
+/** Every engine runs, as only the ones worth seeing reach the screen. The study's best go first. */
+const COMPARE_ORDER = [
+  'boundary-align',
+  'tidy',
+  'force',
+  'layered',
+  'tree',
+  'grid',
+  'compound-flow',
+  'flow',
+  'compound-spring',
+  'stress',
+] as const;
 export const LAYER_COLORS = [
   '#5263d6',
   '#d37b28',
@@ -111,14 +139,15 @@ const initial = (): ComparisonState => ({
   generatedConfig: null,
   cells: [],
   presentation: 'grid',
-  controlsHidden: false,
+  controlsHidden: true,
   overlay: { camera: { cx: 0, cy: 0, k: 1 }, active: 0, allLabels: false },
-  cameraMode: 'sync',
+  cameraMode: 'independent',
   focusId: '',
   shared: { cx: 0, cy: 0, k: 1 },
   busy: false,
   progress: { text: '', error: false },
   expanded: null,
+  showAll: false,
   userCameraMoved: false,
   viewports: {},
 });
@@ -126,22 +155,86 @@ const initial = (): ComparisonState => ({
 const [cmp, setCmp] = createRoot(() => createStore<ComparisonState>(initial()));
 export const comparison = cmp;
 
+interface Sheet {
+  shown: number[];
+  others: number[];
+  failed: number[];
+  alike: number;
+}
+
+const scored = (i: number) => {
+  const { measure, scene } = cmp.cells[i];
+  return measure && scene ? { index: i, measure, scene } : null;
+};
+
+/** Which candidates to show: the current drawing, the best few, and the count of the rest. */
+export const comparisonSheet = createRoot(() =>
+  createMemo<Sheet>(
+    before => {
+      const cells = cmp.cells,
+        all = cells.map((_, i) => i);
+      const current = cells.findIndex(c => c.current);
+      const failed = all.filter(i => cells[i].status === 'error');
+      const pending = all.filter(i => cells[i].status === 'pending' && i !== current);
+      // A parameter grid is read as a whole, and failures need a place to be seen.
+      if (current < 0 || cells[current].status === 'error')
+        return { shown: all, others: [], failed, alike: 0 };
+      const base = scored(current);
+      if (!base)
+        return {
+          shown: [current, ...pending.slice(0, SHOWN)],
+          others: pending.slice(SHOWN),
+          failed,
+          alike: 0,
+        };
+      const ready = all.flatMap(i => (i !== current && scored(i) ? [scored(i)!] : []));
+      const pick = pickCandidates(base, ready, SHOWN);
+      // During a run a drawn card keeps its slot, so Apply stays on what is being read. The run's
+      // end re-ranks once, and any card that is still chosen stays where it is.
+      const worthShowing = [...pick.shown, ...pick.others],
+        slots = before.shown.filter(i => i !== current),
+        keep = cmp.busy
+          ? slots.filter(i => cells[i]?.status === 'ready' && worthShowing.includes(i))
+          : slots.filter(i => pick.shown.includes(i));
+      const shown = holdSlots(slots, keep, [...pick.shown, ...pending], SHOWN);
+      return {
+        shown: [current, ...shown],
+        others: [...worthShowing.filter(i => !shown.includes(i)), ...failed],
+        failed,
+        alike: pick.alike,
+      };
+    },
+    { shown: [], others: [], failed: [], alike: 0 },
+  ),
+);
+
+/** Candidates on screen, in order. */
+export const shownCells = () => {
+  const sheet = comparisonSheet();
+  return cmp.showAll ? [...sheet.shown, ...sheet.others] : sheet.shown;
+};
+
+export const toggleShowAll = () => {
+  setCmp('showAll', on => !on);
+  requestAnimationFrame(() => fitAll());
+};
+
 function defaultConfig(mode: ComparisonMode): ComparisonConfig {
   const scope = currentScope();
   return {
     fixedIds: fixedIds(),
     intent: clone(doc.layout.intent || {}),
     mode,
-    kind: mode === 'routing' ? 'parameters' : 'algorithms',
+    kind: mode === 'routing' ? 'routes' : 'algorithms',
     algorithm: doc.settings.algorithm,
-    algorithms: [...DEFAULT_ALGORITHMS],
+    algorithms: [...COMPARE_ORDER],
     axisA: mode === 'routing' ? 'edgeGap' : 'nodeGap',
     valuesA: mode === 'routing' ? '10,18,28' : '12,24,44',
     axisB: mode === 'routing' ? 'bendPenalty' : 'direction',
     valuesB: mode === 'routing' ? '16,64' : 'RIGHT,DOWN',
     run: 'rebuild',
     maxIterations: 640,
-    scope: 'all',
+    scope: scope.scope === 'container' ? 'container' : 'all',
     autoPorts: false,
     selected: [...selection()],
     ...(scope.scope === 'container' ? { containerId: scope.containerId } : {}),
@@ -164,9 +257,11 @@ function candidateSource(baseline: Diagram, spec: CandidateSpec, config: Compari
   if (config.run !== 'rebuild') return null;
   const scope = sourceScope(config);
   if (!scope)
-    throw Error('A layout recipe arranges the whole diagram or one container, not a selection.');
+    throw Error('A layout line arranges the whole diagram or one group, not a selection.');
   const settings = LayoutLab.settings({ ...baseline.settings, ...spec.patch, mode: 'rebuild' });
-  return sourceWithRecipe(scope, settings).source;
+  const asked = spec.patch.direction;
+  const direction = asked ? (asked === 'DOWN' ? 'down' : 'right') : undefined;
+  return sourceWithRecipe(scope, settings, direction).source;
 }
 
 export function openComparison(mode: ComparisonMode = 'layout') {
@@ -183,7 +278,6 @@ export function openComparison(mode: ComparisonMode = 'layout') {
   finishInlineEdit(true);
   if (layoutBusy()) cancelLayout();
   closeMenu();
-  setLayoutLabOpen(false);
   if (cmp.open) {
     setCmp('config', { ...defaultConfig(mode), priorRoutes: cmp.config!.priorRoutes });
     return;
@@ -196,7 +290,6 @@ export function openComparison(mode: ComparisonMode = 'layout') {
       baseline,
       signature: documentIdentity(baseline),
       config: defaultConfig(mode),
-      controlsHidden: innerWidth < 721,
       focusId:
         [...selection()].find(id => findNode(doc, id) || findGroup(doc, id)) ||
         doc.layout.intent?.start?.id ||
@@ -208,17 +301,17 @@ export function openComparison(mode: ComparisonMode = 'layout') {
   void generate();
 }
 
-let running: RunningTask<CandidateResult> | null = null;
+const running = new Set<RunningTask<CandidateResult>>();
 let job = 0;
 
 export function cancelGeneration() {
   if (!cmp.open) return;
   job++;
-  running?.cancel();
-  running = null;
+  for (const task of running) task.cancel();
+  running.clear();
   if (cmp.busy) {
     setCmp('busy', false);
-    setProgress('Cancelled. Completed candidates remain available.');
+    setProgress(`Stopped · ${cmp.cells.filter(c => c.status === 'ready').length} ready`);
   }
 }
 
@@ -237,11 +330,10 @@ setComparisonCloser(closeComparison);
 
 export function updateConfig(patch: Partial<ComparisonConfig>) {
   setCmp('config', c => ({ ...c!, ...patch }));
-  if (cmp.cells.length)
-    setProgress('Settings changed. Generate to replace this sheet; the editor remains untouched.');
+  if (cmp.cells.length) setProgress('Settings changed. Regenerate to see them.');
 }
 
-/** Switch between layout and routing comparisons; existing candidates stay until regenerated. */
+/** Switch between layout and routing comparisons, from the same frozen starting point. */
 export function setComparisonMode(mode: ComparisonMode) {
   cancelGeneration();
   setCmp('config', {
@@ -249,9 +341,7 @@ export function setComparisonMode(mode: ComparisonMode) {
     intent: clone(cmp.config?.intent || {}),
     priorRoutes: cmp.config!.priorRoutes,
   });
-  setProgress(
-    'Choose parameters, then Generate. Existing panels are from the previous experiment.',
-  );
+  void generate();
 }
 
 export async function generate(override?: Partial<ComparisonConfig>) {
@@ -262,17 +352,17 @@ export async function generate(override?: Partial<ComparisonConfig>) {
   try {
     specs = ExplorerLab.specs(config);
     if (cmp.baseline.graph.nodes.length > 160 || cmp.baseline.graph.edges.length > 360)
-      throw Error(
-        'Comparison is limited to 160 shapes / 360 edges. Use a smaller working diagram for the grid.',
-      );
+      throw Error('Compare handles up to 160 shapes and 360 lines.');
     if (config.scope === 'selection' && !config.selected.length)
-      throw Error('No objects were selected when this explorer opened.');
+      throw Error('Select shapes before you open Compare.');
     if (config.scope === 'container' && !config.containerId)
-      throw Error('Select one container before opening the explorer.');
+      throw Error('Select one group before you open Compare.');
   } catch (error) {
     setProgress(error instanceof Error ? error.message : String(error), true);
     return { status: 'error' };
   }
+  // A grid is one experiment, so it needs no current drawing to read each cell against.
+  if (config.kind !== 'parameters') specs.unshift(CURRENT);
   const thisJob = ++job;
   setCmp(
     produce(s => {
@@ -280,12 +370,14 @@ export async function generate(override?: Partial<ComparisonConfig>) {
       s.generatedConfig = clone(config);
       s.busy = true;
       s.expanded = null;
+      s.showAll = false;
       s.userCameraMoved = false;
       s.overlay.active = 0;
       s.cells = specs.map((spec, i) => ({
         title: spec.title,
         subtitle: spec.subtitle,
         status: 'pending',
+        ...(spec === CURRENT ? { current: true } : {}),
         camera: { cx: 0, cy: 0, k: 1 },
         layer: { visible: true, opacity: i === 0 ? 0.85 : 0.3, adjusted: false },
       }));
@@ -293,35 +385,63 @@ export async function generate(override?: Partial<ComparisonConfig>) {
   );
   const started = performance.now(),
     baseline = cmp.baseline;
-  for (let i = 0; i < specs.length; i++) {
-    if (thisJob !== job) return { status: 'cancelled' };
-    setProgress(`Computing ${i + 1} of ${specs.length} · ${specs[i].title}`);
+  const settled = () => cmp.cells.filter(c => c.status !== 'pending').length;
+  const compute = async (i: number) => {
+    if (thisJob !== job) return;
+    let task: RunningTask<CandidateResult> | undefined;
     try {
-      const source = candidateSource(baseline, specs[i], config);
-      running = source
+      const current = specs[i] === CURRENT,
+        source = current
+          ? fileMode() && currentSource()
+          : candidateSource(baseline, specs[i], config);
+      task = source
         ? startEngineTask({ kind: 'source', source, spec: specs[i] }, { timeout: 30000 })
         : startEngineTask(
-            { kind: 'candidate', baseline: clone(baseline), spec: specs[i], config },
+            {
+              kind: 'candidate',
+              baseline: clone(baseline),
+              spec: specs[i],
+              // Routing alone draws the baseline as it stands, with nothing rearranged.
+              config: current ? { ...config, mode: 'routing' } : config,
+            },
             { timeout: 30000 },
           );
-      const result = await running.promise;
-      if (thisJob !== job) return { status: 'cancelled' };
+      running.add(task);
+      const result = await task.promise;
+      if (thisJob !== job) return;
       const scene = buildStaticScene(result.document, result.routing);
-      setCmp('cells', i, { status: 'ready', result, scene, ...(source ? { source } : {}) });
+      setCmp('cells', i, {
+        status: 'ready',
+        result,
+        scene,
+        measure: measure(scene, result.routing),
+        ...(source && !current ? { source } : {}),
+      });
       if (cmp.presentation === 'grid') fitCell(i);
     } catch (error) {
-      if (error instanceof CancelledError || thisJob !== job) return { status: 'cancelled' };
+      if (error instanceof CancelledError || thisJob !== job) return;
       const message = error instanceof Error ? error.message : String(error);
       setCmp('cells', i, { status: 'error', error: message });
       console.warn('[compare] candidate failed', specs[i].key, message);
+    } finally {
+      if (task) running.delete(task);
     }
-  }
-  running = null;
+    if (thisJob === job) setProgress(`Computing · ${settled()} of ${specs.length} done`);
+  };
+  setProgress(`Computing · 0 of ${specs.length} done`);
+  // The current drawing comes first: every other card is read against it, and it sets the grid.
+  const first = specs[0] === CURRENT ? 1 : 0;
+  if (first) await compute(0);
+  await inPool(specs.length - first, n => compute(n + first));
+  if (thisJob !== job) return { status: 'cancelled' };
   const ready = cmp.cells.filter(c => c.status === 'ready').length;
   setCmp('busy', false);
-  setProgress(
-    `${ready} of ${specs.length} ready · ${((performance.now() - started) / 1000).toFixed(1)} s · original diagram unchanged`,
-  );
+  setProgress('');
+  console.info('[compare] generated', {
+    ready,
+    total: specs.length,
+    ms: Math.round(performance.now() - started),
+  });
   if (!cmp.userCameraMoved) requestAnimationFrame(() => fitAll());
   return { status: 'complete', ready, total: specs.length };
 }
@@ -375,12 +495,7 @@ export function applyCandidate(i: number) {
 }
 
 /** The `layout` or `routing` line a file candidate writes, as Apply would save it. */
-export function candidateChange(source: string): string {
-  const now = new Set(currentSource().split('\n'));
-  return (
-    source.split('\n').find(l => /^(layout|routing)\b/.test(l) && !now.has(l)) ?? 'Same as the file'
-  );
-}
+export const candidateChange = (source: string) => changedLine(source) ?? 'Same as the file';
 
 /** Save a file candidate's source: its layout recipe or routing line. */
 function applyToFile(cell: Candidate & { source: string }) {
@@ -430,13 +545,11 @@ export function effectiveCamera(i: number): ViewCamera {
   return { cx: c.x + cmp.shared.cx, cy: c.y + cmp.shared.cy, k: cmp.shared.k };
 }
 
-/** Ready candidates that are on screen: all of them, or only the enlarged one. */
+/** Ready candidates that are on screen: the shown ones, or only the enlarged one. */
 export const visibleReadyCells = () =>
-  cmp.cells
-    .map((cell, i) => ({ cell, i }))
-    .filter(
-      ({ cell, i }) => cell.status === 'ready' && (cmp.expanded === null || i === cmp.expanded),
-    );
+  (cmp.expanded === null ? shownCells() : [cmp.expanded])
+    .map(i => ({ cell: cmp.cells[i], i }))
+    .filter(({ cell }) => cell.status === 'ready');
 
 export function fitCell(i: number) {
   const cell = cmp.cells[i];
@@ -559,8 +672,14 @@ export function setCameraMode(mode: CameraMode) {
 
 // --- Presentation ----------------------------------------------------------------------------
 
+let controlsBeforeOverlay = true;
+
 export function setPresentation(mode: Presentation) {
+  if (mode === cmp.presentation) return;
   setCmp('presentation', mode);
+  // The overlay's layers are listed in the controls. Leaving it puts the controls back.
+  if (mode === 'overlay') controlsBeforeOverlay = cmp.controlsHidden;
+  setCmp('controlsHidden', mode === 'overlay' ? false : controlsBeforeOverlay);
   requestAnimationFrame(() => fitAll());
 }
 
@@ -637,13 +756,18 @@ export function setIntentPlacement(
 
 /** Column count that keeps candidates as large as possible. */
 export function gridColumns(size: { width: number; height: number }) {
-  const count = cmp.expanded !== null ? 1 : Math.max(1, cmp.cells.length);
+  const shown = shownCells(),
+    count = cmp.expanded !== null ? 1 : Math.max(1, shown.length);
   if (!size.width || !size.height) return 1;
   let cols = count === 1 ? 1 : Math.min(count, 3);
   if (count <= 4) cols = Math.min(count, 2);
   if (size.width < 660 && count > 2) cols = 2;
   if (count > 9) cols = 4;
-  const ready = cmp.cells.filter(c => c.status === 'ready' && c.scene);
+  // The current drawing alone sets the shape, so the grid does not reflow as results arrive.
+  const anchor = cmp.cells.find(c => c.current && c.scene),
+    ready = anchor
+      ? [anchor]
+      : shown.map(i => cmp.cells[i]).filter(c => c.status === 'ready' && c.scene);
   if (ready.length && cmp.expanded === null) {
     let best = -Infinity;
     for (let cc = 1; cc <= Math.min(count, 4); cc++) {

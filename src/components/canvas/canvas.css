@@ -616,11 +616,12 @@
 .layout-preview {
   position: absolute;
   bottom: 16px;
-  left: 50%;
+  left: 16px;
   z-index: 25;
   gap: var(--space-2);
+  width: max-content;
+  max-width: calc(100% - 210px);
   padding: 6px 6px 6px 14px;
-  transform: translateX(-50%);
 }
 
 .layout-preview-text {
@@ -633,6 +634,15 @@
 .layout-preview-text span {
   color: var(--muted);
   font-size: var(--text-xs);
+}
+
+.layout-preview-text span {
+  overflow-wrap: anywhere;
+}
+
+.layout-preview-text code {
+  color: var(--text);
+  font-family: var(--mono);
 }
 
 /* Timeline deck */

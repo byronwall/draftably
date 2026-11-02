@@ -30,6 +30,8 @@ import {
 } from '../dsl/translate';
 import {
   setLayoutRecipe,
+  setLayoutShape,
+  type ShapeChange,
   setRouting,
   UnstorableLayout,
   writeArrangement,
@@ -568,15 +570,34 @@ export function sourceScope(scope: { scope: string; containerId?: string }): str
  * The current source with `scope` arranged by the engine in `settings`. Throws
  * `UnstorableLayout` for an engine a file cannot name.
  */
-export function sourceWithRecipe(scope: string, settings: LayoutSettings) {
+export function sourceWithRecipe(
+  scope: string,
+  settings: LayoutSettings,
+  direction?: 'right' | 'down',
+) {
   const source = readSource(localSource),
-    removed = setLayoutRecipe(source, state.scene()!, scope, settings);
+    removed = setLayoutRecipe(source, state.scene()!, scope, settings, direction);
   return { source: printSource(source), removed };
 }
 
+/** The current source with a change to what a scope's `layout` line says. */
+export function sourceWithShape(scope: string, change: ShapeChange) {
+  const source = readSource(localSource),
+    removed = setLayoutShape(source, state.scene()!, scope, change);
+  return { source: printSource(source), removed };
+}
+
+/** The `layout` or `routing` line that `source` adds to the file, as saving it would write. */
+export function changedLines(source: string) {
+  const now = new Set(localSource.split('\n'));
+  return source.split('\n').filter(l => /^(layout|routing)\b/.test(l) && !now.has(l));
+}
+
+export const changedLine = (source: string) => changedLines(source)[0] ?? null;
+
 /** The current source with these router settings. */
-export function sourceWithRouting(routing: RoutingSettings) {
-  const source = readSource(localSource);
+export function sourceWithRouting(routing: RoutingSettings, base = localSource) {
+  const source = readSource(base);
   setRouting(source, routing);
   return printSource(source);
 }

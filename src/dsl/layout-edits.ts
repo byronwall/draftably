@@ -26,11 +26,13 @@ import {
 import {
   bare,
   ENGINE_PARAMS,
+  FITS,
   printStatement,
   readSource,
   ENGINES,
   paramAttr,
   ROUTING_PARAMS,
+  type Fit,
   type SourceDoc,
   type Statement,
   type Word,
@@ -80,6 +82,97 @@ export function currentRecipe(source: string, scope: string): string | null {
   return s ? printStatement({ ...s, comment: undefined }) : null;
 }
 
+/** What a scope's `layout` line says about the drawing, as the Arrange panel shows it. */
+export interface LayoutShape {
+  /** The built-in recipe, or the engine when the line names one. */
+  recipe: string;
+  engine: boolean;
+  direction: 'auto' | 'right' | 'down';
+  fit: Fit | null;
+  gap: number | null;
+  fold: 'auto' | 'never';
+}
+
+export type ShapeChange = Partial<Pick<LayoutShape, 'direction' | 'fit' | 'gap' | 'fold'>> & {
+  /** Drop an engine for the scope's built-in recipe, keeping what the author said of the result. */
+  builtin?: boolean;
+};
+
+const AXIS_RECIPES: Record<string, 'right' | 'down'> = { row: 'right', column: 'down' };
+
+/** Read a scope's layout line. A scope without one uses the built-in recipe. */
+export function layoutShape(source: string, scope: string): LayoutShape {
+  const s = layoutStatement(readSource(source), scope),
+    engine = s && getAttr(s, 'engine')?.value,
+    recipe = engine ?? s?.args[1]?.value ?? (scope === 'root' ? 'flow' : 'column'),
+    fit = s && getAttr(s, 'fit')?.value,
+    gap = s && getAttr(s, 'gap')?.value;
+  return {
+    recipe,
+    engine: !!engine,
+    direction:
+      AXIS_RECIPES[recipe] ??
+      ((s && getAttr(s, 'direction')?.value) as LayoutShape['direction'] | undefined) ??
+      'auto',
+    fit: fit && fit in FITS ? (fit as Fit) : null,
+    gap: gap ? Number(gap) : null,
+    fold: s && getAttr(s, 'fold')?.value === 'never' ? 'never' : 'auto',
+  };
+}
+
+/**
+ * Change what a scope's `layout` line says, keeping its recipe or engine. A `row` or `column`
+ * states its direction by name, so it swaps with the other. Soft refinements inside the scope are
+ * removed so the new shape shows; the count is returned. With no change, that is all it does.
+ */
+export function setLayoutShape(
+  source: SourceDoc,
+  scene: Scene,
+  scope: string,
+  change: ShapeChange,
+): number {
+  if (change.builtin) useBuiltIn(source, scope);
+  const line = layoutLine(source, scope);
+  const axis = AXIS_RECIPES[line.args[1]?.value ?? ''];
+  if (change.direction && axis && change.direction !== 'auto')
+    line.args[1] = bare(change.direction === 'right' ? 'row' : 'column');
+  else if (change.direction)
+    setAttr(line, 'direction', change.direction === 'auto' ? undefined : bare(change.direction));
+  if ('fit' in change) setAttr(line, 'fit', change.fit ? bare(change.fit) : undefined);
+  if (change.gap !== undefined) setAttr(line, 'gap', change.gap ? value(change.gap) : undefined);
+  if (change.fold) setAttr(line, 'fold', change.fold === 'never' ? bare('never') : undefined);
+  return removeRefinements(source, scene, scope);
+}
+
+/** Replace an engine line with the built-in recipe. A root recipe keeps a stated direction. */
+function useBuiltIn(source: SourceDoc, scope: string) {
+  const line = layoutStatement(source, scope);
+  if (!line || !getAttr(line, 'engine')) return;
+  const keys = [...(scope === 'root' ? ['direction'] : []), 'fit', 'min-width', 'min-height'];
+  const kept = keys.flatMap((key): Array<[string, Word]> => {
+    const attr = getAttr(line, key);
+    return attr ? [[key, attr]] : [];
+  });
+  const next = statement('layout', [bare(scope), bare(scope === 'root' ? 'flow' : 'column')], kept);
+  next.comment = line.comment;
+  source.lines[source.lines.indexOf(line)] = next;
+}
+
+/** A scope's `layout` line, added with the built-in recipe when it has none. */
+function layoutLine(source: SourceDoc, scope: string) {
+  const existing = layoutStatement(source, scope);
+  if (existing) return existing;
+  const line = statement('layout', [bare(scope), bare(scope === 'root' ? 'flow' : 'column')]);
+  placeLayout(source, line);
+  return line;
+}
+
+function placeLayout(source: SourceDoc, line: Statement) {
+  if (statements(source).some(s => s.command === 'layout'))
+    insertAfter(source, line, s => s.command === 'layout');
+  else insertAfter(source, line, s => s.command === 'edge' || s.command === 'node');
+}
+
 /** Ids inside a scope's subtree (not the scope itself). */
 function inside(scene: Scene, scope: string) {
   return new Set(
@@ -94,32 +187,8 @@ function inside(scene: Scene, scope: string) {
   );
 }
 
-/**
- * Arrange `scope` with the engine in `settings`. Its `layout` line is replaced (keeping
- * `min-width`/`min-height`), and soft position refinements inside it are removed so the engine's
- * arrangement shows. Pins, sizes and nested `layout` lines stay. Returns the number of
- * refinements removed.
- */
-export function setLayoutRecipe(
-  source: SourceDoc,
-  scene: Scene,
-  scope: string,
-  settings: LayoutSettings,
-): number {
-  const attrs = engineAttrs(settings);
-  const existing = layoutStatement(source, scope);
-  for (const key of ['min-width', 'min-height']) {
-    const kept = existing && getAttr(existing, key);
-    if (kept) attrs.push([key, kept]);
-  }
-  const next = statement('layout', [bare(scope)], attrs);
-  if (existing) {
-    next.comment = existing.comment;
-    source.lines[source.lines.indexOf(existing)] = next;
-  } else if (statements(source).some(s => s.command === 'layout'))
-    insertAfter(source, next, s => s.command === 'layout');
-  else insertAfter(source, next, s => s.command === 'edge' || s.command === 'node');
-
+/** Remove soft position refinements in a scope, so its arrangement shows. Returns how many. */
+function removeRefinements(source: SourceDoc, scene: Scene, scope: string) {
   const ids = scope === 'root' ? new Set(scene.objects.map(o => o.id)) : inside(scene, scope);
   const before = source.lines.length;
   removeWhere(source, s => {
@@ -129,6 +198,36 @@ export function setLayoutRecipe(
     return false;
   });
   return before - source.lines.length;
+}
+
+/**
+ * Arrange `scope` with the engine in `settings`. Its `layout` line is replaced, keeping what the
+ * author said about the result: `fit`, `min-width`, `min-height` and `direction`, unless
+ * `direction` asks for another. Soft position refinements inside it are removed so the engine's
+ * arrangement shows. Pins, sizes and nested `layout` lines stay. Returns the number of
+ * refinements removed.
+ */
+export function setLayoutRecipe(
+  source: SourceDoc,
+  scene: Scene,
+  scope: string,
+  settings: LayoutSettings,
+  direction?: 'right' | 'down',
+): number {
+  const existing = layoutStatement(source, scope);
+  const reads = direction ?? (existing && getAttr(existing, 'direction'));
+  const attrs = engineAttrs(settings).filter(([key]) => !reads || key !== 'direction');
+  if (reads) attrs.splice(1, 0, ['direction', typeof reads === 'string' ? bare(reads) : reads]);
+  for (const key of ['fit', 'min-width', 'min-height']) {
+    const kept = existing && getAttr(existing, key);
+    if (kept) attrs.push([key, kept]);
+  }
+  const next = statement('layout', [bare(scope)], attrs);
+  if (existing) {
+    next.comment = existing.comment;
+    source.lines[source.lines.indexOf(existing)] = next;
+  } else placeLayout(source, next);
+  return removeRefinements(source, scene, scope);
 }
 
 /** The `routing` statement for router settings, or null when they are all defaults. */

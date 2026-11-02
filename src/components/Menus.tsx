@@ -1,9 +1,7 @@
 import { createSignal, For, Match, onCleanup, onMount, Show, Switch, type JSX } from 'solid-js';
-import { RouteLab } from '../engines/routing-engine.js';
 import { clamp } from '../model/geometry';
 import { EXAMPLES } from '../model/examples';
 import { SAMPLES } from '../model/samples';
-import type { RoutingSettings } from '../model/types';
 import {
   OVERRIDE_LIMITS,
   PRESETS,
@@ -17,17 +15,11 @@ import type { Tool } from '../state/editor';
 import { layoutTarget } from '../state/layout';
 import { timelineOpen } from '../state/sculpt';
 import { commandEnabled, commands, runCommand, type CommandId } from '../state/commands';
-import { commit, doc, setDoc, snapshot } from '../state/document';
+import { doc } from '../state/document';
+import { fileMode, fileSession } from '../state/file-session';
+import { setRouting } from '../state/routing';
 import {
-  commitSource,
-  fileBlocked,
-  fileMode,
-  fileSession,
-  sourceWithRouting,
-} from '../state/file-session';
-import { resetRoutes, routingReport } from '../state/scene';
-import { toast } from '../state/toast';
-import {
+  arrangeOpen,
   closeMenu,
   filesShown,
   inspectorOpen,
@@ -36,7 +28,7 @@ import {
   openMenu,
   type MenuState,
 } from '../state/ui';
-import { RangeField, tip } from './controls';
+import { tip } from './controls';
 import { FileTime } from './FilesPanel';
 import { Icon } from './Icon';
 import './menus.css';
@@ -125,7 +117,7 @@ function Popover(props: { state: MenuState }) {
       ref={el}
       class="popover"
       classList={{
-        wide: ['routing', 'appearance', 'tools', 'file', 'layout'].includes(props.state.id),
+        wide: ['appearance', 'tools', 'file', 'layout'].includes(props.state.id),
       }}
       role="menu"
       onKeyDown={onKeyDown}
@@ -149,9 +141,6 @@ function Popover(props: { state: MenuState }) {
         <Match when={props.state.id === 'export'}>
           <ExportMenu />
         </Match>
-        <Match when={props.state.id === 'routing'}>
-          <RoutingMenu />
-        </Match>
         <Match when={props.state.id === 'appearance'}>
           <AppearanceMenu />
         </Match>
@@ -160,28 +149,6 @@ function Popover(props: { state: MenuState }) {
         </Match>
       </Switch>
     </div>
-  );
-}
-
-/** The layout actions, each saying what it changes and how to reverse it. */
-function LayoutItems() {
-  return (
-    <>
-      <MenuItem
-        command="layout"
-        label="Tidy positions"
-        note={`Small moves in ${layoutTarget()}. Undo restores.`}
-      />
-      <MenuItem
-        command="layout-menu"
-        label="Automatic layout…"
-        note="A new arrangement to preview. Undo restores."
-      />
-      <MenuItem command="timeline-toggle" note="Steps from the current drawing. Undo restores." />
-      <MenuItem command="brush-toggle" note="Paint over shapes to move them. Undo restores." />
-      <MenuItem command="compare-layouts" note="Preview only until you Apply. Undo restores." />
-      <MenuItem command="reroute" note="Redraws connections. Shapes stay." />
-    </>
   );
 }
 
@@ -544,23 +511,19 @@ function ViewMenu() {
 function LayoutMenu() {
   return (
     <>
-      <LayoutItems />
+      <MenuItem command="layout-menu" checked={arrangeOpen()} />
+      <MenuItem command="layout" note={`Small moves in ${layoutTarget()}.`} />
+      <MenuItem command="compare-layouts" />
       <hr />
-      <button
-        type="button"
-        class="menu-item"
-        role="menuitem"
-        onClick={openFrom('routing', '.menubar [aria-expanded="true"]')}
-      >
-        <span class="menu-icon">
-          <Icon name="branch" />
-        </span>
-        <span class="menu-label">Routing options…</span>
-      </button>
+      <MenuItem command="reroute" />
       <MenuItem command="compare-routes" />
       <hr />
-      <MenuItem command="timeline-reopen" />
-      <MenuItem command="timeline-save" />
+      <MenuItem command="timeline-toggle" />
+      <MenuItem command="brush-toggle" />
+      <Show when={commandEnabled('timeline-reopen')}>
+        <MenuItem command="timeline-reopen" />
+        <MenuItem command="timeline-save" />
+      </Show>
     </>
   );
 }
@@ -624,149 +587,6 @@ function ExportMenu() {
   );
 }
 
-const ROUTING_FIELDS: [keyof RoutingSettings, string, number, number, string][] = [
-  ['crossingPenalty', 'Crossing cost', 0, 1200, 'Higher values prefer detours over crossings.'],
-  ['bendPenalty', 'Bend cost', 0, 100, 'Higher values prefer simpler routes.'],
-  ['clearance', 'Shape clearance', 4, 30, 'World pixels around shapes and unrelated containers.'],
-  [
-    'edgeGap',
-    'Parallel edge gap',
-    4,
-    48,
-    'Preferred buffer between parallel runs, independent of port spacing.',
-  ],
-  [
-    'parallelPenalty',
-    'Lane separation cost',
-    0,
-    60,
-    'Higher values spend more route length to keep lanes apart.',
-  ],
-  [
-    'cornerRadius',
-    'Corner radius',
-    0,
-    16,
-    'Rounded orthogonal corners; zero keeps square corners.',
-  ],
-  ['portGap', 'Port spacing', 6, 28, 'Minimum preferred separation on a shape side.'],
-  [
-    'fanoutPenalty',
-    'Spread fan-out',
-    0,
-    160,
-    'Prefer different sides for independent branches when the detour is short.',
-  ],
-  [
-    'portStability',
-    'Keep previous sides',
-    0,
-    150,
-    'Damps port switching; never locks an automatic side.',
-  ],
-];
-const ADVANCED_ROUTING: typeof ROUTING_FIELDS = [
-  [
-    'sharedPenalty',
-    'Shared-path cost',
-    0,
-    20,
-    'Penalty per world pixel of a reused route segment.',
-  ],
-  [
-    'passes',
-    'Routing passes',
-    1,
-    5,
-    'One initial routing pass, followed by up to four conflict-repair passes.',
-  ],
-];
-
-/** Routing settings are undoable edits: they change how every connection is drawn. */
-function setRouting(patch: Partial<RoutingSettings>, label: string, reset = false) {
-  const next = RouteLab.settings(
-    reset ? { ...RouteLab.defaults, ...patch } : { ...doc.settings.routing, ...patch },
-  );
-  // A diagram file stores router settings in its `routing` line.
-  if (fileMode()) {
-    const blocked = fileBlocked();
-    if (blocked) return toast(blocked);
-    void commitSource(sourceWithRouting(next), label, 'routing');
-    return;
-  }
-  const before = snapshot();
-  setDoc('settings', 'routing', next);
-  resetRoutes();
-  commit(before, label);
-}
-
-function RoutingMenu() {
-  const report = () => routingReport();
-  const field = ([key, label, min, max, hint]: (typeof ROUTING_FIELDS)[number]) => (
-    <RangeField
-      label={label}
-      min={min}
-      max={max}
-      hint={hint}
-      value={doc.settings.routing[key]}
-      onChange={value => setRouting({ [key]: value }, 'Change routing settings')}
-    />
-  );
-  return (
-    <div class="routing-menu">
-      <Heading>Automatic connections</Heading>
-      <p class="menu-note">Choose source and target sides together. Shapes never move.</p>
-      <div class="button-row">
-        <button
-          type="button"
-          class="button"
-          onClick={() => setRouting({}, 'Change routing preset', true)}
-        >
-          Balanced
-        </button>
-        <button
-          type="button"
-          class="button"
-          onClick={() =>
-            setRouting(
-              { crossingPenalty: 900, sharedPenalty: 9, portStability: 10 },
-              'Change routing preset',
-              true,
-            )
-          }
-        >
-          Fewer crossings
-        </button>
-      </div>
-      <For each={ROUTING_FIELDS}>{field}</For>
-      <details>
-        <summary>Advanced routing</summary>
-        <For each={ADVANCED_ROUTING}>{field}</For>
-      </details>
-      <button
-        type="button"
-        class="button primary full"
-        onClick={() => {
-          closeMenu();
-          runCommand('compare-routes');
-        }}
-      >
-        Compare ports & routes
-      </button>
-      <button type="button" class="button full" onClick={() => runCommand('reroute')}>
-        Reroute now <kbd>⌥R</kbd>
-      </button>
-      <button type="button" class="button ghost full" onClick={() => runCommand('auto-ports')}>
-        Use auto ports on selection
-      </button>
-      <p class="menu-note">
-        {report().crossings} crossings · {report().lanePairs} close lane pairs · {report().bends}{' '}
-        bends · {report().milliseconds} ms
-      </p>
-    </div>
-  );
-}
-
 /**
  * Diagram theme and diagram-wide padding. Saved with the diagram (in a file, as its `theme`
  * line); the editor's own light or dark mode is separate.
@@ -805,6 +625,20 @@ function AppearanceMenu() {
       <div class="fields-2">
         {padding('paddingX', 'Horizontal padding')}
         {padding('paddingY', 'Vertical padding')}
+      </div>
+      <Heading>Line corners</Heading>
+      <div class="segmented full" role="group" aria-label="Line corners">
+        <For each={[['Square', 0] as const, ['Rounded', 6] as const]}>
+          {([label, radius]) => (
+            <button
+              type="button"
+              aria-pressed={!doc.settings.routing.cornerRadius === !radius}
+              onClick={() => setRouting({ cornerRadius: radius }, 'Change line corners')}
+            >
+              {label}
+            </button>
+          )}
+        </For>
       </div>
       <Show when={Object.keys(doc.appearance.overrides).length}>
         <button

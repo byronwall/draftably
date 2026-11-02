@@ -1,4 +1,6 @@
 .comparison {
+  --comparison-header: 44px;
+
   inset: 0;
   width: 100vw;
   max-width: none;
@@ -18,7 +20,7 @@
     'header header'
     'sidebar main';
   grid-template-columns: clamp(250px, 21vw, 310px) minmax(0, 1fr);
-  grid-template-rows: 56px minmax(0, 1fr);
+  grid-template-rows: var(--comparison-header) minmax(0, 1fr);
 }
 
 .comparison.controls-hidden[open] {
@@ -37,7 +39,7 @@
 
 .comparison-heading {
   flex: none;
-  width: 230px;
+  max-width: 220px;
   min-width: 0;
 }
 
@@ -75,6 +77,11 @@
   border-top: 1px solid var(--line);
 }
 
+.panel-scroll > .sidebar-section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
 .sidebar-section > h3 {
   color: var(--muted);
   font-size: 10px;
@@ -96,38 +103,21 @@ details.sidebar-section[open] > summary,
 .comparison-main {
   grid-area: main;
   display: grid;
-  grid-template-rows: 36px minmax(0, 1fr) 28px;
+  grid-template-rows: minmax(0, 1fr);
   min-width: 0;
   min-height: 0;
   overflow: hidden;
 }
 
-.comparison-bar {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  min-width: 0;
-  padding: 0 12px;
-  border-bottom: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--muted);
-  font-size: var(--text-sm);
-}
-
-.comparison-bar > span:first-child {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .comparison-progress {
-  display: flex;
-  align-items: center;
-  padding: 0 12px;
-  border-top: 1px solid var(--line);
-  background: var(--surface);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
   color: var(--muted);
   font-size: var(--text-xs);
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Candidate grid */
@@ -173,33 +163,40 @@ details.sidebar-section[open] > summary,
   display: flex;
   flex: 0 0 46px;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-2);
   padding: 4px 8px 4px 10px;
   border-bottom: 1px solid var(--line);
 }
 
-.candidate-card > header > div {
+.candidate-card.current > header {
+  background: var(--surface-2);
+}
+
+.candidate-reading {
+  flex: 1;
   min-width: 0;
 }
 
-.candidate-card > header strong {
-  font-size: var(--text-sm);
-}
-
-.candidate-card > header p {
-  margin-left: 24px;
+.candidate-reading strong {
+  display: block;
   overflow: hidden;
-  color: var(--muted);
-  font-size: 10px;
+  font-size: var(--text-sm);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.candidate-index {
-  margin-right: 6px;
+.candidate-reading p {
+  overflow: hidden;
   color: var(--muted);
-  font: 600 10px var(--mono);
+  font-size: var(--text-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.candidate-method {
+  flex: none;
+  color: var(--muted);
+  font-size: var(--text-xs);
 }
 
 .candidate-body {
@@ -219,37 +216,40 @@ details.sidebar-section[open] > summary,
   font-size: var(--text-sm);
 }
 
+.candidate-pending:not(.error-text) {
+  background: linear-gradient(100deg, transparent 30%, var(--hover) 50%, transparent 70%) 0 0 / 300%
+    100%;
+  animation: candidate-pending 1.6s linear infinite;
+}
+
+@keyframes candidate-pending {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candidate-pending:not(.error-text) {
+    animation: none;
+  }
+}
+
 .candidate-card > footer {
-  display: flex;
-  flex: 0 0 42px;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
+  flex: none;
   min-width: 0;
-  padding: 4px 8px 4px 10px;
+  padding: 3px 10px;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 10px;
-}
-
-.candidate-card > footer > div {
-  min-width: 0;
-}
-
-.candidate-card > footer strong {
-  color: var(--text);
-  white-space: nowrap;
-}
-
-.candidate-card > footer p {
-  overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .candidate-warnings {
   position: absolute;
-  top: 52px;
+  top: 8px;
   right: 8px;
   z-index: 2;
   max-width: calc(100% - 16px);
@@ -373,7 +373,6 @@ details.sidebar-section[open] > summary,
 
 .layer-row input[type='range'] {
   grid-area: slider;
-  accent-color: var(--layer-color);
 }
 
 .layer-row output {
@@ -417,9 +416,35 @@ details.sidebar-section[open] > summary,
     grid-template-columns: 0 minmax(0, 1fr);
   }
 
+  .comparison {
+    --comparison-header: 80px;
+  }
+
+  .comparison-header {
+    flex-wrap: wrap;
+    align-content: center;
+    gap: var(--space-1) var(--space-2);
+    padding: 0 var(--space-2);
+  }
+
+  .comparison-header kbd {
+    display: none;
+  }
+
+  .comparison-progress {
+    order: 1;
+    text-align: right;
+  }
+
+  .candidate-grid {
+    grid-template-rows: none;
+    grid-auto-rows: minmax(220px, 1fr);
+    overflow-y: auto;
+  }
+
   .comparison:not(.controls-hidden) .comparison-sidebar {
     position: fixed;
-    top: 56px;
+    top: var(--comparison-header);
     bottom: 0;
     left: 0;
     z-index: 5;
@@ -427,14 +452,15 @@ details.sidebar-section[open] > summary,
     box-shadow: var(--shadow-lg);
   }
 
-  .comparison-heading,
-  .comparison-header > .hint {
+  .comparison-heading {
     display: none;
   }
 }
 
 /* The layout or routing line a diagram-file candidate writes. */
 .candidate-recipe {
-  font: 600 var(--text-xs) / 1.4 var(--mono);
-  overflow-wrap: anywhere;
+  display: block;
+  overflow: hidden;
+  font: var(--text-xs) / 1.4 var(--mono);
+  text-overflow: ellipsis;
 }

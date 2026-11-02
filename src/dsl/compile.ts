@@ -180,7 +180,9 @@ function fitVariants(root: ModelLayout) {
     { label: `as written (${reads(root)})`, layout: {} },
   ];
   if (['lanes', 'sequence', 'cells'].includes(root.algorithm) && !root.engine) return out;
-  for (const direction of ['right', 'down'] as const)
+  // A stated direction holds, so the search has only folding left to try.
+  const directions = root.direction === 'auto' ? (['right', 'down'] as const) : [root.direction];
+  for (const direction of directions)
     for (const fold of ['auto', 'never'] as const) {
       const layout: Partial<ModelLayout> = root.engine
         ? {
