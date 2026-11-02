@@ -279,6 +279,24 @@ function sequenced(scene: Scene): Scene {
     top = groups.length ? look.groupHeader : 0;
   // Lanes stand across a band's edge from each other with room for both bands' padding.
   const across = (i: number) => parts[i - 1].parent !== parts[i].parent;
+  // The labels a message makes room for. Before draws an older one on the same lanes and rows, so
+  // a comparison holds both.
+  const compared = !!scene.model.appearance.compare,
+    labelsOf = (e: SceneEdge) => [e.label, compared ? e.was : ''].filter((l): l is string => !!l),
+    labelBox = (e: SceneEdge) => {
+      const sizes = labelsOf(e).map(l => edgeLabelSize(l, look, true));
+      return { w: Math.max(0, ...sizes.map(s => s.w)), h: Math.max(0, ...sizes.map(s => s.h)) };
+    },
+    selfInk = (e: SceneEdge) => {
+      const inks = labelsOf(e).map(l => selfMessageInk(l, look));
+      return inks.length
+        ? {
+            right: Math.max(...inks.map(i => i.right)),
+            above: Math.max(...inks.map(i => i.above)),
+            below: Math.max(...inks.map(i => i.below)),
+          }
+        : selfMessageInk(undefined, look);
+    };
   // What holds each lane away from an earlier one, by the lane it ends on: a message's label fits
   // between its two lifelines, and a self-message's ink clears the next lifeline or band.
   const reach = new Map<string, number>(),
@@ -286,11 +304,11 @@ function sequenced(scene: Scene): Scene {
   for (const e of scene.edges) {
     const [a, b] = [at.get(e.source)!, at.get(e.target)!].sort((p, q) => p - q);
     if (a < b) {
-      if (e.label)
-        holds[b].push({ from: a, room: edgeLabelSize(e.label, look, true).w + SEQ_LABEL_RUN });
+      const { w } = labelBox(e);
+      if (w) holds[b].push({ from: a, room: w + SEQ_LABEL_RUN });
       continue;
     }
-    const { right } = selfMessageInk(e.label, look);
+    const { right } = selfInk(e);
     reach.set(e.source, Math.max(reach.get(e.source) ?? 0, right));
     if (a + 1 < parts.length)
       holds[a + 1].push({
@@ -312,8 +330,8 @@ function sequenced(scene: Scene): Scene {
     spans = new Map<string, { from: number; to: number }>();
   for (const e of scene.edges) {
     // The label sits above its line, so a row is the label's height and a little air.
-    const label = e.label ? edgeLabelSize(e.label, look, true).h : 0,
-      self = e.source === e.target ? selfMessageInk(e.label, look) : undefined,
+    const label = labelBox(e).h,
+      self = e.source === e.target ? selfInk(e) : undefined,
       above = self ? self.above : label && label + 1;
     y = Math.ceil(
       Math.max(y + Math.max(SEQ_ROW, label ? label + 8 : 0), ink + SEQ_SELF_CLEAR + above),

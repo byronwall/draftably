@@ -225,6 +225,32 @@ layout root flow gap=48
     );
   });
 
+  it('holds the lanes and row for an old label bigger than its new one', () => {
+    const old = 'Validate the password, the device and the session token against the old store',
+      file = (extra: string) => `diagram "Sign in" version=1
+${extra}
+node a "A"
+node b "B"
+node c "C"
+edge m1 a -> b "Open"
+~edge m2 b -> c "Check" was="${old}"
+layout root sequence
+`;
+    const doc = projectScene(checkSource(file('compare'))),
+      plain = projectScene(checkSource(file(''))),
+      gap = (d: typeof doc, from: string, to: string) =>
+        d.layout.nodes[to].x - d.layout.nodes[from].x,
+      rows = (d: typeof doc) => d.layout.edges.m2.row! - d.layout.edges.m1.row!;
+    expect(rows(doc)).toBeGreaterThan(rows(plain));
+    expect(gap(doc, 'b', 'c')).toBeGreaterThan(gap(plain, 'b', 'c'));
+    // In Before, the label's box ends above its own line.
+    const [, row, y, h] =
+      /data-id="m2"[\s\S]*?d="M[\d.-]+,([\d.-]+)L[\s\S]*?y="([\d.-]+)" width="[\d.-]+" height="([\d.-]+)" rx="4"/.exec(
+        renderSvg(doc),
+      )!;
+    expect(Number(y) + Number(h)).toBeLessThanOrEqual(Number(row));
+  });
+
   it('keeps a phase whose removed message sat inside it', () => {
     const before = SWAP([M2, 'edge m9 a -> b', M3].join('\n'), 'm2 m9 m3');
     const { merged, unshown } = compareDetailed(before, SWAP([M2, M3].join('\n')));
