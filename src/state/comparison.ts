@@ -18,7 +18,7 @@ import { findGroup, findNode } from '../model/graph';
 import { fitCamera, type ViewCamera } from '../model/camera';
 import { anchorPoint, buildStaticScene, type StaticScene } from '../model/static-scene';
 import type { Diagram, IntentRole } from '../model/types';
-import { CancelledError, startEngineTask, type RunningTask } from '../lib/engine-tasks';
+import { CancelledError, inPool, startEngineTask, type RunningTask } from '../lib/engine-tasks';
 import { finishInlineEdit, setTool } from './actions';
 import { doc, selection, setSelection, snapshot, transact, prepareForEdit } from './document';
 import { fitView, stageSize, setConnectFrom } from './editor';
@@ -300,14 +300,14 @@ export function openComparison(mode: ComparisonMode = 'layout') {
   void generate();
 }
 
-let running: RunningTask<CandidateResult> | null = null;
+const running = new Set<RunningTask<CandidateResult>>();
 let job = 0;
 
 export function cancelGeneration() {
   if (!cmp.open) return;
   job++;
-  running?.cancel();
-  running = null;
+  for (const task of running) task.cancel();
+  running.clear();
   if (cmp.busy) {
     setCmp('busy', false);
     setProgress(`Stopped · ${cmp.cells.filter(c => c.status === 'ready').length} ready`);
@@ -384,15 +384,16 @@ export async function generate(override?: Partial<ComparisonConfig>) {
   );
   const started = performance.now(),
     baseline = cmp.baseline;
-  for (let i = 0; i < specs.length; i++) {
-    if (thisJob !== job) return { status: 'cancelled' };
-    setProgress(`Computing ${i + 1} of ${specs.length} · ${specs[i].title}`);
+  const settled = () => cmp.cells.filter(c => c.status !== 'pending').length;
+  const compute = async (i: number) => {
+    if (thisJob !== job) return;
+    let task: RunningTask<CandidateResult> | undefined;
     try {
       const current = specs[i] === CURRENT,
         source = current
           ? fileMode() && currentSource()
           : candidateSource(baseline, specs[i], config);
-      running = source
+      task = source
         ? startEngineTask({ kind: 'source', source, spec: specs[i] }, { timeout: 30000 })
         : startEngineTask(
             {
@@ -404,8 +405,9 @@ export async function generate(override?: Partial<ComparisonConfig>) {
             },
             { timeout: 30000 },
           );
-      const result = await running.promise;
-      if (thisJob !== job) return { status: 'cancelled' };
+      running.add(task);
+      const result = await task.promise;
+      if (thisJob !== job) return;
       const scene = buildStaticScene(result.document, result.routing);
       setCmp('cells', i, {
         status: 'ready',
@@ -416,13 +418,21 @@ export async function generate(override?: Partial<ComparisonConfig>) {
       });
       if (cmp.presentation === 'grid') fitCell(i);
     } catch (error) {
-      if (error instanceof CancelledError || thisJob !== job) return { status: 'cancelled' };
+      if (error instanceof CancelledError || thisJob !== job) return;
       const message = error instanceof Error ? error.message : String(error);
       setCmp('cells', i, { status: 'error', error: message });
       console.warn('[compare] candidate failed', specs[i].key, message);
+    } finally {
+      if (task) running.delete(task);
     }
-  }
-  running = null;
+    if (thisJob === job) setProgress(`Computing · ${settled()} of ${specs.length} done`);
+  };
+  setProgress(`Computing · 0 of ${specs.length} done`);
+  // The current drawing comes first: every other card is read against it, and it sets the grid.
+  const first = specs[0] === CURRENT ? 1 : 0;
+  if (first) await compute(0);
+  await inPool(specs.length - first, n => compute(n + first));
+  if (thisJob !== job) return { status: 'cancelled' };
   const ready = cmp.cells.filter(c => c.status === 'ready').length;
   setCmp('busy', false);
   setProgress('');
