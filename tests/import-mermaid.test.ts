@@ -17,6 +17,26 @@ afterAll(() => {
 });
 
 describe('Mermaid flowchart import', () => {
+  it('maps circle, cross and two-ended links to native ends', async () => {
+    const parsed = await parse(`flowchart LR
+A --o B
+A --x C
+A <--> D
+A o--o E
+A x--x F`);
+    const imported = importMermaidFlow(parsed, makePlainLabel(dom.window.document));
+    expect(imported.status).not.toBe('failed');
+    const edges = imported.nativeSource!.split('\n').filter(l => l.startsWith('edge '));
+    expect(edges.map(l => l.split('"" ')[1])).toEqual([
+      'head=circle',
+      'head=cross',
+      'tail=arrow',
+      'head=circle tail=circle',
+      'head=cross tail=cross',
+    ]);
+    await compile(imported.nativeSource!);
+  });
+
   it('preserves groups, edge occurrences, labels and arrowless links in native source', async () => {
     const parsed = await parse(`flowchart LR
 subgraph system[System]

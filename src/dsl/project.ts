@@ -84,6 +84,8 @@ export function projectScene(scene: Scene, view: ViewState = {}): Diagram {
       label: e.label,
       ...(e.was !== undefined ? { was: e.was } : {}),
       directed: e.directed !== false,
+      ...(e.head ? { head: e.head } : {}),
+      ...(e.tail ? { tail: e.tail } : {}),
       emphasis: false,
       dashed: e.dashed,
       ...(e.status ? { status: e.status } : {}),

@@ -20,6 +20,7 @@ import {
   swatchFor,
   type Shade,
 } from '../model/appearance';
+import { headOf, MARKERS, tailOf } from '../model/markers';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
 import { setColor, setLayoutIntent, setShade } from '../state/actions';
@@ -261,6 +262,8 @@ const SIDE_OPTIONS = (['auto', 'left', 'right', 'top', 'bottom'] as PortSide[]).
   side => [side, capitalize(side)] as const,
 );
 
+const MARKER_OPTIONS = MARKERS.map(m => [m, capitalize(m.replace('-', ' '))] as const);
+
 function EdgeInspector(props: { id: string }) {
   const edge = () => findEdge(doc, props.id)!;
   const cfg = () => doc.layout.edges[props.id] || {};
@@ -275,7 +278,7 @@ function EdgeInspector(props: { id: string }) {
           onCommit={v => edit('Edit label', d => edits.setEdgeLabel(d, props.id, v))}
         />
         <Checkbox
-          label="Arrow"
+          label="Directed"
           checked={edge().directed}
           onChange={v => edit('Edit directed', d => edits.setEdge(d, props.id, { directed: v }))}
         />
@@ -289,6 +292,24 @@ function EdgeInspector(props: { id: string }) {
           checked={edge().emphasis}
           onChange={v => edit('Edit emphasis', d => edits.setEdge(d, props.id, { emphasis: v }))}
         />
+      </Section>
+      <Section title="Ends">
+        <div class="fields-2">
+          <SelectField
+            label="Tail"
+            value={tailOf(edge())}
+            options={MARKER_OPTIONS}
+            disabled={!edge().directed}
+            onChange={v => edit('Edit tail', d => edits.setEdge(d, props.id, { tail: v }))}
+          />
+          <SelectField
+            label="Head"
+            value={headOf(edge())}
+            options={MARKER_OPTIONS}
+            disabled={!edge().directed}
+            onChange={v => edit('Edit head', d => edits.setEdge(d, props.id, { head: v }))}
+          />
+        </div>
       </Section>
       <Section title="Ports">
         <div class="fields-2">

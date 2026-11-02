@@ -1,10 +1,27 @@
 import type { CompileResponse, Shape, Connection } from '@d2lang/d2';
+import type { EndMarker } from '../model/markers';
 
 /** Tested research companion for @d2lang/d2 0.1.34 / engine v0.9.0.
  * This produces graph facts, not native .draft text. It deliberately rejects
- * sequence, SQL/class compartments, multiple boards, and two-ended arrows.
+ * sequence, SQL/class compartments, and multiple boards.
  * The product's native emitter and import preview must consume the diagnostics.
  */
+/** D2's arrowheads that native ends cover. D2 reads a plain `diamond` as hollow. */
+const D2_MARKERS: Record<string, EndMarker> = {
+  none: 'none',
+  arrow: 'arrow',
+  triangle: 'triangle',
+  'unfilled-triangle': 'open-triangle',
+  diamond: 'open-diamond',
+  'filled-diamond': 'diamond',
+  'filled-circle': 'circle',
+  cross: 'cross',
+};
+
+/** A native end for a D2 arrowhead. D2's default `triangle` is its plain arrow, unless asked for. */
+const marker = (shape: string, set: unknown): EndMarker =>
+  shape === 'triangle' && !set ? 'arrow' : D2_MARKERS[shape];
+
 export interface D2Diagnostic {
   severity: 'error' | 'warning' | 'info';
   code: string;
@@ -28,6 +45,8 @@ export interface D2Link {
   to: string;
   label: string;
   directed: boolean;
+  head: EndMarker;
+  tail: EndMarker;
   dashed: boolean;
   emphasis: false;
 }
@@ -447,10 +466,7 @@ export function normalizeD2(result: CompileResponse): D2Facts {
       );
       continue;
     }
-    if (
-      !['none', 'arrow', 'triangle'].includes(e.srcArrow) ||
-      !['none', 'arrow', 'triangle'].includes(e.dstArrow)
-    ) {
+    if (!(e.srcArrow in D2_MARKERS) || !(e.dstArrow in D2_MARKERS)) {
       add(
         'error',
         'D2_ARROW_SEMANTICS_UNSUPPORTED',
@@ -477,25 +493,13 @@ export function normalizeD2(result: CompileResponse): D2Facts {
         'The connection markup label is retained as literal text.',
         e.id,
       );
-    // The operator flags preserve meaning even if an arrowhead is styled "none".
+    // The operator flags keep the relation even if an arrowhead is styled "none".
     const srcArrow = semanticEdge.src_arrow;
     const dstArrow = semanticEdge.dst_arrow;
-    if (srcArrow !== (e.srcArrow !== 'none') || dstArrow !== (e.dstArrow !== 'none'))
-      add(
-        'warning',
-        'D2_ARROW_APPEARANCE_CHANGED',
-        'Native arrowheads show the declared connection direction; foreign arrowhead suppression is not preserved.',
-        e.id,
-      );
-    if (srcArrow && dstArrow) {
-      add(
-        'error',
-        'D2_TWO_ENDED_ARROW_UNSUPPORTED',
-        'A two-ended relationship cannot become two native relationships without changing edge multiplicity.',
-        e.id,
-      );
-      continue;
-    }
+    // D2 writes `a <- b` with its arrow at the source; native edges keep it at the target.
+    const flip = srcArrow && !dstArrow,
+      src = marker(e.srcArrow, semanticEdge.srcArrowhead),
+      dst = marker(e.dstArrow, semanticEdge.dstArrowhead);
     if (e.srcLabel?.label || e.dstLabel?.label)
       add(
         'error',
@@ -527,10 +531,12 @@ export function normalizeD2(result: CompileResponse): D2Facts {
       );
     edges.push({
       sourceId: e.id,
-      from: srcArrow ? e.dst : e.src,
-      to: srcArrow ? e.src : e.dst,
+      from: flip ? e.dst : e.src,
+      to: flip ? e.src : e.dst,
       label: e.label,
       directed: srcArrow || dstArrow,
+      head: flip ? src : dst,
+      tail: flip ? dst : src,
       dashed: e.strokeDash > 0,
       emphasis: false,
     });

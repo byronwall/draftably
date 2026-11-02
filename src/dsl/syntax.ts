@@ -20,6 +20,7 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
+import { MARKERS, type EndMarker } from '../model/markers';
 import { EDITORS } from '../model/link';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
@@ -270,6 +271,10 @@ export interface ModelEdge {
   was?: string;
   /** `directed=false`: an undirected connection, drawn without an arrowhead. */
   directed?: false;
+  /** `head=`: the mark at the target end, when it isn't the plain arrow. */
+  head?: EndMarker;
+  /** `tail=`: the mark at the source end, when it has one. */
+  tail?: EndMarker;
   /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
   constraint?: false;
   line: number;
@@ -699,7 +704,7 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'constraint', 'directed']);
+        allow(['kind', 'from', 'to', 'was', 'constraint', 'directed', 'head', 'tail']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -707,6 +712,13 @@ export function parseModel(source: string | SourceDoc): Model {
         const eid = id(args[0]);
         assert(!edgeIds.has(eid), `Duplicate edge id ${eid}.`);
         edgeIds.add(eid);
+        const undirected = choice('directed', 'true', ['true', 'false']) === 'false',
+          head = choice('head', 'arrow', MARKERS),
+          tail = choice('tail', 'none', MARKERS);
+        assert(
+          !undirected || !(attrs.has('head') || attrs.has('tail')),
+          `Edge ${eid} has directed=false, so it has no ends to mark. Remove head= and tail=, or remove directed=false.`,
+        );
         m.edges.push({
           id: eid,
           source: id(args[1]),
@@ -715,9 +727,9 @@ export function parseModel(source: string | SourceDoc): Model {
           dashed: choice('kind', 'sync', ['sync', 'async']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
-          ...(choice('directed', 'true', ['true', 'false']) === 'false'
-            ? { directed: false as const }
-            : {}),
+          ...(undirected ? { directed: false as const } : {}),
+          ...(head !== 'arrow' ? { head } : {}),
+          ...(tail !== 'none' ? { tail } : {}),
           ...(choice('constraint', 'true', ['true', 'false']) === 'false'
             ? { constraint: false as const }
             : {}),

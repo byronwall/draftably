@@ -18,6 +18,15 @@ import { brokenRectPath } from '../model/geometry';
 import { ICONS } from '../model/icons';
 import { edgeLabelLines, edgeLabelType, groupTitleLines, nodeLabel } from '../model/labels';
 import { groupLinkMark, LINK_MARK_PATH, linkMark, linkTarget, type LinkMark } from '../model/link';
+import {
+  headOf,
+  markerBox,
+  markerFill,
+  MARKER_SHAPES,
+  MARKER_STROKE,
+  tailOf,
+  type EndMarker,
+} from '../model/markers';
 import { computeRoutes } from '../model/routes';
 import {
   drawnLegend,
@@ -131,7 +140,7 @@ function routesOf(doc: Diagram) {
 function sceneMarkup(
   doc: Diagram,
   look: ResolvedAppearance,
-  arrow: (ink: string) => string,
+  marker: MarkerRef,
   opts: SvgOptions,
   shared?: Route[],
 ) {
@@ -223,13 +232,15 @@ function sceneMarkup(
     const edge = doc.graph.edges.find(e => e.id === route.id)!,
       p = statusPaint(look, edge.status, edge.spot),
       ink = edgeInk(look, edge, diff),
-      dash = p.dash ?? (edge.dashed ? '5 5' : '');
+      dash = p.dash ?? (edge.dashed ? '5 5' : ''),
+      head = headOf(edge),
+      tail = tailOf(edge);
     out.push(
       `<g data-id="${esc(edge.id)}"${fade(p)}>`,
       route.halo
         ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
         : '',
-      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${edge.directed ? ` marker-end="url(#${arrow(ink)})"` : ''}/>`,
+      `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
     );
     const l = route.label,
       message = doc.layout.edges[route.id]?.row !== undefined,
@@ -320,38 +331,56 @@ function sceneMarkup(
 const PANEL_LABEL = 24,
   PANEL_GAP = 0;
 
-/** One arrowhead per line color: the theme's connection color, then each other color used. */
-function arrowsFor(look: ResolvedAppearance, docs: Diagram[]) {
+/** A `<marker>` id, for one end's kind on a line of one color. */
+type MarkerRef = (kind: EndMarker, ink: string, tail?: boolean) => string;
+
+/**
+ * One marker per kind and line color: an arrowhead for the theme's connection color and each other
+ * color used, and any other mark the edges ask for. A tail needs its own, turned to face out.
+ */
+function markersFor(look: ResolvedAppearance, docs: Diagram[]) {
   const inks = [
     ...new Set([
       look.connection,
       ...docs.flatMap(d => d.graph.edges.map(e => edgeInk(look, e, isDiff(d)))),
     ]),
   ];
-  return {
-    inks,
-    arrow: (ink: string) => (inks.indexOf(ink) ? `arrow-${inks.indexOf(ink)}` : 'arrow'),
+  const marker: MarkerRef = (kind, ink, tail = false) => {
+    const i = inks.indexOf(ink);
+    return `${kind}${i ? `-${i}` : ''}${tail ? '-tail' : ''}`;
   };
+  const defs = new Map<string, string>();
+  const add = (kind: EndMarker, ink: string, tail = false) => {
+    if (kind === 'none') return;
+    const box = markerBox(kind, tail),
+      id = marker(kind, ink, tail);
+    defs.set(
+      id,
+      `<marker id="${id}" markerWidth="${box.markerWidth}" markerHeight="${box.markerHeight}" refX="${box.refX}" refY="${box.refY}" orient="${box.orient}" markerUnits="userSpaceOnUse"><path d="${MARKER_SHAPES[kind].d}" fill="${markerFill(kind, ink, look.canvas)}" stroke="${ink}" stroke-width="${MARKER_STROKE}" stroke-linecap="round" stroke-linejoin="round"/></marker>`,
+    );
+  };
+  for (const ink of inks) add('arrow', ink);
+  for (const d of docs)
+    for (const e of d.graph.edges) {
+      const ink = edgeInk(look, e, isDiff(d));
+      add(headOf(e), ink);
+      add(tailOf(e), ink, true);
+    }
+  return { defs: [...defs.values()].join(''), marker };
 }
 
-/** The file's opening: the canvas, fonts, link hover, arrowheads, and the title above it all. */
+/** The file's opening: the canvas, fonts, link hover, markers, and the title above it all. */
 function openSvg(
   doc: Diagram,
   look: ResolvedAppearance,
-  inks: string[],
-  arrow: (ink: string) => string,
+  markers: string,
   { x, y, w, h, heading }: DiagramFrame,
 ) {
   return [
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x} ${y} ${w} ${h}" width="${w}" height="${h}" data-theme="${look.theme}">`,
     `<title>${esc(doc.title)}</title>`,
     `<defs><style>${fontFaceCss(look)}${doc.graph.nodes.some(n => n.href) || doc.graph.groups.some(g => g.href) ? LINK_CSS : ''}</style>` +
-      inks
-        .map(
-          ink =>
-            `<marker id="${arrow(ink)}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="userSpaceOnUse"><path d="M1 1L7 4L1 7" fill="none" stroke="${ink}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>`,
-        )
-        .join('') +
+      markers +
       '</defs>',
     `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
     // The title and subtitle sit above the drawing, left-aligned with the legend under it.
@@ -367,9 +396,9 @@ function openSvg(
 function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): string {
   const states = doc.appearance.states ?? [],
     docs = states.map(s => withState(doc, s.id)),
-    { inks, arrow } = arrowsFor(look, docs),
+    { defs, marker } = markersFor(look, docs),
     shared = routesOf(doc),
-    scenes = docs.map(d => sceneMarkup(d, look, arrow, opts, shared));
+    scenes = docs.map(d => sceneMarkup(d, look, marker, opts, shared));
   const b = scenes.map(s => s.bounds).reduce(union),
     x0 = Math.floor(b.x),
     y0 = Math.floor(b.y),
@@ -397,7 +426,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
       .reduce((a, c) =>
         Math.abs(Math.log(c.w / c.h / target)) < Math.abs(Math.log(a.w / a.h / target)) ? c : a,
       ),
-    out = openSvg(doc, look, inks, arrow, frame);
+    out = openSvg(doc, look, defs, frame);
   scenes.forEach((scene, i) => {
     const col = i % cols,
       row = Math.floor(i / cols),
@@ -462,12 +491,12 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   const look = resolveAppearance(doc.appearance),
     compare = doc.appearance.compare;
   if (opts.states) return statesSvg(doc, look, opts);
-  const { inks, arrow } = arrowsFor(look, [doc]);
+  const { defs, marker } = markersFor(look, [doc]);
   // With `compare`, each version is its own panel drawn from the merged positions, so the panels
   // share one box and every unchanged object lines up across them.
   const shared = compare ? routesOf(doc) : undefined,
     scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map(d =>
-      sceneMarkup(d, look, arrow, opts, shared),
+      sceneMarkup(d, look, marker, opts, shared),
     );
   const b = scenes.map(s => s.bounds).reduce(union),
     x0 = Math.floor(b.x),
@@ -514,7 +543,7 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
       ? [arrange(compare.direction === 'down')]
       : [arrange(true), arrange(false)],
     { stacked, spans, starts, areaH, frame } = options.reduce((a, b) => (fit(b) < fit(a) ? b : a));
-  const out = openSvg(doc, look, inks, arrow, frame);
+  const out = openSvg(doc, look, defs, frame);
   scenes.forEach((scene, i) => {
     // Panel i's corner, and the shift that brings its own span to that corner.
     const px = stacked ? x0 : x0 + starts[i],

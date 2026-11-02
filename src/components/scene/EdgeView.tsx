@@ -3,6 +3,15 @@ import { findEdge, findObject } from '../../model/graph';
 import type { DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
 import { edgeLabelLines, edgeLabelType } from '../../model/labels';
+import {
+  headOf,
+  markerBox,
+  markerFill,
+  MARKER_SHAPES,
+  MARKER_STROKE,
+  tailOf,
+  type EndMarker,
+} from '../../model/markers';
 import { edgeInk, isDiff, statusPaint } from '../../model/status';
 import type { Diagram } from '../../model/types';
 
@@ -20,6 +29,43 @@ export interface EdgeViewProps {
   idPrefix?: string;
 }
 
+/** One end's mark, from the definitions the CLI draws too. */
+function EndMarkerDef(props: {
+  id: string;
+  kind: EndMarker;
+  tail?: boolean;
+  ink: string;
+  surface: string;
+}) {
+  return (
+    <Show when={props.kind !== 'none' && (props.kind as Exclude<EndMarker, 'none'>)} keyed>
+      {kind => {
+        const box = markerBox(kind, !!props.tail);
+        return (
+          <marker
+            id={props.id}
+            markerWidth={box.markerWidth}
+            markerHeight={box.markerHeight}
+            refX={box.refX}
+            refY={box.refY}
+            orient={box.orient}
+            markerUnits="userSpaceOnUse"
+          >
+            <path
+              d={MARKER_SHAPES[kind].d}
+              fill={markerFill(kind, props.ink, props.surface)}
+              stroke={props.ink}
+              stroke-width={MARKER_STROKE}
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </marker>
+        );
+      }}
+    </Show>
+  );
+}
+
 export function EdgeView(props: EdgeViewProps) {
   const edge = () => findEdge(props.doc, props.route.id)!;
   const look = () => resolveAppearance(props.doc.appearance);
@@ -35,6 +81,8 @@ export function EdgeView(props: EdgeViewProps) {
   const labelType = () => edgeLabelType(look(), message());
   const labelLines = () => edgeLabelLines(edge().label, look(), message());
   const markerId = () => `${props.idPrefix ?? ''}arrow-${props.route.id}`;
+  const tailId = () => `${props.idPrefix ?? ''}tail-${props.route.id}`;
+  const markerInk = () => (props.selected ? 'var(--accent)' : stroke());
   const waypoints = () =>
     props.interactive && props.selected
       ? (props.doc.layout.edges[props.route.id]?.waypoints ?? [])
@@ -60,24 +108,19 @@ export function EdgeView(props: EdgeViewProps) {
           (props.route.blocked ? ' — route obstructed; move overlapping nodes or reset bends' : '')}
       </title>
       <defs>
-        <marker
+        <EndMarkerDef
           id={markerId()}
-          markerWidth="8"
-          markerHeight="8"
-          refX="7"
-          refY="4"
-          orient="auto"
-          markerUnits="userSpaceOnUse"
-        >
-          <path
-            d="M1 1L7 4L1 7"
-            fill="none"
-            stroke={props.selected ? 'var(--accent)' : stroke()}
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </marker>
+          kind={headOf(edge())}
+          ink={markerInk()}
+          surface={look().canvas}
+        />
+        <EndMarkerDef
+          id={tailId()}
+          kind={tailOf(edge())}
+          tail
+          ink={markerInk()}
+          surface={look().canvas}
+        />
       </defs>
       <Show when={props.interactive}>
         <path class="edge-hit" d={props.route.path} />
@@ -102,7 +145,8 @@ export function EdgeView(props: EdgeViewProps) {
         stroke-dasharray={
           paint().dash ?? (edge().dashed || props.route.blocked ? '5 5' : undefined)
         }
-        marker-end={edge().directed ? `url(#${markerId()})` : undefined}
+        marker-end={headOf(edge()) === 'none' ? undefined : `url(#${markerId()})`}
+        marker-start={tailOf(edge()) === 'none' ? undefined : `url(#${tailId()})`}
       />
       <Show when={props.route.label}>
         {label => (

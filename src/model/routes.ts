@@ -8,7 +8,9 @@ import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
 import { edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
+import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import {
+  findEdge,
   findNode,
   isCell,
   isCollapsed,
@@ -661,6 +663,11 @@ export function drawRoutes(
       }),
     ],
   };
+  // A label keeps off a marker as it keeps off a shape. A plain arrow never claims this room.
+  for (const route of result.routes) {
+    const edge = findEdge(doc, route.id);
+    if (edge && hasMarkers(edge)) obstacles.push(...markerRects(route.points, edge));
+  }
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
   const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
   const labelled = result.routes.filter(route => byEdge.get(route.id)!.label && !message(route)),
@@ -702,11 +709,12 @@ export function drawRoutes(
     g.frame || isCollapsed(doc, g.id) ? [] : [rects.get(g.id)!],
   );
   return result.routes.map(route => {
-    const c = crosses.get(route.id);
+    const c = crosses.get(route.id),
+      edge = findEdge(doc, route.id);
     return {
       ...route,
       label: labels.get(route) ?? null,
-      path: roundedPath(route.points, radius),
+      path: roundedPath(edge ? stoppedPoints(route.points, edge) : route.points, radius),
       halo: haloPath(
         route.points,
         result.routes.filter(r => r !== route).map(r => r.points),

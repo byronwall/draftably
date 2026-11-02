@@ -1,4 +1,6 @@
 /** Build native source from the facts retained by an importer. */
+import type { EndMarker } from '../model/markers';
+
 export type Format = 'dot' | 'mermaid' | 'd2';
 export type Impact = 'syntax' | 'semantics' | 'appearance' | 'layout' | 'security' | 'limit';
 export interface Diagnostic {
@@ -25,6 +27,8 @@ export interface NativeEdge {
   to: string;
   label: string;
   directed: boolean;
+  head?: EndMarker;
+  tail?: EndMarker;
   dashed?: boolean;
   constraint?: false;
   fromSide?: 'left' | 'right' | 'top' | 'bottom';
@@ -207,6 +211,8 @@ export function finish(
   for (const e of plan.edges) {
     let s = 'edge ' + e.id + ' ' + e.from + ' -> ' + e.to + ' ' + quote(e.label);
     if (!e.directed) s += ' directed=false';
+    if (e.head && e.head !== 'arrow') s += ' head=' + e.head;
+    if (e.tail && e.tail !== 'none') s += ' tail=' + e.tail;
     if (e.dashed) s += ' kind=async';
     if (e.constraint === false) s += ' constraint=false';
     if (e.fromSide) s += ' from=' + e.fromSide;
