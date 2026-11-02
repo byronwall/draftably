@@ -20,8 +20,11 @@ import {
   labScope,
   layoutCheckpoint,
   layoutPreview,
+  movesBlocked,
   previewSettings,
   previewShape,
+  rebuildBlocked,
+  routesBlocked,
   setLabEngine,
   setLabScope,
   updateLayoutSettings,
@@ -114,15 +117,6 @@ const ASPECTS: Partial<Record<Fit, AspectSetting>> = {
 
 type Direction = LayoutShape['direction'];
 
-/** Sequence and cell drawings take their shape from their content. */
-const SHAPED_BY_CONTENT: Record<string, string> = {
-  sequence: 'Sequence diagrams follow message order.',
-  cells: 'Cells follow their columns and spans.',
-};
-
-/** Recipes with a structure of their own, which an engine would replace and lose. */
-const STRUCTURED = ['lanes', 'sequence', 'cells'];
-
 /** How the diagram is arranged: direction, format and connections, with the exact values below. */
 export function ArrangePanel() {
   const scope = () => (fileMode() ? arrangeScope() : 'root');
@@ -152,24 +146,20 @@ export function ArrangePanel() {
   };
 
   const canReshape = () => !!scope() && !loose();
-  const contentRule = () => SHAPED_BY_CONTENT[shape()?.recipe ?? ''];
   const axisOnly = () => ['row', 'column'].includes(shape()?.recipe ?? '');
-  const structured = () => STRUCTURED.includes(shape()?.recipe ?? '');
-  const hasFormat = () => (!fileMode() || scope() === 'root') && !structured();
-  // A sequence draws its messages straight across, so there is no routing to choose.
-  const routed = () => shape()?.recipe !== 'sequence';
+  const hasFormat = () => (!fileMode() || scope() === 'root') && !rebuildBlocked();
 
   return (
     <div class="panel-scroll arrange">
       <Subject line={fileMode() ? recipeLine(scope(), shape()) : null} />
 
-      <Show
-        when={canReshape()}
-        fallback={
-          <p class="hint">Direction and format apply to the whole diagram or to one group.</p>
-        }
-      >
-        <Show when={!contentRule()} fallback={<p class="hint">{contentRule()}</p>}>
+      <Show when={!movesBlocked()} fallback={<p class="hint">{movesBlocked()}</p>}>
+        <Show
+          when={canReshape()}
+          fallback={
+            <p class="hint">Direction and format apply to the whole diagram or to one group.</p>
+          }
+        >
           <section class="arrange-field">
             <h3>Direction</h3>
             <Choices<Direction>
@@ -192,30 +182,34 @@ export function ArrangePanel() {
               </Show>
             </section>
           </Show>
-        </Show>
-        <Show when={!structured()}>
-          <ActionButton command="compare-layouts" label="Compare alternatives" />
+          <Show when={!rebuildBlocked()}>
+            <ActionButton command="compare-layouts" label="Compare alternatives" />
+          </Show>
         </Show>
       </Show>
 
-      <Show when={routed()}>
+      <Show when={!routesBlocked()}>
         <Connections />
       </Show>
 
-      <details class="arrange-more">
-        <summary>Exact layout</summary>
-        <ExactLayout structured={structured()} />
-      </details>
-      <Show when={routed()}>
+      <Show when={!movesBlocked()}>
+        <details class="arrange-more">
+          <summary>Exact layout</summary>
+          <ExactLayout />
+        </details>
+      </Show>
+      <Show when={!routesBlocked()}>
         <details class="arrange-more">
           <summary>Exact routing</summary>
           <ExactRouting />
         </details>
       </Show>
-      <details class="arrange-more">
-        <summary>Local tools</summary>
-        <LocalTools />
-      </details>
+      <Show when={!movesBlocked()}>
+        <details class="arrange-more">
+          <summary>Local tools</summary>
+          <LocalTools />
+        </details>
+      </Show>
     </div>
   );
 }
@@ -345,14 +339,14 @@ function Connections() {
 }
 
 /** Every setting by what it changes: the rebuild, then the small moves of Improve. */
-function ExactLayout(props: { structured: boolean }) {
+function ExactLayout() {
   const rebuildEngine = () =>
     fileMode() ? (labEngine() ?? (engineOf() as LayoutAlgorithmId | null)) : doc.settings.algorithm;
   const engineOf = () => {
     const id = arrangeScope();
     if (!id) return null;
     fileScene();
-    const shape = layoutShape(currentSource(), id);
+    const shape = layoutShape(layoutPreview()?.file?.source ?? currentSource(), id);
     return shape.engine ? shape.recipe : null;
   };
   const algorithm = () => Engine.algorithms.find(a => a.id === rebuildEngine());
@@ -367,19 +361,22 @@ function ExactLayout(props: { structured: boolean }) {
   const improver = () => Engine.algorithms.find(a => a.id === doc.settings.algorithm)!;
   return (
     <div class="stack">
-      <Show when={!props.structured}>
+      <Show when={!rebuildBlocked()}>
         <section class="arrange-field">
           <h3>Rebuild</h3>
           <SelectField<string>
             label="Method"
             value={rebuildEngine() ?? ''}
             options={[
-              ...(fileMode() && !engineOf() ? [['', 'The file’s recipe'] as const] : []),
+              ...(fileMode() ? [['', 'Built-in recipe'] as const] : []),
               ...(engines() as Array<[string, string]>),
             ]}
             onChange={value => {
-              if (fileMode()) setLabEngine((value || null) as LayoutAlgorithmId | null);
-              else updateLayoutSettings({ algorithm: value as LayoutAlgorithmId });
+              if (!fileMode())
+                return updateLayoutSettings({ algorithm: value as LayoutAlgorithmId });
+              const leavesEngine = !value && engineOf();
+              setLabEngine((value || null) as LayoutAlgorithmId | null);
+              if (leavesEngine) void previewShape({ builtin: true });
             }}
           />
           <Show when={algorithm()}>
@@ -461,7 +458,7 @@ function RecipeControls() {
     return id ? layoutShape(layoutPreview()?.file?.source ?? currentSource(), id) : null;
   };
   return (
-    <Show when={shape() && !STRUCTURED.includes(shape()!.recipe) && shape()}>
+    <Show when={!rebuildBlocked() && shape()}>
       {s => (
         <>
           <RangeField
