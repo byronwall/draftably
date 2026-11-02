@@ -158,9 +158,18 @@ export const edgeLabelType = (r: ResolvedAppearance, message = false): TypeProfi
     ? { ...r.annotation, size: r.annotation.size + 1.5, lineHeight: r.annotation.lineHeight + 2 }
     : r.annotation;
 
-/** A connection label's lines: one, or a sequence message's wrapped to `MESSAGE_WRAP`. */
+/**
+ * Text width a flow line's label wraps to: about 24 characters of the annotation type, so a short
+ * phrase stays on one line and a sentence stacks instead of widening its gap.
+ */
+export const LABEL_WRAP = 140;
+
+/**
+ * A connection label's lines: split at each `\n` and wrapped to `LABEL_WRAP`, or a sequence
+ * message's to `MESSAGE_WRAP`.
+ */
 export const edgeLabelLines = (label: string, r: ResolvedAppearance, message = false) =>
-  message ? wrapLines(label, MESSAGE_WRAP, edgeLabelType(r, true)) : [label];
+  wrapLines(label, message ? MESSAGE_WRAP : LABEL_WRAP, edgeLabelType(r, message));
 
 /**
  * A self-message's loop: its run out to the right of the lifeline and its drop. Its label sits
