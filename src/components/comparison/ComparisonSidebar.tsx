@@ -6,6 +6,7 @@ import {
 } from '../../engines/explorer-engine.js';
 import { LayoutLab } from '../../engines/layout-engine.js';
 import type { LayoutScope } from '../../engines/layout-engine.js';
+import { ENGINE_PARAMS, paramAttr } from '../../dsl/syntax';
 import { INTENT_LABELS, intentPlacements } from '../../model/edits';
 import type { IntentRole, LayoutAlgorithmId } from '../../model/types';
 import {
@@ -28,7 +29,21 @@ import {
   type CameraMode,
 } from '../../state/comparison';
 import { exportComparisonSvg, exportExperiment } from '../../state/comparison-export';
+import { fileMode } from '../../state/file-session';
 import { Checkbox, Field, IconButton, Select, SelectField, tip } from '../controls';
+
+/** Rebuild candidates in a file are source variants: they read only what a `layout` line says. */
+const sourceRun = () => fileMode() && comparison.config!.run === 'rebuild';
+
+/** The parameters a comparison can vary: in a source run, those a `layout` line can store. */
+function savedAxes<T>(params: Record<string, T>) {
+  if (!sourceRun()) return params;
+  return Object.fromEntries(
+    Object.entries(params).filter(
+      ([key]) => key === 'direction' || (key !== 'ordering' && paramAttr(ENGINE_PARAMS, key)),
+    ),
+  );
+}
 
 export function ComparisonSidebar() {
   const config = () => comparison.config!;
@@ -56,7 +71,8 @@ export function ComparisonSidebar() {
           <LayerControls />
         </Show>
         <Settings />
-        <Show when={!routing()}>
+        {/* A file's rebuild candidates compile the source, which has no drawing intent to read. */}
+        <Show when={!routing() && !sourceRun()}>
           <IntentControls />
         </Show>
         <section class="sidebar-section">
@@ -111,7 +127,7 @@ function Settings() {
   const params = () =>
     routing()
       ? ExplorerLab.routeParams
-      : ExplorerLab.effectiveParams(config().algorithm, config().run);
+      : savedAxes(ExplorerLab.effectiveParams(config().algorithm, config().run));
   const axisOptions = (none: boolean) => [
     ...(none ? [['', 'No second parameter'] as const] : []),
     ...Object.entries(params()).map(([key, p]) => [key, p.name] as const),
@@ -149,11 +165,13 @@ function Settings() {
               <strong>Same nodes, different paths.</strong> Zoom in or switch to Overlay to compare
               individual connections.
             </p>
-            <Checkbox
-              label="Release fixed port sides"
-              checked={config().autoPorts}
-              onChange={autoPorts => updateConfig({ autoPorts })}
-            />
+            <Show when={!fileMode()}>
+              <Checkbox
+                label="Release fixed port sides"
+                checked={config().autoPorts}
+                onChange={autoPorts => updateConfig({ autoPorts })}
+              />
+            </Show>
           </>
         }
       >
@@ -251,12 +269,12 @@ function Settings() {
             value={config().scope}
             options={[
               ['all', 'Whole diagram'],
-              ['selection', 'Selected siblings'],
+              ...(sourceRun() ? [] : [['selection', 'Selected siblings'] as const]),
               ['container', 'Selected container'],
             ]}
             onChange={scope => updateConfig({ scope })}
           />
-          <Show when={config().run !== 'pass'}>
+          <Show when={config().run !== 'pass' && !sourceRun()}>
             <SelectField
               label="Maximum solver effort"
               value={config().maxIterations}

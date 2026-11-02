@@ -94,9 +94,23 @@ function inside(scene: Scene, scope: string) {
   );
 }
 
+/** Remove soft position refinements in a scope, so its arrangement shows. Returns how many. */
+function removeRefinements(source: SourceDoc, scene: Scene, scope: string) {
+  const ids = scope === 'root' ? new Set(scene.objects.map(o => o.id)) : inside(scene, scope);
+  const before = source.lines.length;
+  removeWhere(source, s => {
+    if (['near', 'nudge', 'stay'].includes(s.command)) return ids.has(s.args[0]?.value);
+    if (s.command === 'align')
+      return getAttr(s, 'strength')?.value !== 'required' && ids.has(s.args[1]?.value);
+    return false;
+  });
+  return before - source.lines.length;
+}
+
 /**
- * Arrange `scope` with the engine in `settings`. Its `layout` line is replaced (keeping
- * `min-width`/`min-height`), and soft position refinements inside it are removed so the engine's
+ * Arrange `scope` with the engine in `settings`. Its `layout` line is replaced, keeping what the
+ * author said about the result: `fit`, `min-width`, `min-height` and `direction`, unless
+ * `direction` asks for another. Soft position refinements inside it are removed so the engine's
  * arrangement shows. Pins, sizes and nested `layout` lines stay. Returns the number of
  * refinements removed.
  */
@@ -105,10 +119,13 @@ export function setLayoutRecipe(
   scene: Scene,
   scope: string,
   settings: LayoutSettings,
+  direction?: 'right' | 'down',
 ): number {
-  const attrs = engineAttrs(settings);
   const existing = layoutStatement(source, scope);
-  for (const key of ['min-width', 'min-height']) {
+  const reads = direction ?? (existing && getAttr(existing, 'direction'));
+  const attrs = engineAttrs(settings).filter(([key]) => !reads || key !== 'direction');
+  if (reads) attrs.splice(1, 0, ['direction', typeof reads === 'string' ? bare(reads) : reads]);
+  for (const key of ['fit', 'min-width', 'min-height']) {
     const kept = existing && getAttr(existing, key);
     if (kept) attrs.push([key, kept]);
   }
@@ -119,16 +136,7 @@ export function setLayoutRecipe(
   } else if (statements(source).some(s => s.command === 'layout'))
     insertAfter(source, next, s => s.command === 'layout');
   else insertAfter(source, next, s => s.command === 'edge' || s.command === 'node');
-
-  const ids = scope === 'root' ? new Set(scene.objects.map(o => o.id)) : inside(scene, scope);
-  const before = source.lines.length;
-  removeWhere(source, s => {
-    if (['near', 'nudge', 'stay'].includes(s.command)) return ids.has(s.args[0]?.value);
-    if (s.command === 'align')
-      return getAttr(s, 'strength')?.value !== 'required' && ids.has(s.args[1]?.value);
-    return false;
-  });
-  return before - source.lines.length;
+  return removeRefinements(source, scene, scope);
 }
 
 /** The `routing` statement for router settings, or null when they are all defaults. */

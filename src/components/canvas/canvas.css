@@ -635,6 +635,11 @@
   font-size: var(--text-xs);
 }
 
+.layout-preview-text code {
+  color: var(--text);
+  font-family: var(--mono);
+}
+
 /* Timeline deck */
 
 .timeline-deck {
