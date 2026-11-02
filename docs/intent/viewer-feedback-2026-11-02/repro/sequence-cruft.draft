@@ -1,0 +1,18 @@
+diagram "User edit to synced row: the write path" version=1
+subtitle "An edit is optimistic until the sync batch confirms it"
+
+group client "Browser" color=sky
+node view "Record view" in=client
+node rec "Record" in=client
+node store "Row store" in=client
+group server "Server" color=violet
+node api "Document server" in=server
+
+edge m1 view -> rec "edit(name)"
+edge m2 rec -> store "override row"
+edge m3 rec -> api "call RenameRecord"
+edge m4 api -> store "sync batch: row has the new name" kind=async
+edge m5 api -> rec "reply; settle()" kind=async
+edge m6 rec -> store "clear override"
+
+layout root sequence

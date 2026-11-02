@@ -1,5 +1,6 @@
-import { createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
+import { createMemo, createSignal, For, Index, onCleanup, onMount, Show } from 'solid-js';
 import { describeMeasure, readDifference } from '../../model/candidates';
+import { labelHits } from '../../model/label-hits';
 import { currentSource, fileMode, sourceScope } from '../../state/file-session';
 import {
   candidateChange,
@@ -255,7 +256,9 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
     if (!r) return props.cell.subtitle;
     return r.costs.join(' · ') || (r.gains.length ? '' : 'Same counts as the current drawing');
   };
+  const hits = createMemo(() => (props.cell.scene ? labelHits(props.cell.scene) : []));
   const warnings = () => [
+    ...hits().map(h => h.note),
     ...(props.cell.result?.report?.warnings ?? []),
     ...(routing()?.lanePairs
       ? [
@@ -326,6 +329,18 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
                   focusId={comparison.cameraMode === 'focus' ? comparison.focusId : undefined}
                   focusable
                 />
+                <For each={hits()}>
+                  {h => (
+                    <rect
+                      class="label-hit"
+                      x={h.box.x - 3}
+                      y={h.box.y - 3}
+                      width={h.box.w + 6}
+                      height={h.box.h + 6}
+                      rx="4"
+                    />
+                  )}
+                </For>
               </ViewportCanvas>
               <span class="scale-badge">{Math.round(effectiveCamera(props.index).k * 100)}%</span>
             </>

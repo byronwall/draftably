@@ -1509,6 +1509,12 @@ button.folder-heading:hover {
   color: var(--danger);
 }
 
+.statusbar .status-version {
+  padding-right: 8px;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
 .toast {
   position: fixed;
   right: var(--space-4);

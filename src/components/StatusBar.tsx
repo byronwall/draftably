@@ -20,6 +20,9 @@ const HINTS: Record<Tool, string> = {
   text: 'Click to add text',
 };
 
+const BUILD = __DRAFTABLY_BUILD__;
+const version = `v${BUILD.version}${BUILD.commit ? ` · ${BUILD.commit.slice(0, 7)}` : ''}`;
+
 const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`;
 
 export function StatusBar() {
@@ -64,6 +67,9 @@ export function StatusBar() {
       >
         <FileNotes />
       </Show>
+      <span class="status-version" title={BUILD.commit ? `Commit ${BUILD.commit}` : undefined}>
+        {version}
+      </span>
     </footer>
   );
 }

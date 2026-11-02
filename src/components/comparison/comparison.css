@@ -263,6 +263,14 @@ details.sidebar-section[open] > summary,
   font-size: var(--text-xs);
 }
 
+.label-hit {
+  fill: none;
+  stroke: var(--warning);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+
 .candidate-warnings summary {
   font-size: var(--text-xs);
 }
