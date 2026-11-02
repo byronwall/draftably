@@ -8,9 +8,10 @@
  * `hintMoves` compares the drawing with the same file compiled without refinements, so `check
  * --hints` can say how far each refinement moved its target.
  */
-import { measureText } from '../model/fonts';
 import { placeNotes } from '../model/note';
-import { groupHeaderFor, groupTitleLines } from '../model/labels';
+import { covers, segments, segmentInside, shrink } from '../model/geometry';
+import { groupHeaderFor } from '../model/labels';
+import { groupTitleInk, labelBoxes } from '../model/label-hits';
 import { computeRoutes, type DrawnRoute } from '../model/routes';
 import type { Diagram, Point, Rect } from '../model/types';
 import { compile, type Diagnostic, type Scene } from './compile';
@@ -21,40 +22,6 @@ import type { Hint } from './syntax';
 const CLEAR = 16;
 
 type Move = { dx: number; dy: number };
-type Segment = [Point, Point];
-
-const segments = (points: Point[]): Segment[] => points.slice(1).map((p, i) => [points[i], p]);
-const shrink = (r: Rect, d: number): Rect => ({
-  x: r.x + d,
-  y: r.y + d,
-  w: r.w - 2 * d,
-  h: r.h - 2 * d,
-});
-/** Overlap of two rectangles larger than half a pixel on both axes. */
-const covers = (a: Rect, b: Rect) =>
-  Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x) > 0.5 &&
-  Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > 0.5;
-
-/** Length of a segment inside a rectangle (Liang–Barsky clipping). */
-function inside([a, b]: Segment, r: Rect) {
-  const dx = b.x - a.x,
-    dy = b.y - a.y;
-  let t0 = 0,
-    t1 = 1;
-  for (const [p, q] of [
-    [-dx, a.x - r.x],
-    [dx, r.x + r.w - a.x],
-    [-dy, a.y - r.y],
-    [dy, r.y + r.h - a.y],
-  ]) {
-    if (p === 0) {
-      if (q <= 0) return 0;
-    } else if (p < 0) t0 = Math.max(t0, q / p);
-    else t1 = Math.min(t1, q / p);
-  }
-  return t1 > t0 ? (t1 - t0) * Math.hypot(dx, dy) : 0;
-}
-
 /** The smallest move of `box` that clears `other` by `CLEAR`. */
 function clearOf(box: Rect, other: Rect): Move {
   const options: Move[] = [
@@ -201,7 +168,7 @@ export function findConflicts(
     for (const { id, r } of leaves) {
       if (ends.includes(id)) continue;
       const body = shrink(r, 2),
-        hit = segs.find(s => inside(s, body) > 1);
+        hit = segs.find(s => segmentInside(s, body) > 1);
       if (!hit) continue;
       const upright = Math.abs(hit[0].x - hit[1].x) < 0.5;
       const clear = (): Move => {
@@ -225,16 +192,8 @@ export function findConflicts(
     for (const g of doc.graph.groups) {
       const r = rects.get(g.id);
       if (!r || tinted.has(g.id)) continue;
-      const lines = groupTitleLines(g.title, r.w, look, g.titleLines),
-        mid = r.y + look.groupHeader / 2 - 7,
-        half = look.groupTitle.size / 2 + 1;
-      const ink = {
-        x: r.x + 12,
-        y: mid - half,
-        w: 21 + Math.max(...lines.map(l => measureText(l, look.groupTitle))),
-        h: 2 * half + (lines.length - 1) * look.groupTitle.lineHeight,
-      };
-      if (!segs.some(s => inside(s, ink) > 1)) continue;
+      const ink = groupTitleInk(g, r, look);
+      if (!segs.some(s => segmentInside(s, ink) > 1)) continue;
       warn(
         'edge-through-title',
         [route.id, g.id],
@@ -245,21 +204,7 @@ export function findConflicts(
   }
 
   // Labels on a box or on each other. Labels are centred on their spot.
-  const labels = routes.flatMap(r =>
-    r.label
-      ? [
-          {
-            route: r,
-            box: {
-              x: r.label.x - r.label.w / 2,
-              y: r.label.y - r.label.h / 2,
-              w: r.label.w,
-              h: r.label.h,
-            },
-          },
-        ]
-      : [],
-  );
+  const labels = labelBoxes(routes);
   for (const [i, l] of labels.entries()) {
     const text = edges.get(l.route.id)?.label ?? '';
     for (const { id, r } of leaves) {
