@@ -273,6 +273,38 @@ layout root flow gap=48
     expect(scene.sequence!.before!.rows.m3).toBe(scene.edges.find(e => e.id === 'm3')!.row);
   });
 
+  it('holds room for an old flow label bigger than its new one, and draws it in Before', () => {
+    const old = 'Validate the password, the device and the session token against the old store',
+      file = (extra: string, label: string) => `diagram "Flow change" version=1
+${extra}
+node a "Api"
+node b "Orders"
+node c "Billing"
+~edge e1 a -> b${label} was="${old}"
+edge e2 b -> c "bills"
+layout root flow direction=right
+`;
+    const gap = (d: ReturnType<typeof projectScene>) =>
+        d.layout.nodes.b.x - d.layout.nodes.a.x - d.layout.nodes.a.w,
+      // Each panel's line and label box for e1: Before first.
+      marks = (svg: string) =>
+        [...svg.matchAll(/data-id="e1">([\s\S]*?)<\/g>/g)].map(([, g]) => {
+          const [, from, to] = /d="M([\d.]+),[\d.]+L([\d.]+)/.exec(g)!,
+            [, x, w] = /<rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)"/.exec(g) ?? [],
+            text = />([^<]+)<\/text>/.exec(g)?.[1];
+          return { from: +from, to: +to, x: +x, w: +w, text };
+        });
+    for (const label of [' "new"', '']) {
+      const doc = projectScene(checkSource(file('compare', label)));
+      expect(gap(doc)).toBeGreaterThan(gap(projectScene(checkSource(file('', label)))));
+      const [before, after] = marks(renderSvg(doc));
+      expect(before.text).toBe(old);
+      expect(before.x).toBeGreaterThanOrEqual(before.from);
+      expect(before.x + before.w).toBeLessThanOrEqual(before.to);
+      expect(after?.text).toBe(label ? 'new' : undefined);
+    }
+  });
+
   it('moves only the lines that end on a changed shape', () => {
     const paths = (d: string) => [...d.matchAll(/<g data-id="(e\d)"[^]*?<path d="([^"]+)"/g)];
     const svg = renderSvg(

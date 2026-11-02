@@ -157,10 +157,38 @@ export async function compile(source: string): Promise<Scene> {
 }
 
 function compileModel(m: Model) {
-  const flat = dissolved(m);
-  return engineArrangement(flat).then(arranged =>
-    withOldOrder(sequenced(withSoftGroups(layoutModel(flat, arranged), m))),
+  const flat = dissolved(m),
+    room = widestLabels(flat);
+  return engineArrangement(room).then(arranged =>
+    withOldOrder(sequenced(withSoftGroups(ownLabels(layoutModel(room, arranged), flat), m))),
   );
+}
+
+/**
+ * In a comparison, each line's label as the wider of its new and old text. Before draws the old
+ * one at the same positions, so the layout holds room for both.
+ */
+function widestLabels(m: Model): Model {
+  if (!m.appearance.compare || !m.edges.some(e => e.was)) return m;
+  const look = resolveAppearance(m.appearance),
+    wide = (l: string) => (l ? edgeLabelSize(l, look).w : 0);
+  return {
+    ...m,
+    edges: m.edges.map(e =>
+      e.was && wide(e.was) > wide(e.label) ? { ...e, label: e.was } : e,
+    ),
+  };
+}
+
+/** The scene with the file's own labels back after `widestLabels` sized it. */
+function ownLabels(scene: Scene, m: Model): Scene {
+  if (scene.model.edges === m.edges) return scene;
+  const label = new Map(m.edges.map(e => [e.id, e.label]));
+  return {
+    ...scene,
+    model: { ...scene.model, edges: m.edges },
+    edges: scene.edges.map(e => ({ ...e, label: label.get(e.id)! })),
+  };
 }
 
 /** Width over height of a scene's top-level objects. */
@@ -199,7 +227,10 @@ function fitVariants(root: ModelLayout) {
  */
 export function checkSource(source: string): Scene {
   const m = parseModel(source);
-  return withOldOrder(sequenced(withSoftGroups(layoutModel(dissolved(m)), m)));
+  const flat = dissolved(m);
+  return withOldOrder(
+    sequenced(withSoftGroups(ownLabels(layoutModel(widestLabels(flat)), flat), m)),
+  );
 }
 
 /**
