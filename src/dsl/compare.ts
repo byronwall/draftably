@@ -10,6 +10,7 @@ import {
   printSource,
   quoted,
   readSource,
+  type Model,
   type ModelEdge,
   type ModelObject,
   type SourceLine,
@@ -18,16 +19,58 @@ import {
 
 const DECLARATIONS = ['node', 'group', 'edge'];
 
-/** Differences that make a declaration `~`; the layout and labels it implies, not its line. */
-const objectKey = (o: ModelObject) => [o.label, o.parent, o.color, o.shade, o.shape].join('\0');
-const edgeKey = (e: ModelEdge) =>
-  [e.source, e.target, e.label, e.dashed, e.from, e.to, e.directed !== false].join('\0');
+/** What makes a declaration `~`: every parsed field but its line, so new fields count by default. */
+const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) => JSON.stringify(fields);
+
+/** A statement's content, whatever its comment or the order of its attributes. */
+const content = (s: Statement) =>
+  JSON.stringify([
+    s.command,
+    s.args.map(w => w.value),
+    s.attrs.map(([k, w]) => [k, w.value]).sort(),
+  ]);
+
+/** The statements that marks can't carry, each by its content, with a name to report it by. */
+const undeclared = (lines: SourceLine[]) =>
+  new Map(
+    lines.flatMap(l =>
+      l.kind === 'statement' && !DECLARATIONS.includes(l.command)
+        ? [
+            [
+              content(l),
+              l.args[0]?.quoted === false ? `${l.command} ${l.args[0].value}` : l.command,
+            ],
+          ]
+        : [],
+    ),
+  );
+
+/** The attributes of one declaration that differ between versions; `in` is reported as a move. */
+const attrChanges = (old: Statement, now: Statement) => {
+  const value = (s: Statement, name: string) => s.attrs.find(([k]) => k === name)?.[1].value;
+  return [...new Set([...old.attrs, ...now.attrs].map(([k]) => k))].filter(
+    k => k !== 'in' && value(old, k) !== value(now, k),
+  );
+};
+
+/** Whether what both lists hold comes in the same order in each. */
+const sameOrder = (a: { id: string }[], b: { id: string }[]) => {
+  const shared = (x: { id: string }[], y: { id: string }[]) =>
+    x.filter(o => y.some(p => p.id === o.id)).map(o => o.id);
+  return shared(a, b).join('\0') === shared(b, a).join('\0');
+};
+
+const nodesOf = (m: Model) => m.objects.filter(o => o.type === 'node');
+
+const isSequence = (m: Model) =>
+  m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
 
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
 
 /**
  * Merge two plain versions into one marked file. `moved` lists groups that changed container:
- * they keep one position, so the older panel draws them in their new container.
+ * they keep one position, so the older panel draws them in their new container. `unshown` lists
+ * the other changes with no old version in the file, which both panels draw as they are now.
  */
 export function compareSources(before: string, after: string): string {
   return compareDetailed(before, after).merged;
@@ -41,12 +84,12 @@ export function compareDetailed(before: string, after: string) {
         throw new DslError('Compare plain files; this one already has change marks.', s.line);
   const [old, next] = [parseModel(docs[0]), parseModel(docs[1])];
   const was = new Map<string, { key: string; label: string }>([
-    ...old.objects.map(o => ['object:' + o.id, { key: objectKey(o), label: o.label }] as const),
-    ...old.edges.map(e => ['edge:' + e.id, { key: edgeKey(e), label: e.label }] as const),
+    ...old.objects.map(o => ['object:' + o.id, { key: meaning(o), label: o.label }] as const),
+    ...old.edges.map(e => ['edge:' + e.id, { key: meaning(e), label: e.label }] as const),
   ]);
   const now = new Map<string, string>([
-    ...next.objects.map(o => ['object:' + o.id, objectKey(o)] as const),
-    ...next.edges.map(e => ['edge:' + e.id, edgeKey(e)] as const),
+    ...next.objects.map(o => ['object:' + o.id, meaning(o)] as const),
+    ...next.edges.map(e => ['edge:' + e.id, meaning(e)] as const),
   ]);
   const scopes = new Set(next.layouts.map(l => l.scope));
   // A node in another container, or an edge that joins other objects or touches such a node, is
@@ -90,7 +133,8 @@ export function compareDetailed(before: string, after: string) {
     return { ...line, args, mark: '-', comment: undefined };
   };
 
-  const out: SourceLine[] = [];
+  const out: SourceLine[] = [],
+    unshown: string[] = [];
   for (const line of docs[1].lines) {
     if (line.kind !== 'statement' || !DECLARATIONS.includes(line.command)) {
       out.push(line);
@@ -99,7 +143,17 @@ export function compareDetailed(before: string, after: string) {
     const prior = was.get(keyOf(line));
     if (!prior || split.has(keyOf(line))) out.push({ ...line, mark: '+' });
     else if (prior.key !== now.get(keyOf(line))) {
-      const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '';
+      const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '',
+        attrs = attrChanges(
+          docs[0].lines.find(
+            (l): l is Statement =>
+              l.kind === 'statement' &&
+              DECLARATIONS.includes(l.command) &&
+              keyOf(l) === keyOf(line),
+          )!,
+          line,
+        );
+      if (attrs.length) unshown.push(`${line.args[0].value} (${attrs.join(', ')})`);
       out.push({
         ...line,
         mark: '~',
@@ -139,7 +193,14 @@ export function compareDetailed(before: string, after: string) {
     out.splice(anchor + 1, 0, removed);
     anchor += 1;
   }
+  const [gone, kept] = [undeclared(docs[0].lines), undeclared(out)];
+  for (const [text, name] of [...gone, ...kept])
+    if (!gone.has(text) || !kept.has(text)) unshown.push(name);
+  if (isSequence(old) && isSequence(next)) {
+    if (!sameOrder(nodesOf(old), nodesOf(next))) unshown.push('participant order');
+    if (!sameOrder(old.edges, next.edges)) unshown.push('message order');
+  }
   const merged = printSource({ lines: out });
   parseModel(merged);
-  return { merged, moved };
+  return { merged, moved, unshown: [...new Set(unshown)] };
 }
