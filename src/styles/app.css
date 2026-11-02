@@ -1219,6 +1219,12 @@ button.folder-heading:hover {
   border-top: 0;
 }
 
+.align-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2px;
+}
+
 .inspector-section > h3,
 .inspector-section > summary {
   color: var(--muted);

@@ -253,31 +253,37 @@ export const commands = {
   },
   'align-left': {
     label: 'Align left',
+    icon: 'align-left',
     enabled: hasSelection,
     run: () => actions.alignSelection('left'),
   },
   'align-top': {
     label: 'Align top',
+    icon: 'align-top',
     enabled: hasSelection,
     run: () => actions.alignSelection('top'),
   },
   'align-center': {
     label: 'Align horizontal centers',
+    icon: 'align-center',
     enabled: hasSelection,
     run: () => actions.alignSelection('center'),
   },
   'align-middle': {
     label: 'Align vertical centers',
+    icon: 'align-middle',
     enabled: hasSelection,
     run: () => actions.alignSelection('middle'),
   },
   'distribute-x': {
     label: 'Distribute horizontally',
+    icon: 'distribute-x',
     enabled: hasSelection,
     run: () => actions.alignSelection('distribute-x'),
   },
   'distribute-y': {
     label: 'Distribute vertically',
+    icon: 'distribute-y',
     enabled: hasSelection,
     run: () => actions.alignSelection('distribute-y'),
   },
@@ -422,6 +428,18 @@ export const commands = {
     keys: '[',
     icon: 'tree',
     run: () => setObjectsOpen(!objectsOpen()),
+    duringTimeline: true,
+  },
+  'toggle-sidebar': {
+    hint: 'Show or hide the list of diagrams and objects.',
+    label: 'Sidebar',
+    icon: 'panel-left',
+    run: () => {
+      if (filesShown()) setFilesOpen(false);
+      else if (objectsOpen()) setObjectsOpen(false);
+      else if (workspace()) setFilesOpen(true);
+      else setObjectsOpen(true);
+    },
     duringTimeline: true,
   },
   'toggle-files': {
