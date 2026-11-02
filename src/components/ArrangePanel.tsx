@@ -16,13 +16,12 @@ import {
 import {
   arrangeScope,
   currentScope,
-  discardPreview,
   labEngine,
   labScope,
   layoutCheckpoint,
   layoutPreview,
+  previewSettings,
   previewShape,
-  runLabLayout,
   setLabEngine,
   setLabScope,
   updateLayoutSettings,
@@ -145,15 +144,11 @@ export function ArrangePanel() {
 
   const setDirection = (next: Direction) => {
     if (fileMode()) return void previewShape({ direction: next });
-    discardPreview();
-    updateLayoutSettings({ direction: next === 'down' ? 'DOWN' : 'RIGHT' });
-    void runLabLayout('rebuild', true);
+    void previewSettings({ direction: next === 'down' ? 'DOWN' : 'RIGHT' });
   };
   const setFit = (next: Fit | null) => {
     if (fileMode()) return void previewShape({ fit: next });
-    discardPreview();
-    updateLayoutSettings({ aspect: next ? ASPECTS[next] : 'canvas' });
-    void runLabLayout('rebuild', true);
+    void previewSettings({ aspect: next ? ASPECTS[next] : 'canvas' });
   };
 
   const canReshape = () => !!scope() && !loose();
