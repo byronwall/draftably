@@ -1,5 +1,90 @@
 # draftably
 
+## 0.9.0
+
+### Minor Changes
+
+- ce7f656: Open DOT, Mermaid flowchart and D2 files as editable native diagrams in the browser.
+- 066a132: Add a read-only DOT import command that creates native diagram files and reports unsupported meaning.
+- 43791be: Edges take `head=` and `tail=` with `arrow`, `none`, `triangle`, `open-triangle`, `diamond`, `open-diamond`, `circle` and `cross`. The canvas and the CLI draw the same marks. The inspector has a control for each end. Mermaid `--o`, `--x` and `<-->`, DOT `dir=` and `arrowhead=`, and D2 `<->` and arrowhead shapes now import as these marks instead of a refusal.
+- 2c8e51c: The Editor's Layout lab and routing menu are now one Arrange tab beside Properties. Direction and Format show what the file says and preview a change at once, with no engine to pick. Every engine and routing value stays under Exact layout and Exact routing. Line corners moved to Appearance, the Layout menu is shorter, and Enter keeps a preview.
+- 1ed934b: Press ⌘K in the editor to search every command, the folder's diagrams and the examples by name or
+  by what they do, and run one with Enter.
+- 3b78d10: Compare opens on the current drawing beside up to three alternatives that really differ, chosen from every engine. Each card says what it gains and costs in measured terms, repeats are dropped, and a drawing with a blocked line or an overlap comes last. Connections compare exact routing values, each card fits its own view, and method lists and parameter grids moved behind the options button.
+- 0537b28: The editor has a menu bar: File, Edit, View, Layout and Help. File changes with where you are. With
+  a folder open it creates diagrams in that folder, lists recent ones and exports the folder; without
+  one it opens and saves files. Examples and every layout tool have one named home, the toolbar keeps
+  only drawing tools and Tidy positions, and Edit disables commands that need a selection. ⌘O goes
+  to a diagram when a folder is open.
+- 791dd10: The editor's sidebar and inspector can be resized: drag the edge, use the arrow keys, or
+  double-click to reset. The width is remembered. Diagrams and Objects now share one sidebar as tabs,
+  so they no longer take two columns.
+- 360d66e: A Before panel now draws the old shape, count and message order. `draftably compare` writes `was-shape=` and `was-count=` on `~` lines and a `was-order` line in a sequence, and `check` validates them. An image with panels lists any change it can't draw beside the Before label.
+- 722777d: Wrap long connection labels in flow diagrams at about 140px, and start a new line at each `\n`. Gaps grow to fit the wrapped label, so a diagram with long labels draws narrower and a little taller.
+- 47b1fa6: A long subtitle now wraps to the drawing's width (360px to about 70 characters) instead of widening the frame. `check` warns `heading-prose` on a subtitle that wraps and on a note with no `near=`.
+- 5379c8a: The legend can now explain line styles with `legend line dashed "meaning"` and `legend line solid "meaning"`. The key runs left to right under the drawing and wraps only when it passes the drawing's width. `check` warns `legend-missing` when a legend leaves an accent color without a row, and notes `legend-lines` when dashed and solid lines appear with no line row. A diff legend counts shapes and lines apart: `5 added · 5 lines`, not `10 added`.
+- 74c452a: Import Mermaid flowcharts and D2 graphs into new native files from the CLI.
+- c1e3d86: `draftably import` and the editor's text import now read Mermaid sequence diagrams. Block branches become phase bands, with a warning, and notes anchor to their message.
+- 9ddd801: A sequence `note` can now anchor to a message with `near=<message id>`. `side=right` (the default) and `side=left` place it in the margin level with the row, and the panel grows round it. `side=above` and `side=below` look for a clear spot along the row. A note never moves a lane or a row. Deleting a message or participant keeps the note's text and moves it under the subtitle.
+
+### Patch Changes
+
+- 54f4ee7: Show only the fields that apply when a sequence participant is selected in the Inspector.
+- a8cd3de: Draw straight lines between two columns of grouped boxes. When each box faces one box in the group beside it, the box moves to its partner's line.
+- f1bdf2e: The docs now say when to pick each layout engine, add a Fix a layout path, and match the Editor's routing menu names.
+- 2f210ce: Use lowercase draftably in documentation, the website, editor labels, and CLI messages.
+- c55b150: Make room for an old line label in a flow comparison, and draw it on its own line in Before.
+- ff5e015: The editor toolbar and start screen now show the draftably logo, which links back home, and the site's Playground, Docs and GitHub links. The landing page offers to continue the diagram kept in this browser.
+- 51e4a7e: Keep a short marked line whole where another line crosses it.
+- 466766a: Make room for an old message label in a sequence comparison, and draw it above its line.
+- 2483e83: Stop layout passes, the timeline and the brush from writing positions into a sequence.
+- 0b35a7c: The Arrange panel answers a click at once on slow drawings, keeps its buttons at full height, and explains its buttons with their shortcuts. Its counts read correctly for one crossing or bend, and picking a format no longer moves the controls below it.
+- f6bca86: `vary --try direction` works on a file with no `layout` line. `check` no longer warns about a cell
+  marker, and `check --metrics` counts every warning that it prints. The parser now refuses
+  attributes that had no effect: `kind`, `detail` and `priority` on nodes and groups, `importance` on
+  edges, and `kind=data`. The hosted Editor no longer offers Export PDF.
+- c607e0e: An unquoted URL such as `href=https://example.com/path` now keeps its path. Before, the `//` started a comment and `check` reported nothing.
+- b82d70d: Keep Playground edits on immediate reload without overriding incoming shared links.
+- 058fd34: Clarify that returning to Playground opens its separate copy.
+- c647624: Compare fits a phone with Close always in reach, and tooltips now appear inside it and every other dialog. Cards name each method once, reserve Apply while drawing, and show cut-off text on hover. Enter applies a focused drawing, and the sidebar uses plain words.
+- 55c445c: The editor's Compare sheet computes its candidates in parallel, so a full sheet finishes in about a quarter of the time.
+- 18d3956: Compare now counts label collisions. A candidate with a connection label on another label, a shape, a group title or a line, or a title too long for its shape, says so on its card, marks the spot on the drawing, and ranks behind a candidate without one.
+- 90647fa: `draftably compare` now marks a line when any attribute changes. It also lists changes with no old version to draw, such as a new shape, a changed layout or a new message order, instead of printing `No changes.`
+- 648bbc1: Compare no longer moves cards under the pointer while results arrive, and the grid keeps its columns. Overlay offers Apply only for a drawing that can change, numbers its layers in order, and returns the sidebar to how it was.
+- 900da88: Add D2 graph mapping to validated native source. Runtime controls and import entry points follow in a later change.
+- 6d9ef67: The CLI reference in `draftably docs` uses commands that a reader can run, and the Examples section lists every example.
+- c13e879: The language guide in `draftably docs` has headings for notes, links, shades, the legend and side-by-side panels. It lists the values and ranges of more attributes, and its Refinements and Emphasis states samples run as whole files.
+- 931f8fb: Arrange now hides tools a sequence or cell diagram can't use, previews connection presets alongside direction and format, and can return a line from an engine to its built-in recipe.
+- 97c2f02: The editor's diagram list is denser: one line per diagram, folders that fold, and search that
+  marks the matching words. The full path shows on hover, and the folder name above the canvas links
+  back to all of its diagrams.
+- f14d9b8: Tighten the editor: a denser Inspector, one tooltip everywhere, folders first and remembered in the diagram list, a Save as file command for examples, and a toolbar that stays on two rows at 800 px.
+- 8efddd0: The editor's buttons, menus and form controls have a new look: graphite keys with a pressed state,
+  tighter corners and softer shadows. Violet now marks only what is selected on the canvas.
+- 562e9b5: Properties now offers only what the open diagram can keep. In a file, it hides emphasis, bends, label positions, icons, start and end, and container settings that were refused after a click, and Snap no longer says it was not saved. Alignment is one row of icons, a group links to Arrange, and the toolbar has one sidebar button.
+- 6972e2b: Toolbar buttons in the editor now show an instant tooltip with their name, shortcut and what they
+  do, on hover and on keyboard focus.
+- 978c451: Changing a layout engine keeps the line's `fit=` and `direction=`. A `direction=` beside `fit=` now holds, so `fit=` only tries folding. The layout preview shows the line that Keep will save and how many hand placements it removes. Compare no longer offers settings that a diagram file ignores.
+- d72e684: Drop the empty side margin of a message note from comparison and state panels.
+- 506ff0e: Hovering a diagram in the files list now opens a card to the right of the sidebar, so it never covers the list. It waits about half a second, then shows the full title, the subtitle, the path and when the file changed. Moving to the next row switches the card at once. Leaving the list, scrolling or pressing Esc closes it.
+- 7d03d01: The hosted Editor no longer requests a local workspace that does not exist there.
+- 869fc25: Add the first DOT import adapter and native source validation. The import command and editor controls follow in later changes.
+- 425f0ae: Slide a bend when no straight run of a flow line is wide enough for its label, so a long label sits beside one straight run instead of across a corner.
+- 624fafc: Layout actions in the Edit menu state what they change, with the scope from the live selection, and how to reverse them. The Layout tools docs compare them.
+- e8c972a: Add Mermaid flowchart parsing and conversion into validated native diagram source. Import controls follow in a later change.
+- 7a76d11: The Editor shows where work is kept on phone-width screens.
+- d973a6b: Native edge declarations accept directed=false for undirected connections. Formatting, visual edits, comparison, layout projection, and SVG output preserve the flag.
+- cfa1f11: New from an example opens one blank draft from every entry point. The draft has its own name and no longer promises a browser save it does not make.
+
+  The start dialog opens at once. Example thumbnails draw one at a time as they scroll into view.
+
+- 54d916b: Removed objects in a diff now stay readable: a paler red fill, a dashed red border and a − disc on the corner, with no strike-through. Set `config strike-removed=on` to strike removed titles through again.
+- 6b6151f: Draw sequence diagrams on colored lanes without canvas-colored patches. Line breaks, message label cards and participant headers now take the lane color under them, and the outer frame is gone when lanes already hold every participant.
+- 3fae469: Sequence diagrams now draw what the file says. Root and group `order` both apply. A phase must be a run of consecutive messages, a message must end on a participant, and a band needs a participant. Distant labels and self-messages get their full room, and plain headers get a visible outline. Deleting a message or participant cleans its phase, and a drag saves a lane order. Changing the theme keeps the subtitle, notes, legend and states. In any diagram, the editor can now delete a selected connection while the Inspector is open.
+- 61ccd09: Space activates a focused Editor button again. Space-drag still pans on the canvas and after a toolbar click.
+- 1819b87: The Editor's start dialog names `npx draftably open`, the command a visitor can run.
+- f0777d2: The Editor status bar shows the running Draftably version.
+
 ## 0.8.0
 
 ### Minor Changes
