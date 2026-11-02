@@ -18,7 +18,10 @@ import {
   captureCheckpoint,
   discardPreview,
   layoutPreview,
+  movesBlocked,
+  rebuildBlocked,
   restoreCheckpoint,
+  routesBlocked,
   runLabLayout,
 } from './layout';
 import { openComparison } from './comparison';
@@ -77,6 +80,8 @@ export interface Command {
   /** Exits the brush before running. */
   endsBrush?: boolean;
   enabled?: () => boolean;
+  /** Why this cannot work here, shown instead of running it. */
+  blocked?: () => string | null;
 }
 
 let fileInput:
@@ -309,6 +314,7 @@ export const commands = {
     keys: 'L',
     icon: 'layout',
     run: () => runLabLayout(),
+    blocked: movesBlocked,
     endsBrush: true,
   },
   'layout-rebuild': {
@@ -316,11 +322,13 @@ export const commands = {
     label: 'Rearrange from scratch',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
+    blocked: rebuildBlocked,
     endsBrush: true,
   },
   'layout-preview': {
     label: 'Preview improvement',
     run: () => runLabLayout('pass', true),
+    blocked: movesBlocked,
     endsBrush: true,
   },
   'layout-accept': { label: 'Keep preview', run: acceptPreview },
@@ -341,12 +349,14 @@ export const commands = {
     label: 'Compare alternatives',
     keys: '⌥E',
     run: () => openComparison('layout'),
+    blocked: rebuildBlocked,
     endsBrush: true,
   },
   'compare-routes': {
     hint: 'See other connection routes beside these, then apply one.',
     label: 'Compare connections',
     run: () => openComparison('routing'),
+    blocked: routesBlocked,
     endsBrush: true,
   },
   reroute: {
@@ -369,6 +379,7 @@ export const commands = {
     keys: '⌥T',
     icon: 'journey',
     run: () => (timelineOpen() ? closeTimeline() : openTimeline()),
+    blocked: movesBlocked,
     duringTimeline: true,
   },
   'timeline-reopen': {
@@ -391,6 +402,7 @@ export const commands = {
     keys: 'W',
     icon: 'brush',
     run: toggleBrush,
+    blocked: movesBlocked,
     duringTimeline: true,
   },
 
@@ -654,6 +666,8 @@ export function runCommand(id: CommandId) {
     toast('Preview only. Keep this step or press Escape to cancel.');
     return;
   }
+  const blocked = command.blocked?.();
+  if (blocked) return void toast(blocked);
   if (command.endsBrush && brushActive()) deactivateBrush();
   try {
     const result = command.run();
@@ -668,5 +682,6 @@ export function runCommand(id: CommandId) {
 export const commandEnabled = (id: CommandId) => {
   if (unavailableInFile(id)) return false;
   const command: Command = commands[id];
+  if (command.blocked?.()) return false;
   return command.enabled ? command.enabled() : true;
 };

@@ -10,8 +10,8 @@ import {
 import { normalize } from '../model/document';
 import { clamp, clone } from '../model/geometry';
 import { findGroup, selectionRoots } from '../model/graph';
-import { layoutShape, type ShapeChange } from '../dsl/layout-edits';
-import type { Diagram, LayoutAlgorithmId, NodeGeometry } from '../model/types';
+import { layoutShape, type LayoutShape, type ShapeChange } from '../dsl/layout-edits';
+import type { Diagram, LayoutAlgorithmId, NodeGeometry, RoutingSettings } from '../model/types';
 import { CancelledError, startEngineTask, type RunningTask } from '../lib/engine-tasks';
 import {
   commit,
@@ -29,6 +29,7 @@ import {
 import { diagramClipped, fitView, reducedMotion, stageSize } from './editor';
 import {
   changedLine,
+  changedLines,
   commitSource,
   currentSource,
   fileBlocked,
@@ -36,6 +37,7 @@ import {
   projectSource,
   sourceScope,
   sourceWithRecipe,
+  sourceWithRouting,
   sourceWithShape,
   UnstorableLayout,
 } from './file-session';
@@ -58,6 +60,8 @@ interface LayoutPreview {
     removed: number;
     /** The direction and format asked for so far. A further choice builds on them. */
     shape?: ShapeChange;
+    /** The connection preset asked for, which Keep saves with the shape. */
+    routing?: RoutingSettings;
   };
 }
 
@@ -121,9 +125,12 @@ export const fixedIds = () => fixedIdsProvider();
 
 let running: RunningTask<{ document: Diagram; report: LayoutReport }> | null = null;
 let job = 0;
+/** The shape still compiling, so a second click stacks on it instead of replacing it. */
+let asked: ShapeChange = {};
 
 export function cancelLayout() {
   job++;
+  asked = {};
   running?.cancel();
   running = null;
   state.setBusy(false);
@@ -284,7 +291,10 @@ async function showRecipe(
     if (fit || ((preview || whole) && diagramClipped())) fitView();
     return { status: preview ? 'recipe-preview' : 'recipe', source: file.source };
   } finally {
-    if (thisJob === job) state.setBusy(false);
+    if (thisJob === job) {
+      state.setBusy(false);
+      asked = {};
+    }
   }
 }
 
@@ -327,6 +337,41 @@ export function arrangeScope() {
   return sourceScope(scope === 'auto' ? currentScope() : { ...currentScope(), scope });
 }
 
+/** Recipes whose content sets every position, so moving a shape has nothing to keep. */
+const SHAPED_BY_CONTENT: Record<string, string> = {
+  sequence: 'Sequence diagrams follow message order.',
+  cells: 'Cells follow their columns and spans.',
+};
+
+/** Recipes with a structure of their own, which an engine would replace and lose. */
+const STRUCTURED: Record<string, string> = {
+  ...SHAPED_BY_CONTENT,
+  lanes: 'Lanes keep their rows. Another arrangement would remove them.',
+};
+
+/** The recipes that hold here: the scope's own, and the root's, which holds a loose selection. */
+function arrangeRecipes() {
+  if (!fileMode()) return [];
+  const source = state.preview()?.file?.source ?? currentSource(),
+    scope = arrangeScope();
+  return [...new Set([scope, 'root'])].flatMap(id => (id ? [layoutShape(source, id).recipe] : []));
+}
+
+const ruleFrom = (rules: Record<string, string>) =>
+  arrangeRecipes()
+    .map(recipe => rules[recipe])
+    .find(Boolean) ?? null;
+
+/** Why shapes here cannot be moved by a layout tool, or null when they can. */
+export const movesBlocked = () => ruleFrom(SHAPED_BY_CONTENT);
+
+/** Why the arrangement here cannot be replaced, or null when it can. */
+export const rebuildBlocked = () => ruleFrom(STRUCTURED);
+
+/** A sequence draws its messages straight across, so there are no routes to choose. */
+export const routesBlocked = () =>
+  arrangeRecipes().includes('sequence') ? SHAPED_BY_CONTENT.sequence : null;
+
 /**
  * Preview a change to the scope's `layout` line, on top of any direction or format already being
  * previewed. A choice that returns to the file ends the preview. With no change, this removes the
@@ -341,31 +386,62 @@ export async function previewShape(change: ShapeChange): Promise<LayoutOutcome> 
     return { status: 'error', message };
   }
   const file = layoutShape(currentSource(), scope),
-    shape: ShapeChange = { ...state.preview()?.file?.shape, ...change };
-  for (const key of Object.keys(shape) as Array<keyof ShapeChange>)
+    held = state.preview()?.file,
+    routing = held?.routing,
+    shape: ShapeChange = { ...held?.shape, ...asked, ...change };
+  for (const key of Object.keys(shape) as Array<keyof LayoutShape & keyof ShapeChange>)
     if (shape[key] === file[key]) delete shape[key];
   const fresh = !Object.keys(change).length;
-  if (!Object.keys(shape).length && !fresh) {
-    discardPreview();
-    return { status: 'cancelled' };
-  }
-  const next = sourceWithShape(scope, shape);
-  if (fresh && !next.removed) {
+  if (!Object.keys(shape).length && !fresh && !routing) return endPreview();
+  const next = Object.keys(shape).length || fresh ? sourceWithShape(scope, shape) : null;
+  if (fresh && !next?.removed) {
     toast('Nothing to reset: the recipe already draws this.');
     return { status: 'cancelled' };
   }
-  const line = changedLine(next.source);
+  const source = routing
+    ? sourceWithRouting(routing, next?.source ?? currentSource())
+    : next!.source;
+  const line = changedLines(source).join(' · ') || null;
+  asked = shape;
   return showRecipe(
     {
-      source: next.source,
+      source,
       label: 'Arrange',
       message: line ?? 'Removed hand placements',
       line,
-      removed: next.removed,
+      removed: next?.removed ?? 0,
       shape,
+      routing,
     },
     { preview: true },
   );
+}
+
+/** Preview router settings, stacked on any direction or format being previewed. */
+export async function previewRouting(routing: RoutingSettings): Promise<LayoutOutcome> {
+  const held = state.preview()?.file,
+    source = sourceWithRouting(routing, held?.source);
+  if (source === currentSource()) return endPreview();
+  const line = changedLines(source).join(' · ') || null;
+  return showRecipe(
+    {
+      source,
+      label: 'Change routing',
+      message: line ?? 'Change routing',
+      line,
+      removed: held?.removed ?? 0,
+      shape: held?.shape,
+      routing,
+    },
+    { preview: true },
+  );
+}
+
+/** The choices have returned to the file, so nothing is left to show or to finish computing. */
+function endPreview(): LayoutOutcome {
+  cancelLayout();
+  discardPreview();
+  return { status: 'cancelled' };
 }
 
 /** Ease shapes from their old to new positions. Edits during the animation stop it. */

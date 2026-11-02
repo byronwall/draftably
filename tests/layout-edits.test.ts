@@ -29,6 +29,16 @@ function withRecipe(text: string, scope: string, patch: object) {
 }
 
 describe('layout recipes', () => {
+  it('returns from an engine to the built-in recipe, keeping what the author said', () => {
+    const text = checkout.replace(
+      'layout root flow gap=48',
+      'layout root engine=tree rank-gap=64 direction=down fit=slide',
+    );
+    const source = readSource(text);
+    setLayoutShape(source, checkSource(text), 'root', { builtin: true });
+    expect(printSource(source)).toContain('layout root flow direction=down fit=slide\n');
+  });
+
   it('replaces the scope line with the engine and only non-default settings', () => {
     const { text } = withRecipe(checkout, 'root', { algorithm: 'layered', rankGap: 96 });
     expect(text).toContain('layout root engine=layered rank-gap=96\n');

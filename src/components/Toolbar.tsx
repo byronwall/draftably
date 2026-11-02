@@ -10,7 +10,7 @@ import {
   fileStatusText,
 } from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
-import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
+import { layoutBusy, layoutTarget, cancelLayout, movesBlocked } from '../state/layout';
 import { timelineOpen } from '../state/sculpt';
 import { arrangeOpen, filesShown, menu, objectsOpen, openMenu, propertiesOpen } from '../state/ui';
 import { AppNav, Brand } from './Brand';
@@ -76,7 +76,11 @@ export function Toolbar() {
           <button
             type="button"
             class="button primary"
-            {...tip('Improve', 'L', `Small moves in ${layoutTarget()}. Undo restores them.`)}
+            {...tip(
+              'Improve',
+              'L',
+              movesBlocked() ?? `Small moves in ${layoutTarget()}. Undo restores them.`,
+            )}
             disabled={locked() || !commandEnabled('layout')}
             onClick={run('layout')}
           >
