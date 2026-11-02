@@ -1,0 +1,51 @@
+diagram "Eleven branches at one hub" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node hub "hub"
+node n0 "n0"
+edge e0 hub -> n0 "branch 0" from=top to=bottom
+node n1 "n1"
+edge e1 hub -> n1 "branch 1"
+node n2 "n2"
+edge e2 hub -> n2 "branch 2"
+node n3 "n3"
+edge e3 hub -> n3 "branch 3"
+node n4 "n4"
+edge e4 hub -> n4 "branch 4"
+node n5 "n5"
+edge e5 hub -> n5 "branch 5"
+node n6 "n6"
+edge e6 hub -> n6 "branch 6"
+node n7 "n7"
+edge e7 hub -> n7 "branch 7"
+node n8 "n8"
+edge e8 hub -> n8 "branch 8"
+node n9 "n9"
+edge e9 hub -> n9 "branch 9"
+node n10 "n10"
+edge e10 hub -> n10 "branch 10"
+layout root flow direction=auto fold=never
+size hub width=180 height=120
+pin hub x=0 y=400
+size n0 width=140 height=56
+pin n0 x=420 y=0
+size n1 width=140 height=56
+pin n1 x=680 y=90
+size n2 width=140 height=56
+pin n2 x=420 y=180
+size n3 width=140 height=56
+pin n3 x=680 y=270
+size n4 width=140 height=56
+pin n4 x=420 y=360
+size n5 width=140 height=56
+pin n5 x=680 y=450
+size n6 width=140 height=56
+pin n6 x=420 y=540
+size n7 width=140 height=56
+pin n7 x=680 y=630
+size n8 width=140 height=56
+pin n8 x=420 y=720
+size n9 width=140 height=56
+pin n9 x=680 y=810
+size n10 width=140 height=56
+pin n10 x=420 y=900

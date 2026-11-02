@@ -1,0 +1,1004 @@
+[
+  {
+    "policy_id": "clearance-4",
+    "patch": {
+      "clearance": 4
+    },
+    "valid_case_coverage": 23,
+    "acceptable_case_profile_coverage": 50,
+    "acceptable_by_profile": {
+      "balanced": 17,
+      "traceable": 16,
+      "direct": 17
+    },
+    "coverage_half_bands": 49,
+    "coverage_double_bands": 52,
+    "equal_fixture_mean_oracle_regret": 2.5150051159420292,
+    "equal_family_mean_oracle_regret": 1.849201888888889,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 5.416666666666667,
+      "dags": 2.5,
+      "cycles": 0.0,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 0.0,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 5.555555555555555,
+    "max_case_profile_oracle_regret": 23.333333,
+    "regret_case_profile_count": 69,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [],
+    "mean_balanced_on_valid": 8.67232095652174,
+    "mean_traceable_on_valid": 13.517621869565218,
+    "mean_direct_on_valid": 18.967610826086958,
+    "valid_gained_vs_default": 1,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "portStability-0",
+    "patch": {
+      "portStability": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 45,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 15,
+      "direct": 15
+    },
+    "coverage_half_bands": 45,
+    "coverage_double_bands": 47,
+    "equal_fixture_mean_oracle_regret": 3.4953703636363636,
+    "equal_family_mean_oracle_regret": 3.002400543209877,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 2.716049333333334,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.616104136363637,
+    "mean_traceable_on_valid": 15.398243818181818,
+    "mean_direct_on_valid": 19.975780454545454,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "parallelPenalty-0",
+    "patch": {
+      "parallelPenalty": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 2.8187174696969697,
+    "equal_family_mean_oracle_regret": 2.4510537407407407,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 4.166666666666667,
+      "dags": 2.5,
+      "cycles": 0.0,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 6.666666666666667,
+    "max_case_profile_oracle_regret": 23.333333,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.146062818181818,
+    "mean_traceable_on_valid": 14.347968318181819,
+    "mean_direct_on_valid": 19.46613859090909,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "parallelPenalty-48",
+    "patch": {
+      "parallelPenalty": 48
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 47,
+    "equal_fixture_mean_oracle_regret": 3.2627410454545456,
+    "equal_family_mean_oracle_regret": 2.812850728395062,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 5.694444444444445,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 2.676767666666668,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 6.666666666666667,
+    "max_case_profile_oracle_regret": 23.333333,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.436466863636364,
+    "mean_traceable_on_valid": 15.13079659090909,
+    "mean_direct_on_valid": 19.724977,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "default",
+    "patch": {},
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "cornerRadius-0",
+    "patch": {
+      "cornerRadius": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "cornerRadius-12",
+    "patch": {
+      "cornerRadius": 12
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "fanoutPenalty-0",
+    "patch": {
+      "fanoutPenalty": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "passes-5",
+    "patch": {
+      "passes": 5
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "portGap-6",
+    "patch": {
+      "portGap": 6
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "sharedPenalty-0",
+    "patch": {
+      "sharedPenalty": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "sharedPenalty-16",
+    "patch": {
+      "sharedPenalty": 16
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 44,
+    "acceptable_by_profile": {
+      "balanced": 15,
+      "traceable": 14,
+      "direct": 15
+    },
+    "coverage_half_bands": 43,
+    "coverage_double_bands": 46,
+    "equal_fixture_mean_oracle_regret": 3.5573538333333334,
+    "equal_family_mean_oracle_regret": 3.0529055925925928,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.657426454545455,
+    "mean_traceable_on_valid": 15.522210727272727,
+    "mean_direct_on_valid": 19.996441636363635,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "passes-1",
+    "patch": {
+      "passes": 1
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 42,
+    "acceptable_by_profile": {
+      "balanced": 14,
+      "traceable": 14,
+      "direct": 14
+    },
+    "coverage_half_bands": 42,
+    "coverage_double_bands": 44,
+    "equal_fixture_mean_oracle_regret": 3.4953703484848484,
+    "equal_family_mean_oracle_regret": 3.0024005308641977,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 5.694444444444445,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 4.38271588888889,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 6.666666666666667,
+    "max_case_profile_oracle_regret": 23.333333,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.610938818181818,
+    "mean_traceable_on_valid": 15.387913227272728,
+    "mean_direct_on_valid": 19.991276318181818,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "portStability-100",
+    "patch": {
+      "portStability": 100
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 42,
+    "acceptable_by_profile": {
+      "balanced": 14,
+      "traceable": 14,
+      "direct": 14
+    },
+    "coverage_half_bands": 42,
+    "coverage_double_bands": 45,
+    "equal_fixture_mean_oracle_regret": 3.6124502575757576,
+    "equal_family_mean_oracle_regret": 3.097798975308642,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 7.361111111111111,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.574635222222223,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 7.361111111111111,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.698748772727273,
+    "mean_traceable_on_valid": 15.563533045454546,
+    "mean_direct_on_valid": 20.079086272727274,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "fanoutPenalty-120",
+    "patch": {
+      "fanoutPenalty": 120
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 41,
+    "acceptable_by_profile": {
+      "balanced": 14,
+      "traceable": 13,
+      "direct": 14
+    },
+    "coverage_half_bands": 40,
+    "coverage_double_bands": 43,
+    "equal_fixture_mean_oracle_regret": 3.708868984848485,
+    "equal_family_mean_oracle_regret": 3.176362382716049,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 8.472222222222221,
+      "dags": 2.5,
+      "cycles": 2.2222222222222223,
+      "networks": 3.1705947777777785,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 8.472222222222221,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 9.771062818181818,
+    "mean_traceable_on_valid": 15.635847090909092,
+    "mean_direct_on_valid": 20.223714363636365,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "portGap-28",
+    "patch": {
+      "portGap": 28
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 39,
+    "acceptable_by_profile": {
+      "balanced": 13,
+      "traceable": 13,
+      "direct": 13
+    },
+    "coverage_half_bands": 39,
+    "coverage_double_bands": 41,
+    "equal_fixture_mean_oracle_regret": 4.246173818181818,
+    "equal_family_mean_oracle_regret": 3.5373487654320988,
+    "family_mean_oracle_regret": {
+      "pipelines": 0.0,
+      "routing": 9.166666666666666,
+      "dags": 6.9074073333333335,
+      "cycles": 2.2222222222222223,
+      "networks": 4.539842666666668,
+      "architecture": 0.0,
+      "containers": 9,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 9.166666666666666,
+    "max_case_profile_oracle_regret": 33.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 10.00924,
+    "mean_traceable_on_valid": 16.164543136363637,
+    "mean_direct_on_valid": 21.068755636363637,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "crossingPenalty-900",
+    "patch": {
+      "crossingPenalty": 900
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 39,
+    "acceptable_by_profile": {
+      "balanced": 13,
+      "traceable": 13,
+      "direct": 13
+    },
+    "coverage_half_bands": 39,
+    "coverage_double_bands": 41,
+    "equal_fixture_mean_oracle_regret": 6.219773484848485,
+    "equal_family_mean_oracle_regret": 4.905926543209876,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 12.5,
+      "dags": 11.041666666666666,
+      "cycles": 2.2222222222222223,
+      "networks": 6.167227777777778,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 12.5,
+    "max_case_profile_oracle_regret": 57.5,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 11.580635818181818,
+    "mean_traceable_on_valid": 17.812155681818183,
+    "mean_direct_on_valid": 23.770546272727273,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "bendPenalty-0",
+    "patch": {
+      "bendPenalty": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 38,
+    "acceptable_by_profile": {
+      "balanced": 13,
+      "traceable": 13,
+      "direct": 12
+    },
+    "coverage_half_bands": 38,
+    "coverage_double_bands": 40,
+    "equal_fixture_mean_oracle_regret": 4.332912454545455,
+    "equal_family_mean_oracle_regret": 4.083504802469136,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 8.657407444444445,
+      "dags": 0.625,
+      "cycles": 2.9629630000000002,
+      "networks": 3.395061555555556,
+      "architecture": 0.0,
+      "containers": 13.333333333333334,
+      "presentation": 0.0,
+      "authored": 2.2222223333333333
+    },
+    "worst_family_mean_oracle_regret": 13.333333333333334,
+    "max_case_profile_oracle_regret": 40,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 10.267504545454546,
+    "mean_traceable_on_valid": 15.854511,
+    "mean_direct_on_valid": 21.380739136363637,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "crossingPenalty-0",
+    "patch": {
+      "crossingPenalty": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 38,
+    "acceptable_by_profile": {
+      "balanced": 12,
+      "traceable": 12,
+      "direct": 14
+    },
+    "coverage_half_bands": 38,
+    "coverage_double_bands": 40,
+    "equal_fixture_mean_oracle_regret": 5.136631454545454,
+    "equal_family_mean_oracle_regret": 4.228613283950617,
+    "family_mean_oracle_regret": {
+      "pipelines": 1.4814814444444444,
+      "routing": 14.027777777777779,
+      "dags": 5.5,
+      "cycles": 2.2222222222222223,
+      "networks": 8.159371444444444,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 14.027777777777779,
+    "max_case_profile_oracle_regret": 68.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 10.69484609090909,
+    "mean_traceable_on_valid": 20.604166636363637,
+    "mean_direct_on_valid": 18.614898954545453,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "edgeGap-8",
+    "patch": {
+      "edgeGap": 8
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 36,
+    "acceptable_by_profile": {
+      "balanced": 12,
+      "traceable": 12,
+      "direct": 12
+    },
+    "coverage_half_bands": 36,
+    "coverage_double_bands": 36,
+    "equal_fixture_mean_oracle_regret": 6.803336393939394,
+    "equal_family_mean_oracle_regret": 5.475558049382716,
+    "family_mean_oracle_regret": {
+      "pipelines": 5.555555555555555,
+      "routing": 15.555555555555555,
+      "dags": 8.5,
+      "cycles": 2.2222222222222223,
+      "networks": 10.780022444444445,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 15.555555555555555,
+    "max_case_profile_oracle_regret": 55.0,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 12.106117909090909,
+    "mean_traceable_on_valid": 20.198634090909092,
+    "mean_direct_on_valid": 22.6092745,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "edgeGap-32",
+    "patch": {
+      "edgeGap": 32
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 33,
+    "acceptable_by_profile": {
+      "balanced": 11,
+      "traceable": 11,
+      "direct": 11
+    },
+    "coverage_half_bands": 33,
+    "coverage_double_bands": 34,
+    "equal_fixture_mean_oracle_regret": 5.401476909090909,
+    "equal_family_mean_oracle_regret": 4.526717814814814,
+    "family_mean_oracle_regret": {
+      "pipelines": 0.0,
+      "routing": 10.416666666666666,
+      "dags": 7.833333333333333,
+      "cycles": 3.3333333333333335,
+      "networks": 7.934904666666667,
+      "architecture": 0.0,
+      "containers": 9,
+      "presentation": 0.0,
+      "authored": 2.2222223333333333
+    },
+    "worst_family_mean_oracle_regret": 10.416666666666666,
+    "max_case_profile_oracle_regret": 41.25,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 10.842573409090908,
+    "mean_traceable_on_valid": 17.894341136363636,
+    "mean_direct_on_valid": 21.9715335,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "standoff-40",
+    "patch": {
+      "standoff": 40
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 29,
+    "acceptable_by_profile": {
+      "balanced": 10,
+      "traceable": 9,
+      "direct": 10
+    },
+    "coverage_half_bands": 28,
+    "coverage_double_bands": 33,
+    "equal_fixture_mean_oracle_regret": 4.211815166666667,
+    "equal_family_mean_oracle_regret": 3.6684749135802472,
+    "family_mean_oracle_regret": {
+      "pipelines": 6.296296444444445,
+      "routing": 7.222222222222222,
+      "dags": 2.5,
+      "cycles": 4.444444444444445,
+      "networks": 3.664422111111112,
+      "architecture": 0.0,
+      "containers": 6.666666666666667,
+      "presentation": 0.0,
+      "authored": 2.2222223333333333
+    },
+    "worst_family_mean_oracle_regret": 7.222222222222222,
+    "max_case_profile_oracle_regret": 28.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 10.162477045454546,
+    "mean_traceable_on_valid": 16.570190545454544,
+    "mean_direct_on_valid": 20.406795227272728,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "bendPenalty-80",
+    "patch": {
+      "bendPenalty": 80
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 29,
+    "acceptable_by_profile": {
+      "balanced": 10,
+      "traceable": 9,
+      "direct": 10
+    },
+    "coverage_half_bands": 26,
+    "coverage_double_bands": 31,
+    "equal_fixture_mean_oracle_regret": 5.0130471666666665,
+    "equal_family_mean_oracle_regret": 4.355624209876543,
+    "family_mean_oracle_regret": {
+      "pipelines": 1.4814814444444444,
+      "routing": 14.305555555555555,
+      "dags": 5.2407406666666665,
+      "cycles": 2.9629630000000002,
+      "networks": 7.098765555555556,
+      "architecture": 4.444445000000001,
+      "containers": 3.6666666666666665,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 14.305555555555555,
+    "max_case_profile_oracle_regret": 31.25,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 10.586260272727273,
+    "mean_traceable_on_valid": 16.320879318181817,
+    "mean_direct_on_valid": 22.636019227272726,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "standoff-0",
+    "patch": {
+      "standoff": 0
+    },
+    "valid_case_coverage": 22,
+    "acceptable_case_profile_coverage": 9,
+    "acceptable_by_profile": {
+      "balanced": 3,
+      "traceable": 3,
+      "direct": 3
+    },
+    "coverage_half_bands": 9,
+    "coverage_double_bands": 9,
+    "equal_fixture_mean_oracle_regret": 13.154231787878787,
+    "equal_family_mean_oracle_regret": 11.18619850617284,
+    "family_mean_oracle_regret": {
+      "pipelines": 12.962963,
+      "routing": 20.601851888888888,
+      "dags": 20.254629666666666,
+      "cycles": 5.555555555555555,
+      "networks": 12.856341444444446,
+      "architecture": 4.444445000000001,
+      "containers": 17.333333333333332,
+      "presentation": 0.0,
+      "authored": 6.666666666666667
+    },
+    "worst_family_mean_oracle_regret": 20.601851888888888,
+    "max_case_profile_oracle_regret": 48.75,
+    "regret_case_profile_count": 66,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-21"
+    ],
+    "mean_balanced_on_valid": 16.64411159090909,
+    "mean_traceable_on_valid": 28.423037272727274,
+    "mean_direct_on_valid": 28.899563818181818,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 0
+  },
+  {
+    "policy_id": "clearance-22",
+    "patch": {
+      "clearance": 22
+    },
+    "valid_case_coverage": 15,
+    "acceptable_case_profile_coverage": 31,
+    "acceptable_by_profile": {
+      "balanced": 11,
+      "traceable": 11,
+      "direct": 9
+    },
+    "coverage_half_bands": 27,
+    "coverage_double_bands": 31,
+    "equal_fixture_mean_oracle_regret": 4.459259266666667,
+    "equal_family_mean_oracle_regret": 2.9670138958333334,
+    "family_mean_oracle_regret": {
+      "pipelines": 6.111111166666666,
+      "routing": 6.25,
+      "dags": 9.708333333333334,
+      "cycles": 0.0,
+      "networks": 1.6666666666666667,
+      "architecture": 0.0,
+      "containers": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 9.708333333333334,
+    "max_case_profile_oracle_regret": 42.5,
+    "regret_case_profile_count": 45,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": [
+      "route-03",
+      "route-08",
+      "route-15",
+      "route-16",
+      "route-17",
+      "route-19",
+      "route-21",
+      "route-23"
+    ],
+    "mean_balanced_on_valid": 10.7842592,
+    "mean_traceable_on_valid": 15.126851866666666,
+    "mean_direct_on_valid": 25.9018518,
+    "valid_gained_vs_default": 0,
+    "valid_lost_vs_default": 7
+  }
+]

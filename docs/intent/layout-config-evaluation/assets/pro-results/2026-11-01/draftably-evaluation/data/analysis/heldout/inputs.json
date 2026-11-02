@@ -1,0 +1,61 @@
+{
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "inputs": [
+    {
+      "stem": "screen-heldout",
+      "exists": true,
+      "expected": 599,
+      "observed": 599,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "resultsSha256": "f121951690a1bad6d7c46ebc719fed0b1ab3bc8401ad38c9c7b9d4922b6a66ae",
+      "statuses": {
+        "ok": 481,
+        "timed_out": 118
+      }
+    },
+    {
+      "stem": "documented-default-heldout",
+      "exists": true,
+      "expected": 23,
+      "observed": 23,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "resultsSha256": "d82837e3352e3e05969cfbee0498792e3bba23a2eddc3fafc1f16c99f40f5163",
+      "statuses": {
+        "ok": 19,
+        "timed_out": 4
+      }
+    },
+    {
+      "stem": "tuning-development",
+      "notReadDuringHeldout": true
+    },
+    {
+      "stem": "selected-presets-heldout",
+      "exists": true,
+      "expected": 207,
+      "observed": 207,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "resultsSha256": "bf5c33642e259ebdbf72ce3d9cd8fd601147432e1e84dcceef22456d0d5e0e1b",
+      "statuses": {
+        "ok": 173,
+        "timed_out": 34
+      }
+    }
+  ],
+  "fittedOnHeldout": false
+}

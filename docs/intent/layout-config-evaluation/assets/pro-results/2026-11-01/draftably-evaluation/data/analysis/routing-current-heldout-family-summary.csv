@@ -1,0 +1,1441 @@
+family,policy,role,subset,axis,bases,families,total_jobs,oracle_feasible_jobs,acceptable_jobs,absolute_acceptable_fraction,relative_to_scoped_feasible_pool_fraction,hard_valid_jobs,current_valid_hard_loss_jobs,current_valid_hard_loss_bases,current_invalid_valid_gain_bases,mean_finite_score_regret,p95_finite_score_regret,worst_family_relative_coverage,serial_budget_valid_sensitivity_jobs,serial_budget_acceptable_sensitivity_jobs,serial_budget_unknown_valid_jobs,serial_budget_unknown_acceptable_jobs
+architecture,current-default,measured current source baseline,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,9.262449730395105,9.262449730395105,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,10.690921999955492,10.690921999955492,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,20.434782,20.434782,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,10.434782999999996,10.434782999999996,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,10.434782999999996,10.434782999999996,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,10.434782999999996,10.434782999999996,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,20.434782,20.434782,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,9.347826000000005,9.347826000000005,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,12.251543946070118,18.486009999991097,0.0,5,0,0,0
+architecture,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,13.405797,19.434782099999996,0.0,3,0,0,0
+architecture,current-default,measured current source baseline,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,9.262449730395105,9.262449730395105,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,10.690921999955492,10.690921999955492,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,20.434782,20.434782,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,10.434782999999996,10.434782999999996,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,10.434782999999996,10.434782999999996,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,10.434782999999996,10.434782999999996,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,20.434782,20.434782,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,9.347826000000005,9.347826000000005,0.0,1,0,0,0
+architecture,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,12.251543946070118,18.486009999991097,0.0,5,0,0,0
+architecture,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,13.405797,19.434782099999996,0.0,3,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,7.800117666553305,7.800117666553305,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,4.660404353907232,4.660404353907232,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,5.652174000000002,5.652174000000002,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,5.652174000000002,5.652174000000002,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,7.826086999999994,7.826086999999994,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,5.36166960409211,7.370528933242644,0.0,5,0,0,0
+architecture,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,5.942029000000001,7.608695699999995,0.0,3,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,7.800117666553305,7.800117666553305,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,4.660404353907232,4.660404353907232,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,5.652174000000002,5.652174000000002,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,5.652174000000002,5.652174000000002,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,7.826086999999994,7.826086999999994,0.0,1,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,5.36166960409211,7.370528933242644,0.0,5,0,0,0
+architecture,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,5.942029000000001,7.608695699999995,0.0,3,0,0,0
+architecture,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+architecture,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+architecture,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.374513017277167,4.374513017277167,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,7.089948425947867,7.089948425947867,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,14.78260800000001,14.78260800000001,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,6.956522,6.956522,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,6.956522,6.956522,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,6.956522,6.956522,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,14.78260800000001,14.78260800000001,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,8.032022688645009,13.24407608518958,0.0,5,0,0,0
+architecture,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,8.695652000000004,13.999999400000009,0.0,3,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.374513017277167,4.374513017277167,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,7.089948425947867,7.089948425947867,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,14.78260800000001,14.78260800000001,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,6.956522,6.956522,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,6.956522,6.956522,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,6.956522,6.956522,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,14.78260800000001,14.78260800000001,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,4.347826000000005,4.347826000000005,0.0,1,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,8.032022688645009,13.24407608518958,0.0,5,0,0,0
+architecture,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,8.695652000000004,13.999999400000009,0.0,3,0,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+authored,current-default,measured current source baseline,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,current-default,measured current source baseline,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.6067655,1.79704035,0.0,2,0,0,0
+authored,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985202000000001,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985202,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985201999999999,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985201999999999,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985201999999999,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985202,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,1.6067654999999998,1.7970403499999998,0.0,2,0,0,0
+authored,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,8,0.8,0.8,10,0,0,0,0.9640595,1.6279071499999995,0.8,10,8,0,0
+authored,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,1.0711771666666665,1.71247375,0.6666666666666666,6,4,0,0
+authored,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.6067655,1.79704035,0.0,2,0,0,0
+authored,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985202000000001,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985202,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985201999999999,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985201999999999,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985201999999999,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.803383,0.8985202,1.0,2,2,0,0
+authored,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,1.6067654999999998,1.7970403499999998,0.0,2,0,0,0
+authored,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,8,0.8,0.8,10,0,0,0,0.9640595,1.6279071499999995,0.8,10,8,0,0
+authored,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,1.0711771666666665,1.71247375,0.6666666666666666,6,4,0,0
+authored,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+containers,current-default,measured current source baseline,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,current-default,measured current source baseline,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-22,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,clearance-4,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,portGap-28,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-three-route-union,oracle Compare upper bound,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+cycles,current-default,measured current source baseline,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.002735730863113073,0.005197888639914838,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0829069721113016,0.13289987676197054,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.017128540594882936,0.08846173929470914,1.0,10,10,0,0
+cycles,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,current-default,measured current source baseline,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.002735730863113073,0.005197888639914838,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0829069721113016,0.13289987676197054,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.017128540594882936,0.08846173929470914,1.0,10,10,0,0
+cycles,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,0,0.0,0.0,0,10,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,0,6,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,0,0.0,0.0,0,10,2,0,,,0.0,0,0,0,0
+cycles,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,0,6,2,0,,,0.0,0,0,0,0
+cycles,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.005627214864075469,0.01069170824174339,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0011254429728150938,0.006189936350483005,1.0,10,10,0,0
+cycles,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.005627214864075469,0.01069170824174339,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0011254429728150938,0.006189936350483005,1.0,10,10,0,0
+cycles,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.24919978799873022,0.47347959719758737,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5799292809482774,0.9772564542508867,0.5,2,1,0,0
+cycles,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4705884999999999,2.7941181499999996,0.5,2,1,0,0
+cycles,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.49019599999999985,0.9313723999999997,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.49019599999999985,0.9313723999999997,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.49019599999999985,0.9313723999999997,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4705884999999999,2.7941181499999996,0.5,2,1,0,0
+cycles,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.2450985000000001,0.46568715000000016,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,8,0.8,0.8,10,0,0,0,0.6560219137894014,2.0772791130780273,0.8,10,8,0,0
+cycles,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,5,0.8333333333333334,0.8333333333333334,6,0,0,0,0.7352943333333333,2.45098075,0.8333333333333334,6,5,0,0
+cycles,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.24919978799873022,0.47347959719758737,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5799292809482774,0.9772564542508867,0.5,2,1,0,0
+cycles,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4705884999999999,2.7941181499999996,0.5,2,1,0,0
+cycles,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.49019599999999985,0.9313723999999997,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.49019599999999985,0.9313723999999997,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.49019599999999985,0.9313723999999997,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4705884999999999,2.7941181499999996,0.5,2,1,0,0
+cycles,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.2450985000000001,0.46568715000000016,1.0,2,2,0,0
+cycles,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,8,0.8,0.8,10,0,0,0,0.6560219137894014,2.0772791130780273,0.8,10,8,0,0
+cycles,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,5,0.8333333333333334,0.8333333333333334,6,0,0,0,0.7352943333333333,2.45098075,0.8333333333333334,6,5,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+dags,current-default,measured current source baseline,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,current-default,measured current source baseline,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,2.1398470103434555,2.1398470103434555,0.0,1,0,0,0
+dags,current-default,measured current source baseline,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,9.523809,9.523809,0.0,1,0,0,0
+dags,current-default,measured current source baseline,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,1.6666670000000003,1.6666670000000003,0.0,1,0,0,0
+dags,current-default,measured current source baseline,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,1.6666670000000003,1.6666670000000003,0.0,1,0,0,0
+dags,current-default,measured current source baseline,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,1.6666670000000003,1.6666670000000003,0.0,1,0,0,0
+dags,current-default,measured current source baseline,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,9.523809,9.523809,0.0,1,0,0,0
+dags,current-default,measured current source baseline,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,5,1,0.1,0.2,5,0,0,0,2.9993980020686912,8.04701660206869,0.2,5,1,0,0
+dags,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,3,1,0.16666666666666666,0.3333333333333333,3,0,0,0,3.7301586666666666,8.738094799999999,0.3333333333333333,3,1,0,0
+dags,current-default,measured current source baseline,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,current-default,measured current source baseline,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,2.1398470103434555,2.1398470103434555,0.0,1,0,0,0
+dags,current-default,measured current source baseline,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,9.523809,9.523809,0.0,1,0,0,0
+dags,current-default,measured current source baseline,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,1.6666670000000003,1.6666670000000003,0.0,1,0,0,0
+dags,current-default,measured current source baseline,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,1.6666670000000003,1.6666670000000003,0.0,1,0,0,0
+dags,current-default,measured current source baseline,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,1.6666670000000003,1.6666670000000003,0.0,1,0,0,0
+dags,current-default,measured current source baseline,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,9.523809,9.523809,0.0,1,0,0,0
+dags,current-default,measured current source baseline,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,5,1,0.1,0.2,5,0,0,0,2.9993980020686912,8.04701660206869,0.2,5,1,0,0
+dags,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,3,1,0.16666666666666666,0.3333333333333333,3,0,0,0,3.7301586666666666,8.738094799999999,0.3333333333333333,3,1,0,0
+dags,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,1.0439057262804354,1.0439057262804354,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,4.275939745987287,4.275939745987287,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,12.380952,12.380952,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,3.3333340000000007,3.3333340000000007,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,3.3333340000000007,3.3333340000000007,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,3.3333340000000007,3.3333340000000007,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,12.380952,12.380952,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,1.0714289999999949,1.0714289999999949,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,4.873493094453545,10.759949549197456,0.0,5,0,0,0
+dags,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,5.595238333333332,11.4761902,0.0,3,0,0,0
+dags,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,1.0439057262804354,1.0439057262804354,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,4.275939745987287,4.275939745987287,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,12.380952,12.380952,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,3.3333340000000007,3.3333340000000007,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,3.3333340000000007,3.3333340000000007,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,3.3333340000000007,3.3333340000000007,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,12.380952,12.380952,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,1.0714289999999949,1.0714289999999949,0.0,1,0,0,0
+dags,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,4.873493094453545,10.759949549197456,0.0,5,0,0,0
+dags,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,5.595238333333332,11.4761902,0.0,3,0,0,0
+dags,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9779609638205002,0.9779609638205002,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9523809999999955,0.9523809999999955,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.19559219276410006,0.7823687710564,1.0,5,5,0,0
+dags,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.31746033333333185,0.8571428999999958,1.0,3,3,0,0
+dags,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9779609638205002,0.9779609638205002,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9523809999999955,0.9523809999999955,1.0,1,1,0,0
+dags,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.19559219276410006,0.7823687710564,1.0,5,5,0,0
+dags,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.31746033333333185,0.8571428999999958,1.0,3,3,0,0
+dags,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.684545808737397,2.684545808737397,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,4.772345723804239,4.772345723804239,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,13.333333000000003,13.333333000000003,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.523810000000001,4.523810000000001,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,4.523810000000001,4.523810000000001,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,4.523810000000001,4.523810000000001,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,13.333333000000003,13.333333000000003,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,2.7380959999999988,2.7380959999999988,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,5.967568906508328,11.621135544760849,0.0,5,0,0,0
+dags,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,6.865079666666667,12.452380700000003,0.0,3,0,0,0
+dags,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.684545808737397,2.684545808737397,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,4.772345723804239,4.772345723804239,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,13.333333000000003,13.333333000000003,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.523810000000001,4.523810000000001,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,4.523810000000001,4.523810000000001,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,4.523810000000001,4.523810000000001,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,13.333333000000003,13.333333000000003,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,2.7380959999999988,2.7380959999999988,0.0,1,0,0,0
+dags,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,5.967568906508328,11.621135544760849,0.0,5,0,0,0
+dags,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,6.865079666666667,12.452380700000003,0.0,3,0,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9779609638205002,0.9779609638205002,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9523809999999955,0.9523809999999955,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.19559219276410006,0.7823687710564,1.0,5,5,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.31746033333333185,0.8571428999999958,1.0,3,3,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9779609638205002,0.9779609638205002,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.9523809999999955,0.9523809999999955,1.0,1,1,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.19559219276410006,0.7823687710564,1.0,5,5,0,0
+dags,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.31746033333333185,0.8571428999999958,1.0,3,3,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+disconnected,current-default,measured current source baseline,all,profile:readable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,profile:compact,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,profile:stable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,route:balanced,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,route:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,route:direct,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,0,0,0,0.0,0.0,0.5,5,5,0,0
+disconnected,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,0,0,0,0,0.0,0.5,3,3,0,0
+disconnected,current-default,measured current source baseline,niche,profile:readable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,profile:compact,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,profile:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,profile:stable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,profile:specialist,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,route:balanced,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,route:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,route:direct,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,current-default,measured current source baseline,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,0,0,0,0.0,0.0,0.5,5,5,0,0
+disconnected,current-default,measured current source baseline,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,0,0,0,0,0.0,0.5,3,3,0,0
+disconnected,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,clearance-22,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,0,0,0,0.0,0.0,0.5,5,5,0,0
+disconnected,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,0,0,0,0,0.0,0.5,3,3,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,route:direct,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,0,0,0,0.0,0.0,0.5,5,5,0,0
+disconnected,clearance-4,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,0,0,0,0,0.0,0.5,3,3,0,0
+disconnected,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,0,0,0,0.0,0.0,0.5,5,5,0,0
+disconnected,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,0,0,0,0,0.0,0.5,3,3,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,1,0,0,0,0.0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,route:direct,2,1,2,2,1,0.5,0.5,1,0,0,0,0,0.0,0.5,1,1,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,0,0,0,0.0,0.0,0.5,5,5,0,0
+disconnected,portGap-28,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,0,0,0,0,0.0,0.5,3,3,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,frozen-three-route-union,oracle Compare upper bound,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,current-default,measured current source baseline,all,profile:readable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,profile:compact,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,profile:stable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,route:balanced,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,route:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,route:direct,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,0,0.0,0.0,5,0,0,0,1.9999995999999995,2.5,0.0,5,0,0,0
+hierarchies,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,3,0,0,0,2.222222,2.5,0.0,3,0,0,0
+hierarchies,current-default,measured current source baseline,common,profile:readable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,profile:compact,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,profile:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,profile:stable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,profile:specialist,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,route:balanced,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,route:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,route:direct,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,10,0,0.0,0.0,5,0,0,0,1.9999995999999995,2.5,0.0,5,0,0,0
+hierarchies,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,3,0,0,0,2.222222,2.5,0.0,3,0,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,0,0.0,0.0,5,0,0,0,1.9999995999999995,2.5,0.0,5,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,3,0,0,0,2.222222,2.5,0.0,3,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,2,0,0.0,0.0,1,0,0,0,2.5,2.5,0.0,1,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,0,0.0,0.0,5,0,0,0,1.9999995999999995,2.5,0.0,5,0,0,0
+hierarchies,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,3,0,0,0,2.222222,2.5,0.0,3,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.25,1.25,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,4.166667,4.166667,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,4.166667,4.166667,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,0,0.0,0.0,1,0,0,0,1.25,1.25,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,0,0.0,0.0,5,0,0,0,2.0833329999999997,3.6666668,0.0,5,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,3,0,0,0,2.3611109999999997,3.9166669,0.0,3,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.25,1.25,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,4.166667,4.166667,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,2,0,0.0,0.0,1,0,0,0,1.6666659999999993,1.6666659999999993,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,2,0,0.0,0.0,1,0,0,0,4.166667,4.166667,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,2,0,0.0,0.0,1,0,0,0,1.25,1.25,0.0,1,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,0,0.0,0.0,5,0,0,0,2.0833329999999997,3.6666668,0.0,5,0,0,0
+hierarchies,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,3,0,0,0,2.3611109999999997,3.9166669,0.0,3,0,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+networks,current-default,measured current source baseline,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,current-default,measured current source baseline,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-22,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,clearance-4,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,portGap-28,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,frozen-three-route-union,oracle Compare upper bound,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+networks,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+pipelines,current-default,measured current source baseline,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0485753612477167,1.9922931863706617,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0323476584652607,1.961460551083995,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.5789475,3.00000025,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526315,1.9999998499999998,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526315,1.9999998499999998,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526315,1.9999998499999998,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.5789475,3.00000025,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526319999999991,2.0000007999999982,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.1530267039425954,2.684210599999999,0.5,10,5,0,0
+pipelines,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.228070333333333,2.8947372499999995,0.5,6,3,0,0
+pipelines,current-default,measured current source baseline,common,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0485753612477167,1.9922931863706617,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0323476584652607,1.961460551083995,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.5789475,3.00000025,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526315,1.9999998499999998,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526315,1.9999998499999998,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526315,1.9999998499999998,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.5789475,3.00000025,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0526319999999991,2.0000007999999982,0.5,2,1,0,0
+pipelines,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.1530267039425954,2.684210599999999,0.5,10,5,0,0
+pipelines,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.228070333333333,2.8947372499999995,0.5,6,3,0,0
+pipelines,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,5,1,0,0.0,0.0,0.5,5,5,0,0
+pipelines,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,3,1,0,0.0,0.0,0.5,3,3,0,0
+pipelines,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+pipelines,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,5,0.5,0.5,5,5,1,0,0.0,0.0,0.5,5,5,0,0
+pipelines,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,3,3,1,0,0.0,0.0,0.5,3,3,0,0
+pipelines,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.2591013612477173,0.49229258637066287,1.0,2,2,0,0
+pipelines,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5060321584652607,0.9614611010839953,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7894735000000006,1.499999650000001,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.526316,1.0000004,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.526316,1.0000004,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.526316,1.0000004,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7894735000000006,1.499999650000001,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.2631579999999998,0.5000001999999996,1.0,2,2,0,0
+pipelines,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,0.5214478039425957,1.3421052500000001,0.6,10,6,0,0
+pipelines,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,0.5263158333333334,1.447368250000001,0.6666666666666666,6,4,0,0
+pipelines,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.2591013612477173,0.49229258637066287,1.0,2,2,0,0
+pipelines,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5060321584652607,0.9614611010839953,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7894735000000006,1.499999650000001,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.526316,1.0000004,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.526316,1.0000004,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.526316,1.0000004,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7894735000000006,1.499999650000001,0.5,2,1,0,0
+pipelines,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.2631579999999998,0.5000001999999996,1.0,2,2,0,0
+pipelines,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,0.5214478039425957,1.3421052500000001,0.6,10,6,0,0
+pipelines,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,0.5263158333333334,1.447368250000001,0.6666666666666666,6,4,0,0
+pipelines,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6688758612477166,2.5280067363706618,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,1.652648158465261,2.4971750010839955,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,2.8195485,4.071428249999999,0.0,2,0,0,0
+pipelines,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6729320000000003,2.5357143000000004,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6729320000000003,2.5357143000000004,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6729320000000003,2.5357143000000004,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,2.8195485,4.071428249999999,0.0,2,0,0,0
+pipelines,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,1.672932499999999,2.5357143499999983,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,4,0.4,0.4,10,0,0,0,1.8973873039425955,3.4999998499999982,0.4,10,4,0,0
+pipelines,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,6,0,0,0,2.0551376666666665,3.81578925,0.3333333333333333,6,2,0,0
+pipelines,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6688758612477166,2.5280067363706618,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,1.652648158465261,2.4971750010839955,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,2.8195485,4.071428249999999,0.0,2,0,0,0
+pipelines,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6729320000000003,2.5357143000000004,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6729320000000003,2.5357143000000004,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.6729320000000003,2.5357143000000004,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,2.8195485,4.071428249999999,0.0,2,0,0,0
+pipelines,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,1.672932499999999,2.5357143499999983,0.5,2,1,0,0
+pipelines,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,4,0.4,0.4,10,0,0,0,1.8973873039425955,3.4999998499999982,0.4,10,4,0,0
+pipelines,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,6,0,0,0,2.0551376666666665,3.81578925,0.3333333333333333,6,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,current-default,measured current source baseline,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.1176469,0.3039214499999998,1.0,10,10,0,0
+presentation,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.13071883333333334,0.34313725000000006,1.0,6,6,0,0
+presentation,current-default,measured current source baseline,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,current-default,measured current source baseline,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.1176469,0.3039214499999998,1.0,10,10,0,0
+presentation,current-default,measured current source baseline,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.13071883333333334,0.34313725000000006,1.0,6,6,0,0
+presentation,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,0,0.0,0.0,0,10,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,0,6,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,profile:readable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,profile:compact,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,profile:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,profile:stable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,profile:specialist,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,route:balanced,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,route:traceable,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,route:direct,2,1,2,2,0,0.0,0.0,0,2,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,0,0.0,0.0,0,10,2,0,,,0.0,0,0,0,0
+presentation,clearance-22,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,0,6,2,0,,,0.0,0,0,0,0
+presentation,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.43478249999999985,0.8260867499999996,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000018,0.4130438500000003,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739149999999996,0.4130438499999999,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000007,0.4130438500000001,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000007,0.4130438500000001,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000007,0.4130438500000001,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739149999999996,0.4130438499999999,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.43478249999999985,0.8260867499999996,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.26086970000000004,0.6739130999999996,1.0,10,10,0,0
+presentation,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.2898551666666666,0.7608694999999999,1.0,6,6,0,0
+presentation,clearance-4,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.43478249999999985,0.8260867499999996,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000018,0.4130438500000003,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739149999999996,0.4130438499999999,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000007,0.4130438500000001,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000007,0.4130438500000001,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739150000000007,0.4130438500000001,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.21739149999999996,0.4130438499999999,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.43478249999999985,0.8260867499999996,1.0,2,2,0,0
+presentation,clearance-4,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.26086970000000004,0.6739130999999996,1.0,10,10,0,0
+presentation,clearance-4,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.2898551666666666,0.7608694999999999,1.0,6,6,0,0
+presentation,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3921570000000001,0.7450983000000001,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607849999999982,0.37254914999999966,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607849999999982,0.37254914999999966,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607849999999982,0.37254914999999966,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3921570000000001,0.7450983000000001,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.23529419999999995,0.6078433499999998,1.0,10,10,0,0
+presentation,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.261438,0.6862747500000002,1.0,6,6,0,0
+presentation,portGap-28,fixed frozen route policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3921570000000001,0.7450983000000001,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607849999999982,0.37254914999999966,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607849999999982,0.37254914999999966,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607849999999982,0.37254914999999966,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.19607850000000004,0.37254915000000005,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3921570000000001,0.7450983000000001,1.0,2,2,0,0
+presentation,portGap-28,fixed frozen route policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.23529419999999995,0.6078433499999998,1.0,10,10,0,0
+presentation,portGap-28,fixed frozen route policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.261438,0.6862747500000002,1.0,6,6,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,frozen-three-route-union,oracle Compare upper bound,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,retain-current-plus-three,full scoped oracle; retain current plus alternatives,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,current-default,measured current source baseline,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8317332659000987,7.280293205210187,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,2.904800477090597,5.519120906472134,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8,7.219999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,3.5473067485981393,8.948559939310087,0.5,10,5,0,0
+recipes,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,3.933333333333333,9.4,0.5,6,3,0,0
+recipes,current-default,measured current source baseline,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8317332659000987,7.280293205210187,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,2.904800477090597,5.519120906472134,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8,7.219999999999999,0.5,2,1,0,0
+recipes,current-default,measured current source baseline,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,3.5473067485981393,8.948559939310087,0.5,10,5,0,0
+recipes,current-default,measured current source baseline,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,3.933333333333333,9.4,0.5,6,3,0,0
+recipes,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,clearance-22,fixed frozen route policy,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,clearance-22,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,clearance-22,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.231733265900098,4.240293205210186,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,1.3048004770905977,2.4791209064721356,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.1999999999999997,4.18,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4,2.6599999999999997,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4,2.6599999999999997,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4,2.6599999999999997,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.1999999999999997,4.18,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,2.2,4.18,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.707306748598139,4.434906592490107,0.5,10,5,0,0
+recipes,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.9333333333333333,4.4,0.5,6,3,0,0
+recipes,clearance-4,fixed frozen route policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.231733265900098,4.240293205210186,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,1.3048004770905977,2.4791209064721356,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.1999999999999997,4.18,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4,2.6599999999999997,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4,2.6599999999999997,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.4,2.6599999999999997,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.1999999999999997,4.18,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,2.2,4.18,0.5,2,1,0,0
+recipes,clearance-4,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.707306748598139,4.434906592490107,0.5,10,5,0,0
+recipes,clearance-4,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.9333333333333333,4.4,0.5,6,3,0,0
+recipes,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8317332659000987,7.280293205210187,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,2.904800477090597,5.519120906472134,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8,7.219999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,3.5473067485981393,8.948559939310087,0.5,10,5,0,0
+recipes,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,3.933333333333333,9.4,0.5,6,3,0,0
+recipes,portGap-28,fixed frozen route policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8317332659000987,7.280293205210187,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,2.904800477090597,5.519120906472134,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,3.0,5.699999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,5.0,9.5,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,3.8,7.219999999999999,0.5,2,1,0,0
+recipes,portGap-28,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,3.5473067485981393,8.948559939310087,0.5,10,5,0,0
+recipes,portGap-28,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,3.933333333333333,9.4,0.5,6,3,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,frozen-three-route-union,oracle Compare upper bound,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,current-default,measured current source baseline,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8374558451374678,1.5911661057611888,0.5,2,1,0,0
+routing,current-default,measured current source baseline,all,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,1.3009587694595268,1.5472456603713347,0.0,2,0,0,0
+routing,current-default,measured current source baseline,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,6.4276965,7.525122749999999,0.0,2,0,0,0
+routing,current-default,measured current source baseline,all,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.525735000000001,1.8400735000000001,0.0,2,0,0,0
+routing,current-default,measured current source baseline,all,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,1.525735000000001,1.8400735000000001,0.0,2,0,0,0
+routing,current-default,measured current source baseline,all,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,1.525735000000001,1.8400735000000001,0.0,2,0,0,0
+routing,current-default,measured current source baseline,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,6.4276965,7.525122749999999,0.0,2,0,0,0
+routing,current-default,measured current source baseline,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8333329999999997,1.5833326999999993,0.5,2,1,0,0
+routing,current-default,measured current source baseline,all,five_profiles_pooled,2,1,10,10,1,0.1,0.1,10,0,0,0,2.323516222919399,6.549632749999997,0.1,10,1,0,0
+routing,current-default,measured current source baseline,all,three_route_weights_pooled,2,1,6,6,1,0.16666666666666666,0.16666666666666666,6,0,0,0,2.9289215,7.037377749999999,0.16666666666666666,6,1,0,0
+routing,current-default,measured current source baseline,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8374558451374678,1.5911661057611888,0.5,2,1,0,0
+routing,current-default,measured current source baseline,niche,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,1.3009587694595268,1.5472456603713347,0.0,2,0,0,0
+routing,current-default,measured current source baseline,niche,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,6.4276965,7.525122749999999,0.0,2,0,0,0
+routing,current-default,measured current source baseline,niche,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.525735000000001,1.8400735000000001,0.0,2,0,0,0
+routing,current-default,measured current source baseline,niche,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,1.525735000000001,1.8400735000000001,0.0,2,0,0,0
+routing,current-default,measured current source baseline,niche,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,1.525735000000001,1.8400735000000001,0.0,2,0,0,0
+routing,current-default,measured current source baseline,niche,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,6.4276965,7.525122749999999,0.0,2,0,0,0
+routing,current-default,measured current source baseline,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8333329999999997,1.5833326999999993,0.5,2,1,0,0
+routing,current-default,measured current source baseline,niche,five_profiles_pooled,2,1,10,10,1,0.1,0.1,10,0,0,0,2.323516222919399,6.549632749999997,0.1,10,1,0,0
+routing,current-default,measured current source baseline,niche,three_route_weights_pooled,2,1,6,6,1,0.16666666666666666,0.16666666666666666,6,0,0,0,2.9289215,7.037377749999999,0.16666666666666666,6,1,0,0
+routing,clearance-22,fixed frozen route policy,all,profile:readable,2,1,2,2,0,0.0,0.0,1,1,1,0,3.114991766015528,3.114991766015528,0.0,1,0,0,0
+routing,clearance-22,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,all,route:direct,2,1,2,2,0,0.0,0.0,1,1,1,0,3.125,3.125,0.0,1,0,0,0
+routing,clearance-22,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,4,0.4,0.4,5,5,1,0,0.6229983532031056,2.491993412812422,0.4,5,4,0,0
+routing,clearance-22,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,3,3,1,0,1.0416666666666667,2.8124999999999996,0.3333333333333333,3,2,0,0
+routing,clearance-22,fixed frozen route policy,niche,profile:readable,2,1,2,2,0,0.0,0.0,1,1,1,0,3.114991766015528,3.114991766015528,0.0,1,0,0,0
+routing,clearance-22,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,1,1,1,0,0.0,0.0,0.5,1,1,0,0
+routing,clearance-22,fixed frozen route policy,niche,route:direct,2,1,2,2,0,0.0,0.0,1,1,1,0,3.125,3.125,0.0,1,0,0,0
+routing,clearance-22,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,4,0.4,0.4,5,5,1,0,0.6229983532031056,2.491993412812422,0.4,5,4,0,0
+routing,clearance-22,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,3,3,1,0,1.0416666666666667,2.8124999999999996,0.3333333333333333,3,2,0,0
+routing,clearance-4,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.5867467331510792,0.7043024968672318,1.0,2,2,0,0
+routing,clearance-4,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7404779678280038,1.4069081388732072,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.8125,5.34375,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9375,1.78125,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9375,1.78125,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9375,1.78125,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.8125,5.34375,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6495095000000006,0.8590686500000018,1.0,2,2,0,0
+routing,clearance-4,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,1.2029449401958165,3.937499999999996,0.6,10,6,0,0
+routing,clearance-4,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,1.4665031666666668,4.6875,0.6666666666666666,6,4,0,0
+routing,clearance-4,fixed frozen route policy,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.5867467331510792,0.7043024968672318,1.0,2,2,0,0
+routing,clearance-4,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7404779678280038,1.4069081388732072,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.8125,5.34375,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9375,1.78125,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9375,1.78125,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9375,1.78125,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.8125,5.34375,0.5,2,1,0,0
+routing,clearance-4,fixed frozen route policy,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6495095000000006,0.8590686500000018,1.0,2,2,0,0
+routing,clearance-4,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,1.2029449401958165,3.937499999999996,0.6,10,6,0,0
+routing,clearance-4,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,1.4665031666666668,4.6875,0.6666666666666666,6,4,0,0
+routing,portGap-28,fixed frozen route policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,portGap-28,fixed frozen route policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.896655294904261,1.0142415310921924,0.5,2,1,0,0
+routing,portGap-28,fixed frozen route policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,5.698529499999999,7.452206049999998,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,all,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1090680000000006,1.1697298000000018,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,all,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1090680000000006,1.1697298000000018,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,all,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1090680000000006,1.1697298000000018,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,5.698529499999999,7.452206049999998,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,portGap-28,fixed frozen route policy,all,five_profiles_pooled,2,1,10,10,3,0.3,0.3,10,0,0,0,1.7626641589808523,5.893382449999995,0.3,10,3,0,0
+routing,portGap-28,fixed frozen route policy,all,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,6,0,0,0,2.2691991666666667,6.672794249999999,0.3333333333333333,6,2,0,0
+routing,portGap-28,fixed frozen route policy,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,portGap-28,fixed frozen route policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.896655294904261,1.0142415310921924,0.5,2,1,0,0
+routing,portGap-28,fixed frozen route policy,niche,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,5.698529499999999,7.452206049999998,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,niche,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1090680000000006,1.1697298000000018,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,niche,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1090680000000006,1.1697298000000018,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,niche,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1090680000000006,1.1697298000000018,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,niche,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,5.698529499999999,7.452206049999998,0.0,2,0,0,0
+routing,portGap-28,fixed frozen route policy,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,portGap-28,fixed frozen route policy,niche,five_profiles_pooled,2,1,10,10,3,0.3,0.3,10,0,0,0,1.7626641589808523,5.893382449999995,0.3,10,3,0,0
+routing,portGap-28,fixed frozen route policy,niche,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,6,0,0,0,2.2691991666666667,6.672794249999999,0.3333333333333333,6,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,frozen-three-route-union,oracle Compare upper bound,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,retain-current-plus-three,full scoped oracle; retain current plus alternatives,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0

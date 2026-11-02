@@ -1,0 +1,12 @@
+{
+  "checks": {
+    "originalFiveStreamsAccepted": true,
+    "changedRawTimestampRejected": true,
+    "missingHistoricalManifestRejected": true
+  },
+  "engineCalls": 0,
+  "routerCalls": 0,
+  "originalInputsModified": false,
+  "guardCodeSha256": "efddaf4695d389e0e3a5e20a772384634fcaed6b552296f90d623432734f1ec8",
+  "inputManifestSha256": "bf9f011e365934f0b51bc8eceb66d7ebd309f822228d5c0b0dac91fa819c9b5d"
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "draftably-original-report-inputs-1",
+  "createdAt": "2026-11-02T00:52:44.727335+00:00",
+  "purpose": "Guard fixed original-experiment narratives/figures; not a new metric or policy freeze.",
+  "originalRunOnly": true,
+  "streamHashRule": "Exact raw JSONL bytes, including timestamps, runtime observations, recovery metadata, and line ordering. A fresh run intentionally differs even when geometry matches. Never regenerate this manifest during replay.",
+  "freshReplay": "Use dynamic core analysis and plot-portfolio outputs. Original fixed-narrative helpers are excluded from fresh replay-all.",
+  "streams": [
+    {
+      "path": "data/screen-heldout.jsonl",
+      "sha256": "f121951690a1bad6d7c46ebc719fed0b1ab3bc8401ad38c9c7b9d4922b6a66ae",
+      "bytes": 2294603,
+      "canonicalTrials": 599,
+      "canonicalStatuses": {
+        "ok": 481,
+        "timed_out": 118
+      }
+    },
+    {
+      "path": "data/documented-default-heldout.jsonl",
+      "sha256": "d82837e3352e3e05969cfbee0498792e3bba23a2eddc3fafc1f16c99f40f5163",
+      "bytes": 95179,
+      "canonicalTrials": 23,
+      "canonicalStatuses": {
+        "ok": 19,
+        "timed_out": 4
+      }
+    },
+    {
+      "path": "data/selected-presets-heldout.jsonl",
+      "sha256": "bf5c33642e259ebdbf72ce3d9cd8fd601147432e1e84dcceef22456d0d5e0e1b",
+      "bytes": 907789,
+      "canonicalTrials": 207,
+      "canonicalStatuses": {
+        "ok": 173,
+        "timed_out": 34
+      }
+    },
+    {
+      "path": "data/routing-current-heldout.jsonl",
+      "sha256": "8dcabc3b24a9fe8945648af81fac560f1559cd98bc3cc5692ecd4b43043f9c30",
+      "bytes": 277509,
+      "canonicalTrials": 72,
+      "canonicalStatuses": {
+        "ok": 57,
+        "timed_out": 15
+      }
+    },
+    {
+      "path": "data/joint-heldout.jsonl",
+      "sha256": "37884444bf5b896679cab68c671a602970523cf45a29fe7f293e87ba001ecff6",
+      "bytes": 874665,
+      "canonicalTrials": 216,
+      "canonicalStatuses": {
+        "ok": 186,
+        "timed_out": 30
+      }
+    }
+  ],
+  "immutableContext": [
+    {
+      "path": "data/policy-freeze.json",
+      "sha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649"
+    },
+    {
+      "path": "corpus/manifest.json",
+      "sha256": "6847fe5ee8458059cb0edf12f33174e2005cd39375c45a031fe951aa992dc059"
+    }
+  ]
+}

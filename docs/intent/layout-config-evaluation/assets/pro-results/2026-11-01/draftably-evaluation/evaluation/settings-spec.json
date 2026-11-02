@@ -1,0 +1,62 @@
+{
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "status": "Frozen source-informed screening levels; no candidate outcomes inspected by inventory author",
+  "sample_rule": "For every source parameter use >=12 relevant development bases across >=2 families; paired categorical levels are exhaustive when only two values exist. Root ids must be actual ids substituted per case. Production source compile and warm engine trials are different strata.",
+  "source_engine_parameters": [
+    {"attr":"rank-gap","key":"rankGap","levels":[24,52,100],"default":52,"engine":"layered","families":["pipelines","dags","hierarchies"],"condition":"Directional separation; also shared by other connective engines."},
+    {"attr":"group-gap","key":"groupGap","levels":[24,48,96],"default":48,"engine":"compound-flow","families":["architecture","containers"],"condition":"Requires sibling group or group/node spacing; packed source compiler also consumes for layered."},
+    {"attr":"node-gap","key":"nodeGap","levels":[12,24,48],"default":24,"engine":"layered","families":["dags","hierarchies","pipelines"],"condition":"Within-rank spacing and rectangular separation."},
+    {"attr":"boundary-pull","key":"boundaryPull","levels":[0,65,100],"default":65,"engine":"boundary-align","families":["architecture","containers","routing_congestion"],"condition":"At least one cross-parent edge; compound engine family only."},
+    {"attr":"hierarchy-sweeps","key":"hierarchySweeps","levels":[1,2,4],"default":2,"engine":"compound-flow","families":["architecture","containers"],"condition":"Compound engines alternate hierarchy pass order; test nested groups and boundary links."},
+    {"attr":"edge-length","key":"edgeLength","levels":[48,88,144],"default":88,"engine":"tidy","families":["networks","cycles","dags"],"condition":"Spring preferred center distance, size-adjusted; stress uses graph distance."},
+    {"attr":"repulsion","key":"repulsion","levels":[0,45,90],"default":45,"engine":"force","families":["networks","cycles","disconnected"],"condition":"force only; no direction relaxation is possible through source respectDirection because no such source attribute exists."},
+    {"attr":"flow-strength","key":"flowStrength","levels":[0,65,100],"default":65,"engine":"flow","families":["pipelines","dags","cycles"],"condition":"Flow-specific soft constraints and shared respectDirection objective."},
+    {"attr":"alignment","key":"alignment","levels":[0,55,100],"default":55,"engine":"tidy","families":["dags","pipelines","architecture"],"condition":"Tidy neighbour alignment; also flow and boundary-align."},
+    {"attr":"compactness","key":"compactness","levels":[0,35,90],"default":35,"engine":"compound-spring","families":["architecture","containers","networks"],"condition":"Aspect and center forces; disabled for flow/tree/layered/compound-flow/boundary-align."},
+    {"attr":"grid-strength","key":"gridStrength","levels":[0,45,100],"default":45,"engine":"grid","families":["disconnected","presentation_constraints"],"condition":"Grid target attraction only."},
+    {"attr":"ordering","key":"ordering","levels":["stable","crossings"],"default":"stable","engine":"layered","families":["dags","hierarchies","routing_congestion"],"condition":"Source/cold rebuild code always sweeps; predicted cold no-op. Must add warm pass witness with prior rank order before any public removal."},
+    {"attr":"fold","key":"fold","levels":["never","auto"],"default":"never","engine":"layered","families":["pipelines","presentation_constraints"],"condition":"Full compiler folds after engine. Raw engine overrides fold to never when respectDirection true; test raw separately with respectDirection false."},
+    {"attr":"aspect","key":"aspect","levels":["0.75","1.6","2"],"categorical_coverage":["1","1.333"],"default":"1.6","engine":"grid","families":["disconnected","presentation_constraints"],"condition":"Grid seeding/target; also compact engines and fold. Canvas aspect is editor-only, omitted from source."},
+    {"attr":"root","key":"rootId","levels":["$automatic","$source_node","$non_source_node"],"default":"","engine":"tree","families":["hierarchies","dags","networks"],"condition":"Substitute ids per fixture; source validates existing node. Include preferred root with incoming edges and disconnected forest."}
+  ],
+  "source_other_parameters": [
+    {"attr":"direction","levels":["auto","right","down"],"default":"auto","engine":"layered","families":["pipelines","dags","architecture"],"condition":"auto resolves right in fixed 1100x720 render context; explicit right additionally sets per-edge flow in projection."},
+    {"attr":"fit","levels":[null,"slide","page"],"categorical_coverage":["wide","square","tall"],"default":null,"engine":"layered","families":["pipelines","presentation_constraints"],"condition":"Root only; 5 internal compile candidates as-written+right/down x auto/never. Does not reorder sequence/lanes by fit."},
+    {"attr":"gap","levels":[14,28,56],"default":28,"recipe":"flow","families":["pipelines","structural_recipes"],"condition":"Explicit recipe line defaults28; absent root line48 and absent group line24. No engine gap attribute."},
+    {"attr":"min-width","levels":[0,320,640],"default":0,"recipe":"row","families":["architecture","presentation_constraints"],"condition":"Minimum group/scope dimensions; can be hidden by naturally larger content."},
+    {"attr":"min-height","levels":[0,240,480],"default":0,"recipe":"column","families":["architecture","presentation_constraints"],"condition":"Minimum dimensions; no claims of zero sensitivity without small-content witness."}
+  ],
+  "warm_layout_parameters": [
+    {"key":"maxMove","levels":[24,48,96],"default":48,"algorithm":"tidy","mode":"pass","required_state":"Stretched linked drawing, pin, fixed subtree, selected-scope; movement budget applies across ancestors."},
+    {"key":"stability","levels":[0,65,100],"default":65,"algorithm":"tidy","mode":"pass","required_state":"Nonoptimal warm arrangement with enough space; soft anchor may be dominated by cap or pins."},
+    {"key":"iterations","levels":[8,32,96],"default":32,"algorithm":"tidy","mode":"pass","required_state":"Stretched warm drawing; settle=false. This differs from maximum settled effort."},
+    {"key":"respectDirection","levels":[true,false],"default":true,"algorithm":"layered","mode":"pass","required_state":"Directed edges and fold auto; test network non-directional mode separately."},
+    {"key":"respectManual","levels":[false,true],"default":false,"algorithm":"tidy","mode":"pass","required_state":"At least two manual=true nodes that are not pinned; include manual descendant anchoring parent."},
+    {"key":"growContainers","levels":[false,true],"default":false,"algorithm":"compound-flow","mode":"pass","required_state":"Tight unpinned group with child near right/bottom boundary; source engine compile always true."},
+    {"key":"ordering","levels":["stable","crossings"],"default":"stable","algorithm":"layered","mode":"pass","required_state":"Two-rank crossing with existing opposite order; no pins and sufficient maxMove."},
+    {"key":"maxIterations","levels":[320,640,1200],"default":640,"algorithm":"stress","mode":"rebuild","warmStart":true,"settle":true,"required_state":"Nonoptimal network; record early termination and actual iterations."},
+    {"key":"scope","levels":["all","selection","neighbourhood","container"],"default":"auto in editor, all in engine","algorithm":"tidy","mode":"pass","required_state":"Selected siblings with one-hop neighbours; one selected group for container; fixed outsiders. Inapplicable selection must be explicit failure, not fake trial."},
+    {"key":"fixedIds","levels":[[],["$selected_region"]],"default":[],"algorithm":"tidy","mode":"pass","required_state":"Brush hold alias; not a numeric control."}
+  ],
+  "routing_parameters": [
+    {"attr":"clearance","key":"clearance","levels":[4,10,22],"default":10},
+    {"attr":"port-gap","key":"portGap","levels":[6,16,28],"default":16},
+    {"attr":"edge-gap","key":"edgeGap","levels":[8,16,32],"default":16},
+    {"attr":"bend-penalty","key":"bendPenalty","levels":[0,32,80],"default":32},
+    {"attr":"crossing-penalty","key":"crossingPenalty","levels":[0,360,900],"default":360},
+    {"attr":"shared-penalty","key":"sharedPenalty","levels":[0,8,16],"default":8},
+    {"attr":"parallel-penalty","key":"parallelPenalty","levels":[0,18,48],"default":18},
+    {"attr":"port-stability","key":"portStability","levels":[0,20,100],"default":20,"required_state":"same shared previous route sides for all candidates, small edit, plus empty-history control"},
+    {"attr":"fanout-penalty","key":"fanoutPenalty","levels":[0,50,120],"default":50},
+    {"attr":"passes","key":"passes","levels":[1,3,5],"default":3},
+    {"attr":"corner-radius","key":"cornerRadius","levels":[0,6,12],"default":6,"required_state":"Compare production roundedPath/SVG output; route points and metrics should be unchanged"},
+    {"attr":"standoff","key":"standoff","levels":[0,20,40],"default":20,"required_state":"Use RouteLab API directly; absent from explorer and routing UI"}
+  ],
+  "routing_interactions": [["crossingPenalty","bendPenalty"],["clearance","standoff"],["edgeGap","parallelPenalty"],["portGap","fanoutPenalty"],["sharedPenalty","passes"],["portStability","crossingPenalty"]],
+  "layout_interactions": [
+    {"keys":["aspect","fold"],"levels":[["0.75","1.6","2"],["auto","never"]],"design":"3x2 categorical; only two fold values exist","path":"source","engine":"layered"},
+    {"keys":["rankGap","nodeGap"],"levels":[[24,52,100],[12,24,48]],"design":"3x3","path":"source","engine":"layered"},
+    {"keys":["boundaryPull","hierarchySweeps"],"levels":[[0,65,100],[1,2,4]],"design":"3x3","path":"source","engine":"compound-flow"}
+  ],
+  "warnings": ["Boolean/categorical controls must not manufacture a third value.","ENGINES permits all15 source keys with every engine; irrelevant source key accepted does not prove consumed.","Explicit sides are constraints, release only in deliberate separate ablation.","cornerRadius is aesthetic-only in router, consumed by model/routes.drawRoutes.","Raw warm ordering is distinct from cold source ordering; retain warm witness.","Production routing labels, group title bands, lanes and sequence rows require model/routes, not Explorer.sceneInput alone."]
+}

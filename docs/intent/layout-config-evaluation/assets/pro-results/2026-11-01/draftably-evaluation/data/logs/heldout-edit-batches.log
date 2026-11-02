@@ -1,0 +1,81 @@
+{"event":"prerequisite-complete","after":"screen-heldout","at":"2026-11-02T00:16:43.788Z"}
+{"at":"2026-11-02T00:16:43.832Z","runId":"edits-current-heldout","event":"start","started":"2026-11-02T00:16:43.832Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":60,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-02T00:17:37.408Z","runId":"edits-current-heldout","event":"progress","complete":20,"total":60,"last":"E-cold-architecture-05-color_control-current","status":"ok","elapsedSeconds":54}
+{"at":"2026-11-02T00:17:45.039Z","runId":"edits-current-heldout","event":"progress","complete":40,"total":60,"last":"E-cold-routing-05-color_control-current","status":"ok","elapsedSeconds":61}
+{"at":"2026-11-02T00:17:45.850Z","runId":"edits-current-heldout","event":"progress","complete":60,"total":60,"last":"E-cold-recipes-05-color_control-current","status":"ok","elapsedSeconds":62}
+{"at":"2026-11-02T00:17:45.863Z","runId":"edits-current-heldout","event":"complete","started":"2026-11-02T00:16:43.832Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":60,"priorCompleted":0,"executed":60,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996","finished":"2026-11-02T00:17:45.859Z","elapsedSeconds":62.027,"persistedDistinct":60}
+{"at":"2026-11-02T00:17:45.889Z","runId":"edits-states-heldout","event":"start","started":"2026-11-02T00:17:45.888Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":12,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-02T00:18:03.134Z","runId":"edits-states-heldout","event":"complete","started":"2026-11-02T00:17:45.888Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":12,"priorCompleted":0,"executed":12,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c","finished":"2026-11-02T00:18:03.133Z","elapsedSeconds":17.245,"persistedDistinct":12}
+{"at":"2026-11-02T00:18:03.162Z","runId":"edits-warm-heldout","event":"start","started":"2026-11-02T00:18:03.162Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":180,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-02T00:18:22.047Z","runId":"edits-warm-heldout","event":"progress","complete":16,"total":180,"last":"E-warm-dags-05-relabel-current-tidy","status":"timed_out","elapsedSeconds":19}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-02T00:18:50.097Z","runId":"edits-warm-heldout","event":"progress","complete":18,"total":180,"last":"E-warm-dags-05-relabel-group-aware","status":"timed_out","elapsedSeconds":47}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-02T00:19:15.535Z","runId":"edits-warm-heldout","event":"progress","complete":20,"total":180,"last":"E-warm-dags-05-add-separate-only","status":"ok","elapsedSeconds":72}
+{"at":"2026-11-02T00:20:09.844Z","runId":"edits-warm-heldout","event":"progress","complete":40,"total":180,"last":"E-warm-hierarchies-05-direction_or_remove-current-tidy","status":"ok","elapsedSeconds":127}
+{"at":"2026-11-02T00:21:09.744Z","runId":"edits-warm-heldout","event":"progress","complete":60,"total":180,"last":"E-warm-architecture-05-color_control-group-aware","status":"ok","elapsedSeconds":187}
+{"at":"2026-11-02T00:21:22.881Z","runId":"edits-warm-heldout","event":"progress","complete":80,"total":180,"last":"E-warm-networks-05-add-separate-only","status":"ok","elapsedSeconds":200}
+{"at":"2026-11-02T00:21:28.455Z","runId":"edits-warm-heldout","event":"progress","complete":100,"total":180,"last":"E-warm-disconnected-05-direction_or_remove-current-tidy","status":"ok","elapsedSeconds":205}
+{"at":"2026-11-02T00:21:52.108Z","runId":"edits-warm-heldout","event":"progress","complete":120,"total":180,"last":"E-warm-routing-05-color_control-group-aware","status":"ok","elapsedSeconds":229}
+{"at":"2026-11-02T00:21:53.641Z","runId":"edits-warm-heldout","event":"progress","complete":140,"total":180,"last":"E-warm-presentation-05-add-separate-only","status":"ok","elapsedSeconds":230}
+{"at":"2026-11-02T00:21:54.726Z","runId":"edits-warm-heldout","event":"progress","complete":160,"total":180,"last":"E-warm-authored-05-direction_or_remove-current-tidy","status":"ok","elapsedSeconds":232}
+{"at":"2026-11-02T00:21:54.822Z","runId":"edits-warm-heldout","event":"progress","complete":180,"total":180,"last":"E-warm-recipes-05-color_control-group-aware","status":"ok","elapsedSeconds":232}
+{"at":"2026-11-02T00:21:54.842Z","runId":"edits-warm-heldout","event":"complete","started":"2026-11-02T00:18:03.162Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":180,"priorCompleted":0,"executed":180,"failed":0,"timedOut":2,"skipped":0,"taskSha256":"2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87","finished":"2026-11-02T00:21:54.829Z","elapsedSeconds":231.667,"persistedDistinct":180}

@@ -1,0 +1,176 @@
+recommendation_id,name,pro_surface_decision,integration_class,reason,plan_milestone
+ENG-COMPOUND-FLOW,Compound flow,Hide,Defer,Retain Compound flow implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-BOUNDARY-ALIGN,Boundary alignment,Hide,Defer,Retain Boundary alignment implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-COMPOUND-SPRING,Compound spring,Hide,Defer,Retain Compound spring implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-TIDY,Local tidy,Hide,Defer,Retain Local tidy implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-STRESS,Stress descent,Hide,Defer,Retain Stress descent implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-FORCE,Spring network,Hide,Defer,Retain Spring network implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-FLOW,Directional flow,Hide,Defer,Retain Directional flow implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-LAYERED,Layered + fold,Hide,Defer,Retain Layered + fold implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-TREE,Subtree tree,Hide,Defer,Retain Subtree tree implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-GRID,Soft grid,Hide,Defer,Retain Soft grid implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+ENG-SEPARATE,Separate overlaps,Hide,Defer,Retain Separate overlaps implementation and Advanced access; tested portfolio reduction did not pass heldout.,3; 4
+REC-FLOW,flow recipe,Keep,Defer,"Preserve flow recipe; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+REC-ROW,row recipe,Keep,Defer,"Preserve row recipe; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+REC-COLUMN,column recipe,Keep,Defer,"Preserve column recipe; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+REC-LANES,lanes recipe,Keep,Defer,"Preserve lanes recipe; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+REC-SEQUENCE,sequence recipe,Keep,Defer,"Preserve sequence recipe; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+REC-CELLS,cells recipe,Keep,Defer,"Preserve cells recipe; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+REC-IMPLICIT,No layout line,Keep,Defer,"Preserve No layout line; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+LAY-ALGORITHM,algorithm,Merge,Build,Preserve algorithm in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-DIRECTION,direction,Keep,Build,Preserve direction in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-MODE,mode,Merge,Build,Preserve mode in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-MAX-MOVE,maxMove,Automate,Build,Preserve maxMove in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-STABILITY,stability,Hide,Build,Preserve stability in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-ITERATIONS,iterations,Automate,Build,Preserve iterations in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-NODE-GAP,nodeGap,Merge,Build,Preserve nodeGap in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-RANK-GAP,rankGap,Merge,Build,Preserve rankGap in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-EDGE-LENGTH,edgeLength,Hide,Build,Preserve edgeLength in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-REPULSION,repulsion,Hide,Build,Preserve repulsion in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-FLOW-STRENGTH,flowStrength,Automate,Explore,Hide routine flowStrength tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+LAY-ALIGNMENT,alignment,Hide,Build,Preserve alignment in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-COMPACTNESS,compactness,Automate,Explore,Hide routine compactness tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+LAY-GRID-STRENGTH,gridStrength,Automate,Explore,Hide routine gridStrength tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+LAY-ASPECT,aspect,Merge,Build,"Make aspect truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+LAY-FOLD,fold,Keep,Build,Preserve fold in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-RESPECT-DIRECTION,respectDirection,Automate,Explore,Hide routine respectDirection tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+LAY-ORDERING,ordering,Hide,Build,"Make ordering truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+LAY-ROOT-ID,rootId,Keep,Build,Preserve rootId in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-RESPECT-MANUAL,respectManual,Merge,Build,Preserve respectManual in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-GROW-CONTAINERS,growContainers,Automate,Explore,Hide routine growContainers tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+LAY-BOUNDARY-PULL,boundaryPull,Hide,Build,Preserve boundaryPull in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-HIERARCHY-SWEEPS,hierarchySweeps,Automate,Explore,Hide routine hierarchySweeps tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+LAY-GROUP-GAP,groupGap,Merge,Build,Preserve groupGap in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+RTE-CLEARANCE,clearance,Hide,Build,Move clearance out of the main numeric menu; keep exact supported values and current defaults.,2
+RTE-PORT-GAP,portGap,Merge,Build,Move portGap out of the main numeric menu; keep exact supported values and current defaults.,2
+RTE-EDGE-GAP,edgeGap,Merge,Build,Move edgeGap out of the main numeric menu; keep exact supported values and current defaults.,2
+RTE-BEND-PENALTY,bendPenalty,Automate,Explore,Hide routine bendPenalty tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-CROSSING-PENALTY,crossingPenalty,Automate,Explore,Hide routine crossingPenalty tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-SHARED-PENALTY,sharedPenalty,Automate,Explore,Hide routine sharedPenalty tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-PARALLEL-PENALTY,parallelPenalty,Automate,Explore,Hide routine parallelPenalty tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-PORT-STABILITY,portStability,Automate,Explore,Hide routine portStability tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-FANOUT-PENALTY,fanoutPenalty,Automate,Explore,Hide routine fanoutPenalty tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-PASSES,passes,Automate,Explore,Hide routine passes tuning and keep current computation; any new automatic value or preset needs validation.,3; 4
+RTE-CORNER-RADIUS,cornerRadius,Merge,Build,Move cornerRadius out of the main numeric menu; keep exact supported values and current defaults.,2
+RTE-STANDOFF,standoff,Hide,Build,Move standoff out of the main numeric menu; keep exact supported values and current defaults.,2
+LAY-FIT,fit,Keep,Build,"Make fit truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+LAY-RECIPE-GAP,recipe gap,Merge,Build,Preserve recipe gap in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-RECIPE-FOLD,flow recipe fold,Keep,Build,Preserve flow recipe fold in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-MIN-WIDTH,min-width,Hide,Build,Preserve min-width in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-MIN-HEIGHT,min-height,Hide,Build,Preserve min-height in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-CELL-COLUMNS,columns,Keep,Build,Preserve columns in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-CELL-UNIT,unit,Keep,Build,Preserve unit in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-CELL-UNIT-WIDTH,unit-width,Hide,Build,Preserve unit-width in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-CELL-RULER,ruler,Keep,Build,Preserve ruler in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-GROUP-FOLD,group fold,Keep,Build,Preserve group fold in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+LAY-GROUP-FRAME,frame,Keep,Build,Preserve frame in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-FROM,from= / fromSide,Keep,Build,Preserve from= / fromSide in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-TO,to= / toSide,Keep,Build,Preserve to= / toSide in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-CONSTRAINT,constraint=false,Keep,Build,Preserve constraint=false in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-DIRECTED,directed,Keep,Build,Preserve directed in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-ORDER,order scope ids...,Keep,Build,Preserve order scope ids... in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-NEAR-SIDE,near side,Keep,Build,"Make near side truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+AUTH-NEAR-GAP,near gap,Keep,Build,Preserve near gap in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-NEAR-OFFSET,near offset,Hide,Build,Preserve near offset in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-NEAR-STRENGTH,near strength,Keep,Build,Preserve near strength in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-NUDGE-DX,nudge dx,Hide,Build,Preserve nudge dx in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-NUDGE-DY,nudge dy,Hide,Build,Preserve nudge dy in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-STAY-X,stay x,Keep,Build,"Make stay x truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+AUTH-STAY-Y,stay y,Keep,Build,"Make stay y truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+AUTH-STAY-WEIGHT,stay weight,Hide,Build,Preserve stay weight in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-PIN-X,pin x,Keep,Build,Preserve pin x in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-PIN-Y,pin y,Keep,Build,Preserve pin y in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-SIZE-WIDTH,size width,Keep,Build,Preserve size width in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-SIZE-HEIGHT,size height,Keep,Build,Preserve size height in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-ALIGN-AXIS,align x/y,Keep,Build,Preserve align x/y in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-ALIGN-STRENGTH,align strength,Keep,Build,Preserve align strength in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-PARENT,in= / parentId,Keep,Build,Preserve in= / parentId in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-SPAN,span,Keep,Build,Preserve span in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-PHASE,phase message ids,Keep,Build,Preserve phase message ids in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-MANUAL,manual marker,Merge,Build,Preserve manual marker in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-COLLAPSE,collapsed group,Keep,Build,Preserve collapsed group in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-CONTAINER-DIRECTION,container direction,Merge,Build,Preserve container direction in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-CONTAINER-PADDING,container padding,Hide,Build,Preserve container padding in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+AUTH-WAYPOINTS,edge waypoints,Hide,Defer,"Preserve edge waypoints; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+AUTH-LABEL-DX,edge label dx,Hide,Defer,"Preserve edge label dx; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+AUTH-LABEL-DY,edge label dy,Hide,Defer,"Preserve edge label dy; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+AUTH-INTENT-START,start object / placement,Hide,Defer,"Preserve start object / placement; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+AUTH-INTENT-END,end object / placement,Hide,Defer,"Preserve end object / placement; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+UI-SCOPE,Scope,Keep,Build,Preserve Scope in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-WARM-START,Warm start,Merge,Build,Preserve Warm start in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-SETTLE,Settle,Automate,Build,Preserve Settle in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-MAX-ITERATIONS,Maximum settled effort,Automate,Build,"Make Maximum settled effort truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+UI-FIXED-IDS,Brush/session holds,Keep,Build,Preserve Brush/session holds in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-VIEWPORT,Canvas dimensions,Automate,Build,Preserve Canvas dimensions in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-QUICK-ROUTES,Quick drag routing,Automate,Build,Preserve Quick drag routing in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-PRIOR-ROUTES,Shared route history,Keep,Build,Preserve Shared route history in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-SNAP,Snap to nearby shapes,Keep,Build,Preserve Snap to nearby shapes in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-SHOW-MANUAL,Show manual badges,Hide,Build,Preserve Show manual badges in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-MODE,Comparison type,Keep,Build,Preserve Comparison type in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-KIND,Comparison kind,Hide,Build,Preserve Comparison kind in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-ALGORITHMS,Approaches in Compare,Merge,Build,Preserve Approaches in Compare in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-AXIS-A,Column parameter,Hide,Build,Preserve Column parameter in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-AXIS-B,Row parameter,Hide,Build,Preserve Row parameter in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-VALUES-A,Column values,Hide,Build,Preserve Column values in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-VALUES-B,Row values,Hide,Build,Preserve Row values in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-RELEASE-PORTS,Release fixed port sides,Remove,Build,Remove only the ineffective file-routing Compare checkbox; preserve raw release and explicit Use auto ports.,1
+UI-COMPARE-CAMERAS,Grid navigation,Keep,Build,Preserve Grid navigation in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-PRESENTATION,Presentation,Keep,Build,Preserve Presentation in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-LAYER-VISIBILITY,Layer visibility,Keep,Build,Preserve Layer visibility in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-LAYER-OPACITY,Layer opacity,Hide,Build,Preserve Layer opacity in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-LABELS,Labels in every layer,Hide,Build,Preserve Labels in every layer in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+UI-COMPARE-ANCHOR,Comparison anchor,Keep,Build,Preserve Comparison anchor in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+BRUSH-MODE,mode,Keep,Defer,"Preserve mode; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+BRUSH-RADIUS,radius,Keep,Defer,"Preserve radius; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+BRUSH-STRENGTH,strength,Hide,Defer,"Preserve strength; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+BRUSH-SOFTNESS,softness,Automate,Defer,"Preserve softness; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+BRUSH-STEP,step,Automate,Defer,"Preserve step; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+BRUSH-HOLD-RESTORED,holdRestored,Keep,Defer,"Preserve holdRestored; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-TIDY,Tidy positions,Keep,Build,Preserve Tidy positions in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-PREVIEW-TIDY,Preview tidy,Merge,Build,Preserve Preview tidy in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-REBUILD,Preview automatic layout,Keep,Build,"Make Preview automatic layout truthful in source preview/writeback; retain fit, refinements and distinct cold/warm semantics.",1; 2
+ACT-KEEP,Keep layout,Keep,Build,Preserve Keep layout in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-DISCARD,Discard,Keep,Build,Preserve Discard in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-HOLD-BEFORE,Hold before,Keep,Build,Preserve Hold before in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-COMPARE-LAYOUTS,Compare layouts,Keep,Build,Preserve Compare layouts in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-COMPARE-ROUTES,Compare ports & routes,Merge,Build,Preserve Compare ports & routes in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-REROUTE,Reroute now,Keep,Build,Preserve Reroute now in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-AUTO-PORTS,Use auto ports,Keep,Build,Preserve Use auto ports in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-CHECKPOINT,Capture checkpoint,Hide,Defer,"Preserve Capture checkpoint; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-RESTORE,Restore checkpoint,Hide,Defer,"Preserve Restore checkpoint; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-TIMELINE,Layout timeline,Hide,Defer,"Preserve Layout timeline; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-TIMELINE-REOPEN,Reopen last timeline,Hide,Defer,"Preserve Reopen last timeline; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-TIMELINE-SAVE,Save timeline,Hide,Defer,"Preserve Save timeline; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-BRUSH,Layout brush,Hide,Defer,"Preserve Layout brush; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-PIN,Pin during layout,Keep,Build,Preserve Pin during layout in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-CLEAR-MANUAL,Clear manual markers,Merge,Build,Preserve Clear manual markers in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-ALIGN-LEFT,Align left,Keep,Build,Preserve Align left in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-ALIGN-TOP,Align top,Keep,Build,Preserve Align top in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-ALIGN-CENTER,Align horizontal centers,Keep,Build,Preserve Align horizontal centers in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-ALIGN-MIDDLE,Align vertical centers,Keep,Build,Preserve Align vertical centers in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-DISTRIBUTE-X,Distribute horizontally,Keep,Build,Preserve Distribute horizontally in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-DISTRIBUTE-Y,Distribute vertically,Keep,Build,Preserve Distribute vertically in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-FIT-CONTAINER,Fit contents,Hide,Build,Preserve Fit contents in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-REFLOW-GROUP,Reflow group,Keep,Build,Preserve Reflow group in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-COLLAPSE,Collapse/expand,Keep,Build,Preserve Collapse/expand in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-REVERSE-EDGE,Reverse,Keep,Build,Preserve Reverse in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-RESET-BENDS,Reset bends,Keep,Build,Preserve Reset bends in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-MARK-START,Start here,Hide,Defer,"Preserve Start here; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-MARK-END,End here,Hide,Defer,"Preserve End here; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-FIT-VIEW,Fit diagram,Keep,Build,Preserve Fit diagram in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-COMPARE-APPLY,Apply comparison,Keep,Build,Preserve Apply comparison in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-COMPARE-GENERATE,Generate/Regenerate,Hide,Build,Preserve Generate/Regenerate in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-COMPARE-CANCEL,Stop generation,Keep,Build,Preserve Stop generation in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-TIMELINE-KEEP,Keep & edit / Keep & brush,Hide,Defer,"Preserve Keep & edit / Keep & brush; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-BRUSH-REFERENCE,Use current restore reference,Hide,Defer,"Preserve Use current restore reference; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-BRUSH-CLEAR-HOLDS,Clear holds,Hide,Defer,"Preserve Clear holds; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded
+ACT-UNDO-REDO,Undo / redo,Keep,Build,Preserve Undo / redo in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-ROUTING-BALANCED,Balanced routing,Keep,Build,Preserve Balanced routing in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+ACT-ROUTING-FEWER-CROSSINGS,Fewer crossings routing,Keep,Build,Preserve Fewer crossings routing in its applicable context; reduce disclosure without deleting authored meaning or changing defaults.,1; 2; 3
+DEBUG-ROUTE-FACING,facing,Hide,Avoid,Keep facing internal; do not add a routine user control.,Deferred or excluded
+DEBUG-ROUTE-TITLEBANDS,titleBands,Hide,Avoid,Keep titleBands internal; do not add a routine user control.,Deferred or excluded
+DEBUG-ROUTE-WINDOW,window,Hide,Avoid,Keep window internal; do not add a routine user control.,Deferred or excluded
+DEBUG-ROUTE-TIDY,tidy,Hide,Avoid,Keep tidy internal; do not add a routine user control.,Deferred or excluded
+DEBUG-ROUTE-JOGS,jogs,Hide,Avoid,Keep jogs internal; do not add a routine user control.,Deferred or excluded
+DEBUG-ORDER-PRIOR,orderPrior,Hide,Avoid,Keep orderPrior internal; do not add a routine user control.,Deferred or excluded
+LEGACY-ALGORITHM-ALIASES,radial / compact aliases,Hide,Defer,"Preserve radial / compact aliases; a new wizard, specialist redesign, or input removal is outside the main-panel reduction.",Deferred or excluded

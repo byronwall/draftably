@@ -1,0 +1,3051 @@
+{
+  "at": "2026-11-01T23:54:09.102808+00:00",
+  "trials": 336,
+  "controls": [
+    {
+      "control": "rankGap",
+      "fixedDefault": 52,
+      "replacementAttribute": "node-gap",
+      "replacementAlternatives": [
+        12,
+        48
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        24,
+        52,
+        100
+      ],
+      "cases": [
+        "pipelines-03",
+        "dags-03",
+        "hierarchies-01",
+        "pipelines-01",
+        "dags-01",
+        "hierarchies-02",
+        "pipelines-02",
+        "dags-02",
+        "hierarchies-03",
+        "pipelines-04",
+        "dags-04",
+        "hierarchies-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-pipelines-03-rankGap-52",
+        "D-layout-dags-03-rankGap-52",
+        "D-layout-hierarchies-01-rankGap-52",
+        "D-layout-pipelines-01-rankGap-52",
+        "D-layout-dags-01-rankGap-52",
+        "D-layout-hierarchies-02-rankGap-52",
+        "D-layout-pipelines-02-rankGap-52",
+        "D-layout-dags-02-rankGap-52",
+        "D-layout-hierarchies-03-rankGap-52",
+        "D-layout-pipelines-04-rankGap-52",
+        "D-layout-dags-04-rankGap-52",
+        "D-layout-hierarchies-04-rankGap-52"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "100",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 5.3929101818181815,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 5.826794545454545,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 5.826794545454545,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "hierarchies-04",
+              "beforeTrial": "D-layout-hierarchies-04-rankGap-100",
+              "fixedDefaultTrial": "D-layout-hierarchies-04-rankGap-52",
+              "retunedTrial": "D-layout-hierarchies-04-rankGap-52",
+              "beforeScore": 28.181818,
+              "retunedScore": 41.363636,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "100",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 10.082296363636363,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 12.088335818181818,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 12.088335818181818,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "pipelines-01",
+              "beforeTrial": "D-layout-pipelines-01-rankGap-100",
+              "fixedDefaultTrial": "D-layout-pipelines-01-rankGap-52",
+              "retunedTrial": "D-layout-pipelines-01-rankGap-52",
+              "beforeScore": 0.5,
+              "retunedScore": 2.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-03",
+              "beforeTrial": "D-layout-hierarchies-03-rankGap-100",
+              "fixedDefaultTrial": "D-layout-hierarchies-03-rankGap-52",
+              "retunedTrial": "D-layout-hierarchies-03-rankGap-52",
+              "beforeScore": 14,
+              "retunedScore": 21.333333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-04",
+              "beforeTrial": "D-layout-hierarchies-04-rankGap-100",
+              "fixedDefaultTrial": "D-layout-hierarchies-04-rankGap-52",
+              "retunedTrial": "D-layout-hierarchies-04-rankGap-52",
+              "beforeScore": 58.863636,
+              "retunedScore": 87.954545,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "12",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.742174454545455,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.742174454545455,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 10,
+            "meanScoreValidOnly": 6.359254272727273,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "groupGap",
+      "fixedDefault": 48,
+      "replacementAttribute": "node-gap",
+      "replacementAlternatives": [
+        12,
+        48
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        24,
+        48,
+        96
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "architecture-01",
+        "containers-02",
+        "architecture-02",
+        "containers-03",
+        "architecture-04",
+        "containers-04",
+        "authored-03",
+        "presentation-01",
+        "routing-01",
+        "authored-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-groupGap-48",
+        "D-layout-containers-01-groupGap-48",
+        "D-layout-architecture-01-groupGap-48",
+        "D-layout-containers-02-groupGap-48",
+        "D-layout-architecture-02-groupGap-48",
+        "D-layout-containers-03-groupGap-48",
+        "D-layout-architecture-04-groupGap-48",
+        "D-layout-containers-04-groupGap-48",
+        "D-layout-authored-03-groupGap-48",
+        "D-layout-presentation-01-groupGap-48",
+        "D-layout-routing-01-groupGap-48",
+        "D-layout-authored-02-groupGap-48"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "12",
+          "before": {
+            "validBases": 9,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 20.84163511111111,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 9,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 20.84163511111111,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 9,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 8.372368444444444,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [
+            "architecture-04"
+          ],
+          "lossWitnesses": [
+            {
+              "caseId": "architecture-04",
+              "beforeTrial": "D-layout-architecture-04-groupGap-48",
+              "fixedDefaultTrial": "D-layout-architecture-04-groupGap-48",
+              "retunedTrial": "G-control-architecture-04-groupGap-via-node-gap-12",
+              "beforeScore": 104.032258,
+              "retunedScore": null,
+              "retunedHardValid": false
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "traceable": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "12",
+          "before": {
+            "validBases": 9,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 39.31640688888889,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 9,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 39.31640688888889,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 9,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 12.746444888888888,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [
+            "architecture-04"
+          ],
+          "lossWitnesses": [
+            {
+              "caseId": "architecture-04",
+              "beforeTrial": "D-layout-architecture-04-groupGap-48",
+              "fixedDefaultTrial": "D-layout-architecture-04-groupGap-48",
+              "retunedTrial": "G-control-architecture-04-groupGap-via-node-gap-12",
+              "beforeScore": 227.741935,
+              "retunedScore": null,
+              "retunedHardValid": false
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "direct": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "12",
+          "before": {
+            "validBases": 9,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 23.33847488888889,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 9,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 23.33847488888889,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 9,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 11.954234111111111,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [
+            "architecture-04"
+          ],
+          "lossWitnesses": [
+            {
+              "caseId": "architecture-04",
+              "beforeTrial": "D-layout-architecture-04-groupGap-48",
+              "fixedDefaultTrial": "D-layout-architecture-04-groupGap-48",
+              "retunedTrial": "G-control-architecture-04-groupGap-via-node-gap-12",
+              "beforeScore": 95.322581,
+              "retunedScore": null,
+              "retunedHardValid": false
+            }
+          ],
+          "oracleFeasibleBases": 10
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "nodeGap",
+      "fixedDefault": 24,
+      "replacementAttribute": "rank-gap",
+      "replacementAlternatives": [
+        24,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        12,
+        24,
+        48
+      ],
+      "cases": [
+        "dags-03",
+        "hierarchies-01",
+        "pipelines-03",
+        "dags-01",
+        "hierarchies-02",
+        "pipelines-01",
+        "dags-02",
+        "hierarchies-03",
+        "pipelines-02",
+        "dags-04",
+        "hierarchies-04",
+        "pipelines-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-dags-03-nodeGap-24",
+        "D-layout-hierarchies-01-nodeGap-24",
+        "D-layout-pipelines-03-nodeGap-24",
+        "D-layout-dags-01-nodeGap-24",
+        "D-layout-hierarchies-02-nodeGap-24",
+        "D-layout-pipelines-01-nodeGap-24",
+        "D-layout-dags-02-nodeGap-24",
+        "D-layout-hierarchies-03-nodeGap-24",
+        "D-layout-pipelines-02-nodeGap-24",
+        "D-layout-dags-04-nodeGap-24",
+        "D-layout-hierarchies-04-nodeGap-24",
+        "D-layout-pipelines-04-nodeGap-24"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "12",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 10,
+            "meanScoreValidOnly": 1.9064437,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 2.2731104,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 3,
+            "meanScoreValidOnly": 5.3929101818181815,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 7,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-dags-03-nodeGap-24",
+              "retunedTrial": "G-control-dags-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-01",
+              "beforeTrial": "D-layout-hierarchies-01-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-01-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-01-nodeGap-via-rank-gap-100",
+              "beforeScore": 0.909091,
+              "retunedScore": 1.818182,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-03-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-dags-01-nodeGap-24",
+              "retunedTrial": "G-control-dags-01-nodeGap-via-rank-gap-100",
+              "beforeScore": 1.538462,
+              "retunedScore": 11.538462,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-02",
+              "beforeTrial": "D-layout-hierarchies-02-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-02-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-02-nodeGap-via-rank-gap-100",
+              "beforeScore": 4.545455,
+              "retunedScore": 4.545455,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-03",
+              "beforeTrial": "D-layout-hierarchies-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-03-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 7,
+              "retunedScore": 8.333333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-02-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-02-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0.833333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-04",
+              "beforeTrial": "D-layout-pipelines-04-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-04-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-04-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "12",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 3.8108058,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 4.5017149,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 10.082296363636363,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 3,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-dags-03-nodeGap-24",
+              "retunedTrial": "G-control-dags-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-01",
+              "beforeTrial": "D-layout-hierarchies-01-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-01-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-01-nodeGap-via-rank-gap-100",
+              "beforeScore": 1.818182,
+              "retunedScore": 2.727273,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-03-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-02",
+              "beforeTrial": "D-layout-hierarchies-02-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-02-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-02-nodeGap-via-rank-gap-100",
+              "beforeScore": 8.181818,
+              "retunedScore": 9.090909,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-02-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-02-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0.833333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-04",
+              "beforeTrial": "D-layout-pipelines-04-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-04-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-04-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "12",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 10,
+            "meanScoreValidOnly": 2.4610888,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 2.882301,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 3,
+            "meanScoreValidOnly": 7.250121,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 7,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-dags-03-nodeGap-24",
+              "retunedTrial": "G-control-dags-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-01",
+              "beforeTrial": "D-layout-hierarchies-01-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-01-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-01-nodeGap-via-rank-gap-100",
+              "beforeScore": 0.909091,
+              "retunedScore": 5.454545,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-03-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-dags-01-nodeGap-24",
+              "retunedTrial": "G-control-dags-01-nodeGap-via-rank-gap-100",
+              "beforeScore": 3.461538,
+              "retunedScore": 19.230769,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-02",
+              "beforeTrial": "D-layout-hierarchies-02-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-02-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-02-nodeGap-via-rank-gap-100",
+              "beforeScore": 5.454545,
+              "retunedScore": 5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-03",
+              "beforeTrial": "D-layout-hierarchies-03-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-hierarchies-03-nodeGap-24",
+              "retunedTrial": "G-control-hierarchies-03-nodeGap-via-rank-gap-100",
+              "beforeScore": 7.5,
+              "retunedScore": 12,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-02-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-02-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 1.666667,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-04",
+              "beforeTrial": "D-layout-pipelines-04-nodeGap-12",
+              "fixedDefaultTrial": "D-layout-pipelines-04-nodeGap-24",
+              "retunedTrial": "G-control-pipelines-04-nodeGap-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "boundaryPull",
+      "fixedDefault": 65,
+      "replacementAttribute": "hierarchy-sweeps",
+      "replacementAlternatives": [
+        1,
+        4
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        65,
+        100
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "routing-01",
+        "architecture-01",
+        "containers-02",
+        "routing-02",
+        "architecture-02",
+        "containers-03",
+        "architecture-04",
+        "containers-04",
+        "authored-03",
+        "presentation-01"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-boundaryPull-65",
+        "D-layout-containers-01-boundaryPull-65",
+        "D-layout-routing-01-boundaryPull-65",
+        "D-layout-architecture-01-boundaryPull-65",
+        "D-layout-containers-02-boundaryPull-65",
+        "D-layout-routing-02-boundaryPull-65",
+        "D-layout-architecture-02-boundaryPull-65",
+        "D-layout-containers-03-boundaryPull-65",
+        "D-layout-architecture-04-boundaryPull-65",
+        "D-layout-containers-04-boundaryPull-65",
+        "D-layout-authored-03-boundaryPull-65",
+        "D-layout-presentation-01-boundaryPull-65"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "1",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 8.744963375,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 2,
+            "meanScoreValidOnly": 12.583978625,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 9.3094405,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "containers-01",
+              "beforeTrial": "D-layout-containers-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-containers-01-boundaryPull-65",
+              "retunedTrial": "G-control-containers-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 9,
+              "retunedScore": 11,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "architecture-01",
+              "beforeTrial": "D-layout-architecture-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-architecture-01-boundaryPull-65",
+              "retunedTrial": "G-control-architecture-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 4.615385,
+              "retunedScore": 8.461538,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "architecture-02",
+              "beforeTrial": "D-layout-architecture-02-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-architecture-02-boundaryPull-65",
+              "retunedTrial": "G-control-architecture-02-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 6.153846,
+              "retunedScore": 11.923077,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        },
+        "traceable": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "1",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 14.172410875,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 2,
+            "meanScoreValidOnly": 17.27089575,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 13.893335875,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "containers-01",
+              "beforeTrial": "D-layout-containers-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-containers-01-boundaryPull-65",
+              "retunedTrial": "G-control-containers-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 14,
+              "retunedScore": 16.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "architecture-01",
+              "beforeTrial": "D-layout-architecture-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-architecture-01-boundaryPull-65",
+              "retunedTrial": "G-control-architecture-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 7.692308,
+              "retunedScore": 10.769231,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "architecture-02",
+              "beforeTrial": "D-layout-architecture-02-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-architecture-02-boundaryPull-65",
+              "retunedTrial": "G-control-architecture-02-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 10.769231,
+              "retunedScore": 20.769231,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        },
+        "direct": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "1",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 12.378194875,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 2,
+            "meanScoreValidOnly": 18.487876625,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 13.707532,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "containers-01",
+              "beforeTrial": "D-layout-containers-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-containers-01-boundaryPull-65",
+              "retunedTrial": "G-control-containers-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 9,
+              "retunedScore": 14,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "routing-01",
+              "beforeTrial": "D-layout-routing-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-routing-01-boundaryPull-65",
+              "retunedTrial": "G-control-routing-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 11,
+              "retunedScore": 13,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "architecture-01",
+              "beforeTrial": "D-layout-architecture-01-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-architecture-01-boundaryPull-65",
+              "retunedTrial": "G-control-architecture-01-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 8.076923,
+              "retunedScore": 10.769231,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "architecture-02",
+              "beforeTrial": "D-layout-architecture-02-boundaryPull-0",
+              "fixedDefaultTrial": "D-layout-architecture-02-boundaryPull-65",
+              "retunedTrial": "G-control-architecture-02-boundaryPull-via-hierarchy-sweeps-1",
+              "beforeScore": 11.538462,
+              "retunedScore": 22.307692,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "hierarchySweeps",
+      "fixedDefault": 2,
+      "replacementAttribute": "boundary-pull",
+      "replacementAlternatives": [
+        0,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        1,
+        2,
+        4
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "architecture-01",
+        "containers-02",
+        "architecture-02",
+        "containers-03",
+        "architecture-04",
+        "containers-04",
+        "authored-03",
+        "presentation-01",
+        "routing-01",
+        "authored-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-hierarchySweeps-2",
+        "D-layout-containers-01-hierarchySweeps-2",
+        "D-layout-architecture-01-hierarchySweeps-2",
+        "D-layout-containers-02-hierarchySweeps-2",
+        "D-layout-architecture-02-hierarchySweeps-2",
+        "D-layout-containers-03-hierarchySweeps-2",
+        "D-layout-architecture-04-hierarchySweeps-2",
+        "D-layout-containers-04-hierarchySweeps-2",
+        "D-layout-authored-03-hierarchySweeps-2",
+        "D-layout-presentation-01-hierarchySweeps-2",
+        "D-layout-routing-01-hierarchySweeps-2",
+        "D-layout-authored-02-hierarchySweeps-2"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "1",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 10.04508,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 10.44280725,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 10.04508,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 8
+        },
+        "traceable": {
+          "beforeGlobalLevel": "1",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 14.79730675,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 15.763215875,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 15.0245795,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "architecture-03",
+              "beforeTrial": "D-layout-architecture-03-hierarchySweeps-1",
+              "fixedDefaultTrial": "D-layout-architecture-03-hierarchySweeps-2",
+              "retunedTrial": "G-control-architecture-03-hierarchySweeps-via-boundary-pull-100",
+              "beforeScore": 29.090909,
+              "retunedScore": 30.909091,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        },
+        "direct": {
+          "beforeGlobalLevel": "1",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 13.829098,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 14.340461625,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 13.6586435,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 8
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "edgeLength",
+      "fixedDefault": 88,
+      "replacementAttribute": "alignment",
+      "replacementAlternatives": [
+        0,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        48,
+        88,
+        144
+      ],
+      "cases": [
+        "networks-01",
+        "cycles-02",
+        "dags-03",
+        "networks-02",
+        "cycles-03",
+        "dags-01",
+        "networks-03",
+        "cycles-01",
+        "dags-02",
+        "networks-04",
+        "cycles-04",
+        "dags-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-networks-01-edgeLength-88",
+        "D-layout-cycles-02-edgeLength-88",
+        "D-layout-dags-03-edgeLength-88",
+        "D-layout-networks-02-edgeLength-88",
+        "D-layout-cycles-03-edgeLength-88",
+        "D-layout-dags-01-edgeLength-88",
+        "D-layout-networks-03-edgeLength-88",
+        "D-layout-cycles-01-edgeLength-88",
+        "D-layout-dags-02-edgeLength-88",
+        "D-layout-networks-04-edgeLength-88",
+        "D-layout-cycles-04-edgeLength-88",
+        "D-layout-dags-04-edgeLength-88"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "48",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 6.4143739,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 6.9524241,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 6.7099313,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "networks-03",
+              "beforeTrial": "D-layout-networks-03-edgeLength-48",
+              "fixedDefaultTrial": "D-layout-networks-03-edgeLength-88",
+              "retunedTrial": "G-control-networks-03-edgeLength-via-alignment-100",
+              "beforeScore": 23.529412,
+              "retunedScore": 25.882353,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "traceable": {
+          "beforeGlobalLevel": "48",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 9.7036551,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 10.7390315,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 10.3675794,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "networks-03",
+              "beforeTrial": "D-layout-networks-03-edgeLength-48",
+              "fixedDefaultTrial": "D-layout-networks-03-edgeLength-88",
+              "retunedTrial": "G-control-networks-03-edgeLength-via-alignment-100",
+              "beforeScore": 44.117647,
+              "retunedScore": 50,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "direct": {
+          "beforeGlobalLevel": "48",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 9.540777,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 10.3955691,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 9.8811719,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "networks-03",
+              "beforeTrial": "D-layout-networks-03-edgeLength-48",
+              "fixedDefaultTrial": "D-layout-networks-03-edgeLength-88",
+              "retunedTrial": "G-control-networks-03-edgeLength-via-alignment-100",
+              "beforeScore": 34.411765,
+              "retunedScore": 36.764706,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "repulsion",
+      "fixedDefault": 45,
+      "replacementAttribute": "edge-length",
+      "replacementAlternatives": [
+        48,
+        144
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        45,
+        90
+      ],
+      "cases": [
+        "networks-01",
+        "cycles-02",
+        "disconnected-01",
+        "networks-02",
+        "cycles-03",
+        "disconnected-03",
+        "networks-03",
+        "cycles-01",
+        "disconnected-02",
+        "networks-04",
+        "cycles-04",
+        "disconnected-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-networks-01-repulsion-45",
+        "D-layout-cycles-02-repulsion-45",
+        "D-layout-disconnected-01-repulsion-45",
+        "D-layout-networks-02-repulsion-45",
+        "D-layout-cycles-03-repulsion-45",
+        "D-layout-disconnected-03-repulsion-45",
+        "D-layout-networks-03-repulsion-45",
+        "D-layout-cycles-01-repulsion-45",
+        "D-layout-disconnected-02-repulsion-45",
+        "D-layout-networks-04-repulsion-45",
+        "D-layout-cycles-04-repulsion-45",
+        "D-layout-disconnected-04-repulsion-45"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "90",
+          "retunedGlobalLevel": "144",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 3.2682304545454546,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 4.1972937272727275,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 2.9072678181818183,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "cycles-04",
+              "beforeTrial": "D-layout-cycles-04-repulsion-90",
+              "fixedDefaultTrial": "D-layout-cycles-04-repulsion-45",
+              "retunedTrial": "G-control-cycles-04-repulsion-via-edge-length-144",
+              "beforeScore": 7.058824,
+              "retunedScore": 7.941176,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "90",
+          "retunedGlobalLevel": "144",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 4.800559090909091,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 6.455112636363636,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 4.105371909090909,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "cycles-04",
+              "beforeTrial": "D-layout-cycles-04-repulsion-90",
+              "fixedDefaultTrial": "D-layout-cycles-04-repulsion-45",
+              "retunedTrial": "G-control-cycles-04-repulsion-via-edge-length-144",
+              "beforeScore": 11.176471,
+              "retunedScore": 13.235294,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "90",
+          "retunedGlobalLevel": "144",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 4.665289272727272,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 5.985091636363636,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 4.277588727272727,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "flowStrength",
+      "fixedDefault": 65,
+      "replacementAttribute": "rank-gap",
+      "replacementAlternatives": [
+        24,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        65,
+        100
+      ],
+      "cases": [
+        "pipelines-03",
+        "dags-03",
+        "cycles-02",
+        "pipelines-01",
+        "dags-01",
+        "cycles-03",
+        "pipelines-02",
+        "dags-02",
+        "cycles-01",
+        "pipelines-04",
+        "dags-04",
+        "cycles-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-pipelines-03-flowStrength-65",
+        "D-layout-dags-03-flowStrength-65",
+        "D-layout-cycles-02-flowStrength-65",
+        "D-layout-pipelines-01-flowStrength-65",
+        "D-layout-dags-01-flowStrength-65",
+        "D-layout-cycles-03-flowStrength-65",
+        "D-layout-pipelines-02-flowStrength-65",
+        "D-layout-dags-02-flowStrength-65",
+        "D-layout-cycles-01-flowStrength-65",
+        "D-layout-pipelines-04-flowStrength-65",
+        "D-layout-dags-04-flowStrength-65",
+        "D-layout-cycles-04-flowStrength-65"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 3.8457488181818182,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 3.9933284545454546,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 3.378216363636364,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 5,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-03-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-03-flowStrength-via-rank-gap-100",
+              "beforeScore": 4,
+              "retunedScore": 4,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-dags-03-flowStrength-65",
+              "retunedTrial": "G-control-dags-03-flowStrength-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-dags-01-flowStrength-65",
+              "retunedTrial": "G-control-dags-01-flowStrength-via-rank-gap-100",
+              "beforeScore": 6.923077,
+              "retunedScore": 6.923077,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-02-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-02-flowStrength-via-rank-gap-100",
+              "beforeScore": 2.5,
+              "retunedScore": 2.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "cycles-01",
+              "beforeTrial": "D-layout-cycles-01-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-cycles-01-flowStrength-65",
+              "retunedTrial": "G-control-cycles-01-flowStrength-via-rank-gap-100",
+              "beforeScore": 2.272727,
+              "retunedScore": 2.272727,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-04",
+              "beforeTrial": "D-layout-pipelines-04-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-04-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-04-flowStrength-via-rank-gap-100",
+              "beforeScore": 0.740741,
+              "retunedScore": 0.740741,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "cycles-04",
+              "beforeTrial": "D-layout-cycles-04-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-cycles-04-flowStrength-65",
+              "retunedTrial": "G-control-cycles-04-flowStrength-via-rank-gap-100",
+              "beforeScore": 1.470588,
+              "retunedScore": 1.470588,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 4.137647090909091,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 4.2675172727272725,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 3.249807636363636,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 4,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-03-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-03-flowStrength-via-rank-gap-100",
+              "beforeScore": 2,
+              "retunedScore": 2,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-dags-03-flowStrength-65",
+              "retunedTrial": "G-control-dags-03-flowStrength-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-dags-01-flowStrength-65",
+              "retunedTrial": "G-control-dags-01-flowStrength-via-rank-gap-100",
+              "beforeScore": 10,
+              "retunedScore": 10,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-02-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-02-flowStrength-via-rank-gap-100",
+              "beforeScore": 1.666667,
+              "retunedScore": 1.666667,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "cycles-01",
+              "beforeTrial": "D-layout-cycles-01-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-cycles-01-flowStrength-65",
+              "retunedTrial": "G-control-cycles-01-flowStrength-via-rank-gap-100",
+              "beforeScore": 1.363636,
+              "retunedScore": 1.363636,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-04",
+              "beforeTrial": "D-layout-pipelines-04-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-04-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-04-flowStrength-via-rank-gap-100",
+              "beforeScore": 0.37037,
+              "retunedScore": 0.37037,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "cycles-04",
+              "beforeTrial": "D-layout-cycles-04-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-cycles-04-flowStrength-65",
+              "retunedTrial": "G-control-cycles-04-flowStrength-via-rank-gap-100",
+              "beforeScore": 1.470588,
+              "retunedScore": 1.470588,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 5.535670272727272,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 5.816071636363636,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 5.085847363636364,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 5,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-03-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-03-flowStrength-via-rank-gap-100",
+              "beforeScore": 4,
+              "retunedScore": 4,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-dags-03-flowStrength-65",
+              "retunedTrial": "G-control-dags-03-flowStrength-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-dags-01-flowStrength-65",
+              "retunedTrial": "G-control-dags-01-flowStrength-via-rank-gap-100",
+              "beforeScore": 8.461538,
+              "retunedScore": 8.461538,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-02-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-02-flowStrength-via-rank-gap-100",
+              "beforeScore": 3.333333,
+              "retunedScore": 3.333333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "cycles-01",
+              "beforeTrial": "D-layout-cycles-01-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-cycles-01-flowStrength-65",
+              "retunedTrial": "G-control-cycles-01-flowStrength-via-rank-gap-100",
+              "beforeScore": 3.636364,
+              "retunedScore": 3.636364,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-04",
+              "beforeTrial": "D-layout-pipelines-04-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-pipelines-04-flowStrength-65",
+              "retunedTrial": "G-control-pipelines-04-flowStrength-via-rank-gap-100",
+              "beforeScore": 0.740741,
+              "retunedScore": 0.740741,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "cycles-04",
+              "beforeTrial": "D-layout-cycles-04-flowStrength-0",
+              "fixedDefaultTrial": "D-layout-cycles-04-flowStrength-65",
+              "retunedTrial": "G-control-cycles-04-flowStrength-via-rank-gap-100",
+              "beforeScore": 2.941176,
+              "retunedScore": 2.941176,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "alignment",
+      "fixedDefault": 55,
+      "replacementAttribute": "edge-length",
+      "replacementAlternatives": [
+        48,
+        144
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        55,
+        100
+      ],
+      "cases": [
+        "dags-03",
+        "pipelines-03",
+        "architecture-03",
+        "dags-01",
+        "pipelines-01",
+        "architecture-01",
+        "dags-02",
+        "pipelines-02",
+        "architecture-02",
+        "dags-04",
+        "pipelines-04",
+        "architecture-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-dags-03-alignment-55",
+        "D-layout-pipelines-03-alignment-55",
+        "D-layout-architecture-03-alignment-55",
+        "D-layout-dags-01-alignment-55",
+        "D-layout-pipelines-01-alignment-55",
+        "D-layout-architecture-01-alignment-55",
+        "D-layout-dags-02-alignment-55",
+        "D-layout-pipelines-02-alignment-55",
+        "D-layout-architecture-02-alignment-55",
+        "D-layout-dags-04-alignment-55",
+        "D-layout-pipelines-04-alignment-55",
+        "D-layout-architecture-04-alignment-55"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "48",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 4.5126355,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 4.5895586,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 4.5895585,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-alignment-0",
+              "fixedDefaultTrial": "D-layout-dags-01-alignment-55",
+              "retunedTrial": "G-control-dags-01-alignment-via-edge-length-48",
+              "beforeScore": 6.923077,
+              "retunedScore": 8.461538,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "traceable": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "48",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.1762811,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 6.3301273,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.2532042,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "dags-01",
+              "beforeTrial": "D-layout-dags-01-alignment-0",
+              "fixedDefaultTrial": "D-layout-dags-01-alignment-55",
+              "retunedTrial": "G-control-dags-01-alignment-via-edge-length-48",
+              "beforeScore": 9.230769,
+              "retunedScore": 11.538462,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "direct": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.1860288,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.2629519,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 6.2629519,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 10
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "compactness",
+      "fixedDefault": 35,
+      "replacementAttribute": "edge-length",
+      "replacementAlternatives": [
+        48,
+        144
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        35,
+        90
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "networks-01",
+        "architecture-01",
+        "containers-02",
+        "networks-02",
+        "architecture-02",
+        "containers-03",
+        "networks-03",
+        "architecture-04",
+        "containers-04",
+        "networks-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-compactness-35",
+        "D-layout-containers-01-compactness-35",
+        "D-layout-networks-01-compactness-35",
+        "D-layout-architecture-01-compactness-35",
+        "D-layout-containers-02-compactness-35",
+        "D-layout-networks-02-compactness-35",
+        "D-layout-architecture-02-compactness-35",
+        "D-layout-containers-03-compactness-35",
+        "D-layout-networks-03-compactness-35",
+        "D-layout-architecture-04-compactness-35",
+        "D-layout-containers-04-compactness-35",
+        "D-layout-networks-04-compactness-35"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "48",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 3,
+            "meanScoreValidOnly": 11.219071375,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 2,
+            "meanScoreValidOnly": 11.39465925,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 9.114476125,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "containers-02",
+              "beforeTrial": "D-layout-containers-02-compactness-0",
+              "fixedDefaultTrial": "D-layout-containers-02-compactness-35",
+              "retunedTrial": "G-control-containers-02-compactness-via-edge-length-48",
+              "beforeScore": 12.5,
+              "retunedScore": 13.333333,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        },
+        "traceable": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "48",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 3,
+            "meanScoreValidOnly": 18.196121375,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 1,
+            "meanScoreValidOnly": 19.3050355,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 15.39306525,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "networks-01",
+              "beforeTrial": "D-layout-networks-01-compactness-0",
+              "fixedDefaultTrial": "D-layout-networks-01-compactness-35",
+              "retunedTrial": "G-control-networks-01-compactness-via-edge-length-48",
+              "beforeScore": 5.454545,
+              "retunedScore": 7.272727,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "containers-02",
+              "beforeTrial": "D-layout-containers-02-compactness-0",
+              "fixedDefaultTrial": "D-layout-containers-02-compactness-35",
+              "retunedTrial": "G-control-containers-02-compactness-via-edge-length-48",
+              "beforeScore": 16.666667,
+              "retunedScore": 18.333333,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        },
+        "direct": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "48",
+          "before": {
+            "validBases": 8,
+            "acceptableBases": 3,
+            "meanScoreValidOnly": 15.760416625,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 8,
+            "acceptableBases": 1,
+            "meanScoreValidOnly": 15.957986374999999,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 8,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 12.8147325,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "networks-01",
+              "beforeTrial": "D-layout-networks-01-compactness-0",
+              "fixedDefaultTrial": "D-layout-networks-01-compactness-35",
+              "retunedTrial": "G-control-networks-01-compactness-via-edge-length-48",
+              "beforeScore": 3.181818,
+              "retunedScore": 4.090909,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "containers-02",
+              "beforeTrial": "D-layout-containers-02-compactness-0",
+              "fixedDefaultTrial": "D-layout-containers-02-compactness-35",
+              "retunedTrial": "G-control-containers-02-compactness-via-edge-length-48",
+              "beforeScore": 17.083333,
+              "retunedScore": 20.416667,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 8
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "gridStrength",
+      "fixedDefault": 45,
+      "replacementAttribute": "aspect",
+      "replacementAlternatives": [
+        0.75,
+        2
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        45,
+        100
+      ],
+      "cases": [
+        "disconnected-01",
+        "presentation-01",
+        "disconnected-03",
+        "presentation-03",
+        "disconnected-02",
+        "presentation-02",
+        "disconnected-04",
+        "presentation-04",
+        "pipelines-03",
+        "authored-03",
+        "dags-03",
+        "cycles-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-disconnected-01-gridStrength-45",
+        "D-layout-presentation-01-gridStrength-45",
+        "D-layout-disconnected-03-gridStrength-45",
+        "D-layout-presentation-03-gridStrength-45",
+        "D-layout-disconnected-02-gridStrength-45",
+        "D-layout-presentation-02-gridStrength-45",
+        "D-layout-disconnected-04-gridStrength-45",
+        "D-layout-presentation-04-gridStrength-45",
+        "D-layout-pipelines-03-gridStrength-45",
+        "D-layout-authored-03-gridStrength-45",
+        "D-layout-dags-03-gridStrength-45",
+        "D-layout-cycles-02-gridStrength-45"
+      ],
+      "semanticCaution": false,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "0.75",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 12.706564636363638,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 14.856654272727273,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 9.822448090909091,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "presentation-02",
+              "beforeTrial": "D-layout-presentation-02-gridStrength-0",
+              "fixedDefaultTrial": "D-layout-presentation-02-gridStrength-45",
+              "retunedTrial": "G-control-presentation-02-gridStrength-via-aspect-0p75",
+              "beforeScore": 4.615385,
+              "retunedScore": 6.153846,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "100",
+          "retunedGlobalLevel": "0.75",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 22.967480454545456,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 28.233737,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 17.763484363636362,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "presentation-03",
+              "beforeTrial": "D-layout-presentation-03-gridStrength-100",
+              "fixedDefaultTrial": "D-layout-presentation-03-gridStrength-45",
+              "retunedTrial": "G-control-presentation-03-gridStrength-via-aspect-0p75",
+              "beforeScore": 8.333333,
+              "retunedScore": 15.833333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "presentation-02",
+              "beforeTrial": "D-layout-presentation-02-gridStrength-100",
+              "fixedDefaultTrial": "D-layout-presentation-02-gridStrength-45",
+              "retunedTrial": "G-control-presentation-02-gridStrength-via-aspect-0p75",
+              "beforeScore": 7.692308,
+              "retunedScore": 9.230769,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-gridStrength-100",
+              "fixedDefaultTrial": "D-layout-pipelines-03-gridStrength-45",
+              "retunedTrial": "G-control-pipelines-03-gridStrength-via-aspect-0p75",
+              "beforeScore": 10,
+              "retunedScore": 16,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-gridStrength-100",
+              "fixedDefaultTrial": "D-layout-dags-03-gridStrength-45",
+              "retunedTrial": "G-control-dags-03-gridStrength-via-aspect-0p75",
+              "beforeScore": 14.545455,
+              "retunedScore": 16.363636,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "0",
+          "retunedGlobalLevel": "0.75",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 16.19426163636364,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 18.460278090909092,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 12.708218,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "presentation-02",
+              "beforeTrial": "D-layout-presentation-02-gridStrength-0",
+              "fixedDefaultTrial": "D-layout-presentation-02-gridStrength-45",
+              "retunedTrial": "G-control-presentation-02-gridStrength-via-aspect-0p75",
+              "beforeScore": 3.846154,
+              "retunedScore": 5.769231,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "ordering",
+      "fixedDefault": "stable",
+      "replacementAttribute": "node-gap",
+      "replacementAlternatives": [
+        48
+      ],
+      "beforeCandidateBudget": 2,
+      "afterCandidateBudget": 2,
+      "originalCoreLevels": [
+        "stable",
+        "crossings"
+      ],
+      "cases": [
+        "dags-03",
+        "hierarchies-01",
+        "routing-01",
+        "dags-01",
+        "hierarchies-02",
+        "routing-03",
+        "dags-02",
+        "hierarchies-03",
+        "routing-02",
+        "dags-04",
+        "hierarchies-04",
+        "routing-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-dags-03-ordering-stable",
+        "D-layout-hierarchies-01-ordering-stable",
+        "D-layout-routing-01-ordering-stable",
+        "D-layout-dags-01-ordering-stable",
+        "D-layout-hierarchies-02-ordering-stable",
+        "D-layout-routing-03-ordering-stable",
+        "D-layout-dags-02-ordering-stable",
+        "D-layout-hierarchies-03-ordering-stable",
+        "D-layout-routing-02-ordering-stable",
+        "D-layout-dags-04-ordering-stable",
+        "D-layout-hierarchies-04-ordering-stable",
+        "D-layout-routing-04-ordering-stable"
+      ],
+      "semanticCaution": true,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 11.910433727272727,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 11.910433727272727,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 11.910433727272727,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 24.73691009090909,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 24.73691009090909,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 24.73691009090909,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 14.04659290909091,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 14.04659290909091,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 14.04659290909091,
+            "timeouts": 1,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "fold",
+      "fixedDefault": "never",
+      "replacementAttribute": "aspect",
+      "replacementAlternatives": [
+        0.75
+      ],
+      "beforeCandidateBudget": 2,
+      "afterCandidateBudget": 2,
+      "originalCoreLevels": [
+        "never",
+        "auto"
+      ],
+      "cases": [
+        "pipelines-03",
+        "presentation-01",
+        "pipelines-01",
+        "presentation-03",
+        "pipelines-02",
+        "presentation-02",
+        "pipelines-04",
+        "presentation-04",
+        "authored-03",
+        "dags-03",
+        "disconnected-01",
+        "cycles-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-pipelines-03-fold-never",
+        "D-layout-presentation-01-fold-never",
+        "D-layout-pipelines-01-fold-never",
+        "D-layout-presentation-03-fold-never",
+        "D-layout-pipelines-02-fold-never",
+        "D-layout-presentation-02-fold-never",
+        "D-layout-pipelines-04-fold-never",
+        "D-layout-presentation-04-fold-never",
+        "D-layout-authored-03-fold-never",
+        "D-layout-dags-03-fold-never",
+        "D-layout-disconnected-01-fold-never",
+        "D-layout-cycles-02-fold-never"
+      ],
+      "semanticCaution": true,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "auto",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 1.5264921818181818,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 2.187015818181818,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 2.187015818181818,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-fold-auto",
+              "fixedDefaultTrial": "D-layout-pipelines-03-fold-never",
+              "retunedTrial": "D-layout-pipelines-03-fold-never",
+              "beforeScore": 0,
+              "retunedScore": 4,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-01",
+              "beforeTrial": "D-layout-pipelines-01-fold-auto",
+              "fixedDefaultTrial": "D-layout-pipelines-01-fold-never",
+              "retunedTrial": "D-layout-pipelines-01-fold-never",
+              "beforeScore": 1.5,
+              "retunedScore": 3.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-fold-auto",
+              "fixedDefaultTrial": "D-layout-pipelines-02-fold-never",
+              "retunedTrial": "D-layout-pipelines-02-fold-never",
+              "beforeScore": 0,
+              "retunedScore": 1.666667,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 10,
+            "meanScoreValidOnly": 1.9487207272727272,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 10,
+            "meanScoreValidOnly": 1.9487207272727272,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 10,
+            "meanScoreValidOnly": 1.9487207272727272,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 0,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "auto",
+          "retunedGlobalLevel": "default",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 9,
+            "meanScoreValidOnly": 1.9421633636363635,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 2.584027818181818,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 8,
+            "meanScoreValidOnly": 2.584027818181818,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-fold-auto",
+              "fixedDefaultTrial": "D-layout-pipelines-03-fold-never",
+              "retunedTrial": "D-layout-pipelines-03-fold-never",
+              "beforeScore": 0,
+              "retunedScore": 4,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-01",
+              "beforeTrial": "D-layout-pipelines-01-fold-auto",
+              "fixedDefaultTrial": "D-layout-pipelines-01-fold-never",
+              "retunedTrial": "D-layout-pipelines-01-fold-never",
+              "beforeScore": 3,
+              "retunedScore": 5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-02",
+              "beforeTrial": "D-layout-pipelines-02-fold-auto",
+              "fixedDefaultTrial": "D-layout-pipelines-02-fold-never",
+              "retunedTrial": "D-layout-pipelines-02-fold-never",
+              "beforeScore": 0,
+              "retunedScore": 1.666667,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "aspect",
+      "fixedDefault": "1.6",
+      "replacementAttribute": "grid-strength",
+      "replacementAlternatives": [
+        0,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        "0.75",
+        "1.6",
+        "2"
+      ],
+      "cases": [
+        "disconnected-01",
+        "presentation-01",
+        "disconnected-03",
+        "presentation-03",
+        "disconnected-02",
+        "presentation-02",
+        "disconnected-04",
+        "presentation-04",
+        "pipelines-03",
+        "authored-03",
+        "dags-03",
+        "cycles-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-disconnected-01-aspect-1p6",
+        "D-layout-presentation-01-aspect-1p6",
+        "D-layout-disconnected-03-aspect-1p6",
+        "D-layout-presentation-03-aspect-1p6",
+        "D-layout-disconnected-02-aspect-1p6",
+        "D-layout-presentation-02-aspect-1p6",
+        "D-layout-disconnected-04-aspect-1p6",
+        "D-layout-presentation-04-aspect-1p6",
+        "D-layout-pipelines-03-aspect-1p6",
+        "D-layout-authored-03-aspect-1p6",
+        "D-layout-dags-03-aspect-1p6",
+        "D-layout-cycles-02-aspect-1p6"
+      ],
+      "semanticCaution": true,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "0.75",
+          "retunedGlobalLevel": "0",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 9.822448090909091,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 14.856654272727273,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 12.706564636363638,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 3,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "disconnected-03",
+              "beforeTrial": "D-layout-disconnected-03-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-03-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-03-aspect-via-grid-strength-0",
+              "beforeScore": 13.75,
+              "retunedScore": 17.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "disconnected-02",
+              "beforeTrial": "D-layout-disconnected-02-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-02-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-02-aspect-via-grid-strength-0",
+              "beforeScore": 3.75,
+              "retunedScore": 6.25,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "disconnected-04",
+              "beforeTrial": "D-layout-disconnected-04-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-04-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-04-aspect-via-grid-strength-0",
+              "beforeScore": 33.333333,
+              "retunedScore": 59.333333,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-pipelines-03-aspect-1p6",
+              "retunedTrial": "G-control-pipelines-03-aspect-via-grid-strength-0",
+              "beforeScore": 8,
+              "retunedScore": 12,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "traceable": {
+          "beforeGlobalLevel": "0.75",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 17.763484363636362,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 28.233737,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 22.967480454545456,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": -1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "disconnected-03",
+              "beforeTrial": "D-layout-disconnected-03-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-03-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-03-aspect-via-grid-strength-100",
+              "beforeScore": 27.5,
+              "retunedScore": 32.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "disconnected-02",
+              "beforeTrial": "D-layout-disconnected-02-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-02-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-02-aspect-via-grid-strength-100",
+              "beforeScore": 6.875,
+              "retunedScore": 23.125,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "disconnected-04",
+              "beforeTrial": "D-layout-disconnected-04-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-04-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-04-aspect-via-grid-strength-100",
+              "beforeScore": 65,
+              "retunedScore": 116.666667,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        },
+        "direct": {
+          "beforeGlobalLevel": "0.75",
+          "retunedGlobalLevel": "0",
+          "before": {
+            "validBases": 11,
+            "acceptableBases": 7,
+            "meanScoreValidOnly": 12.708218,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 11,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 18.460278090909092,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 11,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 16.19426163636364,
+            "timeouts": 0,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 3,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "disconnected-03",
+              "beforeTrial": "D-layout-disconnected-03-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-03-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-03-aspect-via-grid-strength-0",
+              "beforeScore": 18.125,
+              "retunedScore": 27.5,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "disconnected-02",
+              "beforeTrial": "D-layout-disconnected-02-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-02-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-02-aspect-via-grid-strength-0",
+              "beforeScore": 4.375,
+              "retunedScore": 6.25,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "disconnected-04",
+              "beforeTrial": "D-layout-disconnected-04-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-disconnected-04-aspect-1p6",
+              "retunedTrial": "G-control-disconnected-04-aspect-via-grid-strength-0",
+              "beforeScore": 47.333333,
+              "retunedScore": 71.666667,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "pipelines-03",
+              "beforeTrial": "D-layout-pipelines-03-aspect-0p75",
+              "fixedDefaultTrial": "D-layout-pipelines-03-aspect-1p6",
+              "retunedTrial": "G-control-pipelines-03-aspect-via-grid-strength-0",
+              "beforeScore": 8,
+              "retunedScore": 12,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 11
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    },
+    {
+      "control": "rootId",
+      "fixedDefault": "",
+      "replacementAttribute": "rank-gap",
+      "replacementAlternatives": [
+        24,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        "$automatic",
+        "$source_node",
+        "$non_source_node"
+      ],
+      "cases": [
+        "hierarchies-01",
+        "dags-03",
+        "networks-01",
+        "hierarchies-02",
+        "dags-01",
+        "networks-02",
+        "hierarchies-03",
+        "dags-02",
+        "networks-03",
+        "hierarchies-04",
+        "dags-04",
+        "networks-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-hierarchies-01-rootId-automatic",
+        "D-layout-dags-03-rootId-automatic",
+        "D-layout-networks-01-rootId-automatic",
+        "D-layout-hierarchies-02-rootId-automatic",
+        "D-layout-dags-01-rootId-automatic",
+        "D-layout-networks-02-rootId-automatic",
+        "D-layout-hierarchies-03-rootId-automatic",
+        "D-layout-dags-02-rootId-automatic",
+        "D-layout-networks-03-rootId-automatic",
+        "D-layout-hierarchies-04-rootId-automatic",
+        "D-layout-dags-04-rootId-automatic",
+        "D-layout-networks-04-rootId-automatic"
+      ],
+      "semanticCaution": true,
+      "profiles": {
+        "balanced": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 3.2471058999999998,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 6,
+            "meanScoreValidOnly": 3.2471058999999998,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 2.3472704,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "hierarchies-01",
+              "beforeTrial": "D-layout-hierarchies-01-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-01-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-01-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-dags-03-rootId-automatic",
+              "retunedTrial": "G-control-dags-03-rootId-via-rank-gap-100",
+              "beforeScore": 1.818182,
+              "retunedScore": 1.818182,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-03",
+              "beforeTrial": "D-layout-hierarchies-03-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-03-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-03-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-04",
+              "beforeTrial": "D-layout-hierarchies-04-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-04-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-04-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "traceable": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 5.2907976,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 5.2907976,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 3,
+            "meanScoreValidOnly": 3.801669,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 2,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "hierarchies-01",
+              "beforeTrial": "D-layout-hierarchies-01-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-01-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-01-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-dags-03-rootId-automatic",
+              "retunedTrial": "G-control-dags-03-rootId-via-rank-gap-100",
+              "beforeScore": 1.818182,
+              "retunedScore": 1.818182,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "networks-01",
+              "beforeTrial": "D-layout-networks-01-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-networks-01-rootId-automatic",
+              "retunedTrial": "G-control-networks-01-rootId-via-rank-gap-100",
+              "beforeScore": 11.818182,
+              "retunedScore": 12.727273,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-03",
+              "beforeTrial": "D-layout-hierarchies-03-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-03-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-03-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-04",
+              "beforeTrial": "D-layout-hierarchies-04-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-04-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-04-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        },
+        "direct": {
+          "beforeGlobalLevel": "default",
+          "retunedGlobalLevel": "100",
+          "before": {
+            "validBases": 10,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 5.4605836,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "fixedDefault": {
+            "validBases": 10,
+            "acceptableBases": 5,
+            "meanScoreValidOnly": 5.4605836,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "retuned": {
+            "validBases": 10,
+            "acceptableBases": 4,
+            "meanScoreValidOnly": 4.0250338,
+            "timeouts": 2,
+            "failed": 0
+          },
+          "acceptableLossAfterRetuning": 1,
+          "newHardCasesAfterRetuning": [],
+          "lossWitnesses": [
+            {
+              "caseId": "hierarchies-01",
+              "beforeTrial": "D-layout-hierarchies-01-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-01-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-01-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "dags-03",
+              "beforeTrial": "D-layout-dags-03-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-dags-03-rootId-automatic",
+              "retunedTrial": "G-control-dags-03-rootId-via-rank-gap-100",
+              "beforeScore": 3.636364,
+              "retunedScore": 3.636364,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-03",
+              "beforeTrial": "D-layout-hierarchies-03-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-03-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-03-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            },
+            {
+              "caseId": "hierarchies-04",
+              "beforeTrial": "D-layout-hierarchies-04-rootId-automatic",
+              "fixedDefaultTrial": "D-layout-hierarchies-04-rootId-automatic",
+              "retunedTrial": "G-control-hierarchies-04-rootId-via-rank-gap-100",
+              "beforeScore": 0,
+              "retunedScore": 0,
+              "retunedHardValid": true
+            }
+          ],
+          "oracleFeasibleBases": 10
+        }
+      },
+      "claim": "Measured bounded compensating search, not proof that the control or its authored semantics can be deleted."
+    }
+  ],
+  "heldoutRead": false
+}

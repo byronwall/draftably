@@ -1,0 +1,373 @@
+{
+  "at": "2026-11-02T00:10:04.042918+00:00",
+  "freezeAt": "2026-11-01T23:58:46.719982+00:00",
+  "purpose": "Exact sealed bytes preserved before final documentation/replay integration. Frozen selection/metric implementations stay unchanged.",
+  "files": [
+    {
+      "originalPath": "evaluation/README.md",
+      "frozenCopy": "evaluation/frozen-development/README.md",
+      "sha256": "a2b2456ada9f7ab64fa0ece09d2f18858fe18e4a58a88e0967d44e9035f89d38",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/adapter.mjs",
+      "frozenCopy": "evaluation/frozen-development/adapter.mjs",
+      "sha256": "2e8b57d2cb6b78da43224633470eb6312258f8cfb9b5222ffd596a8075750587",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-contexts.py",
+      "frozenCopy": "evaluation/frozen-development/analyze-contexts.py",
+      "sha256": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-controls.py",
+      "frozenCopy": "evaluation/frozen-development/analyze-controls.py",
+      "sha256": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-dependencies.py",
+      "frozenCopy": "evaluation/frozen-development/analyze-dependencies.py",
+      "sha256": "c776f1855e46b8436a37ba552e3eb5421bbc92f4b3eef7fe2b09091267a52695",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-edits.py",
+      "frozenCopy": "evaluation/frozen-development/analyze-edits.py",
+      "sha256": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-portfolio.py",
+      "frozenCopy": "evaluation/frozen-development/analyze-portfolio.py",
+      "sha256": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-validation.mjs",
+      "frozenCopy": "evaluation/frozen-development/analyze-validation.mjs",
+      "sha256": "216d8150e180322b5ff90e12b9eb1bc353afe23c9700f48987fcd69e39b8bfc9",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/analyze-visual.mjs",
+      "frozenCopy": "evaluation/frozen-development/analyze-visual.mjs",
+      "sha256": "2717eba3bfcd67382fb218e0a16e18640865f23f14c771fcec90db5f64f841ee",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/audit-cell-access.mjs",
+      "frozenCopy": "evaluation/frozen-development/audit-cell-access.mjs",
+      "sha256": "516a3a733bd87c95a31fec652cff44676fc5eb8b11d36269da8fee3edcb2ad5d",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/audit-report.md",
+      "frozenCopy": "evaluation/frozen-development/audit-report.md",
+      "sha256": "39a9750cd83f2d114730620587eccc29fe390a6d88f4598c5ca20e36c38718b7",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/audit-result-archives.mjs",
+      "frozenCopy": "evaluation/frozen-development/audit-result-archives.mjs",
+      "sha256": "3bc08dc62e8f204ee06d5cbd4910236b7c66f752d6385ffc4c2bdf25e4be4862",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-edit-tasks.py",
+      "frozenCopy": "evaluation/frozen-development/build-edit-tasks.py",
+      "sha256": "4e571a860a60da2fcd2f38fd81f8dc87616126e2a5da805e51145579d3c46019",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-inventory-source.py",
+      "frozenCopy": "evaluation/frozen-development/build-inventory-source.py",
+      "sha256": "18e207391c53db2217a4fde9a48f3a3406aeca40d34d5d5493e6d7f80fcd16dd",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-joint-tasks.py",
+      "frozenCopy": "evaluation/frozen-development/build-joint-tasks.py",
+      "sha256": "1ee8a28bf3e436e96e4e6c17e6cb2e7018b2ba6a4e5bba3535ab072b7203dddb",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-stress-tasks.py",
+      "frozenCopy": "evaluation/frozen-development/build-stress-tasks.py",
+      "sha256": "818a3bed37ecb497b5bc5e2b1df3be1ad9df0d1355c3ba77f5e3a1bc524a2205",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-tasks.py",
+      "frozenCopy": "evaluation/frozen-development/build-tasks.py",
+      "sha256": "f2553c20d255bd813b41fd5961bdd9fac56ccb92e07bac741faf48ebee9deb0e",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-ui-artifacts.py",
+      "frozenCopy": "evaluation/frozen-development/build-ui-artifacts.py",
+      "sha256": "b63147ae5b4fe6fe213f2f404cd0c2a4aa68da5d6472c5d474782786a62c180e",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-validation-tasks.py",
+      "frozenCopy": "evaluation/frozen-development/build-validation-tasks.py",
+      "sha256": "6d17b0450cd925f3df353b3238018dd0cd0817b293d5242b2b42989053fa70f3",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/build-warm-targeted.py",
+      "frozenCopy": "evaluation/frozen-development/build-warm-targeted.py",
+      "sha256": "760a0fcecb273959b7eceee3e4d1c68ca7a9c8e93ffd1e4debb64ddc19aab719",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/derive-edit-metrics.mjs",
+      "frozenCopy": "evaluation/frozen-development/derive-edit-metrics.mjs",
+      "sha256": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/edit-analysis-spec.json",
+      "frozenCopy": "evaluation/frozen-development/edit-analysis-spec.json",
+      "sha256": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/enrich-inventory-development.py",
+      "frozenCopy": "evaluation/frozen-development/enrich-inventory-development.py",
+      "sha256": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+      "recoveredFromReportingAmendment": true
+    },
+    {
+      "originalPath": "evaluation/freeze-policy.py",
+      "frozenCopy": "evaluation/frozen-development/freeze-policy.py",
+      "sha256": "277a092d045ba3aee80830220ede8578427b8871fe4fa6f800b852f63d8e3760",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/generate-corpus.py",
+      "frozenCopy": "evaluation/frozen-development/generate-corpus.py",
+      "sha256": "0e4198121062891b1102f843f5d8cef79fbfc7aa29ea729a6eb99ef14a194d82",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/generate-routing-fixtures.py",
+      "frozenCopy": "evaluation/frozen-development/generate-routing-fixtures.py",
+      "sha256": "e01ad530c8ba5a5e2a755d7558d4d8cb0f004c6bf633d6ea95c82e9b6fd55771",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/intent-selfcheck.mjs",
+      "frozenCopy": "evaluation/frozen-development/intent-selfcheck.mjs",
+      "sha256": "7177233d1b3bdc0a04451dbca216a5147c0dd7639afe182249a943f9b192172b",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/intent.mjs",
+      "frozenCopy": "evaluation/frozen-development/intent.mjs",
+      "sha256": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/inventory-counts.json",
+      "frozenCopy": "evaluation/frozen-development/inventory-counts.json",
+      "sha256": "9f4424ed2d6ba5eb60719280ed30de83c8d1c0f11ac9c18c3d3c71e945fcb261",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/inventory-source-read-manifest.json",
+      "frozenCopy": "evaluation/frozen-development/inventory-source-read-manifest.json",
+      "sha256": "fb8ea121e569660ff44642324b3ec4e5f676f221dce8a640d121a73555ad8c0c",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/layout-control-ablation.py",
+      "frozenCopy": "evaluation/frozen-development/layout-control-ablation.py",
+      "sha256": "e47e381207671fb52b7df262950e2109577fa04e3aa088894254da479657e697",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/metric-calibration.mjs",
+      "frozenCopy": "evaluation/frozen-development/metric-calibration.mjs",
+      "sha256": "5ecb53432b1d51329c31d5f7d170831f8c5c4b70e1478edadfa51c202eae0775",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/metric-production-sanity.mjs",
+      "frozenCopy": "evaluation/frozen-development/metric-production-sanity.mjs",
+      "sha256": "2e65e9d5a6ab4e3e9cecdec997e759da81916798fcb9cd4debe2ad08c3b19a70",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/metric-visibility-calibration.mjs",
+      "frozenCopy": "evaluation/frozen-development/metric-visibility-calibration.mjs",
+      "sha256": "374241c84210cd3a8b6f638afe68bb406cfe63196c0b4db8b75bd7a1ffa76161",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/metrics-source-read-manifest.json",
+      "frozenCopy": "evaluation/frozen-development/metrics-source-read-manifest.json",
+      "sha256": "f6582a1db1b01099cdb4bd7f2f7b2deac85972d0ef2ec6606120b0d83065fda0",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/metrics-spec.json",
+      "frozenCopy": "evaluation/frozen-development/metrics-spec.json",
+      "sha256": "ce9e98cbe639f08b838151342e53bfb89d80539ec03b8251d16fe9e5282f7367",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/metrics.mjs",
+      "frozenCopy": "evaluation/frozen-development/metrics.mjs",
+      "sha256": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/plot-portfolio.py",
+      "frozenCopy": "evaluation/frozen-development/plot-portfolio.py",
+      "sha256": "b864f418960f1fa4ff035d4e5453d54bcdc571f24dfd0c6c67eeaa7f1ab89314",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/portfolio-analysis-method.md",
+      "frozenCopy": "evaluation/frozen-development/portfolio-analysis-method.md",
+      "sha256": "d761f13743238f212e110816a97a91ac1b36182f9b8fc4a17e931e03cbfac309",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/portfolio-selfcheck.py",
+      "frozenCopy": "evaluation/frozen-development/portfolio-selfcheck.py",
+      "sha256": "f76630dba18521241aacd4a81781ac8bbf7e8cdd026e0bf9f33a9b2bef72c406",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/predict-cold-policy.py",
+      "frozenCopy": "evaluation/frozen-development/predict-cold-policy.py",
+      "sha256": "6fbf5934e76ccdd4b5046e53945ef2c6f4c46f79fd99cd05d8011bdaa9ca7f25",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/prepare-replay.py",
+      "frozenCopy": "evaluation/frozen-development/prepare-replay.py",
+      "sha256": "7073ec5340520200f87bdf6d8ba2ba3afc853c30abc2e9fd27f7217bd14f5685",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/recover-results.mjs",
+      "frozenCopy": "evaluation/frozen-development/recover-results.mjs",
+      "sha256": "ec843c1793957e2639c1b0583d025d988e853a9dc32ead2361c22271875b8a39",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/render-pairs.mjs",
+      "frozenCopy": "evaluation/frozen-development/render-pairs.mjs",
+      "sha256": "a91af4efc31fd8a1769637a24c7b177ce23b8c1e8a29b5a52dd80e420faeb9aa",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/replay-all.sh",
+      "frozenCopy": "evaluation/frozen-development/replay-all.sh",
+      "sha256": "1550f7e69bf575e319bea66223b2892e88b8f9ac0b45f402f080501de55d956f",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/run-stages.mjs",
+      "frozenCopy": "evaluation/frozen-development/run-stages.mjs",
+      "sha256": "2c2ceaf69c32cc5d2353b71914ce105d9eef29104b1a13bf11ae5c1dd25f25a1",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/run.mjs",
+      "frozenCopy": "evaluation/frozen-development/run.mjs",
+      "sha256": "1e226d1a166d82e167bb4bb2647f44250f6881efee4798fc926acf8a78afa6e4",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/runtime-notes.md",
+      "frozenCopy": "evaluation/frozen-development/runtime-notes.md",
+      "sha256": "1395d0d1005eba7edcbd92a315a71a2bab04306bb31c13552a60ae7d72f893f7",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/select-visual-development.py",
+      "frozenCopy": "evaluation/frozen-development/select-visual-development.py",
+      "sha256": "9de674b612cc9010d28ec18df20cb95c995b9b732c146a3f830ec4b70064f1ee",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/settings-spec.json",
+      "frozenCopy": "evaluation/frozen-development/settings-spec.json",
+      "sha256": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/setup-browser.mjs",
+      "frozenCopy": "evaluation/frozen-development/setup-browser.mjs",
+      "sha256": "4306139668856bb9174384850897afd7749968bd6869ce19d374e4c91b409eac",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/source-tools.mjs",
+      "frozenCopy": "evaluation/frozen-development/source-tools.mjs",
+      "sha256": "dfb56dc0003250441cd1a437e39e2e6e8d1a81755f63b3a72fb9d8e5c34c3edf",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/supplied-prompt.md",
+      "frozenCopy": "evaluation/frozen-development/supplied-prompt.md",
+      "sha256": "7c05976fcea259471202a5bc2c02e2c9b9252446cf56d34e6fea559b70c5dbf6",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/supplied-protocol.md",
+      "frozenCopy": "evaluation/frozen-development/supplied-protocol.md",
+      "sha256": "f0f511588d61f80dfddf2c28150c2e87b84d14145ee66d91f91ba8f30cd85658",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/trial-worker.mjs",
+      "frozenCopy": "evaluation/frozen-development/trial-worker.mjs",
+      "sha256": "ddf3ec03bf5eecc712af7fdc07f03bb156a04937e9b61f12038ff5a0d9cf3b23",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/unpack-baseline.py",
+      "frozenCopy": "evaluation/frozen-development/unpack-baseline.py",
+      "sha256": "65039eb97520d63e7a187802bd20d2f4b4f615b83625381820e67f563a6edcff",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/validate-corpus.mjs",
+      "frozenCopy": "evaluation/frozen-development/validate-corpus.mjs",
+      "sha256": "667dd6d9e07e070ee12374b7abeb8a3a796ae8c4146e5c1b10057ed5d65fc342",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/validate-tasks.mjs",
+      "frozenCopy": "evaluation/frozen-development/validate-tasks.mjs",
+      "sha256": "c95b8d78ce515feb539ec4b9746466bc44655f6760c96d45992b33594752d60b",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/verify-control-archives.mjs",
+      "frozenCopy": "evaluation/frozen-development/verify-control-archives.mjs",
+      "sha256": "f9301bb47096c1e5f54773a5e0891652edf6dc60df87fe45bc62359ff5def5ee",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/visual-judge-guide.md",
+      "frozenCopy": "evaluation/frozen-development/visual-judge-guide.md",
+      "sha256": "d2acfb2c12ce9af668860309c394ca1845793265c01a49db76fa680e6fe81adc",
+      "recoveredFromReportingAmendment": false
+    },
+    {
+      "originalPath": "evaluation/visual-judgment.schema.json",
+      "frozenCopy": "evaluation/frozen-development/visual-judgment.schema.json",
+      "sha256": "ed30834ea750855a33e6135a7cb508bd1947525679c4bcf7cb4f53fba4bd2962",
+      "recoveredFromReportingAmendment": false
+    }
+  ]
+}

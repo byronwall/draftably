@@ -1,0 +1,3452 @@
+[
+  {
+    "policy": "current-authored",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.19999999999999998,
+    "absoluteCommonAcceptableCoverage": 0.17142857142857146,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.14285714285714288,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.16666666666666669,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "implicit-recipe",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "documented-default",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.35714285714285715,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.4166666666666667,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "best-fixed-global",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.14285714285714288,
+      "traceable": 0.28571428571428575,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.16666666666666669,
+      "traceable": 0.33333333333333337,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "best-fixed-global-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.14285714285714288,
+      "traceable": 0.28571428571428575,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.16666666666666669,
+      "traceable": 0.33333333333333337,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k1-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.31666666666666665,
+    "absoluteCommonAcceptableCoverage": 0.2714285714285715,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.28571428571428575,
+      "traceable": 0.28571428571428575,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.33333333333333337,
+      "traceable": 0.33333333333333337,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k1-configuration-oracle-current-fallback",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.35,
+    "absoluteCommonAcceptableCoverage": 0.3000000000000001,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.35714285714285715,
+      "traceable": 0.28571428571428575,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.4166666666666667,
+      "traceable": 0.33333333333333337,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k1-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.21428571428571433,
+      "traceable": 0.28571428571428575,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.25000000000000006,
+      "traceable": 0.33333333333333337,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k1-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.21428571428571433,
+      "traceable": 0.28571428571428575,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.25000000000000006,
+      "traceable": 0.33333333333333337,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k1-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.2333333333333333,
+    "absoluteCommonAcceptableCoverage": 0.20000000000000004,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.14285714285714288,
+      "traceable": 0.28571428571428575,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.16666666666666669,
+      "traceable": 0.33333333333333337,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k2-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.45,
+    "absoluteCommonAcceptableCoverage": 0.38571428571428584,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.5,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.5833333333333334,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k2-configuration-oracle-current-fallback",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.48333333333333334,
+    "absoluteCommonAcceptableCoverage": 0.4142857142857144,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.4285714285714286,
+      "compact": 0.5714285714285715,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.5,
+      "compact": 0.6666666666666667,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k2-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.35714285714285715,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.4166666666666667,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k2-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.35714285714285715,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.4166666666666667,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k2-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.26666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.22857142857142865,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.28571428571428575,
+      "traceable": 0.14285714285714288,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.33333333333333337,
+      "traceable": 0.16666666666666669,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k3-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.55,
+    "absoluteCommonAcceptableCoverage": 0.47142857142857164,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.5,
+      "compact": 0.5,
+      "traceable": 0.5,
+      "stable": 0.4285714285714286,
+      "specialist": 0.4285714285714286
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.5833333333333334,
+      "compact": 0.5833333333333334,
+      "traceable": 0.5833333333333334,
+      "stable": 0.5,
+      "specialist": 0.5
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k3-configuration-oracle-current-fallback",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.5833333333333335,
+    "absoluteCommonAcceptableCoverage": 0.5000000000000003,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.5714285714285715,
+      "compact": 0.5714285714285715,
+      "traceable": 0.5,
+      "stable": 0.4285714285714286,
+      "specialist": 0.4285714285714286
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.6666666666666667,
+      "compact": 0.6666666666666667,
+      "traceable": 0.5833333333333334,
+      "stable": 0.5,
+      "specialist": 0.5
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k3-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k3-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k3-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k4-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.6333333333333336,
+    "absoluteCommonAcceptableCoverage": 0.5428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.5714285714285715,
+      "compact": 0.5714285714285715,
+      "traceable": 0.5714285714285715,
+      "stable": 0.5,
+      "specialist": 0.5
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.6666666666666667,
+      "compact": 0.6666666666666667,
+      "traceable": 0.6666666666666667,
+      "stable": 0.5833333333333334,
+      "specialist": 0.5833333333333334
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k4-configuration-oracle-current-fallback",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.6666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.5714285714285716,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.6428571428571429,
+      "compact": 0.6428571428571429,
+      "traceable": 0.5714285714285715,
+      "stable": 0.5,
+      "specialist": 0.5
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.75,
+      "compact": 0.75,
+      "traceable": 0.6666666666666667,
+      "stable": 0.5833333333333334,
+      "specialist": 0.5833333333333334
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 9,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 9,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k4-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k4-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k4-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k5-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.7000000000000001,
+    "absoluteCommonAcceptableCoverage": 0.6000000000000002,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.5714285714285715,
+      "compact": 0.5714285714285715,
+      "traceable": 0.7142857142857143,
+      "stable": 0.5714285714285715,
+      "specialist": 0.5714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.6666666666666667,
+      "compact": 0.6666666666666667,
+      "traceable": 0.8333333333333334,
+      "stable": 0.6666666666666667,
+      "specialist": 0.6666666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 10,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k5-configuration-oracle-current-fallback",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.7333333333333335,
+    "absoluteCommonAcceptableCoverage": 0.6285714285714289,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.6428571428571429,
+      "compact": 0.6428571428571429,
+      "traceable": 0.7142857142857143,
+      "stable": 0.5714285714285715,
+      "specialist": 0.5714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.75,
+      "compact": 0.75,
+      "traceable": 0.8333333333333334,
+      "stable": 0.6666666666666667,
+      "specialist": 0.6666666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 9,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 9,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 10,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k5-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k5-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "k5-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.21428571428571433,
+      "stable": 0.21428571428571433,
+      "specialist": 0.21428571428571433
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.25000000000000006,
+      "stable": 0.25000000000000006,
+      "specialist": 0.25000000000000006
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k1-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": false,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.16666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.1428571428571429,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.14285714285714288,
+      "traceable": 0.14285714285714288,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.16666666666666669,
+      "traceable": 0.16666666666666669,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 1,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k1-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": false,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.16666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.1428571428571429,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.14285714285714288,
+      "traceable": 0.14285714285714288,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.16666666666666669,
+      "traceable": 0.16666666666666669,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 1,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k1-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.16666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.1428571428571429,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.14285714285714288,
+      "traceable": 0.14285714285714288,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.16666666666666669,
+      "traceable": 0.16666666666666669,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k1-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.16666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.1428571428571429,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.14285714285714288,
+      "compact": 0.14285714285714288,
+      "traceable": 0.14285714285714288,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.16666666666666669,
+      "compact": 0.16666666666666669,
+      "traceable": 0.16666666666666669,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k2-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.43333333333333335,
+    "absoluteCommonAcceptableCoverage": 0.37142857142857155,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.4285714285714286,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.5,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k2-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": false,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3833333333333333,
+    "absoluteCommonAcceptableCoverage": 0.3285714285714286,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.28571428571428575,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.33333333333333337,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 1,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k2-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3833333333333333,
+    "absoluteCommonAcceptableCoverage": 0.3285714285714286,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.28571428571428575,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.33333333333333337,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k2-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.36666666666666664,
+    "absoluteCommonAcceptableCoverage": 0.3142857142857144,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.28571428571428575,
+      "traceable": 0.28571428571428575,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.33333333333333337,
+      "traceable": 0.33333333333333337,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k3-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.43333333333333335,
+    "absoluteCommonAcceptableCoverage": 0.37142857142857155,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.35714285714285715,
+      "compact": 0.4285714285714286,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.4166666666666667,
+      "compact": 0.5,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k3-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": false,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.28571428571428575,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.33333333333333337,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 1
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 1
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 1
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 1
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 1
+      }
+    },
+    "currentValidHardRegressionCases": 2,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k3-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3,
+    "absoluteCommonAcceptableCoverage": 0.25714285714285723,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.28571428571428575,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.33333333333333337,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k3-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.2833333333333333,
+    "absoluteCommonAcceptableCoverage": 0.24285714285714294,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.14285714285714288,
+      "traceable": 0.28571428571428575,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.16666666666666669,
+      "traceable": 0.33333333333333337,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k4-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.5333333333333333,
+    "absoluteCommonAcceptableCoverage": 0.4571428571428573,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.4285714285714286,
+      "compact": 0.5,
+      "traceable": 0.5,
+      "stable": 0.4285714285714286,
+      "specialist": 0.4285714285714286
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.5,
+      "compact": 0.5833333333333334,
+      "traceable": 0.5833333333333334,
+      "stable": 0.5,
+      "specialist": 0.5
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k4-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": false,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3333333333333333,
+    "absoluteCommonAcceptableCoverage": 0.2857142857142858,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.28571428571428575,
+      "traceable": 0.35714285714285715,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.33333333333333337,
+      "traceable": 0.4166666666666667,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 1,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k4-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3333333333333333,
+    "absoluteCommonAcceptableCoverage": 0.2857142857142858,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.28571428571428575,
+      "traceable": 0.35714285714285715,
+      "stable": 0.28571428571428575,
+      "specialist": 0.28571428571428575
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.33333333333333337,
+      "traceable": 0.4166666666666667,
+      "stable": 0.33333333333333337,
+      "specialist": 0.33333333333333337
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k4-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.3833333333333333,
+    "absoluteCommonAcceptableCoverage": 0.3285714285714286,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.28571428571428575,
+      "traceable": 0.35714285714285715,
+      "stable": 0.35714285714285715,
+      "specialist": 0.35714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.33333333333333337,
+      "traceable": 0.4166666666666667,
+      "stable": 0.4166666666666667,
+      "specialist": 0.4166666666666667
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k5-configuration-oracle",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.5333333333333333,
+    "absoluteCommonAcceptableCoverage": 0.4571428571428573,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.4285714285714286,
+      "compact": 0.5,
+      "traceable": 0.5,
+      "stable": 0.4285714285714286,
+      "specialist": 0.4285714285714286
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.5,
+      "compact": 0.5833333333333334,
+      "traceable": 0.5833333333333334,
+      "stable": 0.5,
+      "specialist": 0.5
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 7,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 6,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k5-prelayout-selector",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": false,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.21666666666666665,
+    "absoluteCommonAcceptableCoverage": 0.18571428571428575,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.21428571428571433,
+      "compact": 0.21428571428571433,
+      "traceable": 0.21428571428571433,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.25000000000000006,
+      "compact": 0.25000000000000006,
+      "traceable": 0.25000000000000006,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 2
+      },
+      "compact": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 2
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 2
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 2
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 2
+      }
+    },
+    "currentValidHardRegressionCases": 2,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k5-prelayout-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.24999999999999997,
+    "absoluteCommonAcceptableCoverage": 0.21428571428571433,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.28571428571428575,
+      "traceable": 0.21428571428571433,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.33333333333333337,
+      "traceable": 0.25000000000000006,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  },
+  {
+    "policy": "tuned-k5-goal-selector-validity-guard",
+    "common95Pass": false,
+    "contractRelative95PerProfilePass": false,
+    "conservativeAbsolute95PerProfilePass": false,
+    "contractOverallPass": false,
+    "relativeFeasiblePool95PerProfilePass": false,
+    "relativeFeasiblePool95PooledPass": false,
+    "noHardRegressionPass": true,
+    "commonAcceptableCoverageRelativeToFeasiblePool": 0.26666666666666666,
+    "absoluteCommonAcceptableCoverage": 0.22857142857142865,
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.28571428571428575,
+      "compact": 0.35714285714285715,
+      "traceable": 0.21428571428571433,
+      "stable": 0.14285714285714288,
+      "specialist": 0.14285714285714288
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.33333333333333337,
+      "compact": 0.4166666666666667,
+      "traceable": 0.25000000000000006,
+      "stable": 0.16666666666666669,
+      "specialist": 0.16666666666666669
+    },
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 4,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 5,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 3,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 2,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCases": 0,
+    "supportedSpecialistsPreserved": true,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "designedRootRecipeDispatchPreserved": true,
+    "specialistPreservationExplanation": "Root sequence/lanes dispatch to current authored source; measured loss counts include nested cells against valid current-source results. Guarded policies retain current source on candidate hard failure; unguarded policies may fail. Current specialist may itself be hard-invalid."
+  }
+]

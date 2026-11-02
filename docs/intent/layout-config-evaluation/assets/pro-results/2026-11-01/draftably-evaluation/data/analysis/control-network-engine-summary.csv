@@ -1,0 +1,5 @@
+engine,paired_jobs,comparable_geometry,exact_geometry_changed,geometry_changed_over_1px,hard_valid_candidates,hard_valid_baselines,valid_gained,valid_lost,both_valid_pairs,mean_balanced_delta_both_valid,mean_traceable_delta_both_valid,mean_route_length_delta_both_valid,mean_area_delta_both_valid
+compound-spring,12,11,9,9,10,10,0,0,10,28.2303477,53.9077763,1284.765,-115578.81336090002
+force,12,11,9,9,8,10,0,2,8,11.729166875,22.271306875,284.055,97108.46631437505
+grid,12,11,9,9,11,9,2,0,9,18.486111,32.607323111111114,123.61888888888886,-230020.83746544443
+stress,12,11,9,9,9,10,0,1,9,22.459596,43.414983,762.3922222222222,698.8180184444451

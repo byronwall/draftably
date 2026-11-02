@@ -1,0 +1,11 @@
+{
+  "at": "2026-11-01T23:54:48.300185+00:00",
+  "trials": 6,
+  "methods": [
+    "current source",
+    "force RIGHT defaults",
+    "layered RIGHT defaults"
+  ],
+  "qualityWeight": 0,
+  "purpose": "Separate layout completion from full routing/export scale tails; no tuning or portfolio credit."
+}

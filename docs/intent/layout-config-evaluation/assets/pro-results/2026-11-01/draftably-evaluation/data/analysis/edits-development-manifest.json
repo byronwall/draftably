@@ -1,0 +1,321 @@
+{
+  "version": "edit-analysis-1.0",
+  "generated_at": "2026-11-01T23:58:33.992561+00:00",
+  "split": "development",
+  "heldout_read": false,
+  "source": "Measured E outputs plus declared derived hard-validity guard",
+  "stages": [
+    {
+      "path": "data/edits-current-development.jsonl",
+      "file_sha256": "a6552b11f38cc99b2a363fe3b1e32a331285f006b62d45c7cb6a6122a0ac5cd1",
+      "attempt_rows": 60,
+      "distinct_terminal_rows": 60,
+      "first_status_counts": {
+        "ok": 60
+      },
+      "all_attempt_status_counts": {
+        "ok": 60
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-current-development",
+      "planned_rows": 60,
+      "task_sha256": "74746092a69e10c4b48dfc419a0fb69908ab028556e361a5e423c618cb9e74f6",
+      "state": "complete"
+    },
+    {
+      "path": "data/edits-states-development.jsonl",
+      "file_sha256": "cb9b4c0f849c5aa1db183cf48cc9842cf18fac3eed8eff0b93e8a5cbdaffd970",
+      "attempt_rows": 12,
+      "distinct_terminal_rows": 12,
+      "first_status_counts": {
+        "ok": 12
+      },
+      "all_attempt_status_counts": {
+        "ok": 12
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-states-development",
+      "planned_rows": 12,
+      "task_sha256": "7c466d809dcb969fbdd5984f71a85c826d23098f656a445b3195d26013fe9cb8",
+      "state": "complete"
+    },
+    {
+      "path": "data/edits-warm-development.jsonl",
+      "file_sha256": "de6f285903a63d8348c6e39d981ac09a0433eca9bc0de721f63acbefa29525c5",
+      "attempt_rows": 180,
+      "distinct_terminal_rows": 180,
+      "first_status_counts": {
+        "ok": 180
+      },
+      "all_attempt_status_counts": {
+        "ok": 180
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-warm-development",
+      "planned_rows": 180,
+      "task_sha256": "d5deacb3c9c476f6ede3a2f5aa0b7333011ac2b61d8c5bf6d63819475948569b",
+      "state": "complete"
+    },
+    {
+      "path": "data/edits-policies-development.jsonl",
+      "file_sha256": "1fa4abd7228aa0d26f8e88d569753e43482597608fe8d37ed04c680762ae5bbf",
+      "attempt_rows": 120,
+      "distinct_terminal_rows": 120,
+      "first_status_counts": {
+        "ok": 120
+      },
+      "all_attempt_status_counts": {
+        "ok": 120
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-policies-development",
+      "planned_rows": 120,
+      "task_sha256": "ec97b1ceaac8fd75e1572d0277b8a00ce52638634213bda7b401f51482a31963",
+      "state": "complete"
+    }
+  ],
+  "reference_catalog_files": [
+    {
+      "path": "data/documented-default-development.jsonl",
+      "file_sha256": "eb1f75b4adf56a6f289fe11faa50c76227799fd8591190a781d91c0f3604ad94",
+      "attempt_rows": 46,
+      "distinct_terminal_rows": 46,
+      "first_status_counts": {
+        "ok": 43,
+        "timed_out": 3
+      },
+      "all_attempt_status_counts": {
+        "ok": 43,
+        "timed_out": 3
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-current-development.jsonl",
+      "file_sha256": "a6552b11f38cc99b2a363fe3b1e32a331285f006b62d45c7cb6a6122a0ac5cd1",
+      "attempt_rows": 60,
+      "distinct_terminal_rows": 60,
+      "first_status_counts": {
+        "ok": 60
+      },
+      "all_attempt_status_counts": {
+        "ok": 60
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-policies-development.jsonl",
+      "file_sha256": "1fa4abd7228aa0d26f8e88d569753e43482597608fe8d37ed04c680762ae5bbf",
+      "attempt_rows": 120,
+      "distinct_terminal_rows": 120,
+      "first_status_counts": {
+        "ok": 120
+      },
+      "all_attempt_status_counts": {
+        "ok": 120
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-states-development.jsonl",
+      "file_sha256": "cb9b4c0f849c5aa1db183cf48cc9842cf18fac3eed8eff0b93e8a5cbdaffd970",
+      "attempt_rows": 12,
+      "distinct_terminal_rows": 12,
+      "first_status_counts": {
+        "ok": 12
+      },
+      "all_attempt_status_counts": {
+        "ok": 12
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-warm-development.jsonl",
+      "file_sha256": "de6f285903a63d8348c6e39d981ac09a0433eca9bc0de721f63acbefa29525c5",
+      "attempt_rows": 180,
+      "distinct_terminal_rows": 180,
+      "first_status_counts": {
+        "ok": 180
+      },
+      "all_attempt_status_counts": {
+        "ok": 180
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/identity-development.jsonl",
+      "file_sha256": "5267828347c2690ea0b4321aa210a8ef639ce3af574f722b9a36ca38ad6433ad",
+      "attempt_rows": 240,
+      "distinct_terminal_rows": 240,
+      "first_status_counts": {
+        "ok": 240
+      },
+      "all_attempt_status_counts": {
+        "ok": 240
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/joint-development.jsonl",
+      "file_sha256": "9e62c6b7dd885c80ac1ddde2d7ff7ea43eb6b4b1360c1e97ad56ce05c19d6f91",
+      "attempt_rows": 108,
+      "distinct_terminal_rows": 108,
+      "first_status_counts": {
+        "ok": 108
+      },
+      "all_attempt_status_counts": {
+        "ok": 108
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/screen-development.jsonl",
+      "file_sha256": "cd068a11c206940c490cb18a40976dbaaa2588712b7971ee01a7cca0d90e63d8",
+      "attempt_rows": 1202,
+      "distinct_terminal_rows": 1198,
+      "first_status_counts": {
+        "ok": 1094,
+        "timed_out": 104
+      },
+      "all_attempt_status_counts": {
+        "ok": 1094,
+        "timed_out": 108
+      },
+      "partial_final_line": false,
+      "later_attempts": {
+        "C-development-dags-04-layered-DOWN": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometryHash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometryHash": null
+          }
+        ],
+        "C-development-dags-04-tree-RIGHT": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometryHash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometryHash": null
+          }
+        ],
+        "C-development-dags-04-tree-DOWN": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometryHash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometryHash": null
+          }
+        ],
+        "C-development-dags-04-grid-RIGHT": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometryHash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometryHash": null
+          }
+        ]
+      }
+    },
+    {
+      "path": "data/selected-presets-development.jsonl",
+      "file_sha256": "c3f0713c74fe9f0216716652f44228f82f06ca9c0acc06ab2ff2dbea4099d805",
+      "attempt_rows": 306,
+      "distinct_terminal_rows": 306,
+      "first_status_counts": {
+        "ok": 278,
+        "timed_out": 28
+      },
+      "all_attempt_status_counts": {
+        "ok": 278,
+        "timed_out": 28
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/timing-development.jsonl",
+      "file_sha256": "adf531ecb18cb499c53b19b71049e9bdc1fff97b5153eb9a0a7eb8a8c81a9d4f",
+      "attempt_rows": 720,
+      "distinct_terminal_rows": 720,
+      "first_status_counts": {
+        "ok": 720
+      },
+      "all_attempt_status_counts": {
+        "ok": 720
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/tuning-development.jsonl",
+      "file_sha256": "35a41f828b7fc083e926d40c43aeac083948be631fd8ebfc628466dc3c3592bf",
+      "attempt_rows": 480,
+      "distinct_terminal_rows": 480,
+      "first_status_counts": {
+        "ok": 480
+      },
+      "all_attempt_status_counts": {
+        "ok": 480
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    }
+  ],
+  "design_sha256": "bac85609e8f2a8e54fc64f03149f3538b7e06f9b3819af42680bdcd00ab504f6",
+  "analysis_spec_sha256": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+  "analysis_code_sha256": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+  "derivation_code_sha256": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+  "policy_compact_sha256": "621d7015b7a65427a32b6f22ad735a55ae397c7f94c22c5133b0285ee73f0c4b",
+  "prediction_sha256": "8b26a01313b0714fa3368aa2d159b1b8288ed3dd340f15c5b6d0e9af769476a6",
+  "policy_freeze_sha256": null,
+  "records": 480,
+  "verification": {
+    "geometry_derivations": 480,
+    "effective_geometry_hashes_verified": 480,
+    "reference_geometry_hashes_verified": 480,
+    "errors": [],
+    "scope": "Geometry signatures only; not whole archive byte identity. Edit metrics are recomputed without product engine execution."
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 20261101,
+    "unit": "base diagram; retain its complete five-edit bundle",
+    "interval": "2.5th and97.5th percentile of paired base means",
+    "noHumanSignificanceClaim": true
+  },
+  "canonical_rule": "First terminal outcome. Later attempts never promote coverage.",
+  "guard_map": {
+    "best-single": true,
+    "feature-selector": true,
+    "current-source": false
+  },
+  "no_geometry_algorithms_executed": true
+}

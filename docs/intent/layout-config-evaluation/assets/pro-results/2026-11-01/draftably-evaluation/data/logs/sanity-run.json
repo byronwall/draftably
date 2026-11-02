@@ -1,0 +1,17 @@
+{
+  "runId": "sanity",
+  "started": "2026-11-01T23:30:25.124Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "planned": 20,
+  "priorCompleted": 0,
+  "executed": 20,
+  "failed": 0,
+  "timedOut": 0,
+  "skipped": 0,
+  "taskSha256": "5aef349b97d16b7c565762e51fcb79f3cba8d93c9c07d9cb69fc40aa6f140a5a",
+  "finished": "2026-11-01T23:30:25.766Z",
+  "elapsedSeconds": 0.642,
+  "persistedDistinct": 20
+}

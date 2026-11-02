@@ -1,0 +1,36 @@
+diagram "Shared corridor with opposing lanes" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a0 "a0"
+node b0 "b0"
+node a1 "a1"
+node b1 "b1"
+node a2 "a2"
+node b2 "b2"
+node a3 "a3"
+node b3 "b3"
+edge e0 a0 -> b3 "channel 0"
+edge e1 b0 -> a1 constraint=false
+edge e2 a1 -> b2 "channel 1"
+edge e3 b1 -> a2 constraint=false
+edge e4 a2 -> b1 "channel 2"
+edge e5 b2 -> a3 constraint=false
+edge e6 a3 -> b0 "channel 3"
+edge e7 b3 -> a0 constraint=false
+layout root flow direction=auto fold=never
+size a0 width=120 height=56
+pin a0 x=0 y=0
+size b0 width=120 height=56
+pin b0 x=620 y=0
+size a1 width=120 height=56
+pin a1 x=0 y=110
+size b1 width=120 height=56
+pin b1 x=620 y=110
+size a2 width=120 height=56
+pin a2 x=0 y=220
+size b2 width=120 height=56
+pin b2 x=620 y=220
+size a3 width=120 height=56
+pin a3 x=0 y=330
+size b3 width=120 height=56
+pin b3 x=620 y=330

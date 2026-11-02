@@ -1,0 +1,66 @@
+{
+  "declaredAt": "2026-11-02T00:26:52.351Z",
+  "phase": "post-seal implementation-applicability probe",
+  "purpose": "Test whether the current file-mode Release explicit ports checkbox changes the emitted source. Distinguish the raw Explorer routing API, where this option is implemented.",
+  "decisionScope": "UI-RELEASE-PORTS only; no algorithm/configuration selection, scoring changes, heldout fitting, or default change.",
+  "hypotheses": [
+    "Exact file candidateSource false/true produce byte-identical source and preserve explicit authored sides.",
+    "Actual sourceWithRouting/setRouting edit a scalar routing setting but leave edge side attributes alone.",
+    "Raw Explorer candidate false/true differ in explicit side configuration."
+  ],
+  "frozenPolicySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "sources": {
+    "src/state/comparison.ts": "ea474e623e0145b45ba4d6d7c1d22c38fb82e632f7fed832b9aaaeb38f6bf2ee",
+    "src/state/file-session.ts": "5e9b7050ea5e957a1844876f85650bb5bb3fdeadca97b9625ba2fbd88bdf5778",
+    "src/dsl/layout-edits.ts": "1af93f1b7d0043100c82233c2c1831040223cefff6b835d25c1bbf7d54c38948",
+    "src/engines/explorer-engine.js": "50aa813e59af8f295430c8ac46e39c09bdb647d32cb114acbaa455a89b89291b"
+  },
+  "functions": [
+    {
+      "file": "src/state/comparison.ts",
+      "name": "candidateSource",
+      "firstLine": 159,
+      "lastLine": 169,
+      "bodySha256": "28a1cd02b87b8654cbde6a962c3321279aaa03643d3af4f936370cf31f3451b5",
+      "textSha256": "1d63c5f5313c79d8de7fd50514747b685fcd1b2c2d5dbaeb1e6edd19a70c4865"
+    },
+    {
+      "file": "src/state/file-session.ts",
+      "name": "sourceWithRouting",
+      "firstLine": 578,
+      "lastLine": 582,
+      "bodySha256": "165992b02f8c6fc03b4be9a70461179964ca67f4673be65b8d82b1328f58b6b7",
+      "textSha256": "43917dd035105211e141d51271daff949163a7c07db42429d0bed99c1634c8b2"
+    },
+    {
+      "file": "src/state/file-session.ts",
+      "name": "sourceScope",
+      "firstLine": 561,
+      "lastLine": 565,
+      "bodySha256": "67c31ec162e42cb4ede28fdb6d24720de48cd829d6b00cc0bf1f7c485346c7ac",
+      "textSha256": "219c9c1db55aad13b9c21a80eb1958f883613c7c04b64851889e1bbcd2969c6c"
+    }
+  ],
+  "fixture": {
+    "path": "corpus/routing/route-20.draft",
+    "sha256": "cdf694c56295fa26731024501d2e62360cbcc6aedde2e1cf3d8e349ff9152e77",
+    "existingGeometry": "data/geometry/D-freeze-route-20.json.gz",
+    "geometrySha256": "b92c88cbeb80c9350b1015b162bb17620ab28891ad05ae25a3da67213c7c03b5",
+    "origin": "development routing fixture; pre-existing fixed positions"
+  },
+  "plannedCalls": {
+    "sourceCandidate": 3,
+    "directSourceWithRouting": 1,
+    "directSetRouting": 1,
+    "router": 2,
+    "layout": 0,
+    "compiler": 0
+  },
+  "constraints": [
+    "No product files changed",
+    "No source compilation",
+    "Only two small uncached raw router calls",
+    "No quality superiority claim from this probe",
+    "No heldout outcome files read"
+  ]
+}

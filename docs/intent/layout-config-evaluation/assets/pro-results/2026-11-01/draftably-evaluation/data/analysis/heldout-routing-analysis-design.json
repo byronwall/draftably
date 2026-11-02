@@ -1,0 +1,62 @@
+{
+  "schema": "heldout-routing-analysis-design-1",
+  "createdAt": "2026-11-02T00:10:46.927424+00:00",
+  "heldout_outcomes_opened_by_this_analyzer": false,
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "frozenAt": "2026-11-01T23:58:46.719982+00:00",
+  "geometry_algorithm_calls": 0,
+  "fit_or_selection_operations": 0,
+  "primary_estimand": "Observed status and geometric/source-intent validity of the predeclared route-only task, on cached completed source positions or explicitly marked layout checkpoints. Main C/G cold-source gates remain their observed full-pipeline 15-second results.",
+  "serial_timing": "Derived compileMs from canonical source success or saved checkpoint + observed route workerMs. Missing compileMs stays unknown. This is not measured end-to-end latency.",
+  "budget_sensitivity": "Separately report derived serial <=15000ms eligibility and missing components. Do not add a new runtime hard gate to frozen geometric scoring.",
+  "reference_rule": "First terminal source outcome. A canonical failed/timed-out source may supply only its explicitly completed-layout checkpoint, never a later successful routed archive. Partial references are not valid default-routing results and supply no invented prior history.",
+  "history": "Empty for every candidate. Raw side/path changes compare static alternatives; no warm-history stability claim.",
+  "five_profiles": [
+    "readable",
+    "compact",
+    "traceable",
+    "stable",
+    "specialist"
+  ],
+  "routing_weightings": [
+    "balanced",
+    "traceable",
+    "direct"
+  ],
+  "static_stable_profile": "Project route-row metrics without edit block for scoring only. D-joint source rows had no edit block: stable score equals balanced DI. Preserve raw edit measurements as diagnostics.",
+  "quality_bands": {
+    "score": 1.0,
+    "area": 0.1,
+    "routeLength": 0.1
+  },
+  "current_position_oracle_pool": "Current source default-route result + three frozen route settings on exactly those positions. No unexecuted routing setting is imputed.",
+  "joint_oracle_pool": "Three frozen layout default-route references + nine frozen layout\u00d7route alternatives. No other layout or route configuration is admitted to this scoped oracle.",
+  "coverage_denominators": "All24, common14, niche10, plus the same scoped oracle-feasible denominator, separately for every one of five profiles and three route weightings. Preserve raw numerators/denominators.",
+  "policy_roles": {
+    "fixed_joint_global": "engine:boundary-align:RIGHT|routing:clearance-4",
+    "frozen_joint_triple": [
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+    ],
+    "frozen_routes": [
+      "clearance-22",
+      "clearance-4",
+      "portGap-28"
+    ],
+    "joint_all_nine": "Oracle diagnostic only",
+    "three_route_union": "Oracle/Compare upper bound only; not a learned selector"
+  },
+  "specialist_fallback": "Explicit frozen current-specialist source escape on cases with no generic engine applicability; record effective method and duplicate identities.",
+  "guard": "No new soft or hard fallback for fixed joint/current-route policies. Retained-current Compare unions, if reported, are distinct oracle diagnostics.",
+  "uncertainty": {
+    "replicates": 2000,
+    "seed": 20261102,
+    "units": [
+      "base diagram, retaining all correlated profiles and alternatives",
+      "family, retaining all member bases and profiles"
+    ],
+    "interval": "2.5/97.5 percentile; conditional soft contrasts require both valid; validity includes failures; no human-population significance claim"
+  },
+  "code_timing_note": "This analysis file is authored after selection freeze but before its author opens heldout outcomes. It evaluates stored choices and does not choose new settings."
+}

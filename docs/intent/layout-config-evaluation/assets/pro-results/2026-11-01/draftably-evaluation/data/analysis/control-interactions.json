@@ -1,0 +1,2143 @@
+[
+  {
+    "stratum": "routing-interaction",
+    "interaction": "crossingPenalty*bendPenalty",
+    "factors": [
+      "crossingPenalty",
+      "bendPenalty"
+    ],
+    "fixture_count": 8,
+    "actual_rows": 72,
+    "families": [
+      "containers",
+      "dags",
+      "networks",
+      "pipelines",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "crossingPenalty": [
+        "route-06",
+        "route-09",
+        "route-11"
+      ],
+      "bendPenalty": []
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 0,
+    "combination_witnesses": [],
+    "cases": [
+      {
+        "case_id": "route-01",
+        "family": "pipelines",
+        "baseline_id": "D-rgrid-0-route-01-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-01-0-32",
+        "grid_best_id": "D-rgrid-0-route-01-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-01-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-01-0-80",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-01-900-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-01-900-80",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-03",
+        "family": "routing",
+        "baseline_id": "D-rgrid-0-route-03-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-03-0-32",
+        "grid_best_id": "D-rgrid-0-route-03-0-32",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-03-0-0",
+            "balanced_second_difference": 4.440892098500626e-16
+          },
+          {
+            "trial_id": "D-rgrid-0-route-03-0-80",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-03-900-0",
+            "balanced_second_difference": 4.440892098500626e-16
+          },
+          {
+            "trial_id": "D-rgrid-0-route-03-900-80",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-06",
+        "family": "dags",
+        "baseline_id": "D-rgrid-0-route-06-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-06-360-0",
+        "grid_best_id": "D-rgrid-0-route-06-360-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-06-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-06-900-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-06-0-80",
+            "balanced_second_difference": -4
+          },
+          {
+            "trial_id": "D-rgrid-0-route-06-900-80",
+            "balanced_second_difference": 10
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-09",
+        "family": "networks",
+        "baseline_id": "D-rgrid-0-route-09-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-09-0-32",
+        "grid_best_id": "D-rgrid-0-route-09-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-09-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-09-900-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-09-900-80",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-09-0-80",
+            "balanced_second_difference": 6.666667
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-11",
+        "family": "dags",
+        "baseline_id": "D-rgrid-0-route-11-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-11-360-80",
+        "grid_best_id": "D-rgrid-0-route-11-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-11-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-11-0-80",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-11-900-0",
+            "balanced_second_difference": 5
+          },
+          {
+            "trial_id": "D-rgrid-0-route-11-900-80",
+            "balanced_second_difference": 5
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-14",
+        "family": "containers",
+        "baseline_id": "D-rgrid-0-route-14-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-14-0-32",
+        "grid_best_id": "D-rgrid-0-route-14-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-14-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-14-0-80",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-14-900-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-14-900-80",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-18",
+        "family": "routing",
+        "baseline_id": "D-rgrid-0-route-18-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-18-360-0",
+        "grid_best_id": "D-rgrid-0-route-18-360-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-18-0-0",
+            "balanced_second_difference": 1.25
+          },
+          {
+            "trial_id": "D-rgrid-0-route-18-0-80",
+            "balanced_second_difference": -2.5
+          },
+          {
+            "trial_id": "D-rgrid-0-route-18-900-0",
+            "balanced_second_difference": 8.75
+          },
+          {
+            "trial_id": "D-rgrid-0-route-18-900-80",
+            "balanced_second_difference": 3.75
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-22",
+        "family": "dags",
+        "baseline_id": "D-rgrid-0-route-22-360-32",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-0-route-22-0-32",
+        "grid_best_id": "D-rgrid-0-route-22-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-0-route-22-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-22-0-80",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-22-900-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-0-route-22-900-80",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "routing-interaction",
+    "interaction": "clearance*standoff",
+    "factors": [
+      "clearance",
+      "standoff"
+    ],
+    "fixture_count": 8,
+    "actual_rows": 72,
+    "families": [
+      "containers",
+      "dags",
+      "networks",
+      "pipelines",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "clearance": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-14",
+        "route-22"
+      ],
+      "standoff": [
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-22"
+      ]
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 2,
+    "combination_witnesses": [
+      "D-rgrid-1-route-11-22-40",
+      "D-rgrid-1-route-18-22-40"
+    ],
+    "cases": [
+      {
+        "case_id": "route-01",
+        "family": "pipelines",
+        "baseline_id": "D-rgrid-1-route-01-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-01-10-20",
+        "grid_best_id": "D-rgrid-1-route-01-10-20",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-01-4-0",
+            "balanced_second_difference": -10
+          },
+          {
+            "trial_id": "D-rgrid-1-route-01-4-40",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-01-22-0",
+            "balanced_second_difference": -10
+          },
+          {
+            "trial_id": "D-rgrid-1-route-01-22-40",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-03",
+        "family": "routing",
+        "baseline_id": "D-rgrid-1-route-03-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-03-10-20",
+        "grid_best_id": "D-rgrid-1-route-03-10-20",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-03-4-0",
+            "balanced_second_difference": 4.440892098500626e-16
+          },
+          {
+            "trial_id": "D-rgrid-1-route-03-4-40",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": [
+          "D-rgrid-1-route-03-22-20",
+          "D-rgrid-1-route-03-22-0",
+          "D-rgrid-1-route-03-22-40"
+        ]
+      },
+      {
+        "case_id": "route-06",
+        "family": "dags",
+        "baseline_id": "D-rgrid-1-route-06-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-06-10-20",
+        "grid_best_id": "D-rgrid-1-route-06-10-20",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-06-4-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-06-4-40",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-06-22-0",
+            "balanced_second_difference": -12
+          },
+          {
+            "trial_id": "D-rgrid-1-route-06-22-40",
+            "balanced_second_difference": -8
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-09",
+        "family": "networks",
+        "baseline_id": "D-rgrid-1-route-09-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-09-22-20",
+        "grid_best_id": "D-rgrid-1-route-09-22-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-09-4-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-09-4-40",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-09-22-0",
+            "balanced_second_difference": -1.6666670000000003
+          },
+          {
+            "trial_id": "D-rgrid-1-route-09-22-40",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-11",
+        "family": "dags",
+        "baseline_id": "D-rgrid-1-route-11-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-11-10-20",
+        "grid_best_id": "D-rgrid-1-route-11-22-40",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 5,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-11-4-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-11-4-40",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-11-22-0",
+            "balanced_second_difference": -20
+          },
+          {
+            "trial_id": "D-rgrid-1-route-11-22-40",
+            "balanced_second_difference": -15
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-14",
+        "family": "containers",
+        "baseline_id": "D-rgrid-1-route-14-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-14-10-20",
+        "grid_best_id": "D-rgrid-1-route-14-22-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-14-4-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-14-4-40",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-14-22-0",
+            "balanced_second_difference": -6
+          },
+          {
+            "trial_id": "D-rgrid-1-route-14-22-40",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-18",
+        "family": "routing",
+        "baseline_id": "D-rgrid-1-route-18-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-18-22-20",
+        "grid_best_id": "D-rgrid-1-route-18-22-40",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 2.5,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-18-4-0",
+            "balanced_second_difference": 2.5
+          },
+          {
+            "trial_id": "D-rgrid-1-route-18-4-40",
+            "balanced_second_difference": 1.25
+          },
+          {
+            "trial_id": "D-rgrid-1-route-18-22-0",
+            "balanced_second_difference": -7.5
+          },
+          {
+            "trial_id": "D-rgrid-1-route-18-22-40",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-22",
+        "family": "dags",
+        "baseline_id": "D-rgrid-1-route-22-10-20",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-1-route-22-22-20",
+        "grid_best_id": "D-rgrid-1-route-22-22-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-1-route-22-4-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-22-4-40",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-1-route-22-22-0",
+            "balanced_second_difference": -5.555556
+          },
+          {
+            "trial_id": "D-rgrid-1-route-22-22-40",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "routing-interaction",
+    "interaction": "edgeGap*parallelPenalty",
+    "factors": [
+      "edgeGap",
+      "parallelPenalty"
+    ],
+    "fixture_count": 8,
+    "actual_rows": 72,
+    "families": [
+      "containers",
+      "dags",
+      "networks",
+      "pipelines",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "edgeGap": [],
+      "parallelPenalty": [
+        "route-09",
+        "route-14"
+      ]
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 1,
+    "combination_witnesses": [
+      "D-rgrid-2-route-09-32-0"
+    ],
+    "cases": [
+      {
+        "case_id": "route-01",
+        "family": "pipelines",
+        "baseline_id": "D-rgrid-2-route-01-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-01-16-0",
+        "grid_best_id": "D-rgrid-2-route-01-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-01-8-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-01-8-48",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-01-32-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-01-32-48",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-03",
+        "family": "routing",
+        "baseline_id": "D-rgrid-2-route-03-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-03-16-0",
+        "grid_best_id": "D-rgrid-2-route-03-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-03-8-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-03-8-48",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-03-32-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-03-32-48",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-06",
+        "family": "dags",
+        "baseline_id": "D-rgrid-2-route-06-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-06-16-0",
+        "grid_best_id": "D-rgrid-2-route-06-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-06-8-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-06-8-48",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-06-32-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-06-32-48",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-09",
+        "family": "networks",
+        "baseline_id": "D-rgrid-2-route-09-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-09-16-0",
+        "grid_best_id": "D-rgrid-2-route-09-32-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 1.666667,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-09-8-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-09-8-48",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-09-32-0",
+            "balanced_second_difference": -5.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-09-32-48",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-11",
+        "family": "dags",
+        "baseline_id": "D-rgrid-2-route-11-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-11-16-0",
+        "grid_best_id": "D-rgrid-2-route-11-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-11-8-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-11-8-48",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-11-32-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-11-32-48",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-14",
+        "family": "containers",
+        "baseline_id": "D-rgrid-2-route-14-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-14-16-0",
+        "grid_best_id": "D-rgrid-2-route-14-32-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-14-8-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-14-8-48",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-14-32-0",
+            "balanced_second_difference": -2
+          },
+          {
+            "trial_id": "D-rgrid-2-route-14-32-48",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-18",
+        "family": "routing",
+        "baseline_id": "D-rgrid-2-route-18-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-18-16-0",
+        "grid_best_id": "D-rgrid-2-route-18-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-18-8-0",
+            "balanced_second_difference": -2.5
+          },
+          {
+            "trial_id": "D-rgrid-2-route-18-8-48",
+            "balanced_second_difference": 3.75
+          },
+          {
+            "trial_id": "D-rgrid-2-route-18-32-0",
+            "balanced_second_difference": -5.0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-18-32-48",
+            "balanced_second_difference": 3.75
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-22",
+        "family": "dags",
+        "baseline_id": "D-rgrid-2-route-22-16-18",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-2-route-22-16-0",
+        "grid_best_id": "D-rgrid-2-route-22-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-2-route-22-8-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-22-8-48",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-22-32-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-2-route-22-32-48",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "routing-interaction",
+    "interaction": "portGap*fanoutPenalty",
+    "factors": [
+      "portGap",
+      "fanoutPenalty"
+    ],
+    "fixture_count": 8,
+    "actual_rows": 72,
+    "families": [
+      "containers",
+      "dags",
+      "networks",
+      "pipelines",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "portGap": [],
+      "fanoutPenalty": []
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 0,
+    "combination_witnesses": [],
+    "cases": [
+      {
+        "case_id": "route-01",
+        "family": "pipelines",
+        "baseline_id": "D-rgrid-3-route-01-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-01-16-0",
+        "grid_best_id": "D-rgrid-3-route-01-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-01-6-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-01-6-120",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-01-28-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-01-28-120",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-03",
+        "family": "routing",
+        "baseline_id": "D-rgrid-3-route-03-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-03-16-0",
+        "grid_best_id": "D-rgrid-3-route-03-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-03-6-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-03-6-120",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-03-28-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-03-28-120",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-06",
+        "family": "dags",
+        "baseline_id": "D-rgrid-3-route-06-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-06-16-0",
+        "grid_best_id": "D-rgrid-3-route-06-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-06-6-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-06-6-120",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-06-28-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-06-28-120",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-09",
+        "family": "networks",
+        "baseline_id": "D-rgrid-3-route-09-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-09-28-50",
+        "grid_best_id": "D-rgrid-3-route-09-28-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-09-6-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-09-6-120",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-09-28-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-09-28-120",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-11",
+        "family": "dags",
+        "baseline_id": "D-rgrid-3-route-11-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-11-16-0",
+        "grid_best_id": "D-rgrid-3-route-11-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-11-6-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-11-6-120",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-11-28-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-11-28-120",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-14",
+        "family": "containers",
+        "baseline_id": "D-rgrid-3-route-14-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-14-16-0",
+        "grid_best_id": "D-rgrid-3-route-14-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-14-6-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-14-6-120",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-14-28-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-14-28-120",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-18",
+        "family": "routing",
+        "baseline_id": "D-rgrid-3-route-18-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-18-16-0",
+        "grid_best_id": "D-rgrid-3-route-18-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-18-6-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-18-6-120",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-18-28-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-18-28-120",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-22",
+        "family": "dags",
+        "baseline_id": "D-rgrid-3-route-22-16-50",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-3-route-22-16-0",
+        "grid_best_id": "D-rgrid-3-route-22-16-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-3-route-22-6-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-22-6-120",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-22-28-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-3-route-22-28-120",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "routing-interaction",
+    "interaction": "sharedPenalty*passes",
+    "factors": [
+      "sharedPenalty",
+      "passes"
+    ],
+    "fixture_count": 8,
+    "actual_rows": 72,
+    "families": [
+      "containers",
+      "dags",
+      "networks",
+      "pipelines",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "sharedPenalty": [],
+      "passes": []
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 0,
+    "combination_witnesses": [],
+    "cases": [
+      {
+        "case_id": "route-01",
+        "family": "pipelines",
+        "baseline_id": "D-rgrid-4-route-01-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-01-0-3",
+        "grid_best_id": "D-rgrid-4-route-01-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-01-0-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-01-0-5",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-01-16-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-01-16-5",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-03",
+        "family": "routing",
+        "baseline_id": "D-rgrid-4-route-03-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-03-0-3",
+        "grid_best_id": "D-rgrid-4-route-03-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-03-0-1",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-03-0-5",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-03-16-1",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-03-16-5",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-06",
+        "family": "dags",
+        "baseline_id": "D-rgrid-4-route-06-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-06-0-3",
+        "grid_best_id": "D-rgrid-4-route-06-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-06-0-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-06-0-5",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-06-16-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-06-16-5",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-09",
+        "family": "networks",
+        "baseline_id": "D-rgrid-4-route-09-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-09-0-3",
+        "grid_best_id": "D-rgrid-4-route-09-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-09-0-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-09-0-5",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-09-16-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-09-16-5",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-11",
+        "family": "dags",
+        "baseline_id": "D-rgrid-4-route-11-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-11-0-3",
+        "grid_best_id": "D-rgrid-4-route-11-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-11-0-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-11-0-5",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-11-16-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-11-16-5",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-14",
+        "family": "containers",
+        "baseline_id": "D-rgrid-4-route-14-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-14-0-3",
+        "grid_best_id": "D-rgrid-4-route-14-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-14-0-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-14-0-5",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-14-16-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-14-16-5",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-18",
+        "family": "routing",
+        "baseline_id": "D-rgrid-4-route-18-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-18-8-1",
+        "grid_best_id": "D-rgrid-4-route-18-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-18-0-1",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-18-0-5",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-18-16-1",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-18-16-5",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-22",
+        "family": "dags",
+        "baseline_id": "D-rgrid-4-route-22-8-3",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-4-route-22-8-1",
+        "grid_best_id": "D-rgrid-4-route-22-0-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-4-route-22-0-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-22-0-5",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-22-16-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-4-route-22-16-5",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "routing-interaction",
+    "interaction": "portStability*crossingPenalty",
+    "factors": [
+      "portStability",
+      "crossingPenalty"
+    ],
+    "fixture_count": 8,
+    "actual_rows": 72,
+    "families": [
+      "containers",
+      "dags",
+      "networks",
+      "pipelines",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "portStability": [
+        "route-06"
+      ],
+      "crossingPenalty": []
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 0,
+    "combination_witnesses": [],
+    "cases": [
+      {
+        "case_id": "route-01",
+        "family": "pipelines",
+        "baseline_id": "D-rgrid-5-route-01-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-01-0-360",
+        "grid_best_id": "D-rgrid-5-route-01-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-01-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-01-0-900",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-01-100-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-01-100-900",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-03",
+        "family": "routing",
+        "baseline_id": "D-rgrid-5-route-03-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-03-0-360",
+        "grid_best_id": "D-rgrid-5-route-03-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-03-0-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-03-0-900",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-03-100-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-03-100-900",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-06",
+        "family": "dags",
+        "baseline_id": "D-rgrid-5-route-06-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-06-100-360",
+        "grid_best_id": "D-rgrid-5-route-06-100-360",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-06-0-900",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-06-0-0",
+            "balanced_second_difference": 4
+          },
+          {
+            "trial_id": "D-rgrid-5-route-06-100-0",
+            "balanced_second_difference": 6
+          },
+          {
+            "trial_id": "D-rgrid-5-route-06-100-900",
+            "balanced_second_difference": 10
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-09",
+        "family": "networks",
+        "baseline_id": "D-rgrid-5-route-09-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-09-0-360",
+        "grid_best_id": "D-rgrid-5-route-09-0-360",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-09-0-900",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-09-0-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-09-100-900",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-09-100-0",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-11",
+        "family": "dags",
+        "baseline_id": "D-rgrid-5-route-11-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-11-0-360",
+        "grid_best_id": "D-rgrid-5-route-11-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-11-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-11-0-900",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-11-100-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-11-100-900",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-14",
+        "family": "containers",
+        "baseline_id": "D-rgrid-5-route-14-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-14-0-360",
+        "grid_best_id": "D-rgrid-5-route-14-0-0",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-14-0-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-14-0-900",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-14-100-0",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-14-100-900",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-18",
+        "family": "routing",
+        "baseline_id": "D-rgrid-5-route-18-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-18-100-360",
+        "grid_best_id": "D-rgrid-5-route-18-100-360",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-18-0-0",
+            "balanced_second_difference": 3.75
+          },
+          {
+            "trial_id": "D-rgrid-5-route-18-0-900",
+            "balanced_second_difference": 1.25
+          },
+          {
+            "trial_id": "D-rgrid-5-route-18-100-0",
+            "balanced_second_difference": 6.25
+          },
+          {
+            "trial_id": "D-rgrid-5-route-18-100-900",
+            "balanced_second_difference": 3.75
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "route-22",
+        "family": "dags",
+        "baseline_id": "D-rgrid-5-route-22-20-360",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-rgrid-5-route-22-0-360",
+        "grid_best_id": "D-rgrid-5-route-22-0-360",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-rgrid-5-route-22-0-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-22-0-900",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-22-100-0",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-rgrid-5-route-22-100-900",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "source-layout-interaction",
+    "interaction": "aspect*fold",
+    "factors": [
+      "aspect",
+      "fold"
+    ],
+    "fixture_count": 4,
+    "actual_rows": 24,
+    "families": [
+      "pipelines",
+      "presentation"
+    ],
+    "conditional_only_geometry_cases": {
+      "aspect": [],
+      "fold": []
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 0,
+    "combination_witnesses": [],
+    "cases": [
+      {
+        "case_id": "pipelines-01",
+        "family": "pipelines",
+        "baseline_id": "D-lgrid-pipelines-01-aspect-1p6-fold-never",
+        "rows": 6,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-pipelines-01-aspect-1p6-fold-auto",
+        "grid_best_id": "D-lgrid-pipelines-01-aspect-0p75-fold-auto",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-pipelines-01-aspect-0p75-fold-auto",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-pipelines-01-aspect-2-fold-auto",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "baseline_id": "D-lgrid-pipelines-03-aspect-1p6-fold-never",
+        "rows": 6,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-pipelines-03-aspect-1p6-fold-auto",
+        "grid_best_id": "D-lgrid-pipelines-03-aspect-0p75-fold-auto",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-pipelines-03-aspect-0p75-fold-auto",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-pipelines-03-aspect-2-fold-auto",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "presentation-01",
+        "family": "presentation",
+        "baseline_id": "D-lgrid-presentation-01-aspect-1p6-fold-never",
+        "rows": 6,
+        "default_valid": false,
+        "single_axis_best_id": "D-lgrid-presentation-01-aspect-0p75-fold-never",
+        "grid_best_id": "D-lgrid-presentation-01-aspect-0p75-fold-auto",
+        "single_axis_valid": false,
+        "grid_valid": false,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": null,
+        "numeric_second_differences": [],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "presentation-03",
+        "family": "presentation",
+        "baseline_id": "D-lgrid-presentation-03-aspect-1p6-fold-never",
+        "rows": 6,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-presentation-03-aspect-0p75-fold-never",
+        "grid_best_id": "D-lgrid-presentation-03-aspect-0p75-fold-never",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-presentation-03-aspect-0p75-fold-auto",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-presentation-03-aspect-2-fold-auto",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "source-layout-interaction",
+    "interaction": "rankGap*nodeGap",
+    "factors": [
+      "rankGap",
+      "nodeGap"
+    ],
+    "fixture_count": 4,
+    "actual_rows": 36,
+    "families": [
+      "dags",
+      "hierarchies"
+    ],
+    "conditional_only_geometry_cases": {
+      "rankGap": [],
+      "nodeGap": []
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 0,
+    "combination_witnesses": [],
+    "cases": [
+      {
+        "case_id": "dags-01",
+        "family": "dags",
+        "baseline_id": "D-lgrid-dags-01-rankGap-52-nodeGap-24",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-dags-01-rankGap-52-nodeGap-12",
+        "grid_best_id": "D-lgrid-dags-01-rankGap-52-nodeGap-12",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-dags-01-rankGap-24-nodeGap-12",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-dags-01-rankGap-24-nodeGap-48",
+            "balanced_second_difference": 0.769231
+          },
+          {
+            "trial_id": "D-lgrid-dags-01-rankGap-100-nodeGap-12",
+            "balanced_second_difference": -2.3076930000000004
+          },
+          {
+            "trial_id": "D-lgrid-dags-01-rankGap-100-nodeGap-48",
+            "balanced_second_difference": -10.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "dags-03",
+        "family": "dags",
+        "baseline_id": "D-lgrid-dags-03-rankGap-52-nodeGap-24",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-dags-03-rankGap-52-nodeGap-12",
+        "grid_best_id": "D-lgrid-dags-03-rankGap-52-nodeGap-12",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-dags-03-rankGap-24-nodeGap-12",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-dags-03-rankGap-24-nodeGap-48",
+            "balanced_second_difference": -3.636364
+          },
+          {
+            "trial_id": "D-lgrid-dags-03-rankGap-100-nodeGap-12",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-dags-03-rankGap-100-nodeGap-48",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "hierarchies-01",
+        "family": "hierarchies",
+        "baseline_id": "D-lgrid-hierarchies-01-rankGap-52-nodeGap-24",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-hierarchies-01-rankGap-52-nodeGap-12",
+        "grid_best_id": "D-lgrid-hierarchies-01-rankGap-52-nodeGap-12",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-hierarchies-01-rankGap-24-nodeGap-12",
+            "balanced_second_difference": -1.8181820000000002
+          },
+          {
+            "trial_id": "D-lgrid-hierarchies-01-rankGap-24-nodeGap-48",
+            "balanced_second_difference": -6.363636
+          },
+          {
+            "trial_id": "D-lgrid-hierarchies-01-rankGap-100-nodeGap-12",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-hierarchies-01-rankGap-100-nodeGap-48",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "hierarchies-02",
+        "family": "hierarchies",
+        "baseline_id": "D-lgrid-hierarchies-02-rankGap-52-nodeGap-24",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-hierarchies-02-rankGap-52-nodeGap-12",
+        "grid_best_id": "D-lgrid-hierarchies-02-rankGap-100-nodeGap-48",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.9090909999999996,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-hierarchies-02-rankGap-24-nodeGap-12",
+            "balanced_second_difference": 0.9090910000000001
+          },
+          {
+            "trial_id": "D-lgrid-hierarchies-02-rankGap-24-nodeGap-48",
+            "balanced_second_difference": -23.636363
+          },
+          {
+            "trial_id": "D-lgrid-hierarchies-02-rankGap-100-nodeGap-12",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-hierarchies-02-rankGap-100-nodeGap-48",
+            "balanced_second_difference": -1.818181
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  },
+  {
+    "stratum": "source-layout-interaction",
+    "interaction": "boundaryPull*hierarchySweeps",
+    "factors": [
+      "boundaryPull",
+      "hierarchySweeps"
+    ],
+    "fixture_count": 4,
+    "actual_rows": 36,
+    "families": [
+      "architecture",
+      "containers",
+      "routing"
+    ],
+    "conditional_only_geometry_cases": {
+      "boundaryPull": [
+        "routing-01"
+      ],
+      "hierarchySweeps": [
+        "routing-01"
+      ]
+    },
+    "joint_only_valid_gain_cases": 0,
+    "material_balanced_gain_beyond_single_axis_cases": 1,
+    "combination_witnesses": [
+      "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-1"
+    ],
+    "cases": [
+      {
+        "case_id": "architecture-01",
+        "family": "architecture",
+        "baseline_id": "D-lgrid-architecture-01-boundaryPull-65-hierarchySweeps-2",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-2",
+        "grid_best_id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-2",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-architecture-01-boundaryPull-0-hierarchySweeps-1",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-architecture-01-boundaryPull-0-hierarchySweeps-4",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-1",
+            "balanced_second_difference": 0.0
+          },
+          {
+            "trial_id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-4",
+            "balanced_second_difference": 0.0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "baseline_id": "D-lgrid-architecture-03-boundaryPull-65-hierarchySweeps-2",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-2",
+        "grid_best_id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0.0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-1",
+            "balanced_second_difference": 3.181818
+          },
+          {
+            "trial_id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-4",
+            "balanced_second_difference": 0.45454499999999953
+          },
+          {
+            "trial_id": "D-lgrid-architecture-03-boundaryPull-100-hierarchySweeps-1",
+            "balanced_second_difference": 3.181818
+          },
+          {
+            "trial_id": "D-lgrid-architecture-03-boundaryPull-100-hierarchySweeps-4",
+            "balanced_second_difference": 4.090909
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "containers-01",
+        "family": "containers",
+        "baseline_id": "D-lgrid-containers-01-boundaryPull-65-hierarchySweeps-2",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-2",
+        "grid_best_id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 0,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-containers-01-boundaryPull-0-hierarchySweeps-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-containers-01-boundaryPull-0-hierarchySweeps-4",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-4",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      },
+      {
+        "case_id": "routing-01",
+        "family": "routing",
+        "baseline_id": "D-lgrid-routing-01-boundaryPull-65-hierarchySweeps-2",
+        "rows": 9,
+        "default_valid": true,
+        "single_axis_best_id": "D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-2",
+        "grid_best_id": "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-1",
+        "single_axis_valid": true,
+        "grid_valid": true,
+        "joint_only_valid_gain": false,
+        "balanced_gain_over_single_axis": 5,
+        "numeric_second_differences": [
+          {
+            "trial_id": "D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-1",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-4",
+            "balanced_second_difference": 0
+          },
+          {
+            "trial_id": "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-1",
+            "balanced_second_difference": -5
+          },
+          {
+            "trial_id": "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-4",
+            "balanced_second_difference": 0
+          }
+        ],
+        "adverse_hard_trial_ids": []
+      }
+    ],
+    "coverage_note": "These partial grids have their own fixed fixture subset and context. Do not impute untested fixtures or rank a partial policy as if it covered all 24 routing fixtures."
+  }
+]

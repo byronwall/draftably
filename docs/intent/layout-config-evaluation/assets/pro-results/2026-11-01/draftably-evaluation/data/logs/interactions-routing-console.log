@@ -1,0 +1,47 @@
+{"at":"2026-11-01T23:03:07.177Z","runId":"interactions-routing","event":"start","started":"2026-11-01T23:03:07.175Z","node":"v24.22.1","platform":"linux","workers":2,"planned":432,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"769ad58feddeb927cbd11a3ec1c2945fc941abb221a6d5dbb84ffb7cda000a54"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:03:08.357Z","runId":"interactions-routing","event":"progress","complete":20,"total":432,"last":"D-rgrid-0-route-06-0-0","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:03:08.837Z","runId":"interactions-routing","event":"progress","complete":40,"total":432,"last":"D-rgrid-0-route-11-360-0","status":"ok","elapsedSeconds":2}
+{"at":"2026-11-01T23:03:11.153Z","runId":"interactions-routing","event":"progress","complete":60,"total":432,"last":"D-rgrid-0-route-18-360-80","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:03:11.898Z","runId":"interactions-routing","event":"progress","complete":80,"total":432,"last":"D-rgrid-1-route-01-22-20","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:03:12.151Z","runId":"interactions-routing","event":"progress","complete":100,"total":432,"last":"D-rgrid-1-route-06-22-40","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:03:12.355Z","runId":"interactions-routing","event":"progress","complete":120,"total":432,"last":"D-rgrid-1-route-14-4-40","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:03:14.430Z","runId":"interactions-routing","event":"progress","complete":140,"total":432,"last":"D-rgrid-1-route-22-10-20","status":"ok","elapsedSeconds":7}
+{"at":"2026-11-01T23:03:14.591Z","runId":"interactions-routing","event":"progress","complete":160,"total":432,"last":"D-rgrid-2-route-03-32-0","status":"ok","elapsedSeconds":7}
+{"at":"2026-11-01T23:03:14.805Z","runId":"interactions-routing","event":"progress","complete":180,"total":432,"last":"D-rgrid-2-route-11-8-0","status":"ok","elapsedSeconds":8}
+{"at":"2026-11-01T23:03:15.526Z","runId":"interactions-routing","event":"progress","complete":200,"total":432,"last":"D-rgrid-2-route-18-8-18","status":"ok","elapsedSeconds":8}
+{"at":"2026-11-01T23:03:17.225Z","runId":"interactions-routing","event":"progress","complete":220,"total":432,"last":"D-rgrid-3-route-01-16-50","status":"ok","elapsedSeconds":10}
+{"at":"2026-11-01T23:03:17.309Z","runId":"interactions-routing","event":"progress","complete":240,"total":432,"last":"D-rgrid-3-route-06-16-120","status":"ok","elapsedSeconds":10}
+{"at":"2026-11-01T23:03:17.448Z","runId":"interactions-routing","event":"progress","complete":260,"total":432,"last":"D-rgrid-3-route-11-28-50","status":"ok","elapsedSeconds":10}
+{"at":"2026-11-01T23:03:19.370Z","runId":"interactions-routing","event":"progress","complete":280,"total":432,"last":"D-rgrid-3-route-18-28-120","status":"ok","elapsedSeconds":12}
+{"at":"2026-11-01T23:03:19.586Z","runId":"interactions-routing","event":"progress","complete":300,"total":432,"last":"D-rgrid-4-route-03-0-5","status":"ok","elapsedSeconds":12}
+{"at":"2026-11-01T23:03:19.698Z","runId":"interactions-routing","event":"progress","complete":320,"total":432,"last":"D-rgrid-4-route-09-8-3","status":"ok","elapsedSeconds":13}
+{"at":"2026-11-01T23:03:19.896Z","runId":"interactions-routing","event":"progress","complete":340,"total":432,"last":"D-rgrid-4-route-14-16-1","status":"ok","elapsedSeconds":13}
+{"at":"2026-11-01T23:03:21.809Z","runId":"interactions-routing","event":"progress","complete":360,"total":432,"last":"D-rgrid-5-route-01-0-0","status":"ok","elapsedSeconds":15}
+{"at":"2026-11-01T23:03:21.895Z","runId":"interactions-routing","event":"progress","complete":380,"total":432,"last":"D-rgrid-5-route-06-0-900","status":"ok","elapsedSeconds":15}
+{"at":"2026-11-01T23:03:22.504Z","runId":"interactions-routing","event":"progress","complete":400,"total":432,"last":"D-rgrid-5-route-11-20-0","status":"ok","elapsedSeconds":15}
+{"at":"2026-11-01T23:03:24.058Z","runId":"interactions-routing","event":"progress","complete":420,"total":432,"last":"D-rgrid-5-route-18-20-900","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:25.173Z","runId":"interactions-routing","event":"complete","started":"2026-11-01T23:03:07.175Z","node":"v24.22.1","platform":"linux","workers":2,"planned":432,"priorCompleted":0,"executed":432,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"769ad58feddeb927cbd11a3ec1c2945fc941abb221a6d5dbb84ffb7cda000a54","finished":"2026-11-01T23:03:25.173Z","elapsedSeconds":17.998}

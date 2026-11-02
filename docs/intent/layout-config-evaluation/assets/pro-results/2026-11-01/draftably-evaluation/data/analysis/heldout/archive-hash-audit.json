@@ -1,0 +1,33 @@
+{
+  "split": "heldout",
+  "canonicalRule": "First terminal row per trial ID",
+  "productionCalls": 0,
+  "stems": [
+    {
+      "stem": "screen-heldout",
+      "attempts": 599,
+      "canonical": 599,
+      "duplicates": 0,
+      "completeRows": 481,
+      "verified": 481
+    },
+    {
+      "stem": "documented-default-heldout",
+      "attempts": 23,
+      "canonical": 23,
+      "duplicates": 0,
+      "completeRows": 19,
+      "verified": 19
+    },
+    {
+      "stem": "selected-presets-heldout",
+      "attempts": 207,
+      "canonical": 207,
+      "duplicates": 0,
+      "completeRows": 173,
+      "verified": 173
+    }
+  ],
+  "mismatches": [],
+  "missing": []
+}

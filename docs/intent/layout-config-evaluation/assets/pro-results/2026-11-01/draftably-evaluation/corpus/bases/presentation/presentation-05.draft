@@ -1,0 +1,53 @@
+diagram "Presentation evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Stage 0: validate a deliberately long descriptive operation name"
+node n1 "Stage 1"
+node n2 "Stage 2"
+node n3 "Stage 3" shape=diamond
+node n4 "Stage 4: validate a deliberately long descriptive operation name"
+node n5 "Stage 5"
+node n6 "Stage 6"
+node n7 "Stage 7"
+node n8 "Stage 8: validate a deliberately long descriptive operation name"
+node n9 "Stage 9"
+node n10 "Stage 10"
+node n11 "Stage 11"
+node n12 "Stage 12: validate a deliberately long descriptive operation name" shape=diamond
+node n13 "Stage 13"
+node n14 "Stage 14"
+node n15 "Stage 15"
+node n16 "Stage 16: validate a deliberately long descriptive operation name"
+node n17 "Stage 17"
+node n18 "Stage 18"
+node n19 "Stage 19"
+node n20 "Stage 20: validate a deliberately long descriptive operation name"
+edge e0 n0 -> n1 "next"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4 "next"
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7 "next"
+edge e7 n7 -> n8
+edge e8 n8 -> n9
+edge e9 n9 -> n10 "next"
+edge e10 n10 -> n11
+edge e11 n11 -> n12
+edge e12 n12 -> n13 "next"
+edge e13 n13 -> n14
+edge e14 n14 -> n15
+edge e15 n15 -> n16 "next"
+edge e16 n16 -> n17
+edge e17 n17 -> n18
+edge e18 n18 -> n19 "next"
+edge e19 n19 -> n20
+edge e20 n0 -> n5 "long descriptive alternate processing route"
+edge e21 n6 -> n11 "long descriptive alternate processing route"
+edge e22 n12 -> n17 "long descriptive alternate processing route"
+
+layout root flow direction=right gap=48 fit=page
+
+size n1 width=176 height=80
+size n8 width=232 height=56
+size n15 width=120 height=80

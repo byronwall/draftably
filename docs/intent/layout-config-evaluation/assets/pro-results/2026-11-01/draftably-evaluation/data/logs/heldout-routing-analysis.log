@@ -1,0 +1,906 @@
+{
+  "heldout_analysis_complete": true,
+  "verified_archives": 318,
+  "reference_checks": {
+    "trials": 288,
+    "successful_document_checks": 243,
+    "partial_reference_trials": 54,
+    "missing_input_artifacts": 0,
+    "specialist_fallback_trials": 9
+  },
+  "current_all_profiles": [
+    {
+      "policy": "current-default",
+      "role": "measured current source baseline",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 90,
+      "acceptable_jobs": 47,
+      "absolute_acceptable_fraction": 0.39166666666666666,
+      "relative_to_scoped_feasible_pool_fraction": 0.5222222222222223,
+      "hard_valid_jobs": 80,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 0,
+      "mean_finite_score_regret": 1.9730119862655526,
+      "p95_finite_score_regret": 10.021739149999998,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 80,
+      "serial_budget_acceptable_sensitivity_jobs": 47,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.39166666666666666,
+        "numerator": 47.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.20833333333333334,
+          "high95": 0.5916666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.18333333333333332,
+          "high95": 0.625,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.5222222222222223,
+        "numerator": 47.0,
+        "denominator": 90.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.29473684210526313,
+          "high95": 0.75,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.27690476190476193,
+          "high95": 0.75,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "clearance-22",
+      "role": "fixed frozen route policy",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 90,
+      "acceptable_jobs": 47,
+      "absolute_acceptable_fraction": 0.39166666666666666,
+      "relative_to_scoped_feasible_pool_fraction": 0.5222222222222223,
+      "hard_valid_jobs": 60,
+      "current_valid_hard_loss_jobs": 30,
+      "current_valid_hard_loss_bases": 6,
+      "current_invalid_valid_gain_bases": 2,
+      "mean_finite_score_regret": 1.06552333764573,
+      "p95_finite_score_regret": 4.7099928362118675,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 60,
+      "serial_budget_acceptable_sensitivity_jobs": 47,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.39166666666666666,
+        "numerator": 47.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.2,
+          "high95": 0.575,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.15833333333333333,
+          "high95": 0.6335416666666654,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.5222222222222223,
+        "numerator": 47.0,
+        "denominator": 90.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.29986842105263156,
+          "high95": 0.7411764705882353,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.25,
+          "high95": 0.776503267973856,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.375,
+        "numerator": 30.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.14285714285714285,
+          "high95": 0.6111111111111112,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.09090909090909091,
+          "high95": 0.6251644736842096,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "clearance-4",
+      "role": "fixed frozen route policy",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 90,
+      "acceptable_jobs": 62,
+      "absolute_acceptable_fraction": 0.5166666666666667,
+      "relative_to_scoped_feasible_pool_fraction": 0.6888888888888889,
+      "hard_valid_jobs": 80,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 0,
+      "mean_finite_score_regret": 0.5989363165114271,
+      "p95_finite_score_regret": 2.8,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 80,
+      "serial_budget_acceptable_sensitivity_jobs": 62,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.5166666666666667,
+        "numerator": 62.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.31666666666666665,
+          "high95": 0.7166666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.31645833333333334,
+          "high95": 0.725,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.6888888888888889,
+        "numerator": 62.0,
+        "denominator": 90.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.47687500000000005,
+          "high95": 0.8824369747899155,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.47058823529411764,
+          "high95": 0.8941176470588236,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "portGap-28",
+      "role": "fixed frozen route policy",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 90,
+      "acceptable_jobs": 45,
+      "absolute_acceptable_fraction": 0.375,
+      "relative_to_scoped_feasible_pool_fraction": 0.5,
+      "hard_valid_jobs": 80,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 0,
+      "mean_finite_score_regret": 2.017517077860957,
+      "p95_finite_score_regret": 7.647879376590009,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 80,
+      "serial_budget_acceptable_sensitivity_jobs": 45,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.375,
+        "numerator": 45.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.19166666666666668,
+          "high95": 0.5666666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.17479166666666668,
+          "high95": 0.5918749999999988,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.5,
+        "numerator": 45.0,
+        "denominator": 90.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.2868878718535469,
+          "high95": 0.7125822368421049,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.2714285714285714,
+          "high95": 0.7142857142857143,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "frozen-three-route-union",
+      "role": "oracle Compare upper bound",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 90,
+      "acceptable_jobs": 90,
+      "absolute_acceptable_fraction": 0.75,
+      "relative_to_scoped_feasible_pool_fraction": 1.0,
+      "hard_valid_jobs": 90,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 2,
+      "mean_finite_score_regret": 0.010866232931338891,
+      "p95_finite_score_regret": 0.0,
+      "worst_family_relative_coverage": 1.0,
+      "serial_budget_valid_sensitivity_jobs": 90,
+      "serial_budget_acceptable_sensitivity_jobs": 90,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.75,
+        "numerator": 90.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.5833333333333334,
+          "high95": 0.9166666666666666,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.5,
+          "high95": 0.9166666666666666,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 1.0,
+        "numerator": 90.0,
+        "denominator": 90.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 1.0,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 1.0,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "retain-current-plus-three",
+      "role": "full scoped oracle; retain current plus alternatives",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 90,
+      "acceptable_jobs": 90,
+      "absolute_acceptable_fraction": 0.75,
+      "relative_to_scoped_feasible_pool_fraction": 1.0,
+      "hard_valid_jobs": 90,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 2,
+      "mean_finite_score_regret": 0.0,
+      "p95_finite_score_regret": 0.0,
+      "worst_family_relative_coverage": 1.0,
+      "serial_budget_valid_sensitivity_jobs": 90,
+      "serial_budget_acceptable_sensitivity_jobs": 90,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.75,
+        "numerator": 90.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.5833333333333334,
+          "high95": 0.9166666666666666,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.5,
+          "high95": 0.9166666666666666,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 1.0,
+        "numerator": 90.0,
+        "denominator": 90.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 1.0,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 1.0,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    }
+  ],
+  "joint_all_profiles": [
+    {
+      "policy": "frozen-joint-global",
+      "role": "fixed frozen global policy",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 95,
+      "acceptable_jobs": 50,
+      "absolute_acceptable_fraction": 0.4166666666666667,
+      "relative_to_scoped_feasible_pool_fraction": 0.5263157894736842,
+      "hard_valid_jobs": 95,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 3,
+      "mean_finite_score_regret": 3.6112724421354905,
+      "p95_finite_score_regret": 18.656457092010854,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 95,
+      "serial_budget_acceptable_sensitivity_jobs": 50,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.4166666666666667,
+        "numerator": 50.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.24166666666666667,
+          "high95": 0.5916666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.23333333333333334,
+          "high95": 0.6166666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.5263157894736842,
+        "numerator": 50.0,
+        "denominator": 95.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.3333333333333333,
+          "high95": 0.7142857142857143,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.33042391304347823,
+          "high95": 0.7273262032085559,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "frozen-joint-triple",
+      "role": "oracle Compare upper bound from frozen three",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 95,
+      "acceptable_jobs": 78,
+      "absolute_acceptable_fraction": 0.65,
+      "relative_to_scoped_feasible_pool_fraction": 0.8210526315789474,
+      "hard_valid_jobs": 95,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 3,
+      "mean_finite_score_regret": 0.34638776780059505,
+      "p95_finite_score_regret": 1.96619270624391,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 95,
+      "serial_budget_acceptable_sensitivity_jobs": 78,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.65,
+        "numerator": 78.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.4666666666666667,
+          "high95": 0.8166666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.44145833333333334,
+          "high95": 0.8416666666666667,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.8210526315789474,
+        "numerator": 78.0,
+        "denominator": 95.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.6571428571428571,
+          "high95": 0.9579473684210523,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.6666666666666666,
+          "high95": 0.9444444444444444,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "default-three-layouts",
+      "role": "matched three-layout default-route oracle benchmark",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 95,
+      "acceptable_jobs": 62,
+      "absolute_acceptable_fraction": 0.5166666666666667,
+      "relative_to_scoped_feasible_pool_fraction": 0.6526315789473685,
+      "hard_valid_jobs": 95,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 3,
+      "mean_finite_score_regret": 1.986757153425768,
+      "p95_finite_score_regret": 11.372548999999998,
+      "worst_family_relative_coverage": 0.0,
+      "serial_budget_valid_sensitivity_jobs": 95,
+      "serial_budget_acceptable_sensitivity_jobs": 62,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.5166666666666667,
+        "numerator": 62.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.3416666666666667,
+          "high95": 0.6833333333333333,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.31666666666666665,
+          "high95": 0.7333333333333333,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.6526315789473685,
+        "numerator": 62.0,
+        "denominator": 95.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.47269480519480517,
+          "high95": 0.8267499999999995,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.4362878787878788,
+          "high95": 0.8476190476190476,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "all-nine-joint",
+      "role": "nine-combination oracle diagnostic",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 95,
+      "acceptable_jobs": 94,
+      "absolute_acceptable_fraction": 0.7833333333333333,
+      "relative_to_scoped_feasible_pool_fraction": 0.9894736842105263,
+      "hard_valid_jobs": 95,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 3,
+      "mean_finite_score_regret": 0.027459957894736826,
+      "p95_finite_score_regret": 0.0,
+      "worst_family_relative_coverage": 0.8,
+      "serial_budget_valid_sensitivity_jobs": 95,
+      "serial_budget_acceptable_sensitivity_jobs": 94,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.7833333333333333,
+        "numerator": 94.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.6083333333333333,
+          "high95": 0.9335416666666655,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.575,
+          "high95": 0.9583333333333334,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 0.9894736842105263,
+        "numerator": 94.0,
+        "denominator": 95.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.9666666666666667,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.9625,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    },
+    {
+      "policy": "all-twelve-scoped-pool",
+      "role": "full scoped oracle diagnostic",
+      "subset": "all",
+      "axis": "five_profiles_pooled",
+      "bases": 24,
+      "families": 12,
+      "total_jobs": 120,
+      "oracle_feasible_jobs": 95,
+      "acceptable_jobs": 95,
+      "absolute_acceptable_fraction": 0.7916666666666666,
+      "relative_to_scoped_feasible_pool_fraction": 1.0,
+      "hard_valid_jobs": 95,
+      "current_valid_hard_loss_jobs": 0,
+      "current_valid_hard_loss_bases": 0,
+      "current_invalid_valid_gain_bases": 3,
+      "mean_finite_score_regret": 0.0,
+      "p95_finite_score_regret": 0.0,
+      "worst_family_relative_coverage": 1.0,
+      "serial_budget_valid_sensitivity_jobs": 95,
+      "serial_budget_acceptable_sensitivity_jobs": 95,
+      "serial_budget_unknown_valid_jobs": 0,
+      "serial_budget_unknown_acceptable_jobs": 0,
+      "absolute_coverage_uncertainty": {
+        "point": 0.7916666666666666,
+        "numerator": 95.0,
+        "denominator": 120.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.625,
+          "high95": 0.9583333333333334,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.5833333333333334,
+          "high95": 0.9583333333333334,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "feasible_coverage_uncertainty": {
+        "point": 1.0,
+        "numerator": 95.0,
+        "denominator": 95.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 1.0,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 1.0,
+          "high95": 1.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      },
+      "current_valid_hard_loss_rate_uncertainty": {
+        "point": 0.0,
+        "numerator": 0.0,
+        "denominator": 80.0,
+        "base_clusters": 24,
+        "family_clusters": 12,
+        "base_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        },
+        "family_bootstrap": {
+          "low95": 0.0,
+          "high95": 0.0,
+          "replicates": 2000,
+          "nonempty_draws": 2000
+        }
+      }
+    }
+  ]
+}

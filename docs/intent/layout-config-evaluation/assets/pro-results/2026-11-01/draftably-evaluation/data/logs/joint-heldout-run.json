@@ -1,0 +1,18 @@
+{
+  "runId": "joint-heldout",
+  "started": "2026-11-02T00:24:11.255Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 216,
+  "priorCompleted": 0,
+  "executed": 216,
+  "failed": 0,
+  "timedOut": 30,
+  "skipped": 0,
+  "taskSha256": "53496c83d73103158f098e746ce2be9997fb1339b55c7d56d414b0554067b5d2",
+  "finished": "2026-11-02T00:29:05.155Z",
+  "elapsedSeconds": 293.9,
+  "persistedDistinct": 216
+}

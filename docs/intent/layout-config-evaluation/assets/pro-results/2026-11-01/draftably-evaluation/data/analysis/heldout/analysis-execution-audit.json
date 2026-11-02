@@ -1,0 +1,27 @@
+{
+  "at": "2026-11-02T00:27:07.881335+00:00",
+  "analysisOnly": true,
+  "geometryRuns": 0,
+  "frozenPolicySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "frozenCodeMatches": {
+    "evaluation/analyze-portfolio.py": true,
+    "evaluation/analyze-dependencies.py": true,
+    "evaluation/metrics.mjs": true,
+    "evaluation/plot-portfolio.py": true,
+    "evaluation/audit-result-archives.mjs": true,
+    "evaluation/audit-cell-access.mjs": true
+  },
+  "reportingCodeHashes": {
+    "evaluation/analyze-family-tails.py": "c38a524978be1b0ffb8783ace6a1b319c03011b18b740316a1b0d034ff909fb4",
+    "evaluation/report-heldout-portfolio.py": "ca8d5b08fa2decbdd4efb9ccc9a59f4523d4edbb573ef4abecee398b9e844c95"
+  },
+  "completed": [
+    "analyze-portfolio --phase heldout",
+    "analyze-dependencies --split heldout",
+    "plot-portfolio --split heldout",
+    "audit-result-archives --heldout",
+    "analyze-family-tails --split heldout",
+    "report-heldout-portfolio"
+  ],
+  "cellAccessCensusDeferredUntilFinalRoutingAndEdits": true
+}

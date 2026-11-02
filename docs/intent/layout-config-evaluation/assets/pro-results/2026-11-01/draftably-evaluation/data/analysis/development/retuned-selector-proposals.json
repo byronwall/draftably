@@ -1,0 +1,5233 @@
+{
+  "options": [
+    {
+      "size": 1,
+      "portfolio": [
+        "compound-flow"
+      ],
+      "mode": "tuned",
+      "oracle": {
+        "mode": "tuned",
+        "weighting": "equal-family",
+        "size": 1,
+        "portfolio": [
+          "compound-flow"
+        ],
+        "currentFallback": false,
+        "specialistFallback": true,
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.15384615384615385,
+        "nicheAcceptableCoverage": 0.3777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "currentValidHardRegressionJobs": 5,
+        "meanFiniteScoreRegret": 12.891304476116904,
+        "totalJobs": 240,
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.14285714285714288,
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.03571428571428571,
+          "compact": 0.14285714285714285,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.03846153846153846,
+          "compact": 0.15384615384615383,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.03846153846153846,
+        "contractCommonPerProfile95Pass": false,
+        "worstProfileCommonAbsoluteCoverage": 0.03571428571428571,
+        "absoluteCommonPerProfile95Pass": false
+      },
+      "selectorTree": {
+        "type": "leaf",
+        "method": "tuned:compound-flow:RIGHT:p1",
+        "trainingBases": 46,
+        "trainingLoss": [
+          0.10416666666666666,
+          0.6916666666666668,
+          11.548460259854725
+        ]
+      },
+      "goalTrees": {
+        "readable": {
+          "type": "leaf",
+          "method": "tuned:compound-flow:RIGHT:p1",
+          "trainingBases": 46,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.1583333333333334,
+            2.7360720554700912
+          ]
+        },
+        "compact": {
+          "type": "leaf",
+          "method": "tuned:compound-flow:RIGHT:p1",
+          "trainingBases": 46,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.1416666666666667,
+            1.7997603293846343
+          ]
+        },
+        "traceable": {
+          "type": "leaf",
+          "method": "tuned:compound-flow:RIGHT:p1",
+          "trainingBases": 46,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.13333333333333333,
+            3.363195691666666
+          ]
+        },
+        "stable": {
+          "type": "leaf",
+          "method": "tuned:compound-flow:RIGHT:p1",
+          "trainingBases": 46,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.12916666666666665,
+            1.8247160916666667
+          ]
+        },
+        "specialist": {
+          "type": "leaf",
+          "method": "tuned:compound-flow:RIGHT:p1",
+          "trainingBases": 46,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.12916666666666665,
+            1.8247160916666667
+          ]
+        }
+      },
+      "selector": {
+        "weightedHardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.15384615384615385,
+        "nicheAcceptableCoverage": 0.3777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 5,
+        "currentValidHardRegressionCases": 1,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 54,
+        "totalJobs": 240,
+        "hardValidJobs": 215,
+        "meanFiniteRegret": 12.891304476116904,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 65.0717031553282,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.13636363636363633,
+          "compact": 0.2272727272727272,
+          "traceable": 0.27272727272727265,
+          "stable": 0.29545454545454536,
+          "specialist": 0.29545454545454536
+        },
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.14285714285714288,
+        "absoluteNicheAcceptableCoverage": 0.34000000000000014,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.2,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.03571428571428571,
+          "compact": 0.14285714285714285,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.03846153846153846,
+          "compact": 0.15384615384615383,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.03846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.03571428571428571,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 1,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "compact": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          }
+        },
+        "currentValidHardRegressionCommonCases": 1
+      },
+      "selectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.15384615384615385,
+        "nicheAcceptableCoverage": 0.3777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 54,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 12.645970821335464,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 64.85380499651684,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.13636363636363633,
+          "compact": 0.2272727272727272,
+          "traceable": 0.27272727272727265,
+          "stable": 0.29545454545454536,
+          "specialist": 0.29545454545454536
+        },
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.14285714285714288,
+        "absoluteNicheAcceptableCoverage": 0.34000000000000014,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.2,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.03571428571428571,
+          "compact": 0.14285714285714285,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.03846153846153846,
+          "compact": 0.15384615384615383,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.03846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.03571428571428571,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 1,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelector": {
+        "weightedHardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.15384615384615385,
+        "nicheAcceptableCoverage": 0.3777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 5,
+        "currentValidHardRegressionCases": 1,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 54,
+        "totalJobs": 240,
+        "hardValidJobs": 215,
+        "meanFiniteRegret": 12.891304476116904,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 65.0717031553282,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.13636363636363633,
+          "compact": 0.2272727272727272,
+          "traceable": 0.27272727272727265,
+          "stable": 0.29545454545454536,
+          "specialist": 0.29545454545454536
+        },
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.14285714285714288,
+        "absoluteNicheAcceptableCoverage": 0.34000000000000014,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.2,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.03571428571428571,
+          "compact": 0.14285714285714285,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.03846153846153846,
+          "compact": 0.15384615384615383,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.03846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.03571428571428571,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 1,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "compact": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          }
+        },
+        "currentValidHardRegressionCommonCases": 1
+      },
+      "goalSelectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.15384615384615385,
+        "nicheAcceptableCoverage": 0.3777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 54,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 12.645970821335464,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 64.85380499651684,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.13636363636363633,
+          "compact": 0.2272727272727272,
+          "traceable": 0.27272727272727265,
+          "stable": 0.29545454545454536,
+          "specialist": 0.29545454545454536
+        },
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.14285714285714288,
+        "absoluteNicheAcceptableCoverage": 0.34000000000000014,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.2,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.03571428571428571,
+          "compact": 0.14285714285714285,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.03846153846153846,
+          "compact": 0.15384615384615383,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.03846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.03571428571428571,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 1,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "validityGuardFallbackJobs": 5,
+      "goalValidityGuardFallbackJobs": 5,
+      "developmentThresholdMet": false,
+      "developmentContractThresholdMet": false,
+      "developmentAbsoluteStressTestMet": false
+    },
+    {
+      "size": 2,
+      "portfolio": [
+        "force",
+        "layered"
+      ],
+      "mode": "tuned",
+      "oracle": {
+        "mode": "tuned",
+        "weighting": "equal-family",
+        "size": 2,
+        "portfolio": [
+          "force",
+          "layered"
+        ],
+        "currentFallback": false,
+        "specialistFallback": true,
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.37272727272727274,
+        "commonAcceptableCoverage": 0.24615384615384617,
+        "nicheAcceptableCoverage": 0.5555555555555557,
+        "worstFamilyCoverage": 0.1,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.1,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.6,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.3,
+          "pipelines": 0.35,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionJobs": 0,
+        "meanFiniteScoreRegret": 5.9941016920393455,
+        "totalJobs": 240,
+        "absoluteAcceptableCoverage": 0.3416666666666667,
+        "absoluteCommonAcceptableCoverage": 0.2285714285714286,
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.24999999999999997,
+          "compact": 0.2857142857142857,
+          "traceable": 0.17857142857142855,
+          "stable": 0.21428571428571427,
+          "specialist": 0.21428571428571427
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.2692307692307692,
+          "compact": 0.30769230769230765,
+          "traceable": 0.1923076923076923,
+          "stable": 0.23076923076923075,
+          "specialist": 0.23076923076923075
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "contractCommonPerProfile95Pass": false,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "absoluteCommonPerProfile95Pass": false
+      },
+      "selectorTree": {
+        "type": "split",
+        "feature": "maxDegree",
+        "threshold": 7.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "maxDepth",
+          "threshold": 1.5,
+          "trainingBases": 41,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 2.5,
+            "trainingBases": 31,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 7,
+              "trainingLoss": [
+                0.0,
+                0.05,
+                2.7844591728433072
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 24,
+              "trainingLoss": [
+                0.0,
+                0.43333333333333324,
+                2.3906401584256103
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 10,
+            "trainingLoss": [
+              0.0625,
+              0.09583333333333333,
+              0.3122311673572481
+            ]
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 5,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.0625,
+            1.1312250635990728
+          ]
+        }
+      },
+      "goalTrees": {
+        "readable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "density",
+              "threshold": 0.13055555555555556,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 27,
+                "trainingLoss": [
+                  0.0,
+                  0.08333333333333333,
+                  1.2436913360338342
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.0125,
+                  0.06134438312943365
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 10,
+              "trainingLoss": [
+                0.0125,
+                0.020833333333333332,
+                0.08994975816868248
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.13233270338494363
+            ]
+          }
+        },
+        "compact": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.44664065267570724
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.0875,
+                  0.5467944890431143
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 10,
+              "trainingLoss": [
+                0.0125,
+                0.020833333333333332,
+                0.03134227168856558
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.17573059771412924
+            ]
+          }
+        },
+        "traceable": {
+          "type": "split",
+          "feature": "nodeCount",
+          "threshold": 39.0,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 40,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.6690476208333332
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.0875,
+                  0.7006035374999999
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 9,
+              "trainingLoss": [
+                0.008333333333333333,
+                0.020833333333333332,
+                0.09515160416666667
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 6,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.0125,
+              1.3025252541666665
+            ]
+          }
+        },
+        "stable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.43869047916666665
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.0875,
+                  0.3597829208333333
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 10,
+              "trainingLoss": [
+                0.0125,
+                0.016666666666666666,
+                0.047893766666666664
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.17329763333333334
+            ]
+          }
+        },
+        "specialist": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.43869047916666665
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.0875,
+                  0.3597829208333333
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 10,
+              "trainingLoss": [
+                0.0125,
+                0.016666666666666666,
+                0.047893766666666664
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.17329763333333334
+            ]
+          }
+        }
+      },
+      "selector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.3,
+        "commonAcceptableCoverage": 0.2076923076923077,
+        "nicheAcceptableCoverage": 0.4333333333333336,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.55,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 66,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 7.220242431518443,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 20.146050605272965,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.29545454545454536,
+          "traceable": 0.27272727272727265,
+          "stable": 0.31818181818181807,
+          "specialist": 0.31818181818181807
+        },
+        "absoluteAcceptableCoverage": 0.275,
+        "absoluteCommonAcceptableCoverage": 0.1928571428571429,
+        "absoluteNicheAcceptableCoverage": 0.3900000000000003,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.2,
+          "disconnected": 0.55,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.21428571428571427,
+          "compact": 0.21428571428571427,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.23076923076923075,
+          "compact": 0.23076923076923075,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "selectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.3,
+        "commonAcceptableCoverage": 0.2076923076923077,
+        "nicheAcceptableCoverage": 0.4333333333333336,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.55,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 66,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 7.220242431518443,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 20.146050605272965,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.29545454545454536,
+          "traceable": 0.27272727272727265,
+          "stable": 0.31818181818181807,
+          "specialist": 0.31818181818181807
+        },
+        "absoluteAcceptableCoverage": 0.275,
+        "absoluteCommonAcceptableCoverage": 0.1928571428571429,
+        "absoluteNicheAcceptableCoverage": 0.3900000000000003,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.2,
+          "disconnected": 0.55,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.21428571428571427,
+          "compact": 0.21428571428571427,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.23076923076923075,
+          "compact": 0.23076923076923075,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.30454545454545456,
+        "commonAcceptableCoverage": 0.2,
+        "nicheAcceptableCoverage": 0.45555555555555566,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.6,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.3
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 67,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.21943688200554,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 29.75,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.29545454545454536,
+          "traceable": 0.29545454545454536,
+          "stable": 0.31818181818181807,
+          "specialist": 0.31818181818181807
+        },
+        "absoluteAcceptableCoverage": 0.2791666666666667,
+        "absoluteCommonAcceptableCoverage": 0.18571428571428575,
+        "absoluteNicheAcceptableCoverage": 0.4100000000000001,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.2,
+          "disconnected": 0.6,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.3
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.21428571428571427,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.23076923076923075,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.30454545454545456,
+        "commonAcceptableCoverage": 0.2,
+        "nicheAcceptableCoverage": 0.45555555555555566,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.6,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.3
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 67,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.21943688200554,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 29.75,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.29545454545454536,
+          "traceable": 0.29545454545454536,
+          "stable": 0.31818181818181807,
+          "specialist": 0.31818181818181807
+        },
+        "absoluteAcceptableCoverage": 0.2791666666666667,
+        "absoluteCommonAcceptableCoverage": 0.18571428571428575,
+        "absoluteNicheAcceptableCoverage": 0.4100000000000001,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.2,
+          "disconnected": 0.6,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.3
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.21428571428571427,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.23076923076923075,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "validityGuardFallbackJobs": 0,
+      "goalValidityGuardFallbackJobs": 0,
+      "developmentThresholdMet": false,
+      "developmentContractThresholdMet": false,
+      "developmentAbsoluteStressTestMet": false
+    },
+    {
+      "size": 3,
+      "portfolio": [
+        "tidy",
+        "force",
+        "layered"
+      ],
+      "mode": "tuned",
+      "oracle": {
+        "mode": "tuned",
+        "weighting": "equal-family",
+        "size": 3,
+        "portfolio": [
+          "tidy",
+          "force",
+          "layered"
+        ],
+        "currentFallback": false,
+        "specialistFallback": true,
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.45,
+        "commonAcceptableCoverage": 0.33846153846153854,
+        "nicheAcceptableCoverage": 0.6111111111111114,
+        "worstFamilyCoverage": 0.1,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.1,
+          "dags": 0.5333333333333334,
+          "disconnected": 0.65,
+          "hierarchies": 0.3,
+          "networks": 0.5,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.7,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionJobs": 0,
+        "meanFiniteScoreRegret": 5.326646012583171,
+        "totalJobs": 240,
+        "absoluteAcceptableCoverage": 0.4125,
+        "absoluteCommonAcceptableCoverage": 0.3142857142857144,
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.24999999999999997,
+          "compact": 0.3571428571428571,
+          "traceable": 0.3214285714285714,
+          "stable": 0.3214285714285714,
+          "specialist": 0.3214285714285714
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.2692307692307692,
+          "compact": 0.3846153846153846,
+          "traceable": 0.34615384615384615,
+          "stable": 0.34615384615384615,
+          "specialist": 0.34615384615384615
+        },
+        "worstProfileCommonFeasibleCoverage": 0.2692307692307692,
+        "contractCommonPerProfile95Pass": false,
+        "worstProfileCommonAbsoluteCoverage": 0.24999999999999997,
+        "absoluteCommonPerProfile95Pass": false
+      },
+      "selectorTree": {
+        "type": "split",
+        "feature": "maxDegree",
+        "threshold": 6.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "groupCount",
+          "threshold": 4.5,
+          "trainingBases": 39,
+          "left": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 12.5,
+            "trainingBases": 31,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:tidy:RIGHT:p3",
+              "trainingBases": 18,
+              "trainingLoss": [
+                0.0,
+                0.2791666666666667,
+                1.45358655306259
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 13,
+              "trainingLoss": [
+                0.0,
+                0.18750000000000003,
+                3.6024450235523697
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 8,
+            "trainingLoss": [
+              0.0625,
+              0.05416666666666666,
+              0.1536613783843469
+            ]
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 7,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.09999999999999999,
+            1.227021020809669
+          ]
+        }
+      },
+      "goalTrees": {
+        "readable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 6.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 39,
+            "left": {
+              "type": "split",
+              "feature": "density",
+              "threshold": 0.13055555555555556,
+              "trainingBases": 29,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 25,
+                "trainingLoss": [
+                  0.0,
+                  0.07916666666666666,
+                  1.2390686529070705
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.0125,
+                  0.06134438312943365
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "groupCount",
+              "threshold": 5.5,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tidy:RIGHT:p3",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.008333333333333333,
+                  0.042794842571998
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.0125,
+                  0.031904397829162955
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.016666666666666666,
+              0.1549477801994873
+            ]
+          }
+        },
+        "compact": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 6.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 12.5,
+            "trainingBases": 39,
+            "left": {
+              "type": "split",
+              "feature": "edgeCount",
+              "threshold": 10.5,
+              "trainingBases": 19,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 8,
+                "trainingLoss": [
+                  0.0,
+                  0.020833333333333332,
+                  0.04931223210782518
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:tidy:RIGHT:p3",
+                "trainingBases": 11,
+                "trainingLoss": [
+                  0.0,
+                  0.03333333333333333,
+                  0.18189673251689276
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 20,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.004166666666666667,
+                  0.43503589902405326
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 14,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.041666666666666664,
+                  0.258504675034105
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.020833333333333332,
+              0.18603269061018157
+            ]
+          }
+        },
+        "traceable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 6.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 4.5,
+            "trainingBases": 39,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.6690476208333332
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:tidy:RIGHT:p3",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.08333333333333333,
+                  1.478383754166667
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "edgeCount",
+              "threshold": 13.5,
+              "trainingBases": 8,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.01474359166666667
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0125,
+                  0.004166666666666667,
+                  0.03422619166666666
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.020833333333333332,
+              0.5076271
+            ]
+          }
+        },
+        "stable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 6.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 4.5,
+            "trainingBases": 39,
+            "left": {
+              "type": "split",
+              "feature": "nodeCount",
+              "threshold": 12.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tidy:RIGHT:p3",
+                "trainingBases": 18,
+                "trainingLoss": [
+                  0.0,
+                  0.05416666666666666,
+                  0.22913510416666666
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 13,
+                "trainingLoss": [
+                  0.0,
+                  0.03333333333333333,
+                  0.5630035833333333
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 8,
+              "trainingLoss": [
+                0.0125,
+                0.008333333333333333,
+                0.025457870833333326
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.020833333333333332,
+              0.18920672500000002
+            ]
+          }
+        },
+        "specialist": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 6.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 4.5,
+            "trainingBases": 39,
+            "left": {
+              "type": "split",
+              "feature": "nodeCount",
+              "threshold": 12.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tidy:RIGHT:p3",
+                "trainingBases": 18,
+                "trainingLoss": [
+                  0.0,
+                  0.05416666666666666,
+                  0.22913510416666666
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 13,
+                "trainingLoss": [
+                  0.0,
+                  0.03333333333333333,
+                  0.5630035833333333
+                ]
+              }
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 8,
+              "trainingLoss": [
+                0.0125,
+                0.008333333333333333,
+                0.025457870833333326
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.020833333333333332,
+              0.18920672500000002
+            ]
+          }
+        }
+      },
+      "selector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.32272727272727264,
+        "commonAcceptableCoverage": 0.2615384615384616,
+        "nicheAcceptableCoverage": 0.4111111111111113,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.5333333333333334,
+          "disconnected": 0.45,
+          "hierarchies": 0.25,
+          "networks": 0.5,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 71,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 7.021869791791611,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 20.146050605272965,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.27272727272727265,
+          "compact": 0.31818181818181807,
+          "traceable": 0.29545454545454536,
+          "stable": 0.36363636363636354,
+          "specialist": 0.36363636363636354
+        },
+        "absoluteAcceptableCoverage": 0.2958333333333333,
+        "absoluteCommonAcceptableCoverage": 0.24285714285714294,
+        "absoluteNicheAcceptableCoverage": 0.3700000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.15000000000000002,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.4,
+          "disconnected": 0.45,
+          "hierarchies": 0.25,
+          "networks": 0.5,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.10714285714285715,
+          "compact": 0.24999999999999997,
+          "traceable": 0.2857142857142857,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.11538461538461539,
+          "compact": 0.2692307692307692,
+          "traceable": 0.30769230769230765,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.11538461538461539,
+        "worstProfileCommonAbsoluteCoverage": 0.10714285714285715,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 3,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "selectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.32272727272727264,
+        "commonAcceptableCoverage": 0.2615384615384616,
+        "nicheAcceptableCoverage": 0.4111111111111113,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.5333333333333334,
+          "disconnected": 0.45,
+          "hierarchies": 0.25,
+          "networks": 0.5,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 71,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 7.021869791791611,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 20.146050605272965,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.27272727272727265,
+          "compact": 0.31818181818181807,
+          "traceable": 0.29545454545454536,
+          "stable": 0.36363636363636354,
+          "specialist": 0.36363636363636354
+        },
+        "absoluteAcceptableCoverage": 0.2958333333333333,
+        "absoluteCommonAcceptableCoverage": 0.24285714285714294,
+        "absoluteNicheAcceptableCoverage": 0.3700000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.15000000000000002,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.4,
+          "disconnected": 0.45,
+          "hierarchies": 0.25,
+          "networks": 0.5,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.10714285714285715,
+          "compact": 0.24999999999999997,
+          "traceable": 0.2857142857142857,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.11538461538461539,
+          "compact": 0.2692307692307692,
+          "traceable": 0.30769230769230765,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.11538461538461539,
+        "worstProfileCommonAbsoluteCoverage": 0.10714285714285715,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 3,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.33636363636363636,
+        "commonAcceptableCoverage": 0.28461538461538477,
+        "nicheAcceptableCoverage": 0.4111111111111113,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.4666666666666667,
+          "disconnected": 0.5,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.3,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 74,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.02742957556023,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 29.75,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.3409090909090908,
+          "traceable": 0.31818181818181807,
+          "stable": 0.36363636363636354,
+          "specialist": 0.36363636363636354
+        },
+        "absoluteAcceptableCoverage": 0.30833333333333335,
+        "absoluteCommonAcceptableCoverage": 0.2642857142857144,
+        "absoluteNicheAcceptableCoverage": 0.3700000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.15000000000000002,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.35,
+          "disconnected": 0.5,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.3,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.2857142857142857,
+          "traceable": 0.2857142857142857,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.30769230769230765,
+          "traceable": 0.30769230769230765,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.33636363636363636,
+        "commonAcceptableCoverage": 0.28461538461538477,
+        "nicheAcceptableCoverage": 0.4111111111111113,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.4666666666666667,
+          "disconnected": 0.5,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.3,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 74,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.02742957556023,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 29.75,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.3409090909090908,
+          "traceable": 0.31818181818181807,
+          "stable": 0.36363636363636354,
+          "specialist": 0.36363636363636354
+        },
+        "absoluteAcceptableCoverage": 0.30833333333333335,
+        "absoluteCommonAcceptableCoverage": 0.2642857142857144,
+        "absoluteNicheAcceptableCoverage": 0.3700000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.15000000000000002,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.35,
+          "disconnected": 0.5,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.3,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.2857142857142857,
+          "traceable": 0.2857142857142857,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.30769230769230765,
+          "traceable": 0.30769230769230765,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "validityGuardFallbackJobs": 0,
+      "goalValidityGuardFallbackJobs": 0,
+      "developmentThresholdMet": false,
+      "developmentContractThresholdMet": false,
+      "developmentAbsoluteStressTestMet": false
+    },
+    {
+      "size": 4,
+      "portfolio": [
+        "boundary-align",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "mode": "tuned",
+      "oracle": {
+        "mode": "tuned",
+        "weighting": "equal-family",
+        "size": 4,
+        "portfolio": [
+          "boundary-align",
+          "force",
+          "layered",
+          "tree"
+        ],
+        "currentFallback": false,
+        "specialistFallback": true,
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.49999999999999994,
+        "commonAcceptableCoverage": 0.38461538461538464,
+        "nicheAcceptableCoverage": 0.6666666666666667,
+        "worstFamilyCoverage": 0.1,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.9,
+          "cycles": 0.1,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.8,
+          "hierarchies": 0.75,
+          "networks": 0.55,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.7,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionJobs": 0,
+        "meanFiniteScoreRegret": 4.747201994797916,
+        "totalJobs": 240,
+        "absoluteAcceptableCoverage": 0.45833333333333326,
+        "absoluteCommonAcceptableCoverage": 0.3571428571428572,
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.3214285714285714,
+          "compact": 0.3571428571428571,
+          "traceable": 0.39285714285714285,
+          "stable": 0.3571428571428571,
+          "specialist": 0.3571428571428571
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.34615384615384615,
+          "compact": 0.3846153846153846,
+          "traceable": 0.423076923076923,
+          "stable": 0.3846153846153846,
+          "specialist": 0.3846153846153846
+        },
+        "worstProfileCommonFeasibleCoverage": 0.34615384615384615,
+        "contractCommonPerProfile95Pass": false,
+        "worstProfileCommonAbsoluteCoverage": 0.3214285714285714,
+        "absoluteCommonPerProfile95Pass": false
+      },
+      "selectorTree": {
+        "type": "split",
+        "feature": "maxDegree",
+        "threshold": 7.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "maxDepth",
+          "threshold": 1.5,
+          "trainingBases": 41,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 2.5,
+            "trainingBases": 31,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 7,
+              "trainingLoss": [
+                0.0,
+                0.05,
+                2.7844591728433072
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:boundary-align:RIGHT:p1",
+              "trainingBases": 24,
+              "trainingLoss": [
+                0.0,
+                0.4291666666666666,
+                3.2776191905931547
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 3.5,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:tree:RIGHT:p1",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.041666666666666664,
+                0.016666666666666666,
+                0.00503544550821274
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.020833333333333332,
+                0.07083333333333333,
+                0.27060688888572954
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 5,
+          "trainingLoss": [
+            0.020833333333333332,
+            0.0625,
+            1.1312250635990728
+          ]
+        }
+      },
+      "goalTrees": {
+        "readable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "density",
+              "threshold": 0.13055555555555556,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 27,
+                "trainingLoss": [
+                  0.0,
+                  0.08333333333333333,
+                  1.2436913360338342
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.0125,
+                  0.06134438312943365
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "density",
+              "threshold": 0.03611111111111111,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 5,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.004166666666666667,
+                  0.010317730070878028
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:tree:RIGHT:p1",
+                "trainingBases": 5,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.0125,
+                  0.09275465479123218
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.13233270338494363
+            ]
+          }
+        },
+        "compact": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.44664065267570724
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.0875,
+                  0.5467944890431143
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 3.5,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tree:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.004166666666666667,
+                  0.0006087253209444809
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.016666666666666666,
+                  0.027621760762310855
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.17573059771412924
+            ]
+          }
+        },
+        "traceable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 6.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 39,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 29,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.6690476208333332
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:boundary-align:RIGHT:p1",
+                "trainingBases": 22,
+                "trainingLoss": [
+                  0.0,
+                  0.07083333333333333,
+                  0.7105421708333333
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 3.5,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tree:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.0,
+                  0.0
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.0125,
+                  0.08218864166666667
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.020833333333333332,
+              0.5076271
+            ]
+          }
+        },
+        "stable": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 4.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:boundary-align:RIGHT:p1",
+                "trainingBases": 26,
+                "trainingLoss": [
+                  0.0,
+                  0.07916666666666666,
+                  0.7105430458333333
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 5,
+                "trainingLoss": [
+                  0.0,
+                  0.0125,
+                  0.0103535375
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 3.5,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tree:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.004166666666666667,
+                  0.0
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.0125,
+                  0.0437271
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.17329763333333334
+            ]
+          }
+        },
+        "specialist": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 7.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "maxDepth",
+            "threshold": 1.5,
+            "trainingBases": 41,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 4.5,
+              "trainingBases": 31,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:boundary-align:RIGHT:p1",
+                "trainingBases": 26,
+                "trainingLoss": [
+                  0.0,
+                  0.07916666666666666,
+                  0.7105430458333333
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 5,
+                "trainingLoss": [
+                  0.0,
+                  0.0125,
+                  0.0103535375
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 3.5,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:tree:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.004166666666666667,
+                  0.0
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.0125,
+                  0.0437271
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.004166666666666667,
+              0.0125,
+              0.17329763333333334
+            ]
+          }
+        }
+      },
+      "selector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.3136363636363636,
+        "commonAcceptableCoverage": 0.2923076923076925,
+        "nicheAcceptableCoverage": 0.34444444444444455,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.9,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.65,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 69,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.14794083065034,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 26.275811053568336,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.2045454545454545,
+          "compact": 0.29545454545454536,
+          "traceable": 0.38636363636363624,
+          "stable": 0.3409090909090908,
+          "specialist": 0.3409090909090908
+        },
+        "absoluteAcceptableCoverage": 0.2875,
+        "absoluteCommonAcceptableCoverage": 0.2714285714285716,
+        "absoluteNicheAcceptableCoverage": 0.3100000000000001,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.45,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.65,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.14285714285714285,
+          "compact": 0.2857142857142857,
+          "traceable": 0.3571428571428571,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.15384615384615383,
+          "compact": 0.30769230769230765,
+          "traceable": 0.3846153846153846,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.15384615384615383,
+        "worstProfileCommonAbsoluteCoverage": 0.14285714285714285,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 10,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "selectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.3136363636363636,
+        "commonAcceptableCoverage": 0.2923076923076925,
+        "nicheAcceptableCoverage": 0.34444444444444455,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.9,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.65,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 69,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.14794083065034,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 26.275811053568336,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.2045454545454545,
+          "compact": 0.29545454545454536,
+          "traceable": 0.38636363636363624,
+          "stable": 0.3409090909090908,
+          "specialist": 0.3409090909090908
+        },
+        "absoluteAcceptableCoverage": 0.2875,
+        "absoluteCommonAcceptableCoverage": 0.2714285714285716,
+        "absoluteNicheAcceptableCoverage": 0.3100000000000001,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.45,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.65,
+          "networks": 0.25,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.14285714285714285,
+          "compact": 0.2857142857142857,
+          "traceable": 0.3571428571428571,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.15384615384615383,
+          "compact": 0.30769230769230765,
+          "traceable": 0.3846153846153846,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.15384615384615383,
+        "worstProfileCommonAbsoluteCoverage": 0.14285714285714285,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 10,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.33636363636363636,
+        "commonAcceptableCoverage": 0.2923076923076925,
+        "nicheAcceptableCoverage": 0.4000000000000002,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.06666666666666668,
+          "authored": 0.45,
+          "containers": 0.9,
+          "cycles": 0.0,
+          "dags": 0.06666666666666668,
+          "disconnected": 0.4,
+          "hierarchies": 0.6,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.2
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 74,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 7.181547490465306,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 23.106617199999942,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.31818181818181807,
+          "compact": 0.29545454545454536,
+          "traceable": 0.38636363636363624,
+          "stable": 0.3409090909090908,
+          "specialist": 0.3409090909090908
+        },
+        "absoluteAcceptableCoverage": 0.30833333333333335,
+        "absoluteCommonAcceptableCoverage": 0.2714285714285716,
+        "absoluteNicheAcceptableCoverage": 0.3600000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.05,
+          "authored": 0.45,
+          "containers": 0.45,
+          "cycles": 0.0,
+          "dags": 0.05,
+          "disconnected": 0.4,
+          "hierarchies": 0.6,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.2
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.21428571428571427,
+          "compact": 0.21428571428571427,
+          "traceable": 0.3571428571428571,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.23076923076923075,
+          "compact": 0.23076923076923075,
+          "traceable": 0.3846153846153846,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.23076923076923075,
+        "worstProfileCommonAbsoluteCoverage": 0.21428571428571427,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 10,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.33636363636363636,
+        "commonAcceptableCoverage": 0.2923076923076925,
+        "nicheAcceptableCoverage": 0.4000000000000002,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.06666666666666668,
+          "authored": 0.45,
+          "containers": 0.9,
+          "cycles": 0.0,
+          "dags": 0.06666666666666668,
+          "disconnected": 0.4,
+          "hierarchies": 0.6,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.2
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 74,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 7.181547490465306,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 23.106617199999942,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.31818181818181807,
+          "compact": 0.29545454545454536,
+          "traceable": 0.38636363636363624,
+          "stable": 0.3409090909090908,
+          "specialist": 0.3409090909090908
+        },
+        "absoluteAcceptableCoverage": 0.30833333333333335,
+        "absoluteCommonAcceptableCoverage": 0.2714285714285716,
+        "absoluteNicheAcceptableCoverage": 0.3600000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.05,
+          "authored": 0.45,
+          "containers": 0.45,
+          "cycles": 0.0,
+          "dags": 0.05,
+          "disconnected": 0.4,
+          "hierarchies": 0.6,
+          "networks": 0.25,
+          "pipelines": 0.3,
+          "presentation": 0.45,
+          "recipes": 0.5,
+          "routing": 0.2
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.21428571428571427,
+          "compact": 0.21428571428571427,
+          "traceable": 0.3571428571428571,
+          "stable": 0.2857142857142857,
+          "specialist": 0.2857142857142857
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.23076923076923075,
+          "compact": 0.23076923076923075,
+          "traceable": 0.3846153846153846,
+          "stable": 0.30769230769230765,
+          "specialist": 0.30769230769230765
+        },
+        "worstProfileCommonFeasibleCoverage": 0.23076923076923075,
+        "worstProfileCommonAbsoluteCoverage": 0.21428571428571427,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 10,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "validityGuardFallbackJobs": 0,
+      "goalValidityGuardFallbackJobs": 0,
+      "developmentThresholdMet": false,
+      "developmentContractThresholdMet": false,
+      "developmentAbsoluteStressTestMet": false
+    },
+    {
+      "size": 5,
+      "portfolio": [
+        "boundary-align",
+        "stress",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "mode": "tuned",
+      "oracle": {
+        "mode": "tuned",
+        "weighting": "equal-family",
+        "size": 5,
+        "portfolio": [
+          "boundary-align",
+          "stress",
+          "force",
+          "layered",
+          "tree"
+        ],
+        "currentFallback": false,
+        "specialistFallback": true,
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.5409090909090908,
+        "commonAcceptableCoverage": 0.42307692307692324,
+        "nicheAcceptableCoverage": 0.7111111111111112,
+        "worstFamilyCoverage": 0.1,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.9,
+          "cycles": 0.1,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.8,
+          "hierarchies": 1.0,
+          "networks": 0.75,
+          "pipelines": 0.35,
+          "presentation": 0.45,
+          "recipes": 0.7,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionJobs": 0,
+        "meanFiniteScoreRegret": 4.36264800083338,
+        "totalJobs": 240,
+        "absoluteAcceptableCoverage": 0.49583333333333324,
+        "absoluteCommonAcceptableCoverage": 0.392857142857143,
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.3571428571428571,
+          "compact": 0.39285714285714285,
+          "traceable": 0.42857142857142855,
+          "stable": 0.39285714285714285,
+          "specialist": 0.39285714285714285
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.3846153846153846,
+          "compact": 0.423076923076923,
+          "traceable": 0.4615384615384615,
+          "stable": 0.423076923076923,
+          "specialist": 0.423076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.3846153846153846,
+        "contractCommonPerProfile95Pass": false,
+        "worstProfileCommonAbsoluteCoverage": 0.3571428571428571,
+        "absoluteCommonPerProfile95Pass": false
+      },
+      "selectorTree": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 43.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "componentCount",
+          "threshold": 5.5,
+          "trainingBases": 42,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 2.5,
+            "trainingBases": 32,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.020833333333333332,
+                0.020833333333333332,
+                0.019768051833156886
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:stress:RIGHT:p0",
+              "trainingBases": 26,
+              "trainingLoss": [
+                0.0,
+                0.4583333333333332,
+                3.1617220081754267
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 15.0,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.0,
+                0.0625,
+                0.1782386181217487
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.020833333333333332,
+                0.04583333333333334,
+                2.6820888494079136
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 4,
+          "trainingLoss": [
+            0.041666666666666664,
+            0.020833333333333332,
+            1.7262410466318159
+          ]
+        }
+      },
+      "goalTrees": {
+        "readable": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 43.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "componentCount",
+            "threshold": 3.5,
+            "trainingBases": 42,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 23,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.004166666666666667,
+                  0.007564409521975216
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:stress:RIGHT:p0",
+                "trainingBases": 19,
+                "trainingLoss": [
+                  0.0,
+                  0.06249999999999999,
+                  0.45989611697409677
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "groupCount",
+              "threshold": 4.5,
+              "trainingBases": 19,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 12,
+                "trainingLoss": [
+                  0.0,
+                  0.0375,
+                  0.948887406477549
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.0125,
+                  0.031904397829162955
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.004166666666666667,
+              0.2952135951120052
+            ]
+          }
+        },
+        "compact": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 43.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "componentCount",
+            "threshold": 3.5,
+            "trainingBases": 42,
+            "left": {
+              "type": "split",
+              "feature": "maxDegree",
+              "threshold": 2.5,
+              "trainingBases": 23,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.0,
+                  0.0011904791666666674
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:stress:RIGHT:p0",
+                "trainingBases": 19,
+                "trainingLoss": [
+                  0.0,
+                  0.07083333333333333,
+                  0.4697511342334616
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "groupCount",
+              "threshold": 4.5,
+              "trainingBases": 19,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 12,
+                "trainingLoss": [
+                  0.0,
+                  0.0375,
+                  0.7336643417681055
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 7,
+                "trainingLoss": [
+                  0.008333333333333333,
+                  0.0125,
+                  0.020383363888517293
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.004166666666666667,
+              0.2700426056864774
+            ]
+          }
+        },
+        "traceable": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 43.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "componentCount",
+            "threshold": 5.5,
+            "trainingBases": 42,
+            "left": {
+              "type": "split",
+              "feature": "targetAspect",
+              "threshold": 1.69,
+              "trainingBases": 32,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:stress:RIGHT:p0",
+                "trainingBases": 28,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.08333333333333333,
+                  0.7841559041666667
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:boundary-align:RIGHT:p1",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.0,
+                  0.004166666666666667,
+                  0.011814529166666667
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "nodeCount",
+              "threshold": 15.0,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.0,
+                  0.0125,
+                  0.050457875
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.0125,
+                  0.6319444458333333
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.004166666666666667,
+              0.6136363625
+            ]
+          }
+        },
+        "stable": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 43.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "componentCount",
+            "threshold": 5.5,
+            "trainingBases": 42,
+            "left": {
+              "type": "split",
+              "feature": "groupCount",
+              "threshold": 2.5,
+              "trainingBases": 32,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:stress:RIGHT:p0",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.07083333333333333,
+                  0.3439302208333333
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 8,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.020833333333333332,
+                  0.15541021666666666
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "nodeCount",
+              "threshold": 15.0,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.025457870833333326
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.008333333333333333,
+                  0.44027777916666666
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.004166666666666667,
+              0.2736742416666667
+            ]
+          }
+        },
+        "specialist": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 43.5,
+          "trainingBases": 46,
+          "left": {
+            "type": "split",
+            "feature": "componentCount",
+            "threshold": 5.5,
+            "trainingBases": 42,
+            "left": {
+              "type": "split",
+              "feature": "groupCount",
+              "threshold": 2.5,
+              "trainingBases": 32,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:stress:RIGHT:p0",
+                "trainingBases": 24,
+                "trainingLoss": [
+                  0.0,
+                  0.07083333333333333,
+                  0.3439302208333333
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 8,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.020833333333333332,
+                  0.15541021666666666
+                ]
+              }
+            },
+            "right": {
+              "type": "split",
+              "feature": "nodeCount",
+              "threshold": 15.0,
+              "trainingBases": 10,
+              "left": {
+                "type": "leaf",
+                "method": "tuned:layered:RIGHT:p1",
+                "trainingBases": 6,
+                "trainingLoss": [
+                  0.0,
+                  0.008333333333333333,
+                  0.025457870833333326
+                ]
+              },
+              "right": {
+                "type": "leaf",
+                "method": "tuned:force:RIGHT:p3",
+                "trainingBases": 4,
+                "trainingLoss": [
+                  0.004166666666666667,
+                  0.008333333333333333,
+                  0.44027777916666666
+                ]
+              }
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.004166666666666667,
+              0.2736742416666667
+            ]
+          }
+        }
+      },
+      "selector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.33636363636363636,
+        "commonAcceptableCoverage": 0.2384615384615385,
+        "nicheAcceptableCoverage": 0.4777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.20000000000000004,
+          "disconnected": 0.55,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 74,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.474245717276432,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 34.902941399999534,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.29545454545454536,
+          "traceable": 0.36363636363636354,
+          "stable": 0.36363636363636354,
+          "specialist": 0.36363636363636354
+        },
+        "absoluteAcceptableCoverage": 0.30833333333333335,
+        "absoluteCommonAcceptableCoverage": 0.22142857142857147,
+        "absoluteNicheAcceptableCoverage": 0.43000000000000016,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.15000000000000002,
+          "disconnected": 0.55,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.21428571428571427,
+          "traceable": 0.2857142857142857,
+          "stable": 0.21428571428571427,
+          "specialist": 0.21428571428571427
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.23076923076923075,
+          "traceable": 0.30769230769230765,
+          "stable": 0.23076923076923075,
+          "specialist": 0.23076923076923075
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "selectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.33636363636363636,
+        "commonAcceptableCoverage": 0.2384615384615385,
+        "nicheAcceptableCoverage": 0.4777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.20000000000000004,
+          "disconnected": 0.55,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 74,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.474245717276432,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 34.902941399999534,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.29545454545454536,
+          "compact": 0.29545454545454536,
+          "traceable": 0.36363636363636354,
+          "stable": 0.36363636363636354,
+          "specialist": 0.36363636363636354
+        },
+        "absoluteAcceptableCoverage": 0.30833333333333335,
+        "absoluteCommonAcceptableCoverage": 0.22142857142857147,
+        "absoluteNicheAcceptableCoverage": 0.43000000000000016,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.15000000000000002,
+          "disconnected": 0.55,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.3,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.21428571428571427,
+          "traceable": 0.2857142857142857,
+          "stable": 0.21428571428571427,
+          "specialist": 0.21428571428571427
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.23076923076923075,
+          "traceable": 0.30769230769230765,
+          "stable": 0.23076923076923075,
+          "specialist": 0.23076923076923075
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelector": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.359090909090909,
+        "commonAcceptableCoverage": 0.26923076923076933,
+        "nicheAcceptableCoverage": 0.4888888888888891,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.20000000000000004,
+          "disconnected": 0.4,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.35,
+          "recipes": 0.5,
+          "routing": 0.45
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 79,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.517826500717838,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 34.902941399999534,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.3409090909090908,
+          "compact": 0.31818181818181807,
+          "traceable": 0.36363636363636354,
+          "stable": 0.38636363636363624,
+          "specialist": 0.38636363636363624
+        },
+        "absoluteAcceptableCoverage": 0.3291666666666666,
+        "absoluteCommonAcceptableCoverage": 0.2500000000000001,
+        "absoluteNicheAcceptableCoverage": 0.4400000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.15000000000000002,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.15000000000000002,
+          "disconnected": 0.4,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.35,
+          "recipes": 0.5,
+          "routing": 0.45
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.24999999999999997,
+          "traceable": 0.3214285714285714,
+          "stable": 0.24999999999999997,
+          "specialist": 0.24999999999999997
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.2692307692307692,
+          "traceable": 0.34615384615384615,
+          "stable": 0.2692307692307692,
+          "specialist": 0.2692307692307692
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 9,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "goalSelectorWithValidityGuard": {
+        "weightedHardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.359090909090909,
+        "commonAcceptableCoverage": 0.26923076923076933,
+        "nicheAcceptableCoverage": 0.4888888888888891,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.20000000000000004,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.20000000000000004,
+          "disconnected": 0.4,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.35,
+          "recipes": 0.5,
+          "routing": 0.45
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 79,
+        "totalJobs": 240,
+        "hardValidJobs": 220,
+        "meanFiniteRegret": 8.517826500717838,
+        "maxFiniteRegret": 164.58914500335814,
+        "p95FiniteRegret": 34.902941399999534,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.3409090909090908,
+          "compact": 0.31818181818181807,
+          "traceable": 0.36363636363636354,
+          "stable": 0.38636363636363624,
+          "specialist": 0.38636363636363624
+        },
+        "absoluteAcceptableCoverage": 0.3291666666666666,
+        "absoluteCommonAcceptableCoverage": 0.2500000000000001,
+        "absoluteNicheAcceptableCoverage": 0.4400000000000002,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.15000000000000002,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.15000000000000002,
+          "disconnected": 0.4,
+          "hierarchies": 0.3,
+          "networks": 0.45,
+          "pipelines": 0.35,
+          "presentation": 0.35,
+          "recipes": 0.5,
+          "routing": 0.45
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.17857142857142855,
+          "compact": 0.24999999999999997,
+          "traceable": 0.3214285714285714,
+          "stable": 0.24999999999999997,
+          "specialist": 0.24999999999999997
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.1923076923076923,
+          "compact": 0.2692307692307692,
+          "traceable": 0.34615384615384615,
+          "stable": 0.2692307692307692,
+          "specialist": 0.2692307692307692
+        },
+        "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "compact": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "traceable": {
+            "acceptableBases": 9,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "stable": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          },
+          "specialist": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 0
+          }
+        },
+        "currentValidHardRegressionCommonCases": 0
+      },
+      "validityGuardFallbackJobs": 0,
+      "goalValidityGuardFallbackJobs": 0,
+      "developmentThresholdMet": false,
+      "developmentContractThresholdMet": false,
+      "developmentAbsoluteStressTestMet": false
+    }
+  ],
+  "choice": {
+    "size": 5,
+    "portfolio": [
+      "boundary-align",
+      "stress",
+      "force",
+      "layered",
+      "tree"
+    ],
+    "mode": "tuned",
+    "oracle": {
+      "mode": "tuned",
+      "weighting": "equal-family",
+      "size": 5,
+      "portfolio": [
+        "boundary-align",
+        "stress",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "currentFallback": false,
+      "specialistFallback": true,
+      "hardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.5409090909090908,
+      "commonAcceptableCoverage": 0.42307692307692324,
+      "nicheAcceptableCoverage": 0.7111111111111112,
+      "worstFamilyCoverage": 0.1,
+      "familyCoverage": {
+        "architecture": 0.2666666666666667,
+        "authored": 0.45,
+        "containers": 0.9,
+        "cycles": 0.1,
+        "dags": 0.2666666666666667,
+        "disconnected": 0.8,
+        "hierarchies": 1.0,
+        "networks": 0.75,
+        "pipelines": 0.35,
+        "presentation": 0.45,
+        "recipes": 0.7,
+        "routing": 0.5
+      },
+      "currentValidHardRegressionJobs": 0,
+      "meanFiniteScoreRegret": 4.36264800083338,
+      "totalJobs": 240,
+      "absoluteAcceptableCoverage": 0.49583333333333324,
+      "absoluteCommonAcceptableCoverage": 0.392857142857143,
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.3571428571428571,
+        "compact": 0.39285714285714285,
+        "traceable": 0.42857142857142855,
+        "stable": 0.39285714285714285,
+        "specialist": 0.39285714285714285
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.3846153846153846,
+        "compact": 0.423076923076923,
+        "traceable": 0.4615384615384615,
+        "stable": 0.423076923076923,
+        "specialist": 0.423076923076923
+      },
+      "worstProfileCommonFeasibleCoverage": 0.3846153846153846,
+      "contractCommonPerProfile95Pass": false,
+      "worstProfileCommonAbsoluteCoverage": 0.3571428571428571,
+      "absoluteCommonPerProfile95Pass": false
+    },
+    "selectorTree": {
+      "type": "split",
+      "feature": "edgeCount",
+      "threshold": 43.5,
+      "trainingBases": 46,
+      "left": {
+        "type": "split",
+        "feature": "componentCount",
+        "threshold": 5.5,
+        "trainingBases": 42,
+        "left": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 2.5,
+          "trainingBases": 32,
+          "left": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 6,
+            "trainingLoss": [
+              0.020833333333333332,
+              0.020833333333333332,
+              0.019768051833156886
+            ]
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:stress:RIGHT:p0",
+            "trainingBases": 26,
+            "trainingLoss": [
+              0.0,
+              0.4583333333333332,
+              3.1617220081754267
+            ]
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "nodeCount",
+          "threshold": 15.0,
+          "trainingBases": 10,
+          "left": {
+            "type": "leaf",
+            "method": "tuned:layered:RIGHT:p1",
+            "trainingBases": 6,
+            "trainingLoss": [
+              0.0,
+              0.0625,
+              0.1782386181217487
+            ]
+          },
+          "right": {
+            "type": "leaf",
+            "method": "tuned:force:RIGHT:p3",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.020833333333333332,
+              0.04583333333333334,
+              2.6820888494079136
+            ]
+          }
+        }
+      },
+      "right": {
+        "type": "leaf",
+        "method": "tuned:layered:RIGHT:p1",
+        "trainingBases": 4,
+        "trainingLoss": [
+          0.041666666666666664,
+          0.020833333333333332,
+          1.7262410466318159
+        ]
+      }
+    },
+    "goalTrees": {
+      "readable": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 43.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "componentCount",
+          "threshold": 3.5,
+          "trainingBases": 42,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 2.5,
+            "trainingBases": 23,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.004166666666666667,
+                0.007564409521975216
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:stress:RIGHT:p0",
+              "trainingBases": 19,
+              "trainingLoss": [
+                0.0,
+                0.06249999999999999,
+                0.45989611697409677
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 4.5,
+            "trainingBases": 19,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 12,
+              "trainingLoss": [
+                0.0,
+                0.0375,
+                0.948887406477549
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 7,
+              "trainingLoss": [
+                0.008333333333333333,
+                0.0125,
+                0.031904397829162955
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 4,
+          "trainingLoss": [
+            0.008333333333333333,
+            0.004166666666666667,
+            0.2952135951120052
+          ]
+        }
+      },
+      "compact": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 43.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "componentCount",
+          "threshold": 3.5,
+          "trainingBases": 42,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 2.5,
+            "trainingBases": 23,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.0,
+                0.0011904791666666674
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:stress:RIGHT:p0",
+              "trainingBases": 19,
+              "trainingLoss": [
+                0.0,
+                0.07083333333333333,
+                0.4697511342334616
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 4.5,
+            "trainingBases": 19,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 12,
+              "trainingLoss": [
+                0.0,
+                0.0375,
+                0.7336643417681055
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 7,
+              "trainingLoss": [
+                0.008333333333333333,
+                0.0125,
+                0.020383363888517293
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 4,
+          "trainingLoss": [
+            0.008333333333333333,
+            0.004166666666666667,
+            0.2700426056864774
+          ]
+        }
+      },
+      "traceable": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 43.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "componentCount",
+          "threshold": 5.5,
+          "trainingBases": 42,
+          "left": {
+            "type": "split",
+            "feature": "targetAspect",
+            "threshold": 1.69,
+            "trainingBases": 32,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:stress:RIGHT:p0",
+              "trainingBases": 28,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.08333333333333333,
+                0.7841559041666667
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:boundary-align:RIGHT:p1",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.004166666666666667,
+                0.011814529166666667
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 15.0,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.0,
+                0.0125,
+                0.050457875
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.0125,
+                0.6319444458333333
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 4,
+          "trainingLoss": [
+            0.008333333333333333,
+            0.004166666666666667,
+            0.6136363625
+          ]
+        }
+      },
+      "stable": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 43.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "componentCount",
+          "threshold": 5.5,
+          "trainingBases": 42,
+          "left": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 2.5,
+            "trainingBases": 32,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:stress:RIGHT:p0",
+              "trainingBases": 24,
+              "trainingLoss": [
+                0.0,
+                0.07083333333333333,
+                0.3439302208333333
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 8,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.020833333333333332,
+                0.15541021666666666
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 15.0,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.025457870833333326
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.008333333333333333,
+                0.44027777916666666
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 4,
+          "trainingLoss": [
+            0.008333333333333333,
+            0.004166666666666667,
+            0.2736742416666667
+          ]
+        }
+      },
+      "specialist": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 43.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "componentCount",
+          "threshold": 5.5,
+          "trainingBases": 42,
+          "left": {
+            "type": "split",
+            "feature": "groupCount",
+            "threshold": 2.5,
+            "trainingBases": 32,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:stress:RIGHT:p0",
+              "trainingBases": 24,
+              "trainingLoss": [
+                0.0,
+                0.07083333333333333,
+                0.3439302208333333
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 8,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.020833333333333332,
+                0.15541021666666666
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 15.0,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "tuned:layered:RIGHT:p1",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.025457870833333326
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "tuned:force:RIGHT:p3",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.008333333333333333,
+                0.44027777916666666
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "leaf",
+          "method": "tuned:layered:RIGHT:p1",
+          "trainingBases": 4,
+          "trainingLoss": [
+            0.008333333333333333,
+            0.004166666666666667,
+            0.2736742416666667
+          ]
+        }
+      }
+    },
+    "selector": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.33636363636363636,
+      "commonAcceptableCoverage": 0.2384615384615385,
+      "nicheAcceptableCoverage": 0.4777777777777779,
+      "worstFamilyCoverage": 0.0,
+      "familyCoverage": {
+        "architecture": 0.0,
+        "authored": 0.45,
+        "containers": 0.8,
+        "cycles": 0.0,
+        "dags": 0.20000000000000004,
+        "disconnected": 0.55,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.3,
+        "recipes": 0.5,
+        "routing": 0.25
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 74,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 8.474245717276432,
+      "maxFiniteRegret": 164.58914500335814,
+      "p95FiniteRegret": 34.902941399999534,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.29545454545454536,
+        "compact": 0.29545454545454536,
+        "traceable": 0.36363636363636354,
+        "stable": 0.36363636363636354,
+        "specialist": 0.36363636363636354
+      },
+      "absoluteAcceptableCoverage": 0.30833333333333335,
+      "absoluteCommonAcceptableCoverage": 0.22142857142857147,
+      "absoluteNicheAcceptableCoverage": 0.43000000000000016,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.0,
+        "authored": 0.45,
+        "containers": 0.4,
+        "cycles": 0.0,
+        "dags": 0.15000000000000002,
+        "disconnected": 0.55,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.3,
+        "recipes": 0.5,
+        "routing": 0.25
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.17857142857142855,
+        "compact": 0.21428571428571427,
+        "traceable": 0.2857142857142857,
+        "stable": 0.21428571428571427,
+        "specialist": 0.21428571428571427
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.1923076923076923,
+        "compact": 0.23076923076923075,
+        "traceable": 0.30769230769230765,
+        "stable": 0.23076923076923075,
+        "specialist": 0.23076923076923075
+      },
+      "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+      "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 8,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    },
+    "selectorWithValidityGuard": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.33636363636363636,
+      "commonAcceptableCoverage": 0.2384615384615385,
+      "nicheAcceptableCoverage": 0.4777777777777779,
+      "worstFamilyCoverage": 0.0,
+      "familyCoverage": {
+        "architecture": 0.0,
+        "authored": 0.45,
+        "containers": 0.8,
+        "cycles": 0.0,
+        "dags": 0.20000000000000004,
+        "disconnected": 0.55,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.3,
+        "recipes": 0.5,
+        "routing": 0.25
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 74,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 8.474245717276432,
+      "maxFiniteRegret": 164.58914500335814,
+      "p95FiniteRegret": 34.902941399999534,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.29545454545454536,
+        "compact": 0.29545454545454536,
+        "traceable": 0.36363636363636354,
+        "stable": 0.36363636363636354,
+        "specialist": 0.36363636363636354
+      },
+      "absoluteAcceptableCoverage": 0.30833333333333335,
+      "absoluteCommonAcceptableCoverage": 0.22142857142857147,
+      "absoluteNicheAcceptableCoverage": 0.43000000000000016,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.0,
+        "authored": 0.45,
+        "containers": 0.4,
+        "cycles": 0.0,
+        "dags": 0.15000000000000002,
+        "disconnected": 0.55,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.3,
+        "recipes": 0.5,
+        "routing": 0.25
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.17857142857142855,
+        "compact": 0.21428571428571427,
+        "traceable": 0.2857142857142857,
+        "stable": 0.21428571428571427,
+        "specialist": 0.21428571428571427
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.1923076923076923,
+        "compact": 0.23076923076923075,
+        "traceable": 0.30769230769230765,
+        "stable": 0.23076923076923075,
+        "specialist": 0.23076923076923075
+      },
+      "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+      "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 8,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    },
+    "goalSelector": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.359090909090909,
+      "commonAcceptableCoverage": 0.26923076923076933,
+      "nicheAcceptableCoverage": 0.4888888888888891,
+      "worstFamilyCoverage": 0.0,
+      "familyCoverage": {
+        "architecture": 0.20000000000000004,
+        "authored": 0.45,
+        "containers": 0.8,
+        "cycles": 0.0,
+        "dags": 0.20000000000000004,
+        "disconnected": 0.4,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.35,
+        "recipes": 0.5,
+        "routing": 0.45
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 79,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 8.517826500717838,
+      "maxFiniteRegret": 164.58914500335814,
+      "p95FiniteRegret": 34.902941399999534,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.3409090909090908,
+        "compact": 0.31818181818181807,
+        "traceable": 0.36363636363636354,
+        "stable": 0.38636363636363624,
+        "specialist": 0.38636363636363624
+      },
+      "absoluteAcceptableCoverage": 0.3291666666666666,
+      "absoluteCommonAcceptableCoverage": 0.2500000000000001,
+      "absoluteNicheAcceptableCoverage": 0.4400000000000002,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.15000000000000002,
+        "authored": 0.45,
+        "containers": 0.4,
+        "cycles": 0.0,
+        "dags": 0.15000000000000002,
+        "disconnected": 0.4,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.35,
+        "recipes": 0.5,
+        "routing": 0.45
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.17857142857142855,
+        "compact": 0.24999999999999997,
+        "traceable": 0.3214285714285714,
+        "stable": 0.24999999999999997,
+        "specialist": 0.24999999999999997
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.1923076923076923,
+        "compact": 0.2692307692307692,
+        "traceable": 0.34615384615384615,
+        "stable": 0.2692307692307692,
+        "specialist": 0.2692307692307692
+      },
+      "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+      "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 9,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    },
+    "goalSelectorWithValidityGuard": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.359090909090909,
+      "commonAcceptableCoverage": 0.26923076923076933,
+      "nicheAcceptableCoverage": 0.4888888888888891,
+      "worstFamilyCoverage": 0.0,
+      "familyCoverage": {
+        "architecture": 0.20000000000000004,
+        "authored": 0.45,
+        "containers": 0.8,
+        "cycles": 0.0,
+        "dags": 0.20000000000000004,
+        "disconnected": 0.4,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.35,
+        "recipes": 0.5,
+        "routing": 0.45
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 79,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 8.517826500717838,
+      "maxFiniteRegret": 164.58914500335814,
+      "p95FiniteRegret": 34.902941399999534,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.3409090909090908,
+        "compact": 0.31818181818181807,
+        "traceable": 0.36363636363636354,
+        "stable": 0.38636363636363624,
+        "specialist": 0.38636363636363624
+      },
+      "absoluteAcceptableCoverage": 0.3291666666666666,
+      "absoluteCommonAcceptableCoverage": 0.2500000000000001,
+      "absoluteNicheAcceptableCoverage": 0.4400000000000002,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.15000000000000002,
+        "authored": 0.45,
+        "containers": 0.4,
+        "cycles": 0.0,
+        "dags": 0.15000000000000002,
+        "disconnected": 0.4,
+        "hierarchies": 0.3,
+        "networks": 0.45,
+        "pipelines": 0.35,
+        "presentation": 0.35,
+        "recipes": 0.5,
+        "routing": 0.45
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.17857142857142855,
+        "compact": 0.24999999999999997,
+        "traceable": 0.3214285714285714,
+        "stable": 0.24999999999999997,
+        "specialist": 0.24999999999999997
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.1923076923076923,
+        "compact": 0.2692307692307692,
+        "traceable": 0.34615384615384615,
+        "stable": 0.2692307692307692,
+        "specialist": 0.2692307692307692
+      },
+      "worstProfileCommonFeasibleCoverage": 0.1923076923076923,
+      "worstProfileCommonAbsoluteCoverage": 0.17857142857142855,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 9,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    },
+    "validityGuardFallbackJobs": 0,
+    "goalValidityGuardFallbackJobs": 0,
+    "developmentThresholdMet": false,
+    "developmentContractThresholdMet": false,
+    "developmentAbsoluteStressTestMet": false
+  },
+  "thresholdMet": false,
+  "decisionStatus": "development proposal; heldout and visual review required",
+  "acceptanceGate": "contract: at least95% relative feasible-pool common coverage separately under each profile, zero new current-valid hard failures, preserved specialist task or explicit escape. Separately report conservative absolute95% stress test including all common bases",
+  "validityGuardStatus": "proposed wrapper behavior measured by selecting current-source result only after a hard failure; not a shipped automatic feature",
+  "smallestPortfolioInterpretation": "Oracle engine-set upper bounds are exhaustive over1023nonempty subsets; mandated1..5 are637subsets,6..10 are diagnostics. Selectors are fitted only for the oracle-best subset at each size1..5: the smallest successful selector is among these five proposals, not an exhaustive optimum over all subset/tree combinations. Preserving current-source fallback can retain engines outside the visible portfolio."
+}

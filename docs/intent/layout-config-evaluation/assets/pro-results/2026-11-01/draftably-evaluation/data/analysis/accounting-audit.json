@@ -1,0 +1,2258 @@
+{
+  "schema": "draftably-accounting-audit-1",
+  "auditedAt": "2026-11-02T00:23:31.039390+00:00",
+  "heldoutOutcomesRead": false,
+  "algorithmExecutionsByAudit": 0,
+  "countingRule": "Distinct registered task IDs; timing repetitions are conservatively charged separately. API calls, assertions and filesystem copies are not interchangeable units.",
+  "counts": {
+    "plannedTaskRows": 8203,
+    "plannedDistinctIds": 8203,
+    "developmentPlannedDistinct": 6714,
+    "developmentCanonicalDistinct": 6714,
+    "developmentRawTerminalRows": 6721,
+    "developmentDuplicateTerminalRows": 7,
+    "developmentStatuses": {
+      "ok": 6445,
+      "timed_out": 249,
+      "failed": 20
+    },
+    "heldoutRegisteredDistinct": 1489,
+    "heldoutExpectedColdPolicyTrials": 120,
+    "heldoutColdPolicyNotYetEmitted": 0,
+    "projectedFinalRegisteredDistinct": 8203,
+    "reserveMainLimit": 11500,
+    "ancillaryAllowance": 500,
+    "userDistinctGeometryLimit": 12000,
+    "registeredWithinMainCap": true,
+    "projectedWithinMainCap": true,
+    "projectedMainPlusReservedAncillary": 8703,
+    "projectedHeadroomBelow12000AfterAllowance": 3297,
+    "duplicateTaskIds": {},
+    "immutableDevelopmentAttemptFiles": 1996,
+    "immutableDevelopmentAttemptDistinctIds": 1996,
+    "immutableRecordsAbsentFromDevelopmentSummary": 0
+  },
+  "stages": [
+    {
+      "stage": "documented-default-development",
+      "plannedRows": 46,
+      "plannedDistinct": 46,
+      "splits": {
+        "development": 46
+      },
+      "heldout": false,
+      "taskSha256": "97794c7cc3f5385d2e39c89dea2b45acb43bcfaa405943ab07a73adfcea83af6",
+      "resultSha256": "eb1f75b4adf56a6f289fe11faa50c76227799fd8591190a781d91c0f3604ad94",
+      "rawTerminalRows": 46,
+      "canonicalDistinct": 46,
+      "statuses": {
+        "ok": 43,
+        "timed_out": 3
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "documented-default-heldout",
+      "plannedRows": 23,
+      "plannedDistinct": 23,
+      "splits": {
+        "heldout": 23
+      },
+      "heldout": true,
+      "taskSha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "edits-current-development",
+      "plannedRows": 60,
+      "plannedDistinct": 60,
+      "splits": {
+        "development": 60
+      },
+      "heldout": false,
+      "taskSha256": "74746092a69e10c4b48dfc419a0fb69908ab028556e361a5e423c618cb9e74f6",
+      "resultSha256": "a6552b11f38cc99b2a363fe3b1e32a331285f006b62d45c7cb6a6122a0ac5cd1",
+      "rawTerminalRows": 60,
+      "canonicalDistinct": 60,
+      "statuses": {
+        "ok": 60
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "edits-current-heldout",
+      "plannedRows": 60,
+      "plannedDistinct": 60,
+      "splits": {
+        "heldout": 60
+      },
+      "heldout": true,
+      "taskSha256": "4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "edits-policies-development",
+      "plannedRows": 120,
+      "plannedDistinct": 120,
+      "splits": {
+        "development": 120
+      },
+      "heldout": false,
+      "taskSha256": "ec97b1ceaac8fd75e1572d0277b8a00ce52638634213bda7b401f51482a31963",
+      "resultSha256": "1fa4abd7228aa0d26f8e88d569753e43482597608fe8d37ed04c680762ae5bbf",
+      "rawTerminalRows": 120,
+      "canonicalDistinct": 120,
+      "statuses": {
+        "ok": 120
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 120,
+      "immutableAttemptDistinct": 120,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "edits-policies-heldout",
+      "plannedRows": 120,
+      "plannedDistinct": 120,
+      "splits": {
+        "heldout": 120
+      },
+      "heldout": true,
+      "taskSha256": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "edits-states-development",
+      "plannedRows": 12,
+      "plannedDistinct": 12,
+      "splits": {
+        "development": 12
+      },
+      "heldout": false,
+      "taskSha256": "7c466d809dcb969fbdd5984f71a85c826d23098f656a445b3195d26013fe9cb8",
+      "resultSha256": "cb9b4c0f849c5aa1db183cf48cc9842cf18fac3eed8eff0b93e8a5cbdaffd970",
+      "rawTerminalRows": 12,
+      "canonicalDistinct": 12,
+      "statuses": {
+        "ok": 12
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "edits-states-heldout",
+      "plannedRows": 12,
+      "plannedDistinct": 12,
+      "splits": {
+        "heldout": 12
+      },
+      "heldout": true,
+      "taskSha256": "0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "edits-warm-development",
+      "plannedRows": 180,
+      "plannedDistinct": 180,
+      "splits": {
+        "development": 180
+      },
+      "heldout": false,
+      "taskSha256": "d5deacb3c9c476f6ede3a2f5aa0b7333011ac2b61d8c5bf6d63819475948569b",
+      "resultSha256": "de6f285903a63d8348c6e39d981ac09a0433eca9bc0de721f63acbefa29525c5",
+      "rawTerminalRows": 180,
+      "canonicalDistinct": 180,
+      "statuses": {
+        "ok": 180
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "edits-warm-heldout",
+      "plannedRows": 180,
+      "plannedDistinct": 180,
+      "splits": {
+        "heldout": 180
+      },
+      "heldout": true,
+      "taskSha256": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "identity-development",
+      "plannedRows": 240,
+      "plannedDistinct": 240,
+      "splits": {
+        "development": 240
+      },
+      "heldout": false,
+      "taskSha256": "6d7df00608973ba23ef8cb46bb482c5966142e88a12e8ac0624ce26515769463",
+      "resultSha256": "5267828347c2690ea0b4321aa210a8ef639ce3af574f722b9a36ca38ad6433ad",
+      "rawTerminalRows": 240,
+      "canonicalDistinct": 240,
+      "statuses": {
+        "ok": 240
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "interactions-layout",
+      "plannedRows": 96,
+      "plannedDistinct": 96,
+      "splits": {
+        "development": 96
+      },
+      "heldout": false,
+      "taskSha256": "1fd17300135651d15aeb9651e056843e5e66259c5ed7c2f61b0dbc8203248298",
+      "resultSha256": "edb40fb0c58ff0de8c1c4ab6c977cb40a30bd3908cb27a19211ad4e1231b6b33",
+      "rawTerminalRows": 96,
+      "canonicalDistinct": 96,
+      "statuses": {
+        "ok": 96
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 96,
+      "immutableAttemptDistinct": 96,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "interactions-routing",
+      "plannedRows": 432,
+      "plannedDistinct": 432,
+      "splits": {
+        "development": 432
+      },
+      "heldout": false,
+      "taskSha256": "33fe7ea8018741ba4fb56f274ab57ded962a31c350e489ce3589dbe28a4aa638",
+      "resultSha256": "9c5a37f1bb42e407b6fa361f3939bb3bfa78f60061b2d1e7ced5496d928e46ce",
+      "rawTerminalRows": 432,
+      "canonicalDistinct": 432,
+      "statuses": {
+        "ok": 432
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "joint-development",
+      "plannedRows": 108,
+      "plannedDistinct": 108,
+      "splits": {
+        "development": 108
+      },
+      "heldout": false,
+      "taskSha256": "ce19246cbf3190b71e8ad1f66d8c692a81dbb0d2ee595bb53f20ab1a98328db0",
+      "resultSha256": "9e62c6b7dd885c80ac1ddde2d7ff7ea43eb6b4b1360c1e97ad56ce05c19d6f91",
+      "rawTerminalRows": 108,
+      "canonicalDistinct": 108,
+      "statuses": {
+        "ok": 108
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 108,
+      "immutableAttemptDistinct": 108,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "joint-heldout",
+      "plannedRows": 216,
+      "plannedDistinct": 216,
+      "splits": {
+        "heldout": 216
+      },
+      "heldout": true,
+      "taskSha256": "53496c83d73103158f098e746ce2be9997fb1339b55c7d56d414b0554067b5d2",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "layout-control-ablation",
+      "plannedRows": 336,
+      "plannedDistinct": 336,
+      "splits": {
+        "development": 336
+      },
+      "heldout": false,
+      "taskSha256": "2ba8fbdae8b4a3b5fa1485e62e8ab8f0fc3a88f4f36d9c7d8ed627df2ae1adb9",
+      "resultSha256": "cdb6e5ab7a683f48c3f75a72b05ae8344f78652e0244d37cd817f3509f7bdac3",
+      "rawTerminalRows": 336,
+      "canonicalDistinct": 336,
+      "statuses": {
+        "ok": 302,
+        "timed_out": 34
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 336,
+      "immutableAttemptDistinct": 336,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "network-direction",
+      "plannedRows": 96,
+      "plannedDistinct": 96,
+      "splits": {
+        "development": 96
+      },
+      "heldout": false,
+      "taskSha256": "495ff90cd7ac93a8dcb096a9d420b0b92b980644b1d86ac286cd7ee6f1a928fd",
+      "resultSha256": "e0c8fc9dd187273f452715ac0632662978632e807f488c52a61b4b86b0ca8e90",
+      "rawTerminalRows": 96,
+      "canonicalDistinct": 96,
+      "statuses": {
+        "ok": 88,
+        "timed_out": 8
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 96,
+      "immutableAttemptDistinct": 96,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "optional-scale",
+      "plannedRows": 6,
+      "plannedDistinct": 6,
+      "splits": {
+        "development": 6
+      },
+      "heldout": false,
+      "taskSha256": "8a142ee7b8b94aa2af0ca7dd86c0ab451bc0cbd1aa097d9984ca194df1ec0b2c",
+      "resultSha256": "d46df1f95444f66d9ea0c76952d9b83fc5d691ef1314f52608392ad93c4538b9",
+      "rawTerminalRows": 6,
+      "canonicalDistinct": 6,
+      "statuses": {
+        "timed_out": 6
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 6,
+      "immutableAttemptDistinct": 6,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "prepare-routing",
+      "plannedRows": 24,
+      "plannedDistinct": 24,
+      "splits": {
+        "development": 24
+      },
+      "heldout": false,
+      "taskSha256": "b64531fcd79b2d5ec24929b2c45b4a39c3efdd3f7a48fcc377002273019d165c",
+      "resultSha256": "72eaffbc8b959ac154f03527ef5c6d8a9063a27420d0cc443ac9d6286ac1e7de",
+      "rawTerminalRows": 24,
+      "canonicalDistinct": 24,
+      "statuses": {
+        "ok": 24
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "routing-current-heldout",
+      "plannedRows": 72,
+      "plannedDistinct": 72,
+      "splits": {
+        "heldout": 72
+      },
+      "heldout": true,
+      "taskSha256": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "sanity",
+      "plannedRows": 20,
+      "plannedDistinct": 20,
+      "splits": {
+        "development": 20
+      },
+      "heldout": false,
+      "taskSha256": "5aef349b97d16b7c565762e51fcb79f3cba8d93c9c07d9cb69fc40aa6f140a5a",
+      "resultSha256": "dbfe0419ac2997a818e581c435db7443b429d50cb3464894dca9487c10b3cdd6",
+      "rawTerminalRows": 20,
+      "canonicalDistinct": 20,
+      "statuses": {
+        "ok": 20
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 20,
+      "immutableAttemptDistinct": 20,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "screen-development",
+      "plannedRows": 1198,
+      "plannedDistinct": 1198,
+      "splits": {
+        "development": 1198
+      },
+      "heldout": false,
+      "taskSha256": "2fd56213b2d3dfcb3b6a9041e6dcbd8067dff6d1ad6560acd8c9d01b8d487dc8",
+      "resultSha256": "cd068a11c206940c490cb18a40976dbaaa2588712b7971ee01a7cca0d90e63d8",
+      "rawTerminalRows": 1202,
+      "canonicalDistinct": 1198,
+      "statuses": {
+        "ok": 1094,
+        "timed_out": 104
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 4
+    },
+    {
+      "stage": "screen-heldout",
+      "plannedRows": 599,
+      "plannedDistinct": 599,
+      "splits": {
+        "heldout": 599
+      },
+      "heldout": true,
+      "taskSha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "selected-presets-development",
+      "plannedRows": 306,
+      "plannedDistinct": 306,
+      "splits": {
+        "development": 306
+      },
+      "heldout": false,
+      "taskSha256": "8df108761fd88b185f1ee2a7475d6917ef9470fe2681079d9fab17467e9a2f4f",
+      "resultSha256": "c3f0713c74fe9f0216716652f44228f82f06ca9c0acc06ab2ff2dbea4099d805",
+      "rawTerminalRows": 306,
+      "canonicalDistinct": 306,
+      "statuses": {
+        "ok": 278,
+        "timed_out": 28
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "selected-presets-heldout",
+      "plannedRows": 207,
+      "plannedDistinct": 207,
+      "splits": {
+        "heldout": 207
+      },
+      "heldout": true,
+      "taskSha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "resultAccess": "Excluded: heldout outcomes remain unread by this audit."
+    },
+    {
+      "stage": "settings-layout",
+      "plannedRows": 756,
+      "plannedDistinct": 756,
+      "splits": {
+        "development": 756
+      },
+      "heldout": false,
+      "taskSha256": "481990c97bbd3dcf68a48f4ac3f58e9616248d840f185199088ed443557daf17",
+      "resultSha256": "2311d99fb4b84b92fdf98e17f60f5adfb981b69c0c1900776aef7f7c3479fda6",
+      "rawTerminalRows": 759,
+      "canonicalDistinct": 756,
+      "statuses": {
+        "ok": 696,
+        "timed_out": 60
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 3
+    },
+    {
+      "stage": "settings-routing",
+      "plannedRows": 984,
+      "plannedDistinct": 984,
+      "splits": {
+        "development": 984
+      },
+      "heldout": false,
+      "taskSha256": "fb1190f82ccbcb275eb83b9fbb7d4be8ea60dbaad85c48b20bc0c2f590bcce3d",
+      "resultSha256": "a8203c37e033ed831476265801231cc4ff0f84d231f439c1e0d53f44df922ff1",
+      "rawTerminalRows": 984,
+      "canonicalDistinct": 984,
+      "statuses": {
+        "ok": 984
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "settings-warm",
+      "plannedRows": 444,
+      "plannedDistinct": 444,
+      "splits": {
+        "development": 444
+      },
+      "heldout": false,
+      "taskSha256": "9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e",
+      "resultSha256": "d31aafb0dacd83f78dc4a84816754511391f8e74a671879a405190487b787fb6",
+      "rawTerminalRows": 444,
+      "canonicalDistinct": 444,
+      "statuses": {
+        "ok": 424,
+        "failed": 20
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 444,
+      "immutableAttemptDistinct": 444,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "timing-development",
+      "plannedRows": 720,
+      "plannedDistinct": 720,
+      "splits": {
+        "development": 720
+      },
+      "heldout": false,
+      "taskSha256": "995092a2ae110f71fc81b76e2fb64c0d9204ed18286b1a6ec9b98ded2c296f47",
+      "resultSha256": "adf531ecb18cb499c53b19b71049e9bdc1fff97b5153eb9a0a7eb8a8c81a9d4f",
+      "rawTerminalRows": 720,
+      "canonicalDistinct": 720,
+      "statuses": {
+        "ok": 720
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 720,
+      "immutableAttemptDistinct": 720,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "tuning-development",
+      "plannedRows": 480,
+      "plannedDistinct": 480,
+      "splits": {
+        "development": 480
+      },
+      "heldout": false,
+      "taskSha256": "cd329d93e89afeed1aed23ea46f392ad595a215b951569cdce5e12f48081c963",
+      "resultSha256": "35a41f828b7fc083e926d40c43aeac083948be631fd8ebfc628466dc3c3592bf",
+      "rawTerminalRows": 480,
+      "canonicalDistinct": 480,
+      "statuses": {
+        "ok": 480
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 0,
+      "immutableAttemptDistinct": 0,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    },
+    {
+      "stage": "warm-targeted",
+      "plannedRows": 50,
+      "plannedDistinct": 50,
+      "splits": {
+        "development": 50
+      },
+      "heldout": false,
+      "taskSha256": "60c3d618a78042c5398e7e64e3b305d0005442e7f12b35d250a303c20d2a98ad",
+      "resultSha256": "af7d79f8b4b843e54a05d9a3200550e7fe4589b0e85b746aac4f79dac4822ff6",
+      "rawTerminalRows": 50,
+      "canonicalDistinct": 50,
+      "statuses": {
+        "ok": 44,
+        "timed_out": 6
+      },
+      "missing": 0,
+      "unplanned": 0,
+      "nonterminal": [],
+      "immutableAttemptFiles": 50,
+      "immutableAttemptDistinct": 50,
+      "immutableRecordsAbsentFromSummary": 0,
+      "duplicateTerminalRows": 0
+    }
+  ],
+  "missingDevelopmentTrials": [],
+  "unplannedDevelopmentResults": [],
+  "missingDevelopmentArtifacts": [],
+  "duplicateDevelopmentAttempts": [
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-layered-DOWN",
+      "line": 280,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-tree-RIGHT",
+      "line": 281,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-tree-DOWN",
+      "line": 282,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-grid-RIGHT",
+      "line": 283,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "settings-layout",
+      "id": "D-layout-architecture-04-groupGap-96",
+      "line": 100,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "ok"
+    },
+    {
+      "stage": "settings-layout",
+      "id": "D-layout-dags-04-nodeGap-12",
+      "line": 105,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "settings-layout",
+      "id": "D-layout-dags-04-nodeGap-24",
+      "line": 112,
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    }
+  ],
+  "immutableRecordsAbsentFromSummary": [],
+  "recoveries": [
+    {
+      "id": "D-joint-recipes-02-layout3-route3",
+      "stage": "joint-development",
+      "status": "ok",
+      "recovery": "immutable-record",
+      "totalMs": 274.6559750000015,
+      "actualRouterCalls": 1
+    },
+    {
+      "id": "G-selected-development-architecture-04-compound-spring-p3",
+      "stage": "selected-presets-development",
+      "status": "timed_out",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "G-selected-development-routing-04-compound-spring-p3",
+      "stage": "selected-presets-development",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "G-selected-development-recipes-04-compound-spring-p3",
+      "stage": "selected-presets-development",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "G-selected-development-recipes-04-tree-p1",
+      "stage": "selected-presets-development",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "G-selected-development-recipes-04-grid-p3",
+      "stage": "selected-presets-development",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "D-layout-cycles-04-repulsion-90",
+      "stage": "settings-layout",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "D-layout-architecture-02-alignment-0",
+      "stage": "settings-layout",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "D-layout-architecture-02-alignment-55",
+      "stage": "settings-layout",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    },
+    {
+      "id": "D-layout-architecture-02-alignment-100",
+      "stage": "settings-layout",
+      "status": "ok",
+      "recovery": "artifact",
+      "totalMs": null,
+      "actualRouterCalls": null
+    }
+  ],
+  "frozenProtocolHashes": [
+    {
+      "path": "corpus/manifest.json",
+      "expected": "6847fe5ee8458059cb0edf12f33174e2005cd39375c45a031fe951aa992dc059",
+      "actual": "6847fe5ee8458059cb0edf12f33174e2005cd39375c45a031fe951aa992dc059",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "corpus/routing/manifest.json",
+      "expected": "19c6fdc6cf7adec0e5efd42fbe3fbf2df9707a3b2eac81ec56d39da8c5fd7c5a",
+      "actual": "19c6fdc6cf7adec0e5efd42fbe3fbf2df9707a3b2eac81ec56d39da8c5fd7c5a",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/settings-spec.json",
+      "expected": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+      "actual": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metrics.mjs",
+      "expected": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+      "actual": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/intent.mjs",
+      "expected": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+      "actual": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+      "exists": true,
+      "matches": true
+    }
+  ],
+  "frozenCodeHashes": [
+    {
+      "path": "evaluation/README.md",
+      "expected": "a2b2456ada9f7ab64fa0ece09d2f18858fe18e4a58a88e0967d44e9035f89d38",
+      "actual": "a2b2456ada9f7ab64fa0ece09d2f18858fe18e4a58a88e0967d44e9035f89d38",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/adapter.mjs",
+      "expected": "2e8b57d2cb6b78da43224633470eb6312258f8cfb9b5222ffd596a8075750587",
+      "actual": "2e8b57d2cb6b78da43224633470eb6312258f8cfb9b5222ffd596a8075750587",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-contexts.py",
+      "expected": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+      "actual": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-controls.py",
+      "expected": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+      "actual": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-dependencies.py",
+      "expected": "c776f1855e46b8436a37ba552e3eb5421bbc92f4b3eef7fe2b09091267a52695",
+      "actual": "c776f1855e46b8436a37ba552e3eb5421bbc92f4b3eef7fe2b09091267a52695",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-edits.py",
+      "expected": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+      "actual": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-portfolio.py",
+      "expected": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+      "actual": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-validation.mjs",
+      "expected": "216d8150e180322b5ff90e12b9eb1bc353afe23c9700f48987fcd69e39b8bfc9",
+      "actual": "216d8150e180322b5ff90e12b9eb1bc353afe23c9700f48987fcd69e39b8bfc9",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/analyze-visual.mjs",
+      "expected": "2717eba3bfcd67382fb218e0a16e18640865f23f14c771fcec90db5f64f841ee",
+      "actual": "2717eba3bfcd67382fb218e0a16e18640865f23f14c771fcec90db5f64f841ee",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/audit-cell-access.mjs",
+      "expected": "516a3a733bd87c95a31fec652cff44676fc5eb8b11d36269da8fee3edcb2ad5d",
+      "actual": "516a3a733bd87c95a31fec652cff44676fc5eb8b11d36269da8fee3edcb2ad5d",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/audit-report.md",
+      "expected": "39a9750cd83f2d114730620587eccc29fe390a6d88f4598c5ca20e36c38718b7",
+      "actual": "39a9750cd83f2d114730620587eccc29fe390a6d88f4598c5ca20e36c38718b7",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/audit-result-archives.mjs",
+      "expected": "3bc08dc62e8f204ee06d5cbd4910236b7c66f752d6385ffc4c2bdf25e4be4862",
+      "actual": "3bc08dc62e8f204ee06d5cbd4910236b7c66f752d6385ffc4c2bdf25e4be4862",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-edit-tasks.py",
+      "expected": "4e571a860a60da2fcd2f38fd81f8dc87616126e2a5da805e51145579d3c46019",
+      "actual": "4e571a860a60da2fcd2f38fd81f8dc87616126e2a5da805e51145579d3c46019",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-inventory-source.py",
+      "expected": "18e207391c53db2217a4fde9a48f3a3406aeca40d34d5d5493e6d7f80fcd16dd",
+      "actual": "18e207391c53db2217a4fde9a48f3a3406aeca40d34d5d5493e6d7f80fcd16dd",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-joint-tasks.py",
+      "expected": "1ee8a28bf3e436e96e4e6c17e6cb2e7018b2ba6a4e5bba3535ab072b7203dddb",
+      "actual": "1ee8a28bf3e436e96e4e6c17e6cb2e7018b2ba6a4e5bba3535ab072b7203dddb",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-stress-tasks.py",
+      "expected": "818a3bed37ecb497b5bc5e2b1df3be1ad9df0d1355c3ba77f5e3a1bc524a2205",
+      "actual": "818a3bed37ecb497b5bc5e2b1df3be1ad9df0d1355c3ba77f5e3a1bc524a2205",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-tasks.py",
+      "expected": "f2553c20d255bd813b41fd5961bdd9fac56ccb92e07bac741faf48ebee9deb0e",
+      "actual": "f2553c20d255bd813b41fd5961bdd9fac56ccb92e07bac741faf48ebee9deb0e",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-ui-artifacts.py",
+      "expected": "b63147ae5b4fe6fe213f2f404cd0c2a4aa68da5d6472c5d474782786a62c180e",
+      "actual": "b63147ae5b4fe6fe213f2f404cd0c2a4aa68da5d6472c5d474782786a62c180e",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-validation-tasks.py",
+      "expected": "6d17b0450cd925f3df353b3238018dd0cd0817b293d5242b2b42989053fa70f3",
+      "actual": "6d17b0450cd925f3df353b3238018dd0cd0817b293d5242b2b42989053fa70f3",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/build-warm-targeted.py",
+      "expected": "760a0fcecb273959b7eceee3e4d1c68ca7a9c8e93ffd1e4debb64ddc19aab719",
+      "actual": "760a0fcecb273959b7eceee3e4d1c68ca7a9c8e93ffd1e4debb64ddc19aab719",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/derive-edit-metrics.mjs",
+      "expected": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+      "actual": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/edit-analysis-spec.json",
+      "expected": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+      "actual": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/enrich-inventory-development.py",
+      "expected": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+      "actual": "7fa81c6b349aa26e1c3b57a878ff6959f02e04c752c14d60fd4ddc8d1d2d5b21",
+      "exists": true,
+      "matches": false
+    },
+    {
+      "path": "evaluation/freeze-policy.py",
+      "expected": "277a092d045ba3aee80830220ede8578427b8871fe4fa6f800b852f63d8e3760",
+      "actual": "277a092d045ba3aee80830220ede8578427b8871fe4fa6f800b852f63d8e3760",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/generate-corpus.py",
+      "expected": "0e4198121062891b1102f843f5d8cef79fbfc7aa29ea729a6eb99ef14a194d82",
+      "actual": "0e4198121062891b1102f843f5d8cef79fbfc7aa29ea729a6eb99ef14a194d82",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/generate-routing-fixtures.py",
+      "expected": "e01ad530c8ba5a5e2a755d7558d4d8cb0f004c6bf633d6ea95c82e9b6fd55771",
+      "actual": "e01ad530c8ba5a5e2a755d7558d4d8cb0f004c6bf633d6ea95c82e9b6fd55771",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/intent-selfcheck.mjs",
+      "expected": "7177233d1b3bdc0a04451dbca216a5147c0dd7639afe182249a943f9b192172b",
+      "actual": "7177233d1b3bdc0a04451dbca216a5147c0dd7639afe182249a943f9b192172b",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/intent.mjs",
+      "expected": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+      "actual": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/inventory-counts.json",
+      "expected": "9f4424ed2d6ba5eb60719280ed30de83c8d1c0f11ac9c18c3d3c71e945fcb261",
+      "actual": "9f4424ed2d6ba5eb60719280ed30de83c8d1c0f11ac9c18c3d3c71e945fcb261",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/inventory-source-read-manifest.json",
+      "expected": "fb8ea121e569660ff44642324b3ec4e5f676f221dce8a640d121a73555ad8c0c",
+      "actual": "fb8ea121e569660ff44642324b3ec4e5f676f221dce8a640d121a73555ad8c0c",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/layout-control-ablation.py",
+      "expected": "e47e381207671fb52b7df262950e2109577fa04e3aa088894254da479657e697",
+      "actual": "e47e381207671fb52b7df262950e2109577fa04e3aa088894254da479657e697",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metric-calibration.mjs",
+      "expected": "5ecb53432b1d51329c31d5f7d170831f8c5c4b70e1478edadfa51c202eae0775",
+      "actual": "5ecb53432b1d51329c31d5f7d170831f8c5c4b70e1478edadfa51c202eae0775",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metric-production-sanity.mjs",
+      "expected": "2e65e9d5a6ab4e3e9cecdec997e759da81916798fcb9cd4debe2ad08c3b19a70",
+      "actual": "2e65e9d5a6ab4e3e9cecdec997e759da81916798fcb9cd4debe2ad08c3b19a70",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metric-visibility-calibration.mjs",
+      "expected": "374241c84210cd3a8b6f638afe68bb406cfe63196c0b4db8b75bd7a1ffa76161",
+      "actual": "374241c84210cd3a8b6f638afe68bb406cfe63196c0b4db8b75bd7a1ffa76161",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metrics-source-read-manifest.json",
+      "expected": "f6582a1db1b01099cdb4bd7f2f7b2deac85972d0ef2ec6606120b0d83065fda0",
+      "actual": "f6582a1db1b01099cdb4bd7f2f7b2deac85972d0ef2ec6606120b0d83065fda0",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metrics-spec.json",
+      "expected": "ce9e98cbe639f08b838151342e53bfb89d80539ec03b8251d16fe9e5282f7367",
+      "actual": "ce9e98cbe639f08b838151342e53bfb89d80539ec03b8251d16fe9e5282f7367",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/metrics.mjs",
+      "expected": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+      "actual": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/plot-portfolio.py",
+      "expected": "b864f418960f1fa4ff035d4e5453d54bcdc571f24dfd0c6c67eeaa7f1ab89314",
+      "actual": "b864f418960f1fa4ff035d4e5453d54bcdc571f24dfd0c6c67eeaa7f1ab89314",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/portfolio-analysis-method.md",
+      "expected": "d761f13743238f212e110816a97a91ac1b36182f9b8fc4a17e931e03cbfac309",
+      "actual": "d761f13743238f212e110816a97a91ac1b36182f9b8fc4a17e931e03cbfac309",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/portfolio-selfcheck.py",
+      "expected": "f76630dba18521241aacd4a81781ac8bbf7e8cdd026e0bf9f33a9b2bef72c406",
+      "actual": "f76630dba18521241aacd4a81781ac8bbf7e8cdd026e0bf9f33a9b2bef72c406",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/predict-cold-policy.py",
+      "expected": "6fbf5934e76ccdd4b5046e53945ef2c6f4c46f79fd99cd05d8011bdaa9ca7f25",
+      "actual": "6fbf5934e76ccdd4b5046e53945ef2c6f4c46f79fd99cd05d8011bdaa9ca7f25",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/prepare-replay.py",
+      "expected": "7073ec5340520200f87bdf6d8ba2ba3afc853c30abc2e9fd27f7217bd14f5685",
+      "actual": "e4d6e178be11757ed50004c40839067d9cc8f498c99556ff980fe571170d89ca",
+      "exists": true,
+      "matches": false
+    },
+    {
+      "path": "evaluation/recover-results.mjs",
+      "expected": "ec843c1793957e2639c1b0583d025d988e853a9dc32ead2361c22271875b8a39",
+      "actual": "ec843c1793957e2639c1b0583d025d988e853a9dc32ead2361c22271875b8a39",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/render-pairs.mjs",
+      "expected": "a91af4efc31fd8a1769637a24c7b177ce23b8c1e8a29b5a52dd80e420faeb9aa",
+      "actual": "a91af4efc31fd8a1769637a24c7b177ce23b8c1e8a29b5a52dd80e420faeb9aa",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/replay-all.sh",
+      "expected": "1550f7e69bf575e319bea66223b2892e88b8f9ac0b45f402f080501de55d956f",
+      "actual": "0a05334401be1bc47484602674d15304caf9a30c6143e17f15ff6f666cbf9984",
+      "exists": true,
+      "matches": false
+    },
+    {
+      "path": "evaluation/run-stages.mjs",
+      "expected": "2c2ceaf69c32cc5d2353b71914ce105d9eef29104b1a13bf11ae5c1dd25f25a1",
+      "actual": "2c2ceaf69c32cc5d2353b71914ce105d9eef29104b1a13bf11ae5c1dd25f25a1",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/run.mjs",
+      "expected": "1e226d1a166d82e167bb4bb2647f44250f6881efee4798fc926acf8a78afa6e4",
+      "actual": "1e226d1a166d82e167bb4bb2647f44250f6881efee4798fc926acf8a78afa6e4",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/runtime-notes.md",
+      "expected": "1395d0d1005eba7edcbd92a315a71a2bab04306bb31c13552a60ae7d72f893f7",
+      "actual": "1395d0d1005eba7edcbd92a315a71a2bab04306bb31c13552a60ae7d72f893f7",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/select-visual-development.py",
+      "expected": "9de674b612cc9010d28ec18df20cb95c995b9b732c146a3f830ec4b70064f1ee",
+      "actual": "9de674b612cc9010d28ec18df20cb95c995b9b732c146a3f830ec4b70064f1ee",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/settings-spec.json",
+      "expected": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+      "actual": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/setup-browser.mjs",
+      "expected": "4306139668856bb9174384850897afd7749968bd6869ce19d374e4c91b409eac",
+      "actual": "4306139668856bb9174384850897afd7749968bd6869ce19d374e4c91b409eac",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/source-tools.mjs",
+      "expected": "dfb56dc0003250441cd1a437e39e2e6e8d1a81755f63b3a72fb9d8e5c34c3edf",
+      "actual": "dfb56dc0003250441cd1a437e39e2e6e8d1a81755f63b3a72fb9d8e5c34c3edf",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/supplied-prompt.md",
+      "expected": "7c05976fcea259471202a5bc2c02e2c9b9252446cf56d34e6fea559b70c5dbf6",
+      "actual": "7c05976fcea259471202a5bc2c02e2c9b9252446cf56d34e6fea559b70c5dbf6",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/supplied-protocol.md",
+      "expected": "f0f511588d61f80dfddf2c28150c2e87b84d14145ee66d91f91ba8f30cd85658",
+      "actual": "f0f511588d61f80dfddf2c28150c2e87b84d14145ee66d91f91ba8f30cd85658",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/trial-worker.mjs",
+      "expected": "ddf3ec03bf5eecc712af7fdc07f03bb156a04937e9b61f12038ff5a0d9cf3b23",
+      "actual": "ddf3ec03bf5eecc712af7fdc07f03bb156a04937e9b61f12038ff5a0d9cf3b23",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/unpack-baseline.py",
+      "expected": "65039eb97520d63e7a187802bd20d2f4b4f615b83625381820e67f563a6edcff",
+      "actual": "65039eb97520d63e7a187802bd20d2f4b4f615b83625381820e67f563a6edcff",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/validate-corpus.mjs",
+      "expected": "667dd6d9e07e070ee12374b7abeb8a3a796ae8c4146e5c1b10057ed5d65fc342",
+      "actual": "667dd6d9e07e070ee12374b7abeb8a3a796ae8c4146e5c1b10057ed5d65fc342",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/validate-tasks.mjs",
+      "expected": "c95b8d78ce515feb539ec4b9746466bc44655f6760c96d45992b33594752d60b",
+      "actual": "c95b8d78ce515feb539ec4b9746466bc44655f6760c96d45992b33594752d60b",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/verify-control-archives.mjs",
+      "expected": "f9301bb47096c1e5f54773a5e0891652edf6dc60df87fe45bc62359ff5def5ee",
+      "actual": "f9301bb47096c1e5f54773a5e0891652edf6dc60df87fe45bc62359ff5def5ee",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/visual-judge-guide.md",
+      "expected": "d2acfb2c12ce9af668860309c394ca1845793265c01a49db76fa680e6fe81adc",
+      "actual": "d2acfb2c12ce9af668860309c394ca1845793265c01a49db76fa680e6fe81adc",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "evaluation/visual-judgment.schema.json",
+      "expected": "ed30834ea750855a33e6135a7cb508bd1947525679c4bcf7cb4f53fba4bd2962",
+      "actual": "ed30834ea750855a33e6135a7cb508bd1947525679c4bcf7cb4f53fba4bd2962",
+      "exists": true,
+      "matches": true
+    }
+  ],
+  "frozenEvidenceHashes": [
+    {
+      "path": "data/analysis/routing-policy-proposal.json",
+      "expected": "034acffd95dc747fe0c4d0acf0137a7980b7fd3dfdb0dbe6e641e97b0ba24f71",
+      "actual": "034acffd95dc747fe0c4d0acf0137a7980b7fd3dfdb0dbe6e641e97b0ba24f71",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/joint-policy-proposal.json",
+      "expected": "6f9fabe3299aa429d2d99cc3e59007fd60f8e11ae47ff1ebc62c29f2ef07d7af",
+      "actual": "6f9fabe3299aa429d2d99cc3e59007fd60f8e11ae47ff1ebc62c29f2ef07d7af",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/edits-development-summary.json",
+      "expected": "89da546576d368c46882dbe88076ce9f101850e8fe7bd3f2928cd77606ea488a",
+      "actual": "89da546576d368c46882dbe88076ce9f101850e8fe7bd3f2928cd77606ea488a",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/edits-development-direction-diagnostics.json",
+      "expected": "ba6041d9a993035900bb84993480eceab7195cb63ca84a3d658e237b6d675f9f",
+      "actual": "ba6041d9a993035900bb84993480eceab7195cb63ca84a3d658e237b6d675f9f",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/layout-control-ablations.json",
+      "expected": "e2fcb642b77eb1723417b2878bfd700cc8ea15f2ea6c96f3926db3500f48f02e",
+      "actual": "e2fcb642b77eb1723417b2878bfd700cc8ea15f2ea6c96f3926db3500f48f02e",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/visual-agreement-development.json",
+      "expected": "cc86d3541b1f43641074081afc0df787e4ec4fbcc312c140ce9f410aa276abc5",
+      "actual": "cc86d3541b1f43641074081afc0df787e4ec4fbcc312c140ce9f410aa276abc5",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/cell-access-audit-development.json",
+      "expected": "814d7d912dde4b57979761ef32ff17b0a597aabe98d33fe1cc2ebfa0fe029867",
+      "actual": "814d7d912dde4b57979761ef32ff17b0a597aabe98d33fe1cc2ebfa0fe029867",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/validation/timing.json",
+      "expected": "54eadb86d0336c75853f2837b9cba3cd971d66df1ad38e986178a3c59b71ca62",
+      "actual": "54eadb86d0336c75853f2837b9cba3cd971d66df1ad38e986178a3c59b71ca62",
+      "exists": true,
+      "matches": true
+    },
+    {
+      "path": "data/analysis/validation/determinism.json",
+      "expected": "858ff61e283c816109cb585839f75d258c2a08ff3dc00379af1b9c239ebbf9b9",
+      "actual": "858ff61e283c816109cb585839f75d258c2a08ff3dc00379af1b9c239ebbf9b9",
+      "exists": true,
+      "matches": true
+    }
+  ],
+  "preservedFrozenSnapshot": {
+    "manifest": "data/frozen-development-snapshot.json",
+    "recordedAt": "2026-11-02T00:10:04.042918+00:00",
+    "checks": [
+      {
+        "path": "evaluation/frozen-development/README.md",
+        "expected": "a2b2456ada9f7ab64fa0ece09d2f18858fe18e4a58a88e0967d44e9035f89d38",
+        "actual": "a2b2456ada9f7ab64fa0ece09d2f18858fe18e4a58a88e0967d44e9035f89d38",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/README.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/adapter.mjs",
+        "expected": "2e8b57d2cb6b78da43224633470eb6312258f8cfb9b5222ffd596a8075750587",
+        "actual": "2e8b57d2cb6b78da43224633470eb6312258f8cfb9b5222ffd596a8075750587",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/adapter.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-contexts.py",
+        "expected": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+        "actual": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-contexts.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-controls.py",
+        "expected": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+        "actual": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-controls.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-dependencies.py",
+        "expected": "c776f1855e46b8436a37ba552e3eb5421bbc92f4b3eef7fe2b09091267a52695",
+        "actual": "c776f1855e46b8436a37ba552e3eb5421bbc92f4b3eef7fe2b09091267a52695",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-dependencies.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-edits.py",
+        "expected": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+        "actual": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-edits.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-portfolio.py",
+        "expected": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+        "actual": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-portfolio.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-validation.mjs",
+        "expected": "216d8150e180322b5ff90e12b9eb1bc353afe23c9700f48987fcd69e39b8bfc9",
+        "actual": "216d8150e180322b5ff90e12b9eb1bc353afe23c9700f48987fcd69e39b8bfc9",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-validation.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/analyze-visual.mjs",
+        "expected": "2717eba3bfcd67382fb218e0a16e18640865f23f14c771fcec90db5f64f841ee",
+        "actual": "2717eba3bfcd67382fb218e0a16e18640865f23f14c771fcec90db5f64f841ee",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/analyze-visual.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/audit-cell-access.mjs",
+        "expected": "516a3a733bd87c95a31fec652cff44676fc5eb8b11d36269da8fee3edcb2ad5d",
+        "actual": "516a3a733bd87c95a31fec652cff44676fc5eb8b11d36269da8fee3edcb2ad5d",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/audit-cell-access.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/audit-report.md",
+        "expected": "39a9750cd83f2d114730620587eccc29fe390a6d88f4598c5ca20e36c38718b7",
+        "actual": "39a9750cd83f2d114730620587eccc29fe390a6d88f4598c5ca20e36c38718b7",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/audit-report.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/audit-result-archives.mjs",
+        "expected": "3bc08dc62e8f204ee06d5cbd4910236b7c66f752d6385ffc4c2bdf25e4be4862",
+        "actual": "3bc08dc62e8f204ee06d5cbd4910236b7c66f752d6385ffc4c2bdf25e4be4862",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/audit-result-archives.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-edit-tasks.py",
+        "expected": "4e571a860a60da2fcd2f38fd81f8dc87616126e2a5da805e51145579d3c46019",
+        "actual": "4e571a860a60da2fcd2f38fd81f8dc87616126e2a5da805e51145579d3c46019",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-edit-tasks.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-inventory-source.py",
+        "expected": "18e207391c53db2217a4fde9a48f3a3406aeca40d34d5d5493e6d7f80fcd16dd",
+        "actual": "18e207391c53db2217a4fde9a48f3a3406aeca40d34d5d5493e6d7f80fcd16dd",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-inventory-source.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-joint-tasks.py",
+        "expected": "1ee8a28bf3e436e96e4e6c17e6cb2e7018b2ba6a4e5bba3535ab072b7203dddb",
+        "actual": "1ee8a28bf3e436e96e4e6c17e6cb2e7018b2ba6a4e5bba3535ab072b7203dddb",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-joint-tasks.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-stress-tasks.py",
+        "expected": "818a3bed37ecb497b5bc5e2b1df3be1ad9df0d1355c3ba77f5e3a1bc524a2205",
+        "actual": "818a3bed37ecb497b5bc5e2b1df3be1ad9df0d1355c3ba77f5e3a1bc524a2205",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-stress-tasks.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-tasks.py",
+        "expected": "f2553c20d255bd813b41fd5961bdd9fac56ccb92e07bac741faf48ebee9deb0e",
+        "actual": "f2553c20d255bd813b41fd5961bdd9fac56ccb92e07bac741faf48ebee9deb0e",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-tasks.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-ui-artifacts.py",
+        "expected": "b63147ae5b4fe6fe213f2f404cd0c2a4aa68da5d6472c5d474782786a62c180e",
+        "actual": "b63147ae5b4fe6fe213f2f404cd0c2a4aa68da5d6472c5d474782786a62c180e",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-ui-artifacts.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-validation-tasks.py",
+        "expected": "6d17b0450cd925f3df353b3238018dd0cd0817b293d5242b2b42989053fa70f3",
+        "actual": "6d17b0450cd925f3df353b3238018dd0cd0817b293d5242b2b42989053fa70f3",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-validation-tasks.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/build-warm-targeted.py",
+        "expected": "760a0fcecb273959b7eceee3e4d1c68ca7a9c8e93ffd1e4debb64ddc19aab719",
+        "actual": "760a0fcecb273959b7eceee3e4d1c68ca7a9c8e93ffd1e4debb64ddc19aab719",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/build-warm-targeted.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/derive-edit-metrics.mjs",
+        "expected": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+        "actual": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/derive-edit-metrics.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/edit-analysis-spec.json",
+        "expected": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+        "actual": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/edit-analysis-spec.json",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/enrich-inventory-development.py",
+        "expected": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+        "actual": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/enrich-inventory-development.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/freeze-policy.py",
+        "expected": "277a092d045ba3aee80830220ede8578427b8871fe4fa6f800b852f63d8e3760",
+        "actual": "277a092d045ba3aee80830220ede8578427b8871fe4fa6f800b852f63d8e3760",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/freeze-policy.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/generate-corpus.py",
+        "expected": "0e4198121062891b1102f843f5d8cef79fbfc7aa29ea729a6eb99ef14a194d82",
+        "actual": "0e4198121062891b1102f843f5d8cef79fbfc7aa29ea729a6eb99ef14a194d82",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/generate-corpus.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/generate-routing-fixtures.py",
+        "expected": "e01ad530c8ba5a5e2a755d7558d4d8cb0f004c6bf633d6ea95c82e9b6fd55771",
+        "actual": "e01ad530c8ba5a5e2a755d7558d4d8cb0f004c6bf633d6ea95c82e9b6fd55771",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/generate-routing-fixtures.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/intent-selfcheck.mjs",
+        "expected": "7177233d1b3bdc0a04451dbca216a5147c0dd7639afe182249a943f9b192172b",
+        "actual": "7177233d1b3bdc0a04451dbca216a5147c0dd7639afe182249a943f9b192172b",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/intent-selfcheck.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/intent.mjs",
+        "expected": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+        "actual": "bbb1b0fc282623eca1b181f2cc13caae66eb76c4ec2ba1702fd2dc5af121a536",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/intent.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/inventory-counts.json",
+        "expected": "9f4424ed2d6ba5eb60719280ed30de83c8d1c0f11ac9c18c3d3c71e945fcb261",
+        "actual": "9f4424ed2d6ba5eb60719280ed30de83c8d1c0f11ac9c18c3d3c71e945fcb261",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/inventory-counts.json",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/inventory-source-read-manifest.json",
+        "expected": "fb8ea121e569660ff44642324b3ec4e5f676f221dce8a640d121a73555ad8c0c",
+        "actual": "fb8ea121e569660ff44642324b3ec4e5f676f221dce8a640d121a73555ad8c0c",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/inventory-source-read-manifest.json",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/layout-control-ablation.py",
+        "expected": "e47e381207671fb52b7df262950e2109577fa04e3aa088894254da479657e697",
+        "actual": "e47e381207671fb52b7df262950e2109577fa04e3aa088894254da479657e697",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/layout-control-ablation.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/metric-calibration.mjs",
+        "expected": "5ecb53432b1d51329c31d5f7d170831f8c5c4b70e1478edadfa51c202eae0775",
+        "actual": "5ecb53432b1d51329c31d5f7d170831f8c5c4b70e1478edadfa51c202eae0775",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/metric-calibration.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/metric-production-sanity.mjs",
+        "expected": "2e65e9d5a6ab4e3e9cecdec997e759da81916798fcb9cd4debe2ad08c3b19a70",
+        "actual": "2e65e9d5a6ab4e3e9cecdec997e759da81916798fcb9cd4debe2ad08c3b19a70",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/metric-production-sanity.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/metric-visibility-calibration.mjs",
+        "expected": "374241c84210cd3a8b6f638afe68bb406cfe63196c0b4db8b75bd7a1ffa76161",
+        "actual": "374241c84210cd3a8b6f638afe68bb406cfe63196c0b4db8b75bd7a1ffa76161",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/metric-visibility-calibration.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/metrics-source-read-manifest.json",
+        "expected": "f6582a1db1b01099cdb4bd7f2f7b2deac85972d0ef2ec6606120b0d83065fda0",
+        "actual": "f6582a1db1b01099cdb4bd7f2f7b2deac85972d0ef2ec6606120b0d83065fda0",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/metrics-source-read-manifest.json",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/metrics-spec.json",
+        "expected": "ce9e98cbe639f08b838151342e53bfb89d80539ec03b8251d16fe9e5282f7367",
+        "actual": "ce9e98cbe639f08b838151342e53bfb89d80539ec03b8251d16fe9e5282f7367",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/metrics-spec.json",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/metrics.mjs",
+        "expected": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+        "actual": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/metrics.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/plot-portfolio.py",
+        "expected": "b864f418960f1fa4ff035d4e5453d54bcdc571f24dfd0c6c67eeaa7f1ab89314",
+        "actual": "b864f418960f1fa4ff035d4e5453d54bcdc571f24dfd0c6c67eeaa7f1ab89314",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/plot-portfolio.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/portfolio-analysis-method.md",
+        "expected": "d761f13743238f212e110816a97a91ac1b36182f9b8fc4a17e931e03cbfac309",
+        "actual": "d761f13743238f212e110816a97a91ac1b36182f9b8fc4a17e931e03cbfac309",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/portfolio-analysis-method.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/portfolio-selfcheck.py",
+        "expected": "f76630dba18521241aacd4a81781ac8bbf7e8cdd026e0bf9f33a9b2bef72c406",
+        "actual": "f76630dba18521241aacd4a81781ac8bbf7e8cdd026e0bf9f33a9b2bef72c406",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/portfolio-selfcheck.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/predict-cold-policy.py",
+        "expected": "6fbf5934e76ccdd4b5046e53945ef2c6f4c46f79fd99cd05d8011bdaa9ca7f25",
+        "actual": "6fbf5934e76ccdd4b5046e53945ef2c6f4c46f79fd99cd05d8011bdaa9ca7f25",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/predict-cold-policy.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/prepare-replay.py",
+        "expected": "7073ec5340520200f87bdf6d8ba2ba3afc853c30abc2e9fd27f7217bd14f5685",
+        "actual": "7073ec5340520200f87bdf6d8ba2ba3afc853c30abc2e9fd27f7217bd14f5685",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/prepare-replay.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/recover-results.mjs",
+        "expected": "ec843c1793957e2639c1b0583d025d988e853a9dc32ead2361c22271875b8a39",
+        "actual": "ec843c1793957e2639c1b0583d025d988e853a9dc32ead2361c22271875b8a39",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/recover-results.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/render-pairs.mjs",
+        "expected": "a91af4efc31fd8a1769637a24c7b177ce23b8c1e8a29b5a52dd80e420faeb9aa",
+        "actual": "a91af4efc31fd8a1769637a24c7b177ce23b8c1e8a29b5a52dd80e420faeb9aa",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/render-pairs.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/replay-all.sh",
+        "expected": "1550f7e69bf575e319bea66223b2892e88b8f9ac0b45f402f080501de55d956f",
+        "actual": "1550f7e69bf575e319bea66223b2892e88b8f9ac0b45f402f080501de55d956f",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/replay-all.sh",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/run-stages.mjs",
+        "expected": "2c2ceaf69c32cc5d2353b71914ce105d9eef29104b1a13bf11ae5c1dd25f25a1",
+        "actual": "2c2ceaf69c32cc5d2353b71914ce105d9eef29104b1a13bf11ae5c1dd25f25a1",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/run-stages.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/run.mjs",
+        "expected": "1e226d1a166d82e167bb4bb2647f44250f6881efee4798fc926acf8a78afa6e4",
+        "actual": "1e226d1a166d82e167bb4bb2647f44250f6881efee4798fc926acf8a78afa6e4",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/run.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/runtime-notes.md",
+        "expected": "1395d0d1005eba7edcbd92a315a71a2bab04306bb31c13552a60ae7d72f893f7",
+        "actual": "1395d0d1005eba7edcbd92a315a71a2bab04306bb31c13552a60ae7d72f893f7",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/runtime-notes.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/select-visual-development.py",
+        "expected": "9de674b612cc9010d28ec18df20cb95c995b9b732c146a3f830ec4b70064f1ee",
+        "actual": "9de674b612cc9010d28ec18df20cb95c995b9b732c146a3f830ec4b70064f1ee",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/select-visual-development.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/settings-spec.json",
+        "expected": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+        "actual": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/settings-spec.json",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/setup-browser.mjs",
+        "expected": "4306139668856bb9174384850897afd7749968bd6869ce19d374e4c91b409eac",
+        "actual": "4306139668856bb9174384850897afd7749968bd6869ce19d374e4c91b409eac",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/setup-browser.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/source-tools.mjs",
+        "expected": "dfb56dc0003250441cd1a437e39e2e6e8d1a81755f63b3a72fb9d8e5c34c3edf",
+        "actual": "dfb56dc0003250441cd1a437e39e2e6e8d1a81755f63b3a72fb9d8e5c34c3edf",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/source-tools.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/supplied-prompt.md",
+        "expected": "7c05976fcea259471202a5bc2c02e2c9b9252446cf56d34e6fea559b70c5dbf6",
+        "actual": "7c05976fcea259471202a5bc2c02e2c9b9252446cf56d34e6fea559b70c5dbf6",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/supplied-prompt.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/supplied-protocol.md",
+        "expected": "f0f511588d61f80dfddf2c28150c2e87b84d14145ee66d91f91ba8f30cd85658",
+        "actual": "f0f511588d61f80dfddf2c28150c2e87b84d14145ee66d91f91ba8f30cd85658",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/supplied-protocol.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/trial-worker.mjs",
+        "expected": "ddf3ec03bf5eecc712af7fdc07f03bb156a04937e9b61f12038ff5a0d9cf3b23",
+        "actual": "ddf3ec03bf5eecc712af7fdc07f03bb156a04937e9b61f12038ff5a0d9cf3b23",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/trial-worker.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/unpack-baseline.py",
+        "expected": "65039eb97520d63e7a187802bd20d2f4b4f615b83625381820e67f563a6edcff",
+        "actual": "65039eb97520d63e7a187802bd20d2f4b4f615b83625381820e67f563a6edcff",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/unpack-baseline.py",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/validate-corpus.mjs",
+        "expected": "667dd6d9e07e070ee12374b7abeb8a3a796ae8c4146e5c1b10057ed5d65fc342",
+        "actual": "667dd6d9e07e070ee12374b7abeb8a3a796ae8c4146e5c1b10057ed5d65fc342",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/validate-corpus.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/validate-tasks.mjs",
+        "expected": "c95b8d78ce515feb539ec4b9746466bc44655f6760c96d45992b33594752d60b",
+        "actual": "c95b8d78ce515feb539ec4b9746466bc44655f6760c96d45992b33594752d60b",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/validate-tasks.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/verify-control-archives.mjs",
+        "expected": "f9301bb47096c1e5f54773a5e0891652edf6dc60df87fe45bc62359ff5def5ee",
+        "actual": "f9301bb47096c1e5f54773a5e0891652edf6dc60df87fe45bc62359ff5def5ee",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/verify-control-archives.mjs",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/visual-judge-guide.md",
+        "expected": "d2acfb2c12ce9af668860309c394ca1845793265c01a49db76fa680e6fe81adc",
+        "actual": "d2acfb2c12ce9af668860309c394ca1845793265c01a49db76fa680e6fe81adc",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/visual-judge-guide.md",
+        "manifestHashMatchesSeal": true
+      },
+      {
+        "path": "evaluation/frozen-development/visual-judgment.schema.json",
+        "expected": "ed30834ea750855a33e6135a7cb508bd1947525679c4bcf7cb4f53fba4bd2962",
+        "actual": "ed30834ea750855a33e6135a7cb508bd1947525679c4bcf7cb4f53fba4bd2962",
+        "exists": true,
+        "matches": true,
+        "originalPath": "evaluation/visual-judgment.schema.json",
+        "manifestHashMatchesSeal": true
+      }
+    ],
+    "coversAllSealedFiles": true,
+    "allMatchSeal": true
+  },
+  "postSealChanges": [
+    {
+      "path": "evaluation/enrich-inventory-development.py",
+      "frozenCopy": "evaluation/frozen-development/enrich-inventory-development.py",
+      "frozenSha256": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+      "currentSha256": "7fa81c6b349aa26e1c3b57a878ff6959f02e04c752c14d60fd4ddc8d1d2d5b21",
+      "classification": "Reporting-only denominator literal clarification",
+      "diff": "--- sealed\n+++ current\n@@ -53,7 +53,7 @@\n             'dispatch_proposal':'Direction/format -> source rebuild. Bounded warm repair remains a diagnostic on this job.'}\n     if rid in ['ACT-TIDY','ACT-PREVIEW-TIDY','LAY-MODE','LAY-WARM-START','UI-WARM-START','ACT-REFLOW-GROUP']:\n         row['measured_edit_evidence']=[r for r in edits if r['stratum']=='warm-action']\n-        row['editing_applicability']='Applicable E warm jobs exclude requested global reflow; all three tested policies45/49 valid in development. Their raw60-job table also includes11 diagnostic direction jobs.'\n+        row['editing_applicability']='Applicable E warm jobs exclude requested global reflow; all three policies are33/37 valid on ordinary local edits plus12/12 unchanged color controls (45/49 total). Their raw60-job table also includes11 diagnostic direction jobs.'\n     if rid=='LAY-ORDERING':\n         row['replacement']='Hide ineffective cold-source ordering choice; retain warm ordering in Advanced. Cold silence cannot justify removing the implementation.'\n     if rid=='RTE-CORNER-RADIUS':\n"
+    },
+    {
+      "path": "evaluation/prepare-replay.py",
+      "frozenCopy": "evaluation/frozen-development/prepare-replay.py",
+      "frozenSha256": "7073ec5340520200f87bdf6d8ba2ba3afc853c30abc2e9fd27f7217bd14f5685",
+      "currentSha256": "e4d6e178be11757ed50004c40839067d9cc8f498c99556ff980fe571170d89ca",
+      "classification": "Post-seal replay integration: stage coverage, dependency ordering, analysis commands and visual request copying",
+      "diff": "--- sealed\n+++ current\n@@ -14,6 +14,10 @@\n     if(root/'data/analysis/development'/name).exists():shutil.copy2(root/'data/analysis/development'/name,target/'data/analysis/development'/name)\n for name in ['routing-policy-proposal.json']:\n     if(root/'data/analysis'/name).exists():shutil.copy2(root/'data/analysis'/name,target/'data/analysis'/name)\n+for file in (root/'data').glob('visual-pairs-*.json'):\n+    shutil.copy2(file,target/'data'/file.name)\n+# Pair identities are reproducible render requests. Original judgments are not\n+# copied into a fresh measurement directory as though they judged new renders.\n protocol=json.loads((target/'data/protocol-freeze.json').read_text())\n protocol['replayOfAssignmentStarted']=protocol['assignmentStarted']\n protocol['assignmentStarted']=datetime.datetime.now(datetime.timezone.utc).isoformat()\n"
+    },
+    {
+      "path": "evaluation/replay-all.sh",
+      "frozenCopy": "evaluation/frozen-development/replay-all.sh",
+      "frozenSha256": "1550f7e69bf575e319bea66223b2892e88b8f9ac0b45f402f080501de55d956f",
+      "currentSha256": "0a05334401be1bc47484602674d15304caf9a30c6143e17f15ff6f666cbf9984",
+      "classification": "Post-seal replay integration: stage coverage, dependency ordering, analysis commands and visual request copying",
+      "diff": "--- sealed\n+++ current\n@@ -13,6 +13,8 @@\n run_stage interactions-layout\n run_stage settings-warm\n run_stage network-direction\n+python3 evaluation/analyze-portfolio.py --phase edit-predictions --split development\n+python3 evaluation/build-edit-tasks.py --policies\n run_stage edits-current-development\n run_stage edits-states-development\n run_stage edits-warm-development\n@@ -23,17 +25,32 @@\n run_stage timing-development 1\n run_stage layout-control-ablation\n run_stage warm-targeted\n+run_stage optional-scale\n # The delivered policy is already frozen; no fitting occurs after the following boundary.\n run_stage screen-heldout\n run_stage documented-default-heldout\n run_stage selected-presets-heldout\n+python3 evaluation/analyze-portfolio.py --phase edit-predictions --split heldout\n+python3 evaluation/build-edit-tasks.py --policies\n run_stage edits-current-heldout\n run_stage edits-states-heldout\n run_stage edits-warm-heldout\n run_stage edits-policies-heldout\n+run_stage routing-current-heldout\n+run_stage joint-heldout\n node evaluation/analyze-validation.mjs\n python3 evaluation/analyze-controls.py\n python3 evaluation/layout-control-ablation.py --phase analyze\n+python3 evaluation/analyze-contexts.py\n+python3 evaluation/analyze-edits.py --split development\n python3 evaluation/analyze-portfolio.py --phase heldout\n python3 evaluation/analyze-dependencies.py --split heldout\n+python3 evaluation/analyze-family-tails.py --split development\n+python3 evaluation/analyze-family-tails.py --split heldout\n+python3 evaluation/analyze-edits.py --split heldout --allow-heldout-after-freeze\n+python3 evaluation/analyze-heldout-routing.py --analyze --allow-heldout-after-freeze\n+python3 evaluation/plot-portfolio.py --split heldout\n node evaluation/audit-result-archives.mjs --heldout\n+node evaluation/audit-cell-access.mjs\n+node evaluation/audit-cell-access.mjs --heldout\n+python3 evaluation/summarize-execution.py\n"
+    }
+  ],
+  "frozenDevelopmentStageChecks": [
+    {
+      "stage": "documented-default-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "edits-current-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "edits-policies-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "edits-states-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "edits-warm-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "identity-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "interactions-layout",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "interactions-routing",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "joint-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "layout-control-ablation",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "network-direction",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "optional-scale",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "prepare-routing",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "sanity",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "screen-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "selected-presets-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "settings-layout",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "settings-routing",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "settings-warm",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "timing-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "tuning-development",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    },
+    {
+      "stage": "warm-targeted",
+      "taskHashMatches": true,
+      "resultHashMatches": true,
+      "taskCountMatches": true,
+      "canonicalCountMatches": true
+    }
+  ],
+  "baseline": {
+    "commit": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+    "trackedFiles": 451,
+    "missing": [],
+    "changed": []
+  },
+  "policy": {
+    "frozen": true,
+    "frozenAt": "2026-11-01T23:58:46.719982+00:00",
+    "sha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+    "sidecarMatches": true
+  },
+  "heldoutRunProvenanceOnly": [
+    {
+      "runId": "documented-default-heldout",
+      "started": "2026-11-02T00:16:43.346Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "planned": 23,
+      "workers": 3,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "edits-current-heldout",
+      "started": "2026-11-02T00:16:43.832Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996",
+      "planned": 60,
+      "workers": 1,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "edits-policies-heldout",
+      "started": "2026-11-02T00:22:39.948Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+      "planned": 120,
+      "workers": 1,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "edits-states-heldout",
+      "started": "2026-11-02T00:17:45.888Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c",
+      "planned": 12,
+      "workers": 1,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "edits-warm-heldout",
+      "started": "2026-11-02T00:18:03.162Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+      "planned": 180,
+      "workers": 1,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "routing-current-heldout",
+      "started": "2026-11-02T00:22:12.546Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+      "planned": 72,
+      "workers": 3,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "screen-heldout",
+      "started": "2026-11-02T00:02:05.635Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "planned": 599,
+      "workers": 3,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    },
+    {
+      "runId": "selected-presets-heldout",
+      "started": "2026-11-02T00:17:27.717Z",
+      "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+      "taskSha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "planned": 207,
+      "workers": 3,
+      "startedAfterFreeze": true,
+      "policyHashMatches": true
+    }
+  ],
+  "reportingAmendment": {
+    "classification": "Reporting-only denominator clarification; no policy, metric, formula, selection, or raw-outcome change",
+    "freeze_at": "2026-11-01T23:58:46.719982+00:00",
+    "modified_file": "evaluation/enrich-inventory-development.py",
+    "filesystem_mtime_utc": "2026-11-01T23:59:19.822573+00:00",
+    "timestamp_caution": "Filesystem modification timestamp, not a separate signed event log.",
+    "old_literal": "Applicable E warm jobs exclude requested global reflow; all three tested policies45/49 valid in development. Their raw60-job table also includes11 diagnostic direction jobs.",
+    "new_literal": "Applicable E warm jobs exclude requested global reflow; all three policies are33/37 valid on ordinary local edits plus12/12 unchanged color controls (45/49 total). Their raw60-job table also includes11 diagnostic direction jobs.",
+    "frozen_sha256": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+    "current_sha256": "7fa81c6b349aa26e1c3b57a878ff6959f02e04c752c14d60fd4ddc8d1d2d5b21",
+    "reconstructed_before_matches_frozen_hash": true,
+    "preserved_before": "evaluation/reporting-amendments/enrich-inventory-development.pre-freeze.py",
+    "preserved_after": "evaluation/reporting-amendments/enrich-inventory-development.post-freeze.py",
+    "independentBeforeHashMatches": true,
+    "independentAfterHashMatches": true,
+    "onlyDeclaredLiteralChanged": true
+  },
+  "nestedCalls": {
+    "layout": {
+      "sumKnown": 5710,
+      "rowsWithNumericValues": 6675,
+      "rowsWithoutNumericValues": 39,
+      "scope": "Canonical development rows only; incomplete lower-level accounting, not distinct trials"
+    },
+    "router": {
+      "sumKnown": 3038,
+      "rowsWithNumericValues": 4241,
+      "rowsWithoutNumericValues": 2473,
+      "scope": "Canonical development rows only; incomplete lower-level accounting, not distinct trials"
+    }
+  },
+  "ancillary": {
+    "engineLayout": {
+      "topLevelCandidateScenarios": 100,
+      "layoutApiCalls": 99,
+      "routingApiCalls": 57,
+      "assertions": 195,
+      "broadCasesIncluded": 55,
+      "source": "baseline/tests/engine-layout.mjs",
+      "evidence": "data/logs/access-engine-test.log"
+    },
+    "sculpt": {
+      "journeyCalls": 15,
+      "dabCalls": 111,
+      "topLevelInvocations": 126,
+      "nestedLayoutCalls": 15,
+      "passedAssertions": 54,
+      "source": "baseline/tests/engine-sculpt.mjs",
+      "evidence": "data/sculpt-run-manifest.json",
+      "distinctConfigurations": "Not instrumented; repeated dabs/journeys included"
+    },
+    "historical": {
+      "sourceConfigurations": 45,
+      "cliCompilations": 135,
+      "nestedApiCalls": null,
+      "evidence": "data/historical-audit/aggregate.json"
+    },
+    "calibration": {
+      "totalFixtures": 20,
+      "coreFixtures": 18,
+      "visibilityFixtures": 2,
+      "coreAnalyticalRecords": 16,
+      "coreActualRouterOutputRecords": 2,
+      "cleanCoreActualRouterCalls": 3,
+      "visibilityRouterCalls": 0,
+      "layoutApiCalls": 0,
+      "source": "data/calibration/metric-calibration.json",
+      "extraCall": "The third router call creates the translation comparison baseline."
+    },
+    "productionSanity": {
+      "savedExamples": 4,
+      "evidence": "data/calibration/production-sanity.json",
+      "exploratorySessionTotal": null
+    },
+    "browser": {
+      "layoutProofExplicitCliInspections": 8,
+      "fileProofExplicitCliInspections": 4,
+      "totalEventDrivenApiCalls": null,
+      "distinctGeometryConfigurations": null,
+      "layoutChecks": "15/15",
+      "fileChecks": "22/23",
+      "limitation": "Browser compile/compare/brush/event-driven activity was not instrumented."
+    },
+    "generalUnitSuite": {
+      "engineCalls": null,
+      "distinctGeometryConfigurations": null,
+      "limitation": "Assertions and test outcomes do not bound production invocations."
+    },
+    "boundedBucketCharge": 278,
+    "boundedBucketChargeMeaning": "Conservative scenario-invocation charge for these five listed buckets only, not a complete or deduplicated ancillary total.",
+    "exploratoryCalls": "Unmetered; do not infer a complete total from final artifacts or successful final invocations.",
+    "blanket500BoundCertified": false,
+    "globalApiCallLimitCertified": false
+  },
+  "calibrationErratum": "Supersedes frozen audit-report.md calibration accounting: 20 fixtures =18 core +2 visibility; 16 core analytical records, two actual-router output records, three clean core router invocations. Four saved production sanity examples. Earlier 20-analytical/15-router-total statements are withdrawn.",
+  "certification": {
+    "registeredAndProjectedMainWithinCap": true,
+    "allDevelopmentPlannedTrialsHaveTerminalResults": true,
+    "registeredMainPlusReserved500Within12000": true,
+    "actualAllSessionDistinctGeometryTrialsAtMost12000": "Not fully certifiable from available records: browser/unit/exploratory geometry was not exhaustively counted. No evidence of an exceedance was identified.",
+    "actualAllSessionApiCallsAtMost12000": "Not certified, and not the user's stated counting unit."
+  },
+  "remainingGates": [
+    "Materialize the 120 already prescribed heldout cold-policy edit tasks if absent; reconcile final registration.",
+    "Complete heldout execution and outcome audit after authorized access; no heldout completion or acceptance claim is made here.",
+    "Complete heldout blind review, clustered uncertainty, acceptance gates, and final downloadable bundle checks."
+  ]
+}

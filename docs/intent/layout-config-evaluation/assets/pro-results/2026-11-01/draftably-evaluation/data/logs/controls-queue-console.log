@@ -1,0 +1,195 @@
+{"event":"prerequisite-complete","after":"settings-layout","at":"2026-11-01T23:31:46.789Z"}
+{"at":"2026-11-01T23:31:46.811Z","runId":"interactions-layout","event":"start","started":"2026-11-01T23:31:46.810Z","node":"v24.22.1","platform":"linux","workers":1,"planned":96,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"1fd17300135651d15aeb9651e056843e5e66259c5ed7c2f61b0dbc8203248298"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:31:47.665Z","runId":"interactions-layout","event":"progress","complete":20,"total":96,"last":"D-lgrid-presentation-03-aspect-0p75-fold-never","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:31:48.323Z","runId":"interactions-layout","event":"progress","complete":40,"total":96,"last":"D-lgrid-hierarchies-01-rankGap-100-nodeGap-12","status":"ok","elapsedSeconds":2}
+{"at":"2026-11-01T23:31:50.429Z","runId":"interactions-layout","event":"progress","complete":60,"total":96,"last":"D-lgrid-hierarchies-02-rankGap-100-nodeGap-48","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:31:53.004Z","runId":"interactions-layout","event":"progress","complete":80,"total":96,"last":"D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-2","status":"ok","elapsedSeconds":6}
+{"at":"2026-11-01T23:31:54.547Z","runId":"interactions-layout","event":"complete","started":"2026-11-01T23:31:46.810Z","node":"v24.22.1","platform":"linux","workers":1,"planned":96,"priorCompleted":0,"executed":96,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"1fd17300135651d15aeb9651e056843e5e66259c5ed7c2f61b0dbc8203248298","finished":"2026-11-01T23:31:54.540Z","elapsedSeconds":7.73,"persistedDistinct":96}
+{"at":"2026-11-01T23:31:54.565Z","runId":"settings-warm","event":"start","started":"2026-11-01T23:31:54.564Z","node":"v24.22.1","platform":"linux","workers":1,"planned":444,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:31:58.160Z","runId":"settings-warm","event":"progress","complete":20,"total":444,"last":"D-warm-disconnected-01-maxMove-48","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:32:01.673Z","runId":"settings-warm","event":"progress","complete":40,"total":444,"last":"D-warm-dags-03-stability-0","status":"ok","elapsedSeconds":7}
+{"at":"2026-11-01T23:32:04.367Z","runId":"settings-warm","event":"progress","complete":60,"total":444,"last":"D-warm-routing-01-stability-100","status":"ok","elapsedSeconds":10}
+{"at":"2026-11-01T23:32:05.354Z","runId":"settings-warm","event":"progress","complete":80,"total":444,"last":"D-warm-hierarchies-01-iterations-32","status":"ok","elapsedSeconds":11}
+{"at":"2026-11-01T23:32:07.820Z","runId":"settings-warm","event":"progress","complete":100,"total":444,"last":"D-warm-presentation-01-iterations-8","status":"ok","elapsedSeconds":13}
+{"at":"2026-11-01T23:32:09.859Z","runId":"settings-warm","event":"progress","complete":120,"total":444,"last":"D-warm-networks-01-respectDirection-False","status":"ok","elapsedSeconds":15}
+{"at":"2026-11-01T23:32:11.773Z","runId":"settings-warm","event":"progress","complete":140,"total":444,"last":"D-warm-architecture-03-respectManual-True","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:32:17.254Z","runId":"settings-warm","event":"progress","complete":160,"total":444,"last":"D-warm-containers-01-growContainers-True","status":"ok","elapsedSeconds":23}
+{"at":"2026-11-01T23:32:35.338Z","runId":"settings-warm","event":"progress","complete":179,"total":444,"last":"D-warm-architecture-04-growContainers-False","status":"failed","elapsedSeconds":41}
+{"at":"2026-11-01T23:32:35.339Z","runId":"settings-warm","event":"progress","complete":180,"total":444,"last":"D-warm-architecture-04-growContainers-True","status":"failed","elapsedSeconds":41}
+{"at":"2026-11-01T23:32:39.500Z","runId":"settings-warm","event":"progress","complete":200,"total":444,"last":"D-warm-presentation-01-ordering-crossings","status":"ok","elapsedSeconds":45}
+{"at":"2026-11-01T23:32:41.346Z","runId":"settings-warm","event":"progress","complete":220,"total":444,"last":"D-warm-networks-01-maxIterations-320","status":"ok","elapsedSeconds":47}
+{"at":"2026-11-01T23:32:46.886Z","runId":"settings-warm","event":"progress","complete":240,"total":444,"last":"D-warm-pipelines-01-maxIterations-1200","status":"ok","elapsedSeconds":52}
+{"at":"2026-11-01T23:32:46.918Z","runId":"settings-warm","event":"progress","complete":242,"total":444,"last":"D-warm-architecture-03-scope-selection","status":"failed","elapsedSeconds":52}
+{"at":"2026-11-01T23:32:46.920Z","runId":"settings-warm","event":"progress","complete":243,"total":444,"last":"D-warm-architecture-03-scope-neighbourhood","status":"failed","elapsedSeconds":52}
+{"at":"2026-11-01T23:32:47.283Z","runId":"settings-warm","event":"progress","complete":246,"total":444,"last":"D-warm-containers-01-scope-selection","status":"failed","elapsedSeconds":53}
+{"at":"2026-11-01T23:32:47.284Z","runId":"settings-warm","event":"progress","complete":247,"total":444,"last":"D-warm-containers-01-scope-neighbourhood","status":"failed","elapsedSeconds":53}
+{"at":"2026-11-01T23:32:47.363Z","runId":"settings-warm","event":"progress","complete":254,"total":444,"last":"D-warm-routing-01-scope-selection","status":"failed","elapsedSeconds":53}
+{"at":"2026-11-01T23:32:47.365Z","runId":"settings-warm","event":"progress","complete":255,"total":444,"last":"D-warm-routing-01-scope-neighbourhood","status":"failed","elapsedSeconds":53}
+{"at":"2026-11-01T23:32:48.303Z","runId":"settings-warm","event":"progress","complete":259,"total":444,"last":"D-warm-architecture-01-scope-neighbourhood","status":"failed","elapsedSeconds":54}
+{"at":"2026-11-01T23:32:48.314Z","runId":"settings-warm","event":"progress","complete":260,"total":444,"last":"D-warm-architecture-01-scope-container","status":"ok","elapsedSeconds":54}
+{"at":"2026-11-01T23:32:49.156Z","runId":"settings-warm","event":"progress","complete":263,"total":444,"last":"D-warm-containers-02-scope-neighbourhood","status":"failed","elapsedSeconds":55}
+{"at":"2026-11-01T23:32:49.822Z","runId":"settings-warm","event":"progress","complete":267,"total":444,"last":"D-warm-authored-02-scope-neighbourhood","status":"failed","elapsedSeconds":55}
+{"at":"2026-11-01T23:32:52.399Z","runId":"settings-warm","event":"progress","complete":271,"total":444,"last":"D-warm-routing-02-scope-neighbourhood","status":"failed","elapsedSeconds":58}
+{"at":"2026-11-01T23:32:53.917Z","runId":"settings-warm","event":"progress","complete":275,"total":444,"last":"D-warm-architecture-02-scope-neighbourhood","status":"failed","elapsedSeconds":59}
+{"at":"2026-11-01T23:32:55.712Z","runId":"settings-warm","event":"progress","complete":278,"total":444,"last":"D-warm-containers-03-scope-selection","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.714Z","runId":"settings-warm","event":"progress","complete":279,"total":444,"last":"D-warm-containers-03-scope-neighbourhood","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.757Z","runId":"settings-warm","event":"progress","complete":280,"total":444,"last":"D-warm-containers-03-scope-container","status":"ok","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.923Z","runId":"settings-warm","event":"progress","complete":283,"total":444,"last":"D-warm-authored-01-scope-neighbourhood","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.935Z","runId":"settings-warm","event":"progress","complete":285,"total":444,"last":"D-warm-architecture-04-scope-all","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.936Z","runId":"settings-warm","event":"progress","complete":286,"total":444,"last":"D-warm-architecture-04-scope-selection","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.936Z","runId":"settings-warm","event":"progress","complete":287,"total":444,"last":"D-warm-architecture-04-scope-neighbourhood","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:55.937Z","runId":"settings-warm","event":"progress","complete":288,"total":444,"last":"D-warm-architecture-04-scope-container","status":"failed","elapsedSeconds":61}
+{"at":"2026-11-01T23:32:56.099Z","runId":"settings-warm","event":"progress","complete":300,"total":444,"last":"D-warm-networks-01-fixedIds-['selected_region']","status":"ok","elapsedSeconds":62}
+{"at":"2026-11-01T23:32:56.567Z","runId":"settings-warm","event":"progress","complete":320,"total":444,"last":"C-repair-pipelines-03-layered","status":"ok","elapsedSeconds":62}
+{"at":"2026-11-01T23:32:58.465Z","runId":"settings-warm","event":"progress","complete":340,"total":444,"last":"C-repair-hierarchies-01-force","status":"ok","elapsedSeconds":64}
+{"at":"2026-11-01T23:33:04.221Z","runId":"settings-warm","event":"progress","complete":360,"total":444,"last":"C-repair-cycles-02-tidy","status":"ok","elapsedSeconds":70}
+{"at":"2026-11-01T23:33:06.800Z","runId":"settings-warm","event":"progress","complete":380,"total":444,"last":"C-repair-disconnected-01-boundary-align","status":"ok","elapsedSeconds":72}
+{"at":"2026-11-01T23:33:13.838Z","runId":"settings-warm","event":"progress","complete":400,"total":444,"last":"C-repair-routing-01-separate","status":"ok","elapsedSeconds":79}
+{"at":"2026-11-01T23:33:16.622Z","runId":"settings-warm","event":"progress","complete":420,"total":444,"last":"C-repair-presentation-01-tree","status":"ok","elapsedSeconds":82}
+{"at":"2026-11-01T23:33:17.019Z","runId":"settings-warm","event":"progress","complete":440,"total":444,"last":"C-repair-pipelines-01-flow","status":"ok","elapsedSeconds":82}
+{"at":"2026-11-01T23:33:17.184Z","runId":"settings-warm","event":"complete","started":"2026-11-01T23:31:54.564Z","node":"v24.22.1","platform":"linux","workers":1,"planned":444,"priorCompleted":0,"executed":444,"failed":20,"timedOut":0,"skipped":0,"taskSha256":"9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e","finished":"2026-11-01T23:33:17.160Z","elapsedSeconds":82.596,"persistedDistinct":444}
+{"at":"2026-11-01T23:33:17.200Z","runId":"network-direction","event":"start","started":"2026-11-01T23:33:17.200Z","node":"v24.22.1","platform":"linux","workers":1,"planned":96,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"495ff90cd7ac93a8dcb096a9d420b0b92b980644b1d86ac286cd7ee6f1a928fd"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:33:22.141Z","runId":"network-direction","event":"progress","complete":20,"total":96,"last":"D-network-cycles-03-stress-False","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:33:39.044Z","runId":"network-direction","event":"progress","complete":40,"total":96,"last":"D-network-networks-01-grid-False","status":"ok","elapsedSeconds":22}
+{"at":"2026-11-01T23:34:02.320Z","runId":"network-direction","event":"progress","complete":57,"total":96,"last":"D-network-networks-04-force-True","status":"timed_out","elapsedSeconds":45}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:34:17.819Z","runId":"network-direction","event":"progress","complete":58,"total":96,"last":"D-network-networks-04-force-False","status":"timed_out","elapsedSeconds":61}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:34:33.356Z","runId":"network-direction","event":"progress","complete":59,"total":96,"last":"D-network-networks-04-stress-True","status":"timed_out","elapsedSeconds":76}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:34:48.820Z","runId":"network-direction","event":"progress","complete":60,"total":96,"last":"D-network-networks-04-stress-False","status":"timed_out","elapsedSeconds":92}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:35:04.305Z","runId":"network-direction","event":"progress","complete":61,"total":96,"last":"D-network-networks-04-compound-spring-True","status":"timed_out","elapsedSeconds":107}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:35:19.810Z","runId":"network-direction","event":"progress","complete":62,"total":96,"last":"D-network-networks-04-compound-spring-False","status":"timed_out","elapsedSeconds":123}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:35:35.363Z","runId":"network-direction","event":"progress","complete":63,"total":96,"last":"D-network-networks-04-grid-True","status":"timed_out","elapsedSeconds":138}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:35:50.846Z","runId":"network-direction","event":"progress","complete":64,"total":96,"last":"D-network-networks-04-grid-False","status":"timed_out","elapsedSeconds":154}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:35:53.059Z","runId":"network-direction","event":"progress","complete":80,"total":96,"last":"D-network-disconnected-02-grid-False","status":"ok","elapsedSeconds":156}
+{"at":"2026-11-01T23:36:19.024Z","runId":"network-direction","event":"complete","started":"2026-11-01T23:33:17.200Z","node":"v24.22.1","platform":"linux","workers":1,"planned":96,"priorCompleted":0,"executed":96,"failed":0,"timedOut":8,"skipped":0,"taskSha256":"495ff90cd7ac93a8dcb096a9d420b0b92b980644b1d86ac286cd7ee6f1a928fd","finished":"2026-11-01T23:36:19.018Z","elapsedSeconds":181.818,"persistedDistinct":96}

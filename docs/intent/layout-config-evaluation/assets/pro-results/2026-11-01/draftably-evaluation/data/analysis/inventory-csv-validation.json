@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-02T00:55:08.058Z",
+  "file": "inventory.csv",
+  "sha256": "9b325608b96d32249bc70504ac3e38184a293e33e76eb355d4db81abbd65b7d3",
+  "engine": "@oai/artifact-tool Workbook.fromCSV; read-only; no Excel export or alteration",
+  "records": 175,
+  "columns": 35,
+  "uniqueRecommendationIds": 175,
+  "duplicateIds": [],
+  "missingHeaders": [],
+  "badDecisions": [],
+  "emptyRequired": [],
+  "decisionCounts": {
+    "Keep": 74,
+    "Merge": 18,
+    "Automate": 21,
+    "Hide": 61,
+    "Remove": 1
+  },
+  "inspection": "{\"kind\":\"table\",\"sheet\":\"Inventory\",\"address\":\"A1:E4\",\"rows\":4,\"cols\":5,\"values\":[[\"recommendation_id\",\"category\",\"name\",\"user_job\",\"surfaces\"],[\"ENG-COMPOUND-FLOW\",\"engine\",\"Compound flow\",\"Directional nested architecture\",\"Layout lab Approach; Compare; JSON engine API; source engine=\"],[\"ENG-BOUNDARY-ALIGN\",\"engine\",\"Boundary alignment\",\"Straighten cross-container endpoints with small warm moves\",\"Layout lab Approach; Compare; JSON engine API; source engine=\"],[\"ENG-COMPOUND-SPRING\",\"engine\",\"Compound spring\",\"Compact nested systems without rigid ranks\",\"Layout lab Approach; Compare; JSON engine API; source engine=\"]]}",
+  "passed": true
+}

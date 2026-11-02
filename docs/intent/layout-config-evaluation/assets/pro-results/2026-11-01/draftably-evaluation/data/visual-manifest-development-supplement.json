@@ -1,0 +1,32 @@
+[
+  {
+    "id": "P061",
+    "split": "development-supplement",
+    "family": "containers",
+    "task": "Trace connections through the nested container structure while preserving the existing drawing.",
+    "png": "renders/blinded/P061.png",
+    "svgA": "renders/blinded/P061-A.svg",
+    "svgB": "renders/blinded/P061-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P062",
+    "split": "development-supplement",
+    "family": "architecture",
+    "task": "Explain the architecture and follow connections between named components and groups.",
+    "png": "renders/blinded/P062.png",
+    "svgA": "renders/blinded/P062-A.svg",
+    "svgB": "renders/blinded/P062-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P063",
+    "split": "development-supplement",
+    "family": "cycles",
+    "task": "Understand the relationships and feedback loops without imposing an unnecessary one-way reading order.",
+    "png": "renders/blinded/P063.png",
+    "svgA": "renders/blinded/P063-A.svg",
+    "svgB": "renders/blinded/P063-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  }
+]

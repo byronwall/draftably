@@ -1,0 +1,31 @@
+policy,profile,acceptableCommonBases,feasibleCommonBases,allCommonBases,relativeCoverage,absoluteCoverage,relative95Pass,oracle
+Full measured pool — Reference oracle,readable,12,12,14,1.0,0.8571428571428571,True,True
+Full measured pool — Reference oracle,compact,12,12,14,1.0,0.8571428571428571,True,True
+Full measured pool — Reference oracle,traceable,12,12,14,1.0,0.8571428571428571,True,True
+Full measured pool — Reference oracle,stable,12,12,14,1.0,0.8571428571428571,True,True
+Full measured pool — Reference oracle,specialist,12,12,14,1.0,0.8571428571428571,True,True
+Six engines + native recipes — Availability oracle,readable,11,12,14,0.9166666666666666,0.7857142857142857,False,True
+Six engines + native recipes — Availability oracle,compact,12,12,14,1.0,0.8571428571428571,True,True
+Six engines + native recipes — Availability oracle,traceable,11,12,14,0.9166666666666666,0.7857142857142857,False,True
+Six engines + native recipes — Availability oracle,stable,10,12,14,0.8333333333333334,0.7142857142857143,False,True
+Six engines + native recipes — Availability oracle,specialist,10,12,14,0.8333333333333334,0.7142857142857143,False,True
+11 configurations + native recipes — Availability oracle,readable,10,12,14,0.8333333333333334,0.7142857142857143,False,True
+11 configurations + native recipes — Availability oracle,compact,12,12,14,1.0,0.8571428571428571,True,True
+11 configurations + native recipes — Availability oracle,traceable,10,12,14,0.8333333333333334,0.7142857142857143,False,True
+11 configurations + native recipes — Availability oracle,stable,8,12,14,0.6666666666666666,0.5714285714285714,False,True
+11 configurations + native recipes — Availability oracle,specialist,8,12,14,0.6666666666666666,0.5714285714285714,False,True
+Frozen graph-feature selector — With hard-validity fallback,readable,5,12,14,0.4166666666666667,0.35714285714285715,False,False
+Frozen graph-feature selector — With hard-validity fallback,compact,4,12,14,0.3333333333333333,0.2857142857142857,False,False
+Frozen graph-feature selector — With hard-validity fallback,traceable,3,12,14,0.25,0.21428571428571427,False,False
+Frozen graph-feature selector — With hard-validity fallback,stable,3,12,14,0.25,0.21428571428571427,False,False
+Frozen graph-feature selector — With hard-validity fallback,specialist,3,12,14,0.25,0.21428571428571427,False,False
+Best fixed global: force RIGHT — With hard-validity fallback,readable,3,12,14,0.25,0.21428571428571427,False,False
+Best fixed global: force RIGHT — With hard-validity fallback,compact,2,12,14,0.16666666666666666,0.14285714285714285,False,False
+Best fixed global: force RIGHT — With hard-validity fallback,traceable,4,12,14,0.3333333333333333,0.2857142857142857,False,False
+Best fixed global: force RIGHT — With hard-validity fallback,stable,3,12,14,0.25,0.21428571428571427,False,False
+Best fixed global: force RIGHT — With hard-validity fallback,specialist,3,12,14,0.25,0.21428571428571427,False,False
+Current authored source — Existing first-render behavior,readable,3,12,14,0.25,0.21428571428571427,False,False
+Current authored source — Existing first-render behavior,compact,3,12,14,0.25,0.21428571428571427,False,False
+Current authored source — Existing first-render behavior,traceable,2,12,14,0.16666666666666666,0.14285714285714285,False,False
+Current authored source — Existing first-render behavior,stable,2,12,14,0.16666666666666666,0.14285714285714285,False,False
+Current authored source — Existing first-render behavior,specialist,2,12,14,0.16666666666666666,0.14285714285714285,False,False

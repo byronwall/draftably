@@ -1,0 +1,98 @@
+diagram "Hierarchies evaluation 04" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Owner 0"
+node n1 "Owner 1"
+node n2 "Owner 2"
+node n3 "Owner 3"
+node n4 "Owner 4"
+node n5 "Owner 5"
+node n6 "Owner 6"
+node n7 "Owner 7"
+node n8 "Owner 8"
+node n9 "Owner 9"
+node n10 "Owner 10"
+node n11 "Owner 11"
+node n12 "Owner 12"
+node n13 "Owner 13"
+node n14 "Owner 14"
+node n15 "Owner 15"
+node n16 "Owner 16"
+node n17 "Owner 17"
+node n18 "Owner 18"
+node n19 "Owner 19"
+node n20 "Owner 20"
+node n21 "Owner 21"
+node n22 "Owner 22"
+node n23 "Owner 23"
+node n24 "Owner 24"
+node n25 "Owner 25"
+node n26 "Owner 26"
+node n27 "Owner 27"
+node n28 "Owner 28"
+node n29 "Owner 29"
+node n30 "Owner 30"
+node n31 "Owner 31"
+node n32 "Owner 32"
+node n33 "Owner 33"
+node n34 "Owner 34"
+node n35 "Owner 35"
+node n36 "Owner 36"
+node n37 "Owner 37"
+node n38 "Owner 38"
+node n39 "Owner 39"
+node n40 "Owner 40"
+node n41 "Owner 41"
+node n42 "Owner 42"
+node n43 "Owner 43"
+node n44 "Owner 44"
+node n45 "Owner 45"
+node n46 "Owner 46"
+node n47 "Owner 47"
+edge e0 n0 -> n1
+edge e1 n0 -> n2
+edge e2 n0 -> n3
+edge e3 n1 -> n4
+edge e4 n1 -> n5
+edge e5 n1 -> n6
+edge e6 n2 -> n7
+edge e7 n2 -> n8
+edge e8 n2 -> n9
+edge e9 n3 -> n10
+edge e10 n3 -> n11
+edge e11 n12 -> n13
+edge e12 n12 -> n14
+edge e13 n12 -> n15
+edge e14 n13 -> n16
+edge e15 n13 -> n17
+edge e16 n13 -> n18
+edge e17 n14 -> n19
+edge e18 n14 -> n20
+edge e19 n14 -> n21
+edge e20 n15 -> n22
+edge e21 n15 -> n23
+edge e22 n24 -> n25
+edge e23 n24 -> n26
+edge e24 n24 -> n27
+edge e25 n25 -> n28
+edge e26 n25 -> n29
+edge e27 n25 -> n30
+edge e28 n26 -> n31
+edge e29 n26 -> n32
+edge e30 n26 -> n33
+edge e31 n27 -> n34
+edge e32 n27 -> n35
+edge e33 n36 -> n37
+edge e34 n36 -> n38
+edge e35 n36 -> n39
+edge e36 n37 -> n40
+edge e37 n37 -> n41
+edge e38 n37 -> n42
+edge e39 n38 -> n43
+edge e40 n38 -> n44
+edge e41 n38 -> n45
+edge e42 n39 -> n46
+edge e43 n39 -> n47
+
+layout root flow direction=down gap=48
+

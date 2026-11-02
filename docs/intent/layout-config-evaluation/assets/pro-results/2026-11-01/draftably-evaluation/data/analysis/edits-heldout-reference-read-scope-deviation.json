@@ -1,0 +1,89 @@
+{
+  "recordedAt": "2026-11-02T00:28:07.636347+00:00",
+  "classification": "Post-freeze read-scope deviation; no fitting or policy change",
+  "authorizedTask": "Run completed heldout E analysis with frozen analyze-edits.py",
+  "cause": "Frozen reference index scans all filenames matching *-heldout.jsonl before selecting only task-declared reference IDs. This incidentally ingested the routing72 and partial joint101 files before their joint-all-ready notice.",
+  "frozenCodeUnchanged": true,
+  "analysisCodeSha256": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+  "incidentalCatalogFilesAtAnalysisTime": [
+    {
+      "path": "data/joint-heldout.jsonl",
+      "file_sha256": "c0ba3cab83866c03b59b8a0200aa27aa2397b7adb82bf157e5c950c4e78d2ea2",
+      "attempt_rows": 101,
+      "distinct_terminal_rows": 101,
+      "first_status_counts": {
+        "ok": 84,
+        "timed_out": 17
+      },
+      "all_attempt_status_counts": {
+        "ok": 84,
+        "timed_out": 17
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/routing-current-heldout.jsonl",
+      "file_sha256": "8dcabc3b24a9fe8945648af81fac560f1559cd98bc3cc5692ecd4b43043f9c30",
+      "attempt_rows": 72,
+      "distinct_terminal_rows": 72,
+      "first_status_counts": {
+        "ok": 57,
+        "timed_out": 15
+      },
+      "all_attempt_status_counts": {
+        "ok": 57,
+        "timed_out": 15
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    }
+  ],
+  "effectiveRecords": 480,
+  "uniqueReferenceIds": [
+    "C-heldout-architecture-05-compound-flow-DOWN",
+    "C-heldout-architecture-05-current",
+    "C-heldout-architecture-05-force-RIGHT",
+    "C-heldout-authored-05-current",
+    "C-heldout-authored-05-force-RIGHT",
+    "C-heldout-authored-05-layered-DOWN",
+    "C-heldout-containers-05-current",
+    "C-heldout-containers-05-force-RIGHT",
+    "C-heldout-containers-05-layered-DOWN",
+    "C-heldout-cycles-05-current",
+    "C-heldout-cycles-05-force-RIGHT",
+    "C-heldout-dags-05-current",
+    "C-heldout-dags-05-force-RIGHT",
+    "C-heldout-disconnected-05-current",
+    "C-heldout-disconnected-05-force-RIGHT",
+    "C-heldout-disconnected-05-stress-RIGHT",
+    "C-heldout-hierarchies-05-current",
+    "C-heldout-hierarchies-05-force-RIGHT",
+    "C-heldout-networks-05-current",
+    "C-heldout-networks-05-force-RIGHT",
+    "C-heldout-pipelines-05-current",
+    "C-heldout-pipelines-05-force-RIGHT",
+    "C-heldout-presentation-05-current",
+    "C-heldout-presentation-05-force-RIGHT",
+    "C-heldout-presentation-05-layered-DOWN",
+    "C-heldout-recipes-05-current",
+    "C-heldout-routing-05-current",
+    "C-heldout-routing-05-force-RIGHT",
+    "E-state-architecture-05",
+    "E-state-authored-05",
+    "E-state-containers-05",
+    "E-state-cycles-05",
+    "E-state-dags-05",
+    "E-state-disconnected-05",
+    "E-state-hierarchies-05",
+    "E-state-networks-05",
+    "E-state-pipelines-05",
+    "E-state-presentation-05",
+    "E-state-recipes-05",
+    "E-state-routing-05"
+  ],
+  "incidentalRoutingReferencesUsed": 0,
+  "outcomeSelectionOrRetuning": false,
+  "impact": "None on E estimates: all 480 records use C/G/E-declared references, and no H-joint or H-routing-current canonical ID is used. Preserve this manifest and disclose incidental access; do not rewrite history.",
+  "heldoutRoutingAnalysisModeRun": false
+}

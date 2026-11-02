@@ -1,0 +1,497 @@
+{"event":"prerequisite-complete","after":"timing-development","at":"2026-11-01T23:46:18.660Z"}
+{"at":"2026-11-01T23:46:18.687Z","runId":"layout-control-ablation","event":"start","started":"2026-11-01T23:46:18.686Z","node":"v24.22.1","platform":"linux","workers":3,"policySha256":null,"planned":336,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"2ba8fbdae8b4a3b5fa1485e62e8ab8f0fc3a88f4f36d9c7d8ed627df2ae1adb9"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:46:22.459Z","runId":"layout-control-ablation","event":"progress","complete":20,"total":336,"last":"G-control-hierarchies-03-rankGap-via-node-gap-48","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:46:34.744Z","runId":"layout-control-ablation","event":"progress","complete":22,"total":336,"last":"G-control-dags-04-rankGap-via-node-gap-12","status":"timed_out","elapsedSeconds":16}
+{"at":"2026-11-01T23:46:34.754Z","runId":"layout-control-ablation","event":"progress","complete":23,"total":336,"last":"G-control-dags-04-rankGap-via-node-gap-48","status":"timed_out","elapsedSeconds":16}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:46:37.505Z","runId":"layout-control-ablation","event":"progress","complete":32,"total":336,"last":"G-control-hierarchies-04-rankGap-via-node-gap-48","status":"timed_out","elapsedSeconds":19}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:46:40.192Z","runId":"layout-control-ablation","event":"progress","complete":40,"total":336,"last":"G-control-authored-03-groupGap-via-node-gap-48","status":"ok","elapsedSeconds":22}
+{"at":"2026-11-01T23:46:41.880Z","runId":"layout-control-ablation","event":"progress","complete":60,"total":336,"last":"G-control-dags-02-nodeGap-via-rank-gap-100","status":"ok","elapsedSeconds":23}
+{"at":"2026-11-01T23:46:52.880Z","runId":"layout-control-ablation","event":"progress","complete":65,"total":336,"last":"G-control-architecture-04-groupGap-via-node-gap-12","status":"timed_out","elapsedSeconds":34}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:46:53.071Z","runId":"layout-control-ablation","event":"progress","complete":66,"total":336,"last":"G-control-architecture-04-groupGap-via-node-gap-48","status":"timed_out","elapsedSeconds":34}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:01.137Z","runId":"layout-control-ablation","event":"progress","complete":67,"total":336,"last":"G-control-dags-04-nodeGap-via-rank-gap-24","status":"timed_out","elapsedSeconds":42}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:08.426Z","runId":"layout-control-ablation","event":"progress","complete":75,"total":336,"last":"G-control-dags-04-nodeGap-via-rank-gap-100","status":"timed_out","elapsedSeconds":50}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:11.149Z","runId":"layout-control-ablation","event":"progress","complete":80,"total":336,"last":"G-control-architecture-01-boundaryPull-via-hierarchy-sweeps-4","status":"ok","elapsedSeconds":52}
+{"at":"2026-11-01T23:47:19.938Z","runId":"layout-control-ablation","event":"progress","complete":100,"total":336,"last":"G-control-architecture-01-hierarchySweeps-via-boundary-pull-100","status":"ok","elapsedSeconds":61}
+{"at":"2026-11-01T23:47:30.054Z","runId":"layout-control-ablation","event":"progress","complete":107,"total":336,"last":"G-control-architecture-04-boundaryPull-via-hierarchy-sweeps-1","status":"timed_out","elapsedSeconds":71}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:31.612Z","runId":"layout-control-ablation","event":"progress","complete":108,"total":336,"last":"G-control-architecture-04-boundaryPull-via-hierarchy-sweeps-4","status":"timed_out","elapsedSeconds":73}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:33.860Z","runId":"layout-control-ablation","event":"progress","complete":120,"total":336,"last":"G-control-networks-01-edgeLength-via-alignment-100","status":"ok","elapsedSeconds":75}
+{"at":"2026-11-01T23:47:36.811Z","runId":"layout-control-ablation","event":"progress","complete":137,"total":336,"last":"G-control-architecture-04-hierarchySweeps-via-boundary-pull-0","status":"timed_out","elapsedSeconds":78}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:45.685Z","runId":"layout-control-ablation","event":"progress","complete":138,"total":336,"last":"G-control-architecture-04-hierarchySweeps-via-boundary-pull-100","status":"timed_out","elapsedSeconds":87}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:47.965Z","runId":"layout-control-ablation","event":"progress","complete":140,"total":336,"last":"G-control-cycles-04-edgeLength-via-alignment-100","status":"ok","elapsedSeconds":89}
+{"at":"2026-11-01T23:47:51.705Z","runId":"layout-control-ablation","event":"progress","complete":141,"total":336,"last":"G-control-networks-04-edgeLength-via-alignment-0","status":"timed_out","elapsedSeconds":93}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:52.336Z","runId":"layout-control-ablation","event":"progress","complete":142,"total":336,"last":"G-control-networks-04-edgeLength-via-alignment-100","status":"timed_out","elapsedSeconds":94}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:47:57.906Z","runId":"layout-control-ablation","event":"progress","complete":160,"total":336,"last":"G-control-disconnected-02-repulsion-via-edge-length-144","status":"ok","elapsedSeconds":99}
+{"at":"2026-11-01T23:48:02.969Z","runId":"layout-control-ablation","event":"progress","complete":161,"total":336,"last":"G-control-dags-04-edgeLength-via-alignment-0","status":"timed_out","elapsedSeconds":104}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:07.268Z","runId":"layout-control-ablation","event":"progress","complete":162,"total":336,"last":"G-control-dags-04-edgeLength-via-alignment-100","status":"timed_out","elapsedSeconds":109}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:12.140Z","runId":"layout-control-ablation","event":"progress","complete":180,"total":336,"last":"G-control-pipelines-02-flowStrength-via-rank-gap-100","status":"ok","elapsedSeconds":113}
+{"at":"2026-11-01T23:48:12.910Z","runId":"layout-control-ablation","event":"progress","complete":181,"total":336,"last":"G-control-networks-04-repulsion-via-edge-length-48","status":"timed_out","elapsedSeconds":114}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:18.536Z","runId":"layout-control-ablation","event":"progress","complete":188,"total":336,"last":"G-control-networks-04-repulsion-via-edge-length-144","status":"timed_out","elapsedSeconds":120}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:21.059Z","runId":"layout-control-ablation","event":"progress","complete":200,"total":336,"last":"G-control-pipelines-01-alignment-via-edge-length-144","status":"ok","elapsedSeconds":122}
+{"at":"2026-11-01T23:48:28.777Z","runId":"layout-control-ablation","event":"progress","complete":209,"total":336,"last":"G-control-dags-04-flowStrength-via-rank-gap-24","status":"timed_out","elapsedSeconds":130}
+{"at":"2026-11-01T23:48:28.910Z","runId":"layout-control-ablation","event":"progress","complete":210,"total":336,"last":"G-control-dags-04-flowStrength-via-rank-gap-100","status":"timed_out","elapsedSeconds":130}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:37.900Z","runId":"layout-control-ablation","event":"progress","complete":213,"total":336,"last":"G-control-dags-04-alignment-via-edge-length-48","status":"timed_out","elapsedSeconds":139}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:44.382Z","runId":"layout-control-ablation","event":"progress","complete":214,"total":336,"last":"G-control-dags-04-alignment-via-edge-length-144","status":"timed_out","elapsedSeconds":146}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:44.776Z","runId":"layout-control-ablation","event":"progress","complete":215,"total":336,"last":"G-control-architecture-04-alignment-via-edge-length-48","status":"timed_out","elapsedSeconds":146}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:48:47.294Z","runId":"layout-control-ablation","event":"progress","complete":220,"total":336,"last":"G-control-containers-01-compactness-via-edge-length-144","status":"ok","elapsedSeconds":149}
+{"at":"2026-11-01T23:48:53.583Z","runId":"layout-control-ablation","event":"progress","complete":231,"total":336,"last":"G-control-architecture-04-alignment-via-edge-length-144","status":"timed_out","elapsedSeconds":155}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:09.054Z","runId":"layout-control-ablation","event":"progress","complete":237,"total":336,"last":"G-control-architecture-04-compactness-via-edge-length-48","status":"timed_out","elapsedSeconds":170}
+{"at":"2026-11-01T23:49:09.100Z","runId":"layout-control-ablation","event":"progress","complete":238,"total":336,"last":"G-control-architecture-04-compactness-via-edge-length-144","status":"timed_out","elapsedSeconds":170}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:09.681Z","runId":"layout-control-ablation","event":"progress","complete":240,"total":336,"last":"G-control-disconnected-01-gridStrength-via-aspect-2","status":"ok","elapsedSeconds":171}
+{"at":"2026-11-01T23:49:10.414Z","runId":"layout-control-ablation","event":"progress","complete":253,"total":336,"last":"G-control-networks-04-compactness-via-edge-length-48","status":"timed_out","elapsedSeconds":172}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:10.882Z","runId":"layout-control-ablation","event":"progress","complete":260,"total":336,"last":"G-control-dags-03-gridStrength-via-aspect-0p75","status":"ok","elapsedSeconds":172}
+{"at":"2026-11-01T23:49:24.597Z","runId":"layout-control-ablation","event":"progress","complete":273,"total":336,"last":"G-control-networks-04-compactness-via-edge-length-144","status":"timed_out","elapsedSeconds":186}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:27.258Z","runId":"layout-control-ablation","event":"progress","complete":274,"total":336,"last":"G-control-dags-04-ordering-via-node-gap-48","status":"timed_out","elapsedSeconds":189}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:27.667Z","runId":"layout-control-ablation","event":"progress","complete":275,"total":336,"last":"G-control-hierarchies-04-ordering-via-node-gap-48","status":"timed_out","elapsedSeconds":189}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:28.097Z","runId":"layout-control-ablation","event":"progress","complete":280,"total":336,"last":"G-control-pipelines-02-fold-via-aspect-0p75","status":"ok","elapsedSeconds":189}
+{"at":"2026-11-01T23:49:28.689Z","runId":"layout-control-ablation","event":"progress","complete":300,"total":336,"last":"G-control-disconnected-04-aspect-via-grid-strength-100","status":"ok","elapsedSeconds":190}
+{"at":"2026-11-01T23:49:29.633Z","runId":"layout-control-ablation","event":"progress","complete":320,"total":336,"last":"G-control-hierarchies-02-rootId-via-rank-gap-100","status":"ok","elapsedSeconds":191}
+{"at":"2026-11-01T23:49:40.196Z","runId":"layout-control-ablation","event":"progress","complete":332,"total":336,"last":"G-control-routing-04-ordering-via-node-gap-48","status":"timed_out","elapsedSeconds":202}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:47.024Z","runId":"layout-control-ablation","event":"progress","complete":333,"total":336,"last":"G-control-dags-04-rootId-via-rank-gap-24","status":"timed_out","elapsedSeconds":208}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:47.445Z","runId":"layout-control-ablation","event":"progress","complete":334,"total":336,"last":"G-control-dags-04-rootId-via-rank-gap-100","status":"timed_out","elapsedSeconds":209}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:49:55.671Z","runId":"layout-control-ablation","event":"progress","complete":335,"total":336,"last":"G-control-networks-04-rootId-via-rank-gap-24","status":"timed_out","elapsedSeconds":217}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:50:02.617Z","runId":"layout-control-ablation","event":"progress","complete":336,"total":336,"last":"G-control-networks-04-rootId-via-rank-gap-100","status":"timed_out","elapsedSeconds":224}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:50:03.123Z","runId":"layout-control-ablation","event":"complete","started":"2026-11-01T23:46:18.686Z","node":"v24.22.1","platform":"linux","workers":3,"policySha256":null,"planned":336,"priorCompleted":0,"executed":336,"failed":0,"timedOut":34,"skipped":0,"taskSha256":"2ba8fbdae8b4a3b5fa1485e62e8ab8f0fc3a88f4f36d9c7d8ed627df2ae1adb9","finished":"2026-11-01T23:50:03.085Z","elapsedSeconds":224.399,"persistedDistinct":336}

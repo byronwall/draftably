@@ -1,0 +1,18 @@
+{
+  "runId": "optional-scale",
+  "started": "2026-11-01T23:54:48.357Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": null,
+  "planned": 6,
+  "priorCompleted": 0,
+  "executed": 6,
+  "failed": 0,
+  "timedOut": 6,
+  "skipped": 0,
+  "taskSha256": "8a142ee7b8b94aa2af0ca7dd86c0ab451bc0cbd1aa097d9984ca194df1ec0b2c",
+  "finished": "2026-11-01T23:55:20.238Z",
+  "elapsedSeconds": 31.881,
+  "persistedDistinct": 6
+}

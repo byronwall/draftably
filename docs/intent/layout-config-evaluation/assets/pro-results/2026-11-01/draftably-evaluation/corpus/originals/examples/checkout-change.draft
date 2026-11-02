@@ -1,0 +1,27 @@
+diagram "Checkout: add refunds" version=1
+subtitle "Refunds get their own service; the legacy webhook goes away"
+
+# Change marks: + added, - removed, ~ changed, . unchanged context.
+
+group platform "Commerce platform" color=blue
+node api "API gateway" in=platform
+~node orders "Orders service" in=platform was="Orders"
+node payments "Payments" in=platform
++node refunds "Refunds" in=platform
+.node audit "Audit log" in=platform
+
+node db "Postgres" color=violet
+-node hook "Legacy webhook"
+
+edge dispatch api -> orders "create order"
+edge charge orders -> payments "authorize"
++edge refund orders -> refunds "refund"
++edge ledger refunds -> db "record"
+edge persist orders -> db "persist" kind=async
+-edge notify payments -> hook "notify"
+.edge trail orders -> audit "log"
+
+legend blue "Our services"
+legend violet "Data stores"
+
+layout root engine=layered direction=right

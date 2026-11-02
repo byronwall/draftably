@@ -1,0 +1,729 @@
+{
+  "status": "DEVELOPMENT PROPOSAL ONLY; not sealed; no heldout results read",
+  "selection_rule": "Exhaustive size-three portfolio over fully observed default and single-control settings. Maximize union hard-valid fixtures, then practical acceptable case\u00d7weighting coverage, then minimize equal-fixture mean oracle regret, worst regret and number of changed fields. Defaults break equivalent-cost ties when fewer altered fields suffice.",
+  "scope": "Oracle choice among three numeric route policies on fixed positions; this is not an automatic route-policy selector or evidence that a user chooses the oracle.",
+  "fixture_count": 24,
+  "weightings": [
+    "balanced",
+    "traceable",
+    "direct"
+  ],
+  "case_profile_denominator": 72,
+  "oracle_valid_fixtures": 23,
+  "fully_observed_policy_count": 25,
+  "policies": [
+    {
+      "policy_id": "clearance-22",
+      "patch": {
+        "clearance": 22
+      },
+      "routing": {
+        "clearance": 22,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      },
+      "individual_stats": {
+        "valid_case_coverage": 15,
+        "acceptable_case_profile_coverage": 31,
+        "acceptable_by_profile": {
+          "balanced": 11,
+          "traceable": 11,
+          "direct": 9
+        },
+        "coverage_half_bands": 27,
+        "coverage_double_bands": 31,
+        "equal_fixture_mean_oracle_regret": 4.459259266666667,
+        "equal_family_mean_oracle_regret": 2.9670138958333334,
+        "family_mean_oracle_regret": {
+          "pipelines": 6.111111166666666,
+          "routing": 6.25,
+          "dags": 9.708333333333334,
+          "cycles": 0.0,
+          "networks": 1.6666666666666667,
+          "architecture": 0.0,
+          "containers": 0.0,
+          "authored": 0.0
+        },
+        "worst_family_mean_oracle_regret": 9.708333333333334,
+        "max_case_profile_oracle_regret": 42.5,
+        "regret_case_profile_count": 45,
+        "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+        "uncovered_oracle_valid_cases": [
+          "route-03",
+          "route-08",
+          "route-15",
+          "route-16",
+          "route-17",
+          "route-19",
+          "route-21",
+          "route-23"
+        ]
+      },
+      "individual_valid_gained_vs_defaults": 0,
+      "individual_valid_lost_vs_defaults": 7,
+      "marginal_acceptable_case_profiles_in_three_policy_set": 4
+    },
+    {
+      "policy_id": "clearance-4",
+      "patch": {
+        "clearance": 4
+      },
+      "routing": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      },
+      "individual_stats": {
+        "valid_case_coverage": 23,
+        "acceptable_case_profile_coverage": 50,
+        "acceptable_by_profile": {
+          "balanced": 17,
+          "traceable": 16,
+          "direct": 17
+        },
+        "coverage_half_bands": 49,
+        "coverage_double_bands": 52,
+        "equal_fixture_mean_oracle_regret": 2.5150051159420292,
+        "equal_family_mean_oracle_regret": 1.849201888888889,
+        "family_mean_oracle_regret": {
+          "pipelines": 5.555555555555555,
+          "routing": 5.416666666666667,
+          "dags": 2.5,
+          "cycles": 0.0,
+          "networks": 3.1705947777777785,
+          "architecture": 0.0,
+          "containers": 0.0,
+          "presentation": 0.0,
+          "authored": 0.0
+        },
+        "worst_family_mean_oracle_regret": 5.555555555555555,
+        "max_case_profile_oracle_regret": 23.333333,
+        "regret_case_profile_count": 69,
+        "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+        "uncovered_oracle_valid_cases": []
+      },
+      "individual_valid_gained_vs_defaults": 1,
+      "individual_valid_lost_vs_defaults": 0,
+      "marginal_acceptable_case_profiles_in_three_policy_set": 11
+    },
+    {
+      "policy_id": "portGap-28",
+      "patch": {
+        "portGap": 28
+      },
+      "routing": {
+        "clearance": 10,
+        "portGap": 28,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      },
+      "individual_stats": {
+        "valid_case_coverage": 22,
+        "acceptable_case_profile_coverage": 39,
+        "acceptable_by_profile": {
+          "balanced": 13,
+          "traceable": 13,
+          "direct": 13
+        },
+        "coverage_half_bands": 39,
+        "coverage_double_bands": 41,
+        "equal_fixture_mean_oracle_regret": 4.246173818181818,
+        "equal_family_mean_oracle_regret": 3.5373487654320988,
+        "family_mean_oracle_regret": {
+          "pipelines": 0.0,
+          "routing": 9.166666666666666,
+          "dags": 6.9074073333333335,
+          "cycles": 2.2222222222222223,
+          "networks": 4.539842666666668,
+          "architecture": 0.0,
+          "containers": 9,
+          "presentation": 0.0,
+          "authored": 0.0
+        },
+        "worst_family_mean_oracle_regret": 9.166666666666666,
+        "max_case_profile_oracle_regret": 33.75,
+        "regret_case_profile_count": 66,
+        "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+        "uncovered_oracle_valid_cases": [
+          "route-21"
+        ]
+      },
+      "individual_valid_gained_vs_defaults": 0,
+      "individual_valid_lost_vs_defaults": 0,
+      "marginal_acceptable_case_profiles_in_three_policy_set": 6
+    }
+  ],
+  "selection_stats": {
+    "valid_case_coverage": 23,
+    "acceptable_case_profile_coverage": 63,
+    "acceptable_by_profile": {
+      "balanced": 22,
+      "traceable": 21,
+      "direct": 20
+    },
+    "coverage_half_bands": 61,
+    "coverage_double_bands": 63,
+    "equal_fixture_mean_oracle_regret": 0.6651661449275363,
+    "equal_family_mean_oracle_regret": 0.45474029629629636,
+    "family_mean_oracle_regret": {
+      "pipelines": 0.0,
+      "routing": 0.5208333333333334,
+      "dags": 2.5,
+      "cycles": 0.0,
+      "networks": 1.071829333333334,
+      "architecture": 0.0,
+      "containers": 0.0,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 2.5,
+    "max_case_profile_oracle_regret": 15,
+    "regret_case_profile_count": 69,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": []
+  },
+  "all_pool_stats": {
+    "valid_case_coverage": 23,
+    "acceptable_case_profile_coverage": 69,
+    "acceptable_by_profile": {
+      "balanced": 23,
+      "traceable": 23,
+      "direct": 23
+    },
+    "coverage_half_bands": 69,
+    "coverage_double_bands": 69,
+    "equal_fixture_mean_oracle_regret": 0.0,
+    "equal_family_mean_oracle_regret": 0.0,
+    "family_mean_oracle_regret": {
+      "pipelines": 0.0,
+      "routing": 0.0,
+      "dags": 0.0,
+      "cycles": 0.0,
+      "networks": 0.0,
+      "architecture": 0.0,
+      "containers": 0.0,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 0.0,
+    "max_case_profile_oracle_regret": 0.0,
+    "regret_case_profile_count": 69,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": []
+  },
+  "size_curve": [
+    {
+      "size": 1,
+      "policy_ids": [
+        "clearance-4"
+      ],
+      "valid_case_coverage": 23,
+      "acceptable_case_profile_coverage": 50,
+      "acceptable_by_profile": {
+        "balanced": 17,
+        "traceable": 16,
+        "direct": 17
+      },
+      "coverage_half_bands": 49,
+      "coverage_double_bands": 52,
+      "equal_fixture_mean_oracle_regret": 2.5150051159420292,
+      "equal_family_mean_oracle_regret": 1.849201888888889,
+      "family_mean_oracle_regret": {
+        "pipelines": 5.555555555555555,
+        "routing": 5.416666666666667,
+        "dags": 2.5,
+        "cycles": 0.0,
+        "networks": 3.1705947777777785,
+        "architecture": 0.0,
+        "containers": 0.0,
+        "presentation": 0.0,
+        "authored": 0.0
+      },
+      "worst_family_mean_oracle_regret": 5.555555555555555,
+      "max_case_profile_oracle_regret": 23.333333,
+      "regret_case_profile_count": 69,
+      "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+      "uncovered_oracle_valid_cases": []
+    },
+    {
+      "size": 2,
+      "policy_ids": [
+        "clearance-4",
+        "portGap-28"
+      ],
+      "valid_case_coverage": 23,
+      "acceptable_case_profile_coverage": 59,
+      "acceptable_by_profile": {
+        "balanced": 20,
+        "traceable": 19,
+        "direct": 20
+      },
+      "coverage_half_bands": 58,
+      "coverage_double_bands": 60,
+      "equal_fixture_mean_oracle_regret": 1.468306231884058,
+      "equal_family_mean_oracle_regret": 0.9884337037037039,
+      "family_mean_oracle_regret": {
+        "pipelines": 0.0,
+        "routing": 4.583333333333333,
+        "dags": 2.5,
+        "cycles": 0.0,
+        "networks": 1.8125700000000013,
+        "architecture": 0.0,
+        "containers": 0.0,
+        "presentation": 0.0,
+        "authored": 0.0
+      },
+      "worst_family_mean_oracle_regret": 4.583333333333333,
+      "max_case_profile_oracle_regret": 22.5,
+      "regret_case_profile_count": 69,
+      "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+      "uncovered_oracle_valid_cases": []
+    },
+    {
+      "size": 3,
+      "policy_ids": [
+        "clearance-22",
+        "clearance-4",
+        "portGap-28"
+      ],
+      "valid_case_coverage": 23,
+      "acceptable_case_profile_coverage": 63,
+      "acceptable_by_profile": {
+        "balanced": 22,
+        "traceable": 21,
+        "direct": 20
+      },
+      "coverage_half_bands": 61,
+      "coverage_double_bands": 63,
+      "equal_fixture_mean_oracle_regret": 0.6651661449275363,
+      "equal_family_mean_oracle_regret": 0.45474029629629636,
+      "family_mean_oracle_regret": {
+        "pipelines": 0.0,
+        "routing": 0.5208333333333334,
+        "dags": 2.5,
+        "cycles": 0.0,
+        "networks": 1.071829333333334,
+        "architecture": 0.0,
+        "containers": 0.0,
+        "presentation": 0.0,
+        "authored": 0.0
+      },
+      "worst_family_mean_oracle_regret": 2.5,
+      "max_case_profile_oracle_regret": 15,
+      "regret_case_profile_count": 69,
+      "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+      "uncovered_oracle_valid_cases": []
+    }
+  ],
+  "family_weight_sensitivity": {
+    "policy_ids": [
+      "clearance-22",
+      "clearance-4",
+      "portGap-28"
+    ],
+    "valid_case_coverage": 23,
+    "acceptable_case_profile_coverage": 63,
+    "acceptable_by_profile": {
+      "balanced": 22,
+      "traceable": 21,
+      "direct": 20
+    },
+    "coverage_half_bands": 61,
+    "coverage_double_bands": 63,
+    "equal_fixture_mean_oracle_regret": 0.6651661449275363,
+    "equal_family_mean_oracle_regret": 0.45474029629629636,
+    "family_mean_oracle_regret": {
+      "pipelines": 0.0,
+      "routing": 0.5208333333333334,
+      "dags": 2.5,
+      "cycles": 0.0,
+      "networks": 1.071829333333334,
+      "architecture": 0.0,
+      "containers": 0.0,
+      "presentation": 0.0,
+      "authored": 0.0
+    },
+    "worst_family_mean_oracle_regret": 2.5,
+    "max_case_profile_oracle_regret": 15,
+    "regret_case_profile_count": 69,
+    "regret_note": "Mean and maximum soft regret include only oracle-valid case\u00d7profiles covered by at least one valid policy. Hard failures remain separate coverage losses; no arbitrary numeric failure penalty is inserted.",
+    "uncovered_oracle_valid_cases": []
+  },
+  "partial_grid_policy_count_excluded": 20,
+  "partial_grid_policies": [
+    {
+      "patch": {
+        "bendPenalty": 0,
+        "crossingPenalty": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "bendPenalty": 0,
+        "crossingPenalty": 900
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "bendPenalty": 80,
+        "crossingPenalty": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "bendPenalty": 80,
+        "crossingPenalty": 900
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "clearance": 22,
+        "standoff": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "clearance": 22,
+        "standoff": 40
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "clearance": 4,
+        "standoff": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "clearance": 4,
+        "standoff": 40
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "edgeGap": 32,
+        "parallelPenalty": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "edgeGap": 32,
+        "parallelPenalty": 48
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "edgeGap": 8,
+        "parallelPenalty": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "edgeGap": 8,
+        "parallelPenalty": 48
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "fanoutPenalty": 0,
+        "portGap": 28
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "fanoutPenalty": 0,
+        "portGap": 6
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "fanoutPenalty": 120,
+        "portGap": 28
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "fanoutPenalty": 120,
+        "portGap": 6
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "passes": 1,
+        "sharedPenalty": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "passes": 1,
+        "sharedPenalty": 16
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "passes": 5,
+        "sharedPenalty": 0
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    },
+    {
+      "patch": {
+        "passes": 5,
+        "sharedPenalty": 16
+      },
+      "observed_fixture_count": 8,
+      "observed_fixture_ids": [
+        "route-01",
+        "route-03",
+        "route-06",
+        "route-09",
+        "route-11",
+        "route-14",
+        "route-18",
+        "route-22"
+      ]
+    }
+  ],
+  "limitations": [
+    "No imputation of partial grids.",
+    "Rounded-corner appearance is not quality-ranked by polyline metrics.",
+    "Two alternative values plus one shared baseline per public scalar; no claim of continuous optimum.",
+    "Single-run timing is descriptive only; use repeated timing stage for speed conclusions.",
+    "Within-1px comparisons preserve route point sequence and side identity; no rounding-bin equivalence claim.",
+    "All 24 fixed routing fixtures are development probes, not the 24 heldout diagrams."
+  ]
+}

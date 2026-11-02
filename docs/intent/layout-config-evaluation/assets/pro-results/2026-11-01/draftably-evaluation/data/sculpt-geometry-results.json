@@ -1,0 +1,271 @@
+{
+  "passed": 54,
+  "results": [
+    {
+      "name": "Feather is one at the center and exactly zero at and beyond the radius",
+      "status": "passed"
+    },
+    {
+      "name": "Smooth falloff is bounded and monotonically decreasing",
+      "status": "passed"
+    },
+    {
+      "name": "Soft edge remains continuous at the core and outer rim",
+      "status": "passed"
+    },
+    {
+      "name": "Radius hit testing uses distance to the rectangle, not only its center",
+      "status": "passed"
+    },
+    {
+      "name": "compound-flow: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 17,
+        "reason": "settled"
+      }
+    },
+    {
+      "name": "compound-flow: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "boundary-align: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 43,
+        "reason": "iteration limit"
+      }
+    },
+    {
+      "name": "boundary-align: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "compound-spring: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 32,
+        "reason": "iteration limit"
+      }
+    },
+    {
+      "name": "compound-spring: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "tidy: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 22,
+        "reason": "iteration limit"
+      }
+    },
+    {
+      "name": "tidy: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "stress: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 23,
+        "reason": "iteration limit"
+      }
+    },
+    {
+      "name": "stress: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "force: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 23,
+        "reason": "iteration limit"
+      }
+    },
+    {
+      "name": "force: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "flow: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 22,
+        "reason": "iteration limit"
+      }
+    },
+    {
+      "name": "flow: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "layered: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 8,
+        "reason": "settled"
+      }
+    },
+    {
+      "name": "layered: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "tree: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 9,
+        "reason": "settled"
+      }
+    },
+    {
+      "name": "tree: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "grid: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 16,
+        "reason": "objective plateau"
+      }
+    },
+    {
+      "name": "grid: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "separate: checkpoints begin at exact authored geometry and end at the actual solver output",
+      "status": "passed",
+      "detail": {
+        "frames": 1,
+        "reason": "settled"
+      }
+    },
+    {
+      "name": "separate: finite checkpoint coordinates with bounded history memory",
+      "status": "passed"
+    },
+    {
+      "name": "Journey generation does not mutate source document",
+      "status": "passed"
+    },
+    {
+      "name": "Same source and settings produce the same recorded geometry",
+      "status": "passed"
+    },
+    {
+      "name": "Lookahead chooses a future checkpoint without moving its input",
+      "status": "passed"
+    },
+    {
+      "name": "Local holds protect the node through every ancestor move and solver checkpoint",
+      "status": "passed"
+    },
+    {
+      "name": "Temporary holds are not converted to exported pin metadata",
+      "status": "passed"
+    },
+    {
+      "name": "Invocation-only constraints stay out of persistent settings",
+      "status": "passed"
+    },
+    {
+      "name": "Actual pins survive the complete recorded path",
+      "status": "passed"
+    },
+    {
+      "name": "tidy: source immutable and graph/settings/frame sizes unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "tidy: outside the brush remains bit-identical; displacement stays under the weighted cap",
+      "status": "passed"
+    },
+    {
+      "name": "tidy: no new or worsened rectangle collision",
+      "status": "passed"
+    },
+    {
+      "name": "flow: source immutable and graph/settings/frame sizes unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "flow: outside the brush remains bit-identical; displacement stays under the weighted cap",
+      "status": "passed"
+    },
+    {
+      "name": "flow: no new or worsened rectangle collision",
+      "status": "passed"
+    },
+    {
+      "name": "space: source immutable and graph/settings/frame sizes unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "space: outside the brush remains bit-identical; displacement stays under the weighted cap",
+      "status": "passed"
+    },
+    {
+      "name": "space: no new or worsened rectangle collision",
+      "status": "passed"
+    },
+    {
+      "name": "restore: source immutable and graph/settings/frame sizes unchanged",
+      "status": "passed"
+    },
+    {
+      "name": "restore: outside the brush remains bit-identical; displacement stays under the weighted cap",
+      "status": "passed"
+    },
+    {
+      "name": "restore: no new or worsened rectangle collision",
+      "status": "passed"
+    },
+    {
+      "name": "Brush respects explicit pins",
+      "status": "passed"
+    },
+    {
+      "name": "Brush respects session local holds",
+      "status": "passed"
+    },
+    {
+      "name": "Empty brush is a true no-op",
+      "status": "passed"
+    },
+    {
+      "name": "Local restore approaches the chosen past coordinate",
+      "status": "passed"
+    },
+    {
+      "name": "Missing restore IDs never move or resurrect nodes",
+      "status": "passed"
+    },
+    {
+      "name": "Brush edits children without moving or resizing any container",
+      "status": "passed"
+    },
+    {
+      "name": "A pinned container shields its descendants from brush effects",
+      "status": "passed"
+    },
+    {
+      "name": "80 repeated dabs preserve graph and container identities",
+      "status": "passed"
+    },
+    {
+      "name": "80 repeated dabs do not introduce or worsen collisions",
+      "status": "passed"
+    },
+    {
+      "name": "Observed branch-sample brush timing",
+      "status": "measured",
+      "medianMs": 0.18,
+      "p95Ms": 0.47
+    }
+  ]
+}

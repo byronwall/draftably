@@ -1,0 +1,31 @@
+diagram "draftably: code layers" version=1
+
+# expect above components state
+# expect above state model
+
+theme fieldnotes
+
+node components "components/" color=amber shade=200
+node state "state/" color=amber shade=400
+node dsl "dsl/" color=amber shade=500
+node model "model/" color=amber shade=600
+node engines "engines/" color=amber shade=800
+node cli "cli/" color=amber shade=400
+node server "server/" color=amber shade=400
+node workers "workers/" color=amber shade=600
+node lib "lib/" color=amber shade=600
+node examples "examples/*.draft" shape=pill
+
+edge l1 components -> state
+edge l2 state -> model
+edge l3 state -> dsl
+edge l4 dsl -> model
+edge l5 model -> engines
+edge l6 cli -> dsl
+edge l7 server -> dsl
+edge l8 state -> lib "engine tasks"
+edge l9 lib -> workers
+edge l10 workers -> engines
+edge l11 state -> examples "bundles" kind=async
+
+layout root engine=stress

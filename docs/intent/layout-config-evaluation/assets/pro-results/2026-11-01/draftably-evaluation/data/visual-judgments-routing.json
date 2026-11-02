@@ -1,0 +1,249 @@
+{
+  "reviewer": "one expert model assessment; not independent human validation",
+  "recordedAt": "2026-11-01T23:16:53.697674+00:00",
+  "blinding": {
+    "read": "visual-manifest-routing.json; its ten PNGs; FEEL.md",
+    "notRead": [
+      "visual key",
+      "pair source identities",
+      "trial rows",
+      "control analysis",
+      "candidate engine names"
+    ],
+    "allTenPngsActuallyOpened": true,
+    "cropNeeded": false,
+    "verdictsFrozenBeforeUnblinding": true
+  },
+  "severityScale": {
+    "0": "no material between-candidate task difference",
+    "1": "polish or extra visual effort",
+    "2": "noticeably slower tracing or uncertain ownership",
+    "3": "misleading, hidden, or unreadable connection"
+  },
+  "counts": {
+    "A-better": 3,
+    "B-better": 1,
+    "same": 6,
+    "pairs": 10
+  },
+  "judgments": [
+    {
+      "id": "P001",
+      "verdict": "same",
+      "reason": "The return and local retry remain clear in both images. A has square bends and B rounded bends; the visible style change does not change connection tracing for this case.",
+      "severity": 0,
+      "confidence": 0.98,
+      "defects": [],
+      "appearanceNote": "Rounded versus square corners is visibly different even when the route topology and task outcome appear equivalent.",
+      "family": "cycles",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P001.png",
+      "pngSha256": "1cd95f26029c3bab8f3b3044c7afc1666a214e308b5e0784a2e8c629bca6872d",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P002",
+      "verdict": "B-better",
+      "reason": "A sends the a-to-b connection behind both tall obstacle boxes, so a reader loses the connection through the middle. B takes a clear outer path and sends c-to-d through the central passage. The longer outer path is justified by avoiding hidden connections.",
+      "severity": 3,
+      "confidence": 0.99,
+      "defects": [
+        {
+          "side": "A",
+          "severity": 3,
+          "cause": "routing-obstacle",
+          "description": "The horizontal a-to-b line disappears behind the left and right tall boxes; it reads as interrupted or connected to those obstacles."
+        },
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "routing-detour",
+          "description": "The c-to-d line goes around the far right despite the visible passage between the two obstacles."
+        }
+      ],
+      "family": "authored",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P002.png",
+      "pngSha256": "400d1b7ca9590f22edec5aee9a700db8952932d41aeb3dbcf64d3c4ecfbdac10",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P003",
+      "verdict": "A-better",
+      "reason": "Both avoid the central obstacle, but B adds an extra sideways step immediately above a before reaching the top corridor. A has the simpler continuous exit and is easier to trace.",
+      "severity": 1,
+      "confidence": 0.96,
+      "defects": [
+        {
+          "side": "B",
+          "severity": 1,
+          "cause": "routing-order",
+          "description": "An unnecessary small stair step above a interrupts an otherwise simple route around the blocker."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P003.png",
+      "pngSha256": "b914e3126560b66489fd52618466025fd9346fe96e0ace64fcfe407f83f1b915",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P004",
+      "verdict": "A-better",
+      "reason": "A keeps sources leaving right and targets receiving from the left, with a readable central crossing region. B replaces that organization with long loops around the outside, backward-facing exits and arrivals from several sides. The reduced visual crossing concentration is not worth the tracing detours.",
+      "severity": 2,
+      "confidence": 0.98,
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "routing-detour",
+          "description": "Several connections wrap around the entire outside of the six-node drawing."
+        },
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "routing-ports",
+          "description": "a2 leaves toward the left margin and b0 receives a line from below; endpoint sides no longer consistently communicate left-to-right relationships."
+        },
+        {
+          "side": "A",
+          "severity": 1,
+          "cause": "routing-clearance",
+          "description": "The middle crossing region is busy, but the halo breaks and consistent endpoint direction still permit tracing."
+        }
+      ],
+      "family": "networks",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P004.png",
+      "pngSha256": "f20c82cf9fc394029c7948d183b8e7038c69982558991369abdaf466a810fe5c",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P005",
+      "verdict": "same",
+      "reason": "Both show separated parallel request, audit and reply lines with the same apparent labels, endpoints and long a-to-d branch. No meaningful tracing difference is visible.",
+      "severity": 0,
+      "confidence": 0.99,
+      "defects": [],
+      "family": "networks",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P005.png",
+      "pngSha256": "bda3750d758e61f640df5f48c3ee6f9258baa6ac79e9a7887c7ef278631f47f2",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P006",
+      "verdict": "same",
+      "reason": "A spreads the three hub exits farther apart than B. Both remain symmetric, separated and immediately traceable to a, b and c; neither provides a material task advantage in this sparse fan.",
+      "severity": 0,
+      "confidence": 0.95,
+      "defects": [],
+      "appearanceNote": "Port spacing is visibly different, but a geometric difference need not be a useful quality win.",
+      "family": "dags",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P006.png",
+      "pngSha256": "240359e7c02d0ab10383704da2b2309b6738be46b040d64aac57e790b95e2048",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P007",
+      "verdict": "same",
+      "reason": "Both keep the same clear fan-in, fan-out and second fan-in structure. The paths and spacing appear equivalent at the supplied review size, with labels and endpoints equally legible.",
+      "severity": 0,
+      "confidence": 0.98,
+      "defects": [],
+      "family": "dags",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P007.png",
+      "pngSha256": "17e4a4fac25622907807d7612faa50156b4429c7735f9f9d9ef71658341c0bba",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P008",
+      "verdict": "same",
+      "reason": "Both expose the read, write and extra-branch relationships in the same arrangement. Neither resolves the cramped write arrival along b\u2019s left edge or the small blocker\u2019s awkward label wrap. No material difference is visible.",
+      "severity": 0,
+      "confidence": 0.91,
+      "defects": [
+        {
+          "side": "both",
+          "severity": 2,
+          "cause": "routing-clearance",
+          "description": "The write line runs directly along b\u2019s left border before its arrow arrives, weakening the distinction between connector and box outline."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "label-placement",
+          "description": "The blocker label breaks as \u201cblock\u201d / \u201cer\u201d in a very narrow box."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P008.png",
+      "pngSha256": "044a698a8689f4cf734c43b1e58c31554c647c6133fa3257845369c3f5e47a56",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P009",
+      "verdict": "A-better",
+      "reason": "A keeps \u201creturn inside group\u201d attached to the short return loop. B shortens the connection to a straight line but leaves that label floating well above it. The small, clear loop is preferable to uncertain label ownership.",
+      "severity": 2,
+      "confidence": 0.99,
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "label-placement",
+          "description": "\u201creturn inside group\u201d is separated from its straight b-to-a line and can read as a free annotation."
+        }
+      ],
+      "family": "architecture",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P009.png",
+      "pngSha256": "d23af174a0adbd7d6db6db9ecdf5eb819fdd11d494623595339d859e0cb22470",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P010",
+      "verdict": "same",
+      "reason": "The connection pattern and label placements appear the same. Both remain traceable, but the two long top labels and \u201ccancel pending\u201d stand noticeably above their short straight lines; neither candidate improves this label-association cost.",
+      "severity": 0,
+      "confidence": 0.98,
+      "defects": [
+        {
+          "side": "both",
+          "severity": 2,
+          "cause": "label-placement",
+          "description": "Long labels above a-to-b, b-to-c and d-to-e are visually detached from the short lines they describe."
+        }
+      ],
+      "family": "presentation",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P010.png",
+      "pngSha256": "622dcafaadc741d639913f725a7fefdd37a315b02f78e520b9c47bbb8430778a",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    }
+  ]
+}

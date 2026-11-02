@@ -1,0 +1,2402 @@
+[
+  {
+    "id": "D-lgrid-pipelines-03-aspect-0p75-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-03-aspect-0p75-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-03-aspect-1p6-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-03-aspect-1p6-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-03-aspect-2-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-03-aspect-2-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-01-aspect-0p75-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-01-aspect-0p75-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-01-aspect-1p6-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-01-aspect-1p6-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-01-aspect-2-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-01-aspect-2-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-01-aspect-0p75-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-01-aspect-0p75-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-01-aspect-1p6-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-01-aspect-1p6-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-01-aspect-2-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-pipelines-01-aspect-2-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-03-aspect-0p75-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-03-aspect-0p75-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "0.75",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "0.75",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-03-aspect-1p6-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-03-aspect-1p6-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "1.6",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "1.6",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-03-aspect-2-fold-auto",
+    "stage": "D-lgrid",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "auto"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "auto"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-presentation-03-aspect-2-fold-never",
+    "stage": "D-lgrid",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "aspect": "2",
+        "fold": "never"
+      }
+    },
+    "control": "aspect*fold",
+    "level": [
+      "2",
+      "never"
+    ],
+    "tag": "3x2 categorical; only two fold values exist",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-24-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-24-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-24-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-52-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-52-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-52-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-100-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-100-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-03-rankGap-100-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-24-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-24-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-24-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-52-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-52-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-52-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-100-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-100-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-01-rankGap-100-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-24-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-24-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-24-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-52-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-52-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-52-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-100-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-100-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-dags-01-rankGap-100-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-24-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-24-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-24-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      24,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-52-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-52-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-52-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 52,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      52,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-100-nodeGap-12",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 12
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      12
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-100-nodeGap-24",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 24
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      24
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-hierarchies-02-rankGap-100-nodeGap-48",
+    "stage": "D-lgrid",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "rank-gap": 100,
+        "node-gap": 48
+      }
+    },
+    "control": "rankGap*nodeGap",
+    "level": [
+      100,
+      48
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-0-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-65-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-65-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-65-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-100-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-100-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-03-boundaryPull-100-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-0-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-0-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-0-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-65-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-65-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-65-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-containers-01-boundaryPull-100-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-0-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-65-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-65-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-65-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-routing-01-boundaryPull-100-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-0-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-0-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-0-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 0,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      0,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-65-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-65-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-65-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 65,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      65,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-1",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 1
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      1
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-2",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 2
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      2
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-lgrid-architecture-01-boundaryPull-100-hierarchySweeps-4",
+    "stage": "D-lgrid",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "control": "boundaryPull*hierarchySweeps",
+    "level": [
+      100,
+      4
+    ],
+    "tag": "3x3",
+    "timeoutMs": 15000
+  }
+]

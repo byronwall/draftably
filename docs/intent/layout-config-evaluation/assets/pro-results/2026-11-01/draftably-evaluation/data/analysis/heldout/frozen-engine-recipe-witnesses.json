@@ -1,0 +1,1713 @@
+{
+  "fittedOnHeldout": false,
+  "frozenPortfolio": [
+    "boundary-align",
+    "tidy",
+    "force",
+    "layered",
+    "tree",
+    "grid"
+  ],
+  "witnesses": [
+    {
+      "caseId": "pipelines-05",
+      "family": "pipelines",
+      "profile": "readable",
+      "common": true,
+      "method": "engine:tree:DOWN",
+      "trial": "C-heldout-pipelines-05-tree-DOWN",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-05-tree-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-05",
+      "family": "pipelines",
+      "profile": "compact",
+      "common": true,
+      "method": "recipe:flow:DOWN",
+      "trial": "C-heldout-pipelines-05-recipe-flow-DOWN",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-05-recipe-flow-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-05",
+      "family": "pipelines",
+      "profile": "traceable",
+      "common": true,
+      "method": "engine:force:DOWN",
+      "trial": "C-heldout-pipelines-05-force-DOWN",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-05-force-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-05",
+      "family": "pipelines",
+      "profile": "stable",
+      "common": true,
+      "method": "engine:force:DOWN",
+      "trial": "C-heldout-pipelines-05-force-DOWN",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-05-force-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-05",
+      "family": "pipelines",
+      "profile": "specialist",
+      "common": true,
+      "method": "engine:force:DOWN",
+      "trial": "C-heldout-pipelines-05-force-DOWN",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-05-force-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-06",
+      "family": "pipelines",
+      "profile": "readable",
+      "common": true,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-pipelines-06-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-pipelines-06-layered-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-06",
+      "family": "pipelines",
+      "profile": "compact",
+      "common": true,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-pipelines-06-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-pipelines-06-layered-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-06",
+      "family": "pipelines",
+      "profile": "traceable",
+      "common": true,
+      "method": "recipe:column:auto",
+      "trial": "C-heldout-pipelines-06-recipe-column",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-06-recipe-column",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-06",
+      "family": "pipelines",
+      "profile": "stable",
+      "common": true,
+      "method": "recipe:column:auto",
+      "trial": "C-heldout-pipelines-06-recipe-column",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-06-recipe-column",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "pipelines-06",
+      "family": "pipelines",
+      "profile": "specialist",
+      "common": true,
+      "method": "recipe:column:auto",
+      "trial": "C-heldout-pipelines-06-recipe-column",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-pipelines-06-recipe-column",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "dags-05",
+      "family": "dags",
+      "profile": "readable",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-dags-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-dags-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "dags-05",
+      "family": "dags",
+      "profile": "compact",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-dags-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-dags-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "dags-05",
+      "family": "dags",
+      "profile": "traceable",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-dags-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-dags-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "dags-05",
+      "family": "dags",
+      "profile": "stable",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-dags-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-dags-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "dags-05",
+      "family": "dags",
+      "profile": "specialist",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-dags-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-dags-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "dags-06",
+      "family": "dags",
+      "profile": "readable",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "dags-06",
+      "family": "dags",
+      "profile": "compact",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "dags-06",
+      "family": "dags",
+      "profile": "traceable",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "dags-06",
+      "family": "dags",
+      "profile": "stable",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "dags-06",
+      "family": "dags",
+      "profile": "specialist",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "hierarchies-05",
+      "family": "hierarchies",
+      "profile": "readable",
+      "common": true,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-hierarchies-05-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-05-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-05",
+      "family": "hierarchies",
+      "profile": "compact",
+      "common": true,
+      "method": "recipe:flow:RIGHT",
+      "trial": "C-heldout-hierarchies-05-recipe-flow-RIGHT",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-05-recipe-flow-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-05",
+      "family": "hierarchies",
+      "profile": "traceable",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-hierarchies-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-hierarchies-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-05",
+      "family": "hierarchies",
+      "profile": "stable",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-hierarchies-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-hierarchies-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-05",
+      "family": "hierarchies",
+      "profile": "specialist",
+      "common": true,
+      "method": "tuned:force:RIGHT:p3",
+      "trial": "G-selected-heldout-hierarchies-05-force-p3",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-hierarchies-05-force-p3",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-06",
+      "family": "hierarchies",
+      "profile": "readable",
+      "common": true,
+      "method": "engine:boundary-align:RIGHT",
+      "trial": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-06",
+      "family": "hierarchies",
+      "profile": "compact",
+      "common": true,
+      "method": "engine:boundary-align:RIGHT",
+      "trial": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-06",
+      "family": "hierarchies",
+      "profile": "traceable",
+      "common": true,
+      "method": "engine:boundary-align:RIGHT",
+      "trial": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-06",
+      "family": "hierarchies",
+      "profile": "stable",
+      "common": true,
+      "method": "engine:boundary-align:RIGHT",
+      "trial": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "hierarchies-06",
+      "family": "hierarchies",
+      "profile": "specialist",
+      "common": true,
+      "method": "engine:boundary-align:RIGHT",
+      "trial": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-hierarchies-06-boundary-align-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "architecture-05",
+      "family": "architecture",
+      "profile": "readable",
+      "common": true,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-architecture-05-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-architecture-05-compound-spring-p3",
+      "profileRegret": 5.191630425418563
+    },
+    {
+      "caseId": "architecture-05",
+      "family": "architecture",
+      "profile": "compact",
+      "common": true,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-architecture-05-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-architecture-05-layered-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "architecture-05",
+      "family": "architecture",
+      "profile": "traceable",
+      "common": true,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-architecture-05-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-architecture-05-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "architecture-05",
+      "family": "architecture",
+      "profile": "stable",
+      "common": true,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-architecture-05-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-architecture-05-compound-spring-p3",
+      "profileRegret": 1.0869560000000007
+    },
+    {
+      "caseId": "architecture-05",
+      "family": "architecture",
+      "profile": "specialist",
+      "common": true,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-architecture-05-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-architecture-05-compound-spring-p3",
+      "profileRegret": 1.0869560000000007
+    },
+    {
+      "caseId": "architecture-06",
+      "family": "architecture",
+      "profile": "readable",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "architecture-06",
+      "family": "architecture",
+      "profile": "compact",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "architecture-06",
+      "family": "architecture",
+      "profile": "traceable",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "architecture-06",
+      "family": "architecture",
+      "profile": "stable",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "architecture-06",
+      "family": "architecture",
+      "profile": "specialist",
+      "common": true,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "cycles-05",
+      "family": "cycles",
+      "profile": "readable",
+      "common": true,
+      "method": "recipe:column:auto",
+      "trial": "C-heldout-cycles-05-recipe-column",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-05-recipe-column",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "cycles-05",
+      "family": "cycles",
+      "profile": "compact",
+      "common": true,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-cycles-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-05-flow-DOWN",
+      "profileRegret": 0.04618592114822029
+    },
+    {
+      "caseId": "cycles-05",
+      "family": "cycles",
+      "profile": "traceable",
+      "common": true,
+      "method": "tuned:tree:RIGHT:p1",
+      "trial": "G-selected-heldout-cycles-05-tree-p1",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-cycles-05-tree-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "cycles-05",
+      "family": "cycles",
+      "profile": "stable",
+      "common": true,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-cycles-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-05-flow-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "cycles-05",
+      "family": "cycles",
+      "profile": "specialist",
+      "common": true,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-cycles-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-05-flow-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "cycles-06",
+      "family": "cycles",
+      "profile": "readable",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-cycles-06-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-06-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "cycles-06",
+      "family": "cycles",
+      "profile": "compact",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-cycles-06-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-06-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "cycles-06",
+      "family": "cycles",
+      "profile": "traceable",
+      "common": true,
+      "method": "tuned:tree:RIGHT:p1",
+      "trial": "G-selected-heldout-cycles-06-tree-p1",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-06-compound-flow-RIGHT",
+      "profileRegret": 1.3725490000000002
+    },
+    {
+      "caseId": "cycles-06",
+      "family": "cycles",
+      "profile": "stable",
+      "common": true,
+      "method": "tuned:tree:RIGHT:p1",
+      "trial": "G-selected-heldout-cycles-06-tree-p1",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-06-compound-flow-RIGHT",
+      "profileRegret": 1.372549
+    },
+    {
+      "caseId": "cycles-06",
+      "family": "cycles",
+      "profile": "specialist",
+      "common": true,
+      "method": "tuned:tree:RIGHT:p1",
+      "trial": "G-selected-heldout-cycles-06-tree-p1",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-cycles-06-compound-flow-RIGHT",
+      "profileRegret": 1.372549
+    },
+    {
+      "caseId": "networks-05",
+      "family": "networks",
+      "profile": "readable",
+      "common": false,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-networks-05-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-networks-05-compound-flow-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "networks-05",
+      "family": "networks",
+      "profile": "compact",
+      "common": false,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-networks-05-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-networks-05-compound-flow-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "networks-05",
+      "family": "networks",
+      "profile": "traceable",
+      "common": false,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-networks-05-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-networks-05-compound-flow-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "networks-05",
+      "family": "networks",
+      "profile": "stable",
+      "common": false,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-networks-05-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-networks-05-compound-flow-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "networks-05",
+      "family": "networks",
+      "profile": "specialist",
+      "common": false,
+      "method": "tuned:layered:RIGHT:p1",
+      "trial": "G-selected-heldout-networks-05-layered-p1",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-networks-05-compound-flow-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "networks-06",
+      "family": "networks",
+      "profile": "readable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "networks-06",
+      "family": "networks",
+      "profile": "compact",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "networks-06",
+      "family": "networks",
+      "profile": "traceable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "networks-06",
+      "family": "networks",
+      "profile": "stable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "networks-06",
+      "family": "networks",
+      "profile": "specialist",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "disconnected-05",
+      "family": "disconnected",
+      "profile": "readable",
+      "common": false,
+      "method": "tuned:boundary-align:RIGHT:p1",
+      "trial": "G-selected-heldout-disconnected-05-boundary-align-p1",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-disconnected-05-flow-p1",
+      "profileRegret": 0.005777510790568046
+    },
+    {
+      "caseId": "disconnected-05",
+      "family": "disconnected",
+      "profile": "compact",
+      "common": false,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-disconnected-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-05-tidy-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-05",
+      "family": "disconnected",
+      "profile": "traceable",
+      "common": false,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-disconnected-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-05-tidy-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-05",
+      "family": "disconnected",
+      "profile": "stable",
+      "common": false,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-disconnected-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-05-tidy-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-05",
+      "family": "disconnected",
+      "profile": "specialist",
+      "common": false,
+      "method": "engine:tidy:DOWN",
+      "trial": "C-heldout-disconnected-05-tidy-DOWN",
+      "dependencies": [
+        "tidy"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-05-tidy-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-06",
+      "family": "disconnected",
+      "profile": "readable",
+      "common": false,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-disconnected-06-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-06-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-06",
+      "family": "disconnected",
+      "profile": "compact",
+      "common": false,
+      "method": "engine:boundary-align:RIGHT",
+      "trial": "C-heldout-disconnected-06-boundary-align-RIGHT",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-06-boundary-align-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-06",
+      "family": "disconnected",
+      "profile": "traceable",
+      "common": false,
+      "method": "engine:tree:RIGHT",
+      "trial": "C-heldout-disconnected-06-tree-RIGHT",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-06-tree-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-06",
+      "family": "disconnected",
+      "profile": "stable",
+      "common": false,
+      "method": "engine:tree:RIGHT",
+      "trial": "C-heldout-disconnected-06-tree-RIGHT",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-06-tree-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "disconnected-06",
+      "family": "disconnected",
+      "profile": "specialist",
+      "common": false,
+      "method": "engine:tree:RIGHT",
+      "trial": "C-heldout-disconnected-06-tree-RIGHT",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-disconnected-06-tree-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-05",
+      "family": "routing",
+      "profile": "readable",
+      "common": false,
+      "method": "recipe:row:auto",
+      "trial": "C-heldout-routing-05-recipe-row",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-05-recipe-row",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-05",
+      "family": "routing",
+      "profile": "compact",
+      "common": false,
+      "method": "current",
+      "trial": "C-heldout-routing-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-05-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-05",
+      "family": "routing",
+      "profile": "traceable",
+      "common": false,
+      "method": "engine:tree:DOWN",
+      "trial": "C-heldout-routing-05-tree-DOWN",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-05-tree-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-05",
+      "family": "routing",
+      "profile": "stable",
+      "common": false,
+      "method": "engine:tree:DOWN",
+      "trial": "C-heldout-routing-05-tree-DOWN",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-05-tree-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-05",
+      "family": "routing",
+      "profile": "specialist",
+      "common": false,
+      "method": "engine:tree:DOWN",
+      "trial": "C-heldout-routing-05-tree-DOWN",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-05-tree-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-06",
+      "family": "routing",
+      "profile": "readable",
+      "common": false,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-routing-06-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-06-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-06",
+      "family": "routing",
+      "profile": "compact",
+      "common": false,
+      "method": "recipe:implicit:auto",
+      "trial": "C-heldout-routing-06-recipe-none",
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-routing-06-flow-p1",
+      "profileRegret": 1.6966149566623692
+    },
+    {
+      "caseId": "routing-06",
+      "family": "routing",
+      "profile": "traceable",
+      "common": false,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-routing-06-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-06-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-06",
+      "family": "routing",
+      "profile": "stable",
+      "common": false,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-routing-06-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-06-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "routing-06",
+      "family": "routing",
+      "profile": "specialist",
+      "common": false,
+      "method": "engine:force:RIGHT",
+      "trial": "C-heldout-routing-06-force-RIGHT",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-routing-06-force-RIGHT",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "containers-05",
+      "family": "containers",
+      "profile": "readable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-05",
+      "family": "containers",
+      "profile": "compact",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-05",
+      "family": "containers",
+      "profile": "traceable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-05",
+      "family": "containers",
+      "profile": "stable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-05",
+      "family": "containers",
+      "profile": "specialist",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-06",
+      "family": "containers",
+      "profile": "readable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-06",
+      "family": "containers",
+      "profile": "compact",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-06",
+      "family": "containers",
+      "profile": "traceable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-06",
+      "family": "containers",
+      "profile": "stable",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "containers-06",
+      "family": "containers",
+      "profile": "specialist",
+      "common": false,
+      "method": null,
+      "trial": null,
+      "dependencies": [],
+      "acceptable": false,
+      "hardValid": false,
+      "fullPoolOracle": null,
+      "profileRegret": null
+    },
+    {
+      "caseId": "presentation-05",
+      "family": "presentation",
+      "profile": "readable",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-05",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-05",
+      "family": "presentation",
+      "profile": "compact",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-05",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-05",
+      "family": "presentation",
+      "profile": "traceable",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-05",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-05",
+      "family": "presentation",
+      "profile": "stable",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-05",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-05",
+      "family": "presentation",
+      "profile": "specialist",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-05",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-06",
+      "family": "presentation",
+      "profile": "readable",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-06",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-06",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-06",
+      "family": "presentation",
+      "profile": "compact",
+      "common": true,
+      "method": "documented-default",
+      "trial": "C-doc-heldout-presentation-06",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-presentation-06",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-06",
+      "family": "presentation",
+      "profile": "traceable",
+      "common": true,
+      "method": "recipe:implicit:auto",
+      "trial": "C-heldout-presentation-06-recipe-none",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-presentation-06-recipe-none",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-06",
+      "family": "presentation",
+      "profile": "stable",
+      "common": true,
+      "method": "recipe:implicit:auto",
+      "trial": "C-heldout-presentation-06-recipe-none",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-presentation-06-recipe-none",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "presentation-06",
+      "family": "presentation",
+      "profile": "specialist",
+      "common": true,
+      "method": "recipe:implicit:auto",
+      "trial": "C-heldout-presentation-06-recipe-none",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-presentation-06-recipe-none",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-05",
+      "family": "authored",
+      "profile": "readable",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-authored-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-authored-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-05",
+      "family": "authored",
+      "profile": "compact",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-authored-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-authored-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-05",
+      "family": "authored",
+      "profile": "traceable",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-authored-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-authored-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-05",
+      "family": "authored",
+      "profile": "stable",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-authored-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-authored-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-05",
+      "family": "authored",
+      "profile": "specialist",
+      "common": true,
+      "method": "current",
+      "trial": "C-heldout-authored-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-doc-heldout-authored-05",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-06",
+      "family": "authored",
+      "profile": "readable",
+      "common": true,
+      "method": "engine:boundary-align:DOWN",
+      "trial": "C-heldout-authored-06-boundary-align-DOWN",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-authored-06-boundary-align-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-06",
+      "family": "authored",
+      "profile": "compact",
+      "common": true,
+      "method": "engine:boundary-align:DOWN",
+      "trial": "C-heldout-authored-06-boundary-align-DOWN",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-authored-06-boundary-align-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-06",
+      "family": "authored",
+      "profile": "traceable",
+      "common": true,
+      "method": "engine:boundary-align:DOWN",
+      "trial": "C-heldout-authored-06-boundary-align-DOWN",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-authored-06-boundary-align-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-06",
+      "family": "authored",
+      "profile": "stable",
+      "common": true,
+      "method": "engine:boundary-align:DOWN",
+      "trial": "C-heldout-authored-06-boundary-align-DOWN",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-authored-06-boundary-align-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "authored-06",
+      "family": "authored",
+      "profile": "specialist",
+      "common": true,
+      "method": "engine:boundary-align:DOWN",
+      "trial": "C-heldout-authored-06-boundary-align-DOWN",
+      "dependencies": [
+        "boundary-align"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-authored-06-boundary-align-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-05",
+      "family": "recipes",
+      "profile": "readable",
+      "common": false,
+      "method": "current",
+      "trial": "C-heldout-recipes-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-05-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-05",
+      "family": "recipes",
+      "profile": "compact",
+      "common": false,
+      "method": "current",
+      "trial": "C-heldout-recipes-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-05-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-05",
+      "family": "recipes",
+      "profile": "traceable",
+      "common": false,
+      "method": "current",
+      "trial": "C-heldout-recipes-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-05-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-05",
+      "family": "recipes",
+      "profile": "stable",
+      "common": false,
+      "method": "current",
+      "trial": "C-heldout-recipes-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-05-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-05",
+      "family": "recipes",
+      "profile": "specialist",
+      "common": false,
+      "method": "current",
+      "trial": "C-heldout-recipes-05-current",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-05-current",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-06",
+      "family": "recipes",
+      "profile": "readable",
+      "common": false,
+      "method": "recipe:column:auto",
+      "trial": "C-heldout-recipes-06-recipe-column",
+      "dependencies": [],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-06-recipe-column",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-06",
+      "family": "recipes",
+      "profile": "compact",
+      "common": false,
+      "method": "engine:layered:DOWN",
+      "trial": "C-heldout-recipes-06-layered-DOWN",
+      "dependencies": [
+        "layered"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-06-compound-flow-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-06",
+      "family": "recipes",
+      "profile": "traceable",
+      "common": false,
+      "method": "tuned:tree:RIGHT:p1",
+      "trial": "G-selected-heldout-recipes-06-tree-p1",
+      "dependencies": [
+        "tree"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "G-selected-heldout-recipes-06-tree-p1",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-06",
+      "family": "recipes",
+      "profile": "stable",
+      "common": false,
+      "method": "engine:force:DOWN",
+      "trial": "C-heldout-recipes-06-force-DOWN",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-06-force-DOWN",
+      "profileRegret": 0
+    },
+    {
+      "caseId": "recipes-06",
+      "family": "recipes",
+      "profile": "specialist",
+      "common": false,
+      "method": "engine:force:DOWN",
+      "trial": "C-heldout-recipes-06-force-DOWN",
+      "dependencies": [
+        "force"
+      ],
+      "acceptable": true,
+      "hardValid": true,
+      "fullPoolOracle": "C-heldout-recipes-06-force-DOWN",
+      "profileRegret": 0
+    }
+  ]
+}

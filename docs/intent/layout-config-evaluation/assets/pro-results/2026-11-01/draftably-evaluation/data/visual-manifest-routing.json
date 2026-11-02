@@ -1,0 +1,102 @@
+[
+  {
+    "id": "P001",
+    "split": "development",
+    "family": "cycles",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P001.png",
+    "svgA": "renders/blinded/P001-A.svg",
+    "svgB": "renders/blinded/P001-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P002",
+    "split": "development",
+    "family": "authored",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P002.png",
+    "svgA": "renders/blinded/P002-A.svg",
+    "svgB": "renders/blinded/P002-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P003",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P003.png",
+    "svgA": "renders/blinded/P003-A.svg",
+    "svgB": "renders/blinded/P003-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P004",
+    "split": "development",
+    "family": "networks",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P004.png",
+    "svgA": "renders/blinded/P004-A.svg",
+    "svgB": "renders/blinded/P004-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P005",
+    "split": "development",
+    "family": "networks",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P005.png",
+    "svgA": "renders/blinded/P005-A.svg",
+    "svgB": "renders/blinded/P005-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P006",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P006.png",
+    "svgA": "renders/blinded/P006-A.svg",
+    "svgB": "renders/blinded/P006-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P007",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P007.png",
+    "svgA": "renders/blinded/P007-A.svg",
+    "svgB": "renders/blinded/P007-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P008",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P008.png",
+    "svgA": "renders/blinded/P008-A.svg",
+    "svgB": "renders/blinded/P008-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P009",
+    "split": "development",
+    "family": "architecture",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P009.png",
+    "svgA": "renders/blinded/P009-A.svg",
+    "svgB": "renders/blinded/P009-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P010",
+    "split": "development",
+    "family": "presentation",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "png": "renders/blinded/P010.png",
+    "svgA": "renders/blinded/P010-A.svg",
+    "svgB": "renders/blinded/P010-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  }
+]

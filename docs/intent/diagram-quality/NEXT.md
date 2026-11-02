@@ -1,5 +1,10 @@
 # Diagram quality: what to work on next
 
+The [layout and routing configuration evaluation](../layout-config-evaluation/README.md) adds a
+separate 72-base study at `f14d9b8`. It recommends a smaller main UI while retaining existing
+algorithms. Its custom scores are not comparable to the stock round scores below. See its
+[implementation plan](../layout-config-evaluation/implementation-plan.md) for the proposed work.
+
 The audit has now run five rounds ([r1](rounds/r1.md), [r2](rounds/r2.md), [r3](rounds/r3.md),
 [r4](rounds/r4.md), [r5](rounds/r5.md)). Round 5 reran rounds 1–4 with its own script, so for the
 first time the trend is on one scale:

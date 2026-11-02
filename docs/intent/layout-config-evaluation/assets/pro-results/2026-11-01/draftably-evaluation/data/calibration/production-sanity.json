@@ -1,0 +1,778 @@
+{
+  "recordedAt": "2026-11-01T22:54:36.533Z",
+  "purpose": "Calibration on unmodified shipped examples, no algorithm comparison or tuning",
+  "rows": [
+    {
+      "file": "examples/web-app-components.draft",
+      "compileMs": 16.517875000000004,
+      "routingMs": 494.033951,
+      "metrics": {
+        "metricsVersion": "draftably-eval-metrics-1.0.0",
+        "nodes": 13,
+        "groups": 8,
+        "visibleNodes": 13,
+        "edges": 7,
+        "hardDefects": 0,
+        "layoutHardDefects": 0,
+        "routingHardDefects": 0,
+        "hardValid": true,
+        "requiredIntentFailures": 0,
+        "blockedRoutes": 0,
+        "overlaps": 0,
+        "overlapArea": 0,
+        "throughNodes": 0,
+        "authoredSideViolations": 0,
+        "pinScopeViolations": 0,
+        "width": 1379,
+        "height": 866,
+        "area": 1194214,
+        "aspect": 1.592379,
+        "aspectError": 0.004775,
+        "density": 0.099975,
+        "deadSpaceRatio": 0.900025,
+        "alignment": 0.923077,
+        "crossings": 1,
+        "sharedPairs": 0,
+        "sharedLength": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minLaneGap": null,
+        "bends": 17,
+        "maxBends": 4,
+        "bendsPerEdge": 2.428571,
+        "tinyJogs": 0,
+        "hooks": 1,
+        "backEdges": 0,
+        "routeLength": 4504.02,
+        "routeLengthPerEdge": 643.431429,
+        "detourMean": 1.105384,
+        "detourMax": 1.569038,
+        "labelCount": 4,
+        "labelDefects": 0,
+        "titleTextHits": 0,
+        "titleBandHits": 0,
+        "defectRaw": 20,
+        "defectIndex": 20,
+        "diPer10": 28.571429,
+        "weightingScores": {
+          "balanced": 28.571429,
+          "traceable": 42.857143,
+          "direct": 36.428571
+        },
+        "counts": {
+          "many-bends": 2,
+          "edge-hugs-node": 8,
+          "edge-near-group-border": 3,
+          "hook": 1,
+          "off-axis-port": 1,
+          "crossing": 1,
+          "uneven-padding": 1
+        },
+        "issues": [
+          {
+            "kind": "many-bends",
+            "detail": "h1"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h1 near nav"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h1 near profile"
+          },
+          {
+            "kind": "edge-near-group-border",
+            "detail": "h1 near sidebar"
+          },
+          {
+            "kind": "many-bends",
+            "detail": "h2"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h2 near card_1"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h2 near card_2"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h2 near use_tasks"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h2 near use_socket"
+          },
+          {
+            "kind": "edge-near-group-border",
+            "detail": "h2 near col_todo"
+          },
+          {
+            "kind": "edge-near-group-border",
+            "detail": "h2 near data"
+          },
+          {
+            "kind": "hook",
+            "detail": "h2"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "h4 near use_tasks"
+          },
+          {
+            "kind": "edge-hugs-node",
+            "detail": "open near drawer"
+          },
+          {
+            "kind": "off-axis-port",
+            "detail": "r1"
+          },
+          {
+            "kind": "crossing",
+            "detail": "h1 × r1"
+          },
+          {
+            "kind": "uneven-padding",
+            "detail": "page"
+          }
+        ],
+        "hard": [],
+        "groupFill": {
+          "app": 0.87901,
+          "layout": 0.655463,
+          "sidebar": 0.823529,
+          "page": 0.616514,
+          "board": 0.77131,
+          "col_todo": 0.823529,
+          "col_done": 1,
+          "data": 0.697095
+        },
+        "groupPadding": {
+          "app": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "layout": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "sidebar": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "page": {
+            "left": 40,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "board": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "col_todo": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "col_done": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "data": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          }
+        },
+        "routeDetail": [
+          {
+            "id": "h1",
+            "length": 1048,
+            "bends": 4,
+            "detourRatio": 1,
+            "wrap": true,
+            "back": false
+          },
+          {
+            "id": "h2",
+            "length": 1178,
+            "bends": 4,
+            "detourRatio": 1.168651,
+            "wrap": true,
+            "back": false
+          },
+          {
+            "id": "h3",
+            "length": 49,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "h4",
+            "length": 650,
+            "bends": 3,
+            "detourRatio": 1,
+            "wrap": true,
+            "back": false
+          },
+          {
+            "id": "l1",
+            "length": 625.02,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "open",
+            "length": 375,
+            "bends": 3,
+            "detourRatio": 1.569038,
+            "wrap": true,
+            "back": false
+          },
+          {
+            "id": "r1",
+            "length": 579,
+            "bends": 1,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          }
+        ],
+        "routerReported": {
+          "crossings": 1,
+          "shared": 0,
+          "blocked": 0,
+          "lanePairs": 0,
+          "laneDeficit": 0,
+          "passes": 3
+        },
+        "measurementCoverage": {
+          "geometry": "measured",
+          "paths": "measured",
+          "productionEdgeLabels": "measured",
+          "labelInk": "unavailable; label box crossings only",
+          "groupTitleInk": "production titleWidth/header envelope",
+          "clipping": "unavailable; no exported bounds",
+          "roundedAppearance": "not path-scored; visual inspection",
+          "colors": "not scored",
+          "emptyRectangle": "not measured; density/deadSpace are aggregate proxies",
+          "groupStaircase": "not implemented",
+          "unevenChannel": "not implemented",
+          "raggedBends": "not implemented",
+          "midWordWrap": "not implemented"
+        }
+      }
+    },
+    {
+      "file": "examples/login-sequence.draft",
+      "compileMs": 2.8384340000000066,
+      "routingMs": 0.07882900000004156,
+      "metrics": {
+        "metricsVersion": "draftably-eval-metrics-1.0.0",
+        "nodes": 4,
+        "groups": 0,
+        "visibleNodes": 4,
+        "edges": 7,
+        "hardDefects": 0,
+        "layoutHardDefects": 0,
+        "routingHardDefects": 0,
+        "hardValid": true,
+        "requiredIntentFailures": 0,
+        "blockedRoutes": 0,
+        "overlaps": 0,
+        "overlapArea": 0,
+        "throughNodes": 0,
+        "authoredSideViolations": 0,
+        "pinScopeViolations": 0,
+        "width": 573,
+        "height": 330,
+        "area": 189090,
+        "aspect": 1.736364,
+        "aspectError": 0.081789,
+        "density": 0.123201,
+        "deadSpaceRatio": 0.876799,
+        "alignment": 1,
+        "crossings": 0,
+        "sharedPairs": 0,
+        "sharedLength": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minLaneGap": null,
+        "bends": 2,
+        "maxBends": 2,
+        "bendsPerEdge": 0.285714,
+        "tinyJogs": 0,
+        "hooks": 0,
+        "backEdges": 3,
+        "routeLength": 1032,
+        "routeLengthPerEdge": 147.428571,
+        "detourMean": 1.467532,
+        "detourMax": 4.272727,
+        "labelCount": 7,
+        "labelDefects": 2,
+        "titleTextHits": 0,
+        "titleBandHits": 0,
+        "defectRaw": 5.5,
+        "defectIndex": 5.5,
+        "diPer10": 7.857143,
+        "weightingScores": {
+          "balanced": 7.857143,
+          "traceable": 10.714286,
+          "direct": 14.285714
+        },
+        "counts": {
+          "back-edge": 3,
+          "labels-too-close": 2
+        },
+        "issues": [
+          {
+            "kind": "back-edge",
+            "detail": "m4"
+          },
+          {
+            "kind": "back-edge",
+            "detail": "m6"
+          },
+          {
+            "kind": "back-edge",
+            "detail": "m7"
+          },
+          {
+            "kind": "labels-too-close",
+            "detail": "m1 × m2"
+          },
+          {
+            "kind": "labels-too-close",
+            "detail": "m3 × m4"
+          }
+        ],
+        "hard": [],
+        "groupFill": {},
+        "groupPadding": {},
+        "routeDetail": [
+          {
+            "id": "m1",
+            "length": 181,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "m2",
+            "length": 144,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "m3",
+            "length": 144,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "m4",
+            "length": 144,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": true
+          },
+          {
+            "id": "m5",
+            "length": 94,
+            "bends": 2,
+            "detourRatio": 4.272727,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "m6",
+            "length": 144,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": true
+          },
+          {
+            "id": "m7",
+            "length": 181,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": true
+          }
+        ],
+        "routerReported": {
+          "crossings": 0,
+          "shared": 0,
+          "blocked": 0,
+          "lanePairs": 0,
+          "laneDeficit": 0,
+          "passes": 3
+        },
+        "measurementCoverage": {
+          "geometry": "measured",
+          "paths": "measured",
+          "productionEdgeLabels": "measured",
+          "labelInk": "unavailable; label box crossings only",
+          "groupTitleInk": "unavailable; title bands only",
+          "clipping": "unavailable; no exported bounds",
+          "roundedAppearance": "not path-scored; visual inspection",
+          "colors": "not scored",
+          "emptyRectangle": "not measured; density/deadSpace are aggregate proxies",
+          "groupStaircase": "not implemented",
+          "unevenChannel": "not implemented",
+          "raggedBends": "not implemented",
+          "midWordWrap": "not implemented"
+        }
+      }
+    },
+    {
+      "file": "examples/tcp-header.draft",
+      "compileMs": 2.410449000000199,
+      "routingMs": 0.07070700000008401,
+      "metrics": {
+        "metricsVersion": "draftably-eval-metrics-1.0.0",
+        "nodes": 18,
+        "groups": 1,
+        "visibleNodes": 18,
+        "edges": 0,
+        "hardDefects": 0,
+        "layoutHardDefects": 0,
+        "routingHardDefects": 0,
+        "hardValid": true,
+        "requiredIntentFailures": 0,
+        "blockedRoutes": 0,
+        "overlaps": 0,
+        "overlapArea": 0,
+        "throughNodes": 0,
+        "authoredSideViolations": 0,
+        "pinScopeViolations": 0,
+        "width": 832,
+        "height": 267,
+        "area": 222144,
+        "aspect": 3.116105,
+        "aspectError": 0.66658,
+        "density": 0.808989,
+        "deadSpaceRatio": 0.191011,
+        "alignment": 1,
+        "crossings": 0,
+        "sharedPairs": 0,
+        "sharedLength": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minLaneGap": null,
+        "bends": 0,
+        "maxBends": 0,
+        "bendsPerEdge": 0,
+        "tinyJogs": 0,
+        "hooks": 0,
+        "backEdges": 0,
+        "routeLength": 0,
+        "routeLengthPerEdge": 0,
+        "detourMean": 0,
+        "detourMax": 1,
+        "labelCount": 0,
+        "labelDefects": 0,
+        "titleTextHits": 0,
+        "titleBandHits": 0,
+        "defectRaw": 0,
+        "defectIndex": 0,
+        "diPer10": 0,
+        "weightingScores": {
+          "balanced": 0,
+          "traceable": 0,
+          "direct": 0
+        },
+        "counts": {},
+        "issues": [],
+        "hard": [],
+        "groupFill": {
+          "tcp": 1
+        },
+        "groupPadding": {
+          "tcp": {
+            "left": 0,
+            "right": 0,
+            "top": 51,
+            "bottom": 0
+          }
+        },
+        "routeDetail": [],
+        "routerReported": {
+          "crossings": 0,
+          "shared": 0,
+          "blocked": 0,
+          "lanePairs": 0,
+          "laneDeficit": 0,
+          "passes": 3
+        },
+        "measurementCoverage": {
+          "geometry": "measured",
+          "paths": "measured",
+          "productionEdgeLabels": "measured",
+          "labelInk": "unavailable; label box crossings only",
+          "groupTitleInk": "production titleWidth/header envelope",
+          "clipping": "unavailable; no exported bounds",
+          "roundedAppearance": "not path-scored; visual inspection",
+          "colors": "not scored",
+          "emptyRectangle": "not measured; density/deadSpace are aggregate proxies",
+          "groupStaircase": "not implemented",
+          "unevenChannel": "not implemented",
+          "raggedBends": "not implemented",
+          "midWordWrap": "not implemented"
+        }
+      }
+    },
+    {
+      "file": "examples/order-pipeline.draft",
+      "compileMs": 75.57234099999982,
+      "routingMs": 156.38637799999992,
+      "metrics": {
+        "metricsVersion": "draftably-eval-metrics-1.0.0",
+        "nodes": 12,
+        "groups": 3,
+        "visibleNodes": 12,
+        "edges": 12,
+        "hardDefects": 1,
+        "layoutHardDefects": 0,
+        "routingHardDefects": 1,
+        "hardValid": false,
+        "requiredIntentFailures": 0,
+        "blockedRoutes": 1,
+        "overlaps": 0,
+        "overlapArea": 0,
+        "throughNodes": 0,
+        "authoredSideViolations": 0,
+        "pinScopeViolations": 0,
+        "width": 1611,
+        "height": 396,
+        "area": 637956,
+        "aspect": 4.068182,
+        "aspectError": 0.933193,
+        "density": 0.172752,
+        "deadSpaceRatio": 0.827248,
+        "alignment": 0.75,
+        "crossings": 0,
+        "sharedPairs": 0,
+        "sharedLength": 0,
+        "lanePairs": 0,
+        "laneDeficit": 0,
+        "minLaneGap": null,
+        "bends": 15,
+        "maxBends": 2,
+        "bendsPerEdge": 1.25,
+        "tinyJogs": 0,
+        "hooks": 0,
+        "backEdges": 0,
+        "routeLength": 1932.04,
+        "routeLengthPerEdge": 161.003333,
+        "detourMean": 1,
+        "detourMax": 1,
+        "labelCount": 1,
+        "labelDefects": 0,
+        "titleTextHits": 0,
+        "titleBandHits": 0,
+        "defectRaw": 2,
+        "defectIndex": 1.666667,
+        "diPer10": 1.666667,
+        "weightingScores": {
+          "balanced": 1.666667,
+          "traceable": 0.833333,
+          "direct": 1.666667
+        },
+        "counts": {
+          "blocked-route": 1,
+          "uneven-padding": 1
+        },
+        "issues": [
+          {
+            "kind": "blocked-route",
+            "detail": "e8"
+          },
+          {
+            "kind": "uneven-padding",
+            "detail": "fulfil"
+          }
+        ],
+        "hard": [
+          {
+            "kind": "routing",
+            "defect": "blocked-route",
+            "detail": "e8"
+          }
+        ],
+        "groupFill": {
+          "intake": 0.533127,
+          "core": 0.473891,
+          "fulfil": 0.355418
+        },
+        "groupPadding": {
+          "intake": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "core": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 24
+          },
+          "fulfil": {
+            "left": 24,
+            "right": 24,
+            "top": 48,
+            "bottom": 40
+          }
+        },
+        "routeDetail": [
+          {
+            "id": "e1",
+            "length": 84,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e10",
+            "length": 175,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e11",
+            "length": 347.02,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e12",
+            "length": 204,
+            "bends": 1,
+            "detourRatio": 1,
+            "wrap": true,
+            "back": false
+          },
+          {
+            "id": "e2",
+            "length": 84,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e3",
+            "length": 170,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e4",
+            "length": 52,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e5",
+            "length": 308,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": true,
+            "back": false
+          },
+          {
+            "id": "e6",
+            "length": 52,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e7",
+            "length": 312.02,
+            "bends": 2,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e8",
+            "length": 92,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          },
+          {
+            "id": "e9",
+            "length": 52,
+            "bends": 0,
+            "detourRatio": 1,
+            "wrap": false,
+            "back": false
+          }
+        ],
+        "routerReported": {
+          "crossings": 0,
+          "shared": 0,
+          "blocked": 1,
+          "lanePairs": 0,
+          "laneDeficit": 0,
+          "passes": 3
+        },
+        "measurementCoverage": {
+          "geometry": "measured",
+          "paths": "measured",
+          "productionEdgeLabels": "measured",
+          "labelInk": "unavailable; label box crossings only",
+          "groupTitleInk": "production titleWidth/header envelope",
+          "clipping": "unavailable; no exported bounds",
+          "roundedAppearance": "not path-scored; visual inspection",
+          "colors": "not scored",
+          "emptyRectangle": "not measured; density/deadSpace are aggregate proxies",
+          "groupStaircase": "not implemented",
+          "unevenChannel": "not implemented",
+          "raggedBends": "not implemented",
+          "midWordWrap": "not implemented"
+        }
+      }
+    }
+  ]
+}

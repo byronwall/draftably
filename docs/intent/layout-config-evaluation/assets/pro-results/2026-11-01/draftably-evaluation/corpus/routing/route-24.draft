@@ -1,0 +1,30 @@
+diagram "Group endpoints beside member endpoints" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+group g1 "Publisher boundary"
+group g2 "Consumer boundary"
+node a "a" in=g1
+node b "b" in=g1
+node c "c" in=g2
+node d "d" in=g2
+node external "external"
+edge e0 g1 -> g2 "publish"
+edge e1 a -> c "member route"
+edge e2 external -> g2 "connect boundary"
+edge e3 g1 -> external "notify"
+edge e4 b -> d
+layout root flow direction=auto fold=never
+pin g1 x=0 y=100
+layout g1 column gap=24 min-width=320 min-height=240
+pin g2 x=650 y=100
+layout g2 column gap=24 min-width=320 min-height=240
+size a width=160 height=56
+pin a x=0 y=0
+size b width=160 height=56
+pin b x=0 y=120
+size c width=160 height=56
+pin c x=0 y=0
+size d width=160 height=56
+pin d x=0 y=120
+size external width=160 height=56
+pin external x=400 y=500

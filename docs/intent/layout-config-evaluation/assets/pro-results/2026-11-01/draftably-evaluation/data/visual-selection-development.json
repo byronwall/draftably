@@ -1,0 +1,26 @@
+{
+  "seed": 20261101,
+  "pairs": 26,
+  "stratifiedPairs": 12,
+  "engineWitnessPairs": 10,
+  "portWitnessPairs": 2,
+  "metricTradeoffPairs": 2,
+  "unrenderableRandomDraws": [
+    {
+      "family": "authored",
+      "caseId": "authored-04",
+      "reason": "Fewer than two distinct completed renderable geometries; execution failures remain in numeric coverage."
+    },
+    {
+      "family": "recipes",
+      "caseId": "recipes-01",
+      "reason": "Fewer than two distinct completed renderable geometries; execution failures remain in numeric coverage."
+    },
+    {
+      "family": "recipes",
+      "caseId": "recipes-03",
+      "reason": "Fewer than two distinct completed renderable geometries; execution failures remain in numeric coverage."
+    }
+  ],
+  "heldoutRead": false
+}

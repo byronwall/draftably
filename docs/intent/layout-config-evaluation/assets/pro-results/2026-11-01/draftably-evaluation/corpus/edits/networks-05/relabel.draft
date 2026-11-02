@@ -1,0 +1,51 @@
+diagram "Networks evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Entity 0" shape=circle
+node n1 "Entity 1"
+node n2 "Entity 2"
+node n3 "Entity 3"
+node n4 "Entity 4"
+node n5 "Entity 5"
+node n6 "Entity 6"
+node n7 "Entity 7"
+node n8 "Entity 8"
+node n9 "Entity 9"
+node n10 "Entity 10"
+node n11 "Entity 11"
+node n12 "Entity 12"
+node n13 "Entity 13"
+node n14 "Entity 14"
+node n15 "Entity 15"
+node n16 "Entity 16"
+node n17 "Entity 17"
+node n18 "Entity 18"
+edge e0 n0 -> n1 "edited connection label with longer explanatory context" directed=false
+edge e1 n0 -> n2 directed=false
+edge e2 n0 -> n6 directed=false
+edge e3 n1 -> n2 directed=false
+edge e4 n2 -> n3 directed=false
+edge e5 n3 -> n4 directed=false
+edge e6 n3 -> n6 directed=false
+edge e7 n4 -> n5 directed=false
+edge e8 n5 -> n6 directed=false
+edge e9 n6 -> n7 directed=false
+edge e10 n7 -> n8 directed=false
+edge e11 n7 -> n12 directed=false
+edge e12 n7 -> n18 directed=false
+edge e13 n8 -> n9 directed=false
+edge e14 n9 -> n10 directed=false
+edge e15 n9 -> n18 directed=false
+edge e16 n10 -> n11 directed=false
+edge e17 n10 -> n18 directed=false
+edge e18 n11 -> n12 directed=false
+edge e19 n12 -> n13 directed=false
+edge e20 n13 -> n14 directed=false
+edge e21 n13 -> n17 directed=false
+edge e22 n14 -> n15 directed=false
+edge e23 n15 -> n16 directed=false
+edge e24 n16 -> n17 directed=false
+edge e25 n17 -> n18 directed=false
+
+layout root flow direction=right gap=48
+

@@ -1,0 +1,78 @@
+{
+  "runId": "selected-presets-development",
+  "at": "2026-11-01T23:30:26.507Z",
+  "originalSummarySha256": "de6fe8fe11e5c46d0bed4c893287f47795e73af86a26fb044a47f12bc234e600",
+  "loggedCompletion": {
+    "at": "2026-11-01T23:27:03.004Z",
+    "runId": "selected-presets-development",
+    "event": "complete",
+    "started": "2026-11-01T23:23:19.031Z",
+    "node": "v24.22.1",
+    "platform": "linux",
+    "workers": 3,
+    "planned": 306,
+    "priorCompleted": 0,
+    "executed": 306,
+    "failed": 0,
+    "timedOut": 28,
+    "skipped": 0,
+    "taskSha256": "8df108761fd88b185f1ee2a7475d6917ef9470fe2681079d9fab17467e9a2f4f",
+    "finished": "2026-11-01T23:27:03.004Z",
+    "elapsedSeconds": 223.973
+  },
+  "originalRows": 301,
+  "recoveredRows": 5,
+  "recovered": [
+    {
+      "id": "G-selected-development-architecture-04-compound-spring-p3",
+      "status": "timed_out",
+      "geometry": null,
+      "layoutCheckpoint": "data/layout-checkpoints/G-selected-development-architecture-04-compound-spring-p3.json.gz",
+      "geometryHash": null,
+      "sourceProgress": {
+        "at": "2026-11-01T23:24:42.944Z",
+        "runId": "selected-presets-development",
+        "event": "progress",
+        "complete": 93,
+        "total": 306,
+        "last": "G-selected-development-architecture-04-compound-spring-p3",
+        "status": "timed_out",
+        "elapsedSeconds": 84
+      }
+    },
+    {
+      "id": "G-selected-development-routing-04-compound-spring-p3",
+      "status": "ok",
+      "geometry": "data/geometry/G-selected-development-routing-04-compound-spring-p3.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "c393fe5875c67938a5c09b8152e37a336c765d50bcab8aa343e59c183d9d9a52",
+      "sourceProgress": null
+    },
+    {
+      "id": "G-selected-development-recipes-04-compound-spring-p3",
+      "status": "ok",
+      "geometry": "data/geometry/G-selected-development-recipes-04-compound-spring-p3.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "f122f42d8418d3ac391b45ac10185eec67c80f957bae168d53856ecc4b97ba33",
+      "sourceProgress": null
+    },
+    {
+      "id": "G-selected-development-recipes-04-tree-p1",
+      "status": "ok",
+      "geometry": "data/geometry/G-selected-development-recipes-04-tree-p1.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "5ee8cc71892d5b27e30af3cefe2b4584f880f6aac9335e03ad2c4a466e763a70",
+      "sourceProgress": null
+    },
+    {
+      "id": "G-selected-development-recipes-04-grid-p3",
+      "status": "ok",
+      "geometry": "data/geometry/G-selected-development-recipes-04-grid-p3.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "0fdb829cb4c3ed43ded48588048c2de423cb10867faa3c85957c2201520e76f4",
+      "sourceProgress": null
+    }
+  ],
+  "unavailableFields": "Full wall/routing/label timings, original cache-hit status and exact attempt timestamps cannot be recovered for successful artifacts. They remain null.",
+  "algorithmReruns": 0
+}

@@ -1,0 +1,107 @@
+{
+  "at": "2026-11-02T00:37:19.120880+00:00",
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "design_sha256": "844f80df33acfeaf0d9ad8c7b7d1af352f799a67d306f0bd5d5143d4f1e6a6b9",
+  "code_sha256": "43604a9f7303711084a38b96f47072d2e268fc4606934de07bc2a7aea74b0a4f",
+  "no_selection_or_fitting": true,
+  "no_geometry_algorithms": true,
+  "stages": [
+    {
+      "stem": "screen-heldout",
+      "planned": 599,
+      "canonical_terminal_rows": 599,
+      "attempt_rows": 599,
+      "canonical_rule": "first terminal outcome; later attempts never improve validity or selection",
+      "status_counts": {
+        "ok": 481,
+        "timed_out": 118
+      },
+      "later_attempts": {},
+      "task_sha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "result_sha256": "f121951690a1bad6d7c46ebc719fed0b1ab3bc8401ad38c9c7b9d4922b6a66ae"
+    },
+    {
+      "stem": "documented-default-heldout",
+      "planned": 23,
+      "canonical_terminal_rows": 23,
+      "attempt_rows": 23,
+      "canonical_rule": "first terminal outcome; later attempts never improve validity or selection",
+      "status_counts": {
+        "ok": 19,
+        "timed_out": 4
+      },
+      "later_attempts": {},
+      "task_sha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "result_sha256": "d82837e3352e3e05969cfbee0498792e3bba23a2eddc3fafc1f16c99f40f5163"
+    },
+    {
+      "stem": "selected-presets-heldout",
+      "planned": 207,
+      "canonical_terminal_rows": 207,
+      "attempt_rows": 207,
+      "canonical_rule": "first terminal outcome; later attempts never improve validity or selection",
+      "status_counts": {
+        "ok": 173,
+        "timed_out": 34
+      },
+      "later_attempts": {},
+      "task_sha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "result_sha256": "bf5c33642e259ebdbf72ce3d9cd8fd601147432e1e84dcceef22456d0d5e0e1b"
+    },
+    {
+      "stem": "routing-current-heldout",
+      "planned": 72,
+      "canonical_terminal_rows": 72,
+      "attempt_rows": 72,
+      "canonical_rule": "first terminal outcome; later attempts never improve validity or selection",
+      "status_counts": {
+        "ok": 57,
+        "timed_out": 15
+      },
+      "later_attempts": {},
+      "task_sha256": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+      "result_sha256": "8dcabc3b24a9fe8945648af81fac560f1559cd98bc3cc5692ecd4b43043f9c30"
+    },
+    {
+      "stem": "joint-heldout",
+      "planned": 216,
+      "canonical_terminal_rows": 216,
+      "attempt_rows": 216,
+      "canonical_rule": "first terminal outcome; later attempts never improve validity or selection",
+      "status_counts": {
+        "ok": 186,
+        "timed_out": 30
+      },
+      "later_attempts": {},
+      "task_sha256": "53496c83d73103158f098e746ce2be9997fb1339b55c7d56d414b0554067b5d2",
+      "result_sha256": "37884444bf5b896679cab68c671a602970523cf45a29fe7f293e87ba001ecff6"
+    }
+  ],
+  "cases": 24,
+  "common_cases": 14,
+  "families": 12,
+  "primary_timing_interpretation": "Observed status and geometric/source-intent validity of the predeclared route-only task, on cached completed source positions or explicitly marked layout checkpoints. Main C/G cold-source gates remain their observed full-pipeline 15-second results.",
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 20261102,
+    "units": [
+      "base diagram, retaining all correlated profiles and alternatives",
+      "family, retaining all member bases and profiles"
+    ],
+    "interval": "2.5/97.5 percentile; conditional soft contrasts require both valid; validity includes failures; no human-population significance claim"
+  },
+  "reference_checks": {
+    "trials": 288,
+    "successful_document_checks": 243,
+    "partial_reference_trials": 54,
+    "missing_input_artifacts": 0,
+    "specialist_fallback_trials": 9
+  },
+  "verification": {
+    "verified": 318,
+    "checked": 318,
+    "mismatches": [],
+    "verification": "Canonical geometrySignature hash: node/group boxes, selected sides and route point sequences.",
+    "excludes": "SVG path/halo strings and other archive content are not covered by the trial geometry hash. This is not whole-archive byte identity."
+  }
+}

@@ -1,0 +1,5368 @@
+{
+  "estimand": "Eleven shipped warm pass algorithms on twelve native current drawings, with shared prior routes and inherited pins. No new position perturbation, manual patch, scope change, or collapsed-state patch is applied in this 132-run stratum.",
+  "trials": 132,
+  "cases": 12,
+  "families": 11,
+  "statuses": {
+    "ok": 132
+  },
+  "input_contexts": [
+    {
+      "case_id": "architecture-03",
+      "reference_id": "C-development-architecture-03-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 3,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 11
+    },
+    {
+      "case_id": "authored-03",
+      "reference_id": "C-development-authored-03-current",
+      "pinned_ids": [
+        "local",
+        "distant",
+        "n0",
+        "n4"
+      ],
+      "manual_ids": [
+        "n2"
+      ],
+      "collapsed_groups": [],
+      "groups": 2,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 7
+    },
+    {
+      "case_id": "containers-01",
+      "reference_id": "C-development-containers-01-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 9,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 10
+    },
+    {
+      "case_id": "cycles-02",
+      "reference_id": "C-development-cycles-02-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 11
+    },
+    {
+      "case_id": "dags-03",
+      "reference_id": "C-development-dags-03-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 11
+    },
+    {
+      "case_id": "disconnected-01",
+      "reference_id": "C-development-disconnected-01-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 0
+    },
+    {
+      "case_id": "hierarchies-01",
+      "reference_id": "C-development-hierarchies-01-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 11
+    },
+    {
+      "case_id": "networks-01",
+      "reference_id": "C-development-networks-01-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 11
+    },
+    {
+      "case_id": "pipelines-01",
+      "reference_id": "C-development-pipelines-01-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 10
+    },
+    {
+      "case_id": "pipelines-03",
+      "reference_id": "C-development-pipelines-03-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 0,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 5
+    },
+    {
+      "case_id": "presentation-01",
+      "reference_id": "C-development-presentation-01-current",
+      "pinned_ids": [
+        "close"
+      ],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 2,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 9
+    },
+    {
+      "case_id": "routing-01",
+      "reference_id": "C-development-routing-01-current",
+      "pinned_ids": [],
+      "manual_ids": [],
+      "collapsed_groups": [],
+      "groups": 3,
+      "authored_side_edges": [],
+      "scope": "all",
+      "new_perturbation": false,
+      "shared_history_routes": 10
+    }
+  ],
+  "per_engine": [
+    {
+      "engine": "boundary-align",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 3.2295684545454546,
+      "mean_traceable_delta_both_valid": 4.640955,
+      "mean_route_length_delta_both_valid": -230.79909090909098,
+      "mean_area_delta_both_valid": -12811.776527727283,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-boundary-align"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "boundary-align",
+        "case_id": "routing-01",
+        "family": "routing",
+        "trial_id": "C-repair-routing-01-boundary-align",
+        "baseline_id": "C-development-routing-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 47.985,
+        "routing_ms": 574.5683890000219,
+        "baseline_routing_ms": 506.3731990000233,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -5,
+        "delta_tinyJogs": 1,
+        "delta_hooks": -1,
+        "delta_backEdges": 1,
+        "delta_routeLength": -1102.8200000000002,
+        "delta_detourMean": -0.01587699999999992,
+        "delta_labelDefects": 1,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -65733.12021600001,
+        "delta_aspectError": 0.014317000000000024,
+        "delta_diPer10": -2.5,
+        "delta_score_balanced": -2.5,
+        "delta_score_traceable": -3.5,
+        "delta_score_direct": -3,
+        "candidate_edit_changedSides": 2,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.2,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 40.533309,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 37.470455,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0.030303,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "boundary-align"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "boundary-align",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-boundary-align",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 21.931421000044793,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -129.62,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 4,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 29640.598666000005,
+        "delta_aspectError": -0.025509000000000004,
+        "delta_diPer10": 16,
+        "delta_score_balanced": 16,
+        "delta_score_traceable": 24,
+        "delta_score_direct": 16,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 38.826868,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 38.826812,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "boundary-align"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "boundary-align"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 46,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.003595285390963,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 9,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "boundary-align"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 23,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.306397159345426,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 5,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 5,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 5,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 5,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-boundary-align",
+          "method": "boundary-align",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-boundary-align.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 25.5979405,
+      "mean_changed_side_rate_all_completed": 0.0704545,
+      "mean_balanced_valid_only": 7.432834909090909,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 95.3985780000221,
+      "recorded_operation_p95_ms": 641.839318349975,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "compound-flow",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 11,
+      "geometry_changed_over_1px": 11,
+      "hard_valid_candidates": 12,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 12,
+      "mean_balanced_delta_both_valid": 2.9053029166666664,
+      "mean_traceable_delta_both_valid": 3.7689393333333334,
+      "mean_route_length_delta_both_valid": -145.53500000000008,
+      "mean_area_delta_both_valid": -10260.817013416663,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "compound-flow",
+        "case_id": "containers-01",
+        "family": "containers",
+        "trial_id": "C-repair-containers-01-compound-flow",
+        "baseline_id": "C-development-containers-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 1,
+        "max_node_box_coordinate_delta": 47.99799999999999,
+        "routing_ms": 157.85533900000155,
+        "baseline_routing_ms": 139.56015400006436,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -1,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -288.5100000000002,
+        "delta_detourMean": 0.020557999999999854,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -4064.1119999999646,
+        "delta_aspectError": 0.0035350000000000104,
+        "delta_diPer10": -2.0,
+        "delta_score_balanced": -2.0,
+        "delta_score_traceable": -5.0,
+        "delta_score_direct": -2,
+        "candidate_edit_changedSides": 1,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.1,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 34.339313,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 34.068313,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0.005263,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "compound-flow"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "compound-flow",
+        "case_id": "pipelines-01",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-01-compound-flow",
+        "baseline_id": "C-development-pipelines-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.992999999999995,
+        "routing_ms": 27.079887000028975,
+        "baseline_routing_ms": 82.65030100000001,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 2,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 1,
+        "delta_routeLength": -9.720000000000027,
+        "delta_detourMean": -0.004969999999999919,
+        "delta_labelDefects": 3,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 43554.03198500001,
+        "delta_aspectError": -0.154987,
+        "delta_diPer10": 13.5,
+        "delta_score_balanced": 13.5,
+        "delta_score_traceable": 19.5,
+        "delta_score_direct": 18,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 39.631415,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 39.598215,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0.022222,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "compound-flow"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "compound-flow"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 43,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.1508221128556355,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 8,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 8,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 8,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "compound-flow"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 18,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.606190417401879,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 3,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [],
+      "mean_adjusted_movement_all_completed": 31.530042833333333,
+      "mean_changed_side_rate_all_completed": 0.07727266666666667,
+      "mean_balanced_valid_only": 6.985569916666667,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 86.53100150002865,
+      "recorded_operation_p95_ms": 561.4470061500207,
+      "routing_cache_hits": 0,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "compound-spring",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 3.4210284545454543,
+      "mean_traceable_delta_both_valid": 4.561524363636364,
+      "mean_route_length_delta_both_valid": -242.1954545454546,
+      "mean_area_delta_both_valid": -16052.613319909096,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-compound-spring"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "compound-spring",
+        "case_id": "routing-01",
+        "family": "routing",
+        "trial_id": "C-repair-routing-01-compound-spring",
+        "baseline_id": "C-development-routing-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 1,
+        "max_node_box_coordinate_delta": 47.88499999999999,
+        "routing_ms": 692.6821459999774,
+        "baseline_routing_ms": 506.3731990000233,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -6,
+        "delta_tinyJogs": 0,
+        "delta_hooks": -1,
+        "delta_backEdges": 0,
+        "delta_routeLength": -1200.94,
+        "delta_detourMean": -0.01587699999999992,
+        "delta_labelDefects": 1,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -77396.96065999998,
+        "delta_aspectError": -0.071579,
+        "delta_diPer10": -2,
+        "delta_score_balanced": -2,
+        "delta_score_traceable": -3,
+        "delta_score_direct": -5,
+        "candidate_edit_changedSides": 1,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.1,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.998179,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 47.439317,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "compound-spring"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "compound-spring",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-compound-spring",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 16.11306899995543,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -134.42999999999995,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 4,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 27282.86879400001,
+        "delta_aspectError": -0.026198999999999972,
+        "delta_diPer10": 16,
+        "delta_score_balanced": 16,
+        "delta_score_traceable": 24,
+        "delta_score_direct": 16,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 37.531472,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 37.533494,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "compound-spring"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "compound-spring"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 38,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.1990419668937864,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 7,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "compound-spring"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 15,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.85249107378297,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 3,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-compound-spring",
+          "method": "compound-spring",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-compound-spring.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 25.412932333333334,
+      "mean_changed_side_rate_all_completed": 0.03939391666666667,
+      "mean_balanced_valid_only": 7.624294909090909,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 102.93966500001261,
+      "recorded_operation_p95_ms": 548.1150598000384,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "flow",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 2.8342516363636365,
+      "mean_traceable_delta_both_valid": 3.9747475454545453,
+      "mean_route_length_delta_both_valid": -259.7754545454546,
+      "mean_area_delta_both_valid": -17268.815767818185,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-flow"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "flow",
+        "case_id": "routing-01",
+        "family": "routing",
+        "trial_id": "C-repair-routing-01-flow",
+        "baseline_id": "C-development-routing-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 47.99799999999999,
+        "routing_ms": 629.8904139999067,
+        "baseline_routing_ms": 506.3731990000233,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -2,
+        "delta_tinyJogs": 1,
+        "delta_hooks": -1,
+        "delta_backEdges": 0,
+        "delta_routeLength": -1168.7000000000003,
+        "delta_detourMean": -0.0004189999999999472,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -117452.23804999999,
+        "delta_aspectError": 0.052510999999999974,
+        "delta_diPer10": -3,
+        "delta_score_balanced": -3,
+        "delta_score_traceable": -4,
+        "delta_score_direct": -5,
+        "candidate_edit_changedSides": 2,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.2,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.998188,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 48.125728,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "flow"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "flow",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-flow",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 14.616200000047684,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -138.46000000000004,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 4,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 27420.229496000014,
+        "delta_aspectError": -0.04252100000000003,
+        "delta_diPer10": 16,
+        "delta_score_balanced": 16,
+        "delta_score_traceable": 24,
+        "delta_score_direct": 16,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 35.843202,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 35.843174,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "flow"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "flow"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 39,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.0414635394827552,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 6,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 8,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 8,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "flow"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 15,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.064329488056265,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 2,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 2,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 4,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-flow",
+          "method": "flow",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-flow.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 26.12732475,
+      "mean_changed_side_rate_all_completed": 0.04090908333333333,
+      "mean_balanced_valid_only": 7.037518090909091,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 100.96097050001845,
+      "recorded_operation_p95_ms": 535.5439292500085,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "force",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 11,
+      "geometry_changed_over_1px": 11,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 1.6028466363636362,
+      "mean_traceable_delta_both_valid": 2.148301272727273,
+      "mean_route_length_delta_both_valid": -355.7481818181818,
+      "mean_area_delta_both_valid": -7439.712493909092,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-force"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "force",
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-repair-architecture-03-force",
+        "baseline_id": "C-development-architecture-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 21.472999999999956,
+        "routing_ms": 429.227394000045,
+        "baseline_routing_ms": 266.93000100000063,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 1,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 4,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -865.4299999999998,
+        "delta_detourMean": -0.031536999999999926,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -11552.234999999986,
+        "delta_aspectError": -0.03923500000000002,
+        "delta_diPer10": -5.454546000000001,
+        "delta_score_balanced": -5.454546000000001,
+        "delta_score_traceable": -8.181818,
+        "delta_score_direct": -8.636364,
+        "candidate_edit_changedSides": 3,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.272727,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 11,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 17.217315,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 15.582703,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "force"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "force",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-force",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 10.709013999905437,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -147.28999999999996,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 2,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 43860.706641,
+        "delta_aspectError": -0.17613299999999998,
+        "delta_diPer10": 12,
+        "delta_score_balanced": 12,
+        "delta_score_traceable": 16,
+        "delta_score_direct": 12,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 35.729408,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 35.719794,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "force"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 47,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.4717348786592103,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 8,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 9,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "force"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 20,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 2.7448521815116016,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 5,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 4,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-force",
+          "method": "force",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-force.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 26.475130666666665,
+      "mean_changed_side_rate_all_completed": 0.06439391666666666,
+      "mean_balanced_valid_only": 5.806113090909091,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 95.7557224999764,
+      "recorded_operation_p95_ms": 537.6521360999321,
+      "routing_cache_hits": 1,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "grid",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 11,
+      "geometry_changed_over_1px": 11,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 2.252066090909091,
+      "mean_traceable_delta_both_valid": 3.2024793636363635,
+      "mean_route_length_delta_both_valid": -131.2290909090909,
+      "mean_area_delta_both_valid": -12033.051782999995,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-grid"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "grid",
+        "case_id": "containers-01",
+        "family": "containers",
+        "trial_id": "C-repair-containers-01-grid",
+        "baseline_id": "C-development-containers-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 46.45100000000002,
+        "routing_ms": 96.53414599993266,
+        "baseline_routing_ms": 139.56015400006436,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 2,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -48.07999999999993,
+        "delta_detourMean": 0.021414999999999962,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -11163.125999999931,
+        "delta_aspectError": 0.009737999999999969,
+        "delta_diPer10": -2.0,
+        "delta_score_balanced": -2.0,
+        "delta_score_traceable": -1.0,
+        "delta_score_direct": -2,
+        "candidate_edit_changedSides": 2,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.2,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 23.179474,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 22.52831,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "grid"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "grid",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-grid",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 15.65820199996233,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 2,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -139.65999999999997,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 2,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 8243.942955000006,
+        "delta_aspectError": 0.0013180000000000414,
+        "delta_diPer10": 12,
+        "delta_score_balanced": 12,
+        "delta_score_traceable": 16,
+        "delta_score_direct": 12,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 29.087477,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 29.221852,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "grid"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "grid"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 43,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.2544248328514713,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 8,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "grid"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 18,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 3.6672023012384405,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 5,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 2,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 3,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-grid",
+          "method": "grid",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-grid.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "pay"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "pay through draft"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 26.260729,
+      "mean_changed_side_rate_all_completed": 0.055303000000000005,
+      "mean_balanced_valid_only": 6.455332545454546,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 121.68816249998054,
+      "recorded_operation_p95_ms": 398.27283130001734,
+      "routing_cache_hits": 1,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "layered",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 11,
+      "geometry_changed_over_1px": 11,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 2.4504131818181816,
+      "mean_traceable_delta_both_valid": 3.1363635454545453,
+      "mean_route_length_delta_both_valid": -124.68545454545459,
+      "mean_area_delta_both_valid": -7784.412411181823,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-layered"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "layered",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-layered",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 15.52377400000114,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -95.75999999999999,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 17782.034755,
+        "delta_aspectError": 0.15222199999999997,
+        "delta_diPer10": 0,
+        "delta_score_balanced": 0,
+        "delta_score_traceable": 0,
+        "delta_score_direct": 0,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.41783,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 47.427073,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "layered"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "layered",
+        "case_id": "pipelines-01",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-01-layered",
+        "baseline_id": "C-development-pipelines-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.992999999999995,
+        "routing_ms": 29.604766999953426,
+        "baseline_routing_ms": 82.65030100000001,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 1,
+        "delta_routeLength": -20.710000000000036,
+        "delta_detourMean": -0.005001000000000033,
+        "delta_labelDefects": 3,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 44225.62511199998,
+        "delta_aspectError": -0.15303900000000004,
+        "delta_diPer10": 10.5,
+        "delta_score_balanced": 10.5,
+        "delta_score_traceable": 14.5,
+        "delta_score_direct": 14,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 38.050718,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 38.029599,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0.022222,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "layered"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "layered"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 39,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.3803319908564842,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 8,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 7,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "layered"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 14,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.204835375420375,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 2,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 2,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-layered",
+          "method": "layered",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-layered.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 29.358230416666668,
+      "mean_changed_side_rate_all_completed": 0.055303000000000005,
+      "mean_balanced_valid_only": 6.653679636363636,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 77.29736600001343,
+      "recorded_operation_p95_ms": 513.9017485000134,
+      "routing_cache_hits": 1,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "separate",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 4,
+      "geometry_changed_over_1px": 4,
+      "hard_valid_candidates": 12,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 12,
+      "mean_balanced_delta_both_valid": -0.045454583333333375,
+      "mean_traceable_delta_both_valid": -0.11363641666666673,
+      "mean_route_length_delta_both_valid": -28.990833333333324,
+      "mean_area_delta_both_valid": 1273.3333333333333,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "separate",
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-repair-architecture-03-separate",
+        "baseline_id": "C-development-architecture-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 4.150000000000006,
+        "routing_ms": 447.9706850000657,
+        "baseline_routing_ms": 266.93000100000063,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 1,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 4,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -339.6999999999998,
+        "delta_detourMean": 0.027490000000000014,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 15280,
+        "delta_aspectError": -0.049638000000000015,
+        "delta_diPer10": -4.5454550000000005,
+        "delta_score_balanced": -4.5454550000000005,
+        "delta_score_traceable": -6.363637000000001,
+        "delta_score_direct": -5.0,
+        "candidate_edit_changedSides": 3,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.272727,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 11,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 1.265385,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 1.265385,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "separate"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "separate",
+        "case_id": "routing-01",
+        "family": "routing",
+        "trial_id": "C-repair-routing-01-separate",
+        "baseline_id": "C-development-routing-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 4.150000000000006,
+        "routing_ms": 355.7837340000551,
+        "baseline_routing_ms": 506.3731990000233,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 176.80999999999995,
+        "delta_detourMean": 0.0052480000000001414,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 0,
+        "delta_aspectError": 0.0,
+        "delta_diPer10": 2,
+        "delta_score_balanced": 2,
+        "delta_score_traceable": 3,
+        "delta_score_direct": 2,
+        "candidate_edit_changedSides": 2,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.2,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 8,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 0.8,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 1.345833,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 1.345833,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "separate"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "separate"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 37,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.0713903092848773,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 6,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 7,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "separate"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 36,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.547854094890938,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 6,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 9,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 7,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [],
+      "mean_adjusted_movement_all_completed": 0.5164651666666666,
+      "mean_changed_side_rate_all_completed": 0.05606058333333334,
+      "mean_balanced_valid_only": 4.034812416666667,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 45.57897900004173,
+      "recorded_operation_p95_ms": 411.9576773000066,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "stress",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 2.6322313636363637,
+      "mean_traceable_delta_both_valid": 3.789256181818182,
+      "mean_route_length_delta_both_valid": -307.65272727272736,
+      "mean_area_delta_both_valid": -1806.509774363642,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-stress"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "stress",
+        "case_id": "routing-01",
+        "family": "routing",
+        "trial_id": "C-repair-routing-01-stress",
+        "baseline_id": "C-development-routing-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 1,
+        "max_node_box_coordinate_delta": 47.93100000000004,
+        "routing_ms": 738.8747849999927,
+        "baseline_routing_ms": 506.3731990000233,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -6,
+        "delta_tinyJogs": 1,
+        "delta_hooks": -1,
+        "delta_backEdges": 0,
+        "delta_routeLength": -1210.3900000000003,
+        "delta_detourMean": -0.01587699999999992,
+        "delta_labelDefects": 1,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -85069.60817000002,
+        "delta_aspectError": -0.04567499999999999,
+        "delta_diPer10": -1,
+        "delta_score_balanced": -1,
+        "delta_score_traceable": -2,
+        "delta_score_direct": -3,
+        "candidate_edit_changedSides": 1,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.1,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.998019,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 47.903807,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "stress"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "stress",
+        "case_id": "pipelines-01",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-01-stress",
+        "baseline_id": "C-development-pipelines-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.99200000000002,
+        "routing_ms": 28.36261299997568,
+        "baseline_routing_ms": 82.65030100000001,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 2,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 1,
+        "delta_routeLength": -5.7999999999999545,
+        "delta_detourMean": -0.0049680000000000835,
+        "delta_labelDefects": 4,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 43781.09579599998,
+        "delta_aspectError": -0.15431500000000004,
+        "delta_diPer10": 12.5,
+        "delta_score_balanced": 12.5,
+        "delta_score_traceable": 19.5,
+        "delta_score_direct": 17,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 37.642136,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 37.716513,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0.022222,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "stress"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "stress"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 39,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.190537890978828,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 8,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 7,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "stress"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 16,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 3.639530459777944,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 4,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 3,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-stress",
+          "method": "stress",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-stress.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 26.01179525,
+      "mean_changed_side_rate_all_completed": 0.06212116666666667,
+      "mean_balanced_valid_only": 6.8354978181818185,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 96.0672810000251,
+      "recorded_operation_p95_ms": 526.7536491999108,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "tidy",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 3.073921090909091,
+      "mean_traceable_delta_both_valid": 4.544995454545455,
+      "mean_route_length_delta_both_valid": -238.32545454545462,
+      "mean_area_delta_both_valid": -21057.824918272734,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "C-repair-cycles-02-tidy"
+      ],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "tidy",
+        "case_id": "routing-01",
+        "family": "routing",
+        "trial_id": "C-repair-routing-01-tidy",
+        "baseline_id": "C-development-routing-01-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 47.99699999999996,
+        "routing_ms": 861.5042620000895,
+        "baseline_routing_ms": 506.3731990000233,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 1,
+        "delta_hooks": -1,
+        "delta_backEdges": 0,
+        "delta_routeLength": -1133.27,
+        "delta_detourMean": -0.0005469999999998532,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -115443.25416900002,
+        "delta_aspectError": 0.031335,
+        "delta_diPer10": -2,
+        "delta_score_balanced": -2,
+        "delta_score_traceable": -3,
+        "delta_score_direct": -3,
+        "candidate_edit_changedSides": 2,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.2,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 10,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.998085,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 47.99818,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "tidy"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "tidy",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-tidy",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 18.674404999939725,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -148.44000000000005,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 3,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 41536.237389999995,
+        "delta_aspectError": -0.167051,
+        "delta_diPer10": 14,
+        "delta_score_balanced": 14,
+        "delta_score_traceable": 20,
+        "delta_score_direct": 14,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 32.776158,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 32.779193,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "tidy"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "tidy"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 39,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.1790593688984088,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 8,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "tidy"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 16,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.410634828759171,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 4,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [
+        {
+          "case_id": "cycles-02",
+          "family": "cycles",
+          "trial_id": "C-repair-cycles-02-tidy",
+          "method": "tidy",
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/C-repair-cycles-02-tidy.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "cancel1"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "cancel1 through packed"
+            }
+          ],
+          "intent_failures": [],
+          "baseline_id": "C-development-cycles-02-current",
+          "baseline_valid": true,
+          "baseline_geometry": "data/geometry/C-development-cycles-02-current.json.gz"
+        }
+      ],
+      "mean_adjusted_movement_all_completed": 25.71126041666667,
+      "mean_changed_side_rate_all_completed": 0.0401515,
+      "mean_balanced_valid_only": 7.277187545454545,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 66.03587650001282,
+      "recorded_operation_p95_ms": 616.2655170499809,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    },
+    {
+      "engine": "tree",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 11,
+      "geometry_changed_over_1px": 11,
+      "hard_valid_candidates": 12,
+      "hard_valid_baselines": 12,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 12,
+      "mean_balanced_delta_both_valid": 3.4431816666666664,
+      "mean_traceable_delta_both_valid": 4.58543775,
+      "mean_route_length_delta_both_valid": -76.06750000000005,
+      "mean_area_delta_both_valid": 1589.3190749999897,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "tree",
+        "case_id": "pipelines-03",
+        "family": "pipelines",
+        "trial_id": "C-repair-pipelines-03-tree",
+        "baseline_id": "C-development-pipelines-03-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 0,
+        "max_node_box_coordinate_delta": 47.998,
+        "routing_ms": 0.20522000000346452,
+        "baseline_routing_ms": 6.563555999999835,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 0,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -95.75999999999999,
+        "delta_detourMean": 0,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 17782.034755,
+        "delta_aspectError": 0.15222199999999997,
+        "delta_diPer10": 0,
+        "delta_score_balanced": 0,
+        "delta_score_traceable": 0,
+        "delta_score_direct": 0,
+        "candidate_edit_changedSides": 0,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 5,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.41783,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 47.427073,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "tree"
+      },
+      "worst_soft_witness": {
+        "stratum": "native-current-warm-pass",
+        "control": "warm-engine",
+        "level": "tree",
+        "case_id": "cycles-02",
+        "family": "cycles",
+        "trial_id": "C-repair-cycles-02-tree",
+        "baseline_id": "C-development-cycles-02-current",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 47.99800000000005,
+        "routing_ms": 98.2167269999627,
+        "baseline_routing_ms": 33.10677399998531,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -1,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 22,
+        "delta_tinyJogs": 1,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 410.1199999999999,
+        "delta_detourMean": 0.2851659999999998,
+        "delta_labelDefects": 4,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 7383.361641999974,
+        "delta_aspectError": -0.10969600000000002,
+        "delta_diPer10": 12.727272,
+        "delta_score_balanced": 12.727272,
+        "delta_score_traceable": 17.272728,
+        "delta_score_direct": 16.818182,
+        "candidate_edit_changedSides": 2,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": 0.181818,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": 11,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": 1,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": 47.88637,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": 41.720532,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": 0.027778,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "engine": "tree"
+      },
+      "statuses": {
+        "ok": 12
+      },
+      "pool_with_retention": {
+        "methods": [
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 38,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 1.4101950804848271,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 7,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 7,
+            "feasible": 12
+          }
+        }
+      },
+      "standalone": {
+        "methods": [
+          "tree"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 12,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 5.466371346447224,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 2,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 2,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 3,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 2,
+            "feasible": 12
+          }
+        }
+      },
+      "hard_failure_cases": [],
+      "mean_adjusted_movement_all_completed": 30.402420166666666,
+      "mean_changed_side_rate_all_completed": 0.0704545,
+      "mean_balanced_valid_only": 7.523448666666667,
+      "pin_scope_failures": 0,
+      "authored_side_failures": 0,
+      "required_intent_failures": 0,
+      "recorded_operation_median_ms": 81.16041850001784,
+      "recorded_operation_p95_ms": 486.63873700001835,
+      "routing_cache_hits": 2,
+      "routing_cache_status_available": 12,
+      "timing_caution": "Observed components with cache/order effects; use cache-bypassed timing stage for algorithm speed claims."
+    }
+  ],
+  "full_pool_with_retention": {
+    "methods": [
+      "boundary-align",
+      "compound-flow",
+      "compound-spring",
+      "flow",
+      "force",
+      "grid",
+      "layered",
+      "separate",
+      "stress",
+      "tidy",
+      "tree"
+    ],
+    "always_available": [
+      "retain-current"
+    ],
+    "hard_valid_case_union": 12,
+    "cases": 12,
+    "acceptable_profile_jobs": 60,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 60,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+    "score_regret_available_jobs": 60,
+    "per_profile": {
+      "readable": {
+        "acceptable": 12,
+        "feasible": 12
+      },
+      "compact": {
+        "acceptable": 12,
+        "feasible": 12
+      },
+      "traceable": {
+        "acceptable": 12,
+        "feasible": 12
+      },
+      "stable": {
+        "acceptable": 12,
+        "feasible": 12
+      },
+      "specialist": {
+        "acceptable": 12,
+        "feasible": 12
+      }
+    }
+  },
+  "best_action_portfolio_curve": [
+    {
+      "size": 0,
+      "methods": [],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 37,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 1.4965737606719192,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 7,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 6,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 7,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 10,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 7,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 1,
+      "methods": [
+        "force"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 47,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.4717348786592103,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 9,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 8,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 9,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 9,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 2,
+      "methods": [
+        "boundary-align",
+        "force"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 56,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.23173980153675564,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 11,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 11,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 11,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 11,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 3,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "force"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 4,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "force",
+        "stress"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.001476037286286025,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 5,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "force",
+        "grid",
+        "stress"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 6,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "compound-spring",
+        "force",
+        "grid",
+        "stress"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 7,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "compound-spring",
+        "flow",
+        "force",
+        "grid",
+        "stress"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 8,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "compound-spring",
+        "flow",
+        "force",
+        "grid",
+        "layered",
+        "stress"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 9,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "compound-spring",
+        "flow",
+        "force",
+        "grid",
+        "layered",
+        "separate",
+        "stress"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 10,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "compound-spring",
+        "flow",
+        "force",
+        "grid",
+        "layered",
+        "separate",
+        "stress",
+        "tidy"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 11,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "compound-spring",
+        "flow",
+        "force",
+        "grid",
+        "layered",
+        "separate",
+        "stress",
+        "tidy",
+        "tree"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    }
+  ],
+  "leave_one_engine_out": [
+    {
+      "removed_engine": "boundary-align",
+      "full_pool_without": {
+        "methods": [
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 54,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.08833608236272605,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 10,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 6,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 53,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.1815559744577492,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 10,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "compound-flow",
+          "force",
+          "stress"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 54,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.11078951696762585,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 10,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 6,
+      "unique_practical_witnesses": [
+        {
+          "case_id": "dags-03",
+          "family": "dags",
+          "profile": "compact",
+          "unique_trial": "C-repair-dags-03-boundary-align",
+          "unique_score": 1.8017078204217243,
+          "best_remaining_trial": "C-repair-dags-03-flow",
+          "best_remaining_score": 2.627843098496967,
+          "unique_geometry": "data/geometry/C-repair-dags-03-boundary-align.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-dags-03-flow.json.gz",
+          "best_remaining_score_delta": 0.8261352780752427,
+          "best_remaining_area_ratio": 0.9906003996810335,
+          "best_remaining_route_length_ratio": 1.1463295138680585,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "dags-03",
+          "family": "dags",
+          "profile": "traceable",
+          "unique_trial": "C-repair-dags-03-boundary-align",
+          "unique_score": 0.0,
+          "best_remaining_trial": "C-repair-dags-03-stress",
+          "best_remaining_score": 0.0,
+          "unique_geometry": "data/geometry/C-repair-dags-03-boundary-align.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-dags-03-stress.json.gz",
+          "best_remaining_score_delta": 0.0,
+          "best_remaining_area_ratio": 1.3008072324573843,
+          "best_remaining_route_length_ratio": 1.1456296118543403,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "dags-03",
+          "family": "dags",
+          "profile": "specialist",
+          "unique_trial": "C-repair-dags-03-boundary-align",
+          "unique_score": 0.0,
+          "best_remaining_trial": "C-repair-dags-03-stress",
+          "best_remaining_score": 0.0,
+          "unique_geometry": "data/geometry/C-repair-dags-03-boundary-align.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-dags-03-stress.json.gz",
+          "best_remaining_score_delta": 0.0,
+          "best_remaining_area_ratio": 1.3008072324573843,
+          "best_remaining_route_length_ratio": 1.1456296118543403,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "presentation-01",
+          "family": "presentation",
+          "profile": "readable",
+          "unique_trial": "C-repair-presentation-01-boundary-align",
+          "unique_score": 5.149914512099559,
+          "best_remaining_trial": "C-repair-presentation-01-layered",
+          "best_remaining_score": 6.195508415851931,
+          "unique_geometry": "data/geometry/C-repair-presentation-01-boundary-align.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-presentation-01-layered.json.gz",
+          "best_remaining_score_delta": 1.0455939037523718,
+          "best_remaining_area_ratio": 0.9734412150144766,
+          "best_remaining_route_length_ratio": 0.963565749407917,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "presentation-01",
+          "family": "presentation",
+          "profile": "traceable",
+          "unique_trial": "C-repair-presentation-01-boundary-align",
+          "unique_score": 2.222222,
+          "best_remaining_trial": "C-repair-presentation-01-tree",
+          "best_remaining_score": 3.333333,
+          "unique_geometry": "data/geometry/C-repair-presentation-01-boundary-align.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-presentation-01-tree.json.gz",
+          "best_remaining_score_delta": 1.1111110000000002,
+          "best_remaining_area_ratio": 0.9734020979605831,
+          "best_remaining_route_length_ratio": 0.9920491710837939,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "presentation-01",
+          "family": "presentation",
+          "profile": "specialist",
+          "unique_trial": "C-repair-presentation-01-boundary-align",
+          "unique_score": 2.222222,
+          "best_remaining_trial": "C-repair-presentation-01-compound-flow",
+          "best_remaining_score": 3.333333,
+          "unique_geometry": "data/geometry/C-repair-presentation-01-boundary-align.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-presentation-01-compound-flow.json.gz",
+          "best_remaining_score_delta": 1.1111110000000002,
+          "best_remaining_area_ratio": 0.9662614917306355,
+          "best_remaining_route_length_ratio": 0.9874111875493402,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        }
+      ]
+    },
+    {
+      "removed_engine": "compound-flow",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 59,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.07330133969440757,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 1,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 56,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.23173980153675564,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 11,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "force",
+          "grid"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 59,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.08153537838738467,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 1,
+      "unique_practical_witnesses": [
+        {
+          "case_id": "containers-01",
+          "family": "containers",
+          "profile": "traceable",
+          "unique_trial": "C-repair-containers-01-compound-flow",
+          "unique_score": 12.5,
+          "best_remaining_trial": "C-repair-containers-01-tidy",
+          "best_remaining_score": 16.5,
+          "unique_geometry": "data/geometry/C-repair-containers-01-compound-flow.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-containers-01-tidy.json.gz",
+          "best_remaining_score_delta": 4.0,
+          "best_remaining_area_ratio": 0.997948748754408,
+          "best_remaining_route_length_ratio": 1.0140170720455008,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        }
+      ]
+    },
+    {
+      "removed_engine": "compound-spring",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "flow",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "force",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 52,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.25554841643070886,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 11,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 8,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 50,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.7752104205315861,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 10,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "flow"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 52,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.5930021981107916,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 11,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 10,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 11,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 8,
+      "unique_practical_witnesses": [
+        {
+          "case_id": "architecture-03",
+          "family": "architecture",
+          "profile": "readable",
+          "unique_trial": "C-repair-architecture-03-force",
+          "unique_score": 8.492857484466992,
+          "best_remaining_trial": "C-repair-architecture-03-separate",
+          "best_remaining_score": 12.108415204600131,
+          "unique_geometry": "data/geometry/C-repair-architecture-03-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-architecture-03-separate.json.gz",
+          "best_remaining_score_delta": 3.6155577201331397,
+          "best_remaining_area_ratio": 1.0929416586120186,
+          "best_remaining_route_length_ratio": 1.2175521503618765,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "architecture-03",
+          "family": "architecture",
+          "profile": "compact",
+          "unique_trial": "C-repair-architecture-03-force",
+          "unique_score": 7.584801120967279,
+          "best_remaining_trial": "C-repair-architecture-03-separate",
+          "best_remaining_score": 9.184068484865405,
+          "unique_geometry": "data/geometry/C-repair-architecture-03-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-architecture-03-separate.json.gz",
+          "best_remaining_score_delta": 1.5992673638981252,
+          "best_remaining_area_ratio": 1.0929416586120186,
+          "best_remaining_route_length_ratio": 1.2175521503618765,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "architecture-03",
+          "family": "architecture",
+          "profile": "traceable",
+          "unique_trial": "C-repair-architecture-03-force",
+          "unique_score": 13.636364,
+          "best_remaining_trial": "C-repair-architecture-03-separate",
+          "best_remaining_score": 15.454545,
+          "unique_geometry": "data/geometry/C-repair-architecture-03-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-architecture-03-separate.json.gz",
+          "best_remaining_score_delta": 1.8181809999999992,
+          "best_remaining_area_ratio": 1.0929416586120186,
+          "best_remaining_route_length_ratio": 1.2175521503618765,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "architecture-03",
+          "family": "architecture",
+          "profile": "stable",
+          "unique_trial": "C-repair-architecture-03-force",
+          "unique_score": 9.285641291666666,
+          "best_remaining_trial": "C-repair-architecture-03-separate",
+          "best_remaining_score": 9.598177375,
+          "unique_geometry": "data/geometry/C-repair-architecture-03-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-architecture-03-separate.json.gz",
+          "best_remaining_score_delta": 0.3125360833333346,
+          "best_remaining_area_ratio": 1.0929416586120186,
+          "best_remaining_route_length_ratio": 1.2175521503618765,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "architecture-03",
+          "family": "architecture",
+          "profile": "specialist",
+          "unique_trial": "C-repair-architecture-03-force",
+          "unique_score": 7.272727,
+          "best_remaining_trial": "C-repair-architecture-03-separate",
+          "best_remaining_score": 8.181818,
+          "unique_geometry": "data/geometry/C-repair-architecture-03-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-architecture-03-separate.json.gz",
+          "best_remaining_score_delta": 0.9090910000000001,
+          "best_remaining_area_ratio": 1.0929416586120186,
+          "best_remaining_route_length_ratio": 1.2175521503618765,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "routing-01",
+          "family": "routing",
+          "profile": "readable",
+          "unique_trial": "C-repair-routing-01-force",
+          "unique_score": 8.60282229188975,
+          "best_remaining_trial": "C-repair-routing-01-compound-spring",
+          "best_remaining_score": 10.396972076215695,
+          "unique_geometry": "data/geometry/C-repair-routing-01-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-routing-01-compound-spring.json.gz",
+          "best_remaining_score_delta": 1.7941497843259455,
+          "best_remaining_area_ratio": 1.0888222330302588,
+          "best_remaining_route_length_ratio": 0.9871685673275604,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "routing-01",
+          "family": "routing",
+          "profile": "compact",
+          "unique_trial": "C-repair-routing-01-force",
+          "unique_score": 6.63817493585976,
+          "best_remaining_trial": "C-repair-routing-01-flow",
+          "best_remaining_score": 7.645152262858203,
+          "unique_geometry": "data/geometry/C-repair-routing-01-force.json.gz",
+          "remaining_geometry": "data/geometry/C-repair-routing-01-flow.json.gz",
+          "best_remaining_score_delta": 1.0069773269984434,
+          "best_remaining_area_ratio": 0.9955906692730061,
+          "best_remaining_route_length_ratio": 0.9998817016041261,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        },
+        {
+          "case_id": "routing-01",
+          "family": "routing",
+          "profile": "stable",
+          "unique_trial": "C-repair-routing-01-force",
+          "unique_score": 9.000597375,
+          "best_remaining_trial": "C-development-routing-01-current",
+          "best_remaining_score": 10.0,
+          "unique_geometry": "data/geometry/C-repair-routing-01-force.json.gz",
+          "remaining_geometry": "data/geometry/C-development-routing-01-current.json.gz",
+          "best_remaining_score_delta": 0.9994026250000001,
+          "best_remaining_area_ratio": 1.2689692733848423,
+          "best_remaining_route_length_ratio": 1.4607328191296394,
+          "practical_rule": "Score <= oracle +1 AND area <= oracle \u00d71.10 AND route length <= oracle \u00d71.10. A tied soft score can still fail area or path-length bands."
+        }
+      ]
+    },
+    {
+      "removed_engine": "grid",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "layered",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.001183063378888649,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "layered",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "separate",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "separate",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "stress",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "stress",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "tidy",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0016480232413449648,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "tidy",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tree"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    },
+    {
+      "removed_engine": "tree",
+      "full_pool_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "compound-spring",
+          "flow",
+          "force",
+          "grid",
+          "layered",
+          "separate",
+          "stress",
+          "tidy"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "full_pool_acceptable_loss": 0,
+      "full_pool_hard_valid_case_loss": 0,
+      "fixed_selected_three_without": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_same_three_action_budget": {
+        "methods": [
+          "boundary-align",
+          "compound-flow",
+          "force"
+        ],
+        "always_available": [
+          "retain-current"
+        ],
+        "hard_valid_case_union": 12,
+        "cases": 12,
+        "acceptable_profile_jobs": 60,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 60,
+        "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+        "score_regret_available_jobs": 60,
+        "per_profile": {
+          "readable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "compact": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "traceable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "stable": {
+            "acceptable": 12,
+            "feasible": 12
+          },
+          "specialist": {
+            "acceptable": 12,
+            "feasible": 12
+          }
+        }
+      },
+      "retuned_acceptable_loss": 0,
+      "unique_practical_witnesses": []
+    }
+  ],
+  "retention_caution": "retain-current is the measured source drawing kept unchanged. Movement/churn zero follow identity; source compile time is not treated as the latency of doing nothing.",
+  "portfolio_caution": "Per-job choice is an oracle. The curve is a finite tested-set bound, not an implemented action selector or evidence to delete internal engines.",
+  "constraints_caution": "Manual preservation is not newly requested in these default passes; use the protected warm-settings and edit strata for that contract."
+}

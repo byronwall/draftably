@@ -1,0 +1,52 @@
+{"event":"prerequisite-complete","after":"joint-development","at":"2026-11-01T23:33:00.086Z"}
+{"event":"prerequisite-complete","after":"network-direction","at":"2026-11-01T23:36:19.613Z"}
+{"at":"2026-11-01T23:36:19.634Z","runId":"timing-development","event":"start","started":"2026-11-01T23:36:19.633Z","node":"v24.22.1","platform":"linux","workers":1,"planned":720,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"995092a2ae110f71fc81b76e2fb64c0d9204ed18286b1a6ec9b98ded2c296f47"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:36:23.161Z","runId":"timing-development","event":"progress","complete":20,"total":720,"last":"C-timing-pipelines-04-tidy-r1","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:36:25.948Z","runId":"timing-development","event":"progress","complete":40,"total":720,"last":"C-timing-pipelines-04-flow-r3","status":"ok","elapsedSeconds":6}
+{"at":"2026-11-01T23:36:31.628Z","runId":"timing-development","event":"progress","complete":60,"total":720,"last":"C-timing-pipelines-04-grid-r5","status":"ok","elapsedSeconds":12}
+{"at":"2026-11-01T23:36:33.508Z","runId":"timing-development","event":"progress","complete":80,"total":720,"last":"C-timing-dags-01-tidy-r1","status":"ok","elapsedSeconds":14}
+{"at":"2026-11-01T23:36:36.662Z","runId":"timing-development","event":"progress","complete":100,"total":720,"last":"C-timing-dags-01-flow-r3","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:36:40.185Z","runId":"timing-development","event":"progress","complete":120,"total":720,"last":"C-timing-dags-01-grid-r5","status":"ok","elapsedSeconds":21}
+{"at":"2026-11-01T23:37:20.664Z","runId":"timing-development","event":"progress","complete":140,"total":720,"last":"C-timing-hierarchies-03-tidy-r1","status":"ok","elapsedSeconds":61}
+{"at":"2026-11-01T23:37:47.793Z","runId":"timing-development","event":"progress","complete":160,"total":720,"last":"C-timing-hierarchies-03-flow-r3","status":"ok","elapsedSeconds":88}
+{"at":"2026-11-01T23:38:49.203Z","runId":"timing-development","event":"progress","complete":180,"total":720,"last":"C-timing-hierarchies-03-grid-r5","status":"ok","elapsedSeconds":150}
+{"at":"2026-11-01T23:39:03.320Z","runId":"timing-development","event":"progress","complete":200,"total":720,"last":"C-timing-architecture-01-tidy-r1","status":"ok","elapsedSeconds":164}
+{"at":"2026-11-01T23:39:12.100Z","runId":"timing-development","event":"progress","complete":220,"total":720,"last":"C-timing-architecture-01-flow-r3","status":"ok","elapsedSeconds":172}
+{"at":"2026-11-01T23:39:20.299Z","runId":"timing-development","event":"progress","complete":240,"total":720,"last":"C-timing-architecture-01-grid-r5","status":"ok","elapsedSeconds":181}
+{"at":"2026-11-01T23:39:21.989Z","runId":"timing-development","event":"progress","complete":260,"total":720,"last":"C-timing-cycles-01-tidy-r1","status":"ok","elapsedSeconds":182}
+{"at":"2026-11-01T23:39:23.234Z","runId":"timing-development","event":"progress","complete":280,"total":720,"last":"C-timing-cycles-01-flow-r3","status":"ok","elapsedSeconds":184}
+{"at":"2026-11-01T23:39:25.402Z","runId":"timing-development","event":"progress","complete":300,"total":720,"last":"C-timing-cycles-01-grid-r5","status":"ok","elapsedSeconds":186}
+{"at":"2026-11-01T23:39:45.542Z","runId":"timing-development","event":"progress","complete":320,"total":720,"last":"C-timing-networks-03-tidy-r1","status":"ok","elapsedSeconds":206}
+{"at":"2026-11-01T23:40:06.304Z","runId":"timing-development","event":"progress","complete":340,"total":720,"last":"C-timing-networks-03-flow-r3","status":"ok","elapsedSeconds":227}
+{"at":"2026-11-01T23:40:25.137Z","runId":"timing-development","event":"progress","complete":360,"total":720,"last":"C-timing-networks-03-grid-r5","status":"ok","elapsedSeconds":246}
+{"at":"2026-11-01T23:41:53.145Z","runId":"timing-development","event":"progress","complete":380,"total":720,"last":"C-timing-disconnected-04-tidy-r1","status":"ok","elapsedSeconds":334}
+{"at":"2026-11-01T23:43:26.662Z","runId":"timing-development","event":"progress","complete":400,"total":720,"last":"C-timing-disconnected-04-flow-r3","status":"ok","elapsedSeconds":427}
+{"at":"2026-11-01T23:44:48.850Z","runId":"timing-development","event":"progress","complete":420,"total":720,"last":"C-timing-disconnected-04-grid-r5","status":"ok","elapsedSeconds":509}
+{"at":"2026-11-01T23:45:08.838Z","runId":"timing-development","event":"progress","complete":440,"total":720,"last":"C-timing-routing-02-tidy-r1","status":"ok","elapsedSeconds":529}
+{"at":"2026-11-01T23:45:26.306Z","runId":"timing-development","event":"progress","complete":460,"total":720,"last":"C-timing-routing-02-flow-r3","status":"ok","elapsedSeconds":547}
+{"at":"2026-11-01T23:45:41.040Z","runId":"timing-development","event":"progress","complete":480,"total":720,"last":"C-timing-routing-02-grid-r5","status":"ok","elapsedSeconds":561}
+{"at":"2026-11-01T23:45:51.465Z","runId":"timing-development","event":"progress","complete":500,"total":720,"last":"C-timing-containers-01-tidy-r1","status":"ok","elapsedSeconds":572}
+{"at":"2026-11-01T23:45:54.833Z","runId":"timing-development","event":"progress","complete":520,"total":720,"last":"C-timing-containers-01-flow-r3","status":"ok","elapsedSeconds":575}
+{"at":"2026-11-01T23:45:57.630Z","runId":"timing-development","event":"progress","complete":540,"total":720,"last":"C-timing-containers-01-grid-r5","status":"ok","elapsedSeconds":578}
+{"at":"2026-11-01T23:46:01.175Z","runId":"timing-development","event":"progress","complete":560,"total":720,"last":"C-timing-presentation-03-tidy-r1","status":"ok","elapsedSeconds":582}
+{"at":"2026-11-01T23:46:04.209Z","runId":"timing-development","event":"progress","complete":580,"total":720,"last":"C-timing-presentation-03-flow-r3","status":"ok","elapsedSeconds":585}
+{"at":"2026-11-01T23:46:08.265Z","runId":"timing-development","event":"progress","complete":600,"total":720,"last":"C-timing-presentation-03-grid-r5","status":"ok","elapsedSeconds":589}
+{"at":"2026-11-01T23:46:11.270Z","runId":"timing-development","event":"progress","complete":620,"total":720,"last":"C-timing-authored-03-tidy-r1","status":"ok","elapsedSeconds":592}
+{"at":"2026-11-01T23:46:11.953Z","runId":"timing-development","event":"progress","complete":640,"total":720,"last":"C-timing-authored-03-flow-r3","status":"ok","elapsedSeconds":592}
+{"at":"2026-11-01T23:46:12.618Z","runId":"timing-development","event":"progress","complete":660,"total":720,"last":"C-timing-authored-03-grid-r5","status":"ok","elapsedSeconds":593}
+{"at":"2026-11-01T23:46:16.009Z","runId":"timing-development","event":"progress","complete":680,"total":720,"last":"C-timing-recipes-02-tidy-r1","status":"ok","elapsedSeconds":596}
+{"at":"2026-11-01T23:46:17.535Z","runId":"timing-development","event":"progress","complete":700,"total":720,"last":"C-timing-recipes-02-flow-r3","status":"ok","elapsedSeconds":598}
+{"at":"2026-11-01T23:46:18.198Z","runId":"timing-development","event":"progress","complete":720,"total":720,"last":"C-timing-recipes-02-grid-r5","status":"ok","elapsedSeconds":599}
+{"at":"2026-11-01T23:46:18.250Z","runId":"timing-development","event":"complete","started":"2026-11-01T23:36:19.633Z","node":"v24.22.1","platform":"linux","workers":1,"planned":720,"priorCompleted":0,"executed":720,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"995092a2ae110f71fc81b76e2fb64c0d9204ed18286b1a6ec9b98ded2c296f47","finished":"2026-11-01T23:46:18.205Z","elapsedSeconds":598.572,"persistedDistinct":720}

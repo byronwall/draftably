@@ -1,0 +1,47 @@
+diagram "Decisory: one consultation" version=1
+
+# expect right-of done more
+# expect near done more 120
+
+theme blueprint
+theme-color brand shade=300 fill="#7FC8C0" stroke="#4FA79D" ink="#0E2A27"
+theme-color brand shade=700 fill="#1F6F66" stroke="#2F8C81" ink="#FFFFFF"
+
+node goal "Describe your goal" shape=pill color=brand shade=300
+node summary "Title + summary" color=brand shade=700
+node job "Question job" color=slate
+node socket "Job socket" color=slate
+node questions "8–12 questions" color=brand shade=700
+node answers "Answer + Other" color=brand shade=300
+node analysis "Analysis job" color=slate
+node report "Recommendations" color=brand shade=700
+node more "Another round?" shape=diamond color=brand shade=300
+node done "Copy as Markdown" shape=pill color=brand shade=300
+node store "sessions JSON" color=amber
+
+edge s1 goal -> summary "AI"
+edge s2 goal -> job
+edge s3 job -> socket "progress" kind=async
+edge s4 socket -> questions
+edge s5 questions -> answers
+edge s6 answers -> analysis
+edge s7 analysis -> report
+edge s8 report -> more
+edge s9 more -> job "yes, with context"
+edge s10 more -> done "no"
+edge s11 report -> store "save" kind=async
+
+layout root flow direction=right gap=48
+
+# Layout refinements
+near done more side=right gap=121
+stay goal x=0 y=0
+stay summary x=212 y=0
+stay job x=212 y=105
+stay socket x=212 y=210
+stay questions x=212 y=315
+stay answers x=212 y=420
+stay analysis x=212 y=525
+stay report x=212 y=630
+stay more x=212 y=735
+stay store x=424 y=105

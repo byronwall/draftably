@@ -1,0 +1,302 @@
+[
+  {
+    "id": "C-sanity-empty-compound-flow",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-boundary-align",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-compound-spring",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-tidy",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-stress",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-force",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-flow",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-layered",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-tree",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-empty-grid",
+    "stage": "C-sanity",
+    "caseId": "empty",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/empty.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-compound-flow",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-boundary-align",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-compound-spring",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-tidy",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-stress",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-force",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-flow",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-layered",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-tree",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-sanity-single-grid",
+    "stage": "C-sanity",
+    "caseId": "single",
+    "family": "sanity",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/single.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": false
+    },
+    "timeoutMs": 15000
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "runId": "settings-layout",
+  "at": "2026-11-01T23:31:46.188Z",
+  "originalSummarySha256": "ad25de470149252c9ba1cfe4c97380c74fbf157f9b2d2e15b953b822010aeac5",
+  "loggedCompletion": {
+    "at": "2026-11-01T23:29:44.528Z",
+    "runId": "settings-layout",
+    "event": "complete",
+    "started": "2026-11-01T23:11:24.629Z",
+    "node": "v24.22.1",
+    "platform": "linux",
+    "workers": 1,
+    "planned": 756,
+    "priorCompleted": 97,
+    "executed": 659,
+    "failed": 0,
+    "timedOut": 57,
+    "skipped": 0,
+    "taskSha256": "481990c97bbd3dcf68a48f4ac3f58e9616248d840f185199088ed443557daf17",
+    "finished": "2026-11-01T23:29:44.528Z",
+    "elapsedSeconds": 1099.899
+  },
+  "originalRows": 752,
+  "recoveredRows": 4,
+  "recovered": [
+    {
+      "id": "D-layout-cycles-04-repulsion-90",
+      "status": "ok",
+      "geometry": "data/geometry/D-layout-cycles-04-repulsion-90.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "821bda13935aab1c7b2864cfb693d924eec7e6a3be8eed7970ac031ce5f6c562",
+      "sourceProgress": null
+    },
+    {
+      "id": "D-layout-architecture-02-alignment-0",
+      "status": "ok",
+      "geometry": "data/geometry/D-layout-architecture-02-alignment-0.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "52923bd490c1dc12d2a7c1ba91997525d05572996551da60705e8b2918fb091e",
+      "sourceProgress": null
+    },
+    {
+      "id": "D-layout-architecture-02-alignment-55",
+      "status": "ok",
+      "geometry": "data/geometry/D-layout-architecture-02-alignment-55.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "52923bd490c1dc12d2a7c1ba91997525d05572996551da60705e8b2918fb091e",
+      "sourceProgress": null
+    },
+    {
+      "id": "D-layout-architecture-02-alignment-100",
+      "status": "ok",
+      "geometry": "data/geometry/D-layout-architecture-02-alignment-100.json.gz",
+      "layoutCheckpoint": null,
+      "geometryHash": "52923bd490c1dc12d2a7c1ba91997525d05572996551da60705e8b2918fb091e",
+      "sourceProgress": null
+    }
+  ],
+  "unavailableFields": "Full wall/routing/label timings, original cache-hit status and exact attempt timestamps cannot be recovered for successful artifacts. They remain null.",
+  "algorithmReruns": 0
+}

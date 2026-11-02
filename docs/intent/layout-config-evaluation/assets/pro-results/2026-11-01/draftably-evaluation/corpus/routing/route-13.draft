@@ -1,0 +1,21 @@
+diagram "Route beside a group border slot" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node blocker "blocker"
+group g "Adjacent group"
+node inside "inside" in=g
+edge e0 a -> b
+edge e1 inside -> b
+layout root flow direction=auto fold=never
+size a width=160 height=56
+pin a x=0 y=0
+size b width=160 height=56
+pin b x=0 y=400
+size blocker width=160 height=56
+pin blocker x=0 y=180
+pin g x=190 y=140
+layout g column gap=24 min-width=250 min-height=160
+size inside width=160 height=56
+pin inside x=0 y=0

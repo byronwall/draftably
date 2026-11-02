@@ -1,0 +1,2030 @@
+{
+  "schema": "heldout-portfolio-evidence-1",
+  "reportingOnly": true,
+  "originalRunReportingOnly": true,
+  "geometryRuns": 0,
+  "policyRefitted": false,
+  "originalReportInputGuard": {
+    "path": "data/analysis/original-report-inputs.json",
+    "sha256": "bf9f011e365934f0b51bc8eceb66d7ebd309f822228d5c0b0dac91fa819c9b5d",
+    "verifiedStreams": 5
+  },
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "reportingCodeSha256": "35b8e2e7532b26a08c76efae35c732131ff4d36d86f9ee6dbbca426de0375d06",
+  "enginePortfolio": [
+    "boundary-align",
+    "tidy",
+    "force",
+    "layered",
+    "tree",
+    "grid"
+  ],
+  "globalConfigurations": [
+    "engine:boundary-align:DOWN",
+    "engine:boundary-align:RIGHT",
+    "engine:force:RIGHT",
+    "engine:layered:DOWN",
+    "engine:layered:RIGHT",
+    "engine:tidy:RIGHT",
+    "engine:tree:RIGHT",
+    "tuned:force:RIGHT:p3",
+    "tuned:layered:RIGHT:p1",
+    "tuned:tidy:RIGHT:p3",
+    "tuned:tree:RIGHT:p1"
+  ],
+  "preferredSelector": "k5-prelayout-selector-validity-guard",
+  "preferredGoalSelector": "k5-goal-selector-validity-guard",
+  "summary": [
+    {
+      "policy": "current-authored",
+      "oracleOnly": false,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 2,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 2,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 2,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.25000000000000006,
+        "compact": 0.25000000000000006,
+        "traceable": 0.16666666666666669,
+        "stable": 0.16666666666666669,
+        "specialist": 0.16666666666666669
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.21428571428571433,
+        "compact": 0.21428571428571433,
+        "traceable": 0.14285714285714288,
+        "stable": 0.14285714285714288,
+        "specialist": 0.14285714285714288
+      },
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669,
+      "worstProfileCommonAbsoluteCoverage": 0.14285714285714288,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.18947368421052638,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "implicit-recipe",
+      "oracleOnly": false,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.25000000000000006,
+        "compact": 0.25000000000000006,
+        "traceable": 0.25000000000000006,
+        "stable": 0.25000000000000006,
+        "specialist": 0.25000000000000006
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.21428571428571433,
+        "compact": 0.21428571428571433,
+        "traceable": 0.21428571428571433,
+        "stable": 0.21428571428571433,
+        "specialist": 0.21428571428571433
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.22105263157894742,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "documented-default",
+      "oracleOnly": false,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.33333333333333337,
+        "compact": 0.4166666666666667,
+        "traceable": 0.25000000000000006,
+        "stable": 0.25000000000000006,
+        "specialist": 0.25000000000000006
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.28571428571428575,
+        "compact": 0.35714285714285715,
+        "traceable": 0.21428571428571433,
+        "stable": 0.21428571428571433,
+        "specialist": 0.21428571428571433
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.2421052631578948,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "best-fixed-global-validity-guard",
+      "oracleOnly": false,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 2,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.25000000000000006,
+        "compact": 0.16666666666666669,
+        "traceable": 0.33333333333333337,
+        "stable": 0.25000000000000006,
+        "specialist": 0.25000000000000006
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.21428571428571433,
+        "compact": 0.14285714285714288,
+        "traceable": 0.28571428571428575,
+        "stable": 0.21428571428571433,
+        "specialist": 0.21428571428571433
+      },
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669,
+      "worstProfileCommonAbsoluteCoverage": 0.14285714285714288,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.2631578947368422,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k1-configuration-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.25000000000000006,
+        "compact": 0.33333333333333337,
+        "traceable": 0.33333333333333337,
+        "stable": 0.33333333333333337,
+        "specialist": 0.33333333333333337
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.21428571428571433,
+        "compact": 0.28571428571428575,
+        "traceable": 0.28571428571428575,
+        "stable": 0.28571428571428575,
+        "specialist": 0.28571428571428575
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.30526315789473696,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k2-configuration-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.4166666666666667,
+        "compact": 0.5833333333333334,
+        "traceable": 0.4166666666666667,
+        "stable": 0.4166666666666667,
+        "specialist": 0.4166666666666667
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.35714285714285715,
+        "compact": 0.5,
+        "traceable": 0.35714285714285715,
+        "stable": 0.35714285714285715,
+        "specialist": 0.35714285714285715
+      },
+      "worstProfileCommonFeasibleCoverage": 0.4166666666666667,
+      "worstProfileCommonAbsoluteCoverage": 0.35714285714285715,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.4000000000000003,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k3-configuration-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 6,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 6,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.5833333333333334,
+        "compact": 0.5833333333333334,
+        "traceable": 0.5833333333333334,
+        "stable": 0.5,
+        "specialist": 0.5
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.5,
+        "compact": 0.5,
+        "traceable": 0.5,
+        "stable": 0.4285714285714286,
+        "specialist": 0.4285714285714286
+      },
+      "worstProfileCommonFeasibleCoverage": 0.5,
+      "worstProfileCommonAbsoluteCoverage": 0.4285714285714286,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.5368421052631581,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k4-configuration-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.6666666666666667,
+        "compact": 0.6666666666666667,
+        "traceable": 0.6666666666666667,
+        "stable": 0.5833333333333334,
+        "specialist": 0.5833333333333334
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.5714285714285715,
+        "compact": 0.5714285714285715,
+        "traceable": 0.5714285714285715,
+        "stable": 0.5,
+        "specialist": 0.5
+      },
+      "worstProfileCommonFeasibleCoverage": 0.5833333333333334,
+      "worstProfileCommonAbsoluteCoverage": 0.5,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.6000000000000002,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.6666666666666667,
+        "compact": 0.6666666666666667,
+        "traceable": 0.8333333333333334,
+        "stable": 0.6666666666666667,
+        "specialist": 0.6666666666666667
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.5714285714285715,
+        "compact": 0.5714285714285715,
+        "traceable": 0.7142857142857143,
+        "stable": 0.5714285714285715,
+        "specialist": 0.5714285714285715
+      },
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667,
+      "worstProfileCommonAbsoluteCoverage": 0.5714285714285715,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.642105263157895,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "oracleOnly": false,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.4166666666666667,
+        "compact": 0.33333333333333337,
+        "traceable": 0.25000000000000006,
+        "stable": 0.25000000000000006,
+        "specialist": 0.25000000000000006
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.35714285714285715,
+        "compact": 0.28571428571428575,
+        "traceable": 0.21428571428571433,
+        "stable": 0.21428571428571433,
+        "specialist": 0.21428571428571433
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.30526315789473696,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "oracleOnly": false,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.25000000000000006,
+        "compact": 0.25000000000000006,
+        "traceable": 0.25000000000000006,
+        "stable": 0.25000000000000006,
+        "specialist": 0.25000000000000006
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.21428571428571433,
+        "compact": 0.21428571428571433,
+        "traceable": 0.21428571428571433,
+        "stable": 0.21428571428571433,
+        "specialist": 0.21428571428571433
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.2631578947368422,
+      "worstFamilyCoverage": 0.0,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "frozen-six-engine-recipe-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 12,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.9166666666666666,
+        "compact": 1.0,
+        "traceable": 0.9166666666666666,
+        "stable": 0.8333333333333334,
+        "specialist": 0.8333333333333334
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.7857142857142857,
+        "compact": 0.8571428571428572,
+        "traceable": 0.7857142857142857,
+        "stable": 0.7142857142857143,
+        "specialist": 0.7142857142857143
+      },
+      "worstProfileCommonFeasibleCoverage": 0.8333333333333334,
+      "worstProfileCommonAbsoluteCoverage": 0.7142857142857143,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.9263157894736844,
+      "worstFamilyCoverage": 0.4,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    },
+    {
+      "policy": "frozen-minimum-configuration-oracle",
+      "oracleOnly": true,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 12,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.8333333333333334,
+        "compact": 1.0,
+        "traceable": 0.8333333333333334,
+        "stable": 0.6666666666666667,
+        "specialist": 0.6666666666666667
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.7142857142857143,
+        "compact": 0.8571428571428572,
+        "traceable": 0.7142857142857143,
+        "stable": 0.5714285714285715,
+        "specialist": 0.5714285714285715
+      },
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667,
+      "worstProfileCommonAbsoluteCoverage": 0.5714285714285715,
+      "currentValidHardRegressionCases": 0,
+      "specialistCurrentValidLossCases": 0,
+      "acceptableCoverageAllFeasibleFamilies": 0.8421052631578949,
+      "worstFamilyCoverage": 0.4,
+      "contractRelativeGatePass": false,
+      "conservativeAbsoluteGatePass": false
+    }
+  ],
+  "allPoolUnavailableCases": [
+    "architecture-06",
+    "containers-05",
+    "containers-06",
+    "dags-06",
+    "networks-06"
+  ],
+  "commonDenominators": {
+    "all": 14,
+    "feasible": 12,
+    "currentHardValid": 11
+  },
+  "allBaseDenominators": {
+    "all": 24,
+    "feasible": 19
+  },
+  "pairedBootstrapScopeClarification": "Existing bootstrap uses all 12 families, conditional on their shared full-pool feasibility; it does not filter the seven common-job families. Its intervals must not be called common-job gate intervals.",
+  "pairedCIs": [
+    {
+      "policy": "implicit-recipe",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.031578947368421054,
+      "ci95": [
+        0.0,
+        0.12631578947368421
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "documented-default",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.05263157894736842,
+      "ci95": [
+        -0.07777777777777777,
+        0.23338235294117624
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "best-fixed-global-validity-guard",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.0736842105263158,
+      "ci95": [
+        -0.049999999999999996,
+        0.225
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k1-configuration-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.11578947368421054,
+      "ci95": [
+        -0.02727272727272727,
+        0.30000000000000004
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k2-configuration-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.21052631578947364,
+      "ci95": [
+        0.01658333333333334,
+        0.41907142857142843
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k3-configuration-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.34736842105263155,
+      "ci95": [
+        0.10525062656641604,
+        0.5819602272727264
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k4-configuration-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.41052631578947363,
+      "ci95": [
+        0.16,
+        0.6476785714285711
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.45263157894736844,
+      "ci95": [
+        0.21250000000000005,
+        0.6823529411764706
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.11578947368421053,
+      "ci95": [
+        -0.05555555555555555,
+        0.3368585526315789
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.0736842105263158,
+      "ci95": [
+        -0.04,
+        0.18095238095238098
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "frozen-six-engine-recipe-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.736842105263158,
+      "ci95": [
+        0.5,
+        0.944469696969697
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    },
+    {
+      "policy": "frozen-minimum-configuration-oracle",
+      "baseline": "current-authored",
+      "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+      "point": 0.6526315789473683,
+      "ci95": [
+        0.417391304347826,
+        0.8714610389610389
+      ],
+      "draws": 2000,
+      "usableDraws": 2000,
+      "seed": 220611,
+      "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+      "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+    }
+  ],
+  "weightingSensitivity": [
+    {
+      "policy": "current-authored",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.18947368421052638,
+      "commonAcceptableCoverage": 0.19999999999999998,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669
+    },
+    {
+      "policy": "current-authored",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.19515570934256057,
+      "commonAcceptableCoverage": 0.19999999999999998,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669
+    },
+    {
+      "policy": "current-authored",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.1871559633027523,
+      "commonAcceptableCoverage": 0.20000000000000004,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666666
+    },
+    {
+      "policy": "current-authored",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.18947368421052638,
+      "commonAcceptableCoverage": 0.19999999999999998,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669
+    },
+    {
+      "policy": "implicit-recipe",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.22105263157894742,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "implicit-recipe",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.23667820069204157,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "implicit-recipe",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.21467889908256882,
+      "commonAcceptableCoverage": 0.25000000000000006,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25
+    },
+    {
+      "policy": "implicit-recipe",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.22105263157894742,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "documented-default",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.2421052631578948,
+      "commonAcceptableCoverage": 0.3,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "documented-default",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.27335640138408307,
+      "commonAcceptableCoverage": 0.3,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "documented-default",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.22935779816513763,
+      "commonAcceptableCoverage": 0.30000000000000004,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25
+    },
+    {
+      "policy": "documented-default",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.2421052631578948,
+      "commonAcceptableCoverage": 0.3,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "best-fixed-global-validity-guard",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.2631578947368422,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669
+    },
+    {
+      "policy": "best-fixed-global-validity-guard",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.25605536332179935,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669
+    },
+    {
+      "policy": "best-fixed-global-validity-guard",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.2660550458715596,
+      "commonAcceptableCoverage": 0.25000000000000006,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666666
+    },
+    {
+      "policy": "best-fixed-global-validity-guard",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.2631578947368422,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669
+    },
+    {
+      "policy": "k1-configuration-oracle",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.30526315789473696,
+      "commonAcceptableCoverage": 0.31666666666666665,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k1-configuration-oracle",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.3114186851211073,
+      "commonAcceptableCoverage": 0.31666666666666665,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k1-configuration-oracle",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.30275229357798167,
+      "commonAcceptableCoverage": 0.3166666666666667,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25
+    },
+    {
+      "policy": "k1-configuration-oracle",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.30526315789473696,
+      "commonAcceptableCoverage": 0.31666666666666665,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k2-configuration-oracle",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.4000000000000003,
+      "commonAcceptableCoverage": 0.45,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.4166666666666667
+    },
+    {
+      "policy": "k2-configuration-oracle",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.42698961937716273,
+      "commonAcceptableCoverage": 0.4500000000000001,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.4166666666666667
+    },
+    {
+      "policy": "k2-configuration-oracle",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.38899082568807336,
+      "commonAcceptableCoverage": 0.4500000000000001,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.41666666666666663
+    },
+    {
+      "policy": "k2-configuration-oracle",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.4000000000000003,
+      "commonAcceptableCoverage": 0.45,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.4166666666666667
+    },
+    {
+      "policy": "k3-configuration-oracle",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.5368421052631581,
+      "commonAcceptableCoverage": 0.55,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5
+    },
+    {
+      "policy": "k3-configuration-oracle",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.5439446366782007,
+      "commonAcceptableCoverage": 0.55,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5
+    },
+    {
+      "policy": "k3-configuration-oracle",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.5339449541284405,
+      "commonAcceptableCoverage": 0.55,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5
+    },
+    {
+      "policy": "k3-configuration-oracle",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.5368421052631581,
+      "commonAcceptableCoverage": 0.55,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5
+    },
+    {
+      "policy": "k4-configuration-oracle",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.6000000000000002,
+      "commonAcceptableCoverage": 0.6333333333333336,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5833333333333334
+    },
+    {
+      "policy": "k4-configuration-oracle",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.6179930795847751,
+      "commonAcceptableCoverage": 0.6333333333333335,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5833333333333334
+    },
+    {
+      "policy": "k4-configuration-oracle",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.5926605504587156,
+      "commonAcceptableCoverage": 0.6333333333333333,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5833333333333334
+    },
+    {
+      "policy": "k4-configuration-oracle",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.6000000000000002,
+      "commonAcceptableCoverage": 0.6333333333333336,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.5833333333333334
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.642105263157895,
+      "commonAcceptableCoverage": 0.7000000000000001,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.673356401384083,
+      "commonAcceptableCoverage": 0.7000000000000001,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.6293577981651376,
+      "commonAcceptableCoverage": 0.7,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666666
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.642105263157895,
+      "commonAcceptableCoverage": 0.7000000000000001,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.30526315789473696,
+      "commonAcceptableCoverage": 0.3,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.3024221453287198,
+      "commonAcceptableCoverage": 0.3,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.30642201834862387,
+      "commonAcceptableCoverage": 0.30000000000000004,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.30526315789473696,
+      "commonAcceptableCoverage": 0.3,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "weighting": "equal-family",
+      "acceptableCoverage": 0.2631578947368422,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "weighting": "common80-niche20",
+      "acceptableCoverage": 0.25605536332179935,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "weighting": "common50-niche50",
+      "acceptableCoverage": 0.2660550458715596,
+      "commonAcceptableCoverage": 0.25000000000000006,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "weighting": "worst-family",
+      "acceptableCoverage": 0.2631578947368422,
+      "commonAcceptableCoverage": 0.24999999999999997,
+      "worstFamilyCoverage": 0.0,
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006
+    }
+  ],
+  "bandSensitivity": [
+    {
+      "policy": "k5-configuration-oracle",
+      "bandMultiplier": 0.5,
+      "selectionSemantics": "configuration oracle reselected within fixed portfolio",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 6,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.5,
+      "worstProfileCommonAbsoluteCoverage": 0.4285714285714286,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "bandMultiplier": 1,
+      "selectionSemantics": "configuration oracle reselected within fixed portfolio",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667,
+      "worstProfileCommonAbsoluteCoverage": 0.5714285714285715,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-configuration-oracle",
+      "bandMultiplier": 2,
+      "selectionSemantics": "configuration oracle reselected within fixed portfolio",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 12,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.8333333333333334,
+      "worstProfileCommonAbsoluteCoverage": 0.7142857142857143,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-configuration-oracle-current-fallback",
+      "bandMultiplier": 0.5,
+      "selectionSemantics": "configuration oracle reselected within fixed portfolio",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 7,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.5833333333333334,
+      "worstProfileCommonAbsoluteCoverage": 0.5,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-configuration-oracle-current-fallback",
+      "bandMultiplier": 1,
+      "selectionSemantics": "configuration oracle reselected within fixed portfolio",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 9,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 9,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 10,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 8,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.6666666666666667,
+      "worstProfileCommonAbsoluteCoverage": 0.5714285714285715,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-configuration-oracle-current-fallback",
+      "bandMultiplier": 2,
+      "selectionSemantics": "configuration oracle reselected within fixed portfolio",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 12,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 11,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.9166666666666666,
+      "worstProfileCommonAbsoluteCoverage": 0.7857142857142857,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "bandMultiplier": 0.5,
+      "selectionSemantics": "frozen deployed selection",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "bandMultiplier": 1,
+      "selectionSemantics": "frozen deployed selection",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-prelayout-selector-validity-guard",
+      "bandMultiplier": 2,
+      "selectionSemantics": "frozen deployed selection",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 6,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.33333333333333337,
+      "worstProfileCommonAbsoluteCoverage": 0.28571428571428575,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "bandMultiplier": 0.5,
+      "selectionSemantics": "frozen deployed selection",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 2,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 2,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.16666666666666669,
+      "worstProfileCommonAbsoluteCoverage": 0.14285714285714288,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "bandMultiplier": 1,
+      "selectionSemantics": "frozen deployed selection",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 3,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.25000000000000006,
+      "worstProfileCommonAbsoluteCoverage": 0.21428571428571433,
+      "currentValidHardRegressionCases": 0
+    },
+    {
+      "policy": "k5-goal-selector-validity-guard",
+      "bandMultiplier": 2,
+      "selectionSemantics": "frozen deployed selection",
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 5,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 4,
+          "allCommonBases": 14,
+          "oracleFeasibleBases": 12,
+          "currentValidBases": 11,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "worstProfileCommonFeasibleCoverage": 0.33333333333333337,
+      "worstProfileCommonAbsoluteCoverage": 0.28571428571428575,
+      "currentValidHardRegressionCases": 0
+    }
+  ],
+  "frozenInputs": [
+    {
+      "stem": "screen-heldout",
+      "exists": true,
+      "expected": 599,
+      "observed": 599,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "resultsSha256": "f121951690a1bad6d7c46ebc719fed0b1ab3bc8401ad38c9c7b9d4922b6a66ae",
+      "statuses": {
+        "ok": 481,
+        "timed_out": 118
+      }
+    },
+    {
+      "stem": "documented-default-heldout",
+      "exists": true,
+      "expected": 23,
+      "observed": 23,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "resultsSha256": "d82837e3352e3e05969cfbee0498792e3bba23a2eddc3fafc1f16c99f40f5163",
+      "statuses": {
+        "ok": 19,
+        "timed_out": 4
+      }
+    },
+    {
+      "stem": "tuning-development",
+      "notReadDuringHeldout": true
+    },
+    {
+      "stem": "selected-presets-heldout",
+      "exists": true,
+      "expected": 207,
+      "observed": 207,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "resultsSha256": "bf5c33642e259ebdbf72ce3d9cd8fd601147432e1e84dcceef22456d0d5e0e1b",
+      "statuses": {
+        "ok": 173,
+        "timed_out": 34
+      }
+    }
+  ],
+  "failureWitnessesFile": "data/analysis/heldout/portfolio-failure-witnesses.csv",
+  "supplementaryCellAccessAudit": {
+    "path": "data/analysis/cell-access-audit-heldout.json",
+    "snapshotStarted": "2026-11-02T00:37:22.527Z",
+    "totals": {
+      "artifacts": 1286,
+      "drawnRoutes": 34912,
+      "crossRoutes": 0,
+      "checkedCrossRoutes": 0,
+      "bothEndpointAccessRoutes": 0,
+      "fromOnlyAccessRoutes": 0,
+      "toOnlyAccessRoutes": 0,
+      "newUnscoredNativeNodeFindings": 0,
+      "canonicalGeometryHashMismatches": 0,
+      "unregisteredArtifactsNotOpened": 0,
+      "oppositeOrUnspecifiedSplitArtifactsNotOpened": 6446,
+      "coverageGaps": 0
+    },
+    "unscored": true
+  }
+}

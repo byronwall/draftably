@@ -1,0 +1,90 @@
+[
+  {
+    "id": "Scale-sparse-network-current",
+    "stage": "optional-scale",
+    "caseId": "sparse-network",
+    "family": "scale",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/sparse-network.draft",
+    "layout": null,
+    "tag": "optional-zero-quality-weight",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "Scale-sparse-network-force",
+    "stage": "optional-scale",
+    "caseId": "sparse-network",
+    "family": "scale",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/sparse-network.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "tag": "optional-zero-quality-weight",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "Scale-sparse-network-layered",
+    "stage": "optional-scale",
+    "caseId": "sparse-network",
+    "family": "scale",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/sparse-network.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "tag": "optional-zero-quality-weight",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "Scale-layered-dag-current",
+    "stage": "optional-scale",
+    "caseId": "layered-dag",
+    "family": "scale",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/layered-dag.draft",
+    "layout": null,
+    "tag": "optional-zero-quality-weight",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "Scale-layered-dag-force",
+    "stage": "optional-scale",
+    "caseId": "layered-dag",
+    "family": "scale",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/layered-dag.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "tag": "optional-zero-quality-weight",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "Scale-layered-dag-layered",
+    "stage": "optional-scale",
+    "caseId": "layered-dag",
+    "family": "scale",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/extras/layered-dag.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "tag": "optional-zero-quality-weight",
+    "timeoutMs": 15000
+  }
+]

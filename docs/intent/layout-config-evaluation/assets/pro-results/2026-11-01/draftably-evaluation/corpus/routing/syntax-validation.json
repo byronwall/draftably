@@ -1,0 +1,654 @@
+{
+  "type": "Shipped parseModel validation; zero geometry trials.",
+  "at": "2026-11-01T22:56:51.514Z",
+  "results": [
+    {
+      "id": "route-01",
+      "path": "corpus/routing/route-01.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-01/automatic",
+      "path": "corpus/routing/route-01-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-01/authored-sides",
+      "path": "corpus/routing/route-01-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-02",
+      "path": "corpus/routing/route-02.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-02/automatic",
+      "path": "corpus/routing/route-02-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-02/authored-sides",
+      "path": "corpus/routing/route-02-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-03",
+      "path": "corpus/routing/route-03.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-03/automatic",
+      "path": "corpus/routing/route-03-automatic.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-03/authored-sides",
+      "path": "corpus/routing/route-03-explicit.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-04",
+      "path": "corpus/routing/route-04.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-04/automatic",
+      "path": "corpus/routing/route-04-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-04/authored-sides",
+      "path": "corpus/routing/route-04-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-05",
+      "path": "corpus/routing/route-05.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-05/automatic",
+      "path": "corpus/routing/route-05-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-05/authored-sides",
+      "path": "corpus/routing/route-05-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-06",
+      "path": "corpus/routing/route-06.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-06/automatic",
+      "path": "corpus/routing/route-06-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-06/authored-sides",
+      "path": "corpus/routing/route-06-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-07",
+      "path": "corpus/routing/route-07.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-07/automatic",
+      "path": "corpus/routing/route-07-automatic.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-07/authored-sides",
+      "path": "corpus/routing/route-07-explicit.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-08",
+      "path": "corpus/routing/route-08.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-08/automatic",
+      "path": "corpus/routing/route-08-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-08/authored-sides",
+      "path": "corpus/routing/route-08-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-09",
+      "path": "corpus/routing/route-09.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-09/automatic",
+      "path": "corpus/routing/route-09-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-09/authored-sides",
+      "path": "corpus/routing/route-09-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-10",
+      "path": "corpus/routing/route-10.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "route-10/automatic",
+      "path": "corpus/routing/route-10-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "route-10/authored-sides",
+      "path": "corpus/routing/route-10-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "route-11",
+      "path": "corpus/routing/route-11.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-11/automatic",
+      "path": "corpus/routing/route-11-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-11/authored-sides",
+      "path": "corpus/routing/route-11-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-12",
+      "path": "corpus/routing/route-12.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 1,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-12/automatic",
+      "path": "corpus/routing/route-12-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 1,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-12/authored-sides",
+      "path": "corpus/routing/route-12-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 1,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-13",
+      "path": "corpus/routing/route-13.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 1,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-13/automatic",
+      "path": "corpus/routing/route-13-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 1,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-13/authored-sides",
+      "path": "corpus/routing/route-13-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 1,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "route-14",
+      "path": "corpus/routing/route-14.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 2,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-14/automatic",
+      "path": "corpus/routing/route-14-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 2,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-14/authored-sides",
+      "path": "corpus/routing/route-14-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 2,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-15",
+      "path": "corpus/routing/route-15.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-15/automatic",
+      "path": "corpus/routing/route-15-automatic.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-15/authored-sides",
+      "path": "corpus/routing/route-15-explicit.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-16",
+      "path": "corpus/routing/route-16.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-16/automatic",
+      "path": "corpus/routing/route-16-automatic.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-16/authored-sides",
+      "path": "corpus/routing/route-16-explicit.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "route-17",
+      "path": "corpus/routing/route-17.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-17/automatic",
+      "path": "corpus/routing/route-17-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-17/authored-sides",
+      "path": "corpus/routing/route-17-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "route-18",
+      "path": "corpus/routing/route-18.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "route-18/automatic",
+      "path": "corpus/routing/route-18-automatic.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "route-18/authored-sides",
+      "path": "corpus/routing/route-18-explicit.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "route-19",
+      "path": "corpus/routing/route-19.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-19/automatic",
+      "path": "corpus/routing/route-19-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-19/authored-sides",
+      "path": "corpus/routing/route-19-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-20",
+      "path": "corpus/routing/route-20.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-20/automatic",
+      "path": "corpus/routing/route-20-automatic.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-20/authored-sides",
+      "path": "corpus/routing/route-20-explicit.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "route-21",
+      "path": "corpus/routing/route-21.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-21/automatic",
+      "path": "corpus/routing/route-21-automatic.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-21/authored-sides",
+      "path": "corpus/routing/route-21-explicit.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-22",
+      "path": "corpus/routing/route-22.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "route-22/automatic",
+      "path": "corpus/routing/route-22-automatic.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "route-22/authored-sides",
+      "path": "corpus/routing/route-22-explicit.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "route-23",
+      "path": "corpus/routing/route-23.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "route-23/automatic",
+      "path": "corpus/routing/route-23-automatic.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "route-23/authored-sides",
+      "path": "corpus/routing/route-23-explicit.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "route-24",
+      "path": "corpus/routing/route-24.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 2,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-24/automatic",
+      "path": "corpus/routing/route-24-automatic.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 2,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "route-24/authored-sides",
+      "path": "corpus/routing/route-24-explicit.draft",
+      "ok": true,
+      "nodes": 5,
+      "groups": 2,
+      "edges": 5,
+      "warnings": []
+    }
+  ]
+}

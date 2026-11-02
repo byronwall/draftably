@@ -1,0 +1,15 @@
+{
+  "trials": 1244,
+  "statuses": {
+    "ok": 1137,
+    "timed_out": 107
+  },
+  "hardValid": 1052,
+  "hardInvalid": 192,
+  "casesWithoutAnyHardValidCandidate": [
+    "architecture-04",
+    "containers-03",
+    "containers-04",
+    "dags-04"
+  ]
+}

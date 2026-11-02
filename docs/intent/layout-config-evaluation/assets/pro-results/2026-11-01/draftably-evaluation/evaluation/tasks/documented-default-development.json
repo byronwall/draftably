@@ -1,0 +1,738 @@
+[
+  {
+    "id": "C-doc-development-pipelines-01",
+    "stage": "C-documented-default",
+    "caseId": "pipelines-01",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-pipelines-02",
+    "stage": "C-documented-default",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-pipelines-03",
+    "stage": "C-documented-default",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-pipelines-04",
+    "stage": "C-documented-default",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-dags-01",
+    "stage": "C-documented-default",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-dags-02",
+    "stage": "C-documented-default",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-dags-03",
+    "stage": "C-documented-default",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-dags-04",
+    "stage": "C-documented-default",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-hierarchies-01",
+    "stage": "C-documented-default",
+    "caseId": "hierarchies-01",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-hierarchies-02",
+    "stage": "C-documented-default",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-hierarchies-03",
+    "stage": "C-documented-default",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-hierarchies-04",
+    "stage": "C-documented-default",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-architecture-01",
+    "stage": "C-documented-default",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-architecture-02",
+    "stage": "C-documented-default",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-architecture-03",
+    "stage": "C-documented-default",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-architecture-04",
+    "stage": "C-documented-default",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-cycles-01",
+    "stage": "C-documented-default",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-cycles-02",
+    "stage": "C-documented-default",
+    "caseId": "cycles-02",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-cycles-03",
+    "stage": "C-documented-default",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-cycles-04",
+    "stage": "C-documented-default",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-networks-01",
+    "stage": "C-documented-default",
+    "caseId": "networks-01",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-networks-02",
+    "stage": "C-documented-default",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-networks-03",
+    "stage": "C-documented-default",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-networks-04",
+    "stage": "C-documented-default",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-disconnected-01",
+    "stage": "C-documented-default",
+    "caseId": "disconnected-01",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-disconnected-02",
+    "stage": "C-documented-default",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-disconnected-03",
+    "stage": "C-documented-default",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-disconnected-04",
+    "stage": "C-documented-default",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-routing-01",
+    "stage": "C-documented-default",
+    "caseId": "routing-01",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-routing-02",
+    "stage": "C-documented-default",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-routing-03",
+    "stage": "C-documented-default",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-routing-04",
+    "stage": "C-documented-default",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-containers-01",
+    "stage": "C-documented-default",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-containers-02",
+    "stage": "C-documented-default",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-containers-03",
+    "stage": "C-documented-default",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-containers-04",
+    "stage": "C-documented-default",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-presentation-01",
+    "stage": "C-documented-default",
+    "caseId": "presentation-01",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-presentation-02",
+    "stage": "C-documented-default",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-presentation-03",
+    "stage": "C-documented-default",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-presentation-04",
+    "stage": "C-documented-default",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-authored-01",
+    "stage": "C-documented-default",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-authored-02",
+    "stage": "C-documented-default",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-authored-03",
+    "stage": "C-documented-default",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-authored-04",
+    "stage": "C-documented-default",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-recipes-02",
+    "stage": "C-documented-default",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-development-recipes-04",
+    "stage": "C-documented-default",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "baselinePath": "tests/routing-channels.test.ts",
+    "path": "corpus/regression-source/tests/routing-channels.test.ts",
+    "sha256": "0970be78db86f00b7480f2047fe6d63c30f678ccb327ffd494474b0a73fe9dd5",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-clearance.test.ts",
+    "path": "corpus/regression-source/tests/routing-clearance.test.ts",
+    "sha256": "cd03f9243da66a0b3db91b4e3b5aed407d47e41d9a195b7022e5871f1ed4881e",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-direction.test.ts",
+    "path": "corpus/regression-source/tests/routing-direction.test.ts",
+    "sha256": "9e309f137c303dce78596f1c75483e9b08e097bccb1181620dfad0bbbb5ba4fa",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-fans.test.ts",
+    "path": "corpus/regression-source/tests/routing-fans.test.ts",
+    "sha256": "5454597aeede41d30f4b44775f8bbf7c88c96e009ead5e9d2227fd7af9ecd2ff",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-group-borders.test.ts",
+    "path": "corpus/regression-source/tests/routing-group-borders.test.ts",
+    "sha256": "5cd636c1edf74e09338b482859f225a843b56874e27b5ebc89ce56756c8a1617",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-jogs.test.ts",
+    "path": "corpus/regression-source/tests/routing-jogs.test.ts",
+    "sha256": "c29f966d3a8fcca84fc0b986e133661716b8ad679a5e9a81eeb65d8fd69cfa58",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-order.test.ts",
+    "path": "corpus/regression-source/tests/routing-order.test.ts",
+    "sha256": "605be93809e1d30eeceed00da1d5b5b264b2ec3271402d940ecfbb201e6a231b",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-own-standoff.test.ts",
+    "path": "corpus/regression-source/tests/routing-own-standoff.test.ts",
+    "sha256": "88f093a63a691f1b18856c9d57179a1109fc2d098f9c61a5807179051f570e29",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/routing-ports.test.ts",
+    "path": "corpus/regression-source/tests/routing-ports.test.ts",
+    "sha256": "a9ad4f93162e5647b1f2f1862aaf99a15332b5fcfdb0d0ac719bd5635da8a5e5",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/fold-hold.test.ts",
+    "path": "corpus/regression-source/tests/fold-hold.test.ts",
+    "sha256": "39f42278223debccf8160d01512815439f7ba710bcd3730cc3c59500bb5f5a03",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/group-fit.test.ts",
+    "path": "corpus/regression-source/tests/group-fit.test.ts",
+    "sha256": "19c403a0b45a2bdeea58964322bc5ce3f60916307295e472c33cf906b02b37d4",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/group-packing.test.ts",
+    "path": "corpus/regression-source/tests/group-packing.test.ts",
+    "sha256": "346d9a676338a1a7de834ebc1257ab5591448fcca5cc0b62821130ea94feea27",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/id-order.test.ts",
+    "path": "corpus/regression-source/tests/id-order.test.ts",
+    "sha256": "5f0e4c1bd3c5de35b4032c1227029ac2458dde54dc01016400650a5ec5d4a986",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/layout-fit.test.ts",
+    "path": "corpus/regression-source/tests/layout-fit.test.ts",
+    "sha256": "ac8e8b98ac2d3beec3816458311d45127c6b67c63c067ee5d2050cb7c07a46f8",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/soft-groups.test.ts",
+    "path": "corpus/regression-source/tests/soft-groups.test.ts",
+    "sha256": "d201b2e92abbc9778cb8071784b93bd2c93dd74079f63fe7a3dcf0b1a2f011cb",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/stale-stays.test.ts",
+    "path": "corpus/regression-source/tests/stale-stays.test.ts",
+    "sha256": "fa16991922f2193c3e31a389241befad3ace24e8d501a40c389044f7898e3373",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/return-lanes.test.ts",
+    "path": "corpus/regression-source/tests/return-lanes.test.ts",
+    "sha256": "2e1d9ca68d211c6a0625080a3dda8f7328fb9011203a1dba9f30db73053e0e0c",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/tall-group-fold.test.ts",
+    "path": "corpus/regression-source/tests/tall-group-fold.test.ts",
+    "sha256": "74872142bb1e23308c7d7dda343b2c9fbc4a3d87eb4a6125601130966bfeb867",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/wrap-lanes.test.ts",
+    "path": "corpus/regression-source/tests/wrap-lanes.test.ts",
+    "sha256": "7c6f321de2fe121629365183bcd8f3680953b47709c3964c5d865b88087b6b52",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  },
+  {
+    "baselinePath": "tests/growth-order.test.ts",
+    "path": "corpus/regression-source/tests/growth-order.test.ts",
+    "sha256": "e7048219dc94d6dc66fe4a037ca90c971e5ee1d31f952e4f9727b71682c9b6b2",
+    "role": "Original test source retained as adversarial provenance; not counted as independent base or executed trial."
+  }
+]

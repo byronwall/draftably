@@ -1,0 +1,18 @@
+{
+  "runId": "documented-default-heldout",
+  "started": "2026-11-02T00:16:43.346Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 23,
+  "priorCompleted": 0,
+  "executed": 23,
+  "failed": 0,
+  "timedOut": 4,
+  "skipped": 0,
+  "taskSha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+  "finished": "2026-11-02T00:17:27.681Z",
+  "elapsedSeconds": 44.335,
+  "persistedDistinct": 23
+}

@@ -1,0 +1,27 @@
+diagram "Five-way fan-in" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node s0 "s0"
+node s1 "s1"
+node s2 "s2"
+node s3 "s3"
+node s4 "s4"
+node target "target"
+edge e0 s0 -> target
+edge e1 s1 -> target
+edge e2 s2 -> target
+edge e3 s3 -> target
+edge e4 s4 -> target
+layout root flow direction=auto fold=never
+size s0 width=128 height=56
+pin s0 x=0 y=0
+size s1 width=128 height=56
+pin s1 x=0 y=100
+size s2 width=128 height=56
+pin s2 x=0 y=200
+size s3 width=128 height=56
+pin s3 x=0 y=300
+size s4 width=128 height=56
+pin s4 x=0 y=400
+size target width=180 height=96
+pin target x=360 y=180

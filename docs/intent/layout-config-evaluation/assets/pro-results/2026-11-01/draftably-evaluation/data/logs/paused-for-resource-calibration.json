@@ -1,0 +1,5 @@
+{
+  "at": "2026-11-01T23:11:23.092921+00:00",
+  "reason": "Resource calibration pause; completedrows retained. A previous pause killed one parent before a stale PID lookup aborted its log write. In-flight attempts resume with layout checkpoints and15secondbudgets.",
+  "processes": []
+}

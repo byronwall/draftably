@@ -1,0 +1,13 @@
+{
+  "checks": 14,
+  "passed": 14,
+  "productionCalls": 0,
+  "coverageDenominatorsChecked": [
+    "all-common absolute",
+    "feasible-oracle conditional",
+    "paired cluster bootstrap matches conditional estimand"
+  ],
+  "analyticalPortfolioRows": 8184,
+  "fittedAnalyticalPolicies": 5,
+  "treeChecks": "depth<=3 and min4 bases verified for all analytic policy/goal trees"
+}

@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 2,
+  "id": "doc-mu6xs5ov-cbgygv4",
+  "title": "Dependencies",
+  "graph": {
+    "nodes": [
+      {
+        "id": "app",
+        "title": "Application"
+      },
+      {
+        "id": "sdk",
+        "title": "SDK"
+      },
+      {
+        "id": "gateway",
+        "title": "Gateway"
+      },
+      {
+        "id": "compute",
+        "title": "Compute"
+      },
+      {
+        "id": "storage",
+        "title": "Storage"
+      },
+      {
+        "id": "metrics",
+        "title": "Metrics"
+      }
+    ],
+    "edges": [
+      {
+        "id": "link-sdk",
+        "from": "app",
+        "to": "sdk",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "link-gateway",
+        "from": "sdk",
+        "to": "gateway",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "link-compute",
+        "from": "gateway",
+        "to": "compute",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "link-storage",
+        "from": "gateway",
+        "to": "storage",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      },
+      {
+        "id": "link-metrics",
+        "from": "gateway",
+        "to": "metrics",
+        "label": "",
+        "directed": true,
+        "emphasis": false,
+        "dashed": false
+      }
+    ],
+    "groups": []
+  },
+  "layout": {
+    "nodes": {
+      "app": {
+        "x": 50,
+        "y": 100,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "sdk": {
+        "x": 258,
+        "y": 100,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "gateway": {
+        "x": 466,
+        "y": 100,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "compute": {
+        "x": 674,
+        "y": 45,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "storage": {
+        "x": 674,
+        "y": 163,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      },
+      "metrics": {
+        "x": 466,
+        "y": 268,
+        "w": 164,
+        "h": 56,
+        "manual": false,
+        "pinned": false
+      }
+    },
+    "edges": {
+      "link-sdk": {},
+      "link-gateway": {},
+      "link-compute": {},
+      "link-storage": {},
+      "link-metrics": {}
+    },
+    "labels": {},
+    "containers": {},
+    "intent": {}
+  },
+  "styles": {
+    "app": {
+      "shape": "box",
+      "color": "violet",
+      "icon": "browser"
+    },
+    "sdk": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "code"
+    },
+    "gateway": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "server"
+    },
+    "compute": {
+      "shape": "box",
+      "color": "mint",
+      "icon": "bolt"
+    },
+    "storage": {
+      "shape": "box",
+      "color": "blue",
+      "icon": "database"
+    },
+    "metrics": {
+      "shape": "box",
+      "color": "slate",
+      "icon": "chart"
+    }
+  },
+  "collapsed": [],
+  "settings": {
+    "algorithm": "tidy",
+    "direction": "RIGHT",
+    "mode": "pass",
+    "maxMove": 48,
+    "stability": 65,
+    "iterations": 32,
+    "nodeGap": 24,
+    "rankGap": 52,
+    "edgeLength": 88,
+    "repulsion": 45,
+    "flowStrength": 65,
+    "alignment": 55,
+    "compactness": 35,
+    "gridStrength": 45,
+    "aspect": "1.6",
+    "fold": "never",
+    "respectDirection": true,
+    "ordering": "stable",
+    "rootId": "",
+    "respectManual": false,
+    "growContainers": false,
+    "boundaryPull": 65,
+    "hierarchySweeps": 2,
+    "groupGap": 48,
+    "snap": true,
+    "showManual": true,
+    "routing": {
+      "clearance": 10,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6
+    }
+  },
+  "camera": {
+    "x": 187.20000000000005,
+    "y": 180.1,
+    "k": 1.2
+  },
+  "theme": "light"
+}

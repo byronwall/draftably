@@ -1,0 +1,25 @@
+diagram "Return and forward skip" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node n0 "n0"
+node n1 "n1"
+node n2 "n2"
+node n3 "n3"
+node n4 "n4"
+edge e0 n0 -> n1 "next" from=right to=left
+edge e1 n1 -> n2 "next"
+edge e2 n2 -> n3 "next"
+edge e3 n3 -> n4 "next"
+edge e4 n4 -> n0 "retry" constraint=false
+edge e5 n0 -> n3 "skip optional"
+layout root flow direction=auto fold=never
+size n0 width=160 height=56
+pin n0 x=0 y=100
+size n1 width=160 height=56
+pin n1 x=240 y=100
+size n2 width=160 height=56
+pin n2 x=480 y=100
+size n3 width=160 height=56
+pin n3 x=720 y=100
+size n4 width=160 height=56
+pin n4 x=960 y=100

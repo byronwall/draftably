@@ -1,0 +1,13 @@
+{
+  "checks": 5,
+  "passed": 5,
+  "engineCalls": 0,
+  "metricCalls": 0,
+  "scope": "descriptive quantiles, missing values, and mutually explicit execution denominators",
+  "reportingCodeSha256": "c38a524978be1b0ffb8783ace6a1b319c03011b18b740316a1b0d034ff909fb4",
+  "createdAfterPolicyFreeze": true,
+  "changesAnyFrozenMetricOrPolicy": false,
+  "savedDevelopmentPoolMatchesExistingProfileKeys": true,
+  "logicalObservationKeys": 1704,
+  "reportingCaptionCorrection": "Split-specific reuse explanation; heldout never reads development tuning outcomes."
+}

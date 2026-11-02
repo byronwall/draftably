@@ -1,0 +1,812 @@
+{
+  "reviewer": "one expert model assessment; not independent human validation",
+  "recordedAt": "2026-11-01T23:33:17.989Z",
+  "blinding": {
+    "read": "visual-manifest-development.json; all 26 named PNGs; six supplementary renders of named SVGs; FEEL.md; visual judge guide; prior blinded routing judgment format",
+    "notRead": [
+      "visual key",
+      "pair source identities",
+      "trial rows",
+      "control analysis",
+      "portfolio analysis",
+      "candidate engine names"
+    ],
+    "all26PngsActuallyOpened": true,
+    "supplementalRendersActuallyOpened": 6,
+    "verdictsFrozenBeforeUnblinding": true,
+    "geometryTrialsRunForReview": 0
+  },
+  "severityScale": {
+    "0": "no material between-candidate task difference",
+    "1": "polish or extra visual effort",
+    "2": "noticeably slower tracing or uncertain ownership",
+    "3": "misleading, hidden, or unreadable connection"
+  },
+  "counts": {
+    "A-better": 8,
+    "B-better": 12,
+    "same": 6,
+    "pairs": 26
+  },
+  "selectionCaveat": "Matched renderable pairs supplied by the parent; this is not a population sample. Several endpoint-fan scenes recur, so pair counts are not independent graph counts. Failed full pipelines were unavailable to visual judgment and are tracked separately by the parent.",
+  "judgments": [
+    {
+      "id": "P011",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.99,
+      "reason": "Both panels make the six-phase left-to-right sequence immediately clear. Straight connections and the two 'next' labels have equally clear ownership; small spacing differences do not change the task.",
+      "defects": [],
+      "appearanceNote": "Small changes in gap lengths are visible but do not create a useful preference.",
+      "family": "pipelines",
+      "split": "development",
+      "task": "Explain a reading sequence from input to output.",
+      "inspectedPng": "renders/blinded/P011.png",
+      "pngSha256": "415a8d2ee54a05ffdadd9ff4b4be80f717969e1a53e57e894369550f10b96f22",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 400
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P012",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B keeps Source, Build, Test and Release adjacent in a compact left-to-right overview. A separates the same stages by large vertical and horizontal gaps, requiring long scans along the three Build-to-Test and Test-to-Release connections.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "related stages separated",
+          "description": "Build, Test and Release are separated by large empty areas; their dependency paths are long despite belonging to one pipeline."
+        }
+      ],
+      "appearanceNote": "B's rollback path goes back upward, while A's final rollback is below; the much stronger stage overview still favors B.",
+      "family": "dags",
+      "split": "development",
+      "task": "Trace prerequisites and downstream dependents.",
+      "inspectedPng": "renders/blinded/P012.png",
+      "pngSha256": "2ef9dc336414d259ac5e3c88c0b62e4f9e810edb3df2439f5fa23fda60b35adf",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 4302
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P013",
+      "verdict": "A-better",
+      "severity": 1,
+      "confidence": 0.89,
+      "reason": "A exposes a regular tree with aligned depth levels and paired sibling branches, making subtree boundaries easy to recognize. B remains traceable but staggers nodes of the same depth and spreads sibling groups unevenly.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 1,
+          "cause": "hierarchy alignment",
+          "description": "Nodes at the same tree depth occupy noticeably different horizontal positions, making depth and sibling grouping less immediate."
+        }
+      ],
+      "appearanceNote": "A needs more horizontal extent and its overview text is smaller; B offers larger labels in a taller shape. The preference is modest and concerns structural regularity, not a mandated orientation.",
+      "family": "hierarchies",
+      "split": "development",
+      "task": "Locate ownership and inspect a subtree.",
+      "inspectedPng": "renders/blinded/P013.png",
+      "pngSha256": "325a2c20b3b440a433fe574a02ef7f28ec5db2d6df8c1b4a79d0deeb2eb11bd2",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1992
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P014",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B places the upstream APIs near the refresh jobs and keeps the server-to-phone story legible across adjacent groups. A puts the upstream APIs far below their callers and carries several long connections around the left perimeter.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote dependent group",
+          "description": "The upstream API group is far below the refresh jobs that use it, producing long parallel outer paths and remote labels."
+        }
+      ],
+      "appearanceNote": "Both panels preserve nested group ownership and readable boundary crossings; B has some empty container area but a shorter explanatory scan.",
+      "family": "architecture",
+      "split": "development",
+      "task": "Explain boundaries and cross-system calls.",
+      "inspectedPng": "renders/blinded/P014.png",
+      "pngSha256": "35879d5ce50abee477ae6630239a42d183e15aa0753ec690d87f1001329ef24d",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2968
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P015",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.92,
+      "reason": "Both panels show the consultation sequence, the return for another round, the saved session, and the exit clearly. A is a long horizontal strip and B is a tall vertical flow; neither orientation is specified by the task, and neither introduces a decisive tracing defect.",
+      "defects": [],
+      "appearanceNote": "The aspect ratios differ substantially. A's labels are smaller at the paired overview scale, while B requires a longer vertical scan. Treat this as a presentation choice rather than a universal quality win.",
+      "family": "cycles",
+      "split": "development",
+      "task": "Explain a lifecycle, retry, or feedback loop.",
+      "inspectedPng": "renders/blinded/P015.png",
+      "pngSha256": "93cf528a45fce96d2e5e5c727931f51a7764ad24e5733b7e24ab3349b2f14fee",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 4204
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P016",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.97,
+      "reason": "Both panels clearly connect the coding agent through the CLI, viewer/API paths and server to the five storage destinations. A is a balanced top-to-bottom view and B a compact left-to-right view; connections and labels are unambiguous in each.",
+      "defects": [],
+      "appearanceNote": "The terminal fan is arranged horizontally in A and vertically in B; both group the related destinations usefully.",
+      "family": "networks",
+      "split": "development",
+      "task": "Inspect relationships without imposing a main direction.",
+      "inspectedPng": "renders/blinded/P016.png",
+      "pngSha256": "8371b4e7a565ad3393a8539d8374662b3f95057531d2363e022eeb0b93e62c26",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1444
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P017",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A packs all eight independent items into a clear two-column overview. B spends a long vertical strip and leaves a broad empty column, making an overview of the disconnected items unnecessarily costly.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "unhelpful component packing",
+          "description": "Eight unconnected items are placed in one long column despite ample unused horizontal space."
+        }
+      ],
+      "family": "disconnected",
+      "split": "development",
+      "task": "Pack independent components into a useful overview.",
+      "inspectedPng": "renders/blinded/P017.png",
+      "pngSha256": "a1c89eda9fb18824de3cefc88955d0cc94f30b91cb06b2c4576bf9571fe9f795",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 3862
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P018",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B keeps the services close and makes the event bus's related calls visible in one compact region. A leaves substantial empty area inside the order service and carries cancellation and event routes over long outer paths.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "dispersed event relationships",
+          "description": "The service actions and event bus are spread across a large vertical drawing, with remote cancellation routes and excessive empty container area."
+        }
+      ],
+      "appearanceNote": "Both retain distinguishable service colors and readable labels. The preference is for the shorter explanatory scan, not a claim that B has no congested ports.",
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P018.png",
+      "pngSha256": "b98bd6a93e6f35c594736e85f7d76e164ee74f0c7aa9d5d1f57989ae4ea736cb",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1970
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P019",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.92,
+      "reason": "A is compact, but its far-right return routes visually merge against the right edges of Components 0, 5 and 10, weakening connection identity. B uses more area yet separates the returning paths sufficiently to trace their origins and destinations more reliably.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "merged routes along node borders",
+          "description": "The rightmost vertical return paths share the same visual corridor against several component borders, so the route into one component can look continuous past another."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "tangent arrival",
+          "description": "Several vertical routes end at a box's right edge with a tiny hooked arrow rather than a clearly separated final approach."
+        }
+      ],
+      "appearanceNote": "Both preserve nested title ownership and the labelled group endpoint. Detail crops confirmed the problematic right-edge approaches; B's larger footprint is a real tradeoff.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P019-A-detail.png",
+          "sha256": "6db91315127104a24a3b2b44dc868554ee14472e361c7cab4f096e0756ea8bdb",
+          "width": 902,
+          "height": 1028
+        },
+        {
+          "path": "renders/blinded/P019-B-detail.png",
+          "sha256": "b00242a6a4572bd614d45dcb9afdd80847e25a53530292ff855f3f911023f9cf",
+          "width": 1460,
+          "height": 780
+        }
+      ],
+      "family": "containers",
+      "split": "development",
+      "task": "Read nesting, boundary endpoints, and title ownership.",
+      "inspectedPng": "renders/blinded/P019.png",
+      "pngSha256": "12b935d159b5282cdfae16f3ef117bb3379fce43ee49593033c37be25fe4f7e2",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2462
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P020",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B aligns the driven adapters beside the outbound ports, completing one coherent left-to-right explanation. A drops those adapters far below the application and adds three long parallel descents without improving the visible relationships.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "related adapters displaced",
+          "description": "Postgres, Stripe and Email are placed far below the ports that feed them, adding a large empty region and remote connecting paths."
+        }
+      ],
+      "family": "presentation",
+      "split": "development",
+      "task": "Fit an explanation to a requested presentation format.",
+      "inspectedPng": "renders/blinded/P020.png",
+      "pngSha256": "04f074d34076bc3be2cf08dcf566c19ca3bd9efc89cb8d40990f22deec29d5a0",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1072
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P021",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.94,
+      "reason": "Both panels preserve a legible build-and-run progression across Repository, Builder, Runner and the host. A is more compact, while B uses more vertical spacing and a stepped progression; detailed inspection shows the db.json label remains clearly attached in both.",
+      "defects": [],
+      "appearanceNote": "Static images do not establish whether authored pins or local edit scope were preserved. That constraint question is deliberately left to the separate measurements.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P021-A-detail.png",
+          "sha256": "f904d8aa0c696b7de3bb464a2862aef3ba1acf94994f4d896e7dd0a4aa8f8752",
+          "width": 1300,
+          "height": 676
+        },
+        {
+          "path": "renders/blinded/P021-B-detail.png",
+          "sha256": "b064ba3e6408750609365d8bcf52fc075d2e2995cccffb50079cfc9d547910cc",
+          "width": 1300,
+          "height": 812
+        }
+      ],
+      "family": "authored",
+      "split": "development",
+      "task": "Improve a local region while retaining authored constraints.",
+      "inspectedPng": "renders/blinded/P021.png",
+      "pngSha256": "319b11ac9b20c6f83fac8d928e634f626ba13b82136c46304cf66bb511e0bb0a",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 886
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P022",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A keeps the three schema tables near one another and makes both field-to-field references easy to inspect together. B separates adjacent tables by large empty vertical regions, so tracing two simple references requires a long scan.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "related tables separated",
+          "description": "The line_items, invoices and accounts tables occupy a tall, sparse arrangement with unnecessarily long reference routes."
+        }
+      ],
+      "family": "recipes",
+      "split": "development",
+      "task": "Preserve the structure encoded by a specialized recipe.",
+      "inspectedPng": "renders/blinded/P022.png",
+      "pngSha256": "74c0af7f1cac1d14080ec7e23c81178090286dd1f77a86a18b53bf3da0b84a58",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2956
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P023",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B brings the feedback route through the open central gap above Endpoint 6, so the two hubs can be related directly. A sends the same labelled feedback around the bottom of the entire endpoint column, adding a distracting outer detour.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback connection from the right hub to the left hub loops around the entire lower fan instead of using the visible central gap."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Request/reply labels immediately beside Endpoints 6 and 7 have little free line length and require extra attention among adjacent hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P023.png",
+      "pngSha256": "b492ca6e03c7c5e29bf65c5fdd104133562d6d58b9e16f702ceb5b047b0142a6",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P024",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "A routes feedback through the open central gap above Endpoint 6, keeping its ownership close to the two hubs. B runs feedback around the bottom of the full fan, creating a much longer visual excursion for the same hub-to-hub relationship.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback line loops around the lower endpoint fan before returning to the left hub."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "The short request/reply routes beside Endpoints 6 and 7 leave labels close to adjacent hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P024.png",
+      "pngSha256": "fc7934f7c425e6435d386a567d8f3d15827597941874c06370d01c53d2fbaa55",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P025",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B keeps the feedback relationship near the hubs by using the central opening above Endpoint 6. A takes the feedback line around the entire bottom of the fan, requiring a substantial detour to read one connection.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback route leaves the hub region and loops around the bottom of all lower endpoints."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Short request/reply routes at Endpoints 6 and 7 leave labels close to the hub's adjacent connection ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P025.png",
+      "pngSha256": "92eb76ed97cf1ed09a3af22d7482191133f728b2d926bb2cb8f2e0f35cc0a53f",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P026",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "A uses the central open corridor for the feedback connection between the hubs. B sends that relationship around the full lower fan, requiring a long detour and moving its label far from the hub region.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "Feedback follows a long outside path below Endpoint 11 instead of staying near the hubs."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "The request/reply labels near Endpoints 6 and 7 have limited space among neighboring hub connections."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P026.png",
+      "pngSha256": "64b480c0d312f3eba1473e1a087c7dca78ddb2696436087b7314cf547049a201",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P027",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B makes the feedback relationship local to the hubs by crossing the clear space above Endpoint 6. A loops the same labelled connection below the entire endpoint fan, making it unnecessarily laborious to trace.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback line runs down and around all lower endpoints before returning to the left hub."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Labels on the short request/reply routes near Endpoints 6 and 7 sit close to adjacent hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P027.png",
+      "pngSha256": "b0e58c5e73d8f3377afa8b2c14a5d6cac2641308077ca5c4ef95e354928485b6",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P028",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B separates the two endpoint families into two readable fans around their own hubs. A interleaves all endpoints in one very tall column, producing many long paths across the shared corridor and a costly scan to discover which hub receives each connection.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "interleaved fan membership",
+          "description": "Endpoints for two hubs are interleaved in a single column, so their routes repeatedly traverse the same central corridor."
+        },
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "remote inter-hub detours",
+          "description": "Return and handoff take long routes across the top of the full drawing despite the large visible gap between the two fans."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded fan ports",
+          "description": "Many edges arrive on the top and bottom of each hub, making the final approach locally dense."
+        }
+      ],
+      "appearanceNote": "The full-sized B render was inspected. B's clearer family separation outweighs its poor inter-hub routing, but the latter remains a visible defect.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P028-B-full.png",
+          "sha256": "77e28b68af6c4ee0c0a0526f0a9f84a8dcd3fca651f71ddcc5efdd73d33021d3",
+          "width": 3016,
+          "height": 2862
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P028.png",
+      "pngSha256": "dd508f9a38c7d1cb37837db176f73c63cb42f007ae64d494a8c6718fa51b8a5b",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 6840
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P029",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B keeps the labelled feedback close to both hubs by using the central corridor. A sends it around the bottom of the endpoint column, adding a conspicuous outside loop that does not help identify the connection.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "Feedback loops below the lower fan and its label sits far from both hub endpoints."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Short request/reply connections around Endpoints 6 and 7 leave labels close to the neighboring hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P029.png",
+      "pngSha256": "a58dbd20dde7406dc0e24b26f9d3e5bd8d880af914584beac874523393ecf229",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P030",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A presents Source, Build, Test and Release as adjacent stages, so prerequisites can be read across one coherent pipeline. B raises the Test group far above the other stages and leaves long empty runs in both the test dependencies and rollback connection.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "related stages separated",
+          "description": "Test is distant from Build and Release, and Roll back is remote from production, so the simple dependency story requires several large scans."
+        }
+      ],
+      "family": "dags",
+      "split": "development",
+      "task": "Trace prerequisites and downstream dependents.",
+      "inspectedPng": "renders/blinded/P030.png",
+      "pngSha256": "9165e6bed9fd1e712bb20a3580c20735fd46cb8e32de98d6c7d33ac2f0f7149e",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 856
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P031",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.98,
+      "reason": "Both panels show the same clear local chain and the distant protected chain connected by a legible handoff. A leaves the last local item downward and B leaves it rightward; each path remains simple and its label belongs clearly to the connection.",
+      "defects": [],
+      "appearanceNote": "The bend placement and label location differ visibly. The static pair does not establish prior authored coordinates or whether a protected region moved.",
+      "family": "authored",
+      "split": "development",
+      "task": "Improve a local region while retaining authored constraints.",
+      "inspectedPng": "renders/blinded/P031.png",
+      "pngSha256": "0f06f493cf3b6a178be0dda06288f3d7f845de7eb31d0cda76e10d80d7bbcc05",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 818
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P032",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.98,
+      "reason": "Both panels make the local chain, distant chain and handoff immediately traceable. A uses a rightward departure before stepping down and B departs downward before running right; this visible route difference has no reliable task advantage.",
+      "defects": [],
+      "appearanceNote": "The static picture is insufficient to judge preservation of authored pins or edit scope; no such claim is made here.",
+      "family": "authored",
+      "split": "development",
+      "task": "Improve a local region while retaining authored constraints.",
+      "inspectedPng": "renders/blinded/P032.png",
+      "pngSha256": "a774d04744cd0d205bad60f2cc245c2d1d5706760c3eb47c71e8727010e0ba8d",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 818
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P033",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "B places 'return inside group' directly on a short return loop, making its connection ownership immediate. A has a shorter straight return but leaves the label floating well above that line, which weakens the association.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "detached label ownership",
+          "description": "The return label floats in the space above the a-to-b gap while the actual return line runs at the boxes' mid-height."
+        }
+      ],
+      "appearanceNote": "Both external connections leave the group clearly and the container border yields at the crossings. The added short loop in B is worth its label-ownership benefit.",
+      "family": "architecture",
+      "split": "development",
+      "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+      "inspectedPng": "renders/blinded/P033.png",
+      "pngSha256": "d3c9b214d675e02bd42cf4ee9a17f930fe1876aa41efdd47dfa9c905d27686e5",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1440
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P034",
+      "verdict": "A-better",
+      "severity": 3,
+      "confidence": 0.99,
+      "reason": "A visibly routes the a-to-b connection over the central blocker and preserves the other two direct connections. In B the apparent a-to-b line disappears behind the blocker, making it look as if the blocker were part of the relationship or the connection were interrupted.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 3,
+          "cause": "connection hidden by obstacle",
+          "description": "The horizontal a-to-b connection is occluded by the central blocker and cannot be followed continuously through open space."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+      "inspectedPng": "renders/blinded/P034.png",
+      "pngSha256": "2b0f989a564800e54abb8213074cdc5fecebcade882bea612a2366f2d29585f7",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1480
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P035",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B presents all 28 phases in four ordered left-to-right rows with clear return-to-next-row links. A's single 28-item vertical strip makes the overall process difficult to survey; the full-sized B render confirms the wraps remain unambiguous.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "unwieldy process overview",
+          "description": "A very long one-column chain forces a large vertical scan to compare early and late phases."
+        }
+      ],
+      "appearanceNote": "A is locally simple and has shorter individual links. B's row-return paths are longer, but they preserve a clear reading sequence and produce a much more usable overview.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P035-B-full.png",
+          "sha256": "ffaa5c383e52ace2d4d82b87366a48650fc4be0519051e29df7ee254e071dccb",
+          "width": 3108,
+          "height": 1228
+        }
+      ],
+      "family": "pipelines",
+      "split": "development",
+      "task": "Explain a reading sequence from input to output.",
+      "inspectedPng": "renders/blinded/P035.png",
+      "pngSha256": "cb31a4995c0d3148de9aa7d7ae70b14103d2355491ccc6223fd3f73e82b91d8f",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 15200
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P036",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "A places the neighbors around Entity 0 and keeps paired relationships near the center, communicating a network. B stacks every neighbor in a long column and sends the hub relationships around the outside, imposing an unhelpful apparent sequence and making local relationships remote.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "network forced into long column",
+          "description": "The hub is far from most neighbors and its connections wrap around a tall stack, obscuring the intended neighborhood overview."
+        },
+        {
+          "side": "A",
+          "severity": 1,
+          "cause": "crowded central routes",
+          "description": "Several short hub connections share a tight region beside Entity 0 and near Entities 7 and 8."
+        }
+      ],
+      "family": "networks",
+      "split": "development",
+      "task": "Inspect relationships without imposing a main direction.",
+      "inspectedPng": "renders/blinded/P036.png",
+      "pngSha256": "68bf79a06b6b34ca923c5a3bd62b9c492977b3db6109a0685f44c841865bf461",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 5008
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    }
+  ]
+}

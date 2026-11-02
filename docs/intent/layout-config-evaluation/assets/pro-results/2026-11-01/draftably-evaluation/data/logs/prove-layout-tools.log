@@ -1,0 +1,19 @@
+PASS opened file: viewer matches draftably inspect
+PASS compare apply saved
+PASS compare wrote a recipe
+PASS recipe: viewer matches draftably inspect
+PASS improve saved
+PASS improve wrote positions — 12 stays
+PASS improve: viewer matches draftably inspect
+PASS timeline step saved
+PASS timeline step wrote positions
+PASS timeline step: viewer matches draftably inspect
+PASS brush stroke saved
+PASS brush: viewer matches draftably inspect
+PASS external addition: viewer matches draftably inspect
+PASS distant arranged region stays put
+PASS restart reproduces geometry
+
+15/15 checks passed.
+Screenshots: tmp/proof-layout/
+Final file: /tmp/draft-layout-proof-rstWD6/pipeline.draft

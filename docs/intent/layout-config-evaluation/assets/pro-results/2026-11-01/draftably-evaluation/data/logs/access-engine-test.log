@@ -1,0 +1,12 @@
+[geometry] compound-flow passed
+[geometry] boundary-align passed
+[geometry] compound-spring passed
+[geometry] tidy passed
+[geometry] stress passed
+[geometry] force passed
+[geometry] flow passed
+[geometry] layered passed
+[geometry] tree passed
+[geometry] grid passed
+[geometry] separate passed
+[geometry] PASS 195 named assertions; 55 broad layout/routing cases

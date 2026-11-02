@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="940" viewBox="0 0 1400 940" role="img" aria-labelledby="title desc">
+<title id="title">Proposed Draftably editing dispatch</title>
+<desc id="desc">Appearance changes retain geometry; local improvement previews a bounded warm action; direction, format, and structural requests preview an actual source rebuild. Failed or rejected previews keep current. This is a proposed workflow, not a measured hybrid policy.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#66758a"/></marker></defs>
+<rect width="1400" height="940" fill="#f6f8fc"/>
+<text x="60" y="58" font-family="DejaVu Sans,Arial,sans-serif" font-size="31" font-weight="700" fill="#20314a" text-anchor="start">Editing operations need different execution paths</text>
+<text x="60" y="94" font-family="DejaVu Sans,Arial,sans-serif" font-size="19" font-weight="400" fill="#53657c" text-anchor="start">Proposed UI dispatch · current defaults retained · full Advanced and source escapes remain</text>
+<rect x="520" y="130" width="360" height="66" rx="16" fill="#20314a" stroke="#20314a" stroke-width="1.5"/>
+<text x="700" y="172" font-family="DejaVu Sans,Arial,sans-serif" font-size="25" font-weight="700" fill="#ffffff" text-anchor="middle">Requested edit</text>
+<path d="M700 196 V220 H250 V248 M700 220 V248 M700 220 H1150 V248" fill="none" stroke="#66758a" stroke-width="2"/>
+<path d="M250 239 L250 258" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M700 239 L700 258" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1150 239 L1150 258" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="60" y="264" width="380" height="112" rx="16" fill="#e9f4f2" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="82" y="298" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Appearance only</text>
+<text x="82" y="327" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Color and visual styling</text>
+<text x="82" y="352" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">No unsolicited arrangement</text>
+<path d="M250 378 L250 410" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="510" y="264" width="380" height="112" rx="16" fill="#eaf0fb" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="532" y="298" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Local arrangement</text>
+<text x="532" y="327" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Improve this region</text>
+<text x="532" y="352" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Warm action, scoped constraints</text>
+<path d="M700 378 L700 410" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="960" y="264" width="380" height="112" rx="16" fill="#fff2dd" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="982" y="298" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Direction, format, structure</text>
+<text x="982" y="327" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Preview a new arrangement</text>
+<text x="982" y="352" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Source recipe and explicit intent</text>
+<path d="M1150 378 L1150 410" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="60" y="418" width="380" height="138" rx="16" fill="#ffffff" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="82" y="452" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Retain geometry</text>
+<text x="82" y="481" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Keep boxes, sides, and route points.</text>
+<text x="82" y="506" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">The color control tested this</text>
+<text x="82" y="531" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">in all 12 bases per actual policy.</text>
+<rect x="510" y="418" width="380" height="138" rx="16" fill="#ffffff" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="532" y="452" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Respect the current drawing</text>
+<text x="532" y="481" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Keep pins, manual regions, and scope.</text>
+<text x="532" y="506" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Use the selected bounded action;</text>
+<text x="532" y="531" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Separate remains an optional repair.</text>
+<rect x="960" y="418" width="380" height="138" rx="16" fill="#ffffff" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="982" y="452" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Compile the actual source</text>
+<text x="982" y="481" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Preserve nested recipes and sides.</text>
+<text x="982" y="506" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Use real direction and fit semantics;</text>
+<text x="982" y="531" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">sequence, lanes, and cells stay explicit.</text>
+<path d="M250 558 L250 588" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M700 558 L700 588" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1150 558 L1150 588" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="60" y="596" width="380" height="138" rx="16" fill="#ffffff" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="82" y="630" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Normal appearance review</text>
+<text x="82" y="659" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Inspect the style change.</text>
+<text x="82" y="684" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Geometry equality is separate</text>
+<text x="82" y="709" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">from hard validity.</text>
+<rect x="510" y="596" width="380" height="138" rx="16" fill="#ffffff" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="532" y="630" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Preview before committing</text>
+<text x="532" y="659" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Show current and candidate together.</text>
+<text x="532" y="684" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Show movement and hard failures.</text>
+<text x="532" y="709" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Do not treat a direction job as repair.</text>
+<rect x="960" y="596" width="380" height="138" rx="16" fill="#ffffff" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="982" y="630" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Preview source and geometry</text>
+<text x="982" y="659" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Show removed soft refinements.</text>
+<text x="982" y="684" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Disclose: fit may change direction.</text>
+<text x="982" y="709" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Do not infer success from a setting.</text>
+<path d="M250 736 L250 764" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M700 736 L700 764" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M1150 736 L1150 764" fill="none" stroke="#66758a" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="60" y="772" width="380" height="90" rx="16" fill="#e9f4f2" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="82" y="806" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Save the appearance edit</text>
+<text x="82" y="835" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">One Undo step</text>
+<rect x="510" y="772" width="380" height="90" rx="16" fill="#eaf0fb" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="532" y="806" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Keep the arrangement</text>
+<text x="532" y="835" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Write changed layout; one Undo step</text>
+<rect x="960" y="772" width="380" height="90" rx="16" fill="#fff2dd" stroke="#cfdae7" stroke-width="1.5"/>
+<text x="982" y="806" font-family="DejaVu Sans,Arial,sans-serif" font-size="21" font-weight="700" fill="#20314a" text-anchor="start">Keep the source recipe</text>
+<text x="982" y="835" font-family="DejaVu Sans,Arial,sans-serif" font-size="17" font-weight="400" fill="#20314a" text-anchor="start">Save, reopen, and reproduce</text>
+<text x="700" y="907" font-family="DejaVu Sans,Arial,sans-serif" font-size="18" font-weight="400" fill="#3c4c63" text-anchor="middle">Preview fails or is rejected → keep current and show diagnostics. No measured hybrid-workflow performance is claimed.</text>
+</svg>

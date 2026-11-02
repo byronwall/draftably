@@ -1,0 +1,92 @@
+[
+  {
+    "id": "P001",
+    "split": "development",
+    "family": "cycles",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-17-cornerRadius-0",
+    "b": "D-routing-route-17-cornerRadius-12",
+    "reason": "Appearance only"
+  },
+  {
+    "id": "P002",
+    "split": "development",
+    "family": "authored",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-19-clearance-4",
+    "b": "D-routing-route-19-clearance-22",
+    "reason": "Clearance adverse combination"
+  },
+  {
+    "id": "P003",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-03-standoff-0",
+    "b": "D-routing-route-03-standoff-40",
+    "reason": "Departure spacing"
+  },
+  {
+    "id": "P004",
+    "split": "development",
+    "family": "networks",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-10-crossingPenalty-0",
+    "b": "D-routing-route-10-crossingPenalty-900",
+    "reason": "Crossing versus detour"
+  },
+  {
+    "id": "P005",
+    "split": "development",
+    "family": "networks",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-09-sharedPenalty-0",
+    "b": "D-routing-route-09-sharedPenalty-16",
+    "reason": "Shared segments"
+  },
+  {
+    "id": "P006",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-05-portGap-6",
+    "b": "D-routing-route-05-portGap-28",
+    "reason": "Fan spacing"
+  },
+  {
+    "id": "P007",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-history-route-22-True-0",
+    "b": "D-history-route-22-True-100",
+    "reason": "Shared prior after edit"
+  },
+  {
+    "id": "P008",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-21-passes-1",
+    "b": "D-routing-route-21-passes-5",
+    "reason": "Finishing passes"
+  },
+  {
+    "id": "P009",
+    "split": "development",
+    "family": "architecture",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-port-route-12-automatic",
+    "b": "D-port-route-12-authored",
+    "reason": "Authored side constraint"
+  },
+  {
+    "id": "P010",
+    "split": "development",
+    "family": "presentation",
+    "task": "Trace the connections, identify their labels, and judge whether the geometry communicates them clearly. A crossing can be better than a large detour.",
+    "a": "D-routing-route-15-bendPenalty-0",
+    "b": "D-routing-route-15-bendPenalty-80",
+    "reason": "Label ownership and bends"
+  }
+]

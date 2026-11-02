@@ -1,0 +1,18 @@
+{
+  "at": "2026-11-02T00:44:52.819083+00:00",
+  "geometryRuns": 0,
+  "freshPreparationSucceeded": true,
+  "registeredTasksCopied": 8203,
+  "uniqueTaskIds": 8203,
+  "missingCopiedSourceInputs": [],
+  "immutableBaselineUnpackVerifiedOriginalFiles": 451,
+  "frozenPolicySidecarMatches": true,
+  "heldoutRoutingDesignValidationTasks": 288,
+  "shellSyntaxCheckPassed": true,
+  "newReportingPythonSyntaxChecked": 5,
+  "initialIssue": "First smoke preparation omitted policy-freeze.sha256, required by heldout routing analyzer; no algorithm was started.",
+  "correction": "Added the exact original policy checksum sidecar to prepared replay inputs, then repeated preparation in a new empty directory and passed design-only validation.",
+  "policyOrMetricChanged": false,
+  "scope": "Preparation, baseline unpack and no-outcome design checks only; the complete 8203-trial reproduction was not repeated.",
+  "prepareReplaySha256": "1412e5f80f99d9d793e0510b4c6ddeafcfb80eebd68293ad7a3236e1ff75b610"
+}

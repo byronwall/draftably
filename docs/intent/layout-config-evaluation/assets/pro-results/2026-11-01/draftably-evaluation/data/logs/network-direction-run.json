@@ -1,0 +1,17 @@
+{
+  "runId": "network-direction",
+  "started": "2026-11-01T23:33:17.200Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 1,
+  "planned": 96,
+  "priorCompleted": 0,
+  "executed": 96,
+  "failed": 0,
+  "timedOut": 8,
+  "skipped": 0,
+  "taskSha256": "495ff90cd7ac93a8dcb096a9d420b0b92b980644b1d86ac286cd7ee6f1a928fd",
+  "finished": "2026-11-01T23:36:19.018Z",
+  "elapsedSeconds": 181.818,
+  "persistedDistinct": 96
+}

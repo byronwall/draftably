@@ -1,0 +1,40 @@
+diagram "Web app component tree" version=1
+
+# A UI shell nested five levels deep, with data hooks feeding the components that use them.
+group app "App" color=slate
+node router "Router" in=app shape=pill
+
+group layout "AppLayout" in=app color=blue
+node header "Header" in=layout
+group sidebar "Sidebar" in=layout
+node nav "NavMenu" in=sidebar
+node profile "ProfileCard" in=sidebar
+
+group page "ProjectPage" in=layout color=violet
+node loader "routeLoader()" in=page shape=pill
+node breadcrumbs "Breadcrumbs" in=page
+group board "TaskBoard" in=page color=mint
+group col_todo "Column · To do" in=board
+node card_1 "TaskCard" in=col_todo
+node card_2 "TaskCard" in=col_todo
+group col_done "Column · Done" in=board
+node card_3 "TaskCard" in=col_done
+node drawer "TaskDrawer" in=page
+
+group data "Data hooks" color=amber
+node use_session "useSession()" in=data shape=pill
+node use_tasks "useTasks(projectId)" in=data shape=pill
+node use_socket "useLiveUpdates()" in=data shape=pill
+
+edge r1 router -> loader "/projects/:id"
+edge l1 loader -> use_tasks "projectId"
+edge h1 use_session -> profile
+edge h2 use_tasks -> card_1
+edge h4 use_tasks -> card_3
+edge h3 use_socket -> use_tasks "invalidate" kind=async
+edge open card_1 -> drawer "click"
+
+layout root row gap=56
+layout layout row gap=24
+layout page column gap=24
+layout board row gap=20

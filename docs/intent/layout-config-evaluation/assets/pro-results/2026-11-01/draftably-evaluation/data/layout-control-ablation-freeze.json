@@ -1,0 +1,681 @@
+{
+  "at": "2026-11-01T23:36:35.670278+00:00",
+  "stage": "adaptive development only, before these replacement trials",
+  "trials": 336,
+  "design": [
+    {
+      "control": "rankGap",
+      "fixedDefault": 52,
+      "replacementAttribute": "node-gap",
+      "replacementAlternatives": [
+        12,
+        48
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        24,
+        52,
+        100
+      ],
+      "cases": [
+        "pipelines-03",
+        "dags-03",
+        "hierarchies-01",
+        "pipelines-01",
+        "dags-01",
+        "hierarchies-02",
+        "pipelines-02",
+        "dags-02",
+        "hierarchies-03",
+        "pipelines-04",
+        "dags-04",
+        "hierarchies-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-pipelines-03-rankGap-52",
+        "D-layout-dags-03-rankGap-52",
+        "D-layout-hierarchies-01-rankGap-52",
+        "D-layout-pipelines-01-rankGap-52",
+        "D-layout-dags-01-rankGap-52",
+        "D-layout-hierarchies-02-rankGap-52",
+        "D-layout-pipelines-02-rankGap-52",
+        "D-layout-dags-02-rankGap-52",
+        "D-layout-hierarchies-03-rankGap-52",
+        "D-layout-pipelines-04-rankGap-52",
+        "D-layout-dags-04-rankGap-52",
+        "D-layout-hierarchies-04-rankGap-52"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "groupGap",
+      "fixedDefault": 48,
+      "replacementAttribute": "node-gap",
+      "replacementAlternatives": [
+        12,
+        48
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        24,
+        48,
+        96
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "architecture-01",
+        "containers-02",
+        "architecture-02",
+        "containers-03",
+        "architecture-04",
+        "containers-04",
+        "authored-03",
+        "presentation-01",
+        "routing-01",
+        "authored-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-groupGap-48",
+        "D-layout-containers-01-groupGap-48",
+        "D-layout-architecture-01-groupGap-48",
+        "D-layout-containers-02-groupGap-48",
+        "D-layout-architecture-02-groupGap-48",
+        "D-layout-containers-03-groupGap-48",
+        "D-layout-architecture-04-groupGap-48",
+        "D-layout-containers-04-groupGap-48",
+        "D-layout-authored-03-groupGap-48",
+        "D-layout-presentation-01-groupGap-48",
+        "D-layout-routing-01-groupGap-48",
+        "D-layout-authored-02-groupGap-48"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "nodeGap",
+      "fixedDefault": 24,
+      "replacementAttribute": "rank-gap",
+      "replacementAlternatives": [
+        24,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        12,
+        24,
+        48
+      ],
+      "cases": [
+        "dags-03",
+        "hierarchies-01",
+        "pipelines-03",
+        "dags-01",
+        "hierarchies-02",
+        "pipelines-01",
+        "dags-02",
+        "hierarchies-03",
+        "pipelines-02",
+        "dags-04",
+        "hierarchies-04",
+        "pipelines-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-dags-03-nodeGap-24",
+        "D-layout-hierarchies-01-nodeGap-24",
+        "D-layout-pipelines-03-nodeGap-24",
+        "D-layout-dags-01-nodeGap-24",
+        "D-layout-hierarchies-02-nodeGap-24",
+        "D-layout-pipelines-01-nodeGap-24",
+        "D-layout-dags-02-nodeGap-24",
+        "D-layout-hierarchies-03-nodeGap-24",
+        "D-layout-pipelines-02-nodeGap-24",
+        "D-layout-dags-04-nodeGap-24",
+        "D-layout-hierarchies-04-nodeGap-24",
+        "D-layout-pipelines-04-nodeGap-24"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "boundaryPull",
+      "fixedDefault": 65,
+      "replacementAttribute": "hierarchy-sweeps",
+      "replacementAlternatives": [
+        1,
+        4
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        65,
+        100
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "routing-01",
+        "architecture-01",
+        "containers-02",
+        "routing-02",
+        "architecture-02",
+        "containers-03",
+        "architecture-04",
+        "containers-04",
+        "authored-03",
+        "presentation-01"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-boundaryPull-65",
+        "D-layout-containers-01-boundaryPull-65",
+        "D-layout-routing-01-boundaryPull-65",
+        "D-layout-architecture-01-boundaryPull-65",
+        "D-layout-containers-02-boundaryPull-65",
+        "D-layout-routing-02-boundaryPull-65",
+        "D-layout-architecture-02-boundaryPull-65",
+        "D-layout-containers-03-boundaryPull-65",
+        "D-layout-architecture-04-boundaryPull-65",
+        "D-layout-containers-04-boundaryPull-65",
+        "D-layout-authored-03-boundaryPull-65",
+        "D-layout-presentation-01-boundaryPull-65"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "hierarchySweeps",
+      "fixedDefault": 2,
+      "replacementAttribute": "boundary-pull",
+      "replacementAlternatives": [
+        0,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        1,
+        2,
+        4
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "architecture-01",
+        "containers-02",
+        "architecture-02",
+        "containers-03",
+        "architecture-04",
+        "containers-04",
+        "authored-03",
+        "presentation-01",
+        "routing-01",
+        "authored-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-hierarchySweeps-2",
+        "D-layout-containers-01-hierarchySweeps-2",
+        "D-layout-architecture-01-hierarchySweeps-2",
+        "D-layout-containers-02-hierarchySweeps-2",
+        "D-layout-architecture-02-hierarchySweeps-2",
+        "D-layout-containers-03-hierarchySweeps-2",
+        "D-layout-architecture-04-hierarchySweeps-2",
+        "D-layout-containers-04-hierarchySweeps-2",
+        "D-layout-authored-03-hierarchySweeps-2",
+        "D-layout-presentation-01-hierarchySweeps-2",
+        "D-layout-routing-01-hierarchySweeps-2",
+        "D-layout-authored-02-hierarchySweeps-2"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "edgeLength",
+      "fixedDefault": 88,
+      "replacementAttribute": "alignment",
+      "replacementAlternatives": [
+        0,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        48,
+        88,
+        144
+      ],
+      "cases": [
+        "networks-01",
+        "cycles-02",
+        "dags-03",
+        "networks-02",
+        "cycles-03",
+        "dags-01",
+        "networks-03",
+        "cycles-01",
+        "dags-02",
+        "networks-04",
+        "cycles-04",
+        "dags-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-networks-01-edgeLength-88",
+        "D-layout-cycles-02-edgeLength-88",
+        "D-layout-dags-03-edgeLength-88",
+        "D-layout-networks-02-edgeLength-88",
+        "D-layout-cycles-03-edgeLength-88",
+        "D-layout-dags-01-edgeLength-88",
+        "D-layout-networks-03-edgeLength-88",
+        "D-layout-cycles-01-edgeLength-88",
+        "D-layout-dags-02-edgeLength-88",
+        "D-layout-networks-04-edgeLength-88",
+        "D-layout-cycles-04-edgeLength-88",
+        "D-layout-dags-04-edgeLength-88"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "repulsion",
+      "fixedDefault": 45,
+      "replacementAttribute": "edge-length",
+      "replacementAlternatives": [
+        48,
+        144
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        45,
+        90
+      ],
+      "cases": [
+        "networks-01",
+        "cycles-02",
+        "disconnected-01",
+        "networks-02",
+        "cycles-03",
+        "disconnected-03",
+        "networks-03",
+        "cycles-01",
+        "disconnected-02",
+        "networks-04",
+        "cycles-04",
+        "disconnected-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-networks-01-repulsion-45",
+        "D-layout-cycles-02-repulsion-45",
+        "D-layout-disconnected-01-repulsion-45",
+        "D-layout-networks-02-repulsion-45",
+        "D-layout-cycles-03-repulsion-45",
+        "D-layout-disconnected-03-repulsion-45",
+        "D-layout-networks-03-repulsion-45",
+        "D-layout-cycles-01-repulsion-45",
+        "D-layout-disconnected-02-repulsion-45",
+        "D-layout-networks-04-repulsion-45",
+        "D-layout-cycles-04-repulsion-45",
+        "D-layout-disconnected-04-repulsion-45"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "flowStrength",
+      "fixedDefault": 65,
+      "replacementAttribute": "rank-gap",
+      "replacementAlternatives": [
+        24,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        65,
+        100
+      ],
+      "cases": [
+        "pipelines-03",
+        "dags-03",
+        "cycles-02",
+        "pipelines-01",
+        "dags-01",
+        "cycles-03",
+        "pipelines-02",
+        "dags-02",
+        "cycles-01",
+        "pipelines-04",
+        "dags-04",
+        "cycles-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-pipelines-03-flowStrength-65",
+        "D-layout-dags-03-flowStrength-65",
+        "D-layout-cycles-02-flowStrength-65",
+        "D-layout-pipelines-01-flowStrength-65",
+        "D-layout-dags-01-flowStrength-65",
+        "D-layout-cycles-03-flowStrength-65",
+        "D-layout-pipelines-02-flowStrength-65",
+        "D-layout-dags-02-flowStrength-65",
+        "D-layout-cycles-01-flowStrength-65",
+        "D-layout-pipelines-04-flowStrength-65",
+        "D-layout-dags-04-flowStrength-65",
+        "D-layout-cycles-04-flowStrength-65"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "alignment",
+      "fixedDefault": 55,
+      "replacementAttribute": "edge-length",
+      "replacementAlternatives": [
+        48,
+        144
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        55,
+        100
+      ],
+      "cases": [
+        "dags-03",
+        "pipelines-03",
+        "architecture-03",
+        "dags-01",
+        "pipelines-01",
+        "architecture-01",
+        "dags-02",
+        "pipelines-02",
+        "architecture-02",
+        "dags-04",
+        "pipelines-04",
+        "architecture-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-dags-03-alignment-55",
+        "D-layout-pipelines-03-alignment-55",
+        "D-layout-architecture-03-alignment-55",
+        "D-layout-dags-01-alignment-55",
+        "D-layout-pipelines-01-alignment-55",
+        "D-layout-architecture-01-alignment-55",
+        "D-layout-dags-02-alignment-55",
+        "D-layout-pipelines-02-alignment-55",
+        "D-layout-architecture-02-alignment-55",
+        "D-layout-dags-04-alignment-55",
+        "D-layout-pipelines-04-alignment-55",
+        "D-layout-architecture-04-alignment-55"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "compactness",
+      "fixedDefault": 35,
+      "replacementAttribute": "edge-length",
+      "replacementAlternatives": [
+        48,
+        144
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        35,
+        90
+      ],
+      "cases": [
+        "architecture-03",
+        "containers-01",
+        "networks-01",
+        "architecture-01",
+        "containers-02",
+        "networks-02",
+        "architecture-02",
+        "containers-03",
+        "networks-03",
+        "architecture-04",
+        "containers-04",
+        "networks-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-architecture-03-compactness-35",
+        "D-layout-containers-01-compactness-35",
+        "D-layout-networks-01-compactness-35",
+        "D-layout-architecture-01-compactness-35",
+        "D-layout-containers-02-compactness-35",
+        "D-layout-networks-02-compactness-35",
+        "D-layout-architecture-02-compactness-35",
+        "D-layout-containers-03-compactness-35",
+        "D-layout-networks-03-compactness-35",
+        "D-layout-architecture-04-compactness-35",
+        "D-layout-containers-04-compactness-35",
+        "D-layout-networks-04-compactness-35"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "gridStrength",
+      "fixedDefault": 45,
+      "replacementAttribute": "aspect",
+      "replacementAlternatives": [
+        0.75,
+        2
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        0,
+        45,
+        100
+      ],
+      "cases": [
+        "disconnected-01",
+        "presentation-01",
+        "disconnected-03",
+        "presentation-03",
+        "disconnected-02",
+        "presentation-02",
+        "disconnected-04",
+        "presentation-04",
+        "pipelines-03",
+        "authored-03",
+        "dags-03",
+        "cycles-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-disconnected-01-gridStrength-45",
+        "D-layout-presentation-01-gridStrength-45",
+        "D-layout-disconnected-03-gridStrength-45",
+        "D-layout-presentation-03-gridStrength-45",
+        "D-layout-disconnected-02-gridStrength-45",
+        "D-layout-presentation-02-gridStrength-45",
+        "D-layout-disconnected-04-gridStrength-45",
+        "D-layout-presentation-04-gridStrength-45",
+        "D-layout-pipelines-03-gridStrength-45",
+        "D-layout-authored-03-gridStrength-45",
+        "D-layout-dags-03-gridStrength-45",
+        "D-layout-cycles-02-gridStrength-45"
+      ],
+      "semanticCaution": false
+    },
+    {
+      "control": "ordering",
+      "fixedDefault": "stable",
+      "replacementAttribute": "node-gap",
+      "replacementAlternatives": [
+        48
+      ],
+      "beforeCandidateBudget": 2,
+      "afterCandidateBudget": 2,
+      "originalCoreLevels": [
+        "stable",
+        "crossings"
+      ],
+      "cases": [
+        "dags-03",
+        "hierarchies-01",
+        "routing-01",
+        "dags-01",
+        "hierarchies-02",
+        "routing-03",
+        "dags-02",
+        "hierarchies-03",
+        "routing-02",
+        "dags-04",
+        "hierarchies-04",
+        "routing-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-dags-03-ordering-stable",
+        "D-layout-hierarchies-01-ordering-stable",
+        "D-layout-routing-01-ordering-stable",
+        "D-layout-dags-01-ordering-stable",
+        "D-layout-hierarchies-02-ordering-stable",
+        "D-layout-routing-03-ordering-stable",
+        "D-layout-dags-02-ordering-stable",
+        "D-layout-hierarchies-03-ordering-stable",
+        "D-layout-routing-02-ordering-stable",
+        "D-layout-dags-04-ordering-stable",
+        "D-layout-hierarchies-04-ordering-stable",
+        "D-layout-routing-04-ordering-stable"
+      ],
+      "semanticCaution": true
+    },
+    {
+      "control": "fold",
+      "fixedDefault": "never",
+      "replacementAttribute": "aspect",
+      "replacementAlternatives": [
+        0.75
+      ],
+      "beforeCandidateBudget": 2,
+      "afterCandidateBudget": 2,
+      "originalCoreLevels": [
+        "never",
+        "auto"
+      ],
+      "cases": [
+        "pipelines-03",
+        "presentation-01",
+        "pipelines-01",
+        "presentation-03",
+        "pipelines-02",
+        "presentation-02",
+        "pipelines-04",
+        "presentation-04",
+        "authored-03",
+        "dags-03",
+        "disconnected-01",
+        "cycles-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-pipelines-03-fold-never",
+        "D-layout-presentation-01-fold-never",
+        "D-layout-pipelines-01-fold-never",
+        "D-layout-presentation-03-fold-never",
+        "D-layout-pipelines-02-fold-never",
+        "D-layout-presentation-02-fold-never",
+        "D-layout-pipelines-04-fold-never",
+        "D-layout-presentation-04-fold-never",
+        "D-layout-authored-03-fold-never",
+        "D-layout-dags-03-fold-never",
+        "D-layout-disconnected-01-fold-never",
+        "D-layout-cycles-02-fold-never"
+      ],
+      "semanticCaution": true
+    },
+    {
+      "control": "aspect",
+      "fixedDefault": "1.6",
+      "replacementAttribute": "grid-strength",
+      "replacementAlternatives": [
+        0,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        "0.75",
+        "1.6",
+        "2"
+      ],
+      "cases": [
+        "disconnected-01",
+        "presentation-01",
+        "disconnected-03",
+        "presentation-03",
+        "disconnected-02",
+        "presentation-02",
+        "disconnected-04",
+        "presentation-04",
+        "pipelines-03",
+        "authored-03",
+        "dags-03",
+        "cycles-02"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-disconnected-01-aspect-1p6",
+        "D-layout-presentation-01-aspect-1p6",
+        "D-layout-disconnected-03-aspect-1p6",
+        "D-layout-presentation-03-aspect-1p6",
+        "D-layout-disconnected-02-aspect-1p6",
+        "D-layout-presentation-02-aspect-1p6",
+        "D-layout-disconnected-04-aspect-1p6",
+        "D-layout-presentation-04-aspect-1p6",
+        "D-layout-pipelines-03-aspect-1p6",
+        "D-layout-authored-03-aspect-1p6",
+        "D-layout-dags-03-aspect-1p6",
+        "D-layout-cycles-02-aspect-1p6"
+      ],
+      "semanticCaution": true
+    },
+    {
+      "control": "rootId",
+      "fixedDefault": "",
+      "replacementAttribute": "rank-gap",
+      "replacementAlternatives": [
+        24,
+        100
+      ],
+      "beforeCandidateBudget": 3,
+      "afterCandidateBudget": 3,
+      "originalCoreLevels": [
+        "$automatic",
+        "$source_node",
+        "$non_source_node"
+      ],
+      "cases": [
+        "hierarchies-01",
+        "dags-03",
+        "networks-01",
+        "hierarchies-02",
+        "dags-01",
+        "networks-02",
+        "hierarchies-03",
+        "dags-02",
+        "networks-03",
+        "hierarchies-04",
+        "dags-04",
+        "networks-04"
+      ],
+      "originalBaselineTrials": [
+        "D-layout-hierarchies-01-rootId-automatic",
+        "D-layout-dags-03-rootId-automatic",
+        "D-layout-networks-01-rootId-automatic",
+        "D-layout-hierarchies-02-rootId-automatic",
+        "D-layout-dags-01-rootId-automatic",
+        "D-layout-networks-02-rootId-automatic",
+        "D-layout-hierarchies-03-rootId-automatic",
+        "D-layout-dags-02-rootId-automatic",
+        "D-layout-networks-03-rootId-automatic",
+        "D-layout-hierarchies-04-rootId-automatic",
+        "D-layout-dags-04-rootId-automatic",
+        "D-layout-networks-04-rootId-automatic"
+      ],
+      "semanticCaution": true
+    }
+  ],
+  "rule": "For each removed source control, hold it to its original default and choose one global value of one other consumed parameter from default plus one/two alternatives. Before/after candidate budgets match the original core categorical/three-level design; extra aspect categorical coverage is excluded. No heldout tuning.",
+  "limits": "This bounded replacement search does not prove a continuous optimum. Quality recovery cannot replace authored direction, root, fold, ordering or target-format intent. Warm protection/scope are separate job constraints, not interchangeable numeric choices.",
+  "taskSha256": "2ba8fbdae8b4a3b5fa1485e62e8ab8f0fc3a88f4f36d9c7d8ed627df2ae1adb9"
+}

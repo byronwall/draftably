@@ -1,0 +1,335 @@
+{
+  "at": "2026-11-02T00:53:16.922309+00:00",
+  "reportingOnly": true,
+  "geometryRuns": 0,
+  "policyRefitted": false,
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "sourceAnalysisSha256": "43604a9f7303711084a38b96f47072d2e268fc4606934de07bc2a7aea74b0a4f",
+  "sourceDesignSha256": "844f80df33acfeaf0d9ad8c7b7d1af352f799a67d306f0bd5d5143d4f1e6a6b9",
+  "currentPositionPolicies": [
+    {
+      "policy": "current-default",
+      "role": "measured current source baseline",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 8,
+        "compact": 7,
+        "traceable": 7,
+        "stable": 7,
+        "specialist": 7
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 7,
+        "traceable": 7,
+        "direct": 8
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 36,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "clearance-22",
+      "role": "fixed frozen route policy",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 3,
+        "compact": 5,
+        "traceable": 5,
+        "stable": 5,
+        "specialist": 5
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 5,
+        "traceable": 5,
+        "direct": 3
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 5,
+      "pooledProfiles": {
+        "acceptable_jobs": 23,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "clearance-4",
+      "role": "fixed frozen route policy",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 10,
+        "compact": 9,
+        "traceable": 9,
+        "stable": 9,
+        "specialist": 9
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 9,
+        "traceable": 9,
+        "direct": 10
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 46,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "portGap-28",
+      "role": "fixed frozen route policy",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 7,
+        "compact": 6,
+        "traceable": 5,
+        "stable": 7,
+        "specialist": 7
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 7,
+        "traceable": 5,
+        "direct": 7
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 32,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "frozen-three-route-union",
+      "role": "oracle Compare upper bound",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 12,
+        "compact": 12,
+        "traceable": 12,
+        "stable": 12,
+        "specialist": 12
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 12,
+        "traceable": 12,
+        "direct": 12
+      },
+      "scopedRelative95EveryProfilePass": true,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": true,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 60,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "retain-current-plus-three",
+      "role": "full scoped oracle; retain current plus alternatives",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 12,
+        "compact": 12,
+        "traceable": 12,
+        "stable": 12,
+        "specialist": 12
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 12,
+        "traceable": 12,
+        "direct": 12
+      },
+      "scopedRelative95EveryProfilePass": true,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": true,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 60,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    }
+  ],
+  "jointPolicies": [
+    {
+      "policy": "frozen-joint-global",
+      "role": "fixed frozen global policy",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 5,
+        "compact": 6,
+        "traceable": 9,
+        "stable": 9,
+        "specialist": 9
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 9,
+        "traceable": 9,
+        "direct": 8
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 38,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "frozen-joint-triple",
+      "role": "oracle Compare upper bound from frozen three",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 12,
+        "compact": 11,
+        "traceable": 10,
+        "stable": 12,
+        "specialist": 12
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 12,
+        "traceable": 10,
+        "direct": 12
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 57,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "default-three-layouts",
+      "role": "matched three-layout default-route oracle benchmark",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 7,
+        "compact": 7,
+        "traceable": 9,
+        "stable": 10,
+        "specialist": 10
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 10,
+        "traceable": 9,
+        "direct": 8
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 43,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "all-nine-joint",
+      "role": "nine-combination oracle diagnostic",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 12,
+        "compact": 12,
+        "traceable": 11,
+        "stable": 12,
+        "specialist": 12
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 12,
+        "traceable": 11,
+        "direct": 12
+      },
+      "scopedRelative95EveryProfilePass": false,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": false,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 59,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    },
+    {
+      "policy": "all-twelve-scoped-pool",
+      "role": "full scoped oracle diagnostic",
+      "commonBases": 14,
+      "scopedOracleFeasibleCommonBases": 12,
+      "fiveProfileAcceptedCounts": {
+        "readable": 12,
+        "compact": 12,
+        "traceable": 12,
+        "stable": 12,
+        "specialist": 12
+      },
+      "threeRouteWeightAcceptedCounts": {
+        "balanced": 12,
+        "traceable": 12,
+        "direct": 12
+      },
+      "scopedRelative95EveryProfilePass": true,
+      "absolute95EveryProfilePass": false,
+      "scopedRelative95EveryRouteWeightPass": true,
+      "currentValidHardLossCommonBases": 0,
+      "pooledProfiles": {
+        "acceptable_jobs": 60,
+        "oracle_feasible_jobs": 60,
+        "total_jobs": 70
+      }
+    }
+  ],
+  "scope": "Current-position oracle is current default plus three frozen routes. Joint oracle is three default-routing layouts plus nine frozen layout-route combinations. These are different from the full cold-source algorithm pool.",
+  "defaultDecision": "Keep existing first-render source and routing defaults. Offer exact frozen routing alternatives behind Compare/preview; never apply clearance 22 unconditionally.",
+  "thresholdInterpretation": "A pooled 95% rate is insufficient. Every common-job profile must reach 95% separately. The frozen route triple passes its narrower scoped oracle test, while the fixed joint global, joint triple, and all-nine joint set fail at least one common profile. No new cold default or latency claim follows from cached-position route composition.",
+  "serialSensitivity": {
+    "trials": 288,
+    "knownDerivedCosts": 288,
+    "hardValidRoutes": 205,
+    "hardValidExceeding15000ms": 0,
+    "unknownCosts": 0
+  },
+  "inputIntegrity": {
+    "trials": 288,
+    "successful_document_checks": 243,
+    "partial_reference_trials": 54,
+    "missing_input_artifacts": 0,
+    "specialist_fallback_trials": 9
+  },
+  "archiveVerification": {
+    "verified": 318,
+    "checked": 318,
+    "mismatches": [],
+    "verification": "Canonical geometrySignature hash: node/group boxes, selected sides and route point sequences.",
+    "excludes": "SVG path/halo strings and other archive content are not covered by the trial geometry hash. This is not whole-archive byte identity."
+  },
+  "independentReview": "Pre-outcome routing review passed. Heldout E has separate completed independent review. Post-outcome routing review status is recorded separately if available."
+}

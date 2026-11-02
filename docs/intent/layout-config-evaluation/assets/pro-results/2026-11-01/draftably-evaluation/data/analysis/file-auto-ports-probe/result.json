@@ -1,0 +1,193 @@
+{
+  "declaredAt": "2026-11-02T00:26:52.351Z",
+  "phase": "post-seal implementation-applicability probe",
+  "purpose": "Test whether the current file-mode Release explicit ports checkbox changes the emitted source. Distinguish the raw Explorer routing API, where this option is implemented.",
+  "decisionScope": "UI-RELEASE-PORTS only; no algorithm/configuration selection, scoring changes, heldout fitting, or default change.",
+  "hypotheses": [
+    "Exact file candidateSource false/true produce byte-identical source and preserve explicit authored sides.",
+    "Actual sourceWithRouting/setRouting edit a scalar routing setting but leave edge side attributes alone.",
+    "Raw Explorer candidate false/true differ in explicit side configuration."
+  ],
+  "frozenPolicySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "sources": {
+    "src/state/comparison.ts": "ea474e623e0145b45ba4d6d7c1d22c38fb82e632f7fed832b9aaaeb38f6bf2ee",
+    "src/state/file-session.ts": "5e9b7050ea5e957a1844876f85650bb5bb3fdeadca97b9625ba2fbd88bdf5778",
+    "src/dsl/layout-edits.ts": "1af93f1b7d0043100c82233c2c1831040223cefff6b835d25c1bbf7d54c38948",
+    "src/engines/explorer-engine.js": "50aa813e59af8f295430c8ac46e39c09bdb647d32cb114acbaa455a89b89291b"
+  },
+  "functions": [
+    {
+      "file": "src/state/comparison.ts",
+      "name": "candidateSource",
+      "firstLine": 159,
+      "lastLine": 169,
+      "bodySha256": "28a1cd02b87b8654cbde6a962c3321279aaa03643d3af4f936370cf31f3451b5",
+      "textSha256": "1d63c5f5313c79d8de7fd50514747b685fcd1b2c2d5dbaeb1e6edd19a70c4865"
+    },
+    {
+      "file": "src/state/file-session.ts",
+      "name": "sourceWithRouting",
+      "firstLine": 578,
+      "lastLine": 582,
+      "bodySha256": "165992b02f8c6fc03b4be9a70461179964ca67f4673be65b8d82b1328f58b6b7",
+      "textSha256": "43917dd035105211e141d51271daff949163a7c07db42429d0bed99c1634c8b2"
+    },
+    {
+      "file": "src/state/file-session.ts",
+      "name": "sourceScope",
+      "firstLine": 561,
+      "lastLine": 565,
+      "bodySha256": "67c31ec162e42cb4ede28fdb6d24720de48cd829d6b00cc0bf1f7c485346c7ac",
+      "textSha256": "219c9c1db55aad13b9c21a80eb1958f883613c7c04b64851889e1bbcd2969c6c"
+    }
+  ],
+  "fixture": {
+    "path": "corpus/routing/route-20.draft",
+    "sha256": "cdf694c56295fa26731024501d2e62360cbcc6aedde2e1cf3d8e349ff9152e77",
+    "existingGeometry": "data/geometry/D-freeze-route-20.json.gz",
+    "geometrySha256": "b92c88cbeb80c9350b1015b162bb17620ab28891ad05ae25a3da67213c7c03b5",
+    "origin": "development routing fixture; pre-existing fixed positions"
+  },
+  "plannedCalls": {
+    "sourceCandidate": 3,
+    "directSourceWithRouting": 1,
+    "directSetRouting": 1,
+    "router": 2,
+    "layout": 0,
+    "compiler": 0
+  },
+  "constraints": [
+    "No product files changed",
+    "No source compilation",
+    "Only two small uncached raw router calls",
+    "No quality superiority claim from this probe",
+    "No heldout outcome files read"
+  ],
+  "completedAt": "2026-11-02T00:26:53.116Z",
+  "scriptSha256": "c47e8362a4ff50269f954fafd77c4343994cba9ed6d3c289a537293551ff4a79",
+  "execution": {
+    "routerCalls": 2,
+    "layoutCalls": 0,
+    "compilerCalls": 0,
+    "compilerCallEvidence": "No compiler entrypoint is imported or called by the probe; routing-only candidate path and its exact source functions are shown in extracted-functions.ts.",
+    "rawTiming": "Two ancillary calls under concurrent experiment load; not a latency benchmark"
+  },
+  "source": {
+    "falseSha256": "f4fe7085e9f7c0292cd633bf70f4edf7da1fc9c834514c0b437c49797582dc8d",
+    "trueSha256": "f4fe7085e9f7c0292cd633bf70f4edf7da1fc9c834514c0b437c49797582dc8d",
+    "byteIdentical": true,
+    "originalEdges": [
+      "edge e0 state -> model \"calls\" from=top to=left",
+      "edge e1 other -> dsl",
+      "edge e2 dsl -> model"
+    ],
+    "emittedEdges": [
+      "edge e0 state -> model \"calls\" from=top to=left",
+      "edge e1 other -> dsl",
+      "edge e2 dsl -> model"
+    ]
+  },
+  "raw": [
+    {
+      "autoPorts": false,
+      "elapsedMs": 33.43922799999996,
+      "e0Config": {
+        "fromSide": "top",
+        "toSide": "left"
+      },
+      "allEdgeConfigs": {
+        "e0": {
+          "fromSide": "top",
+          "toSide": "left"
+        },
+        "e1": {},
+        "e2": {}
+      },
+      "routingSha256": "2cc4da8bad5034949e4d501d194226c3df1466dd94b8248ae19a79ac6e6e62a4",
+      "resultKeys": [
+        "routes",
+        "report"
+      ]
+    },
+    {
+      "autoPorts": true,
+      "elapsedMs": 28.097620000000006,
+      "e0Config": {
+        "fromSide": "auto",
+        "toSide": "auto"
+      },
+      "allEdgeConfigs": {
+        "e0": {
+          "fromSide": "auto",
+          "toSide": "auto"
+        },
+        "e1": {
+          "fromSide": "auto",
+          "toSide": "auto"
+        },
+        "e2": {
+          "fromSide": "auto",
+          "toSide": "auto"
+        }
+      },
+      "routingSha256": "1e93e388ac85742ae5d06e73ef12a38b00bc0bf3b4ca530f25516ce2c886e870",
+      "resultKeys": [
+        "routes",
+        "report"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "label": "Exact candidateSource emits byte-identical text for autoPorts false/true",
+      "pass": true
+    },
+    {
+      "label": "Extracted sourceWithRouting and actual imported setRouting match file candidate text",
+      "pass": true
+    },
+    {
+      "label": "Positive scalar source edit inserts clearance=4",
+      "pass": true
+    },
+    {
+      "label": "Source output preserves every authored edge statement",
+      "pass": true
+    },
+    {
+      "label": "Explicit top/left edge sides remain in source",
+      "pass": true
+    },
+    {
+      "label": "All non-routing source lines are unchanged after normal printing",
+      "pass": true
+    },
+    {
+      "label": "Actual fileMode guard returns null outside file mode",
+      "pass": true
+    },
+    {
+      "label": "Source-only probe performs zero router and zero layout calls",
+      "pass": true
+    },
+    {
+      "label": "Raw Explorer false retains explicit authored sides",
+      "pass": true
+    },
+    {
+      "label": "Raw Explorer true releases both explicit authored sides",
+      "pass": true
+    },
+    {
+      "label": "Exactly two actual uncached router calls and zero layout calls",
+      "pass": true
+    },
+    {
+      "label": "Source and raw branches preserve their input document",
+      "pass": true
+    }
+  ],
+  "passed": 12,
+  "failed": 0,
+  "conclusion": "Measured no-op in the current file routing-comparison source branch. The same autoPorts option is active in raw Explorer routing. Remove the ineffective checkbox only in that file-source context; retain explicit side controls and raw capability. A future release-ports file action would require an actual source edge edit and separate acceptance tests."
+}

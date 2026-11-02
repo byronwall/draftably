@@ -1,0 +1,34 @@
+{
+  "at": "2026-11-01T23:15:43.077803+00:00",
+  "basis": "one source-selected base per family, 8\u201348nodes; no timing or candidate-win selection",
+  "cases": [
+    "pipelines-04",
+    "dags-01",
+    "hierarchies-03",
+    "architecture-01",
+    "cycles-01",
+    "networks-03",
+    "disconnected-04",
+    "routing-02",
+    "containers-01",
+    "presentation-03",
+    "authored-03",
+    "recipes-02"
+  ],
+  "engineMethods": [
+    "compound-flow",
+    "boundary-align",
+    "compound-spring",
+    "tidy",
+    "stress",
+    "force",
+    "flow",
+    "layered",
+    "tree",
+    "grid"
+  ],
+  "warmups": 1,
+  "samples": 5,
+  "concurrency": 1,
+  "cache": "disabled; production compiler/router/labels each invocation"
+}

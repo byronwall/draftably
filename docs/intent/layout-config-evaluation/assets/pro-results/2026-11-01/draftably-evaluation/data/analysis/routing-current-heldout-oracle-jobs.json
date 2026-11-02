@@ -1,0 +1,3924 @@
+[
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 64.57907203735195,
+    "scores": {
+      "clearance-22": 72.37918970390525,
+      "clearance-4": 64.57907203735195,
+      "portGap-28": 68.95358505462912,
+      "current-default": 73.84152176774705
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 56.970376037351954,
+    "scores": {
+      "clearance-22": 61.63078039125919,
+      "clearance-4": 56.970376037351954,
+      "portGap-28": 64.06032446329982,
+      "current-default": 67.66129803730745
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 112.608696,
+    "scores": {
+      "clearance-22": 118.26087,
+      "clearance-4": 112.608696,
+      "portGap-28": 127.391304,
+      "current-default": 133.043478
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 54.347826,
+    "scores": {
+      "clearance-22": 58.695652,
+      "clearance-4": 54.347826,
+      "portGap-28": 61.304348,
+      "current-default": 64.782609
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 54.347826,
+    "scores": {
+      "clearance-22": 58.695652,
+      "clearance-4": 54.347826,
+      "portGap-28": 61.304348,
+      "current-default": 64.782609
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 54.347826,
+    "scores": {
+      "clearance-22": 58.695652,
+      "clearance-4": 54.347826,
+      "portGap-28": 61.304348,
+      "current-default": 64.782609
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 112.608696,
+    "scores": {
+      "clearance-22": 118.26087,
+      "clearance-4": 112.608696,
+      "portGap-28": 127.391304,
+      "current-default": 133.043478
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-05",
+    "family": "architecture",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-architecture-05-clearance-4",
+    "oracle_score": 61.956522,
+    "scores": {
+      "clearance-22": 69.782609,
+      "clearance-4": 61.956522,
+      "portGap-28": 66.304348,
+      "current-default": 71.304348
+    },
+    "min_valid_area": 955938,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "architecture-06",
+    "family": "architecture",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 2.4059423365192885,
+    "scores": {
+      "clearance-22": 4.224124336519289,
+      "clearance-4": 2.4059423365192885,
+      "portGap-28": 2.4059423365192885,
+      "current-default": 2.4059423365192885
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 2.4059423365192885,
+    "scores": {
+      "clearance-22": 3.3150333365192886,
+      "clearance-4": 2.4059423365192885,
+      "portGap-28": 2.4059423365192885,
+      "current-default": 2.4059423365192885
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 0.909091,
+    "scores": {
+      "clearance-22": 1.818182,
+      "clearance-4": 0.909091,
+      "portGap-28": 0.909091,
+      "current-default": 0.909091
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 1.818182,
+    "scores": {
+      "clearance-22": 2.727273,
+      "clearance-4": 1.818182,
+      "portGap-28": 1.818182,
+      "current-default": 1.818182
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 1.818182,
+    "scores": {
+      "clearance-22": 2.727273,
+      "clearance-4": 1.818182,
+      "portGap-28": 1.818182,
+      "current-default": 1.818182
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 1.818182,
+    "scores": {
+      "clearance-22": 2.727273,
+      "clearance-4": 1.818182,
+      "portGap-28": 1.818182,
+      "current-default": 1.818182
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 0.909091,
+    "scores": {
+      "clearance-22": 1.818182,
+      "clearance-4": 0.909091,
+      "portGap-28": 0.909091,
+      "current-default": 0.909091
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-05",
+    "family": "authored",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-05-current",
+    "oracle_score": 1.818182,
+    "scores": {
+      "clearance-22": 3.636364,
+      "clearance-4": 1.818182,
+      "portGap-28": 1.818182,
+      "current-default": 1.818182
+    },
+    "min_valid_area": 1252960,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 3.0696846302904386,
+    "scores": {
+      "clearance-22": 4.4650336302904385,
+      "clearance-4": 3.0696846302904386,
+      "portGap-28": 3.0696846302904386,
+      "current-default": 3.0696846302904386
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 2.3720096302904388,
+    "scores": {
+      "clearance-22": 3.0696846302904386,
+      "clearance-4": 2.3720096302904388,
+      "portGap-28": 2.3720096302904388,
+      "current-default": 2.3720096302904388
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 0.581395,
+    "scores": {
+      "clearance-22": 1.27907,
+      "clearance-4": 0.581395,
+      "portGap-28": 0.581395,
+      "current-default": 0.581395
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 0.465116,
+    "scores": {
+      "clearance-22": 1.162791,
+      "clearance-4": 0.465116,
+      "portGap-28": 0.465116,
+      "current-default": 0.465116
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 0.465116,
+    "scores": {
+      "clearance-22": 1.162791,
+      "clearance-4": 0.465116,
+      "portGap-28": 0.465116,
+      "current-default": 0.465116
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 0.465116,
+    "scores": {
+      "clearance-22": 1.162791,
+      "clearance-4": 0.465116,
+      "portGap-28": 0.465116,
+      "current-default": 0.465116
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 0.581395,
+    "scores": {
+      "clearance-22": 1.27907,
+      "clearance-4": 0.581395,
+      "portGap-28": 0.581395,
+      "current-default": 0.581395
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "authored-06",
+    "family": "authored",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-authored-06-current",
+    "oracle_score": 1.162791,
+    "scores": {
+      "clearance-22": 2.55814,
+      "clearance-4": 1.162791,
+      "portGap-28": 1.162791,
+      "current-default": 1.162791
+    },
+    "min_valid_area": 6674752,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-05",
+    "family": "containers",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "containers-06",
+    "family": "containers",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 11.1779415411883,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 11.189195970916451,
+      "portGap-28": 11.1779415411883,
+      "current-default": 11.1779415411883
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-cycles-05-clearance-4",
+    "oracle_score": 6.189195970916451,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 6.189195970916451,
+      "portGap-28": 6.327650614861829,
+      "current-default": 6.327650614861829
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 11.176471,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 11.176471,
+      "portGap-28": 11.176471,
+      "current-default": 11.176471
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 5.882353,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.882353,
+      "portGap-28": 5.882353,
+      "current-default": 5.882353
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 5.882353,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.882353,
+      "portGap-28": 5.882353,
+      "current-default": 5.882353
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 5.882353,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.882353,
+      "portGap-28": 5.882353,
+      "current-default": 5.882353
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 11.176471,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 11.176471,
+      "portGap-28": 11.176471,
+      "current-default": 11.176471
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-05",
+    "family": "cycles",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-05-current",
+    "oracle_score": 10.882353,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 10.882353,
+      "portGap-28": 10.882353,
+      "current-default": 10.882353
+    },
+    "min_valid_area": 447860,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-cycles-06-clearance-4",
+    "oracle_score": 5.661635962212188,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.661635962212188,
+      "portGap-28": 6.160035538209648,
+      "current-default": 5.667107423938414
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-cycles-06-clearance-4",
+    "oracle_score": 3.9949699622121884,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.9949699622121884,
+      "portGap-28": 5.016373880163365,
+      "current-default": 4.022329262489413
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-06-current",
+    "oracle_score": 6.862745,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 6.862745,
+      "portGap-28": 9.803922,
+      "current-default": 6.862745
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-06-current",
+    "oracle_score": 3.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.529412,
+      "portGap-28": 4.509804,
+      "current-default": 3.529412
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-06-current",
+    "oracle_score": 3.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.529412,
+      "portGap-28": 4.509804,
+      "current-default": 3.529412
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-06-current",
+    "oracle_score": 3.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.529412,
+      "portGap-28": 4.509804,
+      "current-default": 3.529412
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-06-current",
+    "oracle_score": 6.862745,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 6.862745,
+      "portGap-28": 9.803922,
+      "current-default": 6.862745
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "cycles-06",
+    "family": "cycles",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-cycles-06-current",
+    "oracle_score": 5.196078,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.196078,
+      "portGap-28": 5.686275,
+      "current-default": 5.196078
+    },
+    "min_valid_area": 2375055,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-dags-05-current",
+    "oracle_score": 33.44660995100381,
+    "scores": {
+      "clearance-22": 34.49051567728424,
+      "clearance-4": 34.42457091482431,
+      "portGap-28": 36.131155759741205,
+      "current-default": 33.44660995100381
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-dags-05-clearance-4",
+    "oracle_score": 25.615046914824312,
+    "scores": {
+      "clearance-22": 29.8909866608116,
+      "clearance-4": 25.615046914824312,
+      "portGap-28": 30.38739263862855,
+      "current-default": 27.754893925167767
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-dags-05-clearance-4",
+    "oracle_score": 47.619048,
+    "scores": {
+      "clearance-22": 60.0,
+      "clearance-4": 47.619048,
+      "portGap-28": 60.952381,
+      "current-default": 57.142857
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-dags-05-clearance-4",
+    "oracle_score": 25.47619,
+    "scores": {
+      "clearance-22": 28.809524,
+      "clearance-4": 25.47619,
+      "portGap-28": 30.0,
+      "current-default": 27.142857
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-dags-05-clearance-4",
+    "oracle_score": 25.47619,
+    "scores": {
+      "clearance-22": 28.809524,
+      "clearance-4": 25.47619,
+      "portGap-28": 30.0,
+      "current-default": 27.142857
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-dags-05-clearance-4",
+    "oracle_score": 25.47619,
+    "scores": {
+      "clearance-22": 28.809524,
+      "clearance-4": 25.47619,
+      "portGap-28": 30,
+      "current-default": 27.142857
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-dags-05-clearance-4",
+    "oracle_score": 47.619048,
+    "scores": {
+      "clearance-22": 60,
+      "clearance-4": 47.619048,
+      "portGap-28": 60.952381,
+      "current-default": 57.142857
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "dags-05",
+    "family": "dags",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-dags-05-current",
+    "oracle_score": 33.333333,
+    "scores": {
+      "clearance-22": 34.404762,
+      "clearance-4": 34.285714,
+      "portGap-28": 36.071429,
+      "current-default": 33.333333
+    },
+    "min_valid_area": 768442.5,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "dags-06",
+    "family": "dags",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0.24792323015562598,
+    "scores": {
+      "clearance-22": 0.24792323015562598,
+      "clearance-4": 0.24792323015562598,
+      "portGap-28": 0.24792323015562598,
+      "current-default": 0.24792323015562598
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0.24792323015562598,
+    "scores": {
+      "clearance-22": 0.24792323015562598,
+      "clearance-4": 0.24792323015562598,
+      "portGap-28": 0.24792323015562598,
+      "current-default": 0.24792323015562598
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0.0,
+    "scores": {
+      "clearance-22": 0.0,
+      "clearance-4": 0.0,
+      "portGap-28": 0.0,
+      "current-default": 0.0
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0.0,
+    "scores": {
+      "clearance-22": 0.0,
+      "clearance-4": 0.0,
+      "portGap-28": 0.0,
+      "current-default": 0.0
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0.0,
+    "scores": {
+      "clearance-22": 0.0,
+      "clearance-4": 0.0,
+      "portGap-28": 0.0,
+      "current-default": 0.0
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0,
+    "scores": {
+      "clearance-22": 0,
+      "clearance-4": 0,
+      "portGap-28": 0,
+      "current-default": 0
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0,
+    "scores": {
+      "clearance-22": 0,
+      "clearance-4": 0,
+      "portGap-28": 0,
+      "current-default": 0
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-05",
+    "family": "disconnected",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-disconnected-05-current",
+    "oracle_score": 0,
+    "scores": {
+      "clearance-22": 0,
+      "clearance-4": 0,
+      "portGap-28": 0,
+      "current-default": 0
+    },
+    "min_valid_area": 244608,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 60.40774957473509,
+    "scores": {
+      "clearance-22": 60.40774957473509,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 51.24108357473509,
+    "scores": {
+      "clearance-22": 51.24108357473509,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 104.259259,
+    "scores": {
+      "clearance-22": 104.259259,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 48.518519,
+    "scores": {
+      "clearance-22": 48.518519,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 48.518519,
+    "scores": {
+      "clearance-22": 48.518519,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 48.518519,
+    "scores": {
+      "clearance-22": 48.518519,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 104.259259,
+    "scores": {
+      "clearance-22": 104.259259,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "disconnected-06",
+    "family": "disconnected",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-disconnected-06-clearance-22",
+    "oracle_score": 57.685185,
+    "scores": {
+      "clearance-22": 57.685185,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2457792,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 10.678582412370023,
+    "scores": {
+      "clearance-22": 10.678582412370023,
+      "clearance-4": 13.178582412370023,
+      "portGap-28": 11.928582412370023,
+      "current-default": 13.178582412370023
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 4.8452494123700225,
+    "scores": {
+      "clearance-22": 4.8452494123700225,
+      "clearance-4": 6.511915412370022,
+      "portGap-28": 6.511915412370022,
+      "current-default": 6.511915412370022
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 5.0,
+    "scores": {
+      "clearance-22": 5.0,
+      "clearance-4": 7.5,
+      "portGap-28": 9.166667,
+      "current-default": 7.5
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 4.166667,
+    "scores": {
+      "clearance-22": 4.166667,
+      "clearance-4": 5.833333,
+      "portGap-28": 5.833333,
+      "current-default": 5.833333
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 4.166667,
+    "scores": {
+      "clearance-22": 4.166667,
+      "clearance-4": 5.833333,
+      "portGap-28": 5.833333,
+      "current-default": 5.833333
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 4.166667,
+    "scores": {
+      "clearance-22": 4.166667,
+      "clearance-4": 5.833333,
+      "portGap-28": 5.833333,
+      "current-default": 5.833333
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 5,
+    "scores": {
+      "clearance-22": 5,
+      "clearance-4": 7.5,
+      "portGap-28": 9.166667,
+      "current-default": 7.5
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-05",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-05-clearance-22",
+    "oracle_score": 10,
+    "scores": {
+      "clearance-22": 10,
+      "clearance-4": 12.5,
+      "portGap-28": 11.25,
+      "current-default": 12.5
+    },
+    "min_valid_area": 898656,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 57.21347031284928,
+    "scores": {
+      "clearance-22": 57.21347031284928,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 62.68966131284928,
+    "scores": {
+      "clearance-22": 62.68966131284928,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 150.0,
+    "scores": {
+      "clearance-22": 150.0,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 58.809524,
+    "scores": {
+      "clearance-22": 58.809524,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 58.809524,
+    "scores": {
+      "clearance-22": 58.809524,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 58.809524,
+    "scores": {
+      "clearance-22": 58.809524,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 150,
+    "scores": {
+      "clearance-22": 150,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "hierarchies-06",
+    "family": "hierarchies",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-hierarchies-06-clearance-22",
+    "oracle_score": 53.333333,
+    "scores": {
+      "clearance-22": 53.333333,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 2918912,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-05",
+    "family": "networks",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "networks-06",
+    "family": "networks",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": null,
+    "oracle_trial": null,
+    "oracle_score": null,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": null,
+      "portGap-28": null,
+      "current-default": null
+    },
+    "min_valid_area": 1,
+    "target_aspect": 1.6,
+    "acceptable_methods": []
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 9.23793413519721,
+    "scores": {
+      "clearance-22": 9.23793413519721,
+      "clearance-4": 9.756136857692645,
+      "portGap-28": 11.861399857692644,
+      "current-default": 11.335084857692644
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 4.533546540762124,
+    "scores": {
+      "clearance-22": 4.533546540762124,
+      "clearance-4": 5.545610857692646,
+      "portGap-28": 7.124557857692646,
+      "current-default": 6.598241857692646
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 7.368421,
+    "scores": {
+      "clearance-22": 7.368421,
+      "clearance-4": 8.947368,
+      "portGap-28": 11.578947,
+      "current-default": 10.526316
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 4.210526,
+    "scores": {
+      "clearance-22": 4.210526,
+      "clearance-4": 5.263158,
+      "portGap-28": 6.842105,
+      "current-default": 6.315789
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 4.210526,
+    "scores": {
+      "clearance-22": 4.210526,
+      "clearance-4": 5.263158,
+      "portGap-28": 6.842105,
+      "current-default": 6.315789
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 4.210526,
+    "scores": {
+      "clearance-22": 4.210526,
+      "clearance-4": 5.263158,
+      "portGap-28": 6.842105,
+      "current-default": 6.315789
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 7.368421,
+    "scores": {
+      "clearance-22": 7.368421,
+      "clearance-4": 8.947368,
+      "portGap-28": 11.578947,
+      "current-default": 10.526316
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "pipelines-05",
+    "family": "pipelines",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-pipelines-05-clearance-22",
+    "oracle_score": 8.947368,
+    "scores": {
+      "clearance-22": 8.947368,
+      "clearance-4": 9.473684,
+      "portGap-28": 11.578947,
+      "current-default": 11.052632
+    },
+    "min_valid_area": 738000,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 1.7667485787840678,
+    "scores": {
+      "clearance-4": 1.7667485787840678,
+      "clearance-22": null,
+      "portGap-28": 2.4810345787840675,
+      "current-default": 1.7667485787840678
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 1.0524635787840677,
+    "scores": {
+      "clearance-4": 1.0524635787840677,
+      "clearance-22": null,
+      "portGap-28": 1.7667485787840678,
+      "current-default": 1.0524635787840677
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 0.714286,
+    "scores": {
+      "clearance-4": 0.714286,
+      "clearance-22": null,
+      "portGap-28": 2.142857,
+      "current-default": 0.714286
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 0.714286,
+    "scores": {
+      "clearance-4": 0.714286,
+      "clearance-22": null,
+      "portGap-28": 1.428571,
+      "current-default": 0.714286
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 0.714286,
+    "scores": {
+      "clearance-4": 0.714286,
+      "clearance-22": null,
+      "portGap-28": 1.428571,
+      "current-default": 0.714286
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 0.714286,
+    "scores": {
+      "clearance-4": 0.714286,
+      "clearance-22": null,
+      "portGap-28": 1.428571,
+      "current-default": 0.714286
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 0.714286,
+    "scores": {
+      "clearance-4": 0.714286,
+      "clearance-22": null,
+      "portGap-28": 2.142857,
+      "current-default": 0.714286
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default"
+    ]
+  },
+  {
+    "case_id": "pipelines-06",
+    "family": "pipelines",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-pipelines-06-current",
+    "oracle_score": 1.428571,
+    "scores": {
+      "clearance-4": 1.428571,
+      "clearance-22": null,
+      "portGap-28": 2.142857,
+      "current-default": 1.428571
+    },
+    "min_valid_area": 2150290,
+    "target_aspect": 1.78,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 4.841923542115259,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.711488542115259,
+      "portGap-28": 4.841923542115259,
+      "current-default": 4.841923542115259
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 2.2332275421152588,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 2.668010542115259,
+      "portGap-28": 2.2332275421152588,
+      "current-default": 2.2332275421152588
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 2.173913,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 2.608696,
+      "portGap-28": 2.173913,
+      "current-default": 2.173913
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 1.73913,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 2.173913,
+      "portGap-28": 1.73913,
+      "current-default": 1.73913
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 1.73913,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 2.173913,
+      "portGap-28": 1.73913,
+      "current-default": 1.73913
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 1.73913,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 2.173913,
+      "portGap-28": 1.73913,
+      "current-default": 1.73913
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 2.173913,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 2.608696,
+      "portGap-28": 2.173913,
+      "current-default": 2.173913
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-05",
+    "family": "presentation",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-presentation-05-current",
+    "oracle_score": 4.347826,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 5.217391,
+      "portGap-28": 4.347826,
+      "current-default": 4.347826
+    },
+    "min_valid_area": 1145400,
+    "target_aspect": 0.77,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 6.6232723306167305,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 6.6232723306167305,
+      "portGap-28": 7.407586330616731,
+      "current-default": 7.015429330616731
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 3.87817433061673,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.87817433061673,
+      "portGap-28": 4.27033133061673,
+      "current-default": 4.07425233061673
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 4.117647,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 4.117647,
+      "portGap-28": 4.509804,
+      "current-default": 4.313725
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 3.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.529412,
+      "portGap-28": 3.921569,
+      "current-default": 3.72549
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 3.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.529412,
+      "portGap-28": 3.921569,
+      "current-default": 3.72549
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 3.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 3.529412,
+      "portGap-28": 3.921569,
+      "current-default": 3.72549
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 4.117647,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 4.117647,
+      "portGap-28": 4.509804,
+      "current-default": 4.313725
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "presentation-06",
+    "family": "presentation",
+    "common": true,
+    "axis": "route:direct",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-presentation-06-clearance-4",
+    "oracle_score": 6.27451,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 6.27451,
+      "portGap-28": 7.058824,
+      "current-default": 6.666667
+    },
+    "min_valid_area": 2569604,
+    "target_aspect": 0.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 17.94807066947561,
+    "scores": {
+      "clearance-22": 17.94807066947561,
+      "clearance-4": 17.94807066947561,
+      "portGap-28": 17.94807066947561,
+      "current-default": 17.94807066947561
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 12.948070669475609,
+    "scores": {
+      "clearance-22": 12.948070669475609,
+      "clearance-4": 12.948070669475609,
+      "portGap-28": 12.948070669475609,
+      "current-default": 12.948070669475609
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 10.0,
+    "scores": {
+      "clearance-22": 10.0,
+      "clearance-4": 10.0,
+      "portGap-28": 10.0,
+      "current-default": 10.0
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 12.0,
+    "scores": {
+      "clearance-22": 12.0,
+      "clearance-4": 12.0,
+      "portGap-28": 12.0,
+      "current-default": 12.0
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 12.0,
+    "scores": {
+      "clearance-22": 12.0,
+      "clearance-4": 12.0,
+      "portGap-28": 12.0,
+      "current-default": 12.0
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 12,
+    "scores": {
+      "clearance-22": 12,
+      "clearance-4": 12,
+      "portGap-28": 12,
+      "current-default": 12
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 10,
+    "scores": {
+      "clearance-22": 10,
+      "clearance-4": 10,
+      "portGap-28": 10,
+      "current-default": 10
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-05",
+    "family": "recipes",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-recipes-05-current",
+    "oracle_score": 17,
+    "scores": {
+      "clearance-22": 17,
+      "clearance-4": 17,
+      "portGap-28": 17,
+      "current-default": 17
+    },
+    "min_valid_area": 711152,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 3.797316433728935,
+    "scores": {
+      "clearance-22": 3.797316433728935,
+      "clearance-4": 8.260782965529131,
+      "portGap-28": 11.460782965529132,
+      "current-default": 11.460782965529132
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 2.4511820113479366,
+    "scores": {
+      "clearance-22": 2.4511820113479366,
+      "clearance-4": 5.060782965529132,
+      "portGap-28": 8.260782965529131,
+      "current-default": 8.260782965529131
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 1.2,
+    "scores": {
+      "clearance-22": 1.2,
+      "clearance-4": 5.6,
+      "portGap-28": 11.2,
+      "current-default": 11.2
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 0.8,
+    "scores": {
+      "clearance-22": 0.8,
+      "clearance-4": 3.6,
+      "portGap-28": 6.8,
+      "current-default": 6.8
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 0.8,
+    "scores": {
+      "clearance-22": 0.8,
+      "clearance-4": 3.6,
+      "portGap-28": 6.8,
+      "current-default": 6.8
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 0.8,
+    "scores": {
+      "clearance-22": 0.8,
+      "clearance-4": 3.6,
+      "portGap-28": 6.8,
+      "current-default": 6.8
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 1.2,
+    "scores": {
+      "clearance-22": 1.2,
+      "clearance-4": 5.6,
+      "portGap-28": 11.2,
+      "current-default": 11.2
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "recipes-06",
+    "family": "recipes",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-recipes-06-clearance-22",
+    "oracle_score": 2.4,
+    "scores": {
+      "clearance-22": 2.4,
+      "clearance-4": 6.8,
+      "portGap-28": 10,
+      "current-default": 10
+    },
+    "min_valid_area": 3374784,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-routing-05-current",
+    "oracle_score": 63.9502159341194,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 64.66758018251065,
+      "portGap-28": 63.9502159341194,
+      "current-default": 63.9502159341194
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-routing-05-clearance-4",
+    "oracle_score": 34.39349726567299,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 34.39349726567299,
+      "portGap-28": 35.4208039341194,
+      "current-default": 35.4208039341194
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-routing-05-clearance-4",
+    "oracle_score": 57.647059,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 57.647059,
+      "portGap-28": 65.294118,
+      "current-default": 65.294118
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-routing-05-clearance-4",
+    "oracle_score": 33.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 33.529412,
+      "portGap-28": 34.705882,
+      "current-default": 34.705882
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-routing-05-clearance-4",
+    "oracle_score": 33.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 33.529412,
+      "portGap-28": 34.705882,
+      "current-default": 34.705882
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-routing-05-clearance-4",
+    "oracle_score": 33.529412,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 33.529412,
+      "portGap-28": 34.705882,
+      "current-default": 34.705882
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-4",
+    "oracle_trial": "H-routing-current-routing-05-clearance-4",
+    "oracle_score": 57.647059,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 57.647059,
+      "portGap-28": 65.294118,
+      "current-default": 65.294118
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4"
+    ]
+  },
+  {
+    "case_id": "routing-05",
+    "family": "routing",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": "current-default",
+    "oracle_trial": "C-heldout-routing-05-current",
+    "oracle_score": 63.235294,
+    "scores": {
+      "clearance-22": null,
+      "clearance-4": 64.117647,
+      "portGap-28": 63.235294,
+      "current-default": 63.235294
+    },
+    "min_valid_area": 749746,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "current-default",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:readable",
+    "oracle_method": "portGap-28",
+    "oracle_trial": "H-routing-current-routing-06-portGap-28",
+    "oracle_score": 24.247351104949104,
+    "scores": {
+      "clearance-22": 27.362342870964632,
+      "clearance-4": 24.703480322860013,
+      "portGap-28": 24.247351104949104,
+      "current-default": 25.92226279522404
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:compact",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-routing-06-clearance-22",
+    "oracle_score": 12.805858387204008,
+    "scores": {
+      "clearance-22": 12.805858387204008,
+      "clearance-4": 14.286814322860016,
+      "portGap-28": 13.571862308566123,
+      "current-default": 14.380469257676655
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22",
+      "portGap-28"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-routing-06-clearance-22",
+    "oracle_score": 14.583333,
+    "scores": {
+      "clearance-22": 14.583333,
+      "clearance-4": 20.208333,
+      "portGap-28": 18.333333,
+      "current-default": 19.791667
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:stable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-routing-06-clearance-22",
+    "oracle_score": 10.416667,
+    "scores": {
+      "clearance-22": 10.416667,
+      "clearance-4": 12.291667,
+      "portGap-28": 11.458333,
+      "current-default": 12.291667
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "profile:specialist",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-routing-06-clearance-22",
+    "oracle_score": 10.416667,
+    "scores": {
+      "clearance-22": 10.416667,
+      "clearance-4": 12.291667,
+      "portGap-28": 11.458333,
+      "current-default": 12.291667
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "route:balanced",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-routing-06-clearance-22",
+    "oracle_score": 10.416667,
+    "scores": {
+      "clearance-22": 10.416667,
+      "clearance-4": 12.291667,
+      "portGap-28": 11.458333,
+      "current-default": 12.291667
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "route:traceable",
+    "oracle_method": "clearance-22",
+    "oracle_trial": "H-routing-current-routing-06-clearance-22",
+    "oracle_score": 14.583333,
+    "scores": {
+      "clearance-22": 14.583333,
+      "clearance-4": 20.208333,
+      "portGap-28": 18.333333,
+      "current-default": 19.791667
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-22"
+    ]
+  },
+  {
+    "case_id": "routing-06",
+    "family": "routing",
+    "common": false,
+    "axis": "route:direct",
+    "oracle_method": "portGap-28",
+    "oracle_trial": "H-routing-current-routing-06-portGap-28",
+    "oracle_score": 22.291667,
+    "scores": {
+      "clearance-22": 25.416667,
+      "clearance-4": 22.708333,
+      "portGap-28": 22.291667,
+      "current-default": 23.958333
+    },
+    "min_valid_area": 1540856,
+    "target_aspect": 1.6,
+    "acceptable_methods": [
+      "clearance-4",
+      "portGap-28"
+    ]
+  }
+]

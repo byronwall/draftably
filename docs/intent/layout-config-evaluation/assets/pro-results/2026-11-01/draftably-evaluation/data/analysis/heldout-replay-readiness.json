@@ -1,0 +1,42 @@
+{
+  "schema": "heldout-replay-readiness-1",
+  "checkedAt": "2026-11-02T00:04:34.550811+00:00",
+  "policyFrozenAt": "2026-11-01T23:58:46.719982+00:00",
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "heldoutOutcomesRead": false,
+  "geometryRuns": 0,
+  "frozenCodeModified": false,
+  "frozenCodeHashesMatch": {
+    "evaluation/analyze-portfolio.py": true,
+    "evaluation/analyze-dependencies.py": true,
+    "evaluation/metrics.mjs": true,
+    "evaluation/plot-portfolio.py": true,
+    "evaluation/audit-result-archives.mjs": true,
+    "evaluation/audit-cell-access.mjs": true
+  },
+  "splitHashMatches": true,
+  "developmentTaskHashes": {
+    "evaluation/tasks/documented-default-development.json": "97794c7cc3f5385d2e39c89dea2b45acb43bcfaa405943ab07a73adfcea83af6",
+    "evaluation/tasks/edits-current-development.json": "74746092a69e10c4b48dfc419a0fb69908ab028556e361a5e423c618cb9e74f6",
+    "evaluation/tasks/edits-policies-development.json": "ec97b1ceaac8fd75e1572d0277b8a00ce52638634213bda7b401f51482a31963",
+    "evaluation/tasks/edits-states-development.json": "7c466d809dcb969fbdd5984f71a85c826d23098f656a445b3195d26013fe9cb8",
+    "evaluation/tasks/edits-warm-development.json": "d5deacb3c9c476f6ede3a2f5aa0b7333011ac2b61d8c5bf6d63819475948569b",
+    "evaluation/tasks/identity-development.json": "6d7df00608973ba23ef8cb46bb482c5966142e88a12e8ac0624ce26515769463",
+    "evaluation/tasks/joint-development.json": "ce19246cbf3190b71e8ad1f66d8c692a81dbb0d2ee595bb53f20ab1a98328db0",
+    "evaluation/tasks/screen-development.json": "2fd56213b2d3dfcb3b6a9041e6dcbd8067dff6d1ad6560acd8c9d01b8d487dc8",
+    "evaluation/tasks/selected-presets-development.json": "8df108761fd88b185f1ee2a7475d6917ef9470fe2681079d9fab17467e9a2f4f",
+    "evaluation/tasks/timing-development.json": "995092a2ae110f71fc81b76e2fb64c0d9204ed18286b1a6ec9b98ded2c296f47",
+    "evaluation/tasks/tuning-development.json": "cd329d93e89afeed1aed23ea46f392ad595a215b951569cdce5e12f48081c963"
+  },
+  "developmentPredictionHashes": {
+    "data/edit-policy-predictions.json": "c8c46c9ff7c926914622ed72e26f77dc253ad4e9175dc42fc2c19811844c6ee8",
+    "data/edit-policy-predictions-development.json": "8b26a01313b0714fa3368aa2d159b1b8288ed3dd340f15c5b6d0e9af769476a6"
+  },
+  "review": {
+    "emitHeldout": "Writes selected-presets-heldout task file, heldout cold predictions, and heldout-task-plan; does not read heldout outcomes.",
+    "editHandoff": "Preserves rows whose split differs from requested split in common prediction file; writes requested split snapshot only; no task-file writes.",
+    "heldoutAnalysis": "Loads embedded frozen proposal and split hash, applies stored engine sets, trees and configurations without fitting.",
+    "dependencyAnalysis": "Requires engineRecipeDiagnostic embedded in frozen policy; no mutable development minima or exhaustive heldout selection.",
+    "builderCaveat": "build-edit-tasks.py --policies rewrites both split task definitions deterministically. Compare developmentTaskHashes after invocation to verify byte preservation; do not edit frozen builder."
+  }
+}

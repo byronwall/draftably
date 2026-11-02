@@ -1,0 +1,42 @@
+diagram "Containers evaluation 03" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group g0 "Boundary 0"
+group g1 "Boundary 1 with a long operational ownership title" in=g0
+group g2 "Boundary 2" in=g1
+group g3 "Boundary 3 with a long operational ownership title" in=g2
+group g4 "Boundary 4" in=g3
+node n0 "Component 0" in=g0
+node n1 "Component 1" in=g1
+node n2 "Component 2" in=g2
+node n3 "Component 3" in=g3
+node n4 "Component 4" in=g4
+node n5 "Component 5" in=g0
+node n6 "Component 6" in=g1
+node n7 "Component 7" in=g2
+node n8 "Component 8" in=g3
+node n9 "Component 9" in=g4
+node n10 "Component 10" in=g0
+node n11 "Component 11" in=g1
+node n12 "Component 12" in=g2
+node n13 "Component 13" in=g3
+edge e0 n0 -> n1
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8
+edge e8 n8 -> n9
+edge e9 n9 -> n10
+edge e10 n10 -> n11
+edge e11 n11 -> n12
+edge e12 n12 -> n13
+edge e13 g4 -> n0 "group endpoint"
+
+layout root flow direction=right gap=48
+
+
+node added_node "New local detail" in=g3
+edge added_edge n13 -> added_node "added follow-up"

@@ -1,0 +1,42 @@
+diagram "AWS VPC network" version=1
+
+# Four levels of containment: account > region > VPC > availability zone > subnet.
+node internet "Internet" shape=circle color=slate
+
+group account "AWS account · prod" color=slate
+node iam "IAM roles" in=account
+group region "us-east-1" in=account color=blue
+node s3 "S3 buckets" in=region
+group vpc "VPC 10.0.0.0/16" in=region color=violet
+node igw "Internet gateway" in=vpc
+
+group az_a "us-east-1a" in=vpc
+group pub_a "Public subnet" in=az_a color=mint
+node alb_a "ALB node" in=pub_a
+node nat_a "NAT gateway" in=pub_a
+group priv_a "Private subnet" in=az_a color=amber
+node ecs_a "ECS tasks" in=priv_a
+node rds_a "RDS primary" in=priv_a shape=circle
+
+group az_b "us-east-1b" in=vpc
+group pub_b "Public subnet" in=az_b color=mint
+node alb_b "ALB node" in=pub_b
+group priv_b "Private subnet" in=az_b color=amber
+node ecs_b "ECS tasks" in=priv_b
+node rds_b "RDS standby" in=priv_b shape=circle
+
+edge in internet -> igw
+edge a1 igw -> alb_a
+edge a2 igw -> alb_b
+edge b1 alb_a -> ecs_a
+edge b2 alb_b -> ecs_b
+edge d1 ecs_a -> rds_a
+edge d2 ecs_b -> rds_a
+edge sync rds_a -> rds_b "sync replica" kind=async
+edge out ecs_a -> nat_a "egress"
+edge assets ecs_b -> s3 "VPC endpoint" kind=async
+
+layout root flow gap=56 direction=right
+layout vpc row gap=32
+layout az_a column gap=20
+layout az_b column gap=20

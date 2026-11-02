@@ -1,0 +1,6428 @@
+[
+  {
+    "id": "G-selected-development-pipelines-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-02",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-pipelines-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-01-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-dags-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "dags-04",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-02",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-hierarchies-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "hierarchies-04",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-01-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-architecture-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-01-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-cycles-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "cycles-04",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-02",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-networks-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "networks-04",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-02",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-disconnected-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-routing-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "routing-04",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-containers-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-02",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-03-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-presentation-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "presentation-04",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-01-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-02",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-authored-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "authored-04",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-02-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-compound-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-boundary-align-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-compound-spring-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-tidy-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-force-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-flow-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-layered-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-tree-p1",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-development-recipes-04-grid-p3",
+    "stage": "G-selected-development",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  }
+]

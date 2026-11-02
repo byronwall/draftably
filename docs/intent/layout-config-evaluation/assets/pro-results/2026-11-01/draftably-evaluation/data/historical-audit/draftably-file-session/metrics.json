@@ -1,0 +1,581 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [
+      "above browser server",
+      "near file write 120"
+    ],
+    "nodes": 11,
+    "groups": 2,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 432,
+    "height": 1353,
+    "aspect": 0.32,
+    "density": 0.231,
+    "aligned": 0.91,
+    "crossings": 1,
+    "bends": 12,
+    "bendsPerEdge": 0.92,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 287,
+    "theme": "ink",
+    "fills": 6,
+    "minTextContrast": 5.89,
+    "groupFill": {
+      "browser": 0.61,
+      "server": 0.41
+    },
+    "groupGaps": {
+      "browser | server": 64,
+      "file | server": 57
+    },
+    "emptyArea": {
+      "share": 0.12,
+      "boxes": 5.6,
+      "w": 171,
+      "h": 404,
+      "x": 261,
+      "y": 878
+    },
+    "edgeStretch": [
+      {
+        "id": "e11",
+        "kind": "back",
+        "length": 718,
+        "detour": 1.58,
+        "span": 0.51
+      },
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 464,
+        "detour": 1.31,
+        "span": 0.33
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 419,
+        "detour": 1.26,
+        "span": 0.3
+      },
+      {
+        "id": "e7",
+        "kind": "back",
+        "length": 943,
+        "detour": 1.65,
+        "span": 0.66
+      },
+      {
+        "id": "e9",
+        "kind": "back",
+        "length": 612,
+        "detour": 1.16,
+        "span": 0.43
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 2,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 4,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 9.2,
+    "issues": [
+      {
+        "kind": "edge-in-slot",
+        "detail": "e13 between browser's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e3 along project"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along save"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along sse"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along write"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "server left 56, right 24, bottom 24"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"new source\" by save"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"new source\" by translate"
+      }
+    ],
+    "checks": [
+      {
+        "line": "above browser server",
+        "pass": true
+      },
+      {
+        "line": "near file write 120",
+        "pass": true,
+        "why": "gap 81px"
+      }
+    ]
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [
+      "order-y revcheck validate write",
+      "near file write 120"
+    ],
+    "nodes": 12,
+    "groups": 2,
+    "edges": 15,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 432,
+    "height": 1600,
+    "aspect": 0.27,
+    "density": 0.214,
+    "aligned": 0.92,
+    "crossings": 3,
+    "bends": 13,
+    "bendsPerEdge": 0.87,
+    "maxBends": 2,
+    "hooks": 0,
+    "backEdges": 5,
+    "edgeLengthPerEdge": 362,
+    "theme": "ink",
+    "fills": 6,
+    "minTextContrast": 5.89,
+    "groupFill": {
+      "browser": 0.61,
+      "server": 0.34
+    },
+    "groupGaps": {
+      "browser | server": 80,
+      "file | server": 73
+    },
+    "emptyArea": {
+      "share": 0.16,
+      "boxes": 8.8,
+      "w": 171,
+      "h": 635,
+      "x": 261,
+      "y": 894
+    },
+    "edgeStretch": [
+      {
+        "id": "e11",
+        "kind": "back",
+        "length": 710,
+        "detour": 1.51,
+        "span": 0.43
+      },
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 464,
+        "detour": 1.31,
+        "span": 0.28
+      },
+      {
+        "id": "e15",
+        "kind": "back",
+        "length": 1198,
+        "detour": 1.5,
+        "span": 0.72
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 422,
+        "detour": 1.21,
+        "span": 0.25
+      },
+      {
+        "id": "e7",
+        "kind": "back",
+        "length": 1107,
+        "detour": 1.89,
+        "span": 0.67
+      },
+      {
+        "id": "e9",
+        "kind": "back",
+        "length": 843,
+        "detour": 1.11,
+        "span": 0.51
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 2,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 3,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 9,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along save"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along sse"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along write"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "server left 56, right 24, bottom 24"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "server fill 0.34"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"new source\" by save"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"new source\" by translate"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 13,
+      "meanMove": 57,
+      "maxMove": 247,
+      "moved": 3,
+      "alignedMean": 51,
+      "alignedMoved": 3,
+      "orderFlips": 1,
+      "shift": {
+        "x": 0,
+        "y": 16
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 57,
+      "maxMove": 247,
+      "moved": 3,
+      "alignedMean": 51,
+      "alignedMoved": 3,
+      "orderFlips": 1,
+      "shift": {
+        "x": 0,
+        "y": 16
+      }
+    },
+    "checks": [
+      {
+        "line": "order-y revcheck validate write",
+        "pass": true
+      },
+      {
+        "line": "near file write 120",
+        "pass": true,
+        "why": "gap 97px"
+      }
+    ]
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [
+      "left-of browser server",
+      "order-x revcheck validate write"
+    ],
+    "nodes": 12,
+    "groups": 2,
+    "edges": 15,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1823,
+    "height": 452,
+    "aspect": 4.03,
+    "density": 0.179,
+    "aligned": 0.92,
+    "crossings": 4,
+    "bends": 21,
+    "bendsPerEdge": 1.4,
+    "maxBends": 5,
+    "hooks": 1,
+    "backEdges": 5,
+    "edgeLengthPerEdge": 387,
+    "theme": "ink",
+    "fills": 6,
+    "minTextContrast": 5.89,
+    "groupFill": {
+      "browser": 0.65,
+      "server": 0.44
+    },
+    "groupGaps": {
+      "browser | server": 108,
+      "file | server": 83
+    },
+    "emptyArea": {
+      "share": 0.16,
+      "boxes": 10.8,
+      "w": 797,
+      "h": 167,
+      "x": 0,
+      "y": 285
+    },
+    "edgeStretch": [
+      {
+        "id": "e11",
+        "kind": "back",
+        "length": 977,
+        "detour": 1.43,
+        "span": 0.52
+      },
+      {
+        "id": "e13",
+        "kind": "back",
+        "length": 734,
+        "detour": 1.39,
+        "span": 0.39
+      },
+      {
+        "id": "e15",
+        "kind": "back",
+        "length": 961,
+        "detour": 1.54,
+        "span": 0.51
+      },
+      {
+        "id": "e3",
+        "kind": "forward",
+        "length": 605,
+        "detour": 1.29,
+        "span": 0.32
+      },
+      {
+        "id": "e5",
+        "kind": "wrap",
+        "length": 637,
+        "detour": 1.87,
+        "span": 0.34
+      },
+      {
+        "id": "e7",
+        "kind": "back",
+        "length": 540,
+        "detour": 1.21,
+        "span": 0.29
+      },
+      {
+        "id": "e9",
+        "kind": "back",
+        "length": 559,
+        "detour": 1.22,
+        "span": 0.3
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 1,
+      "hook": 1,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 3,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 1,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 13,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "e11 (5)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "e9 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e11 along watch"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e13 along session"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "e9 along watch"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈180: gaps 22/3/33/16/18"
+      },
+      {
+        "kind": "group-staircase",
+        "detail": "server: save → revcheck sit diagonally"
+      },
+      {
+        "kind": "hook",
+        "detail": "e15 validate→session doubles back"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"redraw\" 46px from its edge"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 14,
+      "meanMove": 994,
+      "maxMove": 2029,
+      "moved": 14,
+      "alignedMean": 531,
+      "alignedMoved": 14,
+      "orderFlips": 58,
+      "shift": {
+        "x": 980,
+        "y": -622
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 934,
+      "maxMove": 1875,
+      "moved": 13,
+      "alignedMean": 512,
+      "alignedMoved": 12,
+      "orderFlips": 40,
+      "shift": {
+        "x": 954,
+        "y": -606
+      }
+    },
+    "checks": [
+      {
+        "line": "left-of browser server",
+        "pass": true
+      },
+      {
+        "line": "order-x revcheck validate write",
+        "pass": true
+      }
+    ]
+  }
+]

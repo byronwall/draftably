@@ -1,0 +1,40 @@
+diagram "Srcly: adding a metric end to end" version=1
+
+# expect reads-x analyzer models catalog client
+# expect still-shape *
+# expect keeps-order
+
+theme fieldnotes
+
+node analyzer "Analyzer counts it" color=primary
+node markers "Mark the lines"
+node models "Metrics model field"
+node measured "MEASURED_*_METRICS"
+node rollup "Folder rollup rule"
+node catalog "MetricSpec in catalog" color=primary
+node snapshots "Refresh snapshots"
+node api "GET /metrics/catalog"
+node client "Client metric store" color=primary
+node ui "Pickers, treemap, tooltips"
+node cli "report / hotspots CLI"
+node verify "Check in the UI" shape=diamond
+
+edge e1 analyzer -> markers "_mark()"
+edge e2 analyzer -> models "new field"
+edge e3 models -> measured "metric id per language"
+edge e4 measured -> rollup "sum, max or mean"
+edge e5 rollup -> catalog "label, unit, direction"
+edge e6 catalog -> snapshots
+edge e7 catalog -> api "served as JSON"
+edge e8 api -> client "loaded before render"
+edge e9 client -> ui
+edge e10 catalog -> cli
+edge e11 ui -> verify
+edge e12 verify -> analyzer "wrong count" kind=async
+
+node marker_test "test_markers.py"
+node catalog_test "test_metric_catalog.py"
+edge e13 markers -> marker_test "count = metric"
+edge e14 snapshots -> catalog_test
+
+layout root flow direction=right gap=48

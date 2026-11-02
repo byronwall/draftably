@@ -1,0 +1,236 @@
+[
+  {
+    "id": "P011",
+    "a": "C-development-pipelines-03-tidy-RIGHT",
+    "b": "C-development-pipelines-03-stress-RIGHT",
+    "split": "development",
+    "family": "pipelines",
+    "task": "Explain a reading sequence from input to output.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base pipelines-03; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P012",
+    "a": "C-development-dags-02-current",
+    "b": "C-development-dags-02-compound-spring-DOWN",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace prerequisites and downstream dependents.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base dags-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P013",
+    "a": "C-development-hierarchies-03-force-RIGHT",
+    "b": "C-development-hierarchies-03-tree-DOWN",
+    "split": "development",
+    "family": "hierarchies",
+    "task": "Locate ownership and inspect a subtree.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base hierarchies-03; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P014",
+    "a": "C-development-architecture-01-boundary-align-RIGHT",
+    "b": "C-development-architecture-01-force-DOWN",
+    "split": "development",
+    "family": "architecture",
+    "task": "Explain boundaries and cross-system calls.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base architecture-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P015",
+    "a": "C-development-cycles-01-layered-DOWN",
+    "b": "C-development-cycles-01-stress-RIGHT",
+    "split": "development",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base cycles-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P016",
+    "a": "C-development-networks-02-boundary-align-DOWN",
+    "b": "C-development-networks-02-compound-spring-RIGHT",
+    "split": "development",
+    "family": "networks",
+    "task": "Inspect relationships without imposing a main direction.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base networks-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P017",
+    "a": "C-development-disconnected-01-grid-RIGHT",
+    "b": "C-development-disconnected-01-compound-flow-RIGHT",
+    "split": "development",
+    "family": "disconnected",
+    "task": "Pack independent components into a useful overview.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base disconnected-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P018",
+    "a": "C-development-routing-01-layered-RIGHT",
+    "b": "C-development-routing-01-compound-spring-DOWN",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base routing-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P019",
+    "a": "C-development-containers-03-compound-flow-DOWN",
+    "b": "C-development-containers-03-flow-RIGHT",
+    "split": "development",
+    "family": "containers",
+    "task": "Read nesting, boundary endpoints, and title ownership.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base containers-03; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P020",
+    "a": "C-development-presentation-02-current",
+    "b": "C-development-presentation-02-grid-RIGHT",
+    "split": "development",
+    "family": "presentation",
+    "task": "Fit an explanation to a requested presentation format.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base presentation-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P021",
+    "a": "C-development-authored-01-flow-DOWN",
+    "b": "C-development-authored-01-tree-DOWN",
+    "split": "development",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base authored-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P022",
+    "a": "C-development-recipes-02-compound-spring-DOWN",
+    "b": "C-development-recipes-02-tree-RIGHT",
+    "split": "development",
+    "family": "recipes",
+    "task": "Preserve the structure encoded by a specialized recipe.",
+    "reason": "Seeded stratified family sample; seed20261101; selected base recipes-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P023",
+    "a": "C-development-routing-03-compound-flow-RIGHT",
+    "b": "C-development-routing-03-layered-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for compound-flow; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P024",
+    "a": "C-development-routing-03-boundary-align-RIGHT",
+    "b": "C-development-routing-03-layered-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for boundary-align; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P025",
+    "a": "C-development-routing-03-compound-spring-RIGHT",
+    "b": "C-development-routing-03-layered-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for compound-spring; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P026",
+    "a": "C-development-routing-03-tidy-RIGHT",
+    "b": "C-development-routing-03-layered-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for tidy; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P027",
+    "a": "C-development-routing-03-stress-RIGHT",
+    "b": "C-development-routing-03-layered-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for stress; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P028",
+    "a": "C-development-routing-04-force-RIGHT",
+    "b": "C-development-routing-04-stress-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for force; largest available balanced-score margin versus best geometrically distinct other engine; margin=19.000000. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P029",
+    "a": "C-development-routing-03-flow-RIGHT",
+    "b": "C-development-routing-03-layered-RIGHT",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "reason": "Contested engine witness for flow; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P030",
+    "a": "C-development-dags-02-layered-RIGHT",
+    "b": "C-development-dags-02-compound-spring-RIGHT",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace prerequisites and downstream dependents.",
+    "reason": "Contested engine witness for layered; largest available balanced-score margin versus best geometrically distinct other engine; margin=2.142857. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P031",
+    "a": "C-development-authored-03-tree-RIGHT",
+    "b": "C-development-authored-03-boundary-align-DOWN",
+    "split": "development",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "reason": "Contested engine witness for tree; largest available balanced-score margin versus best geometrically distinct other engine; margin=1.428571. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P032",
+    "a": "C-development-authored-03-grid-RIGHT",
+    "b": "C-development-authored-03-boundary-align-DOWN",
+    "split": "development",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "reason": "Contested engine witness for grid; largest available balanced-score margin versus best geometrically distinct other engine; margin=1.428571. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P033",
+    "a": "D-routing-route-12-bendPenalty-0",
+    "b": "D-side-route-12-top-top",
+    "split": "development",
+    "family": "architecture",
+    "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+    "reason": "Explicit port override versus best tested automatic numeric setting; includes beneficial and adverse witnesses."
+  },
+  {
+    "id": "P034",
+    "a": "D-routing-route-03-bendPenalty-80",
+    "b": "D-port-route-03-authored",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+    "reason": "Explicit port override versus best tested automatic numeric setting; includes beneficial and adverse witnesses."
+  },
+  {
+    "id": "P035",
+    "a": "C-development-pipelines-04-current",
+    "b": "C-development-pipelines-04-recipe-column",
+    "split": "development",
+    "family": "pipelines",
+    "task": "Explain a reading sequence from input to output.",
+    "reason": "Metric/directness disagreement: lowest balanced score versus shortest routes; route-length ratio=5.8180."
+  },
+  {
+    "id": "P036",
+    "a": "C-development-networks-03-compound-flow-RIGHT",
+    "b": "C-development-networks-03-force-RIGHT",
+    "split": "development",
+    "family": "networks",
+    "task": "Inspect relationships without imposing a main direction.",
+    "reason": "Metric/directness disagreement: lowest balanced score versus shortest routes; route-length ratio=3.8651."
+  }
+]

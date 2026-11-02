@@ -1,0 +1,38 @@
+diagram "Authored evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group local "Editable local region"
+group distant "Protected distant region"
+node n0 "Placed item 0" in=local
+node n1 "Placed item 1" in=local
+node n2 "Placed item 2" in=local
+node n3 "Placed item 3" in=local
+node n4 "Placed item 4" in=local
+node n5 "Placed item 5" in=local
+node n6 "Placed item 6" in=distant
+node n7 "Placed item 7" in=distant
+node n8 "Placed item 8" in=distant
+node n9 "Placed item 9" in=distant
+node n10 "Placed item 10" in=distant
+node n11 "Placed item 11" in=distant
+edge e0 n0 -> n1
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n6 -> n7
+edge e6 n7 -> n8
+edge e7 n8 -> n9
+edge e8 n9 -> n10
+edge e9 n10 -> n11
+edge e10 n5 -> n6 "handoff"
+
+layout root flow direction=right gap=48
+layout local flow direction=right gap=48
+layout distant flow direction=down gap=48
+
+pin local x=0 y=0
+pin distant x=1400 y=100
+pin n0 x=0 y=0
+pin n6 x=0 y=0
+near n2 n1 side=right gap=48 strength=required

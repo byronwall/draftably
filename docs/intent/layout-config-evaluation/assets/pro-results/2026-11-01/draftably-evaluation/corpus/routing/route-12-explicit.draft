@@ -1,0 +1,22 @@
+diagram "Group title crossing and boundary exit" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+group g "Services"
+node a "a" in=g
+node b "b" in=g
+node c "c"
+node d "d"
+edge e0 b -> a "return inside group" from=top to=top
+edge e1 a -> c
+edge e2 b -> d
+layout root flow direction=auto fold=never
+pin g x=0 y=0
+layout g column gap=24 min-width=520 min-height=240
+size a width=160 height=56
+pin a x=0 y=20
+size b width=160 height=56
+pin b x=280 y=20
+size c width=160 height=56
+pin c x=0 y=450
+size d width=160 height=56
+pin d x=600 y=220

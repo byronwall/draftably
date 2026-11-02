@@ -1,0 +1,683 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [
+      "left-of clients app"
+    ],
+    "nodes": 13,
+    "groups": 4,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1636,
+    "height": 368,
+    "aspect": 4.45,
+    "density": 0.198,
+    "aligned": 1,
+    "crossings": 2,
+    "bends": 26,
+    "bendsPerEdge": 2,
+    "maxBends": 4,
+    "hooks": 1,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 351,
+    "theme": "drafting",
+    "fills": 14,
+    "minTextContrast": 5.3,
+    "groupFill": {
+      "clients": 0.76,
+      "services": 0.43,
+      "routes": 0.78,
+      "app": 0.8
+    },
+    "groupGaps": {
+      "app | clients": 126,
+      "app | postgres": 96,
+      "routes | services": 96
+    },
+    "emptyArea": {
+      "share": 0.2,
+      "boxes": 13.2,
+      "w": 614,
+      "h": 198,
+      "x": 550,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "a1",
+        "kind": "forward",
+        "length": 956,
+        "detour": 1.59,
+        "span": 0.57
+      },
+      {
+        "id": "a8",
+        "kind": "forward",
+        "length": 708,
+        "detour": 1.11,
+        "span": 0.42
+      },
+      {
+        "id": "a9",
+        "kind": "forward",
+        "length": 878,
+        "detour": 1.43,
+        "span": 0.52
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 1,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 1,
+      "arrives-below": 1,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 13.8,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "a8 (4)"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "a9 into s3"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a13 along postgres"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a13 along s3"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "a8 14px from services"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 96–126px"
+      },
+      {
+        "kind": "hook",
+        "detail": "a1 browser→docs_svc doubles back"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"enqueue\" by jobs"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 126px at x=212"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "614×198px at 550,0 (20% of the drawing, room for 13 boxes)"
+      }
+    ],
+    "checks": [
+      {
+        "line": "left-of clients app",
+        "pass": true
+      }
+    ]
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [
+      "below s3 postgres",
+      "aligned-x agent browser cli extension"
+    ],
+    "nodes": 13,
+    "groups": 4,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1809,
+    "height": 421,
+    "aspect": 4.3,
+    "density": 0.157,
+    "aligned": 0.85,
+    "crossings": 2,
+    "bends": 26,
+    "bendsPerEdge": 2,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 458,
+    "theme": "drafting",
+    "fills": 14,
+    "minTextContrast": 5.3,
+    "groupFill": {
+      "clients": 0.71,
+      "services": 0.43,
+      "routes": 0.78,
+      "app": 0.8
+    },
+    "groupGaps": {
+      "app | clients": 58,
+      "app | postgres": 326,
+      "routes | services": 96
+    },
+    "emptyArea": {
+      "share": 0.21,
+      "boxes": 17.1,
+      "w": 374,
+      "h": 421,
+      "x": 1271,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "a1",
+        "kind": "forward",
+        "length": 961,
+        "detour": 2.14,
+        "span": 0.52
+      },
+      {
+        "id": "a13",
+        "kind": "forward",
+        "length": 454,
+        "detour": 1.14,
+        "span": 0.24
+      },
+      {
+        "id": "a4",
+        "kind": "forward",
+        "length": 915,
+        "detour": 3.8,
+        "span": 0.49
+      },
+      {
+        "id": "a8",
+        "kind": "forward",
+        "length": 1074,
+        "detour": 1.27,
+        "span": 0.58
+      },
+      {
+        "id": "a9",
+        "kind": "forward",
+        "length": 1069,
+        "detour": 1.11,
+        "span": 0.58
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 3,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 1,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 2,
+      "expectation-failed": 1,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 1,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 1,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 24.6,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "a4 (5)"
+      },
+      {
+        "kind": "arrives-below",
+        "detail": "a8 into postgres"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "a2 along app"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a4 along agent"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a4 along mcp"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "a4 11px from routes"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 48–84 across groups"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 58–96px"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"clip page\" on clients"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"post markdown\" on app"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"post markdown\" on clients"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "a2 through the \"post markdown\" text"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 326px at x=1319"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "a1 961px, 2.1× the direct way"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "a4 915px, 3.8× the direct way"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "374×421px at 1271,0 (21% of the drawing, room for 17 boxes)"
+      },
+      {
+        "kind": "expectation-failed",
+        "detail": "aligned-x agent browser cli extension"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 17,
+      "meanMove": 96,
+      "maxMove": 242,
+      "moved": 17,
+      "alignedMean": 74,
+      "alignedMoved": 7,
+      "orderFlips": 40,
+      "shift": {
+        "x": -57,
+        "y": -4
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 17,
+      "meanMove": 96,
+      "maxMove": 242,
+      "moved": 17,
+      "alignedMean": 74,
+      "alignedMoved": 7,
+      "orderFlips": 40,
+      "shift": {
+        "x": -57,
+        "y": -4
+      }
+    },
+    "checks": [
+      {
+        "line": "below s3 postgres",
+        "pass": true
+      },
+      {
+        "line": "aligned-x agent browser cli extension",
+        "pass": false
+      }
+    ]
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [
+      "keeps-order",
+      "below s3 postgres"
+    ],
+    "nodes": 15,
+    "groups": 4,
+    "edges": 16,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1809,
+    "height": 421,
+    "aspect": 4.3,
+    "density": 0.181,
+    "aligned": 0.87,
+    "crossings": 5,
+    "bends": 36,
+    "bendsPerEdge": 2.25,
+    "maxBends": 6,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 471,
+    "theme": "drafting",
+    "fills": 14,
+    "minTextContrast": 5.3,
+    "groupFill": {
+      "services": 0.61,
+      "clients": 0.71,
+      "routes": 0.78,
+      "app": 0.84
+    },
+    "groupGaps": {
+      "app | clients": 58,
+      "app | postgres": 296,
+      "routes | services": 96
+    },
+    "emptyArea": {
+      "share": 0.19,
+      "boxes": 15.8,
+      "w": 344,
+      "h": 421,
+      "x": 1301,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "a1",
+        "kind": "forward",
+        "length": 667,
+        "detour": 1.49,
+        "span": 0.36
+      },
+      {
+        "id": "a13",
+        "kind": "forward",
+        "length": 448,
+        "detour": 1.14,
+        "span": 0.24
+      },
+      {
+        "id": "a14",
+        "kind": "forward",
+        "length": 835,
+        "detour": 1.86,
+        "span": 0.45
+      },
+      {
+        "id": "a16",
+        "kind": "forward",
+        "length": 1028,
+        "detour": 1.15,
+        "span": 0.55
+      },
+      {
+        "id": "a4",
+        "kind": "forward",
+        "length": 915,
+        "detour": 3.8,
+        "span": 0.49
+      },
+      {
+        "id": "a8",
+        "kind": "forward",
+        "length": 868,
+        "detour": 1.03,
+        "span": 0.47
+      },
+      {
+        "id": "a9",
+        "kind": "forward",
+        "length": 1053,
+        "detour": 1.12,
+        "span": 0.57
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 1,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 3,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 4,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 1,
+      "long-edge": 1,
+      "expectation-failed": 1,
+      "edge-hugs-node": 5,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 3,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 2,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 1,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 1,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 26.9,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "a1 (6)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "a14 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "a16 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "a4 (5)"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "a1 14px from app"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "a1 10px from routes"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a16 along timeblocks"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "a2 along app"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a4 along agent"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a4 along mcp"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "a4 11px from routes"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a8 along activity"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "a8 along ai"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈110: gaps 40/16"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈222: gaps 16/8/8/8/16"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "postgres in R: turns at 1473, 1632, 845"
+      },
+      {
+        "kind": "jog",
+        "detail": "a1 has a 6px step"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 58–96px"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"clip page\" on clients"
+      },
+      {
+        "kind": "label-near-node",
+        "detail": "\"post markdown\" by docs_api"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"post markdown\" on app"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"post markdown\" on routes"
+      },
+      {
+        "kind": "label-through-text",
+        "detail": "a14 through the \"post markdown\" text"
+      },
+      {
+        "kind": "empty-band",
+        "detail": "column 296px at x=1349"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "a4 915px, 3.8× the direct way"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "344×421px at 1301,0 (19% of the drawing, room for 16 boxes)"
+      },
+      {
+        "kind": "expectation-failed",
+        "detail": "keeps-order (3 order flips)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 17,
+      "meanMove": 11,
+      "maxMove": 71,
+      "moved": 3,
+      "alignedMean": 11,
+      "alignedMoved": 3,
+      "orderFlips": 3,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 17,
+      "meanMove": 93,
+      "maxMove": 242,
+      "moved": 17,
+      "alignedMean": 85,
+      "alignedMoved": 13,
+      "orderFlips": 47,
+      "shift": {
+        "x": -27,
+        "y": -4
+      }
+    },
+    "checks": [
+      {
+        "line": "keeps-order",
+        "pass": false,
+        "why": "3 order flips"
+      },
+      {
+        "line": "below s3 postgres",
+        "pass": true
+      }
+    ]
+  }
+]

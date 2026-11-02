@@ -1,0 +1,242 @@
+{
+  "joint": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-22",
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:boundary-align:RIGHT|routing:default",
+      "engine:boundary-align:RIGHT|routing:portGap-28",
+      "engine:force:RIGHT|routing:clearance-22",
+      "engine:force:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:default",
+      "engine:force:RIGHT|routing:portGap-28",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+      "tuned:compound-flow:RIGHT:p1|routing:default",
+      "tuned:compound-flow:RIGHT:p1|routing:portGap-28"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 55,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 11,
+        "feasible": 11
+      }
+    }
+  },
+  "network": {
+    "methods": [
+      "compound-spring:respectDirection=false",
+      "compound-spring:respectDirection=true",
+      "force:respectDirection=false",
+      "force:respectDirection=true",
+      "grid:respectDirection=false",
+      "grid:respectDirection=true",
+      "stress:respectDirection=false",
+      "stress:respectDirection=true"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 44,
+    "profile_jobs": 48,
+    "feasible_profile_jobs": 44,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+    "score_regret_available_jobs": 44,
+    "per_profile": {
+      "readable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 11,
+        "feasible": 11
+      }
+    }
+  },
+  "warm": [
+    {
+      "size": 0,
+      "methods": [],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 37,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 1.4965737606719192,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 7,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 6,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 7,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 10,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 7,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 1,
+      "methods": [
+        "force"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 47,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.4717348786592103,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 9,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 8,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 9,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 9,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 2,
+      "methods": [
+        "boundary-align",
+        "force"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 56,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.23173980153675564,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 11,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 11,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 11,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 11,
+          "feasible": 12
+        }
+      }
+    },
+    {
+      "size": 3,
+      "methods": [
+        "boundary-align",
+        "compound-flow",
+        "force"
+      ],
+      "always_available": [
+        "retain-current"
+      ],
+      "hard_valid_case_union": 12,
+      "cases": 12,
+      "acceptable_profile_jobs": 60,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 60,
+      "equal_family_mean_regret_on_covered_valid_jobs": 0.012504821127930091,
+      "score_regret_available_jobs": 60,
+      "per_profile": {
+        "readable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "compact": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "traceable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "stable": {
+          "acceptable": 12,
+          "feasible": 12
+        },
+        "specialist": {
+          "acceptable": 12,
+          "feasible": 12
+        }
+      }
+    }
+  ],
+  "archive_checks": 440
+}

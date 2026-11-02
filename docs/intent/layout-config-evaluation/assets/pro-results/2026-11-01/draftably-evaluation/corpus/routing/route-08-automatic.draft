@@ -1,0 +1,28 @@
+diagram "Diamond with four exits and a return" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node decision "Outcome?" shape=diamond
+node a "a"
+node b "b"
+node c "c"
+node d "d"
+node start "start"
+edge e0 decision -> a "ok"
+edge e1 decision -> b "retry"
+edge e2 decision -> c "failed"
+edge e3 decision -> d "unknown"
+edge e4 start -> decision
+edge e5 c -> start "reset" constraint=false
+layout root flow direction=auto fold=never
+size decision width=112 height=112
+pin decision x=260 y=200
+size a width=120 height=56
+pin a x=600 y=30
+size b width=120 height=56
+pin b x=600 y=180
+size c width=120 height=56
+pin c x=600 y=330
+size d width=120 height=56
+pin d x=260 y=440
+size start width=120 height=56
+pin start x=0 y=210

@@ -1,0 +1,48 @@
+{
+  "at": "2026-11-01T23:04:18.403Z",
+  "type": "Hand-calculated intent metric calibration; zero geometry executions",
+  "checks": 10,
+  "passed": 10,
+  "results": [
+    {
+      "name": "required near accepts a larger gap and ignores soft cross-axis offset",
+      "passed": true
+    },
+    {
+      "name": "cross-group near constrains sibling group boundary",
+      "passed": true
+    },
+    {
+      "name": "required alignment uses centers and permits half-pixel rounding",
+      "passed": true
+    },
+    {
+      "name": "identity detects missing objects and changed endpoints",
+      "passed": true
+    },
+    {
+      "name": "diamond explicit size preserves square maximum",
+      "passed": true
+    },
+    {
+      "name": "sequence checks participant row/order and message time order",
+      "passed": true
+    },
+    {
+      "name": "ordinary cells must touch and retain row boundaries",
+      "passed": true
+    },
+    {
+      "name": "same-source cell reference permits whole group translation only",
+      "passed": true
+    },
+    {
+      "name": "bit cells encode main spans and ruler offsets",
+      "passed": true
+    },
+    {
+      "name": "lane bands share span and preserve source order",
+      "passed": true
+    }
+  ]
+}

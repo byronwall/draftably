@@ -1,0 +1,15 @@
+{
+  "policy": "frozen-minimum-configuration-oracle",
+  "baseline": "current-authored",
+  "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+  "point": 0.6526315789473683,
+  "ci95": [
+    0.417391304347826,
+    0.8714610389610389
+  ],
+  "draws": 2000,
+  "usableDraws": 2000,
+  "seed": 220611,
+  "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+  "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+}

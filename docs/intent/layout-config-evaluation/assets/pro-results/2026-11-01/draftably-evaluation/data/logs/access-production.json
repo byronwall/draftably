@@ -1,0 +1,11 @@
+{
+  "file": "/workspace/scratch/8279601ec156/baseline/examples/web-app-components.draft",
+  "nodes": 13,
+  "edges": 7,
+  "engineCalls": 0,
+  "compileMs": 28.666078999999968,
+  "routingMs": 547.8494019999999,
+  "labelMs": 8.18276499999979,
+  "diagnostics": [],
+  "target": "/workspace/scratch/8279601ec156/deliverables/renders/access-production.svg"
+}

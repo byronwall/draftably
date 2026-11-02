@@ -1,0 +1,9 @@
+{
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "manifestSha256": "6847fe5ee8458059cb0edf12f33174e2005cd39375c45a031fe951aa992dc059",
+  "generatorSha256": "0e4198121062891b1102f843f5d8cef79fbfc7aa29ea729a6eb99ef14a194d82",
+  "stage": "pre-outcome",
+  "note": "Record the final validation timestamp externally; no wall-clock randomness enters generation.",
+  "syntaxValidatedAt": "2026-11-01T22:55:30.948219+00:00",
+  "syntaxValidation": "196/196 parseModel inputs passed; zero geometry trials"
+}

@@ -1,0 +1,128 @@
+{
+  "reviewer": "one expert model assessment; not independent human validation",
+  "recordedAt": "2026-11-02T00:08:59.542Z",
+  "phase": "Three archived-development niche comparisons supplied after the policy seal; qualitative retention evidence only.",
+  "policyStatus": "Parent reported that development policies were already sealed. This reviewer did not read seal contents, candidate identities or outcomes and made no policy or threshold changes.",
+  "blinding": {
+    "read": "visual-manifest-development-supplement.json; its three actual PNGs and permitted named SVGs; two supplementary PNG renders; prior judge guide and schema",
+    "notRead": [
+      "keys",
+      "selection specifications",
+      "raw metrics",
+      "inventories",
+      "reports",
+      "other agents analyses",
+      "candidate algorithm IDs"
+    ],
+    "allThreePngsActuallyOpened": true,
+    "supplementalRendersActuallyOpened": 2,
+    "verdictsFrozenBeforeUnblinding": true,
+    "geometryTrialsRunForReview": 0
+  },
+  "severityScale": {
+    "0": "no material between-candidate task difference",
+    "1": "polish or extra visual effort",
+    "2": "noticeably slower tracing or uncertain ownership",
+    "3": "misleading, hidden, or unreadable connection"
+  },
+  "counts": {
+    "A-better": 1,
+    "B-better": 1,
+    "same": 1,
+    "pairs": 3
+  },
+  "selectionCaveat": "Targeted archived-development comparisons selected after sealing policies. They cannot change frozen rules and are not heldout evidence or an unbiased population sample.",
+  "judgments": [
+    {
+      "id": "P061",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.98,
+      "reason": "Both panels preserve a readable nesting of account, region, VPC, zones and subnets, with clear paths to the gateway, load balancers, task nodes, databases and S3. Small position and label-placement differences do not establish a meaningful tracing advantage.",
+      "defects": [],
+      "appearanceNote": "The first-zone subnet, task and database positions shift slightly, and the replica label moves along its path. Both remain readable. A static pair cannot show which candidate preserved prior authored coordinates or edit scope.",
+      "family": "containers",
+      "split": "development-supplement",
+      "task": "Trace connections through the nested container structure while preserving the existing drawing.",
+      "inspectedPng": "renders/blinded/P061.png",
+      "pngSha256": "2c66e478f501c3d85fa65aabe8dce41d92724d76633df41f90a8bfa2015c70d8",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1770
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P062",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B keeps the named services and three subsystems in a compact overview, including Service 10 close to the other components. A isolates Service 10 at the bottom of a large empty subsystem and stretches the service rows, creating long scans to follow otherwise simple calls and returns.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "related components separated",
+          "description": "Service 10 sits far below the remaining services, while the other two subsystems have widely separated rows; long routes and large empty regions weaken the architecture overview."
+        }
+      ],
+      "appearanceNote": "Both retain visible group ownership and readable feedback routes. B's event connection is less straight than A's, but that modest cost does not offset its clearer overview.",
+      "family": "architecture",
+      "split": "development-supplement",
+      "task": "Explain the architecture and follow connections between named components and groups.",
+      "inspectedPng": "renders/blinded/P062.png",
+      "pngSha256": "b70f91a2576111dff2c724ead61945131120b71cb4f64c2fe65cd1fa01410aa8",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1278
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    },
+    {
+      "id": "P063",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A separates the straight state sequence from the two dashed retry paths, and both retry labels remain legible. B's folded sequence is traceable, but its lower retry label is crossed by the neighboring dashed return line, weakening the label's readability and connection ownership.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "label crossed by unrelated feedback line",
+          "description": "The lower retry label belongs to the inner return path, while the outer dashed return line passes through the word. The detail crop confirms the text-line collision."
+        }
+      ],
+      "appearanceNote": "A is wide and B is compact and tall; both communicate the chain and feedback. The preference concerns the visible label collision, not a universal requirement for left-to-right layout.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P063-A-full.png",
+          "sha256": "6676e270b10873d5e92bb543c39524dd4ea4f4adc3b05cb76b8569b48111e33e",
+          "width": 3698,
+          "height": 486
+        },
+        {
+          "path": "renders/blinded/P063-B-detail.png",
+          "sha256": "3eb115b83d1c1b919c2e2eef86592b49c49864c7edeaa50307f5a1b6bd06c14f",
+          "width": 310,
+          "height": 330
+        }
+      ],
+      "family": "cycles",
+      "split": "development-supplement",
+      "task": "Understand the relationships and feedback loops without imposing an unnecessary one-way reading order.",
+      "inspectedPng": "renders/blinded/P063.png",
+      "pngSha256": "1896dd6a28b03efbd0858dbaabe65b4eb675c97b390e2325c0631020634e21a5",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1858
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read"
+    }
+  ]
+}

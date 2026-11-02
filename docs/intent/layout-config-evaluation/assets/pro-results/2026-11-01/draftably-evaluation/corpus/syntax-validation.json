@@ -1,0 +1,1770 @@
+{
+  "type": "Shipped parseModel validation; zero geometry trials.",
+  "at": "2026-11-01T22:54:20.589Z",
+  "results": [
+    {
+      "id": "pipelines-01",
+      "path": "corpus/bases/pipelines/pipelines-01.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 0,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-02",
+      "path": "corpus/bases/pipelines/pipelines-02.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-03",
+      "path": "corpus/bases/pipelines/pipelines-03.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-03/relabel",
+      "path": "corpus/edits/pipelines-03/relabel.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-03/add",
+      "path": "corpus/edits/pipelines-03/add.draft",
+      "ok": true,
+      "nodes": 7,
+      "groups": 0,
+      "edges": 6,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-03/local",
+      "path": "corpus/edits/pipelines-03/local.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-03/direction_or_remove",
+      "path": "corpus/edits/pipelines-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-03/color_control",
+      "path": "corpus/edits/pipelines-03/color_control.draft",
+      "ok": true,
+      "nodes": 6,
+      "groups": 0,
+      "edges": 5,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-04",
+      "path": "corpus/bases/pipelines/pipelines-04.draft",
+      "ok": true,
+      "nodes": 28,
+      "groups": 0,
+      "edges": 27,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-05",
+      "path": "corpus/bases/pipelines/pipelines-05.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 19,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-05/relabel",
+      "path": "corpus/edits/pipelines-05/relabel.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 19,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-05/add",
+      "path": "corpus/edits/pipelines-05/add.draft",
+      "ok": true,
+      "nodes": 18,
+      "groups": 0,
+      "edges": 20,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-05/local",
+      "path": "corpus/edits/pipelines-05/local.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 19,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-05/direction_or_remove",
+      "path": "corpus/edits/pipelines-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 19,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-05/color_control",
+      "path": "corpus/edits/pipelines-05/color_control.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 19,
+      "warnings": []
+    },
+    {
+      "id": "pipelines-06",
+      "path": "corpus/bases/pipelines/pipelines-06.draft",
+      "ok": true,
+      "nodes": 64,
+      "groups": 0,
+      "edges": 70,
+      "warnings": []
+    },
+    {
+      "id": "dags-01",
+      "path": "corpus/bases/dags/dags-01.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "dags-02",
+      "path": "corpus/bases/dags/dags-02.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 4,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "dags-03",
+      "path": "corpus/bases/dags/dags-03.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "dags-03/relabel",
+      "path": "corpus/edits/dags-03/relabel.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "dags-03/add",
+      "path": "corpus/edits/dags-03/add.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "dags-03/local",
+      "path": "corpus/edits/dags-03/local.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "dags-03/direction_or_remove",
+      "path": "corpus/edits/dags-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "dags-03/color_control",
+      "path": "corpus/edits/dags-03/color_control.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "dags-04",
+      "path": "corpus/bases/dags/dags-04.draft",
+      "ok": true,
+      "nodes": 40,
+      "groups": 0,
+      "edges": 144,
+      "warnings": []
+    },
+    {
+      "id": "dags-05",
+      "path": "corpus/bases/dags/dags-05.draft",
+      "ok": true,
+      "nodes": 23,
+      "groups": 0,
+      "edges": 42,
+      "warnings": []
+    },
+    {
+      "id": "dags-05/relabel",
+      "path": "corpus/edits/dags-05/relabel.draft",
+      "ok": true,
+      "nodes": 23,
+      "groups": 0,
+      "edges": 42,
+      "warnings": []
+    },
+    {
+      "id": "dags-05/add",
+      "path": "corpus/edits/dags-05/add.draft",
+      "ok": true,
+      "nodes": 24,
+      "groups": 0,
+      "edges": 43,
+      "warnings": []
+    },
+    {
+      "id": "dags-05/local",
+      "path": "corpus/edits/dags-05/local.draft",
+      "ok": true,
+      "nodes": 23,
+      "groups": 0,
+      "edges": 42,
+      "warnings": []
+    },
+    {
+      "id": "dags-05/direction_or_remove",
+      "path": "corpus/edits/dags-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 23,
+      "groups": 0,
+      "edges": 42,
+      "warnings": []
+    },
+    {
+      "id": "dags-05/color_control",
+      "path": "corpus/edits/dags-05/color_control.draft",
+      "ok": true,
+      "nodes": 23,
+      "groups": 0,
+      "edges": 42,
+      "warnings": []
+    },
+    {
+      "id": "dags-06",
+      "path": "corpus/bases/dags/dags-06.draft",
+      "ok": true,
+      "nodes": 60,
+      "groups": 0,
+      "edges": 113,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-01",
+      "path": "corpus/bases/hierarchies/hierarchies-01.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-02",
+      "path": "corpus/bases/hierarchies/hierarchies-02.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-03",
+      "path": "corpus/bases/hierarchies/hierarchies-03.draft",
+      "ok": true,
+      "nodes": 31,
+      "groups": 0,
+      "edges": 30,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-03/relabel",
+      "path": "corpus/edits/hierarchies-03/relabel.draft",
+      "ok": true,
+      "nodes": 31,
+      "groups": 0,
+      "edges": 30,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-03/add",
+      "path": "corpus/edits/hierarchies-03/add.draft",
+      "ok": true,
+      "nodes": 32,
+      "groups": 0,
+      "edges": 31,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-03/local",
+      "path": "corpus/edits/hierarchies-03/local.draft",
+      "ok": true,
+      "nodes": 31,
+      "groups": 0,
+      "edges": 30,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-03/direction_or_remove",
+      "path": "corpus/edits/hierarchies-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 31,
+      "groups": 0,
+      "edges": 30,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-03/color_control",
+      "path": "corpus/edits/hierarchies-03/color_control.draft",
+      "ok": true,
+      "nodes": 31,
+      "groups": 0,
+      "edges": 30,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-04",
+      "path": "corpus/bases/hierarchies/hierarchies-04.draft",
+      "ok": true,
+      "nodes": 48,
+      "groups": 0,
+      "edges": 44,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-05",
+      "path": "corpus/bases/hierarchies/hierarchies-05.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-05/relabel",
+      "path": "corpus/edits/hierarchies-05/relabel.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-05/add",
+      "path": "corpus/edits/hierarchies-05/add.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 0,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-05/local",
+      "path": "corpus/edits/hierarchies-05/local.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-05/direction_or_remove",
+      "path": "corpus/edits/hierarchies-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-05/color_control",
+      "path": "corpus/edits/hierarchies-05/color_control.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "hierarchies-06",
+      "path": "corpus/bases/hierarchies/hierarchies-06.draft",
+      "ok": true,
+      "nodes": 40,
+      "groups": 0,
+      "edges": 42,
+      "warnings": []
+    },
+    {
+      "id": "architecture-01",
+      "path": "corpus/bases/architecture/architecture-01.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 6,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "architecture-02",
+      "path": "corpus/bases/architecture/architecture-02.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 4,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "architecture-03",
+      "path": "corpus/bases/architecture/architecture-03.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "architecture-03/relabel",
+      "path": "corpus/edits/architecture-03/relabel.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "architecture-03/add",
+      "path": "corpus/edits/architecture-03/add.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 3,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "architecture-03/local",
+      "path": "corpus/edits/architecture-03/local.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "architecture-03/direction_or_remove",
+      "path": "corpus/edits/architecture-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "architecture-03/color_control",
+      "path": "corpus/edits/architecture-03/color_control.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "architecture-04",
+      "path": "corpus/bases/architecture/architecture-04.draft",
+      "ok": true,
+      "nodes": 48,
+      "groups": 7,
+      "edges": 62,
+      "warnings": []
+    },
+    {
+      "id": "architecture-05",
+      "path": "corpus/bases/architecture/architecture-05.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 5,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "architecture-05/relabel",
+      "path": "corpus/edits/architecture-05/relabel.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 5,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "architecture-05/add",
+      "path": "corpus/edits/architecture-05/add.draft",
+      "ok": true,
+      "nodes": 20,
+      "groups": 5,
+      "edges": 24,
+      "warnings": []
+    },
+    {
+      "id": "architecture-05/local",
+      "path": "corpus/edits/architecture-05/local.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 5,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "architecture-05/direction_or_remove",
+      "path": "corpus/edits/architecture-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 5,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "architecture-05/color_control",
+      "path": "corpus/edits/architecture-05/color_control.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 5,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "architecture-06",
+      "path": "corpus/bases/architecture/architecture-06.draft",
+      "ok": true,
+      "nodes": 63,
+      "groups": 7,
+      "edges": 100,
+      "warnings": []
+    },
+    {
+      "id": "cycles-01",
+      "path": "corpus/bases/cycles/cycles-01.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "cycles-02",
+      "path": "corpus/bases/cycles/cycles-02.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "cycles-03",
+      "path": "corpus/bases/cycles/cycles-03.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "cycles-03/relabel",
+      "path": "corpus/edits/cycles-03/relabel.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "cycles-03/add",
+      "path": "corpus/edits/cycles-03/add.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "cycles-03/local",
+      "path": "corpus/edits/cycles-03/local.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "cycles-03/direction_or_remove",
+      "path": "corpus/edits/cycles-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "cycles-03/color_control",
+      "path": "corpus/edits/cycles-03/color_control.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 0,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "cycles-04",
+      "path": "corpus/bases/cycles/cycles-04.draft",
+      "ok": true,
+      "nodes": 30,
+      "groups": 0,
+      "edges": 34,
+      "warnings": []
+    },
+    {
+      "id": "cycles-05",
+      "path": "corpus/bases/cycles/cycles-05.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "cycles-05/relabel",
+      "path": "corpus/edits/cycles-05/relabel.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "cycles-05/add",
+      "path": "corpus/edits/cycles-05/add.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 18,
+      "warnings": []
+    },
+    {
+      "id": "cycles-05/local",
+      "path": "corpus/edits/cycles-05/local.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "cycles-05/direction_or_remove",
+      "path": "corpus/edits/cycles-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "cycles-05/color_control",
+      "path": "corpus/edits/cycles-05/color_control.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "cycles-06",
+      "path": "corpus/bases/cycles/cycles-06.draft",
+      "ok": true,
+      "nodes": 42,
+      "groups": 0,
+      "edges": 51,
+      "warnings": []
+    },
+    {
+      "id": "networks-01",
+      "path": "corpus/bases/networks/networks-01.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "networks-02",
+      "path": "corpus/bases/networks/networks-02.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 0,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "networks-03",
+      "path": "corpus/bases/networks/networks-03.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "networks-03/relabel",
+      "path": "corpus/edits/networks-03/relabel.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "networks-03/add",
+      "path": "corpus/edits/networks-03/add.draft",
+      "ok": true,
+      "nodes": 15,
+      "groups": 0,
+      "edges": 18,
+      "warnings": []
+    },
+    {
+      "id": "networks-03/local",
+      "path": "corpus/edits/networks-03/local.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "networks-03/direction_or_remove",
+      "path": "corpus/edits/networks-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "networks-03/color_control",
+      "path": "corpus/edits/networks-03/color_control.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "networks-04",
+      "path": "corpus/bases/networks/networks-04.draft",
+      "ok": true,
+      "nodes": 45,
+      "groups": 0,
+      "edges": 98,
+      "warnings": []
+    },
+    {
+      "id": "networks-05",
+      "path": "corpus/bases/networks/networks-05.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 0,
+      "edges": 26,
+      "warnings": []
+    },
+    {
+      "id": "networks-05/relabel",
+      "path": "corpus/edits/networks-05/relabel.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 0,
+      "edges": 26,
+      "warnings": []
+    },
+    {
+      "id": "networks-05/add",
+      "path": "corpus/edits/networks-05/add.draft",
+      "ok": true,
+      "nodes": 20,
+      "groups": 0,
+      "edges": 27,
+      "warnings": []
+    },
+    {
+      "id": "networks-05/local",
+      "path": "corpus/edits/networks-05/local.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 0,
+      "edges": 26,
+      "warnings": []
+    },
+    {
+      "id": "networks-05/direction_or_remove",
+      "path": "corpus/edits/networks-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 0,
+      "edges": 26,
+      "warnings": []
+    },
+    {
+      "id": "networks-05/color_control",
+      "path": "corpus/edits/networks-05/color_control.draft",
+      "ok": true,
+      "nodes": 19,
+      "groups": 0,
+      "edges": 26,
+      "warnings": []
+    },
+    {
+      "id": "networks-06",
+      "path": "corpus/bases/networks/networks-06.draft",
+      "ok": true,
+      "nodes": 54,
+      "groups": 0,
+      "edges": 151,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-01",
+      "path": "corpus/bases/disconnected/disconnected-01.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 0,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-02",
+      "path": "corpus/bases/disconnected/disconnected-02.draft",
+      "ok": true,
+      "nodes": 20,
+      "groups": 0,
+      "edges": 16,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-03",
+      "path": "corpus/bases/disconnected/disconnected-03.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-03/relabel",
+      "path": "corpus/edits/disconnected-03/relabel.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-03/add",
+      "path": "corpus/edits/disconnected-03/add.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-03/local",
+      "path": "corpus/edits/disconnected-03/local.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-03/direction_or_remove",
+      "path": "corpus/edits/disconnected-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-03/color_control",
+      "path": "corpus/edits/disconnected-03/color_control.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-04",
+      "path": "corpus/bases/disconnected/disconnected-04.draft",
+      "ok": true,
+      "nodes": 48,
+      "groups": 0,
+      "edges": 30,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-05",
+      "path": "corpus/bases/disconnected/disconnected-05.draft",
+      "ok": true,
+      "nodes": 7,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-05/relabel",
+      "path": "corpus/edits/disconnected-05/relabel.draft",
+      "ok": true,
+      "nodes": 7,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-05/add",
+      "path": "corpus/edits/disconnected-05/add.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 0,
+      "edges": 4,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-05/local",
+      "path": "corpus/edits/disconnected-05/local.draft",
+      "ok": true,
+      "nodes": 7,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-05/direction_or_remove",
+      "path": "corpus/edits/disconnected-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 7,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-05/color_control",
+      "path": "corpus/edits/disconnected-05/color_control.draft",
+      "ok": true,
+      "nodes": 7,
+      "groups": 0,
+      "edges": 3,
+      "warnings": []
+    },
+    {
+      "id": "disconnected-06",
+      "path": "corpus/bases/disconnected/disconnected-06.draft",
+      "ok": true,
+      "nodes": 72,
+      "groups": 0,
+      "edges": 54,
+      "warnings": []
+    },
+    {
+      "id": "routing-01",
+      "path": "corpus/bases/routing/routing-01.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 3,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "routing-02",
+      "path": "corpus/bases/routing/routing-02.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 6,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "routing-03",
+      "path": "corpus/bases/routing/routing-03.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "routing-03/relabel",
+      "path": "corpus/edits/routing-03/relabel.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "routing-03/add",
+      "path": "corpus/edits/routing-03/add.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 24,
+      "warnings": []
+    },
+    {
+      "id": "routing-03/local",
+      "path": "corpus/edits/routing-03/local.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "routing-03/direction_or_remove",
+      "path": "corpus/edits/routing-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "routing-03/color_control",
+      "path": "corpus/edits/routing-03/color_control.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "routing-04",
+      "path": "corpus/bases/routing/routing-04.draft",
+      "ok": true,
+      "nodes": 40,
+      "groups": 0,
+      "edges": 40,
+      "warnings": []
+    },
+    {
+      "id": "routing-05",
+      "path": "corpus/bases/routing/routing-05.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "routing-05/relabel",
+      "path": "corpus/edits/routing-05/relabel.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "routing-05/add",
+      "path": "corpus/edits/routing-05/add.draft",
+      "ok": true,
+      "nodes": 17,
+      "groups": 0,
+      "edges": 18,
+      "warnings": []
+    },
+    {
+      "id": "routing-05/local",
+      "path": "corpus/edits/routing-05/local.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "routing-05/direction_or_remove",
+      "path": "corpus/edits/routing-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "routing-05/color_control",
+      "path": "corpus/edits/routing-05/color_control.draft",
+      "ok": true,
+      "nodes": 16,
+      "groups": 0,
+      "edges": 17,
+      "warnings": []
+    },
+    {
+      "id": "routing-06",
+      "path": "corpus/bases/routing/routing-06.draft",
+      "ok": true,
+      "nodes": 48,
+      "groups": 0,
+      "edges": 48,
+      "warnings": []
+    },
+    {
+      "id": "containers-01",
+      "path": "corpus/bases/containers/containers-01.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 9,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "containers-02",
+      "path": "corpus/bases/containers/containers-02.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 7,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "containers-03",
+      "path": "corpus/bases/containers/containers-03.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 5,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "containers-03/relabel",
+      "path": "corpus/edits/containers-03/relabel.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 5,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "containers-03/add",
+      "path": "corpus/edits/containers-03/add.draft",
+      "ok": true,
+      "nodes": 15,
+      "groups": 5,
+      "edges": 15,
+      "warnings": []
+    },
+    {
+      "id": "containers-03/local",
+      "path": "corpus/edits/containers-03/local.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 5,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "containers-03/direction_or_remove",
+      "path": "corpus/edits/containers-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 5,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "containers-03/color_control",
+      "path": "corpus/edits/containers-03/color_control.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 5,
+      "edges": 14,
+      "warnings": []
+    },
+    {
+      "id": "containers-04",
+      "path": "corpus/bases/containers/containers-04.draft",
+      "ok": true,
+      "nodes": 36,
+      "groups": 5,
+      "edges": 36,
+      "warnings": []
+    },
+    {
+      "id": "containers-05",
+      "path": "corpus/bases/containers/containers-05.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 3,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "containers-05/relabel",
+      "path": "corpus/edits/containers-05/relabel.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 3,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "containers-05/add",
+      "path": "corpus/edits/containers-05/add.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 3,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "containers-05/local",
+      "path": "corpus/edits/containers-05/local.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 3,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "containers-05/direction_or_remove",
+      "path": "corpus/edits/containers-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 3,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "containers-05/color_control",
+      "path": "corpus/edits/containers-05/color_control.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 3,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "containers-06",
+      "path": "corpus/bases/containers/containers-06.draft",
+      "ok": true,
+      "nodes": 56,
+      "groups": 7,
+      "edges": 56,
+      "warnings": []
+    },
+    {
+      "id": "presentation-01",
+      "path": "corpus/bases/presentation/presentation-01.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 2,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "presentation-02",
+      "path": "corpus/bases/presentation/presentation-02.draft",
+      "ok": true,
+      "nodes": 14,
+      "groups": 6,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "presentation-03",
+      "path": "corpus/bases/presentation/presentation-03.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "presentation-03/relabel",
+      "path": "corpus/edits/presentation-03/relabel.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "presentation-03/add",
+      "path": "corpus/edits/presentation-03/add.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 0,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "presentation-03/local",
+      "path": "corpus/edits/presentation-03/local.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "presentation-03/direction_or_remove",
+      "path": "corpus/edits/presentation-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "presentation-03/color_control",
+      "path": "corpus/edits/presentation-03/color_control.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 0,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "presentation-04",
+      "path": "corpus/bases/presentation/presentation-04.draft",
+      "ok": true,
+      "nodes": 38,
+      "groups": 0,
+      "edges": 43,
+      "warnings": []
+    },
+    {
+      "id": "presentation-05",
+      "path": "corpus/bases/presentation/presentation-05.draft",
+      "ok": true,
+      "nodes": 21,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "presentation-05/relabel",
+      "path": "corpus/edits/presentation-05/relabel.draft",
+      "ok": true,
+      "nodes": 21,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "presentation-05/add",
+      "path": "corpus/edits/presentation-05/add.draft",
+      "ok": true,
+      "nodes": 22,
+      "groups": 0,
+      "edges": 24,
+      "warnings": []
+    },
+    {
+      "id": "presentation-05/local",
+      "path": "corpus/edits/presentation-05/local.draft",
+      "ok": true,
+      "nodes": 21,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "presentation-05/direction_or_remove",
+      "path": "corpus/edits/presentation-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 21,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "presentation-05/color_control",
+      "path": "corpus/edits/presentation-05/color_control.draft",
+      "ok": true,
+      "nodes": 21,
+      "groups": 0,
+      "edges": 23,
+      "warnings": []
+    },
+    {
+      "id": "presentation-06",
+      "path": "corpus/bases/presentation/presentation-06.draft",
+      "ok": true,
+      "nodes": 45,
+      "groups": 0,
+      "edges": 51,
+      "warnings": []
+    },
+    {
+      "id": "authored-01",
+      "path": "corpus/bases/authored/authored-01.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 4,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "authored-02",
+      "path": "corpus/bases/authored/authored-02.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "authored-03",
+      "path": "corpus/bases/authored/authored-03.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 2,
+      "edges": 7,
+      "warnings": []
+    },
+    {
+      "id": "authored-03/relabel",
+      "path": "corpus/edits/authored-03/relabel.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 2,
+      "edges": 7,
+      "warnings": []
+    },
+    {
+      "id": "authored-03/add",
+      "path": "corpus/edits/authored-03/add.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 2,
+      "edges": 8,
+      "warnings": []
+    },
+    {
+      "id": "authored-03/local",
+      "path": "corpus/edits/authored-03/local.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 2,
+      "edges": 7,
+      "warnings": []
+    },
+    {
+      "id": "authored-03/direction_or_remove",
+      "path": "corpus/edits/authored-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 2,
+      "edges": 7,
+      "warnings": []
+    },
+    {
+      "id": "authored-03/color_control",
+      "path": "corpus/edits/authored-03/color_control.draft",
+      "ok": true,
+      "nodes": 8,
+      "groups": 2,
+      "edges": 7,
+      "warnings": []
+    },
+    {
+      "id": "authored-04",
+      "path": "corpus/bases/authored/authored-04.draft",
+      "ok": true,
+      "nodes": 36,
+      "groups": 2,
+      "edges": 35,
+      "warnings": []
+    },
+    {
+      "id": "authored-05",
+      "path": "corpus/bases/authored/authored-05.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 2,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "authored-05/relabel",
+      "path": "corpus/edits/authored-05/relabel.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 2,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "authored-05/add",
+      "path": "corpus/edits/authored-05/add.draft",
+      "ok": true,
+      "nodes": 13,
+      "groups": 2,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "authored-05/local",
+      "path": "corpus/edits/authored-05/local.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 2,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "authored-05/direction_or_remove",
+      "path": "corpus/edits/authored-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 2,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "authored-05/color_control",
+      "path": "corpus/edits/authored-05/color_control.draft",
+      "ok": true,
+      "nodes": 12,
+      "groups": 2,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "authored-06",
+      "path": "corpus/bases/authored/authored-06.draft",
+      "ok": true,
+      "nodes": 44,
+      "groups": 2,
+      "edges": 43,
+      "warnings": []
+    },
+    {
+      "id": "recipes-01",
+      "path": "corpus/bases/recipes/recipes-01.draft",
+      "ok": true,
+      "nodes": 4,
+      "groups": 0,
+      "edges": 7,
+      "warnings": []
+    },
+    {
+      "id": "recipes-02",
+      "path": "corpus/bases/recipes/recipes-02.draft",
+      "ok": true,
+      "nodes": 20,
+      "groups": 3,
+      "edges": 2,
+      "warnings": []
+    },
+    {
+      "id": "recipes-03",
+      "path": "corpus/bases/recipes/recipes-03.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 4,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "recipes-03/relabel",
+      "path": "corpus/edits/recipes-03/relabel.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 4,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "recipes-03/add",
+      "path": "corpus/edits/recipes-03/add.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 4,
+      "edges": 13,
+      "warnings": []
+    },
+    {
+      "id": "recipes-03/local",
+      "path": "corpus/edits/recipes-03/local.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 4,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "recipes-03/direction_or_remove",
+      "path": "corpus/edits/recipes-03/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 4,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "recipes-03/color_control",
+      "path": "corpus/edits/recipes-03/color_control.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 4,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "recipes-04",
+      "path": "corpus/bases/recipes/recipes-04.draft",
+      "ok": true,
+      "nodes": 11,
+      "groups": 4,
+      "edges": 12,
+      "warnings": []
+    },
+    {
+      "id": "recipes-05",
+      "path": "corpus/bases/recipes/recipes-05.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 3,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "recipes-05/relabel",
+      "path": "corpus/edits/recipes-05/relabel.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 3,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "recipes-05/add",
+      "path": "corpus/edits/recipes-05/add.draft",
+      "ok": true,
+      "nodes": 10,
+      "groups": 3,
+      "edges": 11,
+      "warnings": []
+    },
+    {
+      "id": "recipes-05/local",
+      "path": "corpus/edits/recipes-05/local.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 3,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "recipes-05/direction_or_remove",
+      "path": "corpus/edits/recipes-05/direction_or_remove.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 3,
+      "edges": 9,
+      "warnings": []
+    },
+    {
+      "id": "recipes-05/color_control",
+      "path": "corpus/edits/recipes-05/color_control.draft",
+      "ok": true,
+      "nodes": 9,
+      "groups": 3,
+      "edges": 10,
+      "warnings": []
+    },
+    {
+      "id": "recipes-06",
+      "path": "corpus/bases/recipes/recipes-06.draft",
+      "ok": true,
+      "nodes": 36,
+      "groups": 4,
+      "edges": 25,
+      "warnings": []
+    },
+    {
+      "id": "empty",
+      "path": "corpus/extras/empty.draft",
+      "ok": true,
+      "nodes": 0,
+      "groups": 0,
+      "edges": 0,
+      "warnings": []
+    },
+    {
+      "id": "single",
+      "path": "corpus/extras/single.draft",
+      "ok": true,
+      "nodes": 1,
+      "groups": 0,
+      "edges": 0,
+      "warnings": []
+    },
+    {
+      "id": "sparse-network",
+      "path": "corpus/extras/sparse-network.draft",
+      "ok": true,
+      "nodes": 180,
+      "groups": 0,
+      "edges": 234,
+      "warnings": []
+    },
+    {
+      "id": "layered-dag",
+      "path": "corpus/extras/layered-dag.draft",
+      "ok": true,
+      "nodes": 220,
+      "groups": 0,
+      "edges": 267,
+      "warnings": []
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "runId": "warm-targeted",
+  "started": "2026-11-01T23:50:03.074Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": null,
+  "planned": 50,
+  "priorCompleted": 0,
+  "executed": 50,
+  "failed": 0,
+  "timedOut": 6,
+  "skipped": 0,
+  "taskSha256": "60c3d618a78042c5398e7e64e3b305d0005442e7f12b35d250a303c20d2a98ad",
+  "finished": "2026-11-01T23:50:42.380Z",
+  "elapsedSeconds": 39.306,
+  "persistedDistinct": 50
+}

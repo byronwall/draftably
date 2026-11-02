@@ -1,0 +1,73 @@
+[
+  {
+    "stem": "screen-development",
+    "exists": true,
+    "expected": 1198,
+    "observed": 1198,
+    "missing": [],
+    "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+    "duplicateAttempts": [
+      {
+        "id": "C-development-dags-04-layered-DOWN",
+        "line": 280,
+        "canonicalStatus": "timed_out",
+        "laterStatus": "timed_out",
+        "canonicalGeometryHash": null,
+        "laterGeometryHash": null,
+        "laterWorkerMs": 90000
+      },
+      {
+        "id": "C-development-dags-04-tree-RIGHT",
+        "line": 281,
+        "canonicalStatus": "timed_out",
+        "laterStatus": "timed_out",
+        "canonicalGeometryHash": null,
+        "laterGeometryHash": null,
+        "laterWorkerMs": 90000
+      },
+      {
+        "id": "C-development-dags-04-tree-DOWN",
+        "line": 282,
+        "canonicalStatus": "timed_out",
+        "laterStatus": "timed_out",
+        "canonicalGeometryHash": null,
+        "laterGeometryHash": null,
+        "laterWorkerMs": 90000
+      },
+      {
+        "id": "C-development-dags-04-grid-RIGHT",
+        "line": 283,
+        "canonicalStatus": "timed_out",
+        "laterStatus": "timed_out",
+        "canonicalGeometryHash": null,
+        "laterGeometryHash": null,
+        "laterWorkerMs": 90000
+      }
+    ],
+    "nonterminalRecords": [],
+    "geometryHashMismatches": [],
+    "taskSha256": "2fd56213b2d3dfcb3b6a9041e6dcbd8067dff6d1ad6560acd8c9d01b8d487dc8",
+    "resultsSha256": "cd068a11c206940c490cb18a40976dbaaa2588712b7971ee01a7cca0d90e63d8",
+    "statuses": {
+      "ok": 1094,
+      "timed_out": 104
+    }
+  },
+  {
+    "stem": "documented-default-development",
+    "exists": true,
+    "expected": 46,
+    "observed": 46,
+    "missing": [],
+    "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+    "duplicateAttempts": [],
+    "nonterminalRecords": [],
+    "geometryHashMismatches": [],
+    "taskSha256": "97794c7cc3f5385d2e39c89dea2b45acb43bcfaa405943ab07a73adfcea83af6",
+    "resultsSha256": "eb1f75b4adf56a6f289fe11faa50c76227799fd8591190a781d91c0f3604ad94",
+    "statuses": {
+      "ok": 43,
+      "timed_out": 3
+    }
+  }
+]

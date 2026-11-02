@@ -1,0 +1,36 @@
+{
+  "rows": 175,
+  "categories": {
+    "action": 41,
+    "authored-constraint": 32,
+    "brush-setting": 6,
+    "engine": 11,
+    "internal-diagnostic": 6,
+    "layout-setting": 24,
+    "legacy-input": 1,
+    "recipe": 6,
+    "recipe-baseline": 1,
+    "recipe-setting": 11,
+    "routing-setting": 12,
+    "runtime-or-ui-control": 24
+  },
+  "surface_counts": {
+    "engine_ids": 11,
+    "source_rebuild_engines": 10,
+    "named_recipes": 6,
+    "implicit_recipe_baselines": 1,
+    "layout_settings_in_model": 24,
+    "engine_params_source": 15,
+    "routing_params_source": 12,
+    "layout_lab_basic_fields": 4,
+    "layout_lab_unique_setting_inputs": 23,
+    "routing_menu_immediate_sliders": 9,
+    "routing_menu_advanced_sliders": 2,
+    "routing_explorer_axes": 11,
+    "layout_explorer_axes": 21,
+    "comparison_default_candidates": 6,
+    "brush_visible_fields": 5,
+    "brush_internal_step": 1
+  },
+  "notes": "Do not sum aliases, commands, or overlapping surface registries."
+}

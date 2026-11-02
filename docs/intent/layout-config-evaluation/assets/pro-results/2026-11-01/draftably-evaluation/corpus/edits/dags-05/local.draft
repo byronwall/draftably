@@ -1,0 +1,73 @@
+diagram "Dags evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "R1 task 1"
+node n1 "R1 task 2"
+node n2 "R2 task 1"
+node n3 "R2 task 2"
+node n4 "R2 task 3"
+node n5 "R2 task 4"
+node n6 "R3 task 1"
+node n7 "R3 task 2"
+node n8 "R3 task 3"
+node n9 "R3 task 4"
+node n10 "R3 task 5"
+node n11 "R3 task 6"
+node n12 "R3 task 7"
+node n13 "R4 task 1"
+node n14 "R4 task 2"
+node n15 "R4 task 3"
+node n16 "R4 task 4"
+node n17 "R4 task 5"
+node n18 "R4 task 6"
+node n19 "R5 task 1"
+node n20 "R5 task 2"
+node n21 "R5 task 3"
+node n22 "R5 task 4"
+edge e0 n0 -> n2
+edge e1 n0 -> n3
+edge e2 n1 -> n2
+edge e3 n1 -> n3
+edge e4 n0 -> n4
+edge e5 n1 -> n5
+edge e6 n2 -> n6
+edge e7 n2 -> n7
+edge e8 n3 -> n7
+edge e9 n3 -> n10
+edge e10 n4 -> n6
+edge e11 n4 -> n8
+edge e12 n5 -> n9
+edge e13 n3 -> n11
+edge e14 n4 -> n12
+edge e15 n6 -> n13
+edge e16 n6 -> n14
+edge e17 n7 -> n14
+edge e18 n7 -> n17
+edge e19 n8 -> n14
+edge e20 n8 -> n15
+edge e21 n9 -> n16
+edge e22 n9 -> n17
+edge e23 n10 -> n14
+edge e24 n10 -> n17
+edge e25 n11 -> n17
+edge e26 n11 -> n18
+edge e27 n12 -> n13
+edge e28 n12 -> n14
+edge e29 n13 -> n19
+edge e30 n13 -> n20
+edge e31 n14 -> n19
+edge e32 n14 -> n20
+edge e33 n15 -> n21
+edge e34 n15 -> n22
+edge e35 n16 -> n21
+edge e36 n16 -> n22
+edge e37 n17 -> n19
+edge e38 n17 -> n20
+edge e39 n18 -> n19
+edge e40 n18 -> n20
+edge e41 n0 -> n22 "direct dependency"
+
+layout root flow direction=right gap=48
+
+
+nudge n1 dx=0 dy=56

@@ -1,0 +1,481 @@
+{
+  "agent": "inventory_ui",
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "method": "Direct source reads and symbol searches. Complete is used conservatively; targeted is not a claim that every line was read. The inventory captures source facts and provisional UI dispositions, not measured algorithm outcome claims. Full source packet remains separate and immutable.",
+  "attachments_read": [
+    "pro-prompt(20261101-224920).md",
+    "evaluation-protocol.md"
+  ],
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "read": "complete",
+      "sha256": "9077f03f7bbadce1c9d329c39b38129e640687e5e7f9dbf435c1e2015caec8c3",
+      "line_count": 30,
+      "inventory_source_references": []
+    },
+    {
+      "path": "README.md",
+      "read": "complete",
+      "sha256": "197ad83ea686e484062b74a321797801d8d2c265a9b702094f86c346449ec3ee",
+      "line_count": 153,
+      "inventory_source_references": []
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "read": "complete",
+      "sha256": "fa60e1cad8fca3f5b3d3ee136c7709c7f92acb971a4f606c5bdb676c69590993",
+      "line_count": 139,
+      "inventory_source_references": []
+    },
+    {
+      "path": "docs/CHECKS.md",
+      "read": "complete",
+      "sha256": "7e54f0a174f5a622245c2024cedff3b8839762557dfe5ea92f9b236dc60ef5c5",
+      "line_count": 168,
+      "inventory_source_references": []
+    },
+    {
+      "path": "docs/DSL.md",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "e429c119b4862438d7b5bc74186e95b2a3fdcb3d860d2f0c729ff613d47754c7",
+      "line_count": 1245,
+      "inventory_source_references": [
+        "docs/DSL.md:173 (## Swim lanes)",
+        "docs/DSL.md:213 (## Sequence diagrams)",
+        "docs/DSL.md:281 (## Cells)",
+        "docs/DSL.md:585 (## Layout engines)",
+        "docs/DSL.md:824 (## Refinements)"
+      ]
+    },
+    {
+      "path": "docs/intent/diagram-quality/FEEL.md",
+      "read": "complete",
+      "sha256": "cfbffe66e998a40074821a9e48bfd99213053a2604cd503ea8f0623ad82e7d9e",
+      "line_count": 88,
+      "inventory_source_references": []
+    },
+    {
+      "path": "docs/intent/diagram-quality/RUBRIC.md",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "08fb23e0d4eecdcfcce052a183c752e2c618aff5c75fcb5f7ed2399889e88ede",
+      "line_count": 313,
+      "inventory_source_references": []
+    },
+    {
+      "path": "scripts/shoot.mjs",
+      "read": "complete",
+      "sha256": "d9e10625339b40e6c5f9f70dd179f702af36f42074deffe17bde9d20726cbbc4",
+      "line_count": 137,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/components/Inspector.tsx",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "50ff586fcfff20910bffe99739fd6497c0429ab3a57f2ea6aa1049e21df61731",
+      "line_count": 663,
+      "inventory_source_references": [
+        "src/components/Inspector.tsx:205 (label=\"Snap to nearby shapes\")",
+        "src/components/Inspector.tsx:210 (label=\"Show manual position badges\")",
+        "src/components/Inspector.tsx:434 (function PinControl)",
+        "src/components/Inspector.tsx:462 (function ParentSelect)"
+      ]
+    },
+    {
+      "path": "src/components/LayoutLab.tsx",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "9a47b48c310d58108ac48e64b0f149caf2ec454fac86cf946dc9310eb1b0de73",
+      "line_count": 469,
+      "inventory_source_references": [
+        "src/components/LayoutLab.tsx:141 (export function LayoutLab)"
+      ]
+    },
+    {
+      "path": "src/components/LayoutPreviewBar.tsx",
+      "read": "complete",
+      "sha256": "625fd63b7fd5b713f59cb4422ae7a280687a2b1f5d2fba3573b10c4f50af287b",
+      "line_count": 50,
+      "inventory_source_references": [
+        "src/components/LayoutPreviewBar.tsx:38 (Hold before)"
+      ]
+    },
+    {
+      "path": "src/components/Menus.tsx",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "942d16495c9b7678d3edbea4a6c884ee57c01bc6eabbf79b27fe8ba4304afbe9",
+      "line_count": 891,
+      "inventory_source_references": [
+        "src/components/Menus.tsx:627 (const ROUTING_FIELDS)",
+        "src/components/Menus.tsx:703 (function RoutingMenu)",
+        "src/components/Menus.tsx:732 (crossingPenalty: 900)"
+      ]
+    },
+    {
+      "path": "src/components/comparison/ComparisonDialog.tsx",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "892d3f7642fc11d1e4c16b3b15a764087a88d0fb9d83390edb2b66c63b7fae9f",
+      "line_count": 335,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/components/comparison/ComparisonSidebar.tsx",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "be5754194f39000206a0d0dab94a2f306690228e581d02c6b233996edb3c5181",
+      "line_count": 408,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/components/sculpt/BrushDock.tsx",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "59bd8fd0a6a9af4f741e2bbcce474b3a1acd3be5f07a139fd448cdb1ad9fe598",
+      "line_count": 133,
+      "inventory_source_references": [
+        "src/components/sculpt/BrushDock.tsx:28 (export function BrushDock)"
+      ]
+    },
+    {
+      "path": "src/dsl/cells.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "443ce057649afb14e58af51416db5aa9b5f7e3783a3c8d285698b9f64e89a5b5",
+      "line_count": 232,
+      "inventory_source_references": [
+        "src/dsl/cells.ts:160 (unitWidth)"
+      ]
+    },
+    {
+      "path": "src/dsl/compile.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "aaa27b7359ebd3da960fb65e6d13a21ea65378f5749bc1522faec4cdd6ad461e",
+      "line_count": 3162,
+      "inventory_source_references": [
+        "src/dsl/compile.ts:1009 (export function foldRanks)",
+        "src/dsl/compile.ts:172 (function fitVariants)",
+        "src/dsl/compile.ts:3063 (tall.fold === 'never')",
+        "src/dsl/compile.ts:684 (const loose = new Set)",
+        "src/dsl/compile.ts:719 (function authoredOrder)",
+        "src/dsl/compile.ts:827 (export function layoutFor)"
+      ]
+    },
+    {
+      "path": "src/dsl/layout-edits.ts",
+      "read": "complete",
+      "sha256": "1af93f1b7d0043100c82233c2c1831040223cefff6b835d25c1bbf7d54c38948",
+      "line_count": 239,
+      "inventory_source_references": [
+        "src/dsl/layout-edits.ts:127 (getAttr(s, 'strength'))",
+        "src/dsl/layout-edits.ts:46 (export function engineAttrs)"
+      ]
+    },
+    {
+      "path": "src/dsl/syntax.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "a31c7dd2b0b933616806934765e8301447a588e0fe03b08035eb3ce70add20c9",
+      "line_count": 1181,
+      "inventory_source_references": [
+        "src/dsl/syntax.ts:395 (export const ENGINES)",
+        "src/dsl/syntax.ts:428 (export const ROUTING_PARAMS)",
+        "src/dsl/syntax.ts:636 (case 'phase')",
+        "src/dsl/syntax.ts:690 (attrs.has('span'))",
+        "src/dsl/syntax.ts:716 (from: choice('from')",
+        "src/dsl/syntax.ts:717 (to: choice('to')",
+        "src/dsl/syntax.ts:718 (choice('directed')",
+        "src/dsl/syntax.ts:760 (['flow', 'row', 'column', 'lanes', 'sequence', 'cells'])",
+        "src/dsl/syntax.ts:778 (columns: num('columns')",
+        "src/dsl/syntax.ts:781 (unit: choice('unit')",
+        "src/dsl/syntax.ts:782 (ruler: choice('ruler')",
+        "src/dsl/syntax.ts:786 (gap: num('gap')",
+        "src/dsl/syntax.ts:787 (minWidth: num('min-width')",
+        "src/dsl/syntax.ts:788 (minHeight: num('min-height')",
+        "src/dsl/syntax.ts:862 (width: num('width')",
+        "src/dsl/syntax.ts:879 (case 'align')",
+        "src/dsl/syntax.ts:890 (strength: choice('strength', 'prefer')",
+        "src/dsl/syntax.ts:911 (side: choice('side', 'right')",
+        "src/dsl/syntax.ts:912 (gap: num('gap', 28, 0, 2000))",
+        "src/dsl/syntax.ts:913 (offset: num('offset')",
+        "src/dsl/syntax.ts:919 (dx: num('dx')",
+        "src/dsl/syntax.ts:919 (dy: num('dy')",
+        "src/dsl/syntax.ts:926 (x: num('x', 0))",
+        "src/dsl/syntax.ts:927 (y: num('y', 0))",
+        "src/dsl/syntax.ts:928 (weight: num('weight')",
+        "src/dsl/syntax.ts:933 (x: num('x', 0, 0))",
+        "src/dsl/syntax.ts:933 (y: num('y', 0, 0))",
+        "src/dsl/syntax.ts:942 (height: num('height')",
+        "src/dsl/syntax.ts:968 (export function layoutParent)"
+      ]
+    },
+    {
+      "path": "src/dsl/translate.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "1a5cdd32f81f30d8a6acc211406b9530d590fb7bb3b95e604daa87be59b08e82",
+      "line_count": 804,
+      "inventory_source_references": [
+        "src/dsl/translate.ts:108 (Connection bends are not saved)",
+        "src/dsl/translate.ts:110 (Connection label positions are not saved)",
+        "src/dsl/translate.ts:118 (Start and end preferences are not saved)"
+      ]
+    },
+    {
+      "path": "src/engines/explorer-engine.d.ts",
+      "read": "complete",
+      "sha256": "04ed37a84affd0589e3e2695807c8455372aae2629d25b5c89369d27784d5729",
+      "line_count": 66,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/engines/explorer-engine.js",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "50aa813e59af8f295430c8ac46e39c09bdb647d32cb114acbaa455a89b89291b",
+      "line_count": 224,
+      "inventory_source_references": [
+        "src/engines/explorer-engine.js:101 (function specs)",
+        "src/engines/explorer-engine.js:115 (config.axisA === config.axisB)",
+        "src/engines/explorer-engine.js:200 (if (config.autoPorts))",
+        "src/engines/explorer-engine.js:45 (function parseValues)",
+        "src/engines/explorer-engine.js:9 (const LAYOUT_PARAMS)"
+      ]
+    },
+    {
+      "path": "src/engines/layout-engine.d.ts",
+      "read": "complete",
+      "sha256": "ebff690030afa00baae10dd688eecc603144688bc21fb2b1bef471c546d2fd6c",
+      "line_count": 120,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/engines/layout-engine.js",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "f383245c4856aa6a33b0a9b567c91743e60684926831478c8d849f5b9f4471e0",
+      "line_count": 1933,
+      "inventory_source_references": [
+        "src/engines/layout-engine.js:107 (id: 'separate')",
+        "src/engines/layout-engine.js:1078 (!opts.warmStart)",
+        "src/engines/layout-engine.js:1123 (opts.orderPrior !== false)",
+        "src/engines/layout-engine.js:1242 (const steps = opts.settle)",
+        "src/engines/layout-engine.js:1243 (clamp(Math.round(opts.maxIterations)",
+        "src/engines/layout-engine.js:14 (id: 'compound-flow')",
+        "src/engines/layout-engine.js:142 (function settings)",
+        "src/engines/layout-engine.js:144 (s.algorithm === 'radial')",
+        "src/engines/layout-engine.js:24 (id: 'boundary-align')",
+        "src/engines/layout-engine.js:33 (id: 'compound-spring')",
+        "src/engines/layout-engine.js:43 (id: 'tidy')",
+        "src/engines/layout-engine.js:52 (id: 'stress')",
+        "src/engines/layout-engine.js:61 (id: 'force')",
+        "src/engines/layout-engine.js:70 (id: 'flow')",
+        "src/engines/layout-engine.js:79 (id: 'layered')",
+        "src/engines/layout-engine.js:847 (async function compute)",
+        "src/engines/layout-engine.js:858 (if (intent.start) s.rootId)",
+        "src/engines/layout-engine.js:867 (const inheritedDirection)",
+        "src/engines/layout-engine.js:877 (const extraFixed)",
+        "src/engines/layout-engine.js:88 (id: 'tree')",
+        "src/engines/layout-engine.js:885 (const visible =)",
+        "src/engines/layout-engine.js:899 (s.aspect === 'canvas')",
+        "src/engines/layout-engine.js:902 (const scope = opts.scope)",
+        "src/engines/layout-engine.js:98 (id: 'grid')"
+      ]
+    },
+    {
+      "path": "src/engines/routing-engine.d.ts",
+      "read": "complete",
+      "sha256": "aa1ac713fc691c3608180e305d62ea7348ab36d579d9c00bb0d85b961cafe101",
+      "line_count": 106,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/engines/routing-engine.js",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "feee4a0ce946d8b2961b86219bc4e72dc333a04173b913c1908fab24376456d9",
+      "line_count": 1834,
+      "inventory_source_references": [
+        "src/engines/routing-engine.js:1184 (rawOptions.window)",
+        "src/engines/routing-engine.js:1503 (rawOptions.tidy)",
+        "src/engines/routing-engine.js:1703 (rawOptions.jogs)",
+        "src/engines/routing-engine.js:21 (const defaults)",
+        "src/engines/routing-engine.js:638 (function compute)",
+        "src/engines/routing-engine.js:639 (rawOptions.facing)",
+        "src/engines/routing-engine.js:640 (rawOptions.titleBands)",
+        "src/engines/routing-engine.js:663 (const previous = new Map)",
+        "src/engines/routing-engine.js:867 (rawOptions.quick)"
+      ]
+    },
+    {
+      "path": "src/engines/sculpt-engine.d.ts",
+      "read": "complete",
+      "sha256": "6100274dad56c1ac6f9beefd0dc3857dd98d2a013e07749a58b3f4b0478dfcb0",
+      "line_count": 71,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/engines/sculpt-engine.js",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "ffdfbfde1d1083656a3addb1d266d2b1c3bd2284dd0cdb186821d374f29c864f",
+      "line_count": 416,
+      "inventory_source_references": [
+        "src/engines/sculpt-engine.js:11 (const defaults)",
+        "src/engines/sculpt-engine.js:19 (function settings)"
+      ]
+    },
+    {
+      "path": "src/model/document.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "3aa2a56bd39dcc0386ce880ce71879056b20e45d299cd599d8dea05e764fbb98",
+      "line_count": 524,
+      "inventory_source_references": [
+        "src/model/document.ts:283 (padding: finite(cfg.padding))",
+        "src/model/document.ts:376 (supplied.algorithm === 'compact')"
+      ]
+    },
+    {
+      "path": "src/model/routes.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "499dd5794462adc6fc348fa70b01bdcd78cfe8c111aca7b4eb93b24bc7396e2d",
+      "line_count": 860,
+      "inventory_source_references": [
+        "src/model/routes.ts:638 (radius = doc.settings.routing)"
+      ]
+    },
+    {
+      "path": "src/model/types.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "2cc8047c41f89627cc34fc0d1c00a268c41c88dd6236666c1c9049f3b03a25de",
+      "line_count": 271,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/state/commands.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "d5bbce21f7cfc4081ed9dc678a826a52fd213ec386e41b653320610c42c7a234",
+      "line_count": 644,
+      "inventory_source_references": [
+        "src/state/commands.ts:229 (pin:)",
+        "src/state/commands.ts:237 ('release-manual')",
+        "src/state/commands.ts:255 ('align-left')",
+        "src/state/commands.ts:260 ('align-top')",
+        "src/state/commands.ts:265 ('align-center')",
+        "src/state/commands.ts:270 ('align-middle')",
+        "src/state/commands.ts:275 ('distribute-x')",
+        "src/state/commands.ts:280 ('distribute-y')",
+        "src/state/commands.ts:285 ('fit-container')",
+        "src/state/commands.ts:286 ('reflow-group')",
+        "src/state/commands.ts:295 ('collapse-selected')",
+        "src/state/commands.ts:296 ('reverse-edge')",
+        "src/state/commands.ts:297 ('reset-route')",
+        "src/state/commands.ts:298 ('mark-start')",
+        "src/state/commands.ts:299 ('mark-end')",
+        "src/state/commands.ts:301 (layout:)",
+        "src/state/commands.ts:309 ('layout-rebuild')",
+        "src/state/commands.ts:316 ('layout-preview')",
+        "src/state/commands.ts:321 ('layout-accept')",
+        "src/state/commands.ts:322 ('layout-discard')",
+        "src/state/commands.ts:330 ('layout-checkpoint')",
+        "src/state/commands.ts:331 ('layout-restore')",
+        "src/state/commands.ts:332 ('compare-layouts')",
+        "src/state/commands.ts:339 ('compare-routes')",
+        "src/state/commands.ts:345 (reroute:)",
+        "src/state/commands.ts:352 ('auto-ports')",
+        "src/state/commands.ts:359 ('timeline-toggle')",
+        "src/state/commands.ts:367 ('timeline-reopen')",
+        "src/state/commands.ts:374 ('timeline-save')",
+        "src/state/commands.ts:381 ('brush-toggle')",
+        "src/state/commands.ts:390 (fit:)"
+      ]
+    },
+    {
+      "path": "src/state/comparison.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "ea474e623e0145b45ba4d6d7c1d22c38fb82e632f7fed832b9aaaeb38f6bf2ee",
+      "line_count": 688,
+      "inventory_source_references": [
+        "src/state/comparison.ts:128 (function defaultConfig)",
+        "src/state/comparison.ts:213 (export function cancelGeneration)",
+        "src/state/comparison.ts:256 (export async function generate)",
+        "src/state/comparison.ts:329 (export function applyCandidate)",
+        "src/state/comparison.ts:539 (export function setCameraMode)",
+        "src/state/comparison.ts:557 (export function setPresentation)",
+        "src/state/comparison.ts:573 (export function chooseAnchor)",
+        "src/state/comparison.ts:602 (export const setLayerVisible)",
+        "src/state/comparison.ts:604 (export const setLayerOpacity)",
+        "src/state/comparison.ts:606 (export const setAllLabels)",
+        "src/state/comparison.ts:87 (const DEFAULT_ALGORITHMS)"
+      ]
+    },
+    {
+      "path": "src/state/file-session.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "5e9b7050ea5e957a1844876f85650bb5bb3fdeadca97b9625ba2fbd88bdf5778",
+      "line_count": 842,
+      "inventory_source_references": [
+        "src/state/file-session.ts:604 (function historyStep)"
+      ]
+    },
+    {
+      "path": "src/state/layout.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "43ac2079954232d5f333ddbb5f11abb96443ba8411de4b94edc7ce22410dec53",
+      "line_count": 349,
+      "inventory_source_references": []
+    },
+    {
+      "path": "src/state/sculpt.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "e9945a1b6c682753f873485adbc5812319660ba798057a796054893b006a09e5",
+      "line_count": 904,
+      "inventory_source_references": [
+        "src/state/sculpt.ts:314 (export function keepStep)",
+        "src/state/sculpt.ts:606 (export function useCurrentAsReference)",
+        "src/state/sculpt.ts:786 (export function clearHolds)"
+      ]
+    },
+    {
+      "path": "tests/engine-recipes.test.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "fd4b84b449c2c91d1dca0e869a29de0085fb37062cf045f738ad642484d34d4e",
+      "line_count": 149,
+      "inventory_source_references": []
+    },
+    {
+      "path": "tests/engine-sculpt.mjs",
+      "read": "complete",
+      "sha256": "3f664e960fcb077772c74fee383584c8a499bd8fee655a2ca15b5d68c7087d64",
+      "line_count": 241,
+      "inventory_source_references": []
+    },
+    {
+      "path": "tests/layout-edits.test.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "261b1827acd438a35d3016dcf3c75dacc31c3036773b1d26eb46d934ad581ae9",
+      "line_count": 164,
+      "inventory_source_references": []
+    },
+    {
+      "path": "tests/routing-own-standoff.test.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "88f093a63a691f1b18856c9d57179a1109fc2d098f9c61a5807179051f570e29",
+      "line_count": 30,
+      "inventory_source_references": []
+    },
+    {
+      "path": "tests/routing-ports.test.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "a9ad4f93162e5647b1f2f1862aaf99a15332b5fcfdb0d0ac719bd5635da8a5e5",
+      "line_count": 47,
+      "inventory_source_references": []
+    },
+    {
+      "path": "tests/translate.test.ts",
+      "read": "targeted declarations, call sites, relevant implementation sections and/or tests",
+      "sha256": "47a407ba92db41701559119104b50dbd52be7fbedbe5e90798da911b4805a175",
+      "line_count": 257,
+      "inventory_source_references": []
+    }
+  ],
+  "source_ref_validation": {
+    "inventory_rows": 175,
+    "missing_line_references": 0
+  },
+  "additional_artifact_checks": [
+    {
+      "artifact": "renders/ui-wireframe.svg",
+      "check": "Rendered with unchanged scripts/shoot.mjs using the already installed fallback Chromium runtime; PNG opened and inspected. No clipped controls or labels visible. This is an illustrative UI proposal, not shipped geometry or a product screenshot."
+    }
+  ]
+}

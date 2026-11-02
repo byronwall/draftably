@@ -1,0 +1,46 @@
+diagram "Kubernetes cluster" version=1
+
+# Three levels: cluster > namespace > deployment, with pods inside each deployment.
+node users "Users" shape=pill color=slate
+node lb "Cloud load balancer" color=slate
+
+group cluster "Production cluster" color=blue
+node ingress "Ingress controller" in=cluster
+
+group ns_shop "namespace: shop" in=cluster color=mint
+group web_deploy "deploy: web" in=ns_shop
+node web_1 "web-7f9c" in=web_deploy
+node web_2 "web-a21d" in=web_deploy
+group cart_deploy "deploy: cart" in=ns_shop
+node cart_1 "cart-5b0e" in=cart_deploy
+node redis "redis" in=ns_shop shape=circle
+
+group ns_data "namespace: data" in=cluster color=violet
+group pg_set "statefulset: postgres" in=ns_data
+node pg_0 "postgres-0" in=pg_set
+node pg_1 "postgres-1" in=pg_set
+node backup "backup cronjob" in=ns_data
+
+group ns_ops "namespace: monitoring" in=cluster color=amber
+node prom "prometheus" in=ns_ops
+node grafana "grafana" in=ns_ops
+
+node bucket "Object storage" color=slate
+
+edge e1 users -> lb "HTTPS"
+edge e2 lb -> ingress
+edge e3 ingress -> web_1
+edge e4 ingress -> web_2
+edge e5 web_1 -> cart_1
+edge e6 web_2 -> cart_1
+edge e7 cart_1 -> redis
+edge e8 cart_1 -> pg_0
+edge rep pg_0 -> pg_1 "replicate" kind=async
+edge bk backup -> bucket "nightly" kind=async
+edge sc prom -> web_1 "scrape" kind=async
+edge g prom -> grafana
+
+layout root flow gap=56 direction=right
+layout cluster flow gap=40 direction=down
+layout web_deploy row gap=16
+layout pg_set row gap=16

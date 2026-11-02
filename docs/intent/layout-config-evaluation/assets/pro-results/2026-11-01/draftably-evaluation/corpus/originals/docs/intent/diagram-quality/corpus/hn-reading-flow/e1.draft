@@ -1,0 +1,41 @@
+diagram "HN Offline: reading on the train" version=1
+
+# expect reads-x open list story
+# expect near toast fetch_ok 120
+
+theme fieldnotes
+
+node open "Open app" shape=pill
+node online "Online?" shape=diamond
+node refresh "Pull to refresh"
+node fetch_ok "Fetch worked?" shape=diamond
+node toast "Offline toast"
+node cached "Show cached lists"
+node list "Front / day / week"
+node hide_read "Hide read stories"
+node story "Open story"
+node mark "Mark as read"
+node thread "Read comments"
+node collapse "Collapse a thread"
+node link "HN link?" shape=diamond
+node inline "Load in app"
+node external "Open in browser" shape=pill
+
+edge f1 open -> online
+edge f2 online -> refresh "yes"
+edge f3 online -> cached "no"
+edge f4 refresh -> fetch_ok
+edge f16 fetch_ok -> list "yes"
+edge f17 fetch_ok -> toast "no"
+edge f18 toast -> cached "fall back"
+edge f5 cached -> list
+edge f6 list -> hide_read
+edge f7 hide_read -> story
+edge f8 story -> mark
+edge f9 mark -> thread
+edge f10 thread -> collapse
+edge f11 collapse -> thread "saved locally"
+edge f12 thread -> link "tap link"
+edge f13 link -> inline "yes"
+edge f14 link -> external "no"
+edge f15 inline -> thread

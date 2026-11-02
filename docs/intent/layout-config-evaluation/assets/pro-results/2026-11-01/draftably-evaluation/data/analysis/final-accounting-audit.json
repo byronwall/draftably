@@ -1,0 +1,2221 @@
+{
+  "schema": "draftably-final-accounting-audit-1",
+  "at": "2026-11-02T00:55:09.143693+00:00",
+  "algorithmExecutions": 0,
+  "heldoutOutcomesRead": true,
+  "preservedHistoricalReports": [
+    "evaluation/audit-report.md",
+    "evaluation/accounting-audit.md",
+    "data/analysis/accounting-audit.json"
+  ],
+  "checks": {
+    "noMissingOrUnplannedTrials": true,
+    "noNonterminalRows": true,
+    "noMissingReferencedArtifacts": true,
+    "noUnmatchedImmutableAttempts": true,
+    "sourceBaselineUnchanged": true,
+    "allFrozenSnapshotsPreserved": true,
+    "criticalCodeUnchanged": true,
+    "protocolHashesMatch": true,
+    "sealedDevelopmentStagesUnchanged": true,
+    "frozenEvidenceUnchanged": true,
+    "allHeldoutStartsAndHashesMatch": true,
+    "executionSummaryAgrees": true,
+    "geometrySignaturesMatch": true,
+    "decisionArithmeticAgrees": true,
+    "blindPairMinimumMet": true,
+    "heldoutBlindPairsPresent": true,
+    "expensiveTrialsWithinSixHours": true,
+    "registeredMainWithin11500": true,
+    "finalInventoryHashesAndRowsAgree": true
+  },
+  "counts": {
+    "registered": 8203,
+    "canonical": 8203,
+    "rawTerminalRows": 8210,
+    "duplicateAttempts": 7,
+    "statuses": {
+      "ok": 7731,
+      "timed_out": 452,
+      "failed": 20
+    },
+    "splits": {
+      "development": {
+        "canonical": 6714,
+        "statuses": {
+          "ok": 6445,
+          "timed_out": 249,
+          "failed": 20
+        }
+      },
+      "heldout": {
+        "canonical": 1489,
+        "statuses": {
+          "ok": 1286,
+          "timed_out": 203
+        }
+      }
+    },
+    "immutableAttemptFiles": 3485
+  },
+  "stages": [
+    {
+      "stage": "documented-default-development",
+      "planned": 46,
+      "canonical": 46,
+      "rawRows": 46,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 43,
+        "timed_out": 3
+      },
+      "taskSha256": "97794c7cc3f5385d2e39c89dea2b45acb43bcfaa405943ab07a73adfcea83af6",
+      "resultSha256": "eb1f75b4adf56a6f289fe11faa50c76227799fd8591190a781d91c0f3604ad94",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "documented-default-heldout",
+      "planned": 23,
+      "canonical": 23,
+      "rawRows": 23,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 19,
+        "timed_out": 4
+      },
+      "taskSha256": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "resultSha256": "d82837e3352e3e05969cfbee0498792e3bba23a2eddc3fafc1f16c99f40f5163",
+      "immutableAttemptFiles": 23
+    },
+    {
+      "stage": "edits-current-development",
+      "planned": 60,
+      "canonical": 60,
+      "rawRows": 60,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 60
+      },
+      "taskSha256": "74746092a69e10c4b48dfc419a0fb69908ab028556e361a5e423c618cb9e74f6",
+      "resultSha256": "a6552b11f38cc99b2a363fe3b1e32a331285f006b62d45c7cb6a6122a0ac5cd1",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "edits-current-heldout",
+      "planned": 60,
+      "canonical": 60,
+      "rawRows": 60,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 60
+      },
+      "taskSha256": "4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996",
+      "resultSha256": "6fdd17acc9944ff6fdf48d62785fd7b59b2730d2f6af2662880ea23bcb3253ae",
+      "immutableAttemptFiles": 60
+    },
+    {
+      "stage": "edits-policies-development",
+      "planned": 120,
+      "canonical": 120,
+      "rawRows": 120,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 120
+      },
+      "taskSha256": "ec97b1ceaac8fd75e1572d0277b8a00ce52638634213bda7b401f51482a31963",
+      "resultSha256": "1fa4abd7228aa0d26f8e88d569753e43482597608fe8d37ed04c680762ae5bbf",
+      "immutableAttemptFiles": 120
+    },
+    {
+      "stage": "edits-policies-heldout",
+      "planned": 120,
+      "canonical": 120,
+      "rawRows": 120,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 120
+      },
+      "taskSha256": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+      "resultSha256": "9db4fe7499a8bea86e948b6068dfd75c46e6570b50d1e27ec6640542b18fd5d6",
+      "immutableAttemptFiles": 120
+    },
+    {
+      "stage": "edits-states-development",
+      "planned": 12,
+      "canonical": 12,
+      "rawRows": 12,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 12
+      },
+      "taskSha256": "7c466d809dcb969fbdd5984f71a85c826d23098f656a445b3195d26013fe9cb8",
+      "resultSha256": "cb9b4c0f849c5aa1db183cf48cc9842cf18fac3eed8eff0b93e8a5cbdaffd970",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "edits-states-heldout",
+      "planned": 12,
+      "canonical": 12,
+      "rawRows": 12,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 12
+      },
+      "taskSha256": "0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c",
+      "resultSha256": "f8737a2b134ba7e9eb35aaef5a6c087bbbf638ab75deba60ccf43d984cdf53a8",
+      "immutableAttemptFiles": 12
+    },
+    {
+      "stage": "edits-warm-development",
+      "planned": 180,
+      "canonical": 180,
+      "rawRows": 180,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 180
+      },
+      "taskSha256": "d5deacb3c9c476f6ede3a2f5aa0b7333011ac2b61d8c5bf6d63819475948569b",
+      "resultSha256": "de6f285903a63d8348c6e39d981ac09a0433eca9bc0de721f63acbefa29525c5",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "edits-warm-heldout",
+      "planned": 180,
+      "canonical": 180,
+      "rawRows": 180,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 178,
+        "timed_out": 2
+      },
+      "taskSha256": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+      "resultSha256": "d5202efc1314a9703def88a873b558b7e31387bb1c2bfded2f69f14908cfc01c",
+      "immutableAttemptFiles": 180
+    },
+    {
+      "stage": "identity-development",
+      "planned": 240,
+      "canonical": 240,
+      "rawRows": 240,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 240
+      },
+      "taskSha256": "6d7df00608973ba23ef8cb46bb482c5966142e88a12e8ac0624ce26515769463",
+      "resultSha256": "5267828347c2690ea0b4321aa210a8ef639ce3af574f722b9a36ca38ad6433ad",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "interactions-layout",
+      "planned": 96,
+      "canonical": 96,
+      "rawRows": 96,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 96
+      },
+      "taskSha256": "1fd17300135651d15aeb9651e056843e5e66259c5ed7c2f61b0dbc8203248298",
+      "resultSha256": "edb40fb0c58ff0de8c1c4ab6c977cb40a30bd3908cb27a19211ad4e1231b6b33",
+      "immutableAttemptFiles": 96
+    },
+    {
+      "stage": "interactions-routing",
+      "planned": 432,
+      "canonical": 432,
+      "rawRows": 432,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 432
+      },
+      "taskSha256": "33fe7ea8018741ba4fb56f274ab57ded962a31c350e489ce3589dbe28a4aa638",
+      "resultSha256": "9c5a37f1bb42e407b6fa361f3939bb3bfa78f60061b2d1e7ced5496d928e46ce",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "joint-development",
+      "planned": 108,
+      "canonical": 108,
+      "rawRows": 108,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 108
+      },
+      "taskSha256": "ce19246cbf3190b71e8ad1f66d8c692a81dbb0d2ee595bb53f20ab1a98328db0",
+      "resultSha256": "9e62c6b7dd885c80ac1ddde2d7ff7ea43eb6b4b1360c1e97ad56ce05c19d6f91",
+      "immutableAttemptFiles": 108
+    },
+    {
+      "stage": "joint-heldout",
+      "planned": 216,
+      "canonical": 216,
+      "rawRows": 216,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 186,
+        "timed_out": 30
+      },
+      "taskSha256": "53496c83d73103158f098e746ce2be9997fb1339b55c7d56d414b0554067b5d2",
+      "resultSha256": "37884444bf5b896679cab68c671a602970523cf45a29fe7f293e87ba001ecff6",
+      "immutableAttemptFiles": 216
+    },
+    {
+      "stage": "layout-control-ablation",
+      "planned": 336,
+      "canonical": 336,
+      "rawRows": 336,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 302,
+        "timed_out": 34
+      },
+      "taskSha256": "2ba8fbdae8b4a3b5fa1485e62e8ab8f0fc3a88f4f36d9c7d8ed627df2ae1adb9",
+      "resultSha256": "cdb6e5ab7a683f48c3f75a72b05ae8344f78652e0244d37cd817f3509f7bdac3",
+      "immutableAttemptFiles": 336
+    },
+    {
+      "stage": "network-direction",
+      "planned": 96,
+      "canonical": 96,
+      "rawRows": 96,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 88,
+        "timed_out": 8
+      },
+      "taskSha256": "495ff90cd7ac93a8dcb096a9d420b0b92b980644b1d86ac286cd7ee6f1a928fd",
+      "resultSha256": "e0c8fc9dd187273f452715ac0632662978632e807f488c52a61b4b86b0ca8e90",
+      "immutableAttemptFiles": 96
+    },
+    {
+      "stage": "optional-scale",
+      "planned": 6,
+      "canonical": 6,
+      "rawRows": 6,
+      "duplicates": 0,
+      "statuses": {
+        "timed_out": 6
+      },
+      "taskSha256": "8a142ee7b8b94aa2af0ca7dd86c0ab451bc0cbd1aa097d9984ca194df1ec0b2c",
+      "resultSha256": "d46df1f95444f66d9ea0c76952d9b83fc5d691ef1314f52608392ad93c4538b9",
+      "immutableAttemptFiles": 6
+    },
+    {
+      "stage": "prepare-routing",
+      "planned": 24,
+      "canonical": 24,
+      "rawRows": 24,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 24
+      },
+      "taskSha256": "b64531fcd79b2d5ec24929b2c45b4a39c3efdd3f7a48fcc377002273019d165c",
+      "resultSha256": "72eaffbc8b959ac154f03527ef5c6d8a9063a27420d0cc443ac9d6286ac1e7de",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "routing-current-heldout",
+      "planned": 72,
+      "canonical": 72,
+      "rawRows": 72,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 57,
+        "timed_out": 15
+      },
+      "taskSha256": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+      "resultSha256": "8dcabc3b24a9fe8945648af81fac560f1559cd98bc3cc5692ecd4b43043f9c30",
+      "immutableAttemptFiles": 72
+    },
+    {
+      "stage": "sanity",
+      "planned": 20,
+      "canonical": 20,
+      "rawRows": 20,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 20
+      },
+      "taskSha256": "5aef349b97d16b7c565762e51fcb79f3cba8d93c9c07d9cb69fc40aa6f140a5a",
+      "resultSha256": "dbfe0419ac2997a818e581c435db7443b429d50cb3464894dca9487c10b3cdd6",
+      "immutableAttemptFiles": 20
+    },
+    {
+      "stage": "screen-development",
+      "planned": 1198,
+      "canonical": 1198,
+      "rawRows": 1202,
+      "duplicates": 4,
+      "statuses": {
+        "ok": 1094,
+        "timed_out": 104
+      },
+      "taskSha256": "2fd56213b2d3dfcb3b6a9041e6dcbd8067dff6d1ad6560acd8c9d01b8d487dc8",
+      "resultSha256": "cd068a11c206940c490cb18a40976dbaaa2588712b7971ee01a7cca0d90e63d8",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "screen-heldout",
+      "planned": 599,
+      "canonical": 599,
+      "rawRows": 599,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 481,
+        "timed_out": 118
+      },
+      "taskSha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "resultSha256": "f121951690a1bad6d7c46ebc719fed0b1ab3bc8401ad38c9c7b9d4922b6a66ae",
+      "immutableAttemptFiles": 599
+    },
+    {
+      "stage": "selected-presets-development",
+      "planned": 306,
+      "canonical": 306,
+      "rawRows": 306,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 278,
+        "timed_out": 28
+      },
+      "taskSha256": "8df108761fd88b185f1ee2a7475d6917ef9470fe2681079d9fab17467e9a2f4f",
+      "resultSha256": "c3f0713c74fe9f0216716652f44228f82f06ca9c0acc06ab2ff2dbea4099d805",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "selected-presets-heldout",
+      "planned": 207,
+      "canonical": 207,
+      "rawRows": 207,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 173,
+        "timed_out": 34
+      },
+      "taskSha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "resultSha256": "bf5c33642e259ebdbf72ce3d9cd8fd601147432e1e84dcceef22456d0d5e0e1b",
+      "immutableAttemptFiles": 207
+    },
+    {
+      "stage": "settings-layout",
+      "planned": 756,
+      "canonical": 756,
+      "rawRows": 759,
+      "duplicates": 3,
+      "statuses": {
+        "ok": 696,
+        "timed_out": 60
+      },
+      "taskSha256": "481990c97bbd3dcf68a48f4ac3f58e9616248d840f185199088ed443557daf17",
+      "resultSha256": "2311d99fb4b84b92fdf98e17f60f5adfb981b69c0c1900776aef7f7c3479fda6",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "settings-routing",
+      "planned": 984,
+      "canonical": 984,
+      "rawRows": 984,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 984
+      },
+      "taskSha256": "fb1190f82ccbcb275eb83b9fbb7d4be8ea60dbaad85c48b20bc0c2f590bcce3d",
+      "resultSha256": "a8203c37e033ed831476265801231cc4ff0f84d231f439c1e0d53f44df922ff1",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "settings-warm",
+      "planned": 444,
+      "canonical": 444,
+      "rawRows": 444,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 424,
+        "failed": 20
+      },
+      "taskSha256": "9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e",
+      "resultSha256": "d31aafb0dacd83f78dc4a84816754511391f8e74a671879a405190487b787fb6",
+      "immutableAttemptFiles": 444
+    },
+    {
+      "stage": "timing-development",
+      "planned": 720,
+      "canonical": 720,
+      "rawRows": 720,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 720
+      },
+      "taskSha256": "995092a2ae110f71fc81b76e2fb64c0d9204ed18286b1a6ec9b98ded2c296f47",
+      "resultSha256": "adf531ecb18cb499c53b19b71049e9bdc1fff97b5153eb9a0a7eb8a8c81a9d4f",
+      "immutableAttemptFiles": 720
+    },
+    {
+      "stage": "tuning-development",
+      "planned": 480,
+      "canonical": 480,
+      "rawRows": 480,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 480
+      },
+      "taskSha256": "cd329d93e89afeed1aed23ea46f392ad595a215b951569cdce5e12f48081c963",
+      "resultSha256": "35a41f828b7fc083e926d40c43aeac083948be631fd8ebfc628466dc3c3592bf",
+      "immutableAttemptFiles": 0
+    },
+    {
+      "stage": "warm-targeted",
+      "planned": 50,
+      "canonical": 50,
+      "rawRows": 50,
+      "duplicates": 0,
+      "statuses": {
+        "ok": 44,
+        "timed_out": 6
+      },
+      "taskSha256": "60c3d618a78042c5398e7e64e3b305d0005442e7f12b35d250a303c20d2a98ad",
+      "resultSha256": "af7d79f8b4b843e54a05d9a3200550e7fe4589b0e85b746aac4f79dac4822ff6",
+      "immutableAttemptFiles": 50
+    }
+  ],
+  "duplicates": [
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-layered-DOWN",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-tree-RIGHT",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-tree-DOWN",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "screen-development",
+      "id": "C-development-dags-04-grid-RIGHT",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "settings-layout",
+      "id": "D-layout-architecture-04-groupGap-96",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "ok"
+    },
+    {
+      "stage": "settings-layout",
+      "id": "D-layout-dags-04-nodeGap-12",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    },
+    {
+      "stage": "settings-layout",
+      "id": "D-layout-dags-04-nodeGap-24",
+      "canonicalStatus": "timed_out",
+      "laterStatus": "timed_out"
+    }
+  ],
+  "missing": [],
+  "unplanned": [],
+  "missingArtifacts": [],
+  "unmatchedImmutableRecords": [],
+  "baselineFiles": 451,
+  "baselineMismatches": [],
+  "frozenSnapshotFiles": 61,
+  "frozenSnapshotMismatches": [],
+  "criticalFrozenCodeChecks": {
+    "metrics.mjs": true,
+    "intent.mjs": true,
+    "analyze-portfolio.py": true,
+    "analyze-dependencies.py": true,
+    "predict-cold-policy.py": true,
+    "trial-worker.mjs": true,
+    "adapter.mjs": true,
+    "source-tools.mjs": true
+  },
+  "protocolChecks": {
+    "splitSha256": true,
+    "routingSha256": true,
+    "settingsSha256": true,
+    "metricSha256": true
+  },
+  "developmentStageChecks": [
+    {
+      "stage": "documented-default-development",
+      "matches": true
+    },
+    {
+      "stage": "edits-current-development",
+      "matches": true
+    },
+    {
+      "stage": "edits-policies-development",
+      "matches": true
+    },
+    {
+      "stage": "edits-states-development",
+      "matches": true
+    },
+    {
+      "stage": "edits-warm-development",
+      "matches": true
+    },
+    {
+      "stage": "identity-development",
+      "matches": true
+    },
+    {
+      "stage": "interactions-layout",
+      "matches": true
+    },
+    {
+      "stage": "interactions-routing",
+      "matches": true
+    },
+    {
+      "stage": "joint-development",
+      "matches": true
+    },
+    {
+      "stage": "layout-control-ablation",
+      "matches": true
+    },
+    {
+      "stage": "network-direction",
+      "matches": true
+    },
+    {
+      "stage": "optional-scale",
+      "matches": true
+    },
+    {
+      "stage": "prepare-routing",
+      "matches": true
+    },
+    {
+      "stage": "sanity",
+      "matches": true
+    },
+    {
+      "stage": "screen-development",
+      "matches": true
+    },
+    {
+      "stage": "selected-presets-development",
+      "matches": true
+    },
+    {
+      "stage": "settings-layout",
+      "matches": true
+    },
+    {
+      "stage": "settings-routing",
+      "matches": true
+    },
+    {
+      "stage": "settings-warm",
+      "matches": true
+    },
+    {
+      "stage": "timing-development",
+      "matches": true
+    },
+    {
+      "stage": "tuning-development",
+      "matches": true
+    },
+    {
+      "stage": "warm-targeted",
+      "matches": true
+    }
+  ],
+  "frozenEvidenceMismatches": [],
+  "postSealIntegrationChanges": [
+    {
+      "path": "evaluation/README.md",
+      "purpose": "Final replay/reporting documentation",
+      "sealedSha256": "a2b2456ada9f7ab64fa0ece09d2f18858fe18e4a58a88e0967d44e9035f89d38",
+      "currentSha256": "05152228d99198727b145f744342703712bad31d127ede66f452f5c88330bcfa",
+      "sealedCopy": "evaluation/frozen-development/README.md",
+      "diff": "--- sealed\n+++ current\n@@ -7,6 +7,12 @@\n The original run used Node24.22.1, pnpm11.25.0, Python3.12.14 and the packet's frozen pnpm lockfile. The packet declares pnpm11.9.0. Exact environment details are in `data/environment.json`. Analysis uses Python's standard library plus NumPy and Matplotlib for figures. The shipped algorithms remain JavaScript; Python does not substitute a layout implementation.\n \n The renderer and compiler require the baseline dependencies. Browser PNGs and real UI proofs additionally need Chromium. Read `runtime-notes.md` for the actual fallback browser and command paths. Normal Playwright CDN downloads failed in the original environment; the successful fallback used a temporary `@sparticuz/chromium`153 package and left product source unchanged.\n+\n+## Completed run and accounting\n+\n+All **8,203 registered trials** have a canonical terminal result: **7,731 completed, 452 timed out and 20 failed**. There are no unstarted or unplanned registered IDs. The 8,210 raw terminal rows also preserve seven overlapping duplicate attempts; the first outcome remains canonical. These totals comprise 6,714 development and 1,489 heldout trials. Completed execution does not imply a hard-valid or acceptable drawing. Detailed stage tables, hashes and missing-counter qualifications are in `data/execution-summary.json` and `data/execution-summary.csv`.\n+\n+The 63 frozen visual judgments comprise 36 development pairs reviewed before policy freeze, three post-freeze development witness pairs, and 24 fresh heldout pairs. The later development supplement did not alter selection or metrics. These are one expert model's judgments, not an independent human study.\n \n ## Inspect and resume the delivered run\n \n@@ -51,16 +57,42 @@\n node evaluation/analyze-validation.mjs\n python3 evaluation/analyze-controls.py\n python3 evaluation/layout-control-ablation.py --phase analyze\n+python3 evaluation/analyze-contexts.py\n+python3 evaluation/analyze-edits.py --split development\n python3 evaluation/analyze-portfolio.py --phase heldout\n python3 evaluation/analyze-dependencies.py --split heldout\n+python3 evaluation/report-heldout-portfolio.py\n+python3 evaluation/analyze-family-tails.py --split development\n+python3 evaluation/analyze-family-tails.py --split heldout\n+python3 evaluation/analyze-edits.py --split heldout --allow-heldout-after-freeze\n+python3 evaluation/analyze-heldout-routing.py --analyze --allow-heldout-after-freeze\n+python3 evaluation/summarize-heldout-routing-decision.py\n python3 evaluation/plot-portfolio.py --split heldout\n+MPLCONFIGDIR=/tmp/draftably-matplotlib python3 evaluation/plot-decision.py\n node evaluation/audit-result-archives.mjs --heldout\n-node evaluation/analyze-visual.mjs --heldout\n+node evaluation/audit-cell-access.mjs\n+node evaluation/audit-cell-access.mjs --heldout\n+python3 evaluation/summarize-execution.py\n+node evaluation/analyze-visual-final.mjs\n+node evaluation/final-geometry-integrity.mjs\n+python3 evaluation/final-accounting-audit.py\n ```\n \n-The full script list and final stage accounting are in `data/execution-summary.json` and `report.md`. Additional edit/joint/targeted-audit analyses describe their CLI at the top of their corresponding files. They read saved outcomes; they do not silently execute extra algorithms.\n+These commands read saved outcomes; they do not silently execute extra layout/routing algorithms. The final visual aggregation requires all four original judgment files and their keys. Run it against this delivered evidence, or only after a new reviewer has frozen all required judgments for a reproduction. `prepare-replay.py` copies the selected pair specifications, but intentionally does not copy original judgments into a new run as new review evidence.\n+\n+The final accounting audit also checks original sealed development and inventory evidence; it is intended for this delivered run. A newly measured reproduction can legitimately have different hardware timings and outcomes and should report those differences, rather than require agreement with the original result hashes. Use the execution summary, archive audits and analysis outputs to assess that new run. `build-final-inventory.py` recreates the delivered final inventory from its included source/development annotations and completed heldout evidence; it makes no geometry calls.\n+\n+Three final presentation helpers\u2014`report-heldout-portfolio.py`, `summarize-heldout-routing-decision.py`, and `plot-decision.py`\u2014contain the completed original run's narrative and fixed-count figure. They verify the exact five source/routing input-stream hashes through `original_report_inputs.py` before producing those reports. They deliberately refuse different freshly measured raw results, including changed timing records. The fresh `replay-all.sh` therefore runs the general frozen-policy analyses, routing findings, family summaries and portfolio charts, but does not run those three original-run presentation helpers. Assess a new run from its newly computed tables instead of carrying over the original narrative. This separation changes no policy, metric or original result.\n+\n+The independent edit/routing review's actually executed arithmetic is preserved under `evaluation/reviews/`, with a separate portability launcher and explicit provenance. See its `README.md` for commands, which checks write review metadata, and the distinction between executed checks and source inspection.\n+\n+`draw-workflow.py` creates the exact experimental-workflow SVG. `render-editing-workflow.py` creates the proposed editing-dispatch diagram; its optional PNG export uses Inkscape. Charts and design diagrams are distinct from production-rendered graph evidence. The optional `validate-inventory-csv.mjs` read-only audit uses `@oai/artifact-tool` from the primary artifact runtime; this dependency is not needed to run the engines or statistical analysis. Ordinary CSV readers can inspect all 175 rows without it.\n+\n+The final stage accounting is in `data/execution-summary.json` and `report.md`. Additional targeted-audit analyses describe their CLI at the top of their corresponding files. The file-source port-checkbox probe is a separate source-applicability experiment with two actual router calls; it is not silently included in the registered main-trial count.\n \n The original development fitting order was: fixed metric/corpus/settings freeze; engine/recipe and sensitivity screening; four presets per engine on twelve fixed development cases; selected presets across the remaining development cases; exact subset and dependency/configuration cover; edit/joint trials and blinded development review; then policy freeze and a single heldout evaluation. All divergences are in `data/protocol-addenda.jsonl` and `evaluation-method.md`.\n+\n+Heldout routing uses 72 current-position reroutes and 216 frozen layout-by-route combinations. It applies the sealed choices without searching for new ones. Route-only validity is the primary observation. A compile-time-plus-route-operation sensitivity is a derived serial estimate; it is not an observed end-to-end cold invocation. Partial layout references and inherited source-intent gates remain explicit.\n \n ## Result integrity and partial outcomes\n \n@@ -69,6 +101,8 @@\n Nine early terminal summary rows were reconstructed from eight existing complete geometry archives and one logged timeout/checkpoint. Their original JSONL and reconstruction proof are under `data/recovery/`; unrecoverable wall/routing/label timings and cache status remain null. Later batches write immutable per-attempt JSON before appending the summary, and exact immutable records can restore a missing summary row without losing any field or rerunning an algorithm. Read every recovery record for the final total; do not infer that every reconstructed row lost timings.\n \n `recover-results.mjs <stage> data/logs/<console>.log` only reconciles an already completed batch. It prefers exact immutable terminal records, otherwise complete archived metrics or a logged timeout. It executes no engine/router and refuses a batch without a completion log. Missing information is retained as missing, not guessed.\n+\n+All 61 files captured by the original development seal are preserved byte-for-byte in `evaluation/frozen-development/`. Final reporting and replay integration changed a few current copies; their original versions and exact hashes remain available. Frozen scoring, selection, source transformation, adapter and worker code did not change. The E analyzer's broad reference-catalog scan incidentally read the completed routing stream and a partial joint snapshot after freeze. The disclosed audit found no E reference to those streams and no effect on E estimates; see `data/analysis/edits-heldout-reference-read-scope-deviation.json`.\n \n ## Figures and blinded judgments\n \n"
+    },
+    {
+      "path": "evaluation/enrich-inventory-development.py",
+      "purpose": "Ordinary-edit/color-control denominator disclosure literal",
+      "sealedSha256": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+      "currentSha256": "7fa81c6b349aa26e1c3b57a878ff6959f02e04c752c14d60fd4ddc8d1d2d5b21",
+      "sealedCopy": "evaluation/frozen-development/enrich-inventory-development.py",
+      "diff": "--- sealed\n+++ current\n@@ -53,7 +53,7 @@\n             'dispatch_proposal':'Direction/format -> source rebuild. Bounded warm repair remains a diagnostic on this job.'}\n     if rid in ['ACT-TIDY','ACT-PREVIEW-TIDY','LAY-MODE','LAY-WARM-START','UI-WARM-START','ACT-REFLOW-GROUP']:\n         row['measured_edit_evidence']=[r for r in edits if r['stratum']=='warm-action']\n-        row['editing_applicability']='Applicable E warm jobs exclude requested global reflow; all three tested policies45/49 valid in development. Their raw60-job table also includes11 diagnostic direction jobs.'\n+        row['editing_applicability']='Applicable E warm jobs exclude requested global reflow; all three policies are33/37 valid on ordinary local edits plus12/12 unchanged color controls (45/49 total). Their raw60-job table also includes11 diagnostic direction jobs.'\n     if rid=='LAY-ORDERING':\n         row['replacement']='Hide ineffective cold-source ordering choice; retain warm ordering in Advanced. Cold silence cannot justify removing the implementation.'\n     if rid=='RTE-CORNER-RADIUS':\n"
+    },
+    {
+      "path": "evaluation/prepare-replay.py",
+      "purpose": "Copy blinded pair specifications without applying old judgments to new renders",
+      "sealedSha256": "7073ec5340520200f87bdf6d8ba2ba3afc853c30abc2e9fd27f7217bd14f5685",
+      "currentSha256": "1412e5f80f99d9d793e0510b4c6ddeafcfb80eebd68293ad7a3236e1ff75b610",
+      "sealedCopy": "evaluation/frozen-development/prepare-replay.py",
+      "diff": "--- sealed\n+++ current\n@@ -7,13 +7,17 @@\n for name in ['evaluation','corpus','baseline-packet']:\n     shutil.copytree(root/name,target/name,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.pyc'))\n (target/'data/analysis/development').mkdir(parents=True,exist_ok=True)\n-configs=['baseline-manifest.json','protocol-freeze.json','policy-freeze.json','policy-compact.json','policy-proposal.json','edit-design-freeze.json','joint-design-freeze.json','layout-control-ablation-freeze.json','warm-targeted-freeze.json','timing-sample-freeze.json','edit-policy-predictions.json','edit-policy-predictions-development.json','edit-policy-predictions-heldout.json']\n+configs=['baseline-manifest.json','protocol-freeze.json','policy-freeze.json','policy-freeze.sha256','policy-compact.json','policy-proposal.json','edit-design-freeze.json','joint-design-freeze.json','layout-control-ablation-freeze.json','warm-targeted-freeze.json','timing-sample-freeze.json','edit-policy-predictions.json','edit-policy-predictions-development.json','edit-policy-predictions-heldout.json']\n for name in configs:\n     if(root/'data'/name).exists():shutil.copy2(root/'data'/name,target/'data'/name)\n for name in ['tuning-selection.json']:\n     if(root/'data/analysis/development'/name).exists():shutil.copy2(root/'data/analysis/development'/name,target/'data/analysis/development'/name)\n for name in ['routing-policy-proposal.json']:\n     if(root/'data/analysis'/name).exists():shutil.copy2(root/'data/analysis'/name,target/'data/analysis'/name)\n+for file in (root/'data').glob('visual-pairs-*.json'):\n+    shutil.copy2(file,target/'data'/file.name)\n+# Pair identities are reproducible render requests. Original judgments are not\n+# copied into a fresh measurement directory as though they judged new renders.\n protocol=json.loads((target/'data/protocol-freeze.json').read_text())\n protocol['replayOfAssignmentStarted']=protocol['assignmentStarted']\n protocol['assignmentStarted']=datetime.datetime.now(datetime.timezone.utc).isoformat()\n"
+    },
+    {
+      "path": "evaluation/replay-all.sh",
+      "purpose": "Replay stage coverage, dependent prediction ordering and final analyses",
+      "sealedSha256": "1550f7e69bf575e319bea66223b2892e88b8f9ac0b45f402f080501de55d956f",
+      "currentSha256": "0a05334401be1bc47484602674d15304caf9a30c6143e17f15ff6f666cbf9984",
+      "sealedCopy": "evaluation/frozen-development/replay-all.sh",
+      "diff": "--- sealed\n+++ current\n@@ -13,6 +13,8 @@\n run_stage interactions-layout\n run_stage settings-warm\n run_stage network-direction\n+python3 evaluation/analyze-portfolio.py --phase edit-predictions --split development\n+python3 evaluation/build-edit-tasks.py --policies\n run_stage edits-current-development\n run_stage edits-states-development\n run_stage edits-warm-development\n@@ -23,17 +25,32 @@\n run_stage timing-development 1\n run_stage layout-control-ablation\n run_stage warm-targeted\n+run_stage optional-scale\n # The delivered policy is already frozen; no fitting occurs after the following boundary.\n run_stage screen-heldout\n run_stage documented-default-heldout\n run_stage selected-presets-heldout\n+python3 evaluation/analyze-portfolio.py --phase edit-predictions --split heldout\n+python3 evaluation/build-edit-tasks.py --policies\n run_stage edits-current-heldout\n run_stage edits-states-heldout\n run_stage edits-warm-heldout\n run_stage edits-policies-heldout\n+run_stage routing-current-heldout\n+run_stage joint-heldout\n node evaluation/analyze-validation.mjs\n python3 evaluation/analyze-controls.py\n python3 evaluation/layout-control-ablation.py --phase analyze\n+python3 evaluation/analyze-contexts.py\n+python3 evaluation/analyze-edits.py --split development\n python3 evaluation/analyze-portfolio.py --phase heldout\n python3 evaluation/analyze-dependencies.py --split heldout\n+python3 evaluation/analyze-family-tails.py --split development\n+python3 evaluation/analyze-family-tails.py --split heldout\n+python3 evaluation/analyze-edits.py --split heldout --allow-heldout-after-freeze\n+python3 evaluation/analyze-heldout-routing.py --analyze --allow-heldout-after-freeze\n+python3 evaluation/plot-portfolio.py --split heldout\n node evaluation/audit-result-archives.mjs --heldout\n+node evaluation/audit-cell-access.mjs\n+node evaluation/audit-cell-access.mjs --heldout\n+python3 evaluation/summarize-execution.py\n"
+    }
+  ],
+  "heldoutRunProvenance": [
+    {
+      "stage": "documented-default-heldout",
+      "started": "2026-11-02T00:16:43.346Z",
+      "finished": "2026-11-02T00:17:27.681Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "edits-current-heldout",
+      "started": "2026-11-02T00:16:43.832Z",
+      "finished": "2026-11-02T00:17:45.859Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "edits-policies-heldout",
+      "started": "2026-11-02T00:22:39.948Z",
+      "finished": "2026-11-02T00:23:50.051Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "edits-states-heldout",
+      "started": "2026-11-02T00:17:45.888Z",
+      "finished": "2026-11-02T00:18:03.133Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "edits-warm-heldout",
+      "started": "2026-11-02T00:18:03.162Z",
+      "finished": "2026-11-02T00:21:54.829Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "joint-heldout",
+      "started": "2026-11-02T00:24:11.255Z",
+      "finished": "2026-11-02T00:29:05.155Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "routing-current-heldout",
+      "started": "2026-11-02T00:22:12.546Z",
+      "finished": "2026-11-02T00:24:11.228Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "screen-heldout",
+      "started": "2026-11-02T00:02:05.635Z",
+      "finished": "2026-11-02T00:16:43.292Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    },
+    {
+      "stage": "selected-presets-heldout",
+      "started": "2026-11-02T00:17:27.717Z",
+      "finished": "2026-11-02T00:22:12.329Z",
+      "policyHashMatches": true,
+      "taskHashMatches": true,
+      "startedAfterSeal": true
+    }
+  ],
+  "executionSummaryChecks": {
+    "registeredDistinctTrials": true,
+    "canonicalTerminalTrials": true,
+    "canonicalStatuses": true,
+    "rawTerminalRows": true,
+    "duplicateTerminalRows": true,
+    "splits": true,
+    "allStageCountsAndHashes": true
+  },
+  "geometry": {
+    "at": "2026-11-02T00:42:07.987Z",
+    "productionCalls": 0,
+    "layoutCalls": 0,
+    "routerCalls": 0,
+    "signatureSource": "evaluation/frozen-development/metrics.mjs",
+    "signatureScope": "Node/group boxes, chosen port sides and route polylines. Not a hash of whole archive bytes, SVG paint, labels, halos or raw source input.",
+    "canonicalSuccessful": 7731,
+    "verified": 7731,
+    "bySplit": {
+      "development": 6445,
+      "heldout": 1286
+    },
+    "missing": [],
+    "malformed": [],
+    "mismatches": [],
+    "extraSavedGeometry": [
+      {
+        "path": "data/geometry/D-layout-architecture-04-groupGap-96.json.gz",
+        "id": "D-layout-architecture-04-groupGap-96",
+        "registered": true,
+        "canonicalStatus": "timed_out"
+      }
+    ],
+    "totalGeometryFiles": 7732
+  },
+  "decision": {
+    "profiles": [
+      "readable",
+      "compact",
+      "traceable",
+      "stable",
+      "specialist"
+    ],
+    "defaultAndTunedPoliciesChecked": 50,
+    "gateArithmeticMismatches": [],
+    "policies": [
+      {
+        "policy": "current-authored",
+        "profileCounts": [
+          3,
+          3,
+          2,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "implicit-recipe",
+        "profileCounts": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "documented-default",
+        "profileCounts": [
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "best-fixed-global",
+        "profileCounts": [
+          3,
+          2,
+          4,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "best-fixed-global-validity-guard",
+        "profileCounts": [
+          3,
+          2,
+          4,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k1-configuration-oracle",
+        "profileCounts": [
+          3,
+          4,
+          4,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k1-configuration-oracle-current-fallback",
+        "profileCounts": [
+          4,
+          5,
+          4,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k1-prelayout-selector",
+        "profileCounts": [
+          2,
+          3,
+          4,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k1-prelayout-selector-validity-guard",
+        "profileCounts": [
+          2,
+          3,
+          4,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k1-goal-selector-validity-guard",
+        "profileCounts": [
+          2,
+          2,
+          4,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k2-configuration-oracle",
+        "profileCounts": [
+          5,
+          7,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k2-configuration-oracle-current-fallback",
+        "profileCounts": [
+          6,
+          8,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k2-prelayout-selector",
+        "profileCounts": [
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k2-prelayout-selector-validity-guard",
+        "profileCounts": [
+          4,
+          5,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k2-goal-selector-validity-guard",
+        "profileCounts": [
+          4,
+          4,
+          2,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k3-configuration-oracle",
+        "profileCounts": [
+          7,
+          7,
+          7,
+          6,
+          6
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k3-configuration-oracle-current-fallback",
+        "profileCounts": [
+          8,
+          8,
+          7,
+          6,
+          6
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k3-prelayout-selector",
+        "profileCounts": [
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k3-prelayout-selector-validity-guard",
+        "profileCounts": [
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k3-goal-selector-validity-guard",
+        "profileCounts": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k4-configuration-oracle",
+        "profileCounts": [
+          8,
+          8,
+          8,
+          7,
+          7
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k4-configuration-oracle-current-fallback",
+        "profileCounts": [
+          9,
+          9,
+          8,
+          7,
+          7
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k4-prelayout-selector",
+        "profileCounts": [
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k4-prelayout-selector-validity-guard",
+        "profileCounts": [
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k4-goal-selector-validity-guard",
+        "profileCounts": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k5-configuration-oracle",
+        "profileCounts": [
+          8,
+          8,
+          10,
+          8,
+          8
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k5-configuration-oracle-current-fallback",
+        "profileCounts": [
+          9,
+          9,
+          10,
+          8,
+          8
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k5-prelayout-selector",
+        "profileCounts": [
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k5-prelayout-selector-validity-guard",
+        "profileCounts": [
+          5,
+          4,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "k5-goal-selector-validity-guard",
+        "profileCounts": [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k1-configuration-oracle",
+        "profileCounts": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 1,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k1-prelayout-selector",
+        "profileCounts": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 1,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k1-prelayout-selector-validity-guard",
+        "profileCounts": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k1-goal-selector-validity-guard",
+        "profileCounts": [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k2-configuration-oracle",
+        "profileCounts": [
+          5,
+          6,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k2-prelayout-selector",
+        "profileCounts": [
+          4,
+          4,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 1,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k2-prelayout-selector-validity-guard",
+        "profileCounts": [
+          4,
+          4,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k2-goal-selector-validity-guard",
+        "profileCounts": [
+          4,
+          4,
+          4,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k3-configuration-oracle",
+        "profileCounts": [
+          5,
+          6,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k3-prelayout-selector",
+        "profileCounts": [
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 2,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k3-prelayout-selector-validity-guard",
+        "profileCounts": [
+          3,
+          3,
+          4,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k3-goal-selector-validity-guard",
+        "profileCounts": [
+          3,
+          2,
+          4,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k4-configuration-oracle",
+        "profileCounts": [
+          6,
+          7,
+          7,
+          6,
+          6
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k4-prelayout-selector",
+        "profileCounts": [
+          3,
+          4,
+          5,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 1,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k4-prelayout-selector-validity-guard",
+        "profileCounts": [
+          3,
+          4,
+          5,
+          4,
+          4
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k4-goal-selector-validity-guard",
+        "profileCounts": [
+          4,
+          4,
+          5,
+          5,
+          5
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k5-configuration-oracle",
+        "profileCounts": [
+          6,
+          7,
+          7,
+          6,
+          6
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k5-prelayout-selector",
+        "profileCounts": [
+          3,
+          3,
+          3,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 2,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k5-prelayout-selector-validity-guard",
+        "profileCounts": [
+          4,
+          4,
+          3,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      },
+      {
+        "policy": "tuned-k5-goal-selector-validity-guard",
+        "profileCounts": [
+          4,
+          5,
+          3,
+          2,
+          2
+        ],
+        "feasible": [
+          12,
+          12,
+          12,
+          12,
+          12
+        ],
+        "allCommon": [
+          14,
+          14,
+          14,
+          14,
+          14
+        ],
+        "hardRegressions": 0,
+        "contractPass": false
+      }
+    ],
+    "sixEngineCommonCounts": [
+      11,
+      12,
+      11,
+      10,
+      10
+    ],
+    "elevenConfigurationCommonCounts": [
+      10,
+      12,
+      10,
+      8,
+      8
+    ],
+    "commonFeasible": 12,
+    "commonAll": 14,
+    "requiredAcceptableCount": 12,
+    "fullPoolUnavailableCases": [
+      "architecture-06",
+      "containers-05",
+      "containers-06",
+      "dags-06",
+      "networks-06"
+    ],
+    "reducedAutomaticReleasePass": false,
+    "recommendation": "Retain current automatic behavior and all underlying engines/exact source controls. A smaller goal-oriented UI can be proposed, but the frozen reduced portfolios do not pass the agreed heldout quality gate.",
+    "auditScope": "Counts and decision arithmetic independently recomputed from saved per-case selections. No rescoring, model fitting, engine execution, new subset search, or heldout policy selection."
+  },
+  "visual": [
+    {
+      "file": "data/visual-judgments-development-supplement.json",
+      "count": 3,
+      "recordedAt": "2026-11-02T00:08:59.542Z",
+      "countsAgree": true,
+      "frozenBeforeUnblinding": true,
+      "sha256": "d703b953262c73a479edc0d5fbc81943da334d80462ccabc9eaffd15b3ed1c6c"
+    },
+    {
+      "file": "data/visual-judgments-development.json",
+      "count": 26,
+      "recordedAt": "2026-11-01T23:33:17.989Z",
+      "countsAgree": true,
+      "frozenBeforeUnblinding": true,
+      "sha256": "9eafaf34317213540b976f53e9cf94b40f77eb037766a1b4fcce2f0c13230b24"
+    },
+    {
+      "file": "data/visual-judgments-heldout.json",
+      "count": 24,
+      "recordedAt": "2026-11-02T00:39:59.417Z",
+      "countsAgree": true,
+      "frozenBeforeUnblinding": true,
+      "sha256": "8d55e3aa90dbeec6663db5120d2e4852bbaee5275b7b1c464a6dfe66de661e4b"
+    },
+    {
+      "file": "data/visual-judgments-routing.json",
+      "count": 10,
+      "recordedAt": "2026-11-01T23:16:53.697674+00:00",
+      "countsAgree": true,
+      "frozenBeforeUnblinding": true,
+      "sha256": "b3832b86fdf0b90c22b0e5f6cbfc915d5ce077c7a29e3eb46c9020c72baf410f"
+    }
+  ],
+  "inventoryManifest": {
+    "at": "2026-11-02T00:53:19.191540+00:00",
+    "reportingOnly": true,
+    "geometryRuns": 0,
+    "policyRefitted": false,
+    "rows": 175,
+    "csvColumns": 35,
+    "decisions": {
+      "Hide": 61,
+      "Keep": 74,
+      "Merge": 18,
+      "Automate": 21,
+      "Remove": 1
+    },
+    "allEnginesRetained": 11,
+    "allRecipesRetained": 6,
+    "sourceEngineParametersRetained": 15,
+    "routingParametersRetained": 12,
+    "inputHashes": {
+      "inventory-development-evidence.json": "52bbbcfac4ebbbd6e1c435641cf359d83f5bfa9deb953f95396b01ee51b4f9b7",
+      "data/analysis/layout-control-ablations.json": "e2fcb642b77eb1723417b2878bfd700cc8ea15f2ea6c96f3926db3500f48f02e",
+      "data/analysis/heldout/portfolio-evidence-summary.json": "77e9024fa40c951630b9c838dc1c9d94510d336b345582ea255062146e593597",
+      "data/analysis/edits-heldout-applicable-summary.json": "f237f38fe00fcf298a3d3dfaee15109fbb7088177e30521878bef11812307213",
+      "data/analysis/file-auto-ports-probe/result.json": "39928234b1a470652764f6e5d22b356c245b317bc7057441793555734a50d480",
+      "data/analysis/routing-current-heldout-policy-summary.json": "06876938bdd08a9c0a1723359e169a162422399a4afaf4ae9d5077a8882f0298",
+      "data/analysis/routing-current-heldout-pair-summary.json": "9b05c284d086855d977c3c51687aab1566eeab8e9e511e9529e9cb37cffe616f",
+      "data/analysis/joint-heldout-policy-summary.json": "d3bba2ce91a77fa33354b127769a32a66335629d39852cf7162baa3885751488",
+      "data/analysis/heldout-routing-analysis-manifest.json": "4de6b3839d62d9cb3bac737f5796129c7c405a63a73b9fb67ee9b1eb84922509"
+    },
+    "scriptSha256": "af56b5ddf4b835b2a95b81eea7da4374604189f34fde94f38f857abe4b874134",
+    "developmentSnapshotSha256": "52bbbcfac4ebbbd6e1c435641cf359d83f5bfa9deb953f95396b01ee51b4f9b7",
+    "finalJsonSha256": "4e77c411764d0f921c490fc4e984e4681a4e53cc38aef6528a8a62f9ef93126a",
+    "finalCsvSha256": "9b325608b96d32249bc70504ac3e38184a293e33e76eb355d4db81abbd65b7d3",
+    "rootIdPresentationOnly": "Empty raw default retained; final display explicitly says automatic root.",
+    "onlyRemoveDecision": "UI-RELEASE-PORTS, limited to proven no-op file-source checkbox."
+  },
+  "inventoryChecks": {
+    "jsonHashMatches": true,
+    "csvHashMatches": true,
+    "jsonRowCountMatches": true,
+    "csvRowCountMatches": true
+  },
+  "ancillary": {
+    "knownMixedScenarioCharge": 280,
+    "additionalPortProbe": {
+      "routerCalls": 2,
+      "layoutCalls": 0,
+      "compilerCalls": 0,
+      "compilerCallEvidence": "No compiler entrypoint is imported or called by the probe; routing-only candidate path and its exact source functions are shown in extracted-functions.ts.",
+      "rawTiming": "Two ancillary calls under concurrent experiment load; not a latency benchmark"
+    },
+    "completeDeduplicatedTotalKnown": false,
+    "allAncillaryWithin500Certified": false,
+    "explanation": "280 combines bounded scenario-invocation buckets, including repetitions and the two positive-control router calls. Browser, general-unit and exploratory invocation totals remain unmetered. Assertions and nested API calls are not distinct geometry trials."
+  },
+  "budget": {
+    "main": 8203,
+    "mainPlusReserved500": 8703,
+    "headroomBelow12000AfterReservation": 3297,
+    "lastRecordedTrialFinished": "2026-11-02T00:29:04.524Z",
+    "elapsedHoursToLastTrial": 1.650213658333333,
+    "allSessionDistinctTrialCeilingCertified": false,
+    "reason": "The main accounting is exact; the complete ancillary distinct-trial count is not established. No measured evidence of exceeding the ceiling was found."
+  },
+  "packaging": "Final ZIP/content manifest is the root's remaining packaging step; this audit does not certify a ZIP not yet created."
+}

@@ -1,0 +1,3575 @@
+{
+  "estimand": "Unchanged source compilation at three fixed layout configurations, followed by production routing with three selected scalar presets. Router overrides occur after compilation and cannot change compiler channel spacing.",
+  "cases": 12,
+  "joint_trials": 108,
+  "matched_default_routing_trials": 36,
+  "source_and_node_checks": [
+    {
+      "trial_id": "D-joint-pipelines-03-layout1-route1",
+      "baseline_id": "G-tune-pipelines-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout1-route2",
+      "baseline_id": "G-tune-pipelines-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout2-route1",
+      "baseline_id": "C-development-pipelines-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout1-route3",
+      "baseline_id": "G-tune-pipelines-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout2-route3",
+      "baseline_id": "C-development-pipelines-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout2-route2",
+      "baseline_id": "C-development-pipelines-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout3-route1",
+      "baseline_id": "C-development-pipelines-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout3-route2",
+      "baseline_id": "C-development-pipelines-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-pipelines-03-layout3-route3",
+      "baseline_id": "C-development-pipelines-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout1-route1",
+      "baseline_id": "G-tune-dags-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout1-route2",
+      "baseline_id": "G-tune-dags-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout1-route3",
+      "baseline_id": "G-tune-dags-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout2-route1",
+      "baseline_id": "C-development-dags-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout3-route1",
+      "baseline_id": "C-development-dags-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout3-route2",
+      "baseline_id": "C-development-dags-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout2-route2",
+      "baseline_id": "C-development-dags-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout3-route3",
+      "baseline_id": "C-development-dags-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-dags-03-layout2-route3",
+      "baseline_id": "C-development-dags-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout1-route1",
+      "baseline_id": "G-selected-development-hierarchies-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout2-route1",
+      "baseline_id": "C-development-hierarchies-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout1-route3",
+      "baseline_id": "G-selected-development-hierarchies-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout1-route2",
+      "baseline_id": "G-selected-development-hierarchies-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout2-route2",
+      "baseline_id": "C-development-hierarchies-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout3-route1",
+      "baseline_id": "C-development-hierarchies-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout2-route3",
+      "baseline_id": "C-development-hierarchies-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout3-route2",
+      "baseline_id": "C-development-hierarchies-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout1-route1",
+      "baseline_id": "G-tune-architecture-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout1-route2",
+      "baseline_id": "G-tune-architecture-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-hierarchies-03-layout3-route3",
+      "baseline_id": "C-development-hierarchies-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout2-route1",
+      "baseline_id": "C-development-architecture-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout1-route3",
+      "baseline_id": "G-tune-architecture-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout2-route2",
+      "baseline_id": "C-development-architecture-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout2-route3",
+      "baseline_id": "C-development-architecture-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout3-route1",
+      "baseline_id": "C-development-architecture-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout1-route1",
+      "baseline_id": "G-selected-development-cycles-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout1-route2",
+      "baseline_id": "G-selected-development-cycles-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout1-route3",
+      "baseline_id": "G-selected-development-cycles-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout2-route1",
+      "baseline_id": "C-development-cycles-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout2-route2",
+      "baseline_id": "C-development-cycles-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout2-route3",
+      "baseline_id": "C-development-cycles-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout3-route1",
+      "baseline_id": "C-development-cycles-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout3-route2",
+      "baseline_id": "C-development-cycles-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-cycles-03-layout3-route3",
+      "baseline_id": "C-development-cycles-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout3-route2",
+      "baseline_id": "C-development-architecture-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-architecture-03-layout3-route3",
+      "baseline_id": "C-development-architecture-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout1-route1",
+      "baseline_id": "G-selected-development-networks-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout1-route3",
+      "baseline_id": "G-selected-development-networks-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout1-route2",
+      "baseline_id": "G-selected-development-networks-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout2-route1",
+      "baseline_id": "C-development-networks-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout2-route3",
+      "baseline_id": "C-development-networks-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout2-route2",
+      "baseline_id": "C-development-networks-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout3-route1",
+      "baseline_id": "C-development-networks-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout1-route1",
+      "baseline_id": "G-selected-development-disconnected-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout1-route2",
+      "baseline_id": "G-selected-development-disconnected-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout1-route3",
+      "baseline_id": "G-selected-development-disconnected-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout2-route1",
+      "baseline_id": "C-development-disconnected-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout3-route3",
+      "baseline_id": "C-development-networks-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-networks-03-layout3-route2",
+      "baseline_id": "C-development-networks-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout2-route2",
+      "baseline_id": "C-development-disconnected-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout2-route3",
+      "baseline_id": "C-development-disconnected-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout3-route2",
+      "baseline_id": "C-development-disconnected-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout3-route1",
+      "baseline_id": "C-development-disconnected-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-disconnected-03-layout3-route3",
+      "baseline_id": "C-development-disconnected-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout1-route1",
+      "baseline_id": "G-selected-development-routing-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout1-route3",
+      "baseline_id": "G-selected-development-routing-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout1-route2",
+      "baseline_id": "G-selected-development-routing-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout2-route1",
+      "baseline_id": "C-development-routing-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout3-route1",
+      "baseline_id": "C-development-routing-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout2-route2",
+      "baseline_id": "C-development-routing-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout3-route2",
+      "baseline_id": "C-development-routing-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout2-route3",
+      "baseline_id": "C-development-routing-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout1-route1",
+      "baseline_id": "G-selected-development-containers-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-routing-03-layout3-route3",
+      "baseline_id": "C-development-routing-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout1-route2",
+      "baseline_id": "G-selected-development-containers-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout1-route3",
+      "baseline_id": "G-selected-development-containers-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout2-route2",
+      "baseline_id": "C-development-containers-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout2-route1",
+      "baseline_id": "C-development-containers-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout2-route3",
+      "baseline_id": "C-development-containers-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout3-route1",
+      "baseline_id": "C-development-containers-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout1-route1",
+      "baseline_id": "G-selected-development-presentation-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout1-route2",
+      "baseline_id": "G-selected-development-presentation-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout1-route3",
+      "baseline_id": "G-selected-development-presentation-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout2-route1",
+      "baseline_id": "C-development-presentation-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout2-route2",
+      "baseline_id": "C-development-presentation-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout2-route3",
+      "baseline_id": "C-development-presentation-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout3-route2",
+      "baseline_id": "C-development-containers-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout3-route1",
+      "baseline_id": "C-development-presentation-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout3-route2",
+      "baseline_id": "C-development-presentation-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout1-route1",
+      "baseline_id": "G-tune-authored-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout1-route2",
+      "baseline_id": "G-tune-authored-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout1-route3",
+      "baseline_id": "G-tune-authored-03-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout2-route1",
+      "baseline_id": "C-development-authored-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout2-route2",
+      "baseline_id": "C-development-authored-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout2-route3",
+      "baseline_id": "C-development-authored-03-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-presentation-03-layout3-route3",
+      "baseline_id": "C-development-presentation-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout3-route1",
+      "baseline_id": "C-development-authored-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout3-route2",
+      "baseline_id": "C-development-authored-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout1-route1",
+      "baseline_id": "G-selected-development-recipes-02-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-containers-03-layout3-route3",
+      "baseline_id": "C-development-containers-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout1-route2",
+      "baseline_id": "G-selected-development-recipes-02-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-authored-03-layout3-route3",
+      "baseline_id": "C-development-authored-03-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout1-route3",
+      "baseline_id": "G-selected-development-recipes-02-compound-flow-p1",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout2-route1",
+      "baseline_id": "C-development-recipes-02-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout2-route2",
+      "baseline_id": "C-development-recipes-02-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout2-route3",
+      "baseline_id": "C-development-recipes-02-force-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout3-route1",
+      "baseline_id": "C-development-recipes-02-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout3-route2",
+      "baseline_id": "C-development-recipes-02-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    },
+    {
+      "trial_id": "D-joint-recipes-02-layout3-route3",
+      "baseline_id": "C-development-recipes-02-boundary-align-RIGHT",
+      "source_equal": true,
+      "max_node_delta": 0
+    }
+  ],
+  "per_layout_policy": [
+    {
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "clearance-22",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 9,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 2,
+      "both_valid_pairs": 9,
+      "mean_balanced_delta_both_valid": -1.7136583333333333,
+      "mean_traceable_delta_both_valid": -2.259442111111111,
+      "mean_route_length_delta_both_valid": 216.99999999999997,
+      "mean_area_delta_both_valid": 8916.333333333334,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "D-joint-networks-03-layout3-route1",
+        "D-joint-recipes-02-layout3-route1"
+      ],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-22",
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout3-route1",
+        "baseline_id": "C-development-architecture-03-boundary-align-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 6,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 938.2457869999998,
+        "baseline_routing_ms": 0.3387399999774061,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 1,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -2,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 641,
+        "delta_detourMean": 0.0036649999999998073,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": -1,
+        "delta_titleBandHits": -1,
+        "delta_area": 21210,
+        "delta_aspectError": -0.04058500000000009,
+        "delta_diPer10": -12.727273,
+        "delta_score_balanced": -12.727273,
+        "delta_score_traceable": -15.454545,
+        "delta_score_direct": -15.0,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:boundary-align:RIGHT",
+        "routing_policy": "clearance-22",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-22",
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout3-route1",
+        "baseline_id": "C-development-routing-03-boundary-align-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 4,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 0.6841029999995953,
+        "baseline_routing_ms": 0.4409260000102222,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -1,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 400,
+        "delta_bends": 3,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 1068,
+        "delta_detourMean": 0.05672299999999986,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 45201,
+        "delta_aspectError": -0.029727999999999977,
+        "delta_diPer10": 1.304348,
+        "delta_score_balanced": 1.304348,
+        "delta_score_traceable": 0.8695660000000007,
+        "delta_score_direct": 4.1304349999999985,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:boundary-align:RIGHT",
+        "routing_policy": "clearance-22",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "clearance-4",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 8,
+      "geometry_changed_over_1px": 8,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": -1.458681272727273,
+      "mean_traceable_delta_both_valid": -2.041309818181818,
+      "mean_route_length_delta_both_valid": -75.16727272727275,
+      "mean_area_delta_both_valid": 514.8181818181819,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-4",
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout3-route2",
+        "baseline_id": "C-development-networks-03-boundary-align-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 7,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1297.3156660000022,
+        "baseline_routing_ms": 715.1741660000407,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 1,
+        "delta_sharedLength": -36,
+        "delta_laneDeficit": -1556.0,
+        "delta_bends": -2,
+        "delta_tinyJogs": 2,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -688.8400000000001,
+        "delta_detourMean": -0.13443699999999992,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -15364,
+        "delta_aspectError": -0.014203000000000021,
+        "delta_diPer10": -9.411765000000003,
+        "delta_score_balanced": -9.411765000000003,
+        "delta_score_traceable": -17.058822999999997,
+        "delta_score_direct": -10.882353000000002,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:boundary-align:RIGHT",
+        "routing_policy": "clearance-4",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-4",
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout3-route2",
+        "baseline_id": "C-development-routing-03-boundary-align-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1421.881061,
+        "baseline_routing_ms": 0.4409260000102222,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -4,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 3,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 2,
+        "delta_backEdges": 0,
+        "delta_routeLength": 374,
+        "delta_detourMean": 0.005965999999999916,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 13917,
+        "delta_aspectError": -0.04523299999999997,
+        "delta_diPer10": 2.608696,
+        "delta_score_balanced": 2.608696,
+        "delta_score_traceable": 0.8695660000000007,
+        "delta_score_direct": 9.565218,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:boundary-align:RIGHT",
+        "routing_policy": "clearance-4",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "portGap-28",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 8,
+      "geometry_changed_over_1px": 8,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": -0.04605345454545457,
+      "mean_traceable_delta_both_valid": -0.3954964545454544,
+      "mean_route_length_delta_both_valid": 27.76272727272722,
+      "mean_area_delta_both_valid": 1665.7272727272727,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "portGap-28",
+        "case_id": "cycles-03",
+        "family": "cycles",
+        "trial_id": "D-joint-cycles-03-layout3-route3",
+        "baseline_id": "C-development-cycles-03-boundary-align-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 45.66017500000089,
+        "baseline_routing_ms": 20.343116000003647,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -2,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 144.1199999999999,
+        "delta_detourMean": -0.005853000000000108,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 0,
+        "delta_aspectError": 0.0,
+        "delta_diPer10": -2,
+        "delta_score_balanced": -2,
+        "delta_score_traceable": -2,
+        "delta_score_direct": -4,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:boundary-align:RIGHT",
+        "routing_policy": "portGap-28",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "portGap-28",
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout3-route3",
+        "baseline_id": "C-development-routing-03-boundary-align-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1749.7946410000004,
+        "baseline_routing_ms": 0.4409260000102222,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -4,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 160,
+        "delta_bends": 4,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 1,
+        "delta_backEdges": 0,
+        "delta_routeLength": 432,
+        "delta_detourMean": 0.014410999999999952,
+        "delta_labelDefects": 1,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 14555,
+        "delta_aspectError": -0.059203000000000006,
+        "delta_diPer10": 3.478261,
+        "delta_score_balanced": 3.478261,
+        "delta_score_traceable": 3.0434790000000014,
+        "delta_score_direct": 8.695652,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:boundary-align:RIGHT",
+        "routing_policy": "portGap-28",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "clearance-22",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 10,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 1,
+      "both_valid_pairs": 10,
+      "mean_balanced_delta_both_valid": 2.0829303999999995,
+      "mean_traceable_delta_both_valid": 4.4348176,
+      "mean_route_length_delta_both_valid": 579.23,
+      "mean_area_delta_both_valid": 10617.95,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "D-joint-recipes-02-layout2-route1"
+      ],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-22",
+        "case_id": "cycles-03",
+        "family": "cycles",
+        "trial_id": "D-joint-cycles-03-layout2-route1",
+        "baseline_id": "C-development-cycles-03-force-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 6.173278999998729,
+        "baseline_routing_ms": 21.35762700001942,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -3,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 182.94000000000005,
+        "delta_detourMean": -0.007438999999999973,
+        "delta_labelDefects": -2,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 17340,
+        "delta_aspectError": -0.08201400000000003,
+        "delta_diPer10": -4,
+        "delta_score_balanced": -4,
+        "delta_score_traceable": -6,
+        "delta_score_direct": -6,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:force:RIGHT",
+        "routing_policy": "clearance-22",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-22",
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout2-route1",
+        "baseline_id": "C-development-networks-03-force-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 7,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1053.7997770000002,
+        "baseline_routing_ms": 662.511342999991,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 16,
+        "delta_sharedLength": 35,
+        "delta_laneDeficit": 12974.26,
+        "delta_bends": 22,
+        "delta_tinyJogs": 1,
+        "delta_hooks": 3,
+        "delta_backEdges": 0,
+        "delta_routeLength": 4145.36,
+        "delta_detourMean": 0.43624600000000013,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 74776,
+        "delta_aspectError": -0.04723800000000001,
+        "delta_diPer10": 21.176470999999996,
+        "delta_score_balanced": 21.176470999999996,
+        "delta_score_traceable": 44.705883,
+        "delta_score_direct": 32.941176999999996,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:force:RIGHT",
+        "routing_policy": "clearance-22",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "clearance-4",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 9,
+      "geometry_changed_over_1px": 9,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 0.0453295454545453,
+      "mean_traceable_delta_both_valid": 0.7406135454545456,
+      "mean_route_length_delta_both_valid": 61.349090909090904,
+      "mean_area_delta_both_valid": 1265.1818181818182,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-4",
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout2-route2",
+        "baseline_id": "C-development-networks-03-force-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1010.6080630000033,
+        "baseline_routing_ms": 662.511342999991,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": -740.0,
+        "delta_bends": -2,
+        "delta_tinyJogs": -1,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 248.17999999999984,
+        "delta_detourMean": 0.03580500000000009,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 0,
+        "delta_aspectError": 0.0,
+        "delta_diPer10": -4.117647000000002,
+        "delta_score_balanced": -4.117647000000002,
+        "delta_score_traceable": -7.647058999999999,
+        "delta_score_direct": -4.705882000000003,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:force:RIGHT",
+        "routing_policy": "clearance-4",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-4",
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout2-route2",
+        "baseline_id": "C-development-routing-03-force-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1421.0962310000032,
+        "baseline_routing_ms": 0.20435900008305907,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -4,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 3,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 2,
+        "delta_backEdges": 0,
+        "delta_routeLength": 374,
+        "delta_detourMean": 0.005965999999999916,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 13917,
+        "delta_aspectError": -0.04523299999999997,
+        "delta_diPer10": 2.608696,
+        "delta_score_balanced": 2.608696,
+        "delta_score_traceable": 0.8695660000000007,
+        "delta_score_direct": 9.565218,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:force:RIGHT",
+        "routing_policy": "clearance-4",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "portGap-28",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 9,
+      "geometry_changed_over_1px": 9,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 0.03853581818181812,
+      "mean_traceable_delta_both_valid": -0.17948609090909065,
+      "mean_route_length_delta_both_valid": 119.66545454545454,
+      "mean_area_delta_both_valid": 2652.2727272727275,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "portGap-28",
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout2-route3",
+        "baseline_id": "C-development-networks-03-force-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 696.1618109999981,
+        "baseline_routing_ms": 662.511342999991,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -2,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": -546.6400000000003,
+        "delta_bends": -4,
+        "delta_tinyJogs": -2,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 156.11000000000013,
+        "delta_detourMean": 0.09997999999999996,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 0,
+        "delta_aspectError": 0.0,
+        "delta_diPer10": -4.705882000000001,
+        "delta_score_balanced": -4.705882000000001,
+        "delta_score_traceable": -9.411763999999998,
+        "delta_score_direct": -5.294117,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:force:RIGHT",
+        "routing_policy": "portGap-28",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "portGap-28",
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout2-route3",
+        "baseline_id": "C-development-routing-03-force-RIGHT",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 3,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1832.0119520000007,
+        "baseline_routing_ms": 0.20435900008305907,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -4,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 160,
+        "delta_bends": 4,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 1,
+        "delta_backEdges": 0,
+        "delta_routeLength": 432,
+        "delta_detourMean": 0.014410999999999952,
+        "delta_labelDefects": 1,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 14555,
+        "delta_aspectError": -0.059203000000000006,
+        "delta_diPer10": 3.478261,
+        "delta_score_balanced": 3.478261,
+        "delta_score_traceable": 3.0434790000000014,
+        "delta_score_direct": 8.695652,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "engine:force:RIGHT",
+        "routing_policy": "portGap-28",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "clearance-22",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 10,
+      "geometry_changed_over_1px": 10,
+      "hard_valid_candidates": 7,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 4,
+      "both_valid_pairs": 7,
+      "mean_balanced_delta_both_valid": -1.4073858571428575,
+      "mean_traceable_delta_both_valid": -3.008447714285714,
+      "mean_route_length_delta_both_valid": 68.85428571428572,
+      "mean_area_delta_both_valid": -5437.071428571428,
+      "gain_witnesses": [],
+      "loss_witnesses": [
+        "D-joint-dags-03-layout1-route1",
+        "D-joint-hierarchies-03-layout1-route1",
+        "D-joint-disconnected-03-layout1-route1",
+        "D-joint-recipes-02-layout1-route1"
+      ],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-22",
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout1-route1",
+        "baseline_id": "G-tune-architecture-03-compound-flow-p1",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 1,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 858.427090000001,
+        "baseline_routing_ms": 1434.4751539999997,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -1,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 123,
+        "delta_detourMean": 0.007923000000000124,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 2838,
+        "delta_aspectError": -0.005515999999999965,
+        "delta_diPer10": -6.363637000000001,
+        "delta_score_balanced": -6.363637000000001,
+        "delta_score_traceable": -10.909090999999997,
+        "delta_score_direct": -6.363636,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "tuned:compound-flow:RIGHT:p1",
+        "routing_policy": "clearance-22",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-22",
+        "case_id": "cycles-03",
+        "family": "cycles",
+        "trial_id": "D-joint-cycles-03-layout1-route1",
+        "baseline_id": "G-selected-development-cycles-03-compound-flow-p1",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 1,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 10.099904999999126,
+        "baseline_routing_ms": 20.667221000010613,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": -1,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 84.98000000000002,
+        "delta_detourMean": 0.00197500000000006,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -30419,
+        "delta_aspectError": 0.13941999999999988,
+        "delta_diPer10": 2,
+        "delta_score_balanced": 2,
+        "delta_score_traceable": 3,
+        "delta_score_direct": 4,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "tuned:compound-flow:RIGHT:p1",
+        "routing_policy": "clearance-22",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "clearance-4",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 9,
+      "geometry_changed_over_1px": 9,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": -1.5809853636363638,
+      "mean_traceable_delta_both_valid": -4.010612363636363,
+      "mean_route_length_delta_both_valid": -155.3209090909091,
+      "mean_area_delta_both_valid": -13682.09090909091,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-4",
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout1-route2",
+        "baseline_id": "G-selected-development-networks-03-compound-flow-p1",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 10,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 892.1295939999982,
+        "baseline_routing_ms": 742.9741809999978,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -15,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": -67.27999999999997,
+        "delta_bends": 1,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -119.59000000000015,
+        "delta_detourMean": -0.0034810000000000674,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -2184,
+        "delta_aspectError": -0.006159999999999943,
+        "delta_diPer10": -7.058823000000001,
+        "delta_score_balanced": -7.058823000000001,
+        "delta_score_traceable": -22.941176,
+        "delta_score_direct": -2.6470590000000023,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "tuned:compound-flow:RIGHT:p1",
+        "routing_policy": "clearance-4",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "clearance-4",
+        "case_id": "cycles-03",
+        "family": "cycles",
+        "trial_id": "D-joint-cycles-03-layout1-route2",
+        "baseline_id": "G-selected-development-cycles-03-compound-flow-p1",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 2,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 27.23582300000271,
+        "baseline_routing_ms": 20.667221000010613,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 0,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 0,
+        "delta_bends": 3,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": -162.94000000000005,
+        "delta_detourMean": 0.01045600000000002,
+        "delta_labelDefects": 2,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": -46429,
+        "delta_aspectError": 0.22143299999999977,
+        "delta_diPer10": 4,
+        "delta_score_balanced": 4,
+        "delta_score_traceable": 6,
+        "delta_score_direct": 6,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "tuned:compound-flow:RIGHT:p1",
+        "routing_policy": "clearance-4",
+        "identical_compiled_source": true
+      }
+    },
+    {
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "portGap-28",
+      "paired_jobs": 12,
+      "comparable_geometry": 12,
+      "exact_geometry_changed": 8,
+      "geometry_changed_over_1px": 8,
+      "hard_valid_candidates": 11,
+      "hard_valid_baselines": 11,
+      "valid_gained": 0,
+      "valid_lost": 0,
+      "both_valid_pairs": 11,
+      "mean_balanced_delta_both_valid": 0.6616642727272726,
+      "mean_traceable_delta_both_valid": 0.8838959999999999,
+      "mean_route_length_delta_both_valid": 88.05454545454549,
+      "mean_area_delta_both_valid": 3346.8863636363635,
+      "gain_witnesses": [],
+      "loss_witnesses": [],
+      "best_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "portGap-28",
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout1-route3",
+        "baseline_id": "G-selected-development-networks-03-compound-flow-p1",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 6,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 792.9286790000006,
+        "baseline_routing_ms": 742.9741809999978,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": -6,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": -496,
+        "delta_bends": 1,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 0,
+        "delta_backEdges": 0,
+        "delta_routeLength": 149.52000000000044,
+        "delta_detourMean": 0.009950000000000125,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 5824,
+        "delta_aspectError": 0.016243999999999925,
+        "delta_diPer10": -4.705882000000001,
+        "delta_score_balanced": -4.705882000000001,
+        "delta_score_traceable": -12.941176000000002,
+        "delta_score_direct": -2.9411760000000022,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "tuned:compound-flow:RIGHT:p1",
+        "routing_policy": "portGap-28",
+        "identical_compiled_source": true
+      },
+      "worst_soft_witness": {
+        "stratum": "source-layout-then-routing",
+        "control": "joint-routing",
+        "level": "portGap-28",
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout1-route3",
+        "baseline_id": "G-selected-development-routing-03-compound-flow-p1",
+        "status": "ok",
+        "baseline_status": "ok",
+        "hard_valid": true,
+        "baseline_hard_valid": true,
+        "valid_gained": false,
+        "valid_lost": false,
+        "exact_geometry_changed": true,
+        "geometry_changed_over_1px": true,
+        "rounded_bin_hash_changed": true,
+        "rendered_path_changed": true,
+        "changed_port_pair_count": 4,
+        "max_node_box_coordinate_delta": 0,
+        "routing_ms": 1557.341339000006,
+        "baseline_routing_ms": 1157.7915360000043,
+        "delta_hardDefects": 0,
+        "delta_layoutHardDefects": 0,
+        "delta_routingHardDefects": 0,
+        "delta_requiredIntentFailures": 0,
+        "delta_blockedRoutes": 0,
+        "delta_overlaps": 0,
+        "delta_throughNodes": 0,
+        "delta_authoredSideViolations": 0,
+        "delta_pinScopeViolations": 0,
+        "delta_crossings": 1,
+        "delta_sharedLength": 0,
+        "delta_laneDeficit": 384,
+        "delta_bends": 4,
+        "delta_tinyJogs": 0,
+        "delta_hooks": 1,
+        "delta_backEdges": 0,
+        "delta_routeLength": 560,
+        "delta_detourMean": 0.025468999999999964,
+        "delta_labelDefects": 0,
+        "delta_titleTextHits": 0,
+        "delta_titleBandHits": 0,
+        "delta_area": 30991.75,
+        "delta_aspectError": -0.02791699999999997,
+        "delta_diPer10": 4.3478259999999995,
+        "delta_score_balanced": 4.3478259999999995,
+        "delta_score_traceable": 7.391304,
+        "delta_score_direct": 8.043478,
+        "candidate_edit_changedSides": null,
+        "baseline_edit_changedSides": null,
+        "delta_edit_changedSides": null,
+        "candidate_edit_changedSideRate": null,
+        "baseline_edit_changedSideRate": null,
+        "delta_edit_changedSideRate": null,
+        "candidate_edit_changedRoutes": null,
+        "baseline_edit_changedRoutes": null,
+        "delta_edit_changedRoutes": null,
+        "candidate_edit_changedRouteRate": null,
+        "baseline_edit_changedRouteRate": null,
+        "delta_edit_changedRouteRate": null,
+        "candidate_edit_meanDisplacement": null,
+        "baseline_edit_meanDisplacement": null,
+        "delta_edit_meanDisplacement": null,
+        "candidate_edit_translationAdjustedMean": null,
+        "baseline_edit_translationAdjustedMean": null,
+        "delta_edit_translationAdjustedMean": null,
+        "candidate_edit_orderFlipRate": null,
+        "baseline_edit_orderFlipRate": null,
+        "delta_edit_orderFlipRate": null,
+        "layout_method": "tuned:compound-flow:RIGHT:p1",
+        "routing_policy": "portGap-28",
+        "identical_compiled_source": true
+      }
+    }
+  ],
+  "default_three_layout_oracle": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:default",
+      "engine:force:RIGHT|routing:default",
+      "tuned:compound-flow:RIGHT:p1|routing:default"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 39,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 1.5122486516642548,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 9,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 6,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 8,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 8,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 8,
+        "feasible": 11
+      }
+    }
+  },
+  "all_three_layouts_four_routes_oracle": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-22",
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:boundary-align:RIGHT|routing:default",
+      "engine:boundary-align:RIGHT|routing:portGap-28",
+      "engine:force:RIGHT|routing:clearance-22",
+      "engine:force:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:default",
+      "engine:force:RIGHT|routing:portGap-28",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+      "tuned:compound-flow:RIGHT:p1|routing:default",
+      "tuned:compound-flow:RIGHT:p1|routing:portGap-28"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 55,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.0,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 11,
+        "feasible": 11
+      }
+    }
+  },
+  "global_single_configurations": [
+    {
+      "methods": [
+        "engine:force:RIGHT|routing:default"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 23,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 3.692951174117737,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 5,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:boundary-align:RIGHT|routing:default"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 22,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 7.609184276713158,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 5,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-4"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 21,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 6.0847940797827516,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 5,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:boundary-align:RIGHT|routing:portGap-28"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 20,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 7.568227042319028,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 5,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 20,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 9.417992181234377,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 4,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:force:RIGHT|routing:portGap-28"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 18,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 3.755240383871359,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 4,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:default"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 16,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 11.284722942192381,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 3,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:portGap-28"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 16,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 12.083393430507773,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 3,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:force:RIGHT|routing:clearance-4"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 11,
+      "cases": 12,
+      "acceptable_profile_jobs": 15,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 3.9934495486429533,
+      "score_regret_available_jobs": 55,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 2,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 3,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:force:RIGHT|routing:clearance-22"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 10,
+      "cases": 12,
+      "acceptable_profile_jobs": 16,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 5.388272557928694,
+      "score_regret_available_jobs": 50,
+      "per_profile": {
+        "readable": {
+          "acceptable": 4,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 3,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-22"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 9,
+      "cases": 12,
+      "acceptable_profile_jobs": 20,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 3.984357563432213,
+      "score_regret_available_jobs": 45,
+      "per_profile": {
+        "readable": {
+          "acceptable": 2,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 5,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 5,
+          "feasible": 11
+        }
+      }
+    },
+    {
+      "methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-22"
+      ],
+      "always_available": [],
+      "hard_valid_case_union": 7,
+      "cases": 12,
+      "acceptable_profile_jobs": 15,
+      "profile_jobs": 60,
+      "feasible_profile_jobs": 55,
+      "equal_family_mean_regret_on_covered_valid_jobs": 2.927488642980312,
+      "score_regret_available_jobs": 35,
+      "per_profile": {
+        "readable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "compact": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "traceable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "stable": {
+          "acceptable": 3,
+          "feasible": 11
+        },
+        "specialist": {
+          "acceptable": 3,
+          "feasible": 11
+        }
+      }
+    }
+  ],
+  "best_global_three_configurations": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:portGap-28",
+      "engine:force:RIGHT|routing:default",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 39,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.9145271840716088,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 8,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 7,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 8,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 8,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 8,
+        "feasible": 11
+      }
+    }
+  },
+  "per_layout": [
+    {
+      "layout_method": "engine:boundary-align:RIGHT",
+      "default": {
+        "methods": [
+          "engine:boundary-align:RIGHT|routing:default"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 22,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 55,
+        "equal_family_mean_regret_on_covered_valid_jobs": 7.609184276713158,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 4,
+            "feasible": 11
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 11
+          },
+          "traceable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "stable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "specialist": {
+            "acceptable": 5,
+            "feasible": 11
+          }
+        }
+      },
+      "default_plus_3_route_alternatives": {
+        "methods": [
+          "engine:boundary-align:RIGHT|routing:clearance-22",
+          "engine:boundary-align:RIGHT|routing:clearance-4",
+          "engine:boundary-align:RIGHT|routing:default",
+          "engine:boundary-align:RIGHT|routing:portGap-28"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 27,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 55,
+        "equal_family_mean_regret_on_covered_valid_jobs": 4.153575362998978,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 4,
+            "feasible": 11
+          },
+          "compact": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "traceable": {
+            "acceptable": 6,
+            "feasible": 11
+          },
+          "stable": {
+            "acceptable": 6,
+            "feasible": 11
+          },
+          "specialist": {
+            "acceptable": 6,
+            "feasible": 11
+          }
+        }
+      }
+    },
+    {
+      "layout_method": "engine:force:RIGHT",
+      "default": {
+        "methods": [
+          "engine:force:RIGHT|routing:default"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 23,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 55,
+        "equal_family_mean_regret_on_covered_valid_jobs": 3.692951174117737,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 11
+          },
+          "traceable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "stable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "specialist": {
+            "acceptable": 5,
+            "feasible": 11
+          }
+        }
+      },
+      "default_plus_3_route_alternatives": {
+        "methods": [
+          "engine:force:RIGHT|routing:clearance-22",
+          "engine:force:RIGHT|routing:clearance-4",
+          "engine:force:RIGHT|routing:default",
+          "engine:force:RIGHT|routing:portGap-28"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 26,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 55,
+        "equal_family_mean_regret_on_covered_valid_jobs": 2.5566698008129194,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 7,
+            "feasible": 11
+          },
+          "compact": {
+            "acceptable": 4,
+            "feasible": 11
+          },
+          "traceable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "stable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "specialist": {
+            "acceptable": 5,
+            "feasible": 11
+          }
+        }
+      }
+    },
+    {
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "default": {
+        "methods": [
+          "tuned:compound-flow:RIGHT:p1|routing:default"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 16,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 55,
+        "equal_family_mean_regret_on_covered_valid_jobs": 11.284722942192381,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 4,
+            "feasible": 11
+          },
+          "compact": {
+            "acceptable": 3,
+            "feasible": 11
+          },
+          "traceable": {
+            "acceptable": 3,
+            "feasible": 11
+          },
+          "stable": {
+            "acceptable": 3,
+            "feasible": 11
+          },
+          "specialist": {
+            "acceptable": 3,
+            "feasible": 11
+          }
+        }
+      },
+      "default_plus_3_route_alternatives": {
+        "methods": [
+          "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+          "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+          "tuned:compound-flow:RIGHT:p1|routing:default",
+          "tuned:compound-flow:RIGHT:p1|routing:portGap-28"
+        ],
+        "always_available": [],
+        "hard_valid_case_union": 11,
+        "cases": 12,
+        "acceptable_profile_jobs": 29,
+        "profile_jobs": 60,
+        "feasible_profile_jobs": 55,
+        "equal_family_mean_regret_on_covered_valid_jobs": 7.4762394778648416,
+        "score_regret_available_jobs": 55,
+        "per_profile": {
+          "readable": {
+            "acceptable": 5,
+            "feasible": 11
+          },
+          "compact": {
+            "acceptable": 6,
+            "feasible": 11
+          },
+          "traceable": {
+            "acceptable": 6,
+            "feasible": 11
+          },
+          "stable": {
+            "acceptable": 6,
+            "feasible": 11
+          },
+          "specialist": {
+            "acceptable": 6,
+            "feasible": 11
+          }
+        }
+      }
+    }
+  ],
+  "joint_only_acceptable_jobs": [
+    {
+      "case_id": "architecture-03",
+      "family": "architecture",
+      "profile": "readable",
+      "joint_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout2-route1",
+        "method": "engine:force:RIGHT|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-architecture-03-layout2-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-development-architecture-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-architecture-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 11.899279114279324,
+      "default_score": 13.717461114279324,
+      "joint_acceptable_methods": [
+        "engine:force:RIGHT|routing:clearance-22",
+        "engine:force:RIGHT|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "architecture-03",
+      "family": "architecture",
+      "profile": "compact",
+      "joint_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout3-route1",
+        "method": "engine:boundary-align:RIGHT|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-architecture-03-layout3-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-development-architecture-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-architecture-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 11.55047305098533,
+      "default_score": 16.93493258162249,
+      "joint_acceptable_methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "architecture-03",
+      "family": "architecture",
+      "profile": "traceable",
+      "joint_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout3-route1",
+        "method": "engine:boundary-align:RIGHT|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-architecture-03-layout3-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-development-architecture-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-architecture-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 12.727273,
+      "default_score": 17.727273,
+      "joint_acceptable_methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "architecture-03",
+      "family": "architecture",
+      "profile": "stable",
+      "joint_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout3-route1",
+        "method": "engine:boundary-align:RIGHT|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-architecture-03-layout3-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-development-architecture-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-architecture-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 6.818182,
+      "default_score": 10.0,
+      "joint_acceptable_methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "architecture-03",
+      "family": "architecture",
+      "profile": "specialist",
+      "joint_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "D-joint-architecture-03-layout3-route1",
+        "method": "engine:boundary-align:RIGHT|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-architecture-03-layout3-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "architecture-03",
+        "family": "architecture",
+        "trial_id": "C-development-architecture-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-architecture-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 6.818182,
+      "default_score": 10.0,
+      "joint_acceptable_methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "dags-03",
+      "family": "dags",
+      "profile": "compact",
+      "joint_oracle": {
+        "case_id": "dags-03",
+        "family": "dags",
+        "trial_id": "D-joint-dags-03-layout1-route2",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-dags-03-layout1-route2.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "dags-03",
+        "family": "dags",
+        "trial_id": "C-development-dags-03-boundary-align-RIGHT",
+        "method": "engine:boundary-align:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-dags-03-boundary-align-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 1.7256042696705056,
+      "default_score": 3.5242950895035188,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "disconnected-03",
+      "family": "disconnected",
+      "profile": "compact",
+      "joint_oracle": {
+        "case_id": "disconnected-03",
+        "family": "disconnected",
+        "trial_id": "D-joint-disconnected-03-layout3-route2",
+        "method": "engine:boundary-align:RIGHT|routing:clearance-4",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-disconnected-03-layout3-route2.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "disconnected-03",
+        "family": "disconnected",
+        "trial_id": "C-development-disconnected-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-disconnected-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 13.784873926242508,
+      "default_score": 16.55639463519057,
+      "joint_acceptable_methods": [
+        "engine:boundary-align:RIGHT|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "networks-03",
+      "family": "networks",
+      "profile": "readable",
+      "joint_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout2-route3",
+        "method": "engine:force:RIGHT|routing:portGap-28",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-networks-03-layout2-route3.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "C-development-networks-03-force-RIGHT",
+        "method": "engine:force:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-networks-03-force-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 17.24944498460875,
+      "default_score": 22.54356198460875,
+      "joint_acceptable_methods": [
+        "engine:force:RIGHT|routing:clearance-4",
+        "engine:force:RIGHT|routing:portGap-28"
+      ]
+    },
+    {
+      "case_id": "networks-03",
+      "family": "networks",
+      "profile": "compact",
+      "joint_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout1-route2",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-networks-03-layout1-route2.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "G-selected-development-networks-03-compound-flow-p1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/G-selected-development-networks-03-compound-flow-p1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 12.46267966133106,
+      "default_score": 19.583103553790245,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "networks-03",
+      "family": "networks",
+      "profile": "traceable",
+      "joint_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout1-route2",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-networks-03-layout1-route2.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "G-selected-development-networks-03-compound-flow-p1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/G-selected-development-networks-03-compound-flow-p1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 15.882353,
+      "default_score": 38.823529,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "networks-03",
+      "family": "networks",
+      "profile": "stable",
+      "joint_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout1-route2",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-networks-03-layout1-route2.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "G-selected-development-networks-03-compound-flow-p1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/G-selected-development-networks-03-compound-flow-p1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 7.647059,
+      "default_score": 14.705882,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "networks-03",
+      "family": "networks",
+      "profile": "specialist",
+      "joint_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "D-joint-networks-03-layout1-route2",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-networks-03-layout1-route2.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "networks-03",
+        "family": "networks",
+        "trial_id": "G-selected-development-networks-03-compound-flow-p1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/G-selected-development-networks-03-compound-flow-p1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 7.647059,
+      "default_score": 14.705882,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+      ]
+    },
+    {
+      "case_id": "routing-03",
+      "family": "routing",
+      "profile": "compact",
+      "joint_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout1-route1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-routing-03-layout1-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "C-development-routing-03-boundary-align-RIGHT",
+        "method": "engine:boundary-align:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-routing-03-boundary-align-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 5.6624994376492035,
+      "default_score": 8.037920963501636,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "routing-03",
+      "family": "routing",
+      "profile": "traceable",
+      "joint_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout1-route1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-routing-03-layout1-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "C-development-routing-03-boundary-align-RIGHT",
+        "method": "engine:boundary-align:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-routing-03-boundary-align-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 5.0,
+      "default_score": 10.217391,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "routing-03",
+      "family": "routing",
+      "profile": "stable",
+      "joint_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout1-route1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-routing-03-layout1-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "C-development-routing-03-boundary-align-RIGHT",
+        "method": "engine:boundary-align:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-routing-03-boundary-align-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 4.565217,
+      "default_score": 5.869565,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-22"
+      ]
+    },
+    {
+      "case_id": "routing-03",
+      "family": "routing",
+      "profile": "specialist",
+      "joint_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "D-joint-routing-03-layout1-route1",
+        "method": "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/D-joint-routing-03-layout1-route1.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "default_oracle": {
+        "case_id": "routing-03",
+        "family": "routing",
+        "trial_id": "C-development-routing-03-boundary-align-RIGHT",
+        "method": "engine:boundary-align:RIGHT|routing:default",
+        "status": "ok",
+        "hard_valid": true,
+        "geometry": "data/geometry/C-development-routing-03-boundary-align-RIGHT.json.gz",
+        "hard": [],
+        "intent_failures": []
+      },
+      "joint_score": 4.565217,
+      "default_score": 5.869565,
+      "joint_acceptable_methods": [
+        "tuned:compound-flow:RIGHT:p1|routing:clearance-22"
+      ]
+    }
+  ],
+  "oracle_caution": "Oracle coverage is a retrospective upper bound, not an implemented selector; no partial-grid outcome is imputed.",
+  "fixed_global_joint_choice": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-4"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 21,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 6.0847940797827516,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 3,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 4,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 4,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 5,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 5,
+        "feasible": 11
+      }
+    }
+  },
+  "fixed_three_joint_portfolio": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 36,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 1.038350308430693,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 7,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 9,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 6,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 7,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 7,
+        "feasible": 11
+      }
+    }
+  },
+  "nine_joint_oracle": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-22",
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:boundary-align:RIGHT|routing:portGap-28",
+      "engine:force:RIGHT|routing:clearance-22",
+      "engine:force:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:portGap-28",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+      "tuned:compound-flow:RIGHT:p1|routing:portGap-28"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 54,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.02657519762586773,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 10,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 11,
+        "feasible": 11
+      }
+    }
+  }
+}

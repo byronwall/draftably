@@ -1,0 +1,194 @@
+{
+  "seed": 20261102,
+  "pairs": 24,
+  "counts": {
+    "family": 12,
+    "frozen-portfolio-regression": 4,
+    "omitted-engine": 4,
+    "metric-directness": 4
+  },
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "selectionCodeSha256": "fde1ed43af2d34da2cc3e312c2a4e17786bd44615343b44e2550275c1a008319",
+  "fittedOrChangedPolicy": false,
+  "unrenderableComparisons": [
+    {
+      "category": "family",
+      "caseId": "dags-06",
+      "reason": "Fewer than two distinct completed source geometries; failures remain in coverage."
+    },
+    {
+      "category": "family",
+      "caseId": "architecture-06",
+      "reason": "Fewer than two distinct completed source geometries; failures remain in coverage."
+    },
+    {
+      "category": "family",
+      "caseId": "authored-06",
+      "reason": "Fewer than two distinct completed source geometries; failures remain in coverage."
+    },
+    {
+      "category": "family",
+      "caseId": "authored-05",
+      "reason": "Fewer than two distinct completed source geometries; failures remain in coverage."
+    },
+    {
+      "category": "family",
+      "caseId": "recipes-05",
+      "reason": "Fewer than two distinct completed source geometries; failures remain in coverage."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    },
+    {
+      "category": "frozen-portfolio-regression",
+      "A": null,
+      "B": null,
+      "reason": "No two canonical completed outputs."
+    }
+  ],
+  "identityNegativeControls": [
+    "P047"
+  ],
+  "note": "Outcome-targeted witnesses supplement the seeded sample; this is not a random population-accuracy estimate."
+}

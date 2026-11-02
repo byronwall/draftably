@@ -1,0 +1,15 @@
+flowchart TD
+    A["Requested operation"] --> B{"Intent"}
+    B -->|"Appearance only"| C["Retain geometry"]
+    B -->|"Improve local arrangement"| D["Warm preview with pins and scope"]
+    B -->|"Direction or format"| E["Source rebuild preview"]
+    B -->|"Sequence, lanes, or cells"| F["Explicit structural recipe"]
+    F --> E
+    C --> G["Normal appearance edit and Undo"]
+    D --> H{"Review geometry and constraints"}
+    E --> H
+    H -->|"Failure or discard"| I["Keep current and show diagnostics"]
+    H -->|"Accept warm result"| J["Save arrangement"]
+    H -->|"Accept rebuild"| K["Save source recipe"]
+    J --> L["One Undo step; replay saved source"]
+    K --> L

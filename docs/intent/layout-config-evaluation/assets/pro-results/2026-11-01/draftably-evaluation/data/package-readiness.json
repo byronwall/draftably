@@ -1,0 +1,22 @@
+{
+  "at": "2026-11-02T00:55:40.339177+00:00",
+  "registeredTrialCount": 8203,
+  "canonicalStatuses": {
+    "ok": 7731,
+    "timed_out": 452,
+    "failed": 20
+  },
+  "mainReportsWithoutPlaceholders": 19,
+  "relativeReportLinksChecked": 124,
+  "missingRelativeReportLinks": [],
+  "inventoryRows": 175,
+  "inventoryValidationPassed": true,
+  "frozenVisualPairs": 63,
+  "geometryAlgorithmsExecutedByPackaging": 0,
+  "excludedReproducibleIntermediates": [
+    "__pycache__ directories",
+    "*.pyc"
+  ],
+  "archivePrefix": "draftably-evaluation",
+  "finalIndependentAudit": "evaluation/final-accounting-audit.md"
+}

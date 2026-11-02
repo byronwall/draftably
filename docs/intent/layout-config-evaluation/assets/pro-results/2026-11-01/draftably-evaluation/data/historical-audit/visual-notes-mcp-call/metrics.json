@@ -1,0 +1,451 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [
+      "order-x agent_side mcp_side data_side"
+    ],
+    "nodes": 10,
+    "groups": 3,
+    "edges": 10,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 816,
+    "height": 472,
+    "aspect": 1.73,
+    "density": 0.313,
+    "aligned": 0.8,
+    "crossings": 2,
+    "bends": 11,
+    "bendsPerEdge": 1.1,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 180,
+    "theme": "ink",
+    "fills": 8,
+    "minTextContrast": 5.73,
+    "groupFill": {
+      "data_side": 0.79,
+      "agent_side": 0.79,
+      "mcp_side": 0.71
+    },
+    "groupGaps": {
+      "agent_side | mcp_side": 79,
+      "data_side | mcp_side": 85,
+      "data_side | denied": 56
+    },
+    "emptyArea": {
+      "share": 0.1,
+      "boxes": 3.2,
+      "w": 185,
+      "h": 208,
+      "x": 427,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "m5",
+        "kind": "forward",
+        "length": 491,
+        "detour": 1.23,
+        "span": 0.52
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 6.5,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "m9 along activity"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "m9 along pg"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "m4 auth→create arrives sideways"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"appUrl\" on mcp_side"
+      }
+    ],
+    "checks": [
+      {
+        "line": "order-x agent_side mcp_side data_side",
+        "pass": true
+      }
+    ]
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [
+      "order-x agent_side mcp_side data_side",
+      "near denied auth 60",
+      "right-of denied auth"
+    ],
+    "nodes": 10,
+    "groups": 3,
+    "edges": 10,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 943,
+    "height": 409,
+    "aspect": 2.31,
+    "density": 0.312,
+    "aligned": 1,
+    "crossings": 1,
+    "bends": 9,
+    "bendsPerEdge": 0.9,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 147,
+    "theme": "ink",
+    "fills": 8,
+    "minTextContrast": 5.73,
+    "groupFill": {
+      "data_side": 0.79,
+      "agent_side": 0.79,
+      "mcp_side": 0.5
+    },
+    "groupGaps": {
+      "agent_side | mcp_side": 79,
+      "data_side | mcp_side": 56
+    },
+    "emptyArea": {
+      "share": 0.18,
+      "boxes": 5.7,
+      "w": 260,
+      "h": 266,
+      "x": 479,
+      "y": 143
+    },
+    "edgeStretch": [
+      {
+        "id": "m7",
+        "kind": "forward",
+        "length": 514,
+        "detour": 1.19,
+        "span": 0.5
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 11.5,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "m9 along activity"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "m9 along pg"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "mcp_side left 24, right 40, bottom 24"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 56–79px"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "m4 auth→create arrives sideways"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"appUrl\" on mcp_side"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"missing\" 62px from its edge"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 13,
+      "meanMove": 72,
+      "maxMove": 355,
+      "moved": 6,
+      "alignedMean": 72,
+      "alignedMoved": 6,
+      "orderFlips": 9,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 72,
+      "maxMove": 355,
+      "moved": 6,
+      "alignedMean": 72,
+      "alignedMoved": 6,
+      "orderFlips": 9,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "checks": [
+      {
+        "line": "order-x agent_side mcp_side data_side",
+        "pass": true
+      },
+      {
+        "line": "near denied auth 60",
+        "pass": true,
+        "why": "gap 28px"
+      },
+      {
+        "line": "right-of denied auth",
+        "pass": true
+      }
+    ]
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [
+      "still *"
+    ],
+    "nodes": 10,
+    "groups": 3,
+    "edges": 10,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 943,
+    "height": 409,
+    "aspect": 2.31,
+    "density": 0.312,
+    "aligned": 1,
+    "crossings": 1,
+    "bends": 9,
+    "bendsPerEdge": 0.9,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 1,
+    "edgeLengthPerEdge": 147,
+    "theme": "ink",
+    "fills": 4,
+    "minTextContrast": 5.68,
+    "groupFill": {
+      "data_side": 0.79,
+      "agent_side": 0.79,
+      "mcp_side": 0.5
+    },
+    "groupGaps": {
+      "agent_side | mcp_side": 79,
+      "data_side | mcp_side": 56
+    },
+    "emptyArea": {
+      "share": 0.18,
+      "boxes": 5.7,
+      "w": 260,
+      "h": 266,
+      "x": 479,
+      "y": 143
+    },
+    "edgeStretch": [
+      {
+        "id": "m7",
+        "kind": "forward",
+        "length": 514,
+        "detour": 1.19,
+        "span": 0.5
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 11.5,
+    "issues": [
+      {
+        "kind": "edge-hugs-node",
+        "detail": "m9 along activity"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "m9 along pg"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "mcp_side left 24, right 40, bottom 24"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 56–79px"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "m4 auth→create arrives sideways"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"appUrl\" on mcp_side"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"missing\" 62px from its edge"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 13,
+      "meanMove": 0,
+      "maxMove": 0,
+      "moved": 0,
+      "alignedMean": 0,
+      "alignedMoved": 0,
+      "orderFlips": 0,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 72,
+      "maxMove": 355,
+      "moved": 6,
+      "alignedMean": 72,
+      "alignedMoved": 6,
+      "orderFlips": 9,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "checks": [
+      {
+        "line": "still *",
+        "pass": true,
+        "shape": true
+      }
+    ]
+  }
+]

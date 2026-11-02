@@ -1,0 +1,75 @@
+{"at":"2026-11-01T23:03:07.187Z","runId":"settings-routing","event":"start","started":"2026-11-01T23:03:07.185Z","node":"v24.22.1","platform":"linux","workers":2,"planned":984,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"f556d091a8db6646551aa90f6a33b3d3b40eef5d1e5ddfd81c3a68b248bb10a3"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:03:08.130Z","runId":"settings-routing","event":"progress","complete":20,"total":984,"last":"D-routing-route-01-passes-1","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:03:08.216Z","runId":"settings-routing","event":"progress","complete":40,"total":984,"last":"D-side-route-01-right-bottom","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:03:08.447Z","runId":"settings-routing","event":"progress","complete":60,"total":984,"last":"D-routing-route-02-sharedPenalty-0","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:03:08.641Z","runId":"settings-routing","event":"progress","complete":80,"total":984,"last":"D-history-route-02-True-100","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:03:08.845Z","runId":"settings-routing","event":"progress","complete":100,"total":984,"last":"D-routing-route-03-clearance-22","status":"ok","elapsedSeconds":2}
+{"at":"2026-11-01T23:03:09.021Z","runId":"settings-routing","event":"progress","complete":120,"total":984,"last":"D-routing-route-03-passes-5","status":"ok","elapsedSeconds":2}
+{"at":"2026-11-01T23:03:09.255Z","runId":"settings-routing","event":"progress","complete":140,"total":984,"last":"D-side-route-03-right-top","status":"ok","elapsedSeconds":2}
+{"at":"2026-11-01T23:03:10.159Z","runId":"settings-routing","event":"progress","complete":160,"total":984,"last":"D-routing-route-04-sharedPenalty-16","status":"ok","elapsedSeconds":3}
+{"at":"2026-11-01T23:03:10.723Z","runId":"settings-routing","event":"progress","complete":180,"total":984,"last":"D-port-route-04-automatic","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:03:11.221Z","runId":"settings-routing","event":"progress","complete":200,"total":984,"last":"D-routing-route-05-portGap-6","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:03:11.278Z","runId":"settings-routing","event":"progress","complete":220,"total":984,"last":"D-routing-route-05-standoff-0","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:03:11.345Z","runId":"settings-routing","event":"progress","complete":240,"total":984,"last":"D-side-route-05-top-bottom","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:03:11.568Z","runId":"settings-routing","event":"progress","complete":260,"total":984,"last":"D-routing-route-06-crossingPenalty-0","status":"ok","elapsedSeconds":4}
+{"at":"2026-11-01T23:03:11.778Z","runId":"settings-routing","event":"progress","complete":280,"total":984,"last":"D-side-route-06-left-top","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:03:12.026Z","runId":"settings-routing","event":"progress","complete":300,"total":984,"last":"D-routing-route-07-portGap-28","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:03:12.250Z","runId":"settings-routing","event":"progress","complete":320,"total":984,"last":"D-history-route-07-False-0","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:03:12.757Z","runId":"settings-routing","event":"progress","complete":340,"total":984,"last":"D-side-route-07-bottom-left","status":"ok","elapsedSeconds":6}
+{"at":"2026-11-01T23:03:13.461Z","runId":"settings-routing","event":"progress","complete":360,"total":984,"last":"D-routing-route-08-portStability-0","status":"ok","elapsedSeconds":6}
+{"at":"2026-11-01T23:03:14.262Z","runId":"settings-routing","event":"progress","complete":380,"total":984,"last":"D-side-route-08-left-bottom","status":"ok","elapsedSeconds":7}
+{"at":"2026-11-01T23:03:14.837Z","runId":"settings-routing","event":"progress","complete":400,"total":984,"last":"D-routing-route-09-edgeGap-32","status":"ok","elapsedSeconds":8}
+{"at":"2026-11-01T23:03:14.940Z","runId":"settings-routing","event":"progress","complete":420,"total":984,"last":"D-history-route-09-False-20","status":"ok","elapsedSeconds":8}
+{"at":"2026-11-01T23:03:15.156Z","runId":"settings-routing","event":"progress","complete":440,"total":984,"last":"D-side-route-09-bottom-bottom","status":"ok","elapsedSeconds":8}
+{"at":"2026-11-01T23:03:18.369Z","runId":"settings-routing","event":"progress","complete":460,"total":984,"last":"D-routing-route-10-fanoutPenalty-120","status":"ok","elapsedSeconds":11}
+{"at":"2026-11-01T23:03:21.885Z","runId":"settings-routing","event":"progress","complete":480,"total":984,"last":"D-side-route-10-right-right","status":"ok","elapsedSeconds":15}
+{"at":"2026-11-01T23:03:23.524Z","runId":"settings-routing","event":"progress","complete":500,"total":984,"last":"D-routing-route-11-crossingPenalty-900","status":"ok","elapsedSeconds":16}
+{"at":"2026-11-01T23:03:23.711Z","runId":"settings-routing","event":"progress","complete":520,"total":984,"last":"D-history-route-11-True-20","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:23.793Z","runId":"settings-routing","event":"progress","complete":540,"total":984,"last":"D-routing-route-12-default","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:23.884Z","runId":"settings-routing","event":"progress","complete":560,"total":984,"last":"D-routing-route-12-passes-5","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:23.963Z","runId":"settings-routing","event":"progress","complete":580,"total":984,"last":"D-side-route-12-top-left","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:24.015Z","runId":"settings-routing","event":"progress","complete":600,"total":984,"last":"D-routing-route-13-sharedPenalty-0","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:24.065Z","runId":"settings-routing","event":"progress","complete":620,"total":984,"last":"D-port-route-13-automatic","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:24.322Z","runId":"settings-routing","event":"progress","complete":640,"total":984,"last":"D-routing-route-14-fanoutPenalty-120","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:24.489Z","runId":"settings-routing","event":"progress","complete":660,"total":984,"last":"D-routing-route-15-edgeGap-8","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:24.597Z","runId":"settings-routing","event":"progress","complete":680,"total":984,"last":"D-history-route-15-False-0","status":"ok","elapsedSeconds":17}
+{"at":"2026-11-01T23:03:24.740Z","runId":"settings-routing","event":"progress","complete":700,"total":984,"last":"D-routing-route-16-sharedPenalty-16","status":"ok","elapsedSeconds":18}
+{"at":"2026-11-01T23:03:24.856Z","runId":"settings-routing","event":"progress","complete":720,"total":984,"last":"D-routing-route-17-default","status":"ok","elapsedSeconds":18}
+{"at":"2026-11-01T23:03:24.941Z","runId":"settings-routing","event":"progress","complete":740,"total":984,"last":"D-routing-route-17-fanoutPenalty-120","status":"ok","elapsedSeconds":18}
+{"at":"2026-11-01T23:03:26.369Z","runId":"settings-routing","event":"progress","complete":760,"total":984,"last":"D-routing-route-18-edgeGap-32","status":"ok","elapsedSeconds":19}
+{"at":"2026-11-01T23:03:29.591Z","runId":"settings-routing","event":"progress","complete":780,"total":984,"last":"D-history-route-18-False-20","status":"ok","elapsedSeconds":22}
+{"at":"2026-11-01T23:03:30.370Z","runId":"settings-routing","event":"progress","complete":800,"total":984,"last":"D-routing-route-19-parallelPenalty-48","status":"ok","elapsedSeconds":23}
+{"at":"2026-11-01T23:03:30.501Z","runId":"settings-routing","event":"progress","complete":820,"total":984,"last":"D-routing-route-20-clearance-4","status":"ok","elapsedSeconds":23}
+{"at":"2026-11-01T23:03:30.613Z","runId":"settings-routing","event":"progress","complete":840,"total":984,"last":"D-routing-route-20-cornerRadius-0","status":"ok","elapsedSeconds":23}
+{"at":"2026-11-01T23:03:30.781Z","runId":"settings-routing","event":"progress","complete":860,"total":984,"last":"D-routing-route-21-bendPenalty-0","status":"ok","elapsedSeconds":24}
+{"at":"2026-11-01T23:03:31.163Z","runId":"settings-routing","event":"progress","complete":880,"total":984,"last":"D-history-route-21-False-20","status":"ok","elapsedSeconds":24}
+{"at":"2026-11-01T23:03:31.652Z","runId":"settings-routing","event":"progress","complete":900,"total":984,"last":"D-routing-route-22-parallelPenalty-0","status":"ok","elapsedSeconds":24}
+{"at":"2026-11-01T23:03:32.576Z","runId":"settings-routing","event":"progress","complete":920,"total":984,"last":"D-routing-route-23-clearance-4","status":"ok","elapsedSeconds":25}
+{"at":"2026-11-01T23:03:36.754Z","runId":"settings-routing","event":"progress","complete":940,"total":984,"last":"D-routing-route-23-passes-5","status":"ok","elapsedSeconds":30}
+{"at":"2026-11-01T23:03:39.197Z","runId":"settings-routing","event":"progress","complete":960,"total":984,"last":"D-routing-route-24-crossingPenalty-0","status":"ok","elapsedSeconds":32}
+{"at":"2026-11-01T23:03:39.366Z","runId":"settings-routing","event":"progress","complete":980,"total":984,"last":"D-history-route-24-True-0","status":"ok","elapsedSeconds":32}
+{"at":"2026-11-01T23:03:39.458Z","runId":"settings-routing","event":"complete","started":"2026-11-01T23:03:07.185Z","node":"v24.22.1","platform":"linux","workers":2,"planned":984,"priorCompleted":0,"executed":984,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"f556d091a8db6646551aa90f6a33b3d3b40eef5d1e5ddfd81c3a68b248bb10a3","finished":"2026-11-01T23:03:39.458Z","elapsedSeconds":32.273}

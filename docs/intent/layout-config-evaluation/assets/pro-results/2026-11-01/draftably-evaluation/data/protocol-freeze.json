@@ -1,0 +1,52 @@
+{
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "assignmentStarted": "2026-11-01T22:50:03.754830+00:00",
+  "frozenAt": "2026-11-01T23:01:59.678229+00:00",
+  "maxDistinctTrials": 12000,
+  "reservedMainTrialLimit": 11500,
+  "ancillaryAllowance": 500,
+  "wallClockHours": 6,
+  "trialTimeoutMs": 90000,
+  "maxWorkerProcesses": 4,
+  "splitSha256": "6847fe5ee8458059cb0edf12f33174e2005cd39375c45a031fe951aa992dc059",
+  "routingSha256": "19c6fdc6cf7adec0e5efd42fbe3fbf2df9707a3b2eac81ec56d39da8c5fd7c5a",
+  "settingsSha256": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+  "metricSha256": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+  "profiles": {
+    "readable": "direct DI per10 + 2*aspect error",
+    "compact": "balanced DI per10 + 8*ln(area / minimum valid area on same base) + 2*aspect error",
+    "traceable": "traceable DI per10",
+    "stable": "balanced DI per10 + adjusted displacement / 24 + 5*changed-side rate (edit trials); balanced DI for static screening",
+    "specialist": "balanced DI per10 with required semantic gates"
+  },
+  "acceptability": "Hard-valid and intent-valid first; within 1 score unit, 10% area, and 10% route length of the profile oracle, with strictly identical zero additional hard defects. Baseline equality always acceptable to itself. Sensitivity doubles/halves bands without retuning.",
+  "weightingAssumptions": [
+    "equal-family",
+    "common80-niche20",
+    "common50-niche50",
+    "worst-family"
+  ],
+  "selection": "Exhaustive all subsets of 10 engine IDs size1..5; specialist recipes and current authored source remain separate fallback. Select presets/selector only development; seal before any heldout execution.",
+  "selector": "A depth<=3 deterministic decision tree over pre-layout node/edge/group count, density, undirected fraction, component count, degree, depth, cycles, target format; min4development bases per leaf. Infeasible labels use current source fallback.",
+  "heldoutAcceptance": "At least95% of current-pool acceptable common-job coverage; no supported specialist task loss without explicit escape hatch; no new hard-defect case where today valid.",
+  "routingPolicySelection": "Choose3 policies from all-default + tested single-knob or grid points, using development fixed-geometry results; cross best3layout choices x3routing on12developmentbases.",
+  "edits": "24bases,4independent edits +colornegativecontrol; cold current/global/selector, warm tidy/separate/group-aware repair. Same prior routes per candidate. Requested directionchange excluded from movement penalties.",
+  "predeclaredDeviations": [
+    "3x2 aspect-fold interaction because fold has exactly2validvalues",
+    "Historial corpus is development evidence only",
+    "Keep authored fit during engine screening; isolate direction in D-other with fit removed",
+    "Source parameter small-boundary minimum-size tests may be masked; retain controls unless targeted witnesses resolve",
+    "No independent human or usability-study claims"
+  ],
+  "plannedNonadaptiveCounts": {
+    "screen-development": 1198,
+    "screen-heldout": 599,
+    "settings-layout": 756,
+    "prepare-routing": 24,
+    "settings-routing": 984,
+    "interactions-routing": 432,
+    "interactions-layout": 96,
+    "settings-warm": 444,
+    "tuning-development": 480
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "runId": "selected-presets-heldout",
+  "started": "2026-11-02T00:17:27.717Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 207,
+  "priorCompleted": 0,
+  "executed": 207,
+  "failed": 0,
+  "timedOut": 34,
+  "skipped": 0,
+  "taskSha256": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+  "finished": "2026-11-02T00:22:12.329Z",
+  "elapsedSeconds": 284.612,
+  "persistedDistinct": 207
+}

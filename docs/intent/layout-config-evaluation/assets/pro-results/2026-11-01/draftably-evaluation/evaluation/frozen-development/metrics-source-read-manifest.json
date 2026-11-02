@@ -1,0 +1,120 @@
+{
+  "agent": "metrics_research",
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "read": "complete",
+      "sha256": "9077f03f7bbadce1c9d329c39b38129e640687e5e7f9dbf435c1e2015caec8c3"
+    },
+    {
+      "path": "docs/intent/diagram-quality/FEEL.md",
+      "read": "complete",
+      "sha256": "cfbffe66e998a40074821a9e48bfd99213053a2604cd503ea8f0623ad82e7d9e"
+    },
+    {
+      "path": "docs/intent/diagram-quality/RUBRIC.md",
+      "read": "complete",
+      "sha256": "08fb23e0d4eecdcfcce052a183c752e2c618aff5c75fcb5f7ed2399889e88ede"
+    },
+    {
+      "path": "src/model/types.ts",
+      "read": "complete",
+      "sha256": "2cc8047c41f89627cc34fc0d1c00a268c41c88dd6236666c1c9049f3b03a25de"
+    },
+    {
+      "path": "src/model/geometry.ts",
+      "read": "complete",
+      "sha256": "87af18587a1fcdb843952c0790a778bbeca2f4a857af7f30d0dbf9227a284f17"
+    },
+    {
+      "path": "src/model/static-scene.ts",
+      "read": "complete",
+      "sha256": "87a3c154c22f43d9f14a2245f2695ebae611b926d8c4b33695a837f7de1b2004"
+    },
+    {
+      "path": "src/model/labels.ts",
+      "read": "complete",
+      "sha256": "db702ed1b70225b9fc63bf816a3e07d9e69e3b1e4cc38749d9c45c8dcfda7703"
+    },
+    {
+      "path": "src/model/routes.ts",
+      "read": "complete",
+      "sha256": "499dd5794462adc6fc348fa70b01bdcd78cfe8c111aca7b4eb93b24bc7396e2d"
+    },
+    {
+      "path": "src/engines/layout-engine.d.ts",
+      "read": "complete",
+      "sha256": "ebff690030afa00baae10dd688eecc603144688bc21fb2b1bef471c546d2fd6c"
+    },
+    {
+      "path": "src/engines/routing-engine.d.ts",
+      "read": "complete",
+      "sha256": "aa1ac713fc691c3608180e305d62ea7348ab36d579d9c00bb0d85b961cafe101"
+    },
+    {
+      "path": "src/engines/explorer-engine.d.ts",
+      "read": "complete",
+      "sha256": "04ed37a84affd0589e3e2695807c8455372aae2629d25b5c89369d27784d5729"
+    },
+    {
+      "path": "src/engines/explorer-engine.js",
+      "read": "complete",
+      "sha256": "50aa813e59af8f295430c8ac46e39c09bdb647d32cb114acbaa455a89b89291b"
+    },
+    {
+      "path": "scripts/shoot.mjs",
+      "read": "complete",
+      "sha256": "d9e10625339b40e6c5f9f70dd179f702af36f42074deffe17bde9d20726cbbc4"
+    },
+    {
+      "path": "scripts/draftably.mjs",
+      "read": "complete",
+      "sha256": "c48956da482fdbefaf3f59c8e94217f4edd9339b40d7a9f896fb32cc4accc6b1"
+    },
+    {
+      "path": "scripts/lib/proof.mjs",
+      "read": "complete",
+      "sha256": "e5d98020ab8a9db9f05616df405f5c86184756a936f1795421fa66d940af41f6"
+    },
+    {
+      "path": "src/engines/routing-engine.js",
+      "read": "targeted sections",
+      "sha256": "feee4a0ce946d8b2961b86219bc4e72dc333a04173b913c1908fab24376456d9"
+    },
+    {
+      "path": "scripts/diagram-audit.mjs",
+      "read": "targeted sections",
+      "sha256": "d84c69cf5291cd8ee803b8f42580a3e8715a4f5305929a4aa3e75c66ff5d808e"
+    },
+    {
+      "path": "scripts/prove-layout-tools.mjs",
+      "read": "targeted sections",
+      "sha256": "0eea19248d2f793480ba6964cc9f7a3dcff78c374f4fbdf39ab287e975cd5e74"
+    },
+    {
+      "path": "scripts/prove-file-session.mjs",
+      "read": "targeted sections",
+      "sha256": "4b123815184bfed03ae70c32d0c1ba983cb188e0baf31bd375669beda94bbacc"
+    },
+    {
+      "path": "src/cli/main.ts",
+      "read": "targeted sections",
+      "sha256": "7c503a123199111764ccccba4285a05cb817d8bf5279a5f1b2f18d69b87cefc0"
+    },
+    {
+      "path": "docs/intent/diagram-quality/CORPUS.md",
+      "read": "targeted sections",
+      "sha256": "effb9b1f86428e562f605b0a93daa868d4e88fb920be377d9f15a68ca5cfce19"
+    },
+    {
+      "path": "docs/intent/diagram-quality/NEXT.md",
+      "read": "targeted sections",
+      "sha256": "cb13682cc672737be85f0a6148f4888fb2b7abd6c6d35282377ec69a35beafc7"
+    }
+  ],
+  "attachmentsRead": [
+    "pro-prompt(20261101-224920).md",
+    "evaluation-protocol.md"
+  ]
+}

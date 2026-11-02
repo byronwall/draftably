@@ -1,0 +1,36 @@
+{
+  "runId": "joint-development",
+  "at": "2026-11-01T23:38:17.434Z",
+  "originalSummarySha256": "e627349d99ea65655d65e8ed6a592f3f4f0c1d05e38dade62c37a822d07640d2",
+  "loggedCompletion": {
+    "at": "2026-11-01T23:32:59.661Z",
+    "runId": "joint-development",
+    "event": "complete",
+    "started": "2026-11-01T23:32:35.238Z",
+    "node": "v24.22.1",
+    "platform": "linux",
+    "workers": 3,
+    "planned": 108,
+    "priorCompleted": 0,
+    "executed": 108,
+    "failed": 0,
+    "timedOut": 0,
+    "skipped": 0,
+    "taskSha256": "ce19246cbf3190b71e8ad1f66d8c692a81dbb0d2ee595bb53f20ab1a98328db0",
+    "finished": "2026-11-01T23:32:59.654Z",
+    "elapsedSeconds": 24.416,
+    "persistedDistinct": 108
+  },
+  "originalRows": 107,
+  "recoveredRows": 1,
+  "recovered": [
+    {
+      "id": "D-joint-recipes-02-layout3-route3",
+      "status": "ok",
+      "exactImmutableTerminalRecord": "data/attempts/joint-development/2026-11-01T23-32-59-368Z-D-joint-recipes-02-layout3-route3-56fbf93a-b867-43ca-bfb4-d4fb9dafafdb.json",
+      "unavailableFields": []
+    }
+  ],
+  "unavailableFields": "None: exact immutable terminal record retained all fields.",
+  "algorithmReruns": 0
+}

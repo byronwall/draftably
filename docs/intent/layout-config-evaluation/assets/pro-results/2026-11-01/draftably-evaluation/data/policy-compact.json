@@ -1,0 +1,2043 @@
+{
+  "schema": "draftably-policy-compact-1",
+  "frozen": false,
+  "analysisVersion": "portfolio-analysis-1.1.0",
+  "analysisCodeSha256": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+  "splitSha256": "6847fe5ee8458059cb0edf12f33174e2005cd39375c45a031fe951aa992dc059",
+  "sourceProposal": "data/policy-proposal.json",
+  "bestSingle": {
+    "method": "engine:force:RIGHT",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {}
+    },
+    "developmentSummaryUnguarded": {
+      "method": "engine:force:RIGHT",
+      "weighting": "equal-family",
+      "weightedHardValidCoverage": 0.875,
+      "acceptableCoverage": 0.24545454545454556,
+      "commonAcceptableCoverage": 0.2076923076923077,
+      "nicheAcceptableCoverage": 0.30000000000000004,
+      "worstFamilyCoverage": 0.0,
+      "familyCoverage": {
+        "architecture": 0.2666666666666667,
+        "authored": 0.45,
+        "containers": 0.0,
+        "cycles": 0.0,
+        "dags": 0.2666666666666667,
+        "disconnected": 0.25,
+        "hierarchies": 0.15000000000000002,
+        "networks": 0.05,
+        "pipelines": 0.15000000000000002,
+        "presentation": 0.2,
+        "recipes": 0.5,
+        "routing": 0.55
+      },
+      "currentValidHardRegressions": 5,
+      "currentValidHardRegressionCases": 1,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 54,
+      "totalJobs": 240,
+      "hardValidJobs": 210,
+      "meanFiniteRegret": 5.896247389541983,
+      "maxFiniteRegret": 159.77417370233553,
+      "p95FiniteRegret": 12.941176000000002,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.36363636363636354,
+        "compact": 0.13636363636363633,
+        "traceable": 0.2272727272727272,
+        "stable": 0.24999999999999992,
+        "specialist": 0.24999999999999992
+      },
+      "absoluteAcceptableCoverage": 0.2250000000000001,
+      "absoluteCommonAcceptableCoverage": 0.1928571428571429,
+      "absoluteNicheAcceptableCoverage": 0.2700000000000001,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.2,
+        "authored": 0.45,
+        "containers": 0.0,
+        "cycles": 0.0,
+        "dags": 0.2,
+        "disconnected": 0.25,
+        "hierarchies": 0.15000000000000002,
+        "networks": 0.05,
+        "pipelines": 0.15000000000000002,
+        "presentation": 0.2,
+        "recipes": 0.5,
+        "routing": 0.55
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.24999999999999997,
+        "compact": 0.07142857142857142,
+        "traceable": 0.21428571428571427,
+        "stable": 0.21428571428571427,
+        "specialist": 0.21428571428571427
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.2692307692307692,
+        "compact": 0.07692307692307691,
+        "traceable": 0.23076923076923075,
+        "stable": 0.23076923076923075,
+        "specialist": 0.23076923076923075
+      },
+      "worstProfileCommonFeasibleCoverage": 0.07692307692307691,
+      "worstProfileCommonAbsoluteCoverage": 0.07142857142857142,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 1
+        },
+        "compact": {
+          "acceptableBases": 2,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 1
+        },
+        "traceable": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 1
+        },
+        "stable": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 1
+        },
+        "specialist": {
+          "acceptableBases": 6,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 1
+        }
+      },
+      "currentValidHardRegressionCommonCases": 1
+    },
+    "validityGuard": "proposed: retain current source on candidate hard failure when current is valid; raw and guarded results reported separately"
+  },
+  "defaultPortfoliosBySize": {
+    "1": [
+      "stress"
+    ],
+    "2": [
+      "stress",
+      "layered"
+    ],
+    "3": [
+      "stress",
+      "force",
+      "layered"
+    ],
+    "4": [
+      "boundary-align",
+      "stress",
+      "force",
+      "layered"
+    ],
+    "5": [
+      "compound-flow",
+      "boundary-align",
+      "stress",
+      "force",
+      "layered"
+    ]
+  },
+  "tunedPortfoliosBySize": {
+    "1": [
+      "compound-flow"
+    ],
+    "2": [
+      "force",
+      "layered"
+    ],
+    "3": [
+      "tidy",
+      "force",
+      "layered"
+    ],
+    "4": [
+      "boundary-align",
+      "force",
+      "layered",
+      "tree"
+    ],
+    "5": [
+      "boundary-align",
+      "stress",
+      "force",
+      "layered",
+      "tree"
+    ]
+  },
+  "preferredSelector": {
+    "mode": "default",
+    "size": 5,
+    "portfolio": [
+      "compound-flow",
+      "boundary-align",
+      "stress",
+      "force",
+      "layered"
+    ],
+    "tree": {
+      "type": "split",
+      "feature": "nodeCount",
+      "threshold": 10.5,
+      "trainingBases": 46,
+      "left": {
+        "type": "split",
+        "feature": "hasDirectedCycle",
+        "threshold": 0.5,
+        "trainingBases": 12,
+        "left": {
+          "type": "leaf",
+          "method": "engine:stress:RIGHT",
+          "trainingBases": 7,
+          "trainingLoss": [
+            0.0,
+            0.09999999999999999,
+            0.35345980713894487
+          ]
+        },
+        "right": {
+          "type": "leaf",
+          "method": "engine:compound-flow:DOWN",
+          "trainingBases": 5,
+          "trainingLoss": [
+            0.0,
+            0.0875,
+            0.5488870164760942
+          ]
+        }
+      },
+      "right": {
+        "type": "split",
+        "feature": "groupCount",
+        "threshold": 4.5,
+        "trainingBases": 34,
+        "left": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 3.5,
+          "trainingBases": 26,
+          "left": {
+            "type": "leaf",
+            "method": "engine:layered:DOWN",
+            "trainingBases": 14,
+            "trainingLoss": [
+              0.0,
+              0.18333333333333335,
+              1.2661229761622814
+            ]
+          },
+          "right": {
+            "type": "leaf",
+            "method": "engine:force:RIGHT",
+            "trainingBases": 12,
+            "trainingLoss": [
+              0.041666666666666664,
+              0.14583333333333331,
+              0.4963093997581573
+            ]
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 13.5,
+          "trainingBases": 8,
+          "left": {
+            "type": "leaf",
+            "method": "engine:compound-flow:RIGHT",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.0,
+              0.016666666666666666,
+              0.04116215863707368
+            ]
+          },
+          "right": {
+            "type": "leaf",
+            "method": "engine:compound-flow:DOWN",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.0625,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      }
+    },
+    "goalTrees": {
+      "readable": {
+        "type": "split",
+        "feature": "nodeCount",
+        "threshold": 10.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "density",
+          "threshold": 0.13055555555555556,
+          "trainingBases": 12,
+          "left": {
+            "type": "split",
+            "feature": "density",
+            "threshold": 0.07676767676767676,
+            "trainingBases": 8,
+            "left": {
+              "type": "leaf",
+              "method": "engine:force:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.03628652186486093
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:stress:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.032393192924848
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "engine:force:DOWN",
+            "trainingBases": 4,
+            "trainingLoss": [
+              0.0,
+              0.0125,
+              0.023452626080349582
+            ]
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "maxDegree",
+          "threshold": 2.5,
+          "trainingBases": 34,
+          "left": {
+            "type": "leaf",
+            "method": "engine:layered:DOWN",
+            "trainingBases": 6,
+            "trainingLoss": [
+              0.008333333333333333,
+              0.008333333333333333,
+              0.09147172334608718
+            ]
+          },
+          "right": {
+            "type": "split",
+            "feature": "density",
+            "threshold": 0.08712121212121213,
+            "trainingBases": 28,
+            "left": {
+              "type": "leaf",
+              "method": "engine:force:RIGHT",
+              "trainingBases": 21,
+              "trainingLoss": [
+                0.008333333333333333,
+                0.04583333333333333,
+                0.2764093896154344
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:layered:RIGHT",
+              "trainingBases": 7,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.008333333333333333,
+                0.03377754258613774
+              ]
+            }
+          }
+        }
+      },
+      "compact": {
+        "type": "split",
+        "feature": "edgeCount",
+        "threshold": 11.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "density",
+          "threshold": 0.08257575757575758,
+          "trainingBases": 20,
+          "left": {
+            "type": "split",
+            "feature": "density",
+            "threshold": 0.04285714285714286,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "engine:compound-flow:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.0125,
+                0.5003885469131917
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:stress:RIGHT",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.0,
+                0.020833333333333332,
+                0.091977352036771
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 10.5,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "engine:layered:DOWN",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.0,
+                0.020833333333333332,
+                0.06182165031698149
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:layered:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.025471924679810624
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "nodeCount",
+          "threshold": 39.0,
+          "trainingBases": 26,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 3.5,
+            "trainingBases": 20,
+            "left": {
+              "type": "leaf",
+              "method": "engine:layered:DOWN",
+              "trainingBases": 12,
+              "trainingLoss": [
+                0.008333333333333333,
+                0.020833333333333332,
+                0.12749226675165526
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:compound-flow:RIGHT",
+              "trainingBases": 8,
+              "trainingLoss": [
+                0.0,
+                0.016666666666666666,
+                0.03979374026553702
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "engine:force:RIGHT",
+            "trainingBases": 6,
+            "trainingLoss": [
+              0.0125,
+              0.0125,
+              0.03652298334827214
+            ]
+          }
+        }
+      },
+      "traceable": {
+        "type": "split",
+        "feature": "maxDegree",
+        "threshold": 3.5,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "hasDirectedCycle",
+          "threshold": 0.5,
+          "trainingBases": 24,
+          "left": {
+            "type": "split",
+            "feature": "density",
+            "threshold": 0.03142063965493507,
+            "trainingBases": 19,
+            "left": {
+              "type": "leaf",
+              "method": "engine:layered:DOWN",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.008333333333333333,
+                0.10208333333333333
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:stress:RIGHT",
+              "trainingBases": 13,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.024999999999999998,
+                0.0990980875
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "engine:boundary-align:DOWN",
+            "trainingBases": 5,
+            "trainingLoss": [
+              0.0,
+              0.008333333333333333,
+              0.04117647083333333
+            ]
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "edgeCount",
+          "threshold": 20.0,
+          "trainingBases": 22,
+          "left": {
+            "type": "split",
+            "feature": "nodeCount",
+            "threshold": 10.5,
+            "trainingBases": 15,
+            "left": {
+              "type": "leaf",
+              "method": "engine:stress:RIGHT",
+              "trainingBases": 5,
+              "trainingLoss": [
+                0.0,
+                0.016666666666666666,
+                0.14393939583333332
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:layered:RIGHT",
+              "trainingBases": 10,
+              "trainingLoss": [
+                0.0,
+                0.020833333333333332,
+                0.41963244583333337
+              ]
+            }
+          },
+          "right": {
+            "type": "leaf",
+            "method": "engine:force:RIGHT",
+            "trainingBases": 7,
+            "trainingLoss": [
+              0.0125,
+              0.0125,
+              0.0013888916666666667
+            ]
+          }
+        }
+      },
+      "stable": {
+        "type": "split",
+        "feature": "density",
+        "threshold": 0.07676767676767676,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "groupCount",
+          "threshold": 4.5,
+          "trainingBases": 28,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 4.5,
+            "trainingBases": 20,
+            "left": {
+              "type": "leaf",
+              "method": "engine:boundary-align:RIGHT",
+              "trainingBases": 14,
+              "trainingLoss": [
+                0.0,
+                0.041666666666666664,
+                0.5536233250000001
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:force:RIGHT",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.0125,
+                0.0
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "edgeCount",
+            "threshold": 13.5,
+            "trainingBases": 8,
+            "left": {
+              "type": "leaf",
+              "method": "engine:compound-flow:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.0,
+                0.004166666666666667
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:compound-flow:DOWN",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0125,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "nodeCount",
+          "threshold": 10.5,
+          "trainingBases": 18,
+          "left": {
+            "type": "split",
+            "feature": "density",
+            "threshold": 0.13055555555555556,
+            "trainingBases": 8,
+            "left": {
+              "type": "leaf",
+              "method": "engine:stress:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.0125
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:boundary-align:DOWN",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.016666666666666666,
+                0.011363637499999997
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 3.5,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "engine:layered:DOWN",
+              "trainingBases": 5,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.035086445833333334
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:compound-flow:RIGHT",
+              "trainingBases": 5,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.008333333333333333,
+                0.011363637499999999
+              ]
+            }
+          }
+        }
+      },
+      "specialist": {
+        "type": "split",
+        "feature": "density",
+        "threshold": 0.07676767676767676,
+        "trainingBases": 46,
+        "left": {
+          "type": "split",
+          "feature": "groupCount",
+          "threshold": 4.5,
+          "trainingBases": 28,
+          "left": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 4.5,
+            "trainingBases": 20,
+            "left": {
+              "type": "leaf",
+              "method": "engine:boundary-align:RIGHT",
+              "trainingBases": 14,
+              "trainingLoss": [
+                0.0,
+                0.041666666666666664,
+                0.5536233250000001
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:force:RIGHT",
+              "trainingBases": 6,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.0125,
+                0.0
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "edgeCount",
+            "threshold": 13.5,
+            "trainingBases": 8,
+            "left": {
+              "type": "leaf",
+              "method": "engine:compound-flow:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.0,
+                0.004166666666666667
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:compound-flow:DOWN",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0125,
+                0.0,
+                0.0
+              ]
+            }
+          }
+        },
+        "right": {
+          "type": "split",
+          "feature": "nodeCount",
+          "threshold": 10.5,
+          "trainingBases": 18,
+          "left": {
+            "type": "split",
+            "feature": "density",
+            "threshold": 0.13055555555555556,
+            "trainingBases": 8,
+            "left": {
+              "type": "leaf",
+              "method": "engine:stress:RIGHT",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.0125
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:boundary-align:DOWN",
+              "trainingBases": 4,
+              "trainingLoss": [
+                0.0,
+                0.016666666666666666,
+                0.011363637499999997
+              ]
+            }
+          },
+          "right": {
+            "type": "split",
+            "feature": "maxDegree",
+            "threshold": 3.5,
+            "trainingBases": 10,
+            "left": {
+              "type": "leaf",
+              "method": "engine:layered:DOWN",
+              "trainingBases": 5,
+              "trainingLoss": [
+                0.0,
+                0.008333333333333333,
+                0.035086445833333334
+              ]
+            },
+            "right": {
+              "type": "leaf",
+              "method": "engine:compound-flow:RIGHT",
+              "trainingBases": 5,
+              "trainingLoss": [
+                0.004166666666666667,
+                0.008333333333333333,
+                0.011363637499999999
+              ]
+            }
+          }
+        }
+      }
+    },
+    "developmentSummary": {
+      "weightedHardValidCoverage": 0.8958333333333333,
+      "acceptableCoverage": 0.41818181818181815,
+      "commonAcceptableCoverage": 0.36923076923076925,
+      "nicheAcceptableCoverage": 0.4888888888888891,
+      "worstFamilyCoverage": 0.05,
+      "familyCoverage": {
+        "architecture": 0.5333333333333334,
+        "authored": 0.5,
+        "containers": 0.8,
+        "cycles": 0.05,
+        "dags": 0.20000000000000004,
+        "disconnected": 0.3,
+        "hierarchies": 0.05,
+        "networks": 0.25,
+        "pipelines": 0.55,
+        "presentation": 0.7,
+        "recipes": 0.5,
+        "routing": 0.75
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 92,
+      "totalJobs": 240,
+      "hardValidJobs": 215,
+      "meanFiniteRegret": 3.0205857021461044,
+      "maxFiniteRegret": 24.705881999999995,
+      "p95FiniteRegret": 12.666667,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.4545454545454544,
+        "compact": 0.31818181818181807,
+        "traceable": 0.409090909090909,
+        "stable": 0.4545454545454544,
+        "specialist": 0.4545454545454544
+      },
+      "absoluteAcceptableCoverage": 0.3833333333333333,
+      "absoluteCommonAcceptableCoverage": 0.34285714285714286,
+      "absoluteNicheAcceptableCoverage": 0.4400000000000002,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.4,
+        "authored": 0.5,
+        "containers": 0.4,
+        "cycles": 0.05,
+        "dags": 0.15000000000000002,
+        "disconnected": 0.3,
+        "hierarchies": 0.05,
+        "networks": 0.25,
+        "pipelines": 0.55,
+        "presentation": 0.7,
+        "recipes": 0.5,
+        "routing": 0.75
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.24999999999999997,
+        "compact": 0.2857142857142857,
+        "traceable": 0.39285714285714285,
+        "stable": 0.39285714285714285,
+        "specialist": 0.39285714285714285
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.2692307692307692,
+        "compact": 0.30769230769230765,
+        "traceable": 0.423076923076923,
+        "stable": 0.423076923076923,
+        "specialist": 0.423076923076923
+      },
+      "worstProfileCommonFeasibleCoverage": 0.2692307692307692,
+      "worstProfileCommonAbsoluteCoverage": 0.24999999999999997,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 7,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 8,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 11,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 11,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 11,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    },
+    "developmentThresholdMet": false,
+    "validityGuard": "proposed: retain current authored source only when candidate hard-invalid and current valid; guard never chooses by post-layout soft quality"
+  },
+  "presetMap": {
+    "compound-flow": {
+      "presetIndex": 1,
+      "direction": "RIGHT",
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 1.0,
+        "acceptableCoverage": 0.27272727272727276,
+        "commonAcceptableCoverage": 0.22857142857142856,
+        "nicheAcceptableCoverage": 0.35000000000000003,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.7999999999999999,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.6,
+          "hierarchies": 0.0,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 0.6,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 15,
+        "totalJobs": 60,
+        "hardValidJobs": 60,
+        "meanFiniteRegret": 6.2721461927806414,
+        "maxFiniteRegret": 32.70289709629973,
+        "p95FiniteRegret": 20.979160074554525,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.1818181818181818,
+          "compact": 0.2727272727272727,
+          "traceable": 0.1818181818181818,
+          "stable": 0.3636363636363636,
+          "specialist": 0.3636363636363636
+        },
+        "engine": "compound-flow",
+        "presetIndex": 1,
+        "method": "tuned:compound-flow:RIGHT:p1"
+      }
+    },
+    "boundary-align": {
+      "presetIndex": 1,
+      "direction": "RIGHT",
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 0.9090909090909092,
+        "acceptableCoverage": 0.2,
+        "commonAcceptableCoverage": 0.28571428571428575,
+        "nicheAcceptableCoverage": 0.049999999999999996,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.19999999999999998,
+          "disconnected": 0.19999999999999998,
+          "hierarchies": 0.7999999999999999,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 0.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 11,
+        "totalJobs": 60,
+        "hardValidJobs": 55,
+        "meanFiniteRegret": 4.442044192571477,
+        "maxFiniteRegret": 16.363636,
+        "p95FiniteRegret": 14.540555625922481,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.2727272727272727,
+          "compact": 0.1818181818181818,
+          "traceable": 0.1818181818181818,
+          "stable": 0.1818181818181818,
+          "specialist": 0.1818181818181818
+        },
+        "engine": "boundary-align",
+        "presetIndex": 1,
+        "method": "tuned:boundary-align:RIGHT:p1"
+      }
+    },
+    "compound-spring": {
+      "presetIndex": 3,
+      "direction": "RIGHT",
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 0.9090909090909092,
+        "acceptableCoverage": 0.18181818181818182,
+        "commonAcceptableCoverage": 0.2571428571428572,
+        "nicheAcceptableCoverage": 0.049999999999999996,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.19999999999999998,
+          "disconnected": 0.19999999999999998,
+          "hierarchies": 0.6,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 0.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 10,
+        "totalJobs": 60,
+        "hardValidJobs": 55,
+        "meanFiniteRegret": 4.464631889424816,
+        "maxFiniteRegret": 16.732884030021506,
+        "p95FiniteRegret": 13.049481198081107,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.2727272727272727,
+          "compact": 0.1818181818181818,
+          "traceable": 0.0909090909090909,
+          "stable": 0.1818181818181818,
+          "specialist": 0.1818181818181818
+        },
+        "engine": "compound-spring",
+        "presetIndex": 3,
+        "method": "tuned:compound-spring:RIGHT:p3"
+      }
+    },
+    "tidy": {
+      "presetIndex": 3,
+      "direction": "RIGHT",
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 1.0,
+        "acceptableCoverage": 0.43636363636363634,
+        "commonAcceptableCoverage": 0.5142857142857143,
+        "nicheAcceptableCoverage": 0.3,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 0.6,
+          "networks": 0.19999999999999998,
+          "pipelines": 0.0,
+          "presentation": 1.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 24,
+        "totalJobs": 60,
+        "hardValidJobs": 60,
+        "meanFiniteRegret": 2.838982853618608,
+        "maxFiniteRegret": 15.454546,
+        "p95FiniteRegret": 8.649068520311332,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.3636363636363636,
+          "compact": 0.5454545454545454,
+          "traceable": 0.3636363636363636,
+          "stable": 0.45454545454545453,
+          "specialist": 0.45454545454545453
+        },
+        "engine": "tidy",
+        "presetIndex": 3,
+        "method": "tuned:tidy:RIGHT:p3"
+      }
+    },
+    "stress": {
+      "presetIndex": 0,
+      "direction": "RIGHT",
+      "attrs": {},
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 1.0,
+        "acceptableCoverage": 0.2909090909090909,
+        "commonAcceptableCoverage": 0.3428571428571429,
+        "nicheAcceptableCoverage": 0.19999999999999998,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.19999999999999998,
+          "disconnected": 0.19999999999999998,
+          "hierarchies": 0.19999999999999998,
+          "networks": 0.6,
+          "pipelines": 0.0,
+          "presentation": 1.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 16,
+        "totalJobs": 60,
+        "hardValidJobs": 60,
+        "meanFiniteRegret": 3.3048504338450293,
+        "maxFiniteRegret": 15.454546,
+        "p95FiniteRegret": 10.668721464541123,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.45454545454545453,
+          "compact": 0.1818181818181818,
+          "traceable": 0.2727272727272727,
+          "stable": 0.2727272727272727,
+          "specialist": 0.2727272727272727
+        },
+        "engine": "stress",
+        "presetIndex": 0,
+        "method": "tuned:stress:RIGHT:p0"
+      }
+    },
+    "force": {
+      "presetIndex": 3,
+      "direction": "RIGHT",
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 0.9090909090909092,
+        "acceptableCoverage": 0.2181818181818182,
+        "commonAcceptableCoverage": 0.17142857142857146,
+        "nicheAcceptableCoverage": 0.3,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.19999999999999998,
+          "hierarchies": 0.19999999999999998,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 0.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 12,
+        "totalJobs": 60,
+        "hardValidJobs": 55,
+        "meanFiniteRegret": 3.492717766676638,
+        "maxFiniteRegret": 14.843364728454613,
+        "p95FiniteRegret": 11.136364099999994,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.3636363636363636,
+          "compact": 0.1818181818181818,
+          "traceable": 0.1818181818181818,
+          "stable": 0.1818181818181818,
+          "specialist": 0.1818181818181818
+        },
+        "engine": "force",
+        "presetIndex": 3,
+        "method": "tuned:force:RIGHT:p3"
+      }
+    },
+    "flow": {
+      "presetIndex": 1,
+      "direction": "RIGHT",
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 0.9090909090909092,
+        "acceptableCoverage": 0.2,
+        "commonAcceptableCoverage": 0.28571428571428575,
+        "nicheAcceptableCoverage": 0.049999999999999996,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.19999999999999998,
+          "disconnected": 0.19999999999999998,
+          "hierarchies": 0.7999999999999999,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 0.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 11,
+        "totalJobs": 60,
+        "hardValidJobs": 55,
+        "meanFiniteRegret": 3.9948197587495833,
+        "maxFiniteRegret": 16.02783017903875,
+        "p95FiniteRegret": 11.51629642690898,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.2727272727272727,
+          "compact": 0.1818181818181818,
+          "traceable": 0.1818181818181818,
+          "stable": 0.1818181818181818,
+          "specialist": 0.1818181818181818
+        },
+        "engine": "flow",
+        "presetIndex": 1,
+        "method": "tuned:flow:RIGHT:p1"
+      }
+    },
+    "layered": {
+      "presetIndex": 1,
+      "direction": "RIGHT",
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 0.9090909090909092,
+        "acceptableCoverage": 0.34545454545454546,
+        "commonAcceptableCoverage": 0.34285714285714286,
+        "nicheAcceptableCoverage": 0.35000000000000003,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.7999999999999999,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.6,
+          "hierarchies": 0.0,
+          "networks": 0.0,
+          "pipelines": 0.7999999999999999,
+          "presentation": 0.6,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 23,
+        "totalJobs": 60,
+        "hardValidJobs": 55,
+        "meanFiniteRegret": 3.7727432988631886,
+        "maxFiniteRegret": 17.727273,
+        "p95FiniteRegret": 11.727272899999992,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.22727272727272727,
+          "compact": 0.3636363636363636,
+          "traceable": 0.22727272727272727,
+          "stable": 0.45454545454545453,
+          "specialist": 0.45454545454545453
+        },
+        "engine": "layered",
+        "presetIndex": 1,
+        "method": "tuned:layered:RIGHT:p1"
+      }
+    },
+    "tree": {
+      "presetIndex": 1,
+      "direction": "RIGHT",
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 1.0,
+        "acceptableCoverage": 0.2909090909090909,
+        "commonAcceptableCoverage": 0.31428571428571433,
+        "nicheAcceptableCoverage": 0.25,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.19999999999999998,
+          "dags": 0.0,
+          "disconnected": 0.0,
+          "hierarchies": 0.0,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 1.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 16,
+        "totalJobs": 60,
+        "hardValidJobs": 60,
+        "meanFiniteRegret": 6.391703335761946,
+        "maxFiniteRegret": 21.818182,
+        "p95FiniteRegret": 17.135724559604142,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.2727272727272727,
+          "compact": 0.3636363636363636,
+          "traceable": 0.2727272727272727,
+          "stable": 0.2727272727272727,
+          "specialist": 0.2727272727272727
+        },
+        "engine": "tree",
+        "presetIndex": 1,
+        "method": "tuned:tree:RIGHT:p1"
+      }
+    },
+    "grid": {
+      "presetIndex": 3,
+      "direction": "RIGHT",
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      },
+      "rootRule": null,
+      "selectionSummary": {
+        "weightedHardValidCoverage": 1.0,
+        "acceptableCoverage": 0.18181818181818182,
+        "commonAcceptableCoverage": 0.14285714285714288,
+        "nicheAcceptableCoverage": 0.25,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 1.0,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 1.0,
+          "hierarchies": 0.0,
+          "networks": 0.0,
+          "pipelines": 0.0,
+          "presentation": 0.0,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 0,
+        "currentValidHardRegressionCases": 0,
+        "oracleUnavailableJobs": 0,
+        "acceptableJobs": 10,
+        "totalJobs": 60,
+        "hardValidJobs": 60,
+        "meanFiniteRegret": 6.745233251947027,
+        "maxFiniteRegret": 19.79620360555696,
+        "p95FiniteRegret": 15.545454099999994,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 0,
+        "specialistCurrentValidCases": 0,
+        "profileCoverage": {
+          "readable": 0.1818181818181818,
+          "compact": 0.1818181818181818,
+          "traceable": 0.1818181818181818,
+          "stable": 0.1818181818181818,
+          "specialist": 0.1818181818181818
+        },
+        "engine": "grid",
+        "presetIndex": 3,
+        "method": "tuned:grid:RIGHT:p3"
+      }
+    }
+  },
+  "jointLayoutChoices": [
+    {
+      "method": "tuned:compound-flow:RIGHT:p1",
+      "engine": "compound-flow",
+      "layout": {
+        "engine": "compound-flow",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {
+          "rank-gap": 24,
+          "node-gap": 12
+        }
+      },
+      "rootRule": null,
+      "developmentSummary": {
+        "method": "tuned:compound-flow:RIGHT:p1",
+        "weighting": "equal-family",
+        "weightedHardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.15384615384615385,
+        "nicheAcceptableCoverage": 0.3777777777777779,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.8,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "currentValidHardRegressions": 5,
+        "currentValidHardRegressionCases": 1,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 54,
+        "totalJobs": 240,
+        "hardValidJobs": 215,
+        "meanFiniteRegret": 12.891304476116904,
+        "maxFiniteRegret": 183.50443073968685,
+        "p95FiniteRegret": 65.0717031553282,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.13636363636363633,
+          "compact": 0.2272727272727272,
+          "traceable": 0.27272727272727265,
+          "stable": 0.29545454545454536,
+          "specialist": 0.29545454545454536
+        },
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.14285714285714288,
+        "absoluteNicheAcceptableCoverage": 0.34000000000000014,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.2,
+          "authored": 0.45,
+          "containers": 0.4,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.35,
+          "hierarchies": 0.0,
+          "networks": 0.25,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.7,
+          "routing": 0.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.03571428571428571,
+          "compact": 0.14285714285714285,
+          "traceable": 0.17857142857142855,
+          "stable": 0.17857142857142855,
+          "specialist": 0.17857142857142855
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.03846153846153846,
+          "compact": 0.15384615384615383,
+          "traceable": 0.1923076923076923,
+          "stable": 0.1923076923076923,
+          "specialist": 0.1923076923076923
+        },
+        "worstProfileCommonFeasibleCoverage": 0.03846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.03571428571428571,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 1,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "compact": {
+            "acceptableBases": 4,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "traceable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "stable": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "specialist": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          }
+        },
+        "currentValidHardRegressionCommonCases": 1
+      }
+    },
+    {
+      "method": "engine:force:RIGHT",
+      "engine": "force",
+      "layout": {
+        "engine": "force",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "rootRule": null,
+      "developmentSummary": {
+        "method": "engine:force:RIGHT",
+        "weighting": "equal-family",
+        "weightedHardValidCoverage": 0.875,
+        "acceptableCoverage": 0.24545454545454556,
+        "commonAcceptableCoverage": 0.2076923076923077,
+        "nicheAcceptableCoverage": 0.30000000000000004,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.2666666666666667,
+          "authored": 0.45,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.2666666666666667,
+          "disconnected": 0.25,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.05,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.55
+        },
+        "currentValidHardRegressions": 5,
+        "currentValidHardRegressionCases": 1,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 54,
+        "totalJobs": 240,
+        "hardValidJobs": 210,
+        "meanFiniteRegret": 5.896247389541983,
+        "maxFiniteRegret": 159.77417370233553,
+        "p95FiniteRegret": 12.941176000000002,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.36363636363636354,
+          "compact": 0.13636363636363633,
+          "traceable": 0.2272727272727272,
+          "stable": 0.24999999999999992,
+          "specialist": 0.24999999999999992
+        },
+        "absoluteAcceptableCoverage": 0.2250000000000001,
+        "absoluteCommonAcceptableCoverage": 0.1928571428571429,
+        "absoluteNicheAcceptableCoverage": 0.2700000000000001,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.2,
+          "authored": 0.45,
+          "containers": 0.0,
+          "cycles": 0.0,
+          "dags": 0.2,
+          "disconnected": 0.25,
+          "hierarchies": 0.15000000000000002,
+          "networks": 0.05,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.55
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.24999999999999997,
+          "compact": 0.07142857142857142,
+          "traceable": 0.21428571428571427,
+          "stable": 0.21428571428571427,
+          "specialist": 0.21428571428571427
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.2692307692307692,
+          "compact": 0.07692307692307691,
+          "traceable": 0.23076923076923075,
+          "stable": 0.23076923076923075,
+          "specialist": 0.23076923076923075
+        },
+        "worstProfileCommonFeasibleCoverage": 0.07692307692307691,
+        "worstProfileCommonAbsoluteCoverage": 0.07142857142857142,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "compact": {
+            "acceptableBases": 2,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "traceable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "stable": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "specialist": {
+            "acceptableBases": 6,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          }
+        },
+        "currentValidHardRegressionCommonCases": 1
+      }
+    },
+    {
+      "method": "engine:boundary-align:RIGHT",
+      "engine": "boundary-align",
+      "layout": {
+        "engine": "boundary-align",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "rootRule": null,
+      "developmentSummary": {
+        "method": "engine:boundary-align:RIGHT",
+        "weighting": "equal-family",
+        "weightedHardValidCoverage": 0.875,
+        "acceptableCoverage": 0.2090909090909092,
+        "commonAcceptableCoverage": 0.2230769230769231,
+        "nicheAcceptableCoverage": 0.1888888888888889,
+        "worstFamilyCoverage": 0.0,
+        "familyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.1,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.05,
+          "hierarchies": 0.65,
+          "networks": 0.0,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "currentValidHardRegressions": 5,
+        "currentValidHardRegressionCases": 1,
+        "oracleUnavailableJobs": 20,
+        "acceptableJobs": 46,
+        "totalJobs": 240,
+        "hardValidJobs": 210,
+        "meanFiniteRegret": 9.235635064628948,
+        "maxFiniteRegret": 143.33087934046208,
+        "p95FiniteRegret": 28.380882299999996,
+        "specialistCurrentValidLossCases": 0,
+        "specialistProtectedCases": 3,
+        "specialistCurrentValidCases": 3,
+        "profileCoverage": {
+          "readable": 0.15909090909090903,
+          "compact": 0.18181818181818177,
+          "traceable": 0.24999999999999992,
+          "stable": 0.2272727272727272,
+          "specialist": 0.2272727272727272
+        },
+        "absoluteAcceptableCoverage": 0.19166666666666676,
+        "absoluteCommonAcceptableCoverage": 0.20714285714285718,
+        "absoluteNicheAcceptableCoverage": 0.17000000000000004,
+        "absoluteFamilyCoverage": {
+          "architecture": 0.0,
+          "authored": 0.45,
+          "containers": 0.05,
+          "cycles": 0.0,
+          "dags": 0.0,
+          "disconnected": 0.05,
+          "hierarchies": 0.65,
+          "networks": 0.0,
+          "pipelines": 0.15000000000000002,
+          "presentation": 0.2,
+          "recipes": 0.5,
+          "routing": 0.25
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.07142857142857142,
+          "compact": 0.17857142857142855,
+          "traceable": 0.2857142857142857,
+          "stable": 0.24999999999999997,
+          "specialist": 0.24999999999999997
+        },
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.07692307692307691,
+          "compact": 0.1923076923076923,
+          "traceable": 0.30769230769230765,
+          "stable": 0.2692307692307692,
+          "specialist": 0.2692307692307692
+        },
+        "worstProfileCommonFeasibleCoverage": 0.07692307692307691,
+        "worstProfileCommonAbsoluteCoverage": 0.07142857142857142,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptableBases": 2,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "compact": {
+            "acceptableBases": 5,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "traceable": {
+            "acceptableBases": 8,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "stable": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          },
+          "specialist": {
+            "acceptableBases": 7,
+            "allCommonBases": 28,
+            "oracleFeasibleBases": 26,
+            "currentValidBases": 25,
+            "currentValidHardRegressionCases": 1
+          }
+        },
+        "currentValidHardRegressionCommonCases": 1
+      }
+    }
+  ],
+  "jointChoiceRule": "best three distinct-engine global configurations, ranked by hard-valid coverage, acceptable coverage, finite regret; default and selected presets share reference oracle",
+  "sourceIntentRule": "Nested structural recipes, authored pins and required hints are preserved. Explicit change-direction edits override the predicted/default direction with the requested direction before compilation.",
+  "acceptanceGate": "contract: at least95% relative feasible-pool common coverage separately per profile, no new current-valid hard failure, specialist losses need explicit escape. Conservative absolute95% is separate sensitivity",
+  "proposedValidityGuards": {
+    "best-single": true,
+    "feature-selector": true,
+    "current-source": false
+  },
+  "proposalOnly": true,
+  "engineRecipeMinima": [
+    {
+      "mode": "defaults",
+      "scenario": "recipe-baselines-safe",
+      "minimumContractSize": null,
+      "portfolio": null
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipes-and-authored-safe",
+      "minimumContractSize": null,
+      "portfolio": null
+    },
+    {
+      "mode": "defaults",
+      "scenario": "current-ui-fallback",
+      "minimumContractSize": null,
+      "portfolio": null
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipe-baselines-safe",
+      "minimumContractSize": null,
+      "portfolio": null
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipes-and-authored-safe",
+      "minimumContractSize": null,
+      "portfolio": null
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "current-ui-fallback",
+      "minimumContractSize": null,
+      "portfolio": null
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipe-baselines-safe",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ]
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipes-and-authored-safe",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ]
+    },
+    {
+      "mode": "combined",
+      "scenario": "current-ui-fallback",
+      "minimumContractSize": 5,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree"
+      ]
+    }
+  ],
+  "minimumConfigurationPolicy": {
+    "fixedEngineSet": [
+      "boundary-align",
+      "tidy",
+      "force",
+      "layered",
+      "tree",
+      "grid"
+    ],
+    "minimumExtraGlobalConfigurations": 11,
+    "globalMethods": [
+      "engine:boundary-align:DOWN",
+      "engine:boundary-align:RIGHT",
+      "engine:force:RIGHT",
+      "engine:layered:DOWN",
+      "engine:layered:RIGHT",
+      "engine:tidy:RIGHT",
+      "engine:tree:RIGHT",
+      "tuned:force:RIGHT:p3",
+      "tuned:layered:RIGHT:p1",
+      "tuned:tidy:RIGHT:p3",
+      "tuned:tree:RIGHT:p1"
+    ],
+    "candidateGlobalConfigurations": 18,
+    "subsetsExamined": 230964,
+    "qualifiedAtMinimumSize": 2,
+    "nativeRecipeAvailability": "All six structural recipes, implicit baseline, and authored current source whose engine dependencies are retained; this is separate from the counted global configurations.",
+    "objective": "Smallest configuration count meeting relative95% separately under all common profiles with no new current-valid hard case; ties maximize accepted jobs then valid jobs. Engine set was chosen first; this is not joint exhaustive optimization over every engine/configuration set.",
+    "oracleOnly": true,
+    "developmentSummary": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.9454545454545455,
+      "commonAcceptableCoverage": 0.9615384615384615,
+      "nicheAcceptableCoverage": 0.9222222222222222,
+      "worstFamilyCoverage": 0.75,
+      "familyCoverage": {
+        "architecture": 1.0,
+        "authored": 1.0,
+        "containers": 1.0,
+        "cycles": 0.75,
+        "dags": 1.0,
+        "disconnected": 1.0,
+        "hierarchies": 1.0,
+        "networks": 0.95,
+        "pipelines": 1.0,
+        "presentation": 1.0,
+        "recipes": 0.95,
+        "routing": 0.75
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 208,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 0.15542062249688066,
+      "maxFiniteRegret": 6.428571,
+      "p95FiniteRegret": 0.9090909999999999,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.9318181818181817,
+        "compact": 0.9545454545454544,
+        "traceable": 0.9318181818181817,
+        "stable": 0.9545454545454544,
+        "specialist": 0.9545454545454544
+      },
+      "absoluteAcceptableCoverage": 0.8666666666666667,
+      "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+      "absoluteNicheAcceptableCoverage": 0.8300000000000001,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.75,
+        "authored": 1.0,
+        "containers": 0.5,
+        "cycles": 0.75,
+        "dags": 0.75,
+        "disconnected": 1.0,
+        "hierarchies": 1.0,
+        "networks": 0.95,
+        "pipelines": 1.0,
+        "presentation": 1.0,
+        "recipes": 0.95,
+        "routing": 0.75
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.8928571428571429,
+        "compact": 0.8928571428571429,
+        "traceable": 0.8928571428571429,
+        "stable": 0.8928571428571429,
+        "specialist": 0.8928571428571429
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.9615384615384616,
+        "compact": 0.9615384615384616,
+        "traceable": 0.9615384615384616,
+        "stable": 0.9615384615384616,
+        "specialist": 0.9615384615384616
+      },
+      "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+      "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    }
+  }
+}

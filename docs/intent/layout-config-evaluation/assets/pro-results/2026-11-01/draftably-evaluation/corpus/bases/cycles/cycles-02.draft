@@ -1,0 +1,26 @@
+diagram "Order lifecycle" version=1
+
+# A state machine with loops back to earlier states and two terminal states.
+node draft "Draft" shape=pill color=slate
+node placed "Placed" shape=pill color=blue
+node paid "Paid" shape=pill color=blue
+node packed "Packed" shape=pill color=violet
+node shipped "Shipped" shape=pill color=violet
+node delivered "Delivered" shape=pill color=mint
+node returned "Return requested" shape=pill color=amber
+node refunded "Refunded" shape=pill color=rose
+node cancelled "Cancelled" shape=pill color=rose
+
+edge submit draft -> placed "submit"
+edge pay placed -> paid "payment captured"
+edge decline placed -> draft "payment declined"
+edge pick paid -> packed "pick & pack"
+edge ship packed -> shipped "hand to carrier"
+edge deliver shipped -> delivered "scan at door"
+edge lost shipped -> packed "lost in transit"
+edge ret delivered -> returned "within 30 days"
+edge refund returned -> refunded "item received"
+edge cancel1 placed -> cancelled "customer cancels"
+edge cancel2 paid -> cancelled "customer cancels"
+
+layout root flow gap=44 direction=right
