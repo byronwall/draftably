@@ -6,6 +6,7 @@ export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
+import type { EndMarker } from './markers';
 import type { Spot, Status } from './status';
 
 export type ShapeKind =
@@ -63,6 +64,10 @@ export interface DiagramEdge {
   /** Label before a change, from `was=` on a `~` line. */
   was?: string;
   directed: boolean;
+  /** The mark at the target end, when it isn't the plain arrow; see `headOf`. */
+  head?: EndMarker;
+  /** The mark at the source end, when it has one; see `tailOf`. */
+  tail?: EndMarker;
   emphasis: boolean;
   dashed: boolean;
   /** How it differs between two versions of the diagram. */

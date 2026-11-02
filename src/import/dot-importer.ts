@@ -4,6 +4,7 @@
  * No Graphviz process, renderer, external resource loader, or foreign writer is used.
  */
 import { checkSource } from '../dsl/compile';
+import type { EndMarker } from '../model/markers';
 import {
   parse,
   type AttributeASTNode,
@@ -25,6 +26,19 @@ import {
   type NativeEdge,
   type ImportResult,
 } from './import-core';
+
+/** Graphviz arrow shapes that native ends cover; any other shape is refused. */
+const DOT_MARKERS: Record<string, EndMarker> = {
+  none: 'none',
+  normal: 'arrow',
+  vee: 'arrow',
+  open: 'arrow',
+  onormal: 'open-triangle',
+  empty: 'open-triangle',
+  diamond: 'diamond',
+  odiamond: 'open-diamond',
+  dot: 'circle',
+};
 
 type Attrs = Map<string, LiteralASTNode>;
 interface Scope {
@@ -620,35 +634,31 @@ function parseDot(source: string, title: string): ImportResult {
   };
   for (const [i, e] of edges.entries()) {
     const direction = val(e.attrs, 'dir') ?? (root.directed ? 'forward' : 'none');
-    if (!['forward', 'none'].includes(direction))
+    if (!['forward', 'back', 'both', 'none'].includes(direction))
       note(
         'DOT_ARROW_ENDS',
-        'dir=' +
-          direction +
-          ' requires a native start/both-arrow model; endpoints are not reversed or duplicated.',
+        'dir=' + direction + ' is not a Graphviz direction.',
         'error',
         'semantics',
         e.line,
       );
-    const head = val(e.attrs, 'arrowhead');
-    if (root.directed && (direction === 'none' || head === 'none'))
-      note(
-        'DOT_HIDDEN_DIRECTION',
-        'DOT retains a directed relation when its arrow is hidden; native directed=false would change that meaning.',
-        'error',
-        'semantics',
-        e.line,
-      );
-    if (head && !['normal', 'none'].includes(head))
-      note(
-        'DOT_ARROW_SHAPE',
-        'Arrowhead ' + head + ' carries unsupported notation.',
-        'error',
-        'semantics',
-        e.line,
-      );
-    if (val(e.attrs, 'arrowtail') && val(e.attrs, 'arrowtail') !== 'none')
-      note('DOT_ARROW_SHAPE', 'A custom tail arrow is unsupported.', 'error', 'semantics', e.line);
+    /** The mark for one end. DOT draws an end's arrow only when `dir` shows that end. */
+    const mark = (attr: string, shown: boolean) => {
+      if (!shown) return 'none';
+      const shape = val(e.attrs, attr) ?? 'normal',
+        marker = DOT_MARKERS[shape];
+      if (!marker)
+        note(
+          'DOT_ARROW_SHAPE',
+          attr + ' ' + shape + ' carries notation with no native marker.',
+          'error',
+          'semantics',
+          e.line,
+        );
+      return marker ?? 'none';
+    };
+    const head = mark('arrowhead', direction === 'forward' || direction === 'both'),
+      tail = mark('arrowtail', direction === 'back' || direction === 'both');
     const style = (val(e.attrs, 'style') ?? '').split(',').map(s => s.trim());
     if (style.includes('invis'))
       note(
@@ -671,11 +681,12 @@ function parseDot(source: string, title: string): ImportResult {
       from: ids.get('node', e.a.id.value),
       to: ids.get('node', e.b.id.value),
       label: text(e.attrs.get('label'), '', { a: e.a.id.value, b: e.b.id.value }),
-      directed: direction === 'forward' && head !== 'none',
+      directed: root.directed,
+      ...(root.directed ? { head, tail } : {}),
       ...(style.includes('dashed') ? { dashed: true } : {}),
       ...(!boolean(e.attrs.get('constraint'), true) ? { constraint: false as const } : {}),
     };
-    if (!root.directed && direction === 'forward')
+    if (!root.directed && direction !== 'none')
       note(
         'DOT_GRAPH_ARROWS',
         'Arrows on an undirected DOT graph conflate decoration and direction in the native model.',

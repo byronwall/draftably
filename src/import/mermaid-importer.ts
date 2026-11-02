@@ -12,9 +12,21 @@ import {
   hex,
   type Diagnostic,
   type ImportResult,
+  type NativeEdge,
   type NativeObject,
 } from './import-core';
 import { MERMAID_VERSION, type ParseFlowResult, type FlowClass } from './mermaid-facade';
+
+/** Mermaid's link types that native ends cover; a type outside this list is refused. */
+const MERMAID_ENDS: Record<string, Pick<NativeEdge, 'head' | 'tail'>> = {
+  arrow_point: {},
+  arrow_open: {},
+  arrow_circle: { head: 'circle' },
+  arrow_cross: { head: 'cross' },
+  double_arrow_point: { tail: 'arrow' },
+  double_arrow_circle: { head: 'circle', tail: 'circle' },
+  double_arrow_cross: { head: 'cross', tail: 'cross' },
+};
 
 function mapMermaidFlow(
   parsed: ParseFlowResult,
@@ -336,7 +348,8 @@ function mapMermaidFlow(
     }
     plan.objects.push(...all.values());
     for (const [index, e] of snapshot.edges.entries()) {
-      if (e.type !== 'arrow_point' && e.type !== 'arrow_open') {
+      const ends = MERMAID_ENDS[String(e.type)];
+      if (!ends) {
         note(
           'MERMAID_ARROW_UNSUPPORTED',
           'Edge terminal semantics are unsupported: ' +
@@ -387,7 +400,8 @@ function mapMermaidFlow(
         from: from.id,
         to: to.id,
         label: label(e.text, e.labelType, foreignEdge),
-        directed: e.type === 'arrow_point',
+        directed: e.type !== 'arrow_open',
+        ...ends,
         ...(e.stroke === 'dotted' ? { dashed: true } : {}),
       });
       if (e.stroke === 'dotted') {

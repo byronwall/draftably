@@ -269,6 +269,8 @@ export function translateEdit(input: EditInput): EditResult {
     s.args = [s.args[0], bare(sid(e.from)), bare('->'), bare(sid(e.to))];
     if (e.label) s.args.push(quoted(e.label));
     setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
+    setAttr(s, 'head', e.head ? bare(e.head) : undefined);
+    setAttr(s, 'tail', e.tail ? bare(e.tail) : undefined);
     const kind = getAttr(s, 'kind')?.value;
     if (e.dashed) setAttr(s, 'kind', bare('async'));
     else if (kind === 'async') setAttr(s, 'kind', undefined);

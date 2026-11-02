@@ -16,6 +16,7 @@ import {
 } from './appearance';
 import { FONT_ROLES } from './fonts';
 import { EDITORS, type FileConfig } from './link';
+import { MARKERS } from './markers';
 import { NOTE_SIDES, type Note } from './note';
 import { STATUSES } from './status';
 import { LEGACY_TYPE_STYLE, SHAPES } from './styles';
@@ -213,6 +214,12 @@ export function normalize(input: unknown): Diagram {
       label: e.label || '',
       ...(typeof e.was === 'string' ? { was: e.was } : {}),
       directed: e.directed !== false,
+      ...(e.directed !== false && MARKERS.includes(e.head) && e.head !== 'arrow'
+        ? { head: e.head }
+        : {}),
+      ...(e.directed !== false && MARKERS.includes(e.tail) && e.tail !== 'none'
+        ? { tail: e.tail }
+        : {}),
       emphasis: !!e.emphasis,
       dashed: !!e.dashed || ['dependency', 'annotation'].includes(e.type),
       ...(STATUSES.includes(e.status) && e.status !== 'same' ? { status: e.status } : {}),
