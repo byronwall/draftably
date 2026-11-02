@@ -3,12 +3,12 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/appearance';
-import { oldDoc, panelDoc } from '../model/panels';
+import { oldDoc, panelDoc, withoutMargins } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
 import { headingMarkup } from '../model/heading';
-import { legendMarkup } from '../model/legend';
+import { legendMarkup, markerMarkup } from '../model/legend';
 import { noteMarkup, placeNotes } from '../model/note';
 import { drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
@@ -27,13 +27,14 @@ import {
   tailOf,
   type EndMarker,
 } from '../model/markers';
-import { computeRoutes } from '../model/routes';
+import { computeRoutes, HALO_WIDTH } from '../model/routes';
 import {
   drawnLegend,
   edgeInk,
   HALO_GAP,
   haloInk,
   isDiff,
+  MARKER,
   statusPaint,
   usedStatuses,
   withState,
@@ -41,6 +42,7 @@ import {
 } from '../model/status';
 import type { Diagram, Rect } from '../model/types';
 import { visibleRects } from '../dsl/project';
+import { haloPieces, labelCards, panelDrawn, phaseOpacity, type Surface } from '../model/surface';
 import { LIFELINE, SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../dsl/frame';
 
 import { fontFaceCss } from '../lib/font-data';
@@ -74,6 +76,15 @@ const markMarkup = (m: LinkMark, x: number, y: number, ink: string) =>
 /** Hover for links, which a browser applies to an SVG opened on its own. */
 const LINK_CSS =
   'a.link{cursor:pointer}a.link:hover .shape{stroke-width:2.4px}a.link:hover .link-mark{stroke-width:2px}';
+
+/** A status's title marks: strike and ink fade, as attributes on a text element. */
+const strikeAttr = (p: StatusPaint) =>
+  (p.strike ? ' text-decoration="line-through"' : '') +
+  (p.inkFade ? ` fill-opacity="${p.inkFade}"` : '');
+
+/** The removed marker on a shape's top-right corner. */
+const cornerMarker = (p: StatusPaint, r: Rect, ink: string, canvas: string) =>
+  p.marker ? markerMarkup(r.x + r.w - MARKER.inset, r.y + MARKER.inset, ink, canvas) : '';
 
 /** A status's fade, as an attribute on the element that groups an object's marks. */
 const fade = (p: StatusPaint) => (p.opacity < 1 ? ` opacity="${p.opacity}"` : '');
@@ -134,14 +145,15 @@ function routesOf(doc: Diagram) {
 
 /**
  * The older panel's lines: the merged routes, so a line runs where it does in the newer panel,
- * except where an end changed shape, the messages changed rows or the label changed, so the old
- * label sits by its own size. Routing all of them as they were would move other lines too, since
- * lines from one box share a turn.
+ * except where an end changed shape or the label changed, so the old label sits by its own size.
+ * Routing all of them as they were would move other lines too, since lines from one box share a
+ * turn. A sequence's messages share nothing, and each label sits by its own size, so they all
+ * take their older routes.
  */
 function oldRoutes(doc: Diagram, merged: Route[]) {
   const shaped = new Set(doc.graph.nodes.filter(n => n.wasShape).map(n => n.id)),
     relabeled = new Set(doc.graph.edges.filter(e => e.was !== undefined).map(e => e.id)),
-    rows = !!doc.layout.sequence?.before;
+    rows = !!doc.layout.sequence;
   if (!rows && !shaped.size && !relabeled.size) return merged;
   const old = routesOf(oldDoc(doc));
   return merged.map(r => {
@@ -195,7 +207,7 @@ function sceneMarkup(
               h =>
                 `<rect x="${r.x + h.x}" y="${r.y + h.y}" width="${h.w}" height="${h.h}" rx="${SOFT_RADIUS}" fill="${c.fill}"/>`,
             ),
-            `<text x="${r.x + hull[0].x + SOFT_TITLE.x}" y="${r.y + hull[0].y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(truncateText(g.title, Math.max(40, hull[0].w - 2 * SOFT_PAD), look.annotation))}</text>`,
+            `<text x="${r.x + hull[0].x + SOFT_TITLE.x}" y="${r.y + hull[0].y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(g.title, Math.max(40, hull[0].w - 2 * SOFT_PAD), look.annotation))}</text>`,
             '</g>',
           ],
           opts,
@@ -217,7 +229,7 @@ function sceneMarkup(
           ...cellsChromeMarkup(doc, look, g.id, r),
           ...title.map(
             (line, i) =>
-              `<text x="${r.x + tx}" y="${r.y + band + i * look.groupTitle.lineHeight}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(line)}</text>`,
+              `<text x="${r.x + tx}" y="${r.y + band + i * look.groupTitle.lineHeight}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${strikeAttr(p)}>${esc(line)}</text>`,
           ),
           g.href
             ? markMarkup(
@@ -231,6 +243,7 @@ function sceneMarkup(
                 c.ink,
               )
             : '',
+          cornerMarker(p, r, c.stroke, look.canvas),
           '</g>',
         ],
         opts,
@@ -257,9 +270,13 @@ function sceneMarkup(
       tail = tailOf(edge);
     out.push(
       `<g data-id="${esc(edge.id)}"${fade(p)}>`,
-      route.halo
-        ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
-        : '',
+      ...haloPieces(doc, look, route.halo).flatMap(({ surface, d }) =>
+        paintSurface(
+          surface,
+          s => `<path d="${d}" fill="none" stroke-width="${HALO_WIDTH}" ${s}/>`,
+          'stroke',
+        ),
+      ),
       `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
     );
     const l = route.label,
@@ -268,8 +285,14 @@ function sceneMarkup(
       lines = edgeLabelLines(edge.label, look, message);
     if (l)
       out.push(
-        `<rect x="${l.x - l.w / 2}" y="${l.y - l.h / 2}" width="${l.w}" height="${l.h}" rx="4" fill="${look.canvas}"/>`,
-        `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
+        ...labelCards(doc, look, l).flatMap((c, _, all) =>
+          paintSurface(
+            c.surface,
+            s =>
+              `<rect x="${c.x}" y="${l.y - l.h / 2}" width="${c.w}" height="${l.h}" rx="${all.length > 1 ? 0 : 4}" ${s}/>`,
+          ),
+        ),
+        `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${strikeAttr(p)}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
       );
     out.push('</g>');
   }
@@ -306,7 +329,7 @@ function sceneMarkup(
           accent && style.shape === 'box'
             ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
             : '',
-          `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
+          `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
             label.lines
               .map(
                 (line, i) =>
@@ -319,6 +342,7 @@ function sceneMarkup(
               `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`
             : '',
           mark ? markMarkup(mark, r.x, r.y, mark.inside ? c.ink : look.muted) : '',
+          badge ? '' : cornerMarker(p, r, c.stroke, look.canvas),
           '</g>',
         ],
         opts,
@@ -404,7 +428,7 @@ function openSvg(
       '</defs>',
     `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${look.canvas}"/>`,
     // The title and subtitle sit above the drawing, left-aligned with the legend under it.
-    headingMarkup(look, doc.appearance.heading, heading.x, heading.y),
+    headingMarkup(look, doc.appearance.heading, heading.x, heading.y, heading.wrap),
   ];
 }
 
@@ -415,7 +439,7 @@ function openSvg(
  */
 function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): string {
   const states = doc.appearance.states ?? [],
-    docs = states.map(s => withState(doc, s.id)),
+    docs = states.map(s => withState(withoutMargins(doc), s.id)),
     { defs, marker } = markersFor(look, docs),
     shared = routesOf(doc),
     scenes = docs.map(d => sceneMarkup(d, look, marker, opts, shared));
@@ -469,7 +493,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
       '</g>',
     );
   });
-  out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
   out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');
@@ -487,15 +511,25 @@ export function sequenceBackdrop(doc: Diagram, look: ResolvedAppearance) {
     tab = seq.phaseX ?? panel.x;
   return {
     panel: [
-      `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
-    ],
+      panelDrawn(doc) &&
+        `<rect class="sequence-panel" x="${panel.x}" y="${panel.y}" width="${panel.w}" height="${panel.h}" rx="${Math.min(10, look.radius + 4)}" fill="${swatchFor(look, 'slate', 50, 'group').fill}" stroke="${band.stroke}" stroke-opacity="0.6"/>`,
+    ].filter(Boolean) as string[],
     // Alternate phases are tinted, so neighbours read apart even without their divider.
     phases: seq.phases.flatMap((ph, i) => [
-      `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${i % 2 ? 0.03 : 0.12}"/>`,
+      `<rect class="sequence-phase" data-phase="${esc(ph.id)}" x="${panel.x}" y="${ph.y}" width="${panel.w}" height="${ph.h}" fill="${band.stroke}" fill-opacity="${phaseOpacity(i)}"/>`,
       `<line x1="${panel.x}" x2="${panel.x + panel.w}" y1="${ph.y}" y2="${ph.y}" stroke="${band.stroke}" stroke-opacity="0.5"/>`,
       `<text x="${tab + PHASE_TAB}" y="${ph.y + PHASE_TAB}" dominant-baseline="hanging" ${font(look.annotation)} fill="${look.muted}">${esc(ph.label)}</text>`,
     ]),
   };
+}
+
+/** Markup painted with a surface: its fill, then a phase band's tint over it. */
+function paintSurface(surface: Surface, mark: (paint: string) => string, attr = 'fill') {
+  const t = surface.tint;
+  return [
+    mark(`${attr}="${surface.fill}"`),
+    t ? mark(`${attr}="${t.fill}" ${attr}-opacity="${t.opacity}"`) : '',
+  ];
 }
 
 /** Inset of a phase label from its band's top left corner. */
@@ -593,8 +627,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     }
     out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
   });
-  // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
-  out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
+  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
   out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');

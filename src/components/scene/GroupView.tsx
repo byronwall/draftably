@@ -2,14 +2,14 @@ import { createMemo, For, Show } from 'solid-js';
 import { cellsBandOf, descendants, findGroup, findNode, isCollapsed } from '../../model/graph';
 import { resolveAppearance, type ResolvedAppearance } from '../../model/appearance';
 import { drawnSwatch } from '../../model/colors';
-import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
+import { HALO_GAP, haloInk, MARKER, statusPaint } from '../../model/status';
 import { truncateText } from '../../model/fonts';
 import { groupTitleLines } from '../../model/labels';
 import { groupLinkMark } from '../../model/link';
 import type { Diagram, NodeLayout } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { PIN_SIZE, PositionBadge, ResizeHandles } from './parts';
+import { PIN_SIZE, PositionBadge, RemovedMarker, ResizeHandles } from './parts';
 import { SOFT_PAD, SOFT_RADIUS, SOFT_TITLE } from '../../dsl/frame';
 
 /** The rest of a field that runs on into another row: its title after an ellipsis. */
@@ -99,6 +99,7 @@ export function GroupView(props: GroupViewProps) {
         font-size={String(look().annotation.size)}
         font-weight={String(look().annotation.weight)}
         fill={color().ink}
+        fill-opacity={paint().inkFade}
         text-decoration={paint().strike ? 'line-through' : undefined}
         pointer-events="none"
       >
@@ -170,6 +171,7 @@ export function GroupView(props: GroupViewProps) {
         font-size={String(look().groupTitle.size)}
         font-weight={String(look().groupTitle.weight)}
         fill={color().ink}
+        fill-opacity={paint().inkFade}
         text-decoration={paint().strike ? 'line-through' : undefined}
         pointer-events="none"
       >
@@ -181,6 +183,14 @@ export function GroupView(props: GroupViewProps) {
           )}
         </For>
       </text>
+      <Show when={paint().marker}>
+        <RemovedMarker
+          x={w() - MARKER.inset}
+          y={MARKER.inset}
+          ink={color().stroke}
+          canvas={look().canvas}
+        />
+      </Show>
       <Show when={group().href}>
         {href => (
           <LinkMarkView

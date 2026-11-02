@@ -103,6 +103,8 @@ node db "Postgres" color=violet
 legend blue "Clients"
 legend mint "Our services"
 legend violet "Data stores"
+legend line solid "Request path"
+legend line dashed "Background write"
 
 edge checkout web -> api "HTTPS"
 edge native mobile -> api "HTTPS"
@@ -119,22 +121,22 @@ layout services row gap=56
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `diagram "title" version=1`        | Optional, at most one. Exports and the viewer draw the title above the drawing; `width=` widens the frame                                                                                                                                                                                                                                                                                                                      |
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                                                                                                                                                                                                                                      |
-| `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                                                                                                                                                                                                                                                                                   |
+| `subtitle "text"`                  | Optional, at most one. One short line under the title in exports: the takeaway in about 10 words, not a second title or a paragraph                                                                                                                                                                                                                                                                                            |
 | `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`; `~node` also takes `was-shape=` and `was-count=`                                                                                                                                                                                                                                                           |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                                                                                                                                                                                                                                                                          |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                                                                                                                                                                                                                                          |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                                                                                                                                                                                                                                 |
-| `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                                                                                                                                                                                                                                                                          |
-| `note "text"`                      | A sentence that never moves layout. `near=id side=below\|above\|left\|right` places it beside an object or sequence message; without `near` it sits under the subtitle. `width=` (280 default)                                                                                                                                                                                                                                 |
+| `legend family "meaning"`          | `shade=`. One entry of the key drawn under the diagram; one per accent color you use. `legend line dashed\|solid "meaning"` explains a line style                                                                                                                                                                                                                                                                              |
+| `note "text"`                      | A sentence that never moves layout. `near=id side=below\|above\|left\|right` places it beside an object or sequence message; without `near` it sits under the subtitle and `check` warns `heading-prose`. `width=` (280 default)                                                                                                                                                                                               |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                                                                                                                                                                                                                                                                                    |
-| `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout; `head=`/`tail=` `arrow\|none\|triangle\|open-triangle\|diamond\|open-diamond\|circle\|cross` mark its ends                                                                                                    |
+| `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout; `head=`/`tail=` `arrow\|none\|triangle\|open-triangle\|diamond\|open-diamond\|circle\|cross` mark its ends; a long label wraps to about 140px and `\n` breaks a line                                          |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                                                                                                                                                                                                                                                                                                                             |
 | `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                                                                                                                                                                                                                                                                                                                          |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                                                                                                                                                                                                                                                                                                                          |
 | `routing ...`                      | Router settings for all connections, e.g. `routing edge-gap=24 clearance=12 standoff=20`. Defaults (range): `clearance` 10 (4–30), `standoff` 20 (0–40), `port-gap` 16 (6–28), `edge-gap` 16 (4–48), `bend-penalty` 32 (0–100), `crossing-penalty` 360 (0–1200), `shared-penalty` 8 (0–20), `parallel-penalty` 18 (0–60), `port-stability` 20 (0–150), `fanout-penalty` 50 (0–160), `passes` 3 (1–5), `corner-radius` 6 (0–16) |
 | `phase id "label" ids...`          | Sequence diagrams: listed messages drawn as a labelled row band                                                                                                                                                                                                                                                                                                                                                                |
 | `state id "label" ids...`          | Emphasis state: listed nodes, groups and edges in focus, the rest faded; `rest=plain` keeps the rest                                                                                                                                                                                                                                                                                                                           |
-| `config key=value ...`             | File settings: `link-base="path"` (where relative links start; a URL such as a pinned `…/blob/<sha>/` joins relative hrefs to it), `editor=vscode\|cursor\|zed\|...`                                                                                                                                                                                                                                                           |
+| `config key=value ...`             | File settings: `link-base="path"` (where relative links start; a URL such as a pinned `…/blob/<sha>/` joins relative hrefs to it), `editor=vscode\|cursor\|zed\|...`, `strike-removed=on` (strike removed titles through in a diff)                                                                                                                                                                                            |
 
 `scope` is `root` or a group ID. Colors: `auto` (inherit the family of the nearest colored
 group), `primary` and `secondary` (the theme's accents), `slate`, `stone`, `blue`, `sky`, `teal`,
@@ -155,8 +157,9 @@ anything. Hex colors go in double quotes (`fill="#405D48"`), since `#` starts a 
 that have their own `layout` line. Useful settings: `node-gap=4..160`, `rank-gap=12..220`,
 `group-gap=12..180`, `ordering=stable|crossings`, `fold=auto|never`,
 `aspect=1|1.333|1.6|2|0.75`. For a document or slide, add `fit=slide` (or `wide`, `square`,
-`page`, `tall`) to the root layout line: compile tries both directions and folding and keeps the
-shape closest to that, naming the choice in an `info` note. Where the connections leave a choice, file order decides and an
+`page`, `tall`) to the root layout line: compile tries folding and, unless the line sets
+`direction=`, both directions, keeps the shape closest to that, and names the choice in an `info`
+note. Where the connections leave a choice, file order decides and an
 `order` line overrides it (`order root start ask rule ctx` puts `rule` left of `ctx` in their
 rank); ids never affect placement.
 
@@ -299,9 +302,14 @@ content area.
   - Give the most common role a pale shade (100–200) and save strong shades for the few
     things that should stand out. `amber` and `orange` at 400–500 are bright fills with dark
     text, good for one highlight.
-  - Say what each color means with one `legend family "meaning"` line per color; the viewer and
-    exports draw them as a key. The swatch is shade 500 unless the line sets `shade=`, so match
-    it to the nodes' shade; `check` warns when no node of that family uses it.
+  - Say what each color means with one `legend family "meaning"` line per accent color; the
+    viewer and exports draw them as a key under the drawing. A key that names some colors and
+    not others misleads, so give every accent color a row (`check` warns `legend-missing`). The
+    swatch is shade 500 unless the line sets `shade=`, so match it to the nodes' shade; `check`
+    warns when no node of that family uses it.
+  - When dashed (`kind=async`) and solid lines both mean something, say what with
+    `legend line dashed "meaning"` and `legend line solid "meaning"` (`check` notes
+    `legend-lines` when they are missing).
   - Avoid red next to green and complementary pairs side by side (red and blue, orange and blue)
     unless they encode opposites.
   - Color the outer group and let members inherit (`color=auto`); nested groups of one family
@@ -313,7 +321,7 @@ content area.
   write two near-identical diagrams for the reader to compare. Marked files draw in change colors
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
   `draftably compare old.draft new.draft --write diff.draft` writes the marked file and prints
-  the change's size (`3 added, 1 changed, 2 removed.`) on stderr, then any
+  the change's size (`3 added · 2 lines, 1 changed, 2 removed.`) on stderr, then any
   `Changes with no old version to draw: …`, which both panels show as they are now; say so when
   you hand the diagram back. `compare` writes the `was` words for you. In a sequence, `was-order`
   lists the older message order (`was-order m1 m2 m3`), and it leaves out `+` messages. To mark a
@@ -323,9 +331,11 @@ content area.
   drawing. `direction=right` (rows align) or `direction=down` (columns align) fixes the
   arrangement; by default it follows `aspect=` (1.6).
 - Give a diagram that will be shared as an image a `diagram` title naming what it shows and a
-  `subtitle` stating its takeaway, so the exported picture stands alone.
-- To define a term or add a sentence of context, write `note "…"` (under the subtitle) or
-  `note "…" near=id side=below` (beside one object). Never fake one with `node … shape=text`:
+  `subtitle` with one short takeaway: one line, about 10 words. The drawing says the rest, so the
+  exported picture stands alone. Don't add a paragraph of context; `check` warns
+  `heading-prose` on a subtitle that wraps and on a note with no `near=`.
+- Add a note only when the drawing cannot say it, and put it beside the object it explains:
+  `note "…" near=id side=below`. Never fake one with `node … shape=text`:
   a node takes part in layout and pushes rows and ranks apart. `check` warns `note-overlap` when
   an anchored note has no clear spot; try another side or leave out `near=`. In a sequence,
   `note "…" near=m1` sits level with that message in the right margin; `side=left` takes the left

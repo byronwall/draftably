@@ -31,6 +31,22 @@ describe('heading', () => {
     expect(renderSvg(projectScene(checkSource(plain)))).not.toContain('font-size="20"');
   });
 
+  it('wraps a long subtitle instead of widening the frame, unless width= sets it', () => {
+    const long = SOURCE.replace(
+      /subtitle.*/,
+      `subtitle "${'Orders now persist before payment so a retry never charges twice '.repeat(3)}"`,
+    );
+    const width = (s: string) =>
+      Number(/<svg[^>]* width="([\d.]+)"/.exec(renderSvg(projectScene(checkSource(s))))![1]);
+    const lines = (s: string) =>
+      renderSvg(projectScene(checkSource(s))).split('Orders now').length - 1;
+    expect(width(long)).toBeLessThanOrEqual(Math.max(width(SOURCE), 440));
+    expect(lines(long)).toBeGreaterThan(2);
+    const wide = long.replace('version=1', 'version=1 width=2400');
+    expect(width(wide)).toBe(2400);
+    expect(lines(wide)).toBeLessThan(lines(long));
+  });
+
   it('allows one subtitle', () => {
     expect(() => parseModel('subtitle "a"\nsubtitle "b"\n')).toThrow(/Duplicate/);
   });

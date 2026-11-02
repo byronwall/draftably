@@ -278,6 +278,8 @@ export interface SequenceLayout {
   phaseX?: number;
   /** Spots of the notes that sit in a side margin, by index in `appearance.notes`. */
   notes?: Array<Rect | null>;
+  /** With `notes`: the panel without those margins, for drawings with their notes in the frame. */
+  inner?: Rect;
   /**
    * From `was-order`: each message's row and the phase bands in the older message order, and how
    * much further that order runs down the panel.

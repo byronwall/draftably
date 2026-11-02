@@ -3,7 +3,6 @@ import { resolveAppearance } from '../../model/appearance';
 import { MIN_FRAME_WIDTH, type DiagramFrame } from '../../model/frame';
 import { headingLines, headingTypes } from '../../model/heading';
 import { legendMarkup } from '../../model/legend';
-import { drawnLegend, usedStatuses } from '../../model/status';
 import { HEADING_EDIT } from '../../state/actions';
 import { doc, transact } from '../../state/document';
 import { inlineEditId, screenToWorld } from '../../state/editor';
@@ -19,11 +18,18 @@ type Key = 'title' | 'subtitle';
 export function headingSlot(frame: DiagramFrame, key: Key) {
   const look = resolveAppearance(doc.appearance),
     types = headingTypes(look),
-    lines = headingLines(look, doc.appearance.heading, frame.heading.x, frame.heading.y),
+    lines = headingLines(
+      look,
+      doc.appearance.heading,
+      frame.heading.x,
+      frame.heading.y,
+      frame.heading.wrap,
+    ),
     line = lines.find(l => l.key === key),
     title = lines.find(l => l.key === 'title'),
     w = Math.max(240, frame.x + frame.w - frame.heading.x - 40),
-    h = types[key].lineHeight;
+    // A wrapped subtitle edits over all its lines.
+    h = types[key].lineHeight * Math.max(1, lines.filter(l => l.key === key).length);
   const y = line
     ? line.y
     : key === 'title'
@@ -46,9 +52,14 @@ export function Frame() {
   const [dragW, setDragW] = createSignal<number | null>(null);
   const w = () => dragW() ?? frame().w;
   const lines = () =>
-    headingLines(look(), doc.appearance.heading, frame().heading.x, frame().heading.y);
-  const legend = () =>
-    legendMarkup(look(), drawnLegend(doc), frame().legend.x, frame().legend.y, usedStatuses(doc));
+    headingLines(
+      look(),
+      doc.appearance.heading,
+      frame().heading.x,
+      frame().heading.y,
+      frame().heading.wrap,
+    );
+  const legend = () => legendMarkup(look(), frame().key, frame().legend.x, frame().legend.y);
   const ghost = (key: Key) => {
     if (doc.appearance.heading?.[key] || inlineEditId() === HEADING_EDIT[key]) return;
     // Frame notes sit where a missing subtitle would go, as exports draw them.

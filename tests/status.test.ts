@@ -4,7 +4,7 @@ import { checkSource } from '../src/dsl/compile';
 import { projectScene } from '../src/dsl/project';
 import { formatSource, parseModel } from '../src/dsl/syntax';
 import { normalize } from '../src/model/document';
-import { usedStatuses } from '../src/model/status';
+import { statusLabel, usedStatuses } from '../src/model/status';
 
 const SOURCE = `node api "API"
 ~node orders "Orders service" was="Orders"
@@ -28,15 +28,20 @@ describe('change marks', () => {
     expect(m.objects[1].was).toBe('Orders');
     expect(formatSource(SOURCE)).toBe(SOURCE);
     const doc = normalize(JSON.parse(JSON.stringify(projectScene(checkSource(SOURCE)))));
-    expect(usedStatuses(doc).map(s => `${s.count} ${s.status}`)).toEqual([
-      '2 added',
+    // Shapes and lines count apart, so an added box and its line don't read as two boxes.
+    expect(usedStatuses(doc).map(statusLabel)).toEqual([
+      '1 added · 1 line',
       '1 changed',
-      '2 removed',
-      '1 context',
+      '1 removed · 1 line',
+      '1 shown for context',
     ]);
     const svg = renderSvg(doc);
     expect(svg).toContain('1 shown for context');
-    expect(svg).toContain('line-through');
+    // A removed title stays readable unless the file asks for a strike.
+    expect(svg).not.toContain('line-through');
+    const struck = `${SOURCE}config strike-removed=on\n`;
+    const strikeDoc = normalize(JSON.parse(JSON.stringify(projectScene(checkSource(struck)))));
+    expect(renderSvg(strikeDoc)).toContain('line-through');
   });
 
   it('rejects marks and was= where they mean nothing', () => {

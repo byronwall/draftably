@@ -5,16 +5,8 @@ import { workspace } from './launch';
 const UI_STORAGE = 'diagram-studio-v5-ui';
 
 export type MenuId =
-  | 'file'
-  | 'edit'
-  | 'view'
-  | 'layout'
-  | 'help'
-  | 'export'
-  | 'routing'
-  | 'context'
-  | 'appearance'
-  | 'tools';
+  'file' | 'edit' | 'view' | 'layout' | 'help' | 'export' | 'context' | 'appearance' | 'tools';
+export type RightTab = 'properties' | 'arrange';
 export type DialogId = 'help' | 'palette' | 'quick-build' | 'confirm' | 'error' | 'export';
 
 export interface MenuState {
@@ -53,6 +45,7 @@ function readPanels() {
       files,
       sidebarWidth: saved?.sidebarWidth ?? SIDEBAR_WIDTH,
       inspectorWidth: saved?.inspectorWidth ?? INSPECTOR_WIDTH,
+      rightTab: (saved?.rightTab === 'arrange' ? 'arrange' : 'properties') as RightTab,
     };
   } catch {
     return {
@@ -61,6 +54,7 @@ function readPanels() {
       files: true,
       sidebarWidth: SIDEBAR_WIDTH,
       inspectorWidth: INSPECTOR_WIDTH,
+      rightTab: 'properties' as RightTab,
     };
   }
 }
@@ -71,6 +65,7 @@ const state = createRoot(() => {
   // The served folder's diagrams. Open unless closed, and only shown when a folder is served.
   const [filesOpen, setFilesOpen] = createSignal(initial.files);
   const [inspectorOpen, setInspectorOpen] = createSignal(initial.right);
+  const [rightTab, setRightTab] = createSignal<RightTab>(initial.rightTab);
   const [sidebarWidth, setSidebarWidth] = createSignal<number>(initial.sidebarWidth);
   const [inspectorWidth, setInspectorWidth] = createSignal<number>(initial.inspectorWidth);
   const [menu, setMenu] = createSignal<MenuState | null>(null);
@@ -78,7 +73,6 @@ const state = createRoot(() => {
   const [confirmRequest, setConfirmRequest] = createSignal<ConfirmRequest | null>(null);
   const [errorMessage, setErrorMessage] = createSignal('');
   const [quickBuildText, setQuickBuildText] = createSignal('');
-  const [layoutLabOpen, setLayoutLabOpen] = createSignal(false);
   const [creatingFile, setCreatingFile] = createSignal(false);
   const [savingExample, setSavingExample] = createSignal(false);
   createEffect(() => {
@@ -91,6 +85,7 @@ const state = createRoot(() => {
           filesClosed: !filesOpen(),
           sidebarWidth: sidebarWidth(),
           inspectorWidth: inspectorWidth(),
+          rightTab: rightTab(),
         }),
       );
     } catch {
@@ -104,6 +99,8 @@ const state = createRoot(() => {
     setFilesOpen,
     inspectorOpen,
     setInspectorOpen,
+    rightTab,
+    setRightTab,
     sidebarWidth,
     setSidebarWidth,
     inspectorWidth,
@@ -118,8 +115,6 @@ const state = createRoot(() => {
     setErrorMessage,
     quickBuildText,
     setQuickBuildText,
-    layoutLabOpen,
-    setLayoutLabOpen,
     creatingFile,
     setCreatingFile,
     savingExample,
@@ -137,8 +132,8 @@ export const {
   confirmRequest,
   errorMessage,
   quickBuildText,
-  layoutLabOpen,
-  setLayoutLabOpen,
+  rightTab,
+  setRightTab,
   creatingFile,
   setCreatingFile,
   savingExample,
@@ -159,10 +154,7 @@ export const resetInspectorWidth = () => state.setInspectorWidth(INSPECTOR_WIDTH
 export function setObjectsOpen(open: boolean) {
   if (open) {
     state.setFilesOpen(false);
-    if (compactPanels.matches) {
-      state.setInspectorOpen(false);
-      state.setLayoutLabOpen(false);
-    }
+    if (compactPanels.matches) state.setInspectorOpen(false);
   }
   state.setObjectsOpen(open);
 }
@@ -170,31 +162,35 @@ export function setObjectsOpen(open: boolean) {
 export function setFilesOpen(open: boolean) {
   if (open) {
     state.setObjectsOpen(false);
-    if (compactPanels.matches) {
-      state.setInspectorOpen(false);
-      state.setLayoutLabOpen(false);
-    }
+    if (compactPanels.matches) state.setInspectorOpen(false);
   }
   state.setFilesOpen(open);
 }
 
 export function setInspectorOpen(open: boolean) {
-  if (open) {
-    state.setLayoutLabOpen(false);
-    if (compactPanels.matches) {
-      state.setObjectsOpen(false);
-      state.setFilesOpen(false);
-    }
+  if (open && compactPanels.matches) {
+    state.setObjectsOpen(false);
+    state.setFilesOpen(false);
   }
   state.setInspectorOpen(open);
 }
 
+/** The right panel shows this tab. */
+const tabOpen = (tab: RightTab) => state.inspectorOpen() && state.rightTab() === tab;
+export const propertiesOpen = () => tabOpen('properties');
+export const arrangeOpen = () => tabOpen('arrange');
+
+/** Open the right panel on a tab, or close it if that tab is already showing. */
+export function toggleRightTab(tab: RightTab) {
+  state.setMenu(null);
+  const open = !tabOpen(tab);
+  if (open) state.setRightTab(tab);
+  setInspectorOpen(open);
+}
+
 compactPanels.addEventListener('change', () => {
   if (!compactPanels.matches) return;
-  if (state.layoutLabOpen()) {
-    state.setInspectorOpen(false);
-    state.setObjectsOpen(false);
-  } else if (state.inspectorOpen()) {
+  if (state.inspectorOpen()) {
     state.setObjectsOpen(false);
     state.setFilesOpen(false);
   } else if (state.filesOpen()) state.setObjectsOpen(false);
@@ -252,13 +248,3 @@ export function openQuickBuild(text = '') {
   state.setQuickBuildText(text);
   openDialog('quick-build');
 }
-
-export const toggleLayoutLab = () => {
-  state.setMenu(null);
-  const open = !state.layoutLabOpen();
-  if (open) {
-    state.setInspectorOpen(false);
-    if (compactPanels.matches) state.setObjectsOpen(false);
-  }
-  state.setLayoutLabOpen(open);
-};

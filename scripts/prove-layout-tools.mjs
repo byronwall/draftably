@@ -80,14 +80,24 @@ try {
   await waitFor(page, () => !window.diagramStudio.fileState().compiling, 'laid out');
   await matches(page, 'opened file');
 
-  // 1. Compare: apply the layered candidate. The file gets a layout recipe.
+  // 1. Compare: apply the first alternative. The file gets a layout recipe.
   let before = read();
   await page.keyboard.press('Alt+e');
-  await waitFor(page, () => /\d+ of \d+ ready/.test(document.body.innerText), 'candidates');
+  await waitFor(
+    page,
+    () =>
+      !document.querySelector('.comparison-progress')?.textContent?.includes('Computing') &&
+      !!document.querySelector('.candidate-card.current canvas, .candidate-card.current svg'),
+    'candidates',
+  );
   await page.screenshot({ path: path.join(proof.out, 'layout-1-compare.png') });
-  await page.getByRole('button', { name: 'Apply' }).nth(1).click();
+  check(
+    'compare leads with the current drawing',
+    (await page.locator('.candidate-card').first().textContent()).includes('Current drawing'),
+  );
+  await page.getByRole('button', { name: 'Apply' }).first().click();
   check('compare apply saved', await settled(page, before));
-  check('compare wrote a recipe', /^layout root engine=layered$/m.test(read()));
+  check('compare wrote a recipe', /^layout root engine=[a-z-]+$/m.test(read()));
   await matches(page, 'recipe');
   await shot(page, 'layout-2-recipe.png');
 

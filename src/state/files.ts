@@ -7,7 +7,6 @@ import { clamp } from '../model/geometry';
 import { resolveAppearance } from '../model/appearance';
 import { headingMarkup } from '../model/heading';
 import { legendMarkup } from '../model/legend';
-import { drawnLegend, usedStatuses } from '../model/status';
 import { renderSvg } from '../cli/svg';
 import { findNode } from '../model/graph';
 import { fontFaceCss } from '../lib/font-data';
@@ -301,8 +300,6 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
   });
   try {
     const theme = resolveAppearance(doc.appearance),
-      statuses = usedStatuses(doc),
-      legend = drawnLegend(doc),
       frame = viewerFrame(),
       vg = visibleScene();
     // The frame as the viewer draws it; the drawing alone without the heading; or the selection.
@@ -345,8 +342,13 @@ export function exportSvg(look = exportLook(), onlySelection = false): string {
     const markup =
       picked.size || !look.heading
         ? ''
-        : headingMarkup(theme, doc.appearance.heading, frame.heading.x, frame.heading.y) +
-          legendMarkup(theme, legend, frame.legend.x, frame.legend.y, statuses);
+        : headingMarkup(
+            theme,
+            doc.appearance.heading,
+            frame.heading.x,
+            frame.heading.y,
+            frame.heading.wrap,
+          ) + legendMarkup(theme, frame.key, frame.legend.x, frame.legend.y);
     if (markup) {
       const parsed = new DOMParser().parseFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${markup}</svg>`,

@@ -1,5 +1,6 @@
 import { For, Show } from 'solid-js';
 import type { TypeProfile } from '../../model/fonts';
+import { markerMarkup } from '../../model/legend';
 import type { Rect } from '../../model/types';
 import { fileScene } from '../../state/file-session';
 import { SceneGlyph } from '../Icon';
@@ -15,6 +16,8 @@ export function SceneText(props: {
   class?: string;
   /** Strike the text through, as for a removed object. */
   strike?: boolean;
+  /** Fade of the text alone, as for a removed object. */
+  fade?: number;
 }) {
   const first = () => props.y - ((props.lines.length - 1) * props.lineHeight) / 2;
   return (
@@ -26,6 +29,7 @@ export function SceneText(props: {
       font-weight={String(props.type.weight)}
       font-family={props.type.family}
       fill={props.fill}
+      fill-opacity={props.fade}
       text-decoration={props.strike ? 'line-through' : undefined}
       text-anchor="middle"
       dominant-baseline="central"
@@ -40,6 +44,16 @@ export function SceneText(props: {
     </text>
   );
 }
+
+/** The removed marker, a minus in a disc, centred at (x, y). */
+export const RemovedMarker = (props: { x: number; y: number; ink: string; canvas: string }) => (
+  <g
+    class="removed-marker"
+    pointer-events="none"
+    // eslint-disable-next-line solid/no-innerhtml -- numbers and theme colors only
+    innerHTML={markerMarkup(props.x, props.y, props.ink, props.canvas)}
+  />
+);
 
 /** Size of the pin glyph on a placed object, in diagram px. */
 export const PIN_SIZE = 12;

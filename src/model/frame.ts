@@ -4,7 +4,7 @@
  * what an export draws.
  */
 import type { Heading, LegendEntry, ResolvedAppearance } from './appearance';
-import { headingSize } from './heading';
+import { headingSize, subtitleMeasure } from './heading';
 import { legendSize } from './legend';
 import type { PlacedNote } from './note';
 import { rectUnion } from './geometry';
@@ -37,12 +37,16 @@ export function diagramFrame(
   const anchored = notes.filter(n => !n.inFrame).map(n => n.rect),
     area = anchored.length ? rectUnion([drawing, rectUnion(anchored, FRAME_PAD)]) : drawing,
     inFrame = notes.filter(n => n.inFrame),
-    lines = headingSize(look, heading),
+    // The subtitle wraps to the drawing, or to the frame a `width=` sets.
+    wrap = subtitleMeasure(look, (heading?.width ?? area.w) - FRAME_PAD * 2),
+    lines = headingSize(look, heading, wrap),
     block = inFrame.reduce((h, n) => h + n.rect.h + NOTE_GAP, lines.h ? 0 : -NOTE_GAP),
     head = inFrame.length
       ? { w: Math.max(lines.w, ...inFrame.map(n => n.rect.w)), h: (lines.h || 20) + block }
       : lines,
-    key = legendSize(look, legend, statuses),
+    // The key flows left to right and wraps to the frame the drawing and heading set.
+    inner = Math.max(area.w, head.w + FRAME_PAD * 2, heading?.width ?? 0) - FRAME_PAD * 2,
+    key = legendSize(look, legend, statuses, inner),
     natural = Math.max(area.w, head.w + FRAME_PAD * 2, key.w + FRAME_PAD * 2),
     y = area.y - head.h,
     left = area.x + FRAME_PAD;
@@ -63,7 +67,7 @@ export function diagramFrame(
     natural,
     head,
     key,
-    heading: { x: left, y: y + 28 },
+    heading: { x: left, y: y + 28, wrap },
     legend: { x: left, y: area.y + area.h - 12 },
     /** Every note, placed. */
     notes: placed,

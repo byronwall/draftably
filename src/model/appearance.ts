@@ -115,8 +115,14 @@ export interface Heading {
   width?: number;
 }
 
+/** The connection styles a `legend line` row can explain. */
+export const LEGEND_LINES = ['dashed', 'solid'] as const;
+export type LegendLine = (typeof LEGEND_LINES)[number];
+
+/** One row of the key: a color swatch (`family`), or a short connection (`line`). */
 export interface LegendEntry {
-  family: string;
+  family?: string;
+  line?: LegendLine;
   /** Shade of the swatch; nodes' default when omitted. */
   shade?: Shade;
   label: string;
@@ -561,6 +567,8 @@ export interface ResolvedAppearance {
   /** Every family and the shades it defines: built-in ones plus the file's own. */
   families: Map<string, Map<Shade, Swatch>>;
   custom: Set<string>;
+  /** Strike a removed object's title through (`config strike-removed=on`). */
+  strikeRemoved: boolean;
 }
 
 /** Height of a group's title band, derived from the title's line height. */
@@ -632,6 +640,7 @@ export function resolveAppearance(appearance?: DiagramAppearance): ResolvedAppea
     groupHeader: groupHeaderFor(title.lineHeight),
     families,
     custom,
+    strikeRemoved: !!a.config?.strikeRemoved,
   };
   if (cache.size > 50) cache.clear();
   cache.set(key, resolved);

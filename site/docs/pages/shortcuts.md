@@ -67,10 +67,10 @@ To connect from the keyboard, select a source, press `C`, press `Tab` to reach t
 
 | Action                       | Keys               |
 | ---------------------------- | ------------------ |
-| Tidy current positions       | `L`                |
-| Preview automatic layout     | `Shift L`          |
-| Layout settings              | `Alt L`            |
-| Compare layouts              | `Alt E`            |
+| Improve positions            | `L`                |
+| Rearrange from scratch       | `Shift L`          |
+| Arrange panel                | `Alt L`            |
+| Compare alternatives         | `Alt E`            |
 | Layout timeline              | `Alt T`            |
 | Layout brush                 | `W`                |
 | Brush size, in brush mode    | `[` and `]`        |

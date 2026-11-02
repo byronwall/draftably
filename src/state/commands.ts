@@ -4,7 +4,7 @@
  */
 import * as actions from './actions';
 import { canRedo, canUndo, doc, redo, selectedIds, undo } from './document';
-import { fitView, zoomAt } from './editor';
+import { diagramClipped, fitView, zoomAt } from './editor';
 import {
   copyImage,
   exportDocument,
@@ -18,7 +18,10 @@ import {
   captureCheckpoint,
   discardPreview,
   layoutPreview,
+  movesBlocked,
+  rebuildBlocked,
   restoreCheckpoint,
+  routesBlocked,
   runLabLayout,
 } from './layout';
 import { openComparison } from './comparison';
@@ -50,17 +53,16 @@ import {
 import { toast } from './toast';
 import {
   filesShown,
-  inspectorOpen,
   objectsOpen,
   confirmAction,
   openDialog,
   openQuickBuild,
   setCreatingFile,
   setFilesOpen,
-  setInspectorOpen,
   setObjectsOpen,
   setSavingExample,
-  toggleLayoutLab,
+  toggleRightTab,
+  type RightTab,
   togglePanels,
 } from './ui';
 import { findNode, isGroup } from '../model/graph';
@@ -78,6 +80,8 @@ export interface Command {
   /** Exits the brush before running. */
   endsBrush?: boolean;
   enabled?: () => boolean;
+  /** Why this cannot work here, shown instead of running it. */
+  blocked?: () => string | null;
 }
 
 let fileInput:
@@ -254,31 +258,37 @@ export const commands = {
   },
   'align-left': {
     label: 'Align left',
+    icon: 'align-left',
     enabled: hasSelection,
     run: () => actions.alignSelection('left'),
   },
   'align-top': {
     label: 'Align top',
+    icon: 'align-top',
     enabled: hasSelection,
     run: () => actions.alignSelection('top'),
   },
   'align-center': {
     label: 'Align horizontal centers',
+    icon: 'align-center',
     enabled: hasSelection,
     run: () => actions.alignSelection('center'),
   },
   'align-middle': {
     label: 'Align vertical centers',
+    icon: 'align-middle',
     enabled: hasSelection,
     run: () => actions.alignSelection('middle'),
   },
   'distribute-x': {
     label: 'Distribute horizontally',
+    icon: 'distribute-x',
     enabled: hasSelection,
     run: () => actions.alignSelection('distribute-x'),
   },
   'distribute-y': {
     label: 'Distribute vertically',
+    icon: 'distribute-y',
     enabled: hasSelection,
     run: () => actions.alignSelection('distribute-y'),
   },
@@ -300,51 +310,58 @@ export const commands = {
 
   layout: {
     hint: 'Nudge shapes into line with small moves. Your arrangement stays.',
-    label: 'Tidy positions',
+    label: 'Improve positions',
     keys: 'L',
     icon: 'layout',
     run: () => runLabLayout(),
+    blocked: movesBlocked,
     endsBrush: true,
   },
   'layout-rebuild': {
-    hint: 'Preview a new arrangement of the whole diagram.',
-    label: 'Preview automatic layout',
+    hint: 'Preview the recipe again, without hand placements.',
+    label: 'Rearrange from scratch',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
+    blocked: rebuildBlocked,
     endsBrush: true,
   },
   'layout-preview': {
-    label: 'Preview tidy',
+    label: 'Preview improvement',
     run: () => runLabLayout('pass', true),
+    blocked: movesBlocked,
     endsBrush: true,
   },
-  'layout-accept': { label: 'Keep layout', run: acceptPreview },
+  'layout-accept': { label: 'Keep preview', run: acceptPreview },
   'layout-discard': { label: 'Discard', run: discardPreview },
   'layout-menu': {
-    hint: 'Choose an arrangement, preview it and keep it if you like it.',
-    label: 'Automatic layout…',
+    hint: 'Choose a direction, a format and how connections run.',
+    label: 'Arrange',
     keys: '⌥L',
-    run: toggleLayoutLab,
+    icon: 'layers',
+    run: () => toggleRight('arrange'),
     endsBrush: true,
+    duringTimeline: true,
   },
   'layout-checkpoint': { label: 'Capture checkpoint', run: captureCheckpoint },
   'layout-restore': { label: 'Restore checkpoint', run: restoreCheckpoint },
   'compare-layouts': {
-    hint: 'See other arrangements side by side, then apply one.',
-    label: 'Compare layouts',
+    hint: 'See other arrangements beside this one, then apply one.',
+    label: 'Compare alternatives',
     keys: '⌥E',
     run: () => openComparison('layout'),
+    blocked: rebuildBlocked,
     endsBrush: true,
   },
   'compare-routes': {
-    hint: 'See other connection routes side by side, then apply one.',
-    label: 'Compare ports & routes',
+    hint: 'See other connection routes beside these, then apply one.',
+    label: 'Compare connections',
     run: () => openComparison('routing'),
+    blocked: routesBlocked,
     endsBrush: true,
   },
   reroute: {
     hint: 'Redraw every connection. Shapes stay where they are.',
-    label: 'Reroute now',
+    label: 'Reroute connections',
     keys: '⌥R',
     icon: 'branch',
     run: () => actions.reroute(),
@@ -362,6 +379,7 @@ export const commands = {
     keys: '⌥T',
     icon: 'journey',
     run: () => (timelineOpen() ? closeTimeline() : openTimeline()),
+    blocked: movesBlocked,
     duringTimeline: true,
   },
   'timeline-reopen': {
@@ -384,6 +402,7 @@ export const commands = {
     keys: 'W',
     icon: 'brush',
     run: toggleBrush,
+    blocked: movesBlocked,
     duringTimeline: true,
   },
 
@@ -423,6 +442,18 @@ export const commands = {
     run: () => setObjectsOpen(!objectsOpen()),
     duringTimeline: true,
   },
+  'toggle-sidebar': {
+    hint: 'Show or hide the list of diagrams and objects.',
+    label: 'Sidebar',
+    icon: 'panel-left',
+    run: () => {
+      if (filesShown()) setFilesOpen(false);
+      else if (objectsOpen()) setObjectsOpen(false);
+      else if (workspace()) setFilesOpen(true);
+      else setObjectsOpen(true);
+    },
+    duringTimeline: true,
+  },
   'toggle-files': {
     hint: 'List the diagrams in the open folder.',
     label: 'Diagrams in this folder',
@@ -446,7 +477,7 @@ export const commands = {
     label: 'Inspector',
     keys: ']',
     icon: 'sliders',
-    run: () => setInspectorOpen(!inspectorOpen()),
+    run: () => toggleRight('properties'),
     duringTimeline: true,
   },
   'toggle-panels': {
@@ -598,6 +629,15 @@ export const commands = {
 
 export type CommandId = keyof typeof commands;
 
+/** Open or close a right-panel tab, keeping a diagram that was shown whole in view. */
+function toggleRight(tab: RightTab) {
+  const whole = !diagramClipped();
+  toggleRightTab(tab);
+  // The canvas takes its new size on the next frame.
+  if (whole)
+    requestAnimationFrame(() => requestAnimationFrame(() => diagramClipped() && fitView()));
+}
+
 /**
  * Tools whose results a diagram file cannot store yet. Rebuilds, Compare and routing are saved as
  * layout recipes and `routing` lines; passes, timeline steps and brush strokes as `stay`
@@ -626,6 +666,8 @@ export function runCommand(id: CommandId) {
     toast('Preview only. Keep this step or press Escape to cancel.');
     return;
   }
+  const blocked = command.blocked?.();
+  if (blocked) return void toast(blocked);
   if (command.endsBrush && brushActive()) deactivateBrush();
   try {
     const result = command.run();
@@ -640,5 +682,6 @@ export function runCommand(id: CommandId) {
 export const commandEnabled = (id: CommandId) => {
   if (unavailableInFile(id)) return false;
   const command: Command = commands[id];
+  if (command.blocked?.()) return false;
   return command.enabled ? command.enabled() : true;
 };

@@ -225,6 +225,32 @@ layout root flow gap=48
     );
   });
 
+  it('holds the lanes and row for an old label bigger than its new one', () => {
+    const old = 'Validate the password, the device and the session token against the old store',
+      file = (extra: string) => `diagram "Sign in" version=1
+${extra}
+node a "A"
+node b "B"
+node c "C"
+edge m1 a -> b "Open"
+~edge m2 b -> c "Check" was="${old}"
+layout root sequence
+`;
+    const doc = projectScene(checkSource(file('compare'))),
+      plain = projectScene(checkSource(file(''))),
+      gap = (d: typeof doc, from: string, to: string) =>
+        d.layout.nodes[to].x - d.layout.nodes[from].x,
+      rows = (d: typeof doc) => d.layout.edges.m2.row! - d.layout.edges.m1.row!;
+    expect(rows(doc)).toBeGreaterThan(rows(plain));
+    expect(gap(doc, 'b', 'c')).toBeGreaterThan(gap(plain, 'b', 'c'));
+    // In Before, the label's box ends above its own line.
+    const [, row, y, h] =
+      /data-id="m2"[\s\S]*?d="M[\d.-]+,([\d.-]+)L[\s\S]*?y="([\d.-]+)" width="[\d.-]+" height="([\d.-]+)" rx="4"/.exec(
+        renderSvg(doc),
+      )!;
+    expect(Number(y) + Number(h)).toBeLessThanOrEqual(Number(row));
+  });
+
   it('keeps a phase whose removed message sat inside it', () => {
     const before = SWAP([M2, 'edge m9 a -> b', M3].join('\n'), 'm2 m9 m3');
     const { merged, unshown } = compareDetailed(before, SWAP([M2, M3].join('\n')));
@@ -248,6 +274,32 @@ layout root flow gap=48
     expect(svg.split('class="diagram-note"')).toHaveLength(2);
     expect(Number(note[1])).toBeLessThan(labelY);
     expect(svg).toContain('Drawn as new: a (color)');
+  });
+
+  it('drops the note margins from panels, whose notes sit in the frame', () => {
+    const file = (lines: string) => `diagram "Notes" version=1
+layout root sequence
+node a "A"
+node b "B"
+${lines}
+~edge m1 a -> b "Now" was="Then"
+phase p "Start" m1
+note "Right side" near=m1
+note "Left side" near=m1 side=left
+`;
+    const panel = (svg: string) =>
+      /class="sequence-panel" x="([^"]+)" y="[^"]+" width="([^"]+)"/
+        .exec(svg)!
+        .slice(1)
+        .map(Number);
+    const compared = projectScene(checkSource(file('compare'))),
+      seq = compared.layout.sequence!;
+    expect(seq.panel.w).toBeGreaterThan(seq.inner!.w);
+    expect(panel(renderSvg(compared))).toEqual([seq.inner!.x, seq.inner!.w]);
+    const states = projectScene(checkSource(file('state s "One" a')));
+    expect(panel(renderSvg(states, { states: true }))).toEqual([seq.inner!.x, seq.inner!.w]);
+    // One drawing keeps its margins.
+    expect(panel(renderSvg(states))).toEqual([seq.panel.x, seq.panel.w]);
   });
 
   it('keeps was-order through format, and refuses it where it means nothing', () => {

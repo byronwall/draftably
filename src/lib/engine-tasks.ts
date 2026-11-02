@@ -165,6 +165,18 @@ export interface RunningTask<T> {
   thread: () => string;
 }
 
+/** Computations to run at once: one core stays with the page. */
+export const poolSize = () => Math.max(1, (navigator.hardwareConcurrency || 2) - 1);
+
+/** Call `work` for each index up to `count`, with at most `poolSize()` calls going at once. */
+export async function inPool(count: number, work: (index: number) => Promise<void>) {
+  let next = 0;
+  const lane = async () => {
+    while (next < count) await work(next++);
+  };
+  await Promise.all(Array.from({ length: Math.min(poolSize(), count) }, lane));
+}
+
 /**
  * Run an engine computation in a worker. If the browser blocks workers, the same computation
  * runs on the main thread instead.

@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
-import { edgeLabelSize } from '../src/model/labels';
-import { placeEdgeLabel, placeEdgeLabels } from '../src/model/routes';
+import { resolveAppearance } from '../src/model/appearance';
+import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
+import { placeEdgeLabel, placeEdgeLabels, roomForLabel } from '../src/model/routes';
 import type { Point, Rect } from '../src/model/types';
 
 const rectOf = (l: { x: number; y: number; w: number; h: number }): Rect => ({
@@ -50,9 +51,14 @@ describe('edge label placement', () => {
     expect(existing.some(o => overlaps(rect, o, 6))).toBe(false);
   });
 
-  it('sizes long labels from the rendered edge font without a width cap', () => {
-    const label = 'a connection label that is long enough to exceed the old width limit '.repeat(2);
-    expect(edgeLabelSize(label).w).toBeGreaterThan(280);
+  it('wraps a long flow label and breaks it at each \\n', () => {
+    const look = resolveAppearance(),
+      long = 'a connection label that is long enough to need more than one line',
+      one = edgeLabelSize('short');
+    expect(edgeLabelSize(long).w).toBeLessThanOrEqual(LABEL_WRAP + 16);
+    expect(edgeLabelLines(long, look).length).toBeGreaterThan(1);
+    expect(edgeLabelLines('first line\nsecond line', look)).toEqual(['first line', 'second line']);
+    expect(edgeLabelSize('first line\nsecond line').h).toBe(one.h + look.annotation.lineHeight);
   });
 
   it('stays on its own route instead of sitting on another edge', () => {
@@ -146,5 +152,29 @@ describe('the label pass', () => {
     expect(pa.x > 62 || pa.x + pa.w < 58).toBe(true);
     // Nor do the two read as one pair: they stand at least a label's height apart.
     expect(overlaps(pa, pb, pa.h)).toBe(false);
+  });
+});
+
+describe('room for a label at a bend', () => {
+  // A line across a 170px gap that drops 40px half way: neither 85px run holds a 140px label.
+  const z = [
+    { x: 0, y: 0 },
+    { x: 85, y: 0 },
+    { x: 85, y: 40 },
+    { x: 170, y: 40 },
+  ];
+  const level = (ps: Point[]) =>
+    Math.max(...ps.slice(1).map((p, i) => (p.y === ps[i].y ? Math.abs(p.x - ps[i].x) : 0)));
+
+  it('slides the bend so one level run holds the label', () => {
+    expect(level(roomForLabel(z, 140, 21, [], []))).toBeGreaterThanOrEqual(148);
+  });
+
+  it('keeps the bend when sliding it would cross a box', () => {
+    const boxes = [
+      { x: 10, y: 10, w: 12, h: 20 },
+      { x: 148, y: 10, w: 12, h: 20 },
+    ];
+    expect(roomForLabel(z, 140, 21, boxes, [])).toEqual(z);
   });
 });

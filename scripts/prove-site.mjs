@@ -394,19 +394,16 @@ const journeys = {
   async 'layout actions say what they change'() {
     const page = await open('app/?example=checkout');
     await editorReady(page);
-    const button = page.locator('.toolbar button:has-text("Tidy positions")');
+    const button = page.locator('.toolbar button:has-text("Improve")');
     await page.click('.menubar-item:has-text("Layout")');
-    await page.click('.popover .menu-item:has-text("Automatic layout")');
-    const panel = page.locator('.hint', { hasText: 'Tidy positions changes' });
+    await page.click('.popover .menu-item:has-text("Arrange")');
+    const panel = page.locator('.arrange-subject strong');
     check(
       '#307 nothing selected means the whole diagram',
-      /the whole diagram/.test(await panel.textContent()),
+      /Whole diagram/.test(await panel.textContent()),
     );
     await page.locator('[data-id="web"]').first().click({ force: true });
-    check(
-      '#307 a selection narrows the scope',
-      /the selection|this group/.test(await panel.textContent()),
-    );
+    check('#307 a selection narrows the scope', /1 shape/.test(await panel.textContent()));
     check(
       '#307 the toolbar tooltip agrees',
       /the selection|this group/.test(await button.getAttribute('data-tip-hint')),
@@ -420,7 +417,7 @@ const journeys = {
     await phone.click('.popover .menu-item:has-text("Layout")');
     const menu = await phone.locator('.popover').textContent();
     check('#307 the phone menu states the scope', /Small moves in the whole diagram/.test(menu));
-    check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
+    check('#307 the phone menu offers a comparison', /Compare alternatives/.test(menu));
     await phone.keyboard.press('Escape');
     check('F08 the phone shows where work is kept', await phone.isVisible('.save-status'));
     await phone.screenshot({ path: path.join(proof.out, 'phone-brand.png') });

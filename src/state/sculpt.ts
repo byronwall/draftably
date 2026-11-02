@@ -5,6 +5,7 @@
  */
 import { batch, createEffect, createRoot, createSignal, on } from 'solid-js';
 import { unwrap } from 'solid-js/store';
+import { LANES_HOLD } from '../dsl/layout-edits';
 import { LayoutLab } from '../engines/layout-engine.js';
 import {
   SculptLab,
@@ -54,7 +55,7 @@ import {
 import { routing, resetRoutes, setAdoptedRoutes, setRoutePrior, setSculptGeometry } from './scene';
 import { shortcutKey } from './keys';
 import { toast } from './toast';
-import { closeMenu, setLayoutLabOpen } from './ui';
+import { closeMenu } from './ui';
 
 const ARCHIVE_KEY = 'diagram-studio-v7-last-journey';
 
@@ -197,6 +198,10 @@ const updateTimeline = (patch: Partial<TimelineState>) =>
   state.setTimeline(t => (t ? { ...t, ...patch } : t));
 
 export async function openTimeline(options: Record<string, unknown> = {}) {
+  if (doc.layout.sequence) {
+    toast(LANES_HOLD);
+    return;
+  }
   if (layoutPreview()) {
     toast('Keep or discard the existing layout preview first.');
     return;
@@ -207,7 +212,6 @@ export async function openTimeline(options: Record<string, unknown> = {}) {
   cancelStroke();
   deactivateBrush();
   closeMenu();
-  setLayoutLabOpen(false);
   batch(() => {
     setToolSignal('select');
     setConnectFrom(null);
@@ -560,6 +564,10 @@ let strokeTimer: number | undefined;
 let lastDabAt = 0;
 
 export function activateBrush(options: Partial<BrushSettings> = {}) {
+  if (doc.layout.sequence) {
+    toast(LANES_HOLD);
+    return;
+  }
   if (state.timeline()) {
     toast('Keep a timeline step before brushing. Use Keep & brush.');
     return;

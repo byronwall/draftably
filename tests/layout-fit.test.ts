@@ -21,10 +21,16 @@ const aspect = (scene: Scene) => {
 describe('fit= on the root layout', () => {
   it('picks the reading direction whose shape is closest to the target, and says so', async () => {
     const plain = await compile(chain('')),
-      wide = await compile(chain(' fit=wide'));
+      wide = await compile(chain(' fit=wide').replace(' direction=down', ''));
     expect(aspect(plain)).toBeLessThan(1);
     expect(aspect(wide)).toBeGreaterThan(1);
     expect(wide.diagnostics.find(d => d.code === 'fit')?.message).toContain('reading right');
+  });
+
+  it('holds a stated direction, even when the other one would fit better', async () => {
+    const wide = await compile(chain(' fit=wide'));
+    expect(aspect(wide)).toBeLessThan(1);
+    expect(wide.diagnostics.find(d => d.code === 'fit')?.message).toContain('reading down');
   });
 
   it('keeps the file as written when it already fits best', async () => {
