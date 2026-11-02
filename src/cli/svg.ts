@@ -27,7 +27,7 @@ import {
   tailOf,
   type EndMarker,
 } from '../model/markers';
-import { computeRoutes } from '../model/routes';
+import { computeRoutes, HALO_WIDTH } from '../model/routes';
 import {
   drawnLegend,
   edgeInk,
@@ -254,7 +254,7 @@ function sceneMarkup(
     out.push(
       `<g data-id="${esc(edge.id)}"${fade(p)}>`,
       route.halo
-        ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="8"/>`
+        ? `<path d="${route.halo}" fill="none" stroke="${look.canvas}" stroke-width="${HALO_WIDTH}"/>`
         : '',
       `<path d="${route.path}" fill="none" stroke="${ink}" stroke-width="${p.width ? p.width - 0.5 : 1.4}" stroke-linecap="round" stroke-linejoin="round"${dash ? ` stroke-dasharray="${dash}"` : ''}${head === 'none' ? '' : ` marker-end="url(#${marker(head, ink)})"`}${tail === 'none' ? '' : ` marker-start="url(#${marker(tail, ink, true)})"`}/>`,
     );

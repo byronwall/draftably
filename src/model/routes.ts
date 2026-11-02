@@ -4,7 +4,7 @@ import {
   type Route,
   type RoutingResult,
 } from '../engines/routing-engine.js';
-import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
+import { clamp, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
 import { edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
@@ -719,7 +719,13 @@ export function drawRoutes(
   const frames = vg.groups.flatMap(g =>
     g.frame || isCollapsed(doc, g.id) ? [] : [rects.get(g.id)!],
   );
-  return result.routes.map(route => {
+  const whole = wholeLines(
+    result.routes.map(r => {
+      const edge = findEdge(doc, r.id);
+      return { points: r.points, marks: edge ? markerRects(r.points, edge) : [] };
+    }),
+  );
+  const drawn = result.routes.map((route, i) => {
     const c = crosses.get(route.id),
       edge = findEdge(doc, route.id);
     return {
@@ -728,14 +734,20 @@ export function drawRoutes(
       path: roundedPath(edge ? stoppedPoints(route.points, edge) : route.points, radius),
       halo: haloPath(
         route.points,
-        result.routes.filter(r => r !== route).map(r => r.points),
+        result.routes
+          .filter((_, j) => j !== i && !(whole.has(i) && whole.has(j)))
+          .map(r => r.points),
         frames,
       ),
       ...(c?.to ? { cross: c.to.cross } : c?.from ? { cross: c.from.cross } : {}),
     };
   });
+  // Later lines draw over earlier ones, so a whole line goes last and the other line gives way.
+  return [...drawn.filter((_, i) => !whole.has(i)), ...drawn.filter((_, i) => whole.has(i))];
 }
 
+/** Width of the halo under a connection, in drawing units. */
+export const HALO_WIDTH = 8;
 /** How far a halo piece runs each way from a crossing, along the line. */
 export const HALO_REACH = 7;
 
@@ -750,9 +762,31 @@ function crossing(a: Seg, b: Seg): Point | null {
   if (!h || !v) return null;
   const x = v[0].x,
     y = h[0].y,
-    inside = (t: number, p: number, q: number) =>
+    between = (t: number, p: number, q: number) =>
       t > Math.min(p, q) + 0.5 && t < Math.max(p, q) - 0.5;
-  return inside(x, h[0].x, h[1].x) && inside(y, v[0].y, v[1].y) ? { x, y } : null;
+  return between(x, h[0].x, h[1].x) && between(y, v[0].y, v[1].y) ? { x, y } : null;
+}
+
+/**
+ * The lines, by index, that another line's halo would cut at a mark. A halo there leaves half a
+ * mark, or on a short line almost nothing, so these lines stay whole.
+ */
+export function wholeLines(lines: { points: Point[]; marks: Rect[] }[]): Set<number> {
+  const out = new Set<number>();
+  lines.forEach(({ points, marks }, i) => {
+    const hit = lines.some(
+      (other, j) =>
+        j !== i &&
+        segsOf(points).some(s =>
+          segsOf(other.points).some(c => {
+            const p = crossing(s, c);
+            return p && marks.some(m => inside(p, m, HALO_WIDTH / 2));
+          }),
+        ),
+    );
+    if (hit) out.add(i);
+  });
+  return out;
 }
 
 /** The pieces of `points` around each place it crosses `others` or a frame's border, as a path. */
