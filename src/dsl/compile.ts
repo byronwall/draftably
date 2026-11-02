@@ -1723,6 +1723,8 @@ function packed(
   sinks = false,
   lines: ScopeLine[] = [],
   outside = new Map<string, string[]>(),
+  follow = new Map<string, number>(),
+  anchor: (a: string, b: string) => number | undefined = () => undefined,
 ) {
   const by = new Map(items.map(n => [n.id, n])),
     ids = items.map(n => n.id),
@@ -1780,13 +1782,42 @@ function packed(
     for (const [j, id] of layer.entries()) {
       const [pred] = ins.get(id)!,
         link = ins.get(id)!.size === 1 && outs.get(pred)!.size === 1,
-        want = link ? mid.get(pred)! - minor(id) / 2 : slot,
+        lined = link ? anchor(pred, id) : undefined,
+        want =
+          lined !== undefined
+            ? cross.get(pred)! + lined
+            : link
+              ? mid.get(pred)! - minor(id) / 2
+              : slot,
         start = j ? Math.max(want, end + between(layer[j - 1], id)) : want;
       cross.set(id, start);
       mid.set(id, start + minor(id) / 2);
       end = start + minor(id);
       slot = Math.max(slot + minor(id), end) + (layer[j + 1] ? between(id, layer[j + 1]) : 0);
     }
+  }
+  const followed = layers.length === 1 && spaced(layers[0]);
+  /**
+   * One rank whose members each face one box in a sibling group (`follow`: that box's centre,
+   * in order) takes that box's spacing, so each line between the two columns runs straight.
+   * Members only move on to keep their gaps; if that costs more than a little length, the rank
+   * stays packed.
+   */
+  function spaced(layer: string[]) {
+    const at = layer.map(id => follow.get(id));
+    if (layer.length < 2 || at.some((c, j) => c === undefined || (j && c < at[j - 1]!)))
+      return false;
+    const starts: number[] = [];
+    let end = -Infinity;
+    for (const [j, id] of layer.entries()) {
+      const want = at[j]! - at[0]! + minor(layer[0]) / 2 - minor(id) / 2;
+      starts.push(j ? Math.max(want, end + between(layer[j - 1], id)) : want);
+      end = starts[j] + minor(id);
+    }
+    const span = at.at(-1)! - at[0]! + (minor(layer[0]) + minor(layer.at(-1)!)) / 2;
+    if (end - starts[0] > Math.max(extents[0] * 1.25, span + 1)) return false;
+    layer.forEach((id, j) => cross.set(id, starts[j]));
+    return true;
   }
   const low = Math.min(...cross.values()),
     busy = gapRoom(layers, lines, rooms, axis);
@@ -1812,7 +1843,7 @@ function packed(
         after = Math.max(after, right ? r.w : r.h);
     at += Math.max(...layer.map(major)) + after;
   }
-  return { positions: out, axis };
+  return { positions: out, axis, followed };
 }
 
 /**
@@ -2471,6 +2502,8 @@ function layoutPass(
     local = new Map<string, Pos>(),
     bases = new Map<string, Pos>();
   const byId = new Map(m.objects.map(o => [o.id, o]));
+  /** Groups whose members follow the boxes of the sibling group named. */
+  const following = new Map<string, string>();
   const immediate = (id: string, scope: string) => {
     let o = byId.get(id);
     while (o && o.parent !== scope) o = byId.get(o.parent);
@@ -2773,6 +2806,41 @@ function layoutPass(
       if (a && !b) outside.set(a, [...(outside.get(a) ?? []), e.target]);
       if (b && !a) outside.set(b, [...(outside.get(b) ?? []), e.source]);
     }
+    // A group's members that each face one box in a sibling group placed before it follow that
+    // box's centre across the reading direction, so the lines between the two run straight; the
+    // scope around them then lines the two frames up by their first pair (`anchor`).
+    const across = (id: string, right: boolean) => {
+      const p = local.get(id)!,
+        s = drawn.get(id) ?? items.get(id)!;
+      return right ? p.y + s.h / 2 : p.x + s.w / 2;
+    };
+    const follow = new Map<string, number>(),
+      parent = byId.get(scope)?.parent,
+      siblings = (parent !== undefined && children.get(parent)) || [],
+      faced = list.map(n => outside.get(n.id) ?? []),
+      holder = faced[0]?.length === 1 ? byId.get(faced[0][0])?.parent : undefined,
+      earlier = siblings.findIndex(o => o.id === holder) < siblings.findIndex(o => o.id === scope);
+    if (
+      holder !== undefined &&
+      holder !== scope &&
+      siblings.some(o => o.id === holder) &&
+      earlier &&
+      faced.every(o => o.length === 1 && byId.get(o[0])?.parent === holder && local.has(o[0]))
+    )
+      for (const [i, n] of list.entries())
+        follow.set(n.id, across(faced[i][0], readsAlong(holder) === 'right'));
+    const anchor = (a: string, b: string) => {
+      if (following.get(b) !== a) return undefined;
+      const right = readsAlong(scope) === 'right',
+        head = (g: string) => (right ? groupHeaderFor(look, titleLines.get(g)) : GROUP_INSET),
+        joins = m.edges.filter(
+          e => byId.get(e.source)?.parent === a && byId.get(e.target)?.parent === b,
+        );
+      const first = joins.sort((x, y) => across(x.target, right) - across(y.target, right))[0];
+      return first
+        ? head(a) + across(first.source, right) - head(b) - across(first.target, right)
+        : undefined;
+    };
     const rooms = m.edges.flatMap(e => {
       const a = immediate(e.source, scope),
         b = immediate(e.target, scope);
@@ -2863,6 +2931,8 @@ function layoutPass(
               scope === 'root',
               lines,
               outside,
+              follow,
+              anchor,
             )
           : governing?.engine && list.every(n => arranged!.has(n.id))
             ? fromEngine(list, arranged!, axisOf(governing), with_)
@@ -2951,6 +3021,8 @@ function layoutPass(
               : h,
           );
       const pos = refine(list, base.positions, hints, scope, diagnostics, base.axis);
+      if ('followed' in base && base.followed) following.set(scope, holder!);
+      else following.delete(scope);
       return { base, fold, pos, off };
     };
     const drawnBox = (n: Item, at: ReturnType<typeof lay>) => {
