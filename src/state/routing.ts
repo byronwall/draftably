@@ -3,6 +3,7 @@ import { RouteLab } from '../engines/routing-engine.js';
 import type { RoutingSettings } from '../model/types';
 import { commit, doc, setDoc, snapshot } from './document';
 import { commitSource, fileBlocked, fileMode, sourceWithRouting } from './file-session';
+import { layoutPreview, previewRouting } from './layout';
 import { resetRoutes } from './scene';
 import { toast } from './toast';
 
@@ -20,6 +21,7 @@ export function setRouting(patch: Partial<RoutingSettings>, label: string) {
   if (fileMode()) {
     const blocked = fileBlocked();
     if (blocked) return toast(blocked);
+    if (layoutPreview()) return void previewRouting(next);
     void commitSource(sourceWithRouting(next), label, 'routing');
     return;
   }
@@ -36,8 +38,13 @@ const presetSettings = (preset: RoutePreset): RoutingSettings => ({
   cornerRadius: doc.settings.routing.cornerRadius,
 });
 
-export const applyRoutePreset = (preset: RoutePreset) =>
-  setRouting(presetSettings(preset), 'Change routing preset');
+/** A file previews a preset, like a direction or format. A browser diagram's edit is undoable. */
+export function applyRoutePreset(preset: RoutePreset) {
+  if (!fileMode()) return setRouting(presetSettings(preset), 'Change routing preset');
+  const blocked = fileBlocked();
+  if (blocked) return toast(blocked);
+  void previewRouting(presetSettings(preset));
+}
 
 /** The preset the current settings match, or null for custom values. */
 export function activeRoutePreset() {

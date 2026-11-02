@@ -588,14 +588,16 @@ export function sourceWithShape(scope: string, change: ShapeChange) {
 }
 
 /** The `layout` or `routing` line that `source` adds to the file, as saving it would write. */
-export function changedLine(source: string) {
+export function changedLines(source: string) {
   const now = new Set(localSource.split('\n'));
-  return source.split('\n').find(l => /^(layout|routing)\b/.test(l) && !now.has(l)) ?? null;
+  return source.split('\n').filter(l => /^(layout|routing)\b/.test(l) && !now.has(l));
 }
 
+export const changedLine = (source: string) => changedLines(source)[0] ?? null;
+
 /** The current source with these router settings. */
-export function sourceWithRouting(routing: RoutingSettings) {
-  const source = readSource(localSource);
+export function sourceWithRouting(routing: RoutingSettings, base = localSource) {
+  const source = readSource(base);
   setRouting(source, routing);
   return printSource(source);
 }
