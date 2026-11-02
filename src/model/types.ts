@@ -28,6 +28,10 @@ export interface DiagramNode {
   title: string;
   /** Title before a change, from `was=` on a `~` line. */
   was?: string;
+  /** Shape before a change, from `was-shape=` on a `~` line. */
+  wasShape?: ShapeKind;
+  /** Count before a change, from `was-count=` on a `~` line; 1 means a single box. */
+  wasCount?: number | string;
   /** A link to open from exported drawings. */
   href?: string;
   /** How many things this box stands for, or a symbol such as `N`; drawn as a stack with a badge. */

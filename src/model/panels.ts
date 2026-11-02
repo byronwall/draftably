@@ -9,27 +9,46 @@ import type { Diagram } from './types';
 
 export type PanelSide = 'before' | 'after';
 
-/** The document as it was (`before`: no added objects, old labels) or is (`after`: no removed). */
+/**
+ * The merged document with each change as it was: old labels, shapes and counts. Every object
+ * stays in its place and every line stays in, so routing this gives the older panel lines that
+ * differ from the newer panel's only where a change needs it.
+ */
+export function oldDoc(doc: Diagram): Diagram {
+  const styles = { ...doc.styles };
+  for (const n of doc.graph.nodes)
+    if (n.wasShape) styles[n.id] = { ...styles[n.id], shape: n.wasShape };
+  return {
+    ...doc,
+    styles,
+    graph: {
+      nodes: doc.graph.nodes.map(n => ({
+        ...n,
+        title: n.was ?? n.title,
+        ...(n.wasCount !== undefined ? { count: n.wasCount === 1 ? undefined : n.wasCount } : {}),
+      })),
+      groups: doc.graph.groups.map(g => ({ ...g, title: g.was ?? g.title })),
+      edges: doc.graph.edges.map(e => ({ ...e, label: e.was ?? e.label })),
+    },
+  };
+}
+
+/** The document as it was (`before`: no added objects, old values) or is (`after`: no removed). */
 export function panelDoc(doc: Diagram, side: PanelSide): Diagram {
   const hidden = side === 'before' ? 'added' : 'removed',
     keep = (id: string) => doc.styles[id]?.status !== hidden,
-    old = side === 'before';
-  const nodes = doc.graph.nodes
-    .filter(n => keep(n.id))
-    .map(n => (old && n.was !== undefined ? { ...n, title: n.was } : n));
+    version = side === 'before' ? oldDoc(doc) : doc;
+  const nodes = version.graph.nodes.filter(n => keep(n.id));
   const ids = new Set(nodes.map(n => n.id));
-  const groups = doc.graph.groups
-    .filter(g => keep(g.id))
-    .map(g => (old && g.was !== undefined ? { ...g, title: g.was } : g));
   return fitFrames(
     {
-      ...doc,
+      ...version,
       graph: {
         nodes,
-        groups,
-        edges: doc.graph.edges
-          .filter(e => e.status !== hidden && ids.has(e.from) && ids.has(e.to))
-          .map(e => (old && e.was !== undefined ? { ...e, label: e.was } : e)),
+        groups: version.graph.groups.filter(g => keep(g.id)),
+        edges: version.graph.edges.filter(
+          e => e.status !== hidden && ids.has(e.from) && ids.has(e.to),
+        ),
       },
     },
     new Set(

@@ -5,6 +5,7 @@
  * that holds both versions instead of two near-identical files.
  */
 import {
+  bare,
   DslError,
   parseModel,
   printSource,
@@ -15,6 +16,7 @@ import {
   type ModelObject,
   type SourceLine,
   type Statement,
+  type Word,
 } from './syntax';
 
 const DECLARATIONS = ['node', 'group', 'edge'];
@@ -53,6 +55,18 @@ const attrChanges = (old: Statement, now: Statement) => {
   );
 };
 
+/**
+ * A changed node's old shape and count as `was-` words, and the attributes those draw. A marker's
+ * box is a thin cut between cells, so a change to or from one keeps its report instead.
+ */
+const pastNode = (old: ModelObject, now: ModelObject) => {
+  const boxed = old.shape !== 'marker' && now.shape !== 'marker',
+    words: [string, Word][] = [];
+  if (boxed && old.shape !== now.shape) words.push(['was-shape', bare(old.shape)]);
+  if ((old.count ?? 1) !== (now.count ?? 1)) words.push(['was-count', bare(old.count ?? 1)]);
+  return { words, drawn: boxed ? ['shape', 'count'] : ['count'] };
+};
+
 /** Whether what both lists hold comes in the same order in each. */
 const sameOrder = (a: { id: string }[], b: { id: string }[]) => {
   const shared = (x: { id: string }[], y: { id: string }[]) =>
@@ -83,14 +97,13 @@ export function compareDetailed(before: string, after: string) {
       if (s.kind === 'statement' && s.mark)
         throw new DslError('Compare plain files; this one already has change marks.', s.line);
   const [old, next] = [parseModel(docs[0]), parseModel(docs[1])];
-  const was = new Map<string, { key: string; label: string }>([
-    ...old.objects.map(o => ['object:' + o.id, { key: meaning(o), label: o.label }] as const),
-    ...old.edges.map(e => ['edge:' + e.id, { key: meaning(e), label: e.label }] as const),
-  ]);
-  const now = new Map<string, string>([
-    ...next.objects.map(o => ['object:' + o.id, meaning(o)] as const),
-    ...next.edges.map(e => ['edge:' + e.id, meaning(e)] as const),
-  ]);
+  const [was, now] = [old, next].map(
+    m =>
+      new Map<string, ModelObject | ModelEdge>([
+        ...m.objects.map(o => ['object:' + o.id, o] as const),
+        ...m.edges.map(e => ['edge:' + e.id, e] as const),
+      ]),
+  );
   const scopes = new Set(next.layouts.map(l => l.scope));
   // A node in another container, or an edge that joins other objects or touches such a node, is
   // a different thing in each version, as is a changed direction: remove the old one under a
@@ -142,8 +155,12 @@ export function compareDetailed(before: string, after: string) {
     }
     const prior = was.get(keyOf(line));
     if (!prior || split.has(keyOf(line))) out.push({ ...line, mark: '+' });
-    else if (prior.key !== now.get(keyOf(line))) {
+    else if (meaning(prior) !== meaning(now.get(keyOf(line))!)) {
       const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '',
+        { words, drawn } =
+          'shape' in prior
+            ? pastNode(prior, now.get(keyOf(line)) as ModelObject)
+            : { words: [], drawn: [] },
         attrs = attrChanges(
           docs[0].lines.find(
             (l): l is Statement =>
@@ -152,12 +169,16 @@ export function compareDetailed(before: string, after: string) {
               keyOf(l) === keyOf(line),
           )!,
           line,
-        );
+        ).filter(k => !drawn.includes(k));
       if (attrs.length) unshown.push(`${line.args[0].value} (${attrs.join(', ')})`);
       out.push({
         ...line,
         mark: '~',
-        attrs: label !== prior.label ? [...line.attrs, ['was', quoted(prior.label)]] : line.attrs,
+        attrs: [
+          ...line.attrs,
+          ...(label !== prior.label ? [['was', quoted(prior.label)] as [string, Word]] : []),
+          ...words,
+        ],
       });
     } else out.push(line);
   }

@@ -3,7 +3,7 @@
  * same appearance, shapes and title wrapping as the canvas and embeds the fonts it uses.
  */
 import { resolveAppearance, swatchFor, type ResolvedAppearance } from '../model/appearance';
-import { panelDoc } from '../model/panels';
+import { oldDoc, panelDoc } from '../model/panels';
 import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
@@ -134,7 +134,7 @@ function routesOf(doc: Diagram) {
 
 /**
  * One drawing's marks in its own coordinates, and the box they need with a margin. A comparison
- * panel passes the merged drawing's routes, so every line it keeps runs exactly where it does in
+ * panel passes routes of the whole merged drawing, so every line it keeps runs where it does in
  * the other panel.
  */
 function sceneMarkup(
@@ -494,10 +494,11 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
   if (opts.states) return statesSvg(doc, look, opts);
   const { defs, marker } = markersFor(look, [doc]);
   // With `compare`, each version is its own panel drawn from the merged positions, so the panels
-  // share one box and every unchanged object lines up across them.
-  const shared = compare ? routesOf(doc) : undefined,
-    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map(d =>
-      sceneMarkup(d, look, marker, opts, shared),
+  // share one box and every unchanged object lines up across them. Each routes the whole merged
+  // drawing as that version, so a line both keep runs the same way unless a change moves its end.
+  const shared = compare ? [routesOf(oldDoc(doc)), routesOf(doc)] : [],
+    scenes = (compare ? [panelDoc(doc, 'before'), panelDoc(doc, 'after')] : [doc]).map((d, i) =>
+      sceneMarkup(d, look, marker, opts, shared[i]),
     );
   const b = scenes.map(s => s.bounds).reduce(union),
     x0 = Math.floor(b.x),

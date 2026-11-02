@@ -235,6 +235,10 @@ export interface ModelObject {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** With `~`, nodes only: the shape before the change. */
+  wasShape?: DslShape;
+  /** With `~`, nodes only: the count before the change; 1 means a single box. */
+  wasCount?: number | string;
   /** A link to open from exported drawings, such as a source file or URL. */
   href?: string;
   /**
@@ -455,6 +459,8 @@ export const isIdentifier = (s: string) => ID.test(s);
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
+/** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
+export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker');
 const FRAMES = ['box', 'soft', 'none'] as const;
 /** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
 const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
@@ -520,9 +526,9 @@ export function parseModel(source: string | SourceDoc): Model {
       );
       return n;
     };
-    const countOf = () => {
-      const w = attrs.get('count')!;
-      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num('count', 2, 2, 1_000_000);
+    const countOf = (key: string, min: number) => {
+      const w = attrs.get(key)!;
+      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num(key, min, min, 1_000_000);
     };
     const choice = <T extends string>(key: string, fallback: T, choices: readonly T[]): T => {
       const value = (attrs.get(key)?.value ?? fallback) as T;
@@ -555,10 +561,15 @@ export function parseModel(source: string | SourceDoc): Model {
       `Only node, group and edge lines take a ${s.mark} mark.`,
     );
     const was = () => {
-      const w = attrs.get('was');
-      if (!w) return {};
-      assert(s.mark === '~', 'was= belongs on a changed (~) line.');
-      return { was: w.value };
+      for (const key of ['was', 'was-shape', 'was-count'])
+        assert(!attrs.has(key) || s.mark === '~', `${key}= belongs on a changed (~) line.`);
+      return {
+        ...(attrs.has('was') ? { was: attrs.get('was')!.value } : {}),
+        ...(attrs.has('was-shape')
+          ? { wasShape: choice('was-shape', 'box', PAST_SHAPES) as DslShape }
+          : {}),
+        ...(attrs.has('was-count') ? { wasCount: countOf('was-count', 1) } : {}),
+      };
     };
     const readParams = <K extends string>(table: Record<string, Param<K>>) => {
       const out: Record<string, string | number> = {};
@@ -661,7 +672,18 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? ['in', 'color', 'shade', 'shape', 'was', 'href', 'count', 'span']
+            ? [
+                'in',
+                'color',
+                'shade',
+                'shape',
+                'was',
+                'was-shape',
+                'was-count',
+                'href',
+                'count',
+                'span',
+              ]
             : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold'],
         );
         const oid = id(args[0]);
@@ -685,7 +707,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
-          ...(attrs.has('count') ? { count: countOf() } : {}),
+          ...(attrs.has('count') ? { count: countOf('count', 2) } : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
             : {}),

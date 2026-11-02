@@ -163,6 +163,10 @@ export function normalize(input: unknown): Diagram {
       id: n.id,
       title: n.title,
       ...(typeof n.was === 'string' ? { was: n.was } : {}),
+      ...(typeof n.wasShape === 'string' ? { wasShape: n.wasShape } : {}),
+      ...(Number.isInteger(n.wasCount) || typeof n.wasCount === 'string'
+        ? { wasCount: n.wasCount }
+        : {}),
       ...(typeof n.href === 'string' ? { href: n.href } : {}),
       ...((Number.isInteger(n.count) && n.count > 1) || typeof n.count === 'string'
         ? { count: n.count }

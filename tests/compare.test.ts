@@ -5,6 +5,7 @@ import { compareDetailed, compareSources } from '../src/dsl/compare';
 import { checkSource } from '../src/dsl/compile';
 import { GROUP_INSET } from '../src/dsl/frame';
 import { projectScene } from '../src/dsl/project';
+import { formatSource } from '../src/dsl/syntax';
 import { resolveAppearance } from '../src/model/appearance';
 import { panelDoc } from '../src/model/panels';
 
@@ -85,13 +86,56 @@ layout root flow gap=48
 
   it('marks any changed attribute and names what has no old version to draw', () => {
     const { merged, unshown } = compareDetailed(
-      'node a "A" count=2 shape=circle\nnode b "B"\nedge e a -> b\n',
-      'node a "A" shape=diamond count=3\nnode b "B"\nedge e a -> b kind=async\n',
+      'node a "A" color=red\nnode b "B"\nedge e a -> b\n',
+      'node a "A" color=blue\nnode b "B"\nedge e a -> b kind=async\n',
+    );
+    expect(merged).toBe('~node a "A" color=blue\nnode b "B"\n~edge e a -> b kind=async\n');
+    expect(unshown).toEqual(['a (color)', 'e (kind)']);
+  });
+
+  it('draws the old shape and count in Before and the new ones in After, in one box', () => {
+    const { merged, unshown } = compareDetailed(
+      'node a "A" shape=circle count=2\nnode b "B" count=N\nnode c "C" shape=box\n',
+      'node a "A" shape=diamond count=3\nnode b "B"\nnode c "C" count=4\n',
     );
     expect(merged).toBe(
-      '~node a "A" shape=diamond count=3\nnode b "B"\n~edge e a -> b kind=async\n',
+      '~node a "A" shape=diamond count=3 was-shape=circle was-count=2\n' +
+        '~node b "B" was-count=N\n~node c "C" count=4 was-count=1\n',
     );
-    expect(unshown).toEqual(['a (count, shape)', 'e (kind)']);
+    expect(unshown).toEqual([]);
+    const doc = projectScene(checkSource(merged)),
+      [before, after] = [panelDoc(doc, 'before'), panelDoc(doc, 'after')],
+      counts = (d: typeof doc) => d.graph.nodes.map(n => n.count);
+    expect(before.styles.a.shape).toBe('circle');
+    expect(after.styles.a.shape).toBe('diamond');
+    expect(doc.styles.a.shape).toBe('diamond');
+    expect(counts(before)).toEqual([2, 'N', undefined]);
+    expect(counts(after)).toEqual([3, undefined, 4]);
+    expect(before.layout.nodes).toEqual(after.layout.nodes);
+  });
+
+  it('keeps reporting a change to a marker, whose box can hold no other shape', () => {
+    const lines = (shape: string) =>
+      `group g "G"\nnode a "A" in=g\nnode c "C" in=g${shape}\nlayout g cells\n`;
+    const { merged, unshown } = compareDetailed(lines(''), lines(' shape=marker'));
+    expect(merged).not.toContain('was-shape');
+    expect(unshown).toEqual(['c (shape)']);
+  });
+
+  it('refuses the old-value words where they mean nothing', () => {
+    expect(() => checkSource('node a "A" was-shape=circle\n')).toThrow(
+      /was-shape= belongs on a changed \(~\) line/,
+    );
+    expect(() => checkSource('+node a "A" was-count=2\n')).toThrow(
+      /was-count= belongs on a changed \(~\) line/,
+    );
+    expect(() => checkSource('~group g "G" was-shape=box\n')).toThrow(/Unknown group attribute/);
+    expect(() => checkSource('~node a "A" was-shape=marker\n')).toThrow(/Expected was-shape=/);
+  });
+
+  it('keeps the old-value words through format', () => {
+    const line = '~node a "A" shape=diamond was-shape=circle was-count=2\n';
+    expect(formatSource(line)).toBe(line);
   });
 
   it('leaves a label change, which the older panel can draw, out of the list', () => {
