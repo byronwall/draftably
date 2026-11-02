@@ -255,3 +255,75 @@ describe('stability after a refinement', () => {
     expect(reflowed).toMatch(/^stay platform/m);
   });
 });
+
+describe('editing a sequence', () => {
+  const source = [
+    'diagram "S" version=1',
+    'node a "A"',
+    'node b "B"',
+    'node c "C"',
+    'edge m1 a -> b "1"',
+    'edge m2 b -> c "2"',
+    'edge m3 c -> a "3"',
+    'edge m4 a -> c "4"',
+    'phase p "P" m1 m2 m3 # the middle',
+    'phase q "Q" m4',
+    'state s "S" m2 m4',
+    'layout root sequence',
+  ].join('\n');
+  const without = (ids: string[]) => (d: Diagram) => {
+    d.graph.edges = d.graph.edges.filter(e => !ids.includes(e.id));
+  };
+
+  it('takes a deleted message out of its phase', () => {
+    const { text } = edit(source, 'Delete', [], without(['m2']));
+    expect(text).toContain('phase p "P" m1 m3');
+    expect(text).toContain('state s "S" m4');
+  });
+
+  it('removes a phase with its last message and keeps its comment', () => {
+    const { text } = edit(source, 'Delete', [], without(['m1', 'm2', 'm3']));
+    expect(text).not.toContain('phase p');
+    expect(text).toContain('# the middle');
+    expect(text).toContain('phase q "Q" m4');
+  });
+
+  it("clears a deleted participant's messages from phases and states", () => {
+    const { text } = edit(source, 'Delete', [], d => {
+      d.graph.nodes = d.graph.nodes.filter(n => n.id !== 'b');
+      without(['m1', 'm2'])(d);
+    });
+    expect(text).toContain('phase p "P" m3');
+    expect(text).toContain('state s "S" m4');
+  });
+
+  it('saves a drag as a lane order and never as a position', () => {
+    const { text, scene } = edit(source, 'Move', ['a'], d => {
+      d.layout.nodes.a.x += 200;
+    });
+    expect(text).toContain('order root b a c');
+    expect(text).not.toMatch(/^(near|nudge|stay|pin) /m);
+    expect(scene.byId.get('b')!.x).toBeLessThan(scene.byId.get('a')!.x);
+  });
+
+  it('saves nothing for a drag that keeps the lane order', () => {
+    expect(() =>
+      edit(source, 'Move', ['a'], d => {
+        d.layout.nodes.a.y += 40;
+      }),
+    ).toThrow(UnsupportedEdit);
+  });
+
+  it('saves a resize and a new participant without position hints', () => {
+    const { text } = edit(source, 'Resize', ['b'], d => {
+      d.layout.nodes.b.w += 40;
+    });
+    expect(text).toMatch(/^size b /m);
+    expect(text).not.toMatch(/^(near|nudge|stay|pin) /m);
+    const added = edit(source, 'Add', [], d => {
+      edits.addNode(d, { title: 'New' }, { x: 900, y: 0 });
+    });
+    expect(added.text).toContain('node new "New"');
+    expect(added.text).not.toMatch(/^(near|nudge|stay|pin) /m);
+  });
+});

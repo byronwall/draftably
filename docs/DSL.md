@@ -232,7 +232,7 @@ their `edge` lines.
 drawn in a row across the top in file order (or the order an `order root` line gives), with a
 dashed lifeline below it. Every edge is a message, drawn on its own row in the order the edge
 lines appear, as a straight arrow from the sender's lifeline to the receiver's, so the file
-reads top to bottom as the exchange does. A message's label sits just above its arrow, a step
+reads top to bottom as the exchange does. Rows show order, not elapsed time. A message's label sits just above its arrow, a step
 larger than other labels, and wraps to about 170px; a self-message's label sits beside its loop.
 Participants are spaced for the wrapped labels, and a short participant title gets a box only as
 wide as it needs.
@@ -249,15 +249,37 @@ layout root sequence
 ```
 
 `kind=async` draws a dashed message, the usual mark of a reply. A message from a participant to
-itself draws a short loop. Participants are spaced so each message's label fits between them.
-Position refinements do not apply.
+itself draws a short loop. Participants are spaced so each message's label fits between its two
+lifelines, however far apart they are. A self-message's loop and label keep clear of the next
+lifeline and the next row, and a self-message on the last participant widens the panel.
+
+Position refinements do not apply. In the editor, drag a participant or a band past a neighbor
+to change the order; the drop saves an `order` line, and a drag that keeps the order saves
+nothing.
 
 The diagram is drawn on a framed panel, and each participant is outlined in its color with a
-thin stripe of it along the top, so the row of headers stays quiet. A top-level `group` gathers
-participants (`in=group`) into a lightly tinted column band behind their lifelines, with its title
-above them; its participants stay together where its first one falls in the order. A `phase`
-lists messages that belong together and draws them as a row band across the panel, its label in
-a tab at the left; alternate phases are tinted, so neighbours read apart:
+thin stripe of it along the top, so the row of headers stays quiet. A participant with no color
+gets the theme's plain outline and no stripe.
+
+A top-level `group` gathers participants (`in=group`) into a lightly tinted column band behind
+their lifelines, with its title above them. A group needs at least one participant, and a message
+ends on a participant, not on a group. The band stays whole, by default where its first
+participant falls. `order root` places bands and ungrouped participants, and `order group` places
+the participants inside one band:
+
+```draft
+group server "Server"
+node auth "Auth" in=server
+node app "App"
+node db "Store" in=server
+order root app server
+order server db auth
+layout root sequence
+```
+
+This draws App, Store, Auth. A `phase` lists messages that belong together and draws them as a
+row band across the panel, its label in a tab at the left; alternate phases are tinted, so
+neighbours read apart:
 
 ```draft
 group client "Client" color=blue
@@ -274,7 +296,10 @@ phase commit "Commit" m3 m4
 layout root sequence
 ```
 
-A message belongs to at most one phase. Change marks
+A phase is a run of consecutive messages. A listed run can't skip a message, so `check` reports
+`m1 m3` around `m2`: include `m2` or split the phase. A message belongs to at most one phase, and
+messages outside every phase are fine. Deleting a message takes it out of its phase, and deleting
+a phase's last message removes the phase. Change marks
 work as anywhere else: a `+edge` line shows a new message in place. Fragments (`loop`, `alt`),
 activations and notes are not supported yet.
 

@@ -181,8 +181,11 @@ Good defaults:
   and the lines tangle. Draw independent flows as groups side by side instead.
 - An exchange between participants: `layout root sequence`. Nodes are participants across the
   top; each `edge` line is one message, in file order; `kind=async` for replies. A top-level
-  `group` makes a column band of its participants (client, server), and
-  `phase id "label" m1 m2 ...` draws a run of messages as a labelled row band (preview, apply).
+  `group` makes a column band of its participants (client, server); it needs a participant, and
+  a message ends on a participant, not a group. `order root` places bands and ungrouped
+  participants, and `order group` places a band's members. `phase id "label" m1 m2 ...` draws a
+  run of consecutive messages as a labelled row band (preview, apply). A phase can't skip a
+  message; include it or split the phase. Rows show order, not elapsed time.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
 - One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request

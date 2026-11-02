@@ -1039,19 +1039,26 @@ function validateReferences(m: Model) {
       assert(!o.frame, `${o.id} is a lane, so it needs its frame; remove frame=.`, o.line);
     }
   // Sequence: participants and messages only.
-  if (m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+  const sequence = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
+  if (sequence)
     // Groups gather participants into column bands; they hold nodes and sit at the top level.
-    for (const o of m.objects)
+    for (const o of m.objects) {
       assert(
         o.type === 'node' ? by.get(o.parent)?.type !== 'node' : o.parent === 'root' && !o.frame,
         `In a sequence diagram a group is a band of participants: put ${o.id} at the top level and its participants in=${o.id}.`,
         o.line,
       );
+      assert(
+        o.type === 'node' || m.objects.some(x => x.parent === o.id),
+        `Group ${o.id} has no participants, so it has no band to draw. Put a participant in=${o.id} or remove the group.`,
+        o.line,
+      );
+    }
   const messageIds = new Set(m.edges.map(e => e.id)),
     phased = new Set<string>();
   for (const p of m.phases) {
     assert(
-      m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'),
+      sequence,
       'A phase groups messages in a sequence diagram; use layout root sequence.',
       p.line,
     );
@@ -1064,6 +1071,17 @@ function validateReferences(m: Model) {
       assert(!phased.has(x), `${x} is already in another phase.`, p.line);
       phased.add(x);
     }
+    // A phase's band runs from its first message to its last, so it covers all those between.
+    const at = m.edges.flatMap((e, i) => (p.ids.includes(e.id) ? [i] : [])),
+      skipped = m.edges
+        .slice(at[0], at[at.length - 1] + 1)
+        .filter(e => !p.ids.includes(e.id))
+        .map(e => e.id);
+    assert(
+      !skipped.length,
+      `Phase ${p.id} skips ${skipped.join(', ')}: a phase is a run of consecutive messages. Include it or split the phase.`,
+      p.line,
+    );
   }
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
@@ -1071,6 +1089,11 @@ function validateReferences(m: Model) {
       // A line may end on a boxed group's frame, but not on a tint or on a group around its other end.
       const o = by.get(end)!,
         other = end === e.source ? e.target : e.source;
+      assert(
+        !sequence || o.type === 'node',
+        `A message joins participants, and ${end} is a group. End ${e.id} on one of its participants.`,
+        e.line,
+      );
       assert(
         o.type === 'node' || !o.frame,
         `${end} is a ${o.frame} group, which has no frame for a line to end on. Connect to one of its members, or use frame=box.`,

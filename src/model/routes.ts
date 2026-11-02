@@ -7,7 +7,7 @@ import {
 import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { edgeLabelSize, groupTitleLines } from './labels';
+import { edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
 import {
   findNode,
   isCell,
@@ -689,7 +689,12 @@ export function drawRoutes(
     labels.set(
       route,
       route.from === route.to
-        ? { x: route.points[1].x + 4 + w / 2, y: (route.points[1].y + route.points[2].y) / 2, w, h }
+        ? {
+            x: route.points[1].x + SELF_LOOP.label + w / 2,
+            y: (route.points[1].y + route.points[2].y) / 2,
+            w,
+            h,
+          }
         : { x: (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
     );
   }
@@ -765,9 +770,6 @@ export function haloPath(points: Point[], others: Point[][], frames: Rect[]): st
   }
   return out.join('');
 }
-
-/** Run of a self-message's loop out to the right of its lifeline, and its drop. */
-const SELF_LOOP = { out: 36, down: 22 };
 
 /**
  * A sequence message: a straight line at its row from the source's lifeline (the middle of the

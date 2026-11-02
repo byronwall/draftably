@@ -6,6 +6,7 @@ import {
   findEdge,
   findGroup,
   findNode,
+  findObject,
   isCell,
   isGroup,
   styleOf,
@@ -59,7 +60,9 @@ export function Inspector() {
           <Match when={ids().length === 1 && findEdge(doc, ids()[0]) && ids()[0]}>
             {id => <EdgeInspector id={id()} />}
           </Match>
-          <Match when={ids().length === 1 && ids()[0]}>{id => <ObjectInspector id={id()} />}</Match>
+          <Match when={ids().length === 1 && findObject(doc, ids()[0]) && ids()[0]}>
+            {id => <ObjectInspector id={id()} />}
+          </Match>
         </Switch>
       </fieldset>
       <ResizeHandle

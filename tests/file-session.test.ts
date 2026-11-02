@@ -93,3 +93,44 @@ it('releases cached-page streams and catches up when the file page returns', asy
   page.dispatchEvent(restored);
   expect(streams).toHaveLength(3);
 });
+
+it('keeps framing through a theme change, in a document and in a file', async () => {
+  const [actions, documentState, fileSession] = await Promise.all([
+    import('../src/state/actions'),
+    import('../src/state/document'),
+    import('../src/state/file-session'),
+  ]);
+  const framing = {
+    heading: { title: 'T', subtitle: 'Why' },
+    notes: [{ text: 'Scope' }],
+    legend: [{ color: 'blue', label: 'Blue' }],
+    states: [{ id: 's', label: 'S', ids: [] }],
+  };
+  fileSession.closeFileSession();
+  documentState.setDoc('appearance', { ...documentState.doc.appearance, ...framing } as never);
+  actions.chooseTheme('ink');
+  expect(documentState.doc.appearance).toMatchObject({ theme: 'ink', ...framing });
+
+  const source = [
+    'diagram "Framed" version=1',
+    'subtitle "Why it matters"',
+    'note "Scope"',
+    'legend blue "Blue"',
+    'node a "A" color=blue',
+    'node b "B"',
+    'edge m1 a -> b "1"',
+    'state s "S" m1',
+    'layout root sequence',
+  ].join('\n');
+  await fileSession.openExampleSession('framed', 'Framed', source);
+  actions.chooseTheme('ink');
+  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+    await new Promise(resolve => setTimeout(resolve, 0));
+  const saved = fileSession.currentSource();
+  expect(saved).toContain('theme ink');
+  for (const line of source.split('\n')) expect(saved).toContain(line);
+  documentState.undo();
+  for (let i = 0; i < 20 && fileSession.fileCompiling(); i++)
+    await new Promise(resolve => setTimeout(resolve, 0));
+  expect(fileSession.currentSource().trim()).toBe(source);
+});
