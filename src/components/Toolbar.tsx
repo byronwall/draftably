@@ -11,8 +11,8 @@ import {
 } from '../state/file-session';
 import { tool, type Tool } from '../state/editor';
 import { layoutBusy, layoutTarget, cancelLayout } from '../state/layout';
-import { brushActive, timelineOpen } from '../state/sculpt';
-import { filesShown, inspectorOpen, menu, objectsOpen, openMenu } from '../state/ui';
+import { timelineOpen } from '../state/sculpt';
+import { arrangeOpen, filesShown, menu, objectsOpen, openMenu, propertiesOpen } from '../state/ui';
 import { AppNav, Brand } from './Brand';
 import { startUrl, workspace } from '../state/launch';
 import { CommandButton, IconButton, tip } from './controls';
@@ -56,8 +56,6 @@ export function Toolbar() {
           <ToolButtons tools={NAV_TOOLS} disabled={locked()} />
           <span class="divider" />
           <ToolButtons tools={DRAW_TOOLS} disabled={locked()} />
-          <span class="divider" />
-          <CommandButton command="brush-toggle" pressed={brushActive()} />
         </div>
         <span class="divider" />
         <div class="toolbar-group">
@@ -78,14 +76,23 @@ export function Toolbar() {
           <button
             type="button"
             class="button primary"
-            {...tip('Tidy positions', 'L', `Small moves in ${layoutTarget()}. Undo restores them.`)}
+            {...tip('Improve', 'L', `Small moves in ${layoutTarget()}. Undo restores them.`)}
             disabled={locked() || !commandEnabled('layout')}
             onClick={run('layout')}
           >
             <Icon name="layout" />
-            Tidy positions
+            Improve
           </button>
         </Show>
+        <button
+          type="button"
+          class="button ghost"
+          aria-pressed={arrangeOpen()}
+          {...tip('Arrange', '⌥L', 'Choose a direction, a format and how connections run.')}
+          onClick={run('layout-menu')}
+        >
+          Arrange
+        </button>
       </div>
 
       <div class="toolbar-group toolbar-panels">
@@ -103,7 +110,7 @@ export function Toolbar() {
           <CommandButton command="toggle-files" pressed={filesShown()} />
         </Show>
         <CommandButton command="toggle-objects" pressed={objectsOpen()} />
-        <CommandButton command="toggle-inspector" pressed={inspectorOpen()} />
+        <CommandButton command="toggle-inspector" pressed={propertiesOpen()} />
         <button
           type="button"
           class="button ghost"
@@ -139,7 +146,7 @@ export function Toolbar() {
         <button
           type="button"
           class="button ghost"
-          aria-pressed={inspectorOpen()}
+          aria-pressed={propertiesOpen()}
           onClick={run('toggle-inspector')}
         >
           <Icon name="sliders" />

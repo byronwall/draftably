@@ -783,10 +783,10 @@ layout root engine=compound-flow
 and the drawing gets larger.
 
 To compare engines on your own file, run
-`draftably vary diagram.draft --try engine=layered,tree,grid`, or select **Compare layouts**
-(**Alt E**) in the Editor. To set one in the Editor, select **Layout options**, then **Advanced
-layout settings**. **Approach** lists the engines by the names in the table. Choose one, select
-**Preview automatic layout**, then select **Keep layout** to write the `layout` line.
+`draftably vary diagram.draft --try engine=layered,tree,grid`, or select **Compare alternatives**
+(**Alt E**) in the Editor. To set one in the Editor, select **Arrange** (**Alt L**), then **Exact
+layout**. **Method** under **Rebuild** lists the engines by the names in the table. Choose one,
+select **Preview rebuild**, then select **Keep** to write the `layout` line.
 
 ### Scopes and groups
 
@@ -930,20 +930,21 @@ Try these steps in order, and stop when the drawing reads well:
    goes when nothing else does. Put boxes in the same order as the boxes they connect to.
 2. **Let the engine reorder.** On a `compound-flow` or `layered` engine, add `ordering=crossings`:
    `layout root engine=layered ordering=crossings`. In the Editor, the same setting is
-   **Within-rank ordering** → **Reorder to reduce crossings** in Layout options.
+   **Order within a stage** → **Reduce crossings** under **Arrange** → **Exact layout** →
+   **Improve**, which applies to small moves. A rebuild always reduces crossings.
 3. **Move one box.** A `near` line with `side=` puts a box on the other side of its neighbor. A
    `pin` holds a box at an exact place. See [Refinements](#refinements).
 4. **Choose the sides.** `from=` and `to=` on an `edge` line choose the sides a line leaves and
    enters.
 5. **Route around it.** Raise `crossing-penalty` on the `routing` line, for example to 900. In the
-   Editor, **Routing options** → **Fewer crossings** writes that line.
+   Editor, **Arrange** → **Connections** → **Fewer crossings** writes that line.
 
 To compare more than one result at once:
 
-- **In the Editor:** **Routing options** shows the crossings in the current drawing. **Compare
-  ports & routes** draws routing candidates side by side, and **Compare layouts** (**Alt E**) does the same
-  for layout recipes. **Apply** writes the candidate's `routing` or `layout` line into the file.
-  **Reroute now** (**Alt R**) routes every line again without moving shapes. Undo steps back
+- **In the Editor:** **Arrange** → **Connections** shows the crossings in the current drawing. Its
+  **Compare** button draws routing candidates side by side, and **Compare alternatives** (**Alt E**)
+  does the same for layout recipes. **Apply** writes the candidate's `routing` or `layout` line into
+  the file. **Reroute** (**Alt R**) routes every line again without moving shapes. Undo steps back
   through the file's versions. See [Layout tools](#layout-tools).
 - **From the command line:** `draftably vary diagram.draft` tries layouts and a router that avoids
   crossings harder. Its table has a `crossings` column and its contact sheet draws each variant.
@@ -1295,23 +1296,24 @@ for Cache. Undo returns the file to its earlier version.
 
 Edits made in the Editor are written back to the file as readable statements:
 
-| In the Editor                              | In the file                                                         |
-| ------------------------------------------ | ------------------------------------------------------------------- |
-| Drag an object                             | `near` the closest sibling it does not overlap; `nudge` if none.    |
-| Drag a soft group's tint                   | A `stay` for each member at its new place; the group gets none.     |
-| Pin or unpin (**P**)                       | `pin` at its position; unpinning leaves a soft `stay`.              |
-| Resize a shape or container                | `size`, or `min-width`/`min-height` on the container's `layout`.    |
-| Drag a cell among its group's cells        | The group's `order` line. **Span** in Inspector writes `span=`.     |
-| Add, rename, connect, delete, recolor      | `node`, `group` and `edge` declarations, with IDs from the label.   |
-| Color family or shade in Inspector         | `color=` and `shade=` on the declaration.                           |
-| Theme or padding in **Appearance**         | The `theme` line; preset changes drop built-in `theme-color` lines. |
-| Double-click the title or subtitle         | The `diagram` title and the `subtitle` line.                        |
-| Drag the frame's right edge                | `width=` on the `diagram` line; back to its content removes it.     |
-| Wrap in a container or ungroup             | A `group` and the members' `in=`.                                   |
-| Clear manual markers                       | Removes the object's soft position refinements.                     |
-| Rebuild, or Apply in Compare               | `layout scope engine=…` for the diagram or the selected container.  |
-| Tidy positions, a timeline step, the brush | `stay` for each object that moved, plus anchors around them.        |
-| Routing options, or a routing Compare      | The `routing` line.                                                 |
+| In the Editor                          | In the file                                                         |
+| -------------------------------------- | ------------------------------------------------------------------- |
+| Drag an object                         | `near` the closest sibling it does not overlap; `nudge` if none.    |
+| Drag a soft group's tint               | A `stay` for each member at its new place; the group gets none.     |
+| Pin or unpin (**P**)                   | `pin` at its position; unpinning leaves a soft `stay`.              |
+| Resize a shape or container            | `size`, or `min-width`/`min-height` on the container's `layout`.    |
+| Drag a cell among its group's cells    | The group's `order` line. **Span** in Inspector writes `span=`.     |
+| Add, rename, connect, delete, recolor  | `node`, `group` and `edge` declarations, with IDs from the label.   |
+| Color family or shade in Inspector     | `color=` and `shade=` on the declaration.                           |
+| Theme or padding in **Appearance**     | The `theme` line; preset changes drop built-in `theme-color` lines. |
+| Double-click the title or subtitle     | The `diagram` title and the `subtitle` line.                        |
+| Drag the frame's right edge            | `width=` on the `diagram` line; back to its content removes it.     |
+| Wrap in a container or ungroup         | A `group` and the members' `in=`.                                   |
+| Clear manual markers                   | Removes the object's soft position refinements.                     |
+| Direction or Format in **Arrange**     | `direction=` or `fit=` on the scope's `layout` line.                |
+| Rebuild, or Apply in Compare           | `layout scope engine=…` for the diagram or the selected container.  |
+| Improve, a timeline step, the brush    | `stay` for each object that moved, plus anchors around them.        |
+| Connections in **Arrange**, or Compare | The `routing` line.                                                 |
 
 An accepted move, pin or resize also writes soft `stay` anchors for the objects around it: every
 top-level object, and the siblings of the edited object and of its containers. When an agent later
@@ -1341,37 +1343,40 @@ drawing.
 - **Lines cross.** Follow [Fixing line crossings](#fixing-line-crossings).
 - **Lines have too many bends, or run too close.** Change one setting on the `routing` line. See
   [Routing](#routing).
-- **Shapes are close, but a few lines are stretched or uneven.** Select **Tidy positions** (**L**).
+- **Shapes are close, but a few lines are stretched or uneven.** Select **Improve** (**L**).
 - **A group is out of shape after edits.** Select **Reflow group**. It removes the soft refinements
   inside the group. To clear one object, select **Clear manual markers**.
-- **The whole drawing has the wrong shape.** Set `direction=` on the `layout` line, or run
+- **The whole drawing has the wrong shape.** Choose a **Direction** or **Format** in **Arrange**
+  (**Alt L**), set `direction=` on the `layout` line, or run
   `draftably vary diagram.draft --fit slide`. See [Layout variants](#layout-variants).
 - **The whole arrangement is wrong.** Change the engine. See
-  [Choose an engine](#choose-an-engine), and use **Compare layouts** (**Alt E**) to see the results
-  side by side.
+  [Choose an engine](#choose-an-engine), and use **Compare alternatives** (**Alt E**) to see the
+  results side by side.
 
 ### What each tool changes
 
-| Action           | What it changes                              | Applies to                                  | How to reverse                         |
-| ---------------- | -------------------------------------------- | ------------------------------------------- | -------------------------------------- |
-| Tidy positions   | Small moves from the current drawing         | The selection, a group or the whole diagram | Undo                                   |
-| Automatic layout | A new arrangement, saved as a recipe         | The whole diagram or one group              | Discard the preview, or Undo           |
-| Compare layouts  | Nothing until you Apply a candidate          | The whole diagram or one group              | Close it, or Undo after Apply          |
-| Layout timeline  | Steps from the current drawing               | The diagram                                 | Close it, or Undo a kept step          |
-| Layout brush     | The shapes you paint over                    | The shapes under the brush                  | Undo                                   |
-| Reroute now      | Connection paths. Shapes stay where they are | Every connection                            | Not needed: the source does not change |
+| Action               | What it changes                              | Applies to                                  | How to reverse                         |
+| -------------------- | -------------------------------------------- | ------------------------------------------- | -------------------------------------- |
+| Improve              | Small moves from the current drawing         | The selection, a group or the whole diagram | Undo                                   |
+| Direction or Format  | A preview of the scope's `layout` line       | The whole diagram or one group              | Discard the preview, or Undo           |
+| Compare alternatives | Nothing until you Apply a candidate          | The whole diagram or one group              | Close it, or Undo after Apply          |
+| Layout timeline      | Steps from the current drawing               | The diagram                                 | Close it, or Undo a kept step          |
+| Layout brush         | The shapes you paint over                    | The shapes under the brush                  | Undo                                   |
+| Reroute              | Connection paths. Shapes stay where they are | Every connection                            | Not needed: the source does not change |
 
-A rebuild arranges a scope from scratch, so it is saved as a recipe. **Preview automatic layout**
-in Layout options, and every rebuild candidate in **Compare**, compile the file with the new
-`layout` line. What you see is exactly what the file will draw, and **Keep** or **Apply** saves
-that line. Soft position refinements inside the scope are removed so the engine's arrangement
-shows; pins, sizes and the nested groups' own `layout` lines stay. Layout options shows the
-scope's current line and the one a rebuild would write. The routing menu and routing comparisons
-write the `routing` line.
+The **Arrange** panel (**Alt L**) follows the selection: with nothing selected it arranges the whole
+diagram, and with one group selected it arranges that group. **Direction** and **Format** show what
+the scope's `layout` line says. Choosing another preview it at once, and further choices add to the
+same preview. Each rebuild candidate in **Compare** also compiles the file with a new `layout` line.
+What you see is exactly what the file will draw, and **Keep** (**Enter**) or **Apply** saves that
+line. The preview shows the line, and how many hand placements it removes: soft position refinements
+inside the scope go, so the new arrangement shows. Pins, sizes and the nested groups' own `layout`
+lines stay. **Exact layout** has every engine and spacing setting, and **Exact routing** has every
+`routing` value. Corner rounding is in **Appearance**, because it changes how lines look and not
+where they go.
 
-**Tidy positions**, **Preview tidy**, a kept **timeline** step, a **brush** stroke, and warm-start or
-pass candidates in Compare all start from the current drawing, so a recipe could not reproduce
-them. They are saved as an arrangement instead: each object that moved gets a soft `stay` at its
+**Improve**, a kept **timeline** step, a **brush** stroke, and warm-start or pass candidates in
+Compare all start from the current drawing, so a recipe could not reproduce them. They are saved as an arrangement instead: each object that moved gets a soft `stay` at its
 new position relative to its parent (an existing `stay` is updated in place), and the objects
 around them are anchored as for a drag. Groups follow their contents, so a group whose children
 moved left or up moves with them. Pins never move. A root-level `stay` may be negative, because

@@ -30,6 +30,8 @@ import {
 } from '../dsl/translate';
 import {
   setLayoutRecipe,
+  setLayoutShape,
+  type ShapeChange,
   setRouting,
   UnstorableLayout,
   writeArrangement,
@@ -575,6 +577,13 @@ export function sourceWithRecipe(
 ) {
   const source = readSource(localSource),
     removed = setLayoutRecipe(source, state.scene()!, scope, settings, direction);
+  return { source: printSource(source), removed };
+}
+
+/** The current source with a change to what a scope's `layout` line says. */
+export function sourceWithShape(scope: string, change: ShapeChange) {
+  const source = readSource(localSource),
+    removed = setLayoutShape(source, state.scene()!, scope, change);
   return { source: printSource(source), removed };
 }
 

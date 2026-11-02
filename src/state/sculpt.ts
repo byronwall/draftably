@@ -55,7 +55,7 @@ import {
 import { routing, resetRoutes, setAdoptedRoutes, setRoutePrior, setSculptGeometry } from './scene';
 import { shortcutKey } from './keys';
 import { toast } from './toast';
-import { closeMenu, setLayoutLabOpen } from './ui';
+import { closeMenu } from './ui';
 
 const ARCHIVE_KEY = 'diagram-studio-v7-last-journey';
 
@@ -212,7 +212,6 @@ export async function openTimeline(options: Record<string, unknown> = {}) {
   cancelStroke();
   deactivateBrush();
   closeMenu();
-  setLayoutLabOpen(false);
   batch(() => {
     setToolSignal('select');
     setConnectFrom(null);

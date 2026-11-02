@@ -4,7 +4,7 @@
  */
 import * as actions from './actions';
 import { canRedo, canUndo, doc, redo, selectedIds, undo } from './document';
-import { fitView, zoomAt } from './editor';
+import { diagramClipped, fitView, zoomAt } from './editor';
 import {
   copyImage,
   exportDocument,
@@ -50,17 +50,16 @@ import {
 import { toast } from './toast';
 import {
   filesShown,
-  inspectorOpen,
   objectsOpen,
   confirmAction,
   openDialog,
   openQuickBuild,
   setCreatingFile,
   setFilesOpen,
-  setInspectorOpen,
   setObjectsOpen,
   setSavingExample,
-  toggleLayoutLab,
+  toggleRightTab,
+  type RightTab,
   togglePanels,
 } from './ui';
 import { findNode, isGroup } from '../model/graph';
@@ -300,51 +299,53 @@ export const commands = {
 
   layout: {
     hint: 'Nudge shapes into line with small moves. Your arrangement stays.',
-    label: 'Tidy positions',
+    label: 'Improve positions',
     keys: 'L',
     icon: 'layout',
     run: () => runLabLayout(),
     endsBrush: true,
   },
   'layout-rebuild': {
-    hint: 'Preview a new arrangement of the whole diagram.',
-    label: 'Preview automatic layout',
+    hint: 'Preview the recipe again, without hand placements.',
+    label: 'Rearrange from scratch',
     keys: '⇧L',
     run: () => runLabLayout('rebuild', true),
     endsBrush: true,
   },
   'layout-preview': {
-    label: 'Preview tidy',
+    label: 'Preview improvement',
     run: () => runLabLayout('pass', true),
     endsBrush: true,
   },
-  'layout-accept': { label: 'Keep layout', run: acceptPreview },
+  'layout-accept': { label: 'Keep preview', run: acceptPreview },
   'layout-discard': { label: 'Discard', run: discardPreview },
   'layout-menu': {
-    hint: 'Choose an arrangement, preview it and keep it if you like it.',
-    label: 'Automatic layout…',
+    hint: 'Choose a direction, a format and how connections run.',
+    label: 'Arrange',
     keys: '⌥L',
-    run: toggleLayoutLab,
+    icon: 'layers',
+    run: () => toggleRight('arrange'),
     endsBrush: true,
+    duringTimeline: true,
   },
   'layout-checkpoint': { label: 'Capture checkpoint', run: captureCheckpoint },
   'layout-restore': { label: 'Restore checkpoint', run: restoreCheckpoint },
   'compare-layouts': {
-    hint: 'See other arrangements side by side, then apply one.',
-    label: 'Compare layouts',
+    hint: 'See other arrangements beside this one, then apply one.',
+    label: 'Compare alternatives',
     keys: '⌥E',
     run: () => openComparison('layout'),
     endsBrush: true,
   },
   'compare-routes': {
-    hint: 'See other connection routes side by side, then apply one.',
-    label: 'Compare ports & routes',
+    hint: 'See other connection routes beside these, then apply one.',
+    label: 'Compare connections',
     run: () => openComparison('routing'),
     endsBrush: true,
   },
   reroute: {
     hint: 'Redraw every connection. Shapes stay where they are.',
-    label: 'Reroute now',
+    label: 'Reroute connections',
     keys: '⌥R',
     icon: 'branch',
     run: () => actions.reroute(),
@@ -446,7 +447,7 @@ export const commands = {
     label: 'Inspector',
     keys: ']',
     icon: 'sliders',
-    run: () => setInspectorOpen(!inspectorOpen()),
+    run: () => toggleRight('properties'),
     duringTimeline: true,
   },
   'toggle-panels': {
@@ -597,6 +598,15 @@ export const commands = {
 } satisfies Record<string, Command>;
 
 export type CommandId = keyof typeof commands;
+
+/** Open or close a right-panel tab, keeping a diagram that was shown whole in view. */
+function toggleRight(tab: RightTab) {
+  const whole = !diagramClipped();
+  toggleRightTab(tab);
+  // The canvas takes its new size on the next frame.
+  if (whole)
+    requestAnimationFrame(() => requestAnimationFrame(() => diagramClipped() && fitView()));
+}
 
 /**
  * Tools whose results a diagram file cannot store yet. Rebuilds, Compare and routing are saved as
