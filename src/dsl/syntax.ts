@@ -1121,7 +1121,13 @@ function validateReferences(m: Model) {
       );
     }
   (m.appearance.notes ?? []).forEach((n, i) => {
-    if (n.near) exists(n.near, m.noteLines[i]);
+    if (!n.near || by.has(n.near)) return;
+    if (!messageIds.has(n.near)) return exists(n.near, m.noteLines[i]);
+    assert(
+      sequence,
+      `near=${n.near} names a connection. Only a sequence diagram anchors a note to a message; use a node or group here.`,
+      m.noteLines[i],
+    );
   });
   const edgeIds = new Set(m.edges.map(e => e.id));
   for (const s of m.appearance.states ?? [])

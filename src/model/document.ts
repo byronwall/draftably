@@ -375,6 +375,8 @@ export function normalize(input: unknown): Diagram {
       phases: seq.phases
         .filter(p => typeof p?.id === 'string' && finite(p.y) && finite(p.h))
         .map(p => ({ id: p.id, label: String(p.label ?? p.id), y: p.y, h: p.h })),
+      ...(finite(seq.phaseX) ? { phaseX: seq.phaseX } : {}),
+      ...(Array.isArray(seq.notes) ? { notes: seq.notes } : {}),
     };
   out.collapsed = Array.isArray(data.collapsed)
     ? data.collapsed.filter((id: string) => groups.has(id))

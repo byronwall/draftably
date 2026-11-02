@@ -12,6 +12,7 @@
 import { LayoutLab } from '../engines/layout-engine.js';
 import { DEFAULT_THEME, resolveAppearance, type ResolvedAppearance } from '../model/appearance';
 import { measureText, widestPiece, wrapLines } from '../model/fonts';
+import { rectUnion } from '../model/geometry';
 import {
   edgeLabelSize,
   GROUP_TITLE_LINES,
@@ -24,6 +25,7 @@ import {
   wrapTitle,
 } from '../model/labels';
 import { cellsBandFor, layoutCells, layoutUnits } from './cells';
+import { marginNotes } from '../model/note';
 import { defaultShapeSize } from '../model/styles';
 import type { CellsChrome, Diagram, Direction, Lane, SequenceLayout } from '../model/types';
 import { planChannels, trimChannels, type Channel } from './channels';
@@ -216,6 +218,8 @@ const SEQ_TOP = 24,
   SEQ_BAND_PAD = 16,
   /** Room between the panel's border and what it holds. */
   SEQ_PANEL_PAD = 20,
+  /** Room between the drawing and a note in a side margin. */
+  SEQ_NOTE_PAD = 8,
   /** Narrowest participant box; a short title no longer takes a full default-width box. */
   SEQ_MIN_W = 104;
 
@@ -373,6 +377,18 @@ function sequenced(scene: Scene): Scene {
       w: right - left + 2 * SEQ_PANEL_PAD,
       h: end + SEQ_BAND_PAD + 2 * SEQ_PANEL_PAD,
     };
+  // Notes on messages take the margins past the outer lanes. The panel grows round them and
+  // nothing inside it moves. A left note also stays clear of the phase labels.
+  const notes = scene.model.appearance.notes ?? [],
+    anchors = new Map([...rows].filter(([id]) => !scene.byId.has(id))),
+    margins = marginNotes(look, notes, anchors, {
+      left: left - (tab ? SEQ_PANEL_PAD : SEQ_NOTE_PAD),
+      right: right + SEQ_NOTE_PAD,
+      top: 0,
+    }),
+    drawn = margins.filter(r => r !== null),
+    framed = drawn.length ? rectUnion([panel, rectUnion(drawn, SEQ_PANEL_PAD)]) : panel,
+    phaseX = framed.x < panel.x ? panel.x : undefined;
   // Phases top to bottom, so tinting alternates down the drawing, each ending where the next begins.
   const runs = scene.model.phases
     .map(p => {
@@ -396,7 +412,12 @@ function sequenced(scene: Scene): Scene {
     objects,
     byId: new Map(objects.map(o => [o.id, o])),
     edges: scene.edges.map(e => ({ ...e, lane: undefined, row: rows.get(e.id) })),
-    sequence: { panel, phases },
+    sequence: {
+      panel: framed,
+      phases,
+      ...(phaseX !== undefined ? { phaseX } : {}),
+      ...(drawn.length ? { notes: margins } : {}),
+    },
   };
 }
 
