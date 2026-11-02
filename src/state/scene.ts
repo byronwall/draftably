@@ -160,6 +160,8 @@ const state = createRoot(() => {
   });
 
   const routesById = createMemo(() => new Map(routing().routes.map(r => [r.id, r])));
+  /** Connections in draw order: `drawRoutes` puts a line that stays whole last. */
+  const routeIds = createMemo(() => routing().routes.map(r => r.id), [], { equals: sameIds });
 
   return {
     sculptGeometry,
@@ -179,6 +181,7 @@ const state = createRoot(() => {
     rects,
     routing,
     routesById,
+    routeIds,
     routesPending,
     setAwaiting,
     resetRoutes() {
@@ -207,6 +210,7 @@ export const {
   rects: sceneRects,
   routing,
   routesById,
+  routeIds,
   routesPending,
   resetRoutes,
   routeInputFor,

@@ -1,6 +1,6 @@
 import { For, Show } from 'solid-js';
 import { findEdge, findObject } from '../../model/graph';
-import type { DrawnRoute } from '../../model/routes';
+import { HALO_WIDTH, type DrawnRoute } from '../../model/routes';
 import { resolveAppearance, swatchFor } from '../../model/appearance';
 import { edgeLabelLines, edgeLabelType } from '../../model/labels';
 import {
@@ -14,9 +14,6 @@ import {
 } from '../../model/markers';
 import { edgeInk, isDiff, statusPaint } from '../../model/status';
 import type { Diagram } from '../../model/types';
-
-/** Width of the halo under a connection, in drawing units. */
-export const EDGE_HALO = 8;
 
 export interface EdgeViewProps {
   doc: Diagram;
@@ -133,7 +130,7 @@ export function EdgeView(props: EdgeViewProps) {
           class="edge-halo"
           d={props.route.halo}
           stroke={look().canvas}
-          stroke-width={EDGE_HALO}
+          stroke-width={HALO_WIDTH}
           fill="none"
         />
       </Show>

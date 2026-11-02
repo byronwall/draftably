@@ -11,7 +11,15 @@ import {
 } from '../../state/editor';
 import { registerSceneElement, openFile } from '../../state/files';
 import * as pointer from '../../state/pointer';
-import { edgeIds, geometry, groupIds, nodeIds, routesById, sceneRects } from '../../state/scene';
+import {
+  edgeIds,
+  geometry,
+  groupIds,
+  nodeIds,
+  routeIds,
+  routesById,
+  sceneRects,
+} from '../../state/scene';
 import { brushActive, brushPointerLeave, cancelStroke, timelineOpen } from '../../state/sculpt';
 import { runCommand } from '../../state/commands';
 import { toast } from '../../state/toast';
@@ -169,7 +177,7 @@ export function Canvas() {
           <SequenceBackdrop doc={shown()} part="phases" />
           <Lifelines doc={doc} ids={nodeIds()} rect={id => sceneRects().get(id)} />
           <g>
-            <For each={edgeIds()}>
+            <For each={routeIds()}>
               {id => (
                 <Show when={routesById().get(id)}>
                   {route => (
