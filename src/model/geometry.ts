@@ -43,6 +43,41 @@ export const rectFromPoints = (a: Point, b: Point): Rect => ({
   h: Math.abs(b.y - a.y),
 });
 
+export type Segment = [Point, Point];
+
+export const segments = (points: readonly Point[]): Segment[] =>
+  points.slice(1).map((p, i) => [points[i], p]);
+export const shrink = (r: Rect, d: number): Rect => ({
+  x: r.x + d,
+  y: r.y + d,
+  w: r.w - 2 * d,
+  h: r.h - 2 * d,
+});
+/** Overlap of two rectangles larger than half a pixel on both axes. */
+export const covers = (a: Rect, b: Rect) =>
+  Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x) > 0.5 &&
+  Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y) > 0.5;
+
+/** Length of a segment inside a rectangle (Liang–Barsky clipping). */
+export function segmentInside([a, b]: Segment, r: Rect) {
+  const dx = b.x - a.x,
+    dy = b.y - a.y;
+  let t0 = 0,
+    t1 = 1;
+  for (const [p, q] of [
+    [-dx, a.x - r.x],
+    [dx, r.x + r.w - a.x],
+    [-dy, a.y - r.y],
+    [dy, r.y + r.h - a.y],
+  ]) {
+    if (p === 0) {
+      if (q <= 0) return 0;
+    } else if (p < 0) t0 = Math.max(t0, q / p);
+    else t1 = Math.min(t1, q / p);
+  }
+  return t1 > t0 ? (t1 - t0) * Math.hypot(dx, dy) : 0;
+}
+
 /** SVG path for an orthogonal polyline with rounded corners. */
 export function roundedPath(points: readonly Point[], radius: number): string {
   if (!points.length) return '';

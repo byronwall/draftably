@@ -3,6 +3,7 @@
  * which few are worth showing, and how each differs from the current drawing.
  */
 import type { RoutingResult } from '../engines/routing-engine.js';
+import { labelHits } from './label-hits';
 import type { Rect } from './types';
 import type { StaticScene } from './static-scene';
 
@@ -10,6 +11,7 @@ export interface Measure {
   crossings: number;
   blocked: number;
   overlaps: number;
+  labels: number;
   bends: number;
   length: number;
   area: number;
@@ -39,6 +41,7 @@ export function measure(scene: StaticScene, routing: RoutingResult): Measure {
     crossings: r.crossings,
     blocked: r.blocked,
     overlaps: overlaps(scene),
+    labels: labelHits(scene).length,
     bends: r.bends,
     length: r.length,
     area: scene.bounds.w * scene.bounds.h,
@@ -106,6 +109,7 @@ export function readDifference(m: Measure, base: Measure): Reading {
   };
   defect(m.blocked, base.blocked, 'blocked line');
   defect(m.overlaps, base.overlaps, 'overlap');
+  defect(m.labels, base.labels, 'label collision');
   fewer(m.crossings - base.crossings, 'crossing');
   const area = percent(m.area, base.area),
     length = percent(m.length, base.length);
@@ -124,6 +128,7 @@ export const describeMeasure = (m: Measure) =>
     count(m.bends, 'bend'),
     ...(m.blocked ? [count(m.blocked, 'blocked line')] : []),
     ...(m.overlaps ? [count(m.overlaps, 'overlap')] : []),
+    ...(m.labels ? [count(m.labels, 'label collision')] : []),
   ].join(' · ');
 
 export interface Candidate {
@@ -158,14 +163,15 @@ function distance(a: StaticScene, b: StaticScene) {
   return sum / Math.max(1, a.rects.size);
 }
 
-const hard = (m: Measure) => m.blocked + m.overlaps;
+const hard = (m: Measure) => m.blocked + m.overlaps + m.labels;
 
 /**
  * The candidates worth showing beside the current drawing, best first. Repeats of the current
  * drawing or of each other are dropped. A candidate with more hard defects than the current
- * drawing comes last, whatever its other measures. A candidate that beats the current drawing on
- * something comes before one that does not: first the best for crossings, area and line length,
- * then the ones least like those already chosen.
+ * drawing comes last, whatever its other measures, and the fewer it has the sooner it comes. A
+ * candidate that beats the current drawing on something comes before one that does not: first the
+ * best for hard defects, crossings, area and line length, then the ones with the fewest hard
+ * defects and least like those already chosen.
  */
 export function pickCandidates(current: Candidate, candidates: Candidate[], limit: number) {
   const distinct: Candidate[] = [];
@@ -175,12 +181,20 @@ export function pickCandidates(current: Candidate, candidates: Candidate[], limi
     flawed = distinct.filter(c => hard(c.measure) > hard(current.measure));
   const gains = (c: Candidate) => readDifference(c.measure, current.measure).gains.length > 0;
   const picked: Candidate[] = [];
-  const objectives: Array<(m: Measure) => number> = [m => m.crossings, m => m.area, m => m.length];
+  const objectives: Array<(m: Measure) => number> = [
+    hard,
+    m => m.crossings,
+    m => m.area,
+    m => m.length,
+  ];
   for (const objective of objectives) {
     const best = sound
       .filter(c => !picked.includes(c) && objective(c.measure) < objective(current.measure))
       .sort(
-        (a, b) => objective(a.measure) - objective(b.measure) || a.measure.bends - b.measure.bends,
+        (a, b) =>
+          objective(a.measure) - objective(b.measure) ||
+          hard(a.measure) - hard(b.measure) ||
+          a.measure.bends - b.measure.bends,
       )[0];
     if (best) picked.push(best);
   }
@@ -189,12 +203,17 @@ export function pickCandidates(current: Candidate, candidates: Candidate[], limi
   const fill = (pool: Candidate[]) => {
     while (pool.some(c => !picked.includes(c))) {
       const rest = pool.filter(c => !picked.includes(c));
-      picked.push(rest.reduce((a, b) => (unlike(b) > unlike(a) ? b : a)));
+      const defects = Math.min(...rest.map(c => hard(c.measure)));
+      picked.push(
+        rest
+          .filter(c => hard(c.measure) === defects)
+          .reduce((a, b) => (unlike(b) > unlike(a) ? b : a)),
+      );
     }
   };
   fill(sound.filter(gains));
   fill(sound);
-  const ranked = [...picked, ...flawed];
+  const ranked = [...picked, ...flawed.sort((a, b) => hard(a.measure) - hard(b.measure))];
   return {
     shown: ranked.slice(0, limit).map(c => c.index),
     others: ranked.slice(limit).map(c => c.index),
