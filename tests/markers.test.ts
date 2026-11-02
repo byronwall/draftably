@@ -5,8 +5,8 @@ import { projectScene, visibleRects } from '../src/dsl/project';
 import { printSource, readSource } from '../src/dsl/syntax';
 import { translateEdit } from '../src/dsl/translate';
 import * as edits from '../src/model/edits';
-import { clone } from '../src/model/geometry';
-import { MARKERS, MARKER_SHAPES } from '../src/model/markers';
+import { clone, overlaps } from '../src/model/geometry';
+import { MARKERS, MARKER_SHAPES, markerRects } from '../src/model/markers';
 import { computeRoutes } from '../src/model/routes';
 import type { Diagram } from '../src/model/types';
 
@@ -117,16 +117,17 @@ describe('endpoint markers', () => {
     expect(svg).toContain(`d="${MARKER_SHAPES.diamond.d}"`);
   });
 
-  it('keeps a label off the mark on a short line', async () => {
+  it('keeps a label beside its line and off the marks when the line is short', async () => {
     const doc = await drawn(
       nodes +
-        'pin a x=0 y=0\npin b x=260 y=0\nedge e a -> b "a label" head=open-diamond tail=diamond\n',
+        'pin a x=0 y=0\npin b x=250 y=0\nedge e a -> b "settled by" head=open-diamond tail=diamond\n',
     );
     const route = routesOf(doc)[0],
       l = route.label!,
-      p = route.points;
-    expect(l.x - l.w / 2).toBeGreaterThanOrEqual(p[0].x + MARKER_SHAPES.diamond.stop);
-    expect(l.x + l.w / 2).toBeLessThanOrEqual(p.at(-1)!.x - MARKER_SHAPES['open-diamond'].stop);
+      box = { x: l.x - l.w / 2, y: l.y - l.h / 2, w: l.w, h: l.h };
+    for (const mark of markerRects(route.points, doc.graph.edges[0]))
+      expect(overlaps(box, mark)).toBe(false);
+    expect(Math.abs(l.y - route.points[0].y)).toBeLessThan(l.h);
   });
 
   it('keeps the tail at the source and the head at the target when a step goes in', () => {

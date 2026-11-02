@@ -72,6 +72,8 @@ export interface LabelAvoid {
   routes?: Point[][];
   /** Thin strips along group borders. */
   borders?: Rect[];
+  /** The marks at line ends. A spot that hides one costs as much as a line through the text. */
+  marks?: Rect[];
 }
 
 /** Whether an orthogonal segment passes through a rectangle. */
@@ -137,6 +139,7 @@ function labelSpots(
       else if (!shared && hits(near)) c += 1;
     }
     for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 2;
+    for (const m of avoid.marks ?? []) if (overlaps(r, m, 1)) c += 5;
     // A label pressed against a box reads as part of it; a spot a little further along is clearer.
     if (obstacles.some(o => overlaps(r, o, BOX_CLEARANCE))) c += 1;
     return c;
@@ -168,8 +171,12 @@ function labelSpots(
       base = len + (flat ? 50 : 0),
       // Beside a level segment the label sits just above or below it; a vertical segment runs
       // through the label, which may shift a little to either side, or far enough to clear a
-      // line running alongside while its own line still crosses it.
-      offsets = flat ? [0, -(h / 2 + 4), h / 2 + 4] : [0, -(h - 4), h - 4, ...beside(a, b)],
+      // line running alongside while its own line still crosses it. A short line with marks
+      // adds a spot a step further out, which clears the tallest mark.
+      clear = avoid.marks?.length ? [-(h / 2 + 7), h / 2 + 7] : [],
+      offsets = flat
+        ? [0, -(h / 2 + 4), h / 2 + 4, ...clear]
+        : [0, -(h - 4), h - 4, ...beside(a, b)],
       steps = Math.max(2, Math.ceil(len / 6));
     for (let k = 0; k <= steps; k++) {
       const t = k / steps,
@@ -663,11 +670,11 @@ export function drawRoutes(
       }),
     ],
   };
-  // A label keeps off a marker as it keeps off a shape. A plain arrow never claims this room.
-  for (const route of result.routes) {
+  // A plain arrow claims no room, so a diagram without markers places its labels as it did.
+  const marks = result.routes.flatMap(route => {
     const edge = findEdge(doc, route.id);
-    if (edge && hasMarkers(edge)) obstacles.push(...markerRects(route.points, edge));
-  }
+    return edge && hasMarkers(edge) ? markerRects(route.points, edge) : [];
+  });
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
   const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
   const labelled = result.routes.filter(route => byEdge.get(route.id)!.label && !message(route)),
@@ -677,7 +684,11 @@ export function drawRoutes(
         return {
           label: byEdge.get(route.id)!.label!,
           points: route.points,
-          avoid: { routes: result.routes.filter(r => r !== route).map(r => r.points), borders },
+          avoid: {
+            routes: result.routes.filter(r => r !== route).map(r => r.points),
+            borders,
+            marks,
+          },
           dx: cfg.labelDx || 0,
           dy: cfg.labelDy || 0,
         };
