@@ -33,6 +33,9 @@ PNG file identity or registered pixel error is not claimed. Selected local PNGs 
 Independent source counts reproduce the reported totals: 953, 1,146, and 1,880 non-comment lines;
 median 26.5, 30.5, and 55; and 376 final pins. Authoring time remains unmeasured.
 
+The final repository `pnpm check` passed after integration: 480 unit tests, engine regressions,
+320 parity comparisons, typecheck, lint, formatting, and the production build.
+
 ## Visual review
 
 All 30 full reference/default/final sheets were viewed. Selected detail sheets and local stage

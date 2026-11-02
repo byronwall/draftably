@@ -14,7 +14,7 @@
 - Model: Pro, power 5 of 5 verified in the live selector.
 - Submission time: 2026-11-01 22:13 EST (2026-11-02 03:13 UTC).
 - Last check: 2026-11-01 23:11 EST (2026-11-02 04:11 UTC).
-- Phase: local replay complete; review documents written; final checks and packaging in progress.
+- Phase: local replay and integration checks complete; PR and final packaging in progress.
 - Follow-up count: 0.
 - Heartbeat ID: `complete-draftably-editorial-corpus` (active, hourly at minute 14).
 - Blockers: none.
@@ -77,7 +77,8 @@ Key code claims about label persistence, note colors, and group scope were verif
 All 456 local gallery references resolve. Independent counts reproduce the reported line and pin totals.
 The summary narrows G12 to Explore before changing the fit diagnostic policy.
 
-The final pre-push `pnpm check` is running. Log: `tmp/pro/editorial-diagram-corpus/integration-check.log`.
+The final pre-push `pnpm check` passed with exit 0: 480 unit tests, engine suites, parity, and build.
+Log: `tmp/pro/editorial-diagram-corpus/integration-check.log`.
 
 ## Evaluation boundary
 
