@@ -1,6 +1,7 @@
 /**
  * Working partial Mermaid adapter: the official flowchart DB -> native .draft source.
- * Supported diagram family: flowchart only. Parser coverage is broader than native fidelity.
+ * Sequence diagrams go through `mermaid-sequence.ts`. Parser coverage is broader than native
+ * fidelity.
  * Native layout is regenerated. There is no Mermaid writer or synchronization layer.
  */
 import { checkSource } from '../dsl/compile';
@@ -16,6 +17,7 @@ import {
   type NativeObject,
 } from './import-core';
 import { MERMAID_VERSION, type ParseFlowResult, type FlowClass } from './mermaid-facade';
+import { mapMermaidSequence } from './mermaid-sequence';
 
 /** Mermaid's link types that native ends cover; a type outside this list is refused. */
 const MERMAID_ENDS: Record<string, Pick<NativeEdge, 'head' | 'tail'>> = {
@@ -70,6 +72,8 @@ function mapMermaidFlow(
     );
     return done();
   }
+  if (snapshot.family === 'sequence')
+    return mapMermaidSequence(snapshot, plainText, title, diagnostics);
 
   const label = (value: string, labelType: string, foreignId: string) => {
     if (/<\/?[a-z][\s\S]*?>/i.test(value)) {
@@ -470,7 +474,7 @@ function mapMermaidFlow(
   }
 }
 
-/** Convert a checked Mermaid flowchart snapshot into valid native source. */
+/** Convert a checked Mermaid snapshot into valid native source. */
 export function importMermaidFlow(
   parsed: ParseFlowResult,
   plainText: (value: string) => string,

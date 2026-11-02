@@ -15,7 +15,12 @@ export async function runImportWorker(): Promise<void> {
     const dom = new JSDOM('<!doctype html><html><body></body></html>', {
       url: 'https://import.invalid/',
     });
-    Object.assign(globalThis, { window: dom.window, document: dom.window.document });
+    // Mermaid's `box` parser tests its color with `new Option()`.
+    Object.assign(globalThis, {
+      window: dom.window,
+      document: dom.window.document,
+      Option: dom.window.Option,
+    });
     try {
       const parse = createMermaidFlowParser(async () => (await import('mermaid')).default);
       result = importMermaidFlow(
