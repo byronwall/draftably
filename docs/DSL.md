@@ -713,8 +713,8 @@ not defined is an error on the referencing line. Each family and shade may be de
 
 `legend family "meaning"` adds an entry to the diagram's key, in file order: a swatch of that
 family (`shade=` picks one; 500 by default) and its meaning. `legend line dashed "meaning"` and
-`legend line solid "meaning"` add a short line in that style and its meaning, for files that use
-`kind=async` to say something. The viewer, `inspect --svg` and exports draw the key under the
+`legend line solid "meaning"` add a short line in that style and its meaning, for files whose
+dashed lines say something. The viewer, `inspect --svg` and exports draw the key under the
 drawing, left to right, and start a new row only when the next entry would pass the drawing's
 width. Each family and shade, and each line style, may appear once. A legend never moves anything.
 
