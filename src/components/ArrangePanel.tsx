@@ -1,10 +1,17 @@
-import { createMemo, For, Show, type JSX } from 'solid-js';
+import { createEffect, createMemo, createSignal, For, Show, type JSX } from 'solid-js';
 import { LayoutLab as Engine, type LayoutSettingKey } from '../engines/layout-engine.js';
 import { layoutShape, type LayoutShape } from '../dsl/layout-edits';
 import { ENGINES, FITS, type Fit } from '../dsl/syntax';
+import { count } from '../model/candidates';
 import { selectionRoots } from '../model/graph';
 import type { AspectSetting, Diagram, LayoutAlgorithmId, RoutingSettings } from '../model/types';
-import { commandEnabled, runCommand, type CommandId } from '../state/commands';
+import {
+  commandEnabled,
+  commands,
+  runCommand,
+  type Command,
+  type CommandId,
+} from '../state/commands';
 import { doc, selection } from '../state/document';
 import {
   changedLine,
@@ -18,6 +25,7 @@ import {
   currentScope,
   labEngine,
   labScope,
+  layoutBusy,
   layoutCheckpoint,
   layoutPreview,
   movesBlocked,
@@ -157,7 +165,10 @@ export function ArrangePanel() {
         <Show
           when={canReshape()}
           fallback={
-            <p class="hint">Direction and format apply to the whole diagram or to one group.</p>
+            <p class="hint">
+              Direction and format apply to the whole diagram or to one group. Select a group, or
+              clear the selection.
+            </p>
           }
         >
           <section class="arrange-field">
@@ -171,15 +182,13 @@ export function ArrangePanel() {
                 ['down', 'Down'],
               ]}
               onChange={setDirection}
+              hints={{ auto: 'Reads whichever way fits best.' }}
             />
           </section>
           <Show when={hasFormat()}>
             <section class="arrange-field">
               <h3>Format</h3>
               <FormatPicker value={fit()} onChange={setFit} />
-              <Show when={fit() && direction() === 'auto'}>
-                <p class="hint">Auto direction reads whichever way fits best.</p>
-              </Show>
             </section>
           </Show>
           <Show when={!rebuildBlocked()}>
@@ -235,22 +244,40 @@ function Subject(props: { line: string | null }) {
   return (
     <header class="arrange-subject">
       <strong>{name()}</strong>
-      <Show when={props.line}>{line => <code>{line()}</code>}</Show>
+      <Show when={props.line}>
+        {line => <code classList={{ unsaved: !!layoutPreview() }}>{line()}</code>}
+      </Show>
     </header>
   );
 }
 
 function ActionButton(props: { command: CommandId; label: string }) {
+  const command = (): Command => commands[props.command];
   return (
     <button
       type="button"
       class="button"
       disabled={!commandEnabled(props.command)}
+      {...tip(command().label, command().keys, command().hint)}
       onClick={() => runCommand(props.command)}
     >
       {props.label}
     </button>
   );
+}
+
+/**
+ * The choice being compiled, so a click answers at once on a drawing that takes a while. It ends
+ * when the drawing catches up.
+ */
+function useAsked<T>(value: () => T) {
+  const [asked, setAsked] = createSignal<T>();
+  createEffect(() => {
+    value();
+    if (!layoutBusy()) setAsked(undefined);
+  });
+  const shown = (option: T) => (asked() === undefined ? value() : asked()) === option;
+  return { asked, setAsked, shown };
 }
 
 /** A segmented choice whose active button is what the drawing is now. */
@@ -259,15 +286,23 @@ function Choices<T extends string>(props: {
   value: T | null;
   options: ReadonlyArray<readonly [T, string]>;
   onChange: (value: T) => void;
+  hints?: Partial<Record<T, string>>;
 }) {
+  const { asked, setAsked, shown } = useAsked(() => props.value);
   return (
     <div class="segmented full" role="group" aria-label={props.label}>
       <For each={props.options}>
         {([value, text]) => (
           <button
             type="button"
-            aria-pressed={props.value === value}
-            onClick={() => props.value !== value && props.onChange(value)}
+            aria-pressed={shown(value)}
+            classList={{ pending: asked() === value }}
+            {...(props.hints?.[value] ? tip(text, undefined, props.hints[value]) : {})}
+            onClick={() => {
+              if (shown(value)) return;
+              setAsked(() => value);
+              props.onChange(value);
+            }}
           >
             {text}
           </button>
@@ -279,6 +314,12 @@ function Choices<T extends string>(props: {
 
 /** Each format drawn to its own proportions, so the shape is the label. */
 function FormatPicker(props: { value: Fit | null; onChange: (fit: Fit | null) => void }) {
+  const { asked, setAsked, shown } = useAsked(() => props.value ?? 'auto');
+  const choose = (next: Fit | 'auto') => {
+    if (shown(next)) return;
+    setAsked(() => next);
+    props.onChange(next === 'auto' ? null : next);
+  };
   const options = () =>
     (Object.keys(FITS) as Fit[]).filter(f => fileMode() || ASPECTS[f] !== undefined);
   const glyph = (ratio: number) => ({
@@ -289,21 +330,27 @@ function FormatPicker(props: { value: Fit | null; onChange: (fit: Fit | null) =>
     <div class="format-picker" role="group" aria-label="Format">
       <button
         type="button"
-        aria-pressed={props.value === null}
+        aria-pressed={shown('auto')}
+        classList={{ pending: asked() === 'auto' }}
         {...tip('Auto', undefined, 'No target shape. The drawing takes the size it needs.')}
-        onClick={() => props.value !== null && props.onChange(null)}
+        onClick={() => choose('auto')}
       >
-        <span class="format-glyph auto" />
+        <span class="format-shape">
+          <span class="format-glyph auto" />
+        </span>
         Auto
       </button>
       <For each={options()}>
         {fit => (
           <button
             type="button"
-            aria-pressed={props.value === fit}
-            onClick={() => props.value !== fit && props.onChange(fit)}
+            aria-pressed={shown(fit)}
+            classList={{ pending: asked() === fit }}
+            onClick={() => choose(fit)}
           >
-            <span class="format-glyph" style={glyph(FITS[fit])} />
+            <span class="format-shape">
+              <span class="format-glyph" style={glyph(FITS[fit])} />
+            </span>
             {fit[0].toUpperCase() + fit.slice(1)}
           </button>
         )}
@@ -331,8 +378,8 @@ function Connections() {
         <ActionButton command="compare-routes" label="Compare" />
       </div>
       <p class="hint">
-        {report().crossings} crossings · {report().lanePairs} close lane pairs · {report().bends}{' '}
-        bends
+        {count(report().crossings, 'crossing')} · {count(report().bends, 'bend')}
+        <Show when={report().lanePairs}> · {count(report().lanePairs, 'close line')}</Show>
       </p>
     </section>
   );
@@ -365,7 +412,7 @@ function ExactLayout() {
         <section class="arrange-field">
           <h3>Rebuild</h3>
           <SelectField<string>
-            label="Method"
+            label="Rebuild with"
             value={rebuildEngine() ?? ''}
             options={[
               ...(fileMode() ? [['', 'Built-in recipe'] as const] : []),
@@ -401,7 +448,7 @@ function ExactLayout() {
         <h3>Improve</h3>
         <Show when={fileMode()}>
           <SelectField<LayoutAlgorithmId>
-            label="Method"
+            label="Improve with"
             value={doc.settings.algorithm}
             options={Engine.algorithms.map(a => [a.id, a.name] as const)}
             onChange={value => updateLayoutSettings({ algorithm: value })}

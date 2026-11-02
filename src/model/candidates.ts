@@ -84,7 +84,7 @@ export interface Reading {
   costs: string[];
 }
 
-const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`;
+export const count = (n: number, noun: string) => `${n} ${noun}${n === 1 ? '' : 's'}`;
 
 /** A change in percent, when it is large enough to see. */
 const percent = (now: number, base: number) => {
