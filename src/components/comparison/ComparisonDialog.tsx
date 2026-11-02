@@ -24,7 +24,7 @@ import {
   type Candidate,
 } from '../../state/comparison';
 import { rebuildBlocked } from '../../state/layout';
-import { IconButton, tip } from '../controls';
+import { cutTip, IconButton, tip } from '../controls';
 import { StaticScene } from '../scene/StaticScene';
 import { ComparisonSidebar } from './ComparisonSidebar';
 import { ViewportCanvas } from './ViewportCanvas';
@@ -123,14 +123,7 @@ function Dialog() {
             {comparison.showAll ? 'Fewer' : `${others()} more`}
           </button>
         </Show>
-        <p
-          class="comparison-progress"
-          classList={{ 'error-text': comparison.progress.error }}
-          role="status"
-          aria-live="polite"
-        >
-          <Summary />
-        </p>
+        <Summary />
         <Show when={comparison.busy}>
           <button type="button" class="button ghost" onClick={cancelGeneration}>
             Stop
@@ -166,7 +159,7 @@ function Dialog() {
   );
 }
 
-/** How the sheet came out: an error or progress first, then what was left off it. */
+/** How the sheet came out: progress or a notice first, then what was left off it. */
 function Summary() {
   const parts = () => {
     const sheet = comparisonSheet();
@@ -175,7 +168,21 @@ function Summary() {
       ...(sheet.failed.length ? [`${sheet.failed.length} failed`] : []),
     ].join(' · ');
   };
-  return <>{comparison.busy || comparison.progress.error ? comparison.progress.text : parts()}</>;
+  const failures = () =>
+    comparisonSheet()
+      .failed.map(i => `${comparison.cells[i].title}: ${comparison.cells[i].error}`)
+      .join(' · ');
+  return (
+    <p
+      class="comparison-progress"
+      classList={{ 'error-text': comparison.progress.error }}
+      role="status"
+      aria-live="polite"
+      {...(failures() ? tip('Could not draw', undefined, failures()) : cutTip)}
+    >
+      {comparison.progress.text || parts()}
+    </p>
+  );
 }
 
 function CandidateGrid() {
@@ -201,8 +208,11 @@ function CandidateGrid() {
         when={comparison.cells.length}
         fallback={
           <div class="empty-state">
-            <strong>Nothing to compare yet.</strong>
+            <strong>Nothing to compare</strong>
             <p>{comparison.progress.text}</p>
+            <button type="button" class="button" onClick={closeComparison}>
+              Close
+            </button>
           </div>
         }
       >
@@ -238,16 +248,12 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
     return m && base && !props.cell.current ? readDifference(m, base) : null;
   };
   /** The card's headline: what the drawing is, or what choosing it gains. */
-  const headline = () => {
-    const r = reading();
-    if (props.cell.current) return props.cell.title;
-    if (!r) return props.cell.title;
-    return r.gains.join(' · ') || (r.costs.length ? 'A different arrangement' : 'Same measures');
-  };
+  const headline = () => reading()?.gains.join(' · ') || props.cell.title;
   const detail = () => {
     const r = reading();
     if (props.cell.current) return props.cell.measure ? describeMeasure(props.cell.measure) : '';
-    return r?.costs.join(' · ') ?? props.cell.subtitle;
+    if (!r) return props.cell.subtitle;
+    return r.costs.join(' · ') || (r.gains.length ? '' : 'Same counts as the current drawing');
   };
   const warnings = () => [
     ...(props.cell.result?.report?.warnings ?? []),
@@ -266,23 +272,31 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
     >
       <header>
         <div class="candidate-reading">
-          <strong>{headline()}</strong>
-          <p>
+          <strong {...cutTip}>{headline()}</strong>
+          <p {...cutTip}>
             <Show when={reading()?.defects.length}>
               <span class="warning-text">{reading()!.defects.join(' · ')}</span>{' '}
             </Show>
             {detail()}
           </p>
         </div>
-        <span class="candidate-method">{props.cell.current ? '' : props.cell.title}</span>
+        <Show when={headline() !== props.cell.title}>
+          <span class="candidate-method">{props.cell.title}</span>
+        </Show>
         <IconButton
-          icon="fit"
+          icon="expand"
           label={`${expanded() ? 'Back to the sheet from' : 'Enlarge'} ${props.cell.title}`}
           pressed={expanded()}
           onClick={() => toggleExpanded(props.index)}
         />
-        <Show when={!props.cell.current && props.cell.status === 'ready'}>
-          <button type="button" class="button primary" onClick={() => applyCandidate(props.index)}>
+        <Show when={!props.cell.current && props.cell.status !== 'error'}>
+          <button
+            type="button"
+            class="button primary"
+            disabled={props.cell.status !== 'ready'}
+            {...tip('Apply', 'Enter', 'Enter works while this drawing has focus.')}
+            onClick={() => applyCandidate(props.index)}
+          >
             Apply
           </button>
         </Show>
@@ -294,6 +308,7 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
             <div
               class="candidate-pending"
               classList={{ 'error-text': props.cell.status === 'error' }}
+              role={props.cell.status === 'error' ? 'alert' : undefined}
             >
               {props.cell.status === 'error' ? props.cell.error : 'Drawing…'}
             </div>
@@ -303,7 +318,7 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
             <>
               <ViewportCanvas
                 index={props.index}
-                label={`${props.cell.title}. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.`}
+                label={`${props.cell.title}. Drag or use arrow keys to pan. Plus and minus zoom. Home fits.${props.cell.current ? '' : ' Enter applies.'}`}
               >
                 <StaticScene
                   scene={scene()}
@@ -319,7 +334,7 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
         <Show when={warnings().length}>
           <details class="candidate-warnings">
             <summary>
-              {warnings().length} constraint note{warnings().length === 1 ? '' : 's'}
+              {warnings().length} note{warnings().length === 1 ? '' : 's'}
             </summary>
             <For each={warnings()}>{w => <p>{w}</p>}</For>
           </details>
@@ -328,7 +343,7 @@ function CandidateCard(props: { cell: Candidate; index: number }) {
       <Show when={props.cell.source ?? (props.cell.current && fileMode())}>
         {source => (
           <footer>
-            <code class="candidate-recipe">
+            <code class="candidate-recipe" {...cutTip}>
               {props.cell.current ? currentLine() : candidateChange(source() as string)}
             </code>
           </footer>
@@ -387,7 +402,7 @@ function OverlayView() {
         {Math.round(comparison.overlay.camera.k * 100)}% · shared scale
       </span>
       <Show when={!comparison.cells.some((_, i) => visible(i))}>
-        <div class="overlay-empty">Generate layouts to compare their geometry.</div>
+        <div class="overlay-empty">No layers are on. Turn one on in the sidebar.</div>
       </Show>
     </div>
   );

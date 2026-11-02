@@ -600,9 +600,12 @@ input[type='range'] {
 
 .tip {
   position: fixed;
+  inset: auto;
   z-index: 110;
   max-width: 260px;
+  margin: 0;
   padding: 6px 9px;
+  border: 0;
   border-radius: var(--radius-sm);
   background: var(--ink);
   color: var(--ink-on);

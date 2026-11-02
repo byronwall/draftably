@@ -65,17 +65,18 @@ export function ComparisonSidebar() {
         </Show>
         <section class="sidebar-section">
           <h3>Inspect</h3>
-          <SelectField<CameraMode>
-            label="Grid navigation"
-            value={comparison.cameraMode}
-            disabled={comparison.presentation === 'overlay'}
-            options={[
-              ['sync', 'Synced · same world position'],
-              ['focus', 'Same clicked object'],
-              ['independent', 'Independent cameras'],
-            ]}
-            onChange={setCameraMode}
-          />
+          <Show when={comparison.presentation === 'grid'}>
+            <SelectField<CameraMode>
+              label="Panning"
+              value={comparison.cameraMode}
+              options={[
+                ['independent', 'Each drawing alone'],
+                ['sync', 'All drawings together'],
+                ['focus', 'Follow the clicked shape'],
+              ]}
+              onChange={setCameraMode}
+            />
+          </Show>
           <div class="fields-2">
             <button type="button" class="button" onClick={fitAll}>
               Fit all
@@ -187,9 +188,9 @@ function Settings() {
           label="Starting point"
           value={config().run}
           options={[
-            ['rebuild', 'Rebuild & settle'],
-            ['warm', 'Current positions → settle'],
-            ['pass', 'One bounded pass'],
+            ['rebuild', 'Start fresh'],
+            ['warm', 'From the current drawing'],
+            ['pass', 'One small pass'],
           ]}
           onChange={run => ensureAxes({ run })}
         />
@@ -263,27 +264,28 @@ function Settings() {
             options={[
               ['all', 'Whole diagram'],
               ...(sourceRun() ? [] : [['selection', 'Selected siblings'] as const]),
-              ['container', 'Selected container'],
+              ['container', 'Selected group'],
             ]}
             onChange={scope => updateConfig({ scope })}
           />
           <Show when={config().run !== 'pass' && !sourceRun()}>
             <SelectField
-              label="Maximum solver effort"
+              label="Solver effort"
               value={config().maxIterations}
-              options={[320, 640, 1200].map(n => [n, `${n} steps / solve`] as const)}
+              options={[320, 640, 1200].map(n => [n, `Up to ${n} steps`] as const)}
               onChange={maxIterations => updateConfig({ maxIterations })}
             />
           </Show>
-          <p class="hint">Stops on stability, a plateau, or this limit. Not a global optimum.</p>
+          <p class="hint">Stops once the drawing settles, or at this limit.</p>
         </details>
       </Show>
 
       <div class="button-row">
         <button
           type="button"
-          class="button primary grow"
+          class="button grow"
           disabled={comparison.busy}
+          {...tip('Regenerate', '⌘↵')}
           onClick={() => generate()}
         >
           Regenerate {routing() ? 'routes' : 'layouts'}
