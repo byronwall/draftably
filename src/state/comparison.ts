@@ -11,6 +11,7 @@ import {
   type ComparisonConfig,
   type ComparisonMode,
 } from '../engines/explorer-engine.js';
+import { LANES_HOLD } from '../dsl/layout-edits';
 import { documentIdentity, normalize, routingFingerprint } from '../model/document';
 import { clamp, clone, rectUnion } from '../model/geometry';
 import { findGroup, findNode } from '../model/graph';
@@ -341,6 +342,10 @@ export function applyCandidate(i: number) {
   if (fileMode() && cell.source) return applyToFile({ ...cell, source: cell.source });
   if (fileMode() && fileBlocked()) {
     setProgress(fileBlocked()!, true);
+    return false;
+  }
+  if (doc.layout.sequence) {
+    setProgress(LANES_HOLD, true);
     return false;
   }
   const winner = normalize(clone(cell.result.document)),
