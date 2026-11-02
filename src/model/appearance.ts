@@ -115,8 +115,14 @@ export interface Heading {
   width?: number;
 }
 
+/** The connection styles a `legend line` row can explain. */
+export const LEGEND_LINES = ['dashed', 'solid'] as const;
+export type LegendLine = (typeof LEGEND_LINES)[number];
+
+/** One row of the key: a color swatch (`family`), or a short connection (`line`). */
 export interface LegendEntry {
-  family: string;
+  family?: string;
+  line?: LegendLine;
   /** Shade of the swatch; nodes' default when omitted. */
   shade?: Shade;
   label: string;

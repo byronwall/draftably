@@ -489,7 +489,7 @@ function statesSvg(doc: Diagram, look: ResolvedAppearance, opts: SvgOptions): st
       '</g>',
     );
   });
-  out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
   out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');
@@ -623,8 +623,8 @@ export function renderSvg(doc: Diagram, opts: SvgOptions = {}): string {
     }
     out.push(`<g transform="translate(${dx},${dy})">`, scene.markup, '</g>');
   });
-  // The legend sits under the drawing, left-aligned with it, one swatch and meaning per row.
-  out.push(legendMarkup(look, legend, frame.legend.x, frame.legend.y, statuses));
+  // The legend sits under the drawing, left-aligned with it, its rows wrapped to the frame.
+  out.push(legendMarkup(look, frame.key, frame.legend.x, frame.legend.y));
   out.push(noteMarkup(look, frame.notes));
   out.push('</svg>\n');
   return out.join('\n');

@@ -11,83 +11,85 @@ export const markerMarkup = (x: number, y: number, ink: string, canvas: string, 
   `<circle cx="${x}" cy="${y}" r="${r}" fill="${ink}" stroke="${canvas}" stroke-width="${r / 4.5}"/>` +
   `<path d="M${x - r / 2},${y} h${r}" stroke="${canvas}" stroke-width="${r / 4}" stroke-linecap="round"/>`;
 
-/** Space between change entries, which share one row. */
-const STATUS_GAP = 24;
+/** Space between entries that share a row. */
+const GAP = 24;
 
 /** Width of one entry: its swatch, the gap after it, and its label. */
 const entryW = (look: ResolvedAppearance, label: string) =>
   24 + measureText(label, look.annotation);
 
 /**
- * Size of the key: one row per `legend` entry, then one row holding every change mark used with
- * its count, plus a gap above it. Zero when there is neither.
+ * Lay out the key: every `legend` entry, then every change mark used with its count, left to
+ * right, starting a new row only where the next entry would pass `max`. A short key is one row
+ * under the drawing. Zero size when there is nothing to show.
  */
 export function legendSize(
   look: ResolvedAppearance,
   legend: LegendEntry[] = [],
   statuses: StatusCount[] = [],
+  max = Infinity,
 ) {
   const row = Math.round(look.annotation.lineHeight + 8),
-    rows = legend.length + (statuses.length ? 1 : 0);
-  if (!rows) return { w: 0, h: 0, row };
-  const marks = statuses.reduce((w, s) => w + entryW(look, statusLabel(s)), 0);
-  return {
-    w: Math.max(
-      ...legend.map(e => entryW(look, e.label)),
-      marks + STATUS_GAP * Math.max(0, statuses.length - 1),
-    ),
-    h: row * rows + 12,
-    row,
-  };
+    entries: { legend?: LegendEntry; status?: StatusCount; label: string }[] = [
+      ...legend.map(e => ({ legend: e, label: e.label })),
+      ...statuses.map(s => ({ status: s, label: statusLabel(s) })),
+    ];
+  let x = 0,
+    y = 0,
+    w = 0;
+  const items = entries.map(e => {
+    const ew = entryW(look, e.label);
+    if (x && x + ew > max) {
+      x = 0;
+      y += row;
+    }
+    const at = { ...e, x, y };
+    w = Math.max(w, x + ew);
+    x += ew + GAP;
+    return at;
+  });
+  return { w, h: items.length ? y + row + 12 : 0, row, items };
 }
 
-/** SVG markup for the key with its top-left corner at (x, y). */
-export function legendMarkup(
-  look: ResolvedAppearance,
-  legend: LegendEntry[] = [],
-  x: number,
-  y: number,
-  statuses: StatusCount[] = [],
-): string {
-  const { row } = legendSize(look, legend, statuses),
+export type LegendLayout = ReturnType<typeof legendSize>;
+
+/** SVG markup for the key laid out by `legendSize`, with its top-left corner at (x, y). */
+export function legendMarkup(look: ResolvedAppearance, key: LegendLayout, x: number, y: number) {
+  const { row } = key,
     { family, size, weight } = look.annotation;
-  const entry = (left: number, i: number, swatch: string, label: string) => {
-    const top = y + 12 + i * row;
-    return (
-      `<rect x="${left}" y="${top + (row - 12) / 2}" width="16" height="12" rx="3" ${swatch}/>` +
-      `<text x="${left + 24}" y="${top + row / 2}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${esc(label)}</text>`
-    );
-  };
-  let left = x;
-  return [
-    ...legend.map((e, i) => {
-      const c = swatchFor(look, e.family, e.shade ?? NODE_SHADE, 'node');
-      return entry(x, i, `fill="${c.fill}" stroke="${c.stroke}"`, e.label);
-    }),
-    // A change entry draws a box with that mark's fill, border, dash, fade and marker.
-    ...statuses.map(s => {
-      const p = statusPaint(look, s.status),
-        c = statusSwatch(look, s.status, 'node'),
-        label = statusLabel(s),
-        at = left;
-      left += entryW(look, label) + STATUS_GAP;
+  return key.items
+    .map(e => {
+      const left = x + e.x,
+        top = y + 12 + e.y,
+        mid = top + row / 2;
+      let swatch: string;
+      if (e.legend?.line) {
+        // A line row draws a short connection in the style it explains.
+        swatch = `<line x1="${left}" y1="${mid}" x2="${left + 16}" y2="${mid}" stroke="${look.connection}" stroke-width="1.4"${e.legend.line === 'dashed' ? ' stroke-dasharray="5 5"' : ''}/>`;
+      } else if (e.legend) {
+        const c = swatchFor(look, e.legend.family!, e.legend.shade ?? NODE_SHADE, 'node');
+        swatch = box(left, top, row, `fill="${c.fill}" stroke="${c.stroke}"`);
+      } else {
+        // A change entry draws a box with that mark's fill, border, dash, fade and marker.
+        const s = e.status!.status,
+          p = statusPaint(look, s),
+          c = statusSwatch(look, s, 'node');
+        swatch =
+          box(
+            left,
+            top,
+            row,
+            `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="3 2"` : ''} opacity="${p.opacity}"`,
+          ) +
+          (p.marker ? markerMarkup(left + 16, top + (row - 12) / 2, c.stroke, look.canvas, 4) : '');
+      }
       return (
-        entry(
-          at,
-          legend.length,
-          `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="3 2"` : ''} opacity="${p.opacity}"`,
-          label,
-        ) +
-        (p.marker
-          ? markerMarkup(
-              at + 16,
-              y + 12 + legend.length * row + (row - 12) / 2,
-              c.stroke,
-              look.canvas,
-              4,
-            )
-          : '')
+        swatch +
+        `<text x="${left + 24}" y="${mid}" dominant-baseline="central" font-family="${esc(family)}" font-size="${size}" font-weight="${weight}" fill="${look.text}">${esc(e.label)}</text>`
       );
-    }),
-  ].join('');
+    })
+    .join('');
 }
+
+const box = (left: number, top: number, row: number, paint: string) =>
+  `<rect x="${left}" y="${top + (row - 12) / 2}" width="16" height="12" rx="3" ${paint}/>`;

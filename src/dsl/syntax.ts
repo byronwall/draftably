@@ -12,10 +12,12 @@ import {
   NODE_SHADE,
   HEX_COLOR,
   isBuiltInFamily,
+  LEGEND_LINES,
   OVERRIDE_LIMITS,
   SHADES,
   THEME_IDS,
   type DiagramAppearance,
+  type LegendLine,
   type Shade,
   type ThemeId,
 } from '../model/appearance';
@@ -882,6 +884,21 @@ export function parseModel(source: string | SourceDoc): Model {
         break;
       }
       case 'legend': {
+        if (args[0]?.value === 'line' && !args[0].quoted) {
+          // `legend line dashed "meaning"`: a short connection in that style, then its meaning.
+          count(3);
+          allow([]);
+          const style = args[1].value as LegendLine;
+          assert(
+            !args[1].quoted && LEGEND_LINES.includes(style),
+            `Expected legend line ${LEGEND_LINES.join('|')} "meaning".`,
+          );
+          once(`legend:line:${style}`);
+          assert(text(args[2]).trim(), 'A legend entry needs its meaning in quotes.');
+          (m.appearance.legend ??= []).push({ line: style, label: text(args[2]) });
+          m.legendLines.push(line);
+          break;
+        }
         count(2);
         allow(['shade']);
         const family = args[0].value;
@@ -1043,7 +1060,7 @@ function validateReferences(m: Model) {
     defined.get(c.family)!.add(c.shade);
   }
   (m.appearance.legend ?? []).forEach((e, i) => {
-    if (isBuiltInFamily(e.family)) return;
+    if (!e.family || isBuiltInFamily(e.family)) return;
     const shades = defined.get(e.family),
       shade = e.shade ?? NODE_SHADE;
     assert(
