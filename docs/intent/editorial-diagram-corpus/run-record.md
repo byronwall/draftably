@@ -14,13 +14,13 @@
 - Model: Pro, power 5 of 5 verified in the live selector.
 - Submission time: 2026-11-01 22:13 EST (2026-11-02 03:13 UTC).
 - Last check: 2026-11-01 23:11 EST (2026-11-02 04:11 UTC).
-- Phase: local replay and integration checks complete; PR and final packaging in progress.
+- Phase: complete. Corpus, local replay, review documents, final ZIP, and verified PR are delivered.
 - Follow-up count: 0.
-- Heartbeat ID: `complete-draftably-editorial-corpus` (active, hourly at minute 14).
+- Heartbeat ID: `complete-draftably-editorial-corpus` (deleted after completion).
 - Blockers: none.
 - Collected files: all 3,248 Pro result files under `assets/pro-results/2026-11-01/`.
-- PR: pending.
-- Final ZIP: `tmp/pro/editorial-diagram-corpus/draftably-editorial-corpus.zip` (planned).
+- PR: https://github.com/byronwall/draftably/pull/381 (open; base `main`).
+- Final ZIP: `tmp/pro/editorial-diagram-corpus/draftably-editorial-corpus.zip`.
 
 ## Submission evidence
 
@@ -79,6 +79,24 @@ The summary narrows G12 to Explore before changing the fit diagnostic policy.
 
 The final pre-push `pnpm check` passed with exit 0: 480 unit tests, engine suites, parity, and build.
 Log: `tmp/pro/editorial-diagram-corpus/integration-check.log`.
+
+## PR verification
+
+The saved PR body has two verified GitHub attachment URLs and links to the summary, plan, and asset index.
+The PR API returned only 100 file entries. The full remote Git tree was checked instead.
+All 3,248 original result paths and Git blob hashes match the committed local assets.
+Evidence: `tmp/pro/editorial-diagram-corpus/remote-verification-summary.json`.
+
+## Final delivery
+
+The combined ZIP contains 4,171 files: all 3,248 original Pro files and the local replay/review evidence.
+Its safe paths, CRC, original bytes, and supplemental manifest were verified.
+Open `START-HERE.md` or `index.html` after extraction. Original files remain at the archive root;
+Codex additions are under `codex/`. The original Pro ZIP remains separately in ignored storage.
+
+`final-archive-verification.json` and `draftably-editorial-corpus.zip.sha256` beside the ZIP record
+the final size and hash. The completion record is included in the final packaging pass.
+The heartbeat was deleted. No product fixes, merges, or deployments were performed.
 
 ## Evaluation boundary
 
