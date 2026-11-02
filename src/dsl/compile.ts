@@ -174,9 +174,7 @@ function widestLabels(m: Model): Model {
     wide = (l: string) => (l ? edgeLabelSize(l, look).w : 0);
   return {
     ...m,
-    edges: m.edges.map(e =>
-      e.was && wide(e.was) > wide(e.label) ? { ...e, label: e.was } : e,
-    ),
+    edges: m.edges.map(e => (e.was && wide(e.was) > wide(e.label) ? { ...e, label: e.was } : e)),
   };
 }
 
