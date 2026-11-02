@@ -104,6 +104,7 @@ function mapD2Facts(facts: D2Facts, title = facts.title || 'Imported D2 diagram'
       to: nativeBySource.get(edge.to) ?? edge.to,
       label: edge.label,
       directed: edge.directed,
+      ...(edge.directed ? { head: edge.head, tail: edge.tail } : {}),
       ...(edge.dashed ? { dashed: true } : {}),
     });
   }

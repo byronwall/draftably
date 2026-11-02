@@ -444,17 +444,31 @@ export async function main(argv: string[]): Promise<number> {
         return 0;
       }
       case 'compare': {
-        const { merged, moved } = compareDetailed(await read(file), await read(rest[0]));
+        const { merged, moved, reordered, unshown } = compareDetailed(
+          await read(file),
+          await read(rest[0]),
+        );
         const doc = projectScene(await compile(merged)),
           draw = async () => renderSvg(doc);
         const out = option(rest, '--write');
         // The size of the change goes to stderr, so stdout stays a clean file or drawing.
-        const sizes = usedStatuses(doc).filter(s => s.status !== 'context');
-        console.error(sizes.length ? sizes.map(statusLabel).join(', ') + '.' : 'No changes.');
+        const sizes = usedStatuses(doc)
+          .filter(s => s.status !== 'context')
+          .map(statusLabel)
+          .concat(reordered ? ['message order changed'] : []);
+        if (sizes.length || !unshown.length)
+          console.error(sizes.length ? sizes.join(', ') + '.' : 'No changes.');
+        if (unshown.length)
+          console.error(
+            `Changes with no old version to draw: ${unshown.join(', ')}. Both panels draw the new version.`,
+          );
         if (moved.length)
           console.error(
             `Groups moved to another container: ${moved.join(', ')}. Both panels draw them where they are now.`,
           );
+        // A picture leaves stderr behind, so panels carry the same list beside the older label.
+        if (unshown.length && doc.appearance.compare)
+          doc.appearance.compare.undrawn = unshown.join(', ');
         if (await maybePng(draw, rest, embed(merged))) return 0;
         if (out) {
           fs.writeFileSync(path.resolve(out), merged);

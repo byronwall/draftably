@@ -17,6 +17,7 @@ import {
 import { projectScene } from '../src/dsl/project';
 import type { Diagram } from '../src/model/types';
 import { parseModel, printSource, readSource } from '../src/dsl/syntax';
+import { UnsupportedEdit } from '../src/dsl/translate';
 
 const checkout = readFileSync(path.join(__dirname, '../examples/checkout.draft'), 'utf8');
 const settings = (patch: object) => LayoutLab.settings({ ...patch, mode: 'rebuild' });
@@ -180,6 +181,16 @@ describe('arrangements', () => {
         return Math.hypot(a.x - b.x, a.y - b.y);
       }),
     );
+
+  it('refuses a pass on a sequence, which draws from its lanes and rows', async () => {
+    const text = readFileSync(path.join(__dirname, '../examples/login-sequence.draft'), 'utf8'),
+      scene = await compile(text),
+      after = projectScene(scene);
+    after.layout.nodes.app.x += 40;
+    const source = readSource(text);
+    expect(() => writeArrangement(source, scene, after)).toThrow(UnsupportedEdit);
+    expect(printSource(source)).toBe(text);
+  });
 
   it('saves a pass as stays that compile back to the same drawing', async () => {
     const { after, placed, next, compiled } = await roundTrip(pipeline, {

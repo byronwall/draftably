@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { HALO_REACH, haloPath } from '../src/model/routes';
+import { checkSource } from '../src/dsl/compile';
+import { projectScene, visibleRects } from '../src/dsl/project';
+import { computeRoutes, HALO_REACH, haloPath, wholeLines } from '../src/model/routes';
 
 const p = (x: number, y: number) => ({ x, y });
 
@@ -19,5 +21,38 @@ describe('edge halo', () => {
 
   it('ignores lines that only touch at an end', () => {
     expect(haloPath([p(0, 50), p(100, 50)], [[p(100, 0), p(100, 100)]], [])).toBe('');
+  });
+
+  it('keeps a line whole only where a crossing would cut its mark', () => {
+    const mark = { x: 88, y: 45, w: 12, h: 10 },
+      marked = { points: [p(0, 50), p(100, 50)], marks: [mark] },
+      across = (x: number) => ({ points: [p(x, 0), p(x, 100)], marks: [] });
+    expect([...wholeLines([marked, across(90)])]).toEqual([0]);
+    expect([...wholeLines([marked, across(40)])]).toEqual([]);
+  });
+
+  it('draws a short marked line over the line that crosses it, in every output', () => {
+    const doc = projectScene(
+        checkSource(`diagram "flow" version=1
+node Client "Client"
+node Api "API"
+node Cache "Cache"
+node Legacy "Legacy service"
+node Db "Database"
+node Worker "Worker"
+node Queue "Queue"
+node Admin "Admin"
+edge edge_1 Client -> Api "" tail=arrow
+edge edge_2 Api -> Cache "" head=circle
+edge edge_3 Api -> Legacy "" head=cross
+edge edge_4 Api -> Db ""
+edge edge_5 Worker -> Queue "" head=circle tail=circle
+edge edge_6 Api -> Admin "" head=cross tail=cross
+layout root flow direction=right
+`),
+      ),
+      { vg, rects } = visibleRects(doc),
+      ids = computeRoutes(doc, vg, rects, { previous: [] }).routes.map(r => r.id);
+    expect(ids.indexOf('edge_5')).toBeGreaterThan(ids.indexOf('edge_6'));
   });
 });

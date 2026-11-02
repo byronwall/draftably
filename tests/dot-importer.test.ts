@@ -144,13 +144,34 @@ test('DOT: malformed, multiple graphs and parser silent-misparse profile fail at
   }
 });
 
+test('DOT: arrow ends become native markers and keep the directed relation', () => {
+  for (const [attrs, native] of [
+    ['dir=both', ' tail=arrow'],
+    ['dir=back', ' head=none tail=arrow'],
+    ['dir=none', ' head=none'],
+    ['arrowhead=none', ' head=none'],
+    ['arrowhead=vee', ''],
+    ['arrowhead=empty', ' head=open-triangle'],
+    ['arrowhead=odiamond', ' head=open-diamond'],
+    ['dir=both,arrowtail=diamond,arrowhead=dot', ' head=circle tail=diamond'],
+    // Graphviz draws a tail only when `dir` shows that end.
+    ['arrowtail=diamond', ''],
+  ]) {
+    const r = importDot(`digraph{a->b[${attrs}]}`);
+    assert.notEqual(r.status, 'failed', attrs);
+    assert.ok(r.nativeSource?.includes(`edge edge_1 a -> b ""${native}\n`), r.nativeSource);
+    assert.ok(!r.nativeSource?.includes('directed=false'));
+  }
+  for (const attrs of ['arrowhead=crow', 'arrowhead=box', 'arrowhead=odot', 'dir=sideways']) {
+    assert.equal(importDot(`digraph{a->b[${attrs}]}`).status, 'failed', attrs);
+  }
+  assert.equal(importDot('graph{a--b[dir=both]}').status, 'failed');
+});
+
 test('DOT: semantic losses are blockers, not a successful partial graph', () => {
   for (const source of [
     'digraph{a[label=<<B>A</B>>]}',
     'digraph{a[shape=record,label="<p> x|y"];a:p->b}',
-    'digraph{a->b[dir=both]}',
-    'digraph{a->b[dir=back]}',
-    'digraph{a->b[dir=none]}',
     'digraph{a->b[headlabel="many"]}',
     'digraph{subgraph cluster_x{a} subgraph cluster_y{a}}',
   ]) {

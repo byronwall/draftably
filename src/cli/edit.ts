@@ -9,7 +9,7 @@ import {
   edgeStatement,
   getAttr,
   quoted,
-  removeFromStates,
+  removeEdge,
   removeReferences,
   removeWhere,
   setAttr,
@@ -63,25 +63,19 @@ export function setFields(source: string, target: string, fields: string[]) {
 }
 
 /**
- * Remove nodes, groups or edges by id. A node takes its edges, refinements and `state` mentions
- * with it; a group's members move up to the group's own container.
+ * Remove nodes, groups or edges by id. A node takes its edges, refinements and `phase` and `state`
+ * mentions with it; a group's members move up to the group's own container.
  */
 export function removeIds(source: string, ids: string[]) {
   if (!ids.length) throw new DslError('Name the ids to remove.');
   let next = source;
   for (const target of ids) {
     const { doc, s, id } = find(next, target);
-    if (s.command === 'edge') {
-      removeWhere(doc, x => x === s);
-      removeFromStates(doc, id);
-    } else {
+    if (s.command === 'edge') removeEdge(doc, id);
+    else {
       const parent = getAttr(s, 'in');
       for (const member of statements(doc))
         if (getAttr(member, 'in')?.value === id) setAttr(member, 'in', parent);
-      // Its edges go with it, so they leave the states too.
-      for (const e of statements(doc))
-        if (e.command === 'edge' && (e.args[1]?.value === id || e.args[3]?.value === id))
-          removeFromStates(doc, e.args[0].value);
       removeWhere(doc, x => x === s);
       removeReferences(doc, id);
     }

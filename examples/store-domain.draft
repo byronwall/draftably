@@ -1,0 +1,35 @@
+diagram "Store domain model" version=1
+subtitle "What owns what, what extends what, and which links run both ways."
+
+# A domain model: composition, aggregation, inheritance and two-way links, drawn as line ends.
+
+node customer "Customer" color=blue
+node profile "Profile" color=blue
+node order "Order" color=teal
+node line "Order line" color=teal
+node payment "Payment" color=teal
+node refund "Refund" color=teal
+node catalog "Catalog" color=violet
+node product "Product" color=violet
+node digital "Digital product" color=violet
+node physical "Physical product" color=violet
+
+# A two-way link: each side holds the other.
+edge has customer -> profile "has" tail=arrow
+edge places customer -> order "places"
+
+# Composition: an order line can't outlive its order.
+edge lines order -> line "contains" tail=diamond head=none
+edge settled order -> payment "settled by" tail=diamond head=none
+
+# Aggregation: a product outlives its catalog.
+edge lists catalog -> product "lists" tail=open-diamond head=none
+edge names line -> product "names"
+
+# Inheritance: the triangle points at the parent type.
+edge is-digital product -> digital head=none tail=open-triangle
+edge is-physical product -> physical head=none tail=open-triangle
+
+# A path that stops: a refund never reopens the order.
+edge reopens refund -> order "never reopens" head=cross kind=async
+edge reverses refund -> payment "reverses" head=circle

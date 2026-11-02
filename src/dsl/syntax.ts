@@ -20,6 +20,7 @@ import {
   type ThemeId,
 } from '../model/appearance';
 import { FONT_ROLES, type FontRole } from '../model/fonts';
+import { MARKERS, type EndMarker } from '../model/markers';
 import { EDITORS } from '../model/link';
 import { NOTE_SIDES, NOTE_WIDTH } from '../model/note';
 import type { Status } from '../model/status';
@@ -129,7 +130,9 @@ export function tokenize(
       token += c;
       continue;
     }
-    if (!inQuote && (c === '#' || (c === '/' && text[i + 1] === '/'))) {
+    // `//` inside a bare word is text, so an unquoted URL keeps its path.
+    const slashes = c === '/' && text[i + 1] === '/' && !/[^\s"]/.test(text[i - 1] ?? ' ');
+    if (!inQuote && (c === '#' || slashes)) {
       push();
       return { tokens, columns, comment: text.slice(i).trim() };
     }
@@ -234,6 +237,10 @@ export interface ModelObject {
   status?: Status;
   /** With `~`: the label before the change. */
   was?: string;
+  /** With `~`, nodes only: the shape before the change. */
+  wasShape?: DslShape;
+  /** With `~`, nodes only: the count before the change; 1 means a single box. */
+  wasCount?: number | string;
   /** A link to open from exported drawings, such as a source file or URL. */
   href?: string;
   /**
@@ -270,6 +277,10 @@ export interface ModelEdge {
   was?: string;
   /** `directed=false`: an undirected connection, drawn without an arrowhead. */
   directed?: false;
+  /** `head=`: the mark at the target end, when it isn't the plain arrow. */
+  head?: EndMarker;
+  /** `tail=`: the mark at the source end, when it has one. */
+  tail?: EndMarker;
   /** `constraint=false`: drawn and routed, but layout doesn't rank or order by it. */
   constraint?: false;
   line: number;
@@ -364,6 +375,8 @@ export interface Model {
   stateLines: Map<string, number>;
   /** Sequence diagrams: `phase` statements, each a run of messages drawn as a row band. */
   phases: Array<{ id: string; label: string; ids: string[]; line: number }>;
+  /** Sequence diagrams: the `was-order` statement, the older version's message order. */
+  wasOrder?: { ids: string[]; line: number };
   /** Problems that do not stop the file from drawing, such as a `config` key set twice. */
   warnings: { code: string; message: string; line: number }[];
 }
@@ -450,6 +463,8 @@ export const isIdentifier = (s: string) => ID.test(s);
 export const COLORS: DslColor[] = ['auto', ...BUILT_IN_FAMILIES];
 const FAMILY = /^[A-Za-z_][A-Za-z0-9_-]*$/;
 export const DSL_SHAPES: DslShape[] = ['box', 'pill', 'circle', 'diamond', 'text', 'marker'];
+/** Shapes a node's box can draw as it was: a marker's box is a thin cut, so it has no other shape. */
+export const PAST_SHAPES = DSL_SHAPES.filter(s => s !== 'marker');
 const FRAMES = ['box', 'soft', 'none'] as const;
 /** A `count=` symbol for an unknown number: a letter or a short word, such as `N` or `many`. */
 const COUNT_SYMBOL = /^[A-Za-z]{1,8}$/;
@@ -515,9 +530,9 @@ export function parseModel(source: string | SourceDoc): Model {
       );
       return n;
     };
-    const countOf = () => {
-      const w = attrs.get('count')!;
-      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num('count', 2, 2, 1_000_000);
+    const countOf = (key: string, min: number) => {
+      const w = attrs.get(key)!;
+      return !w.quoted && COUNT_SYMBOL.test(w.value) ? w.value : num(key, min, min, 1_000_000);
     };
     const choice = <T extends string>(key: string, fallback: T, choices: readonly T[]): T => {
       const value = (attrs.get(key)?.value ?? fallback) as T;
@@ -550,10 +565,15 @@ export function parseModel(source: string | SourceDoc): Model {
       `Only node, group and edge lines take a ${s.mark} mark.`,
     );
     const was = () => {
-      const w = attrs.get('was');
-      if (!w) return {};
-      assert(s.mark === '~', 'was= belongs on a changed (~) line.');
-      return { was: w.value };
+      for (const key of ['was', 'was-shape', 'was-count'])
+        assert(!attrs.has(key) || s.mark === '~', `${key}= belongs on a changed (~) line.`);
+      return {
+        ...(attrs.has('was') ? { was: attrs.get('was')!.value } : {}),
+        ...(attrs.has('was-shape')
+          ? { wasShape: choice('was-shape', 'box', PAST_SHAPES) as DslShape }
+          : {}),
+        ...(attrs.has('was-count') ? { wasCount: countOf('was-count', 1) } : {}),
+      };
     };
     const readParams = <K extends string>(table: Record<string, Param<K>>) => {
       const out: Record<string, string | number> = {};
@@ -644,6 +664,12 @@ export function parseModel(source: string | SourceDoc): Model {
         m.phases.push({ id: pid, label: args[1].value, ids: args.slice(2).map(w => id(w)), line });
         break;
       }
+      case 'was-order':
+        assert(args.length, 'was-order lists the older message order: was-order m2 m1.');
+        allow([]);
+        once('was-order');
+        m.wasOrder = { ids: args.map(w => id(w)), line };
+        break;
       case 'subtitle':
         count(1);
         allow([]);
@@ -656,7 +682,18 @@ export function parseModel(source: string | SourceDoc): Model {
         count(2);
         allow(
           command === 'node'
-            ? ['in', 'color', 'shade', 'shape', 'was', 'href', 'count', 'span']
+            ? [
+                'in',
+                'color',
+                'shade',
+                'shape',
+                'was',
+                'was-shape',
+                'was-count',
+                'href',
+                'count',
+                'span',
+              ]
             : ['in', 'color', 'shade', 'was', 'href', 'frame', 'fold'],
         );
         const oid = id(args[0]);
@@ -680,7 +717,7 @@ export function parseModel(source: string | SourceDoc): Model {
           ...(s.mark ? { status } : {}),
           ...was(),
           ...(attrs.has('href') ? { href: text(attrs.get('href')) } : {}),
-          ...(attrs.has('count') ? { count: countOf() } : {}),
+          ...(attrs.has('count') ? { count: countOf('count', 2) } : {}),
           ...(command === 'group' && choice('fold', 'auto', ['auto', 'never']) === 'never'
             ? { fold: 'never' as const }
             : {}),
@@ -699,7 +736,7 @@ export function parseModel(source: string | SourceDoc): Model {
       }
       case 'edge': {
         count(4, 5);
-        allow(['kind', 'from', 'to', 'was', 'constraint', 'directed']);
+        allow(['kind', 'from', 'to', 'was', 'constraint', 'directed', 'head', 'tail']);
         assert(
           args[2]?.value === '->' && !args[2].quoted,
           'Edges use: edge id source -> target "label".',
@@ -707,6 +744,13 @@ export function parseModel(source: string | SourceDoc): Model {
         const eid = id(args[0]);
         assert(!edgeIds.has(eid), `Duplicate edge id ${eid}.`);
         edgeIds.add(eid);
+        const undirected = choice('directed', 'true', ['true', 'false']) === 'false',
+          head = choice('head', 'arrow', MARKERS),
+          tail = choice('tail', 'none', MARKERS);
+        assert(
+          !undirected || !(attrs.has('head') || attrs.has('tail')),
+          `Edge ${eid} has directed=false, so it has no ends to mark. Remove head= and tail=, or remove directed=false.`,
+        );
         m.edges.push({
           id: eid,
           source: id(args[1]),
@@ -715,9 +759,9 @@ export function parseModel(source: string | SourceDoc): Model {
           dashed: choice('kind', 'sync', ['sync', 'async']) === 'async',
           from: choice('from', 'auto', SIDES),
           to: choice('to', 'auto', SIDES),
-          ...(choice('directed', 'true', ['true', 'false']) === 'false'
-            ? { directed: false as const }
-            : {}),
+          ...(undirected ? { directed: false as const } : {}),
+          ...(head !== 'arrow' ? { head } : {}),
+          ...(tail !== 'none' ? { tail } : {}),
           ...(choice('constraint', 'true', ['true', 'false']) === 'false'
             ? { constraint: false as const }
             : {}),
@@ -1039,19 +1083,26 @@ function validateReferences(m: Model) {
       assert(!o.frame, `${o.id} is a lane, so it needs its frame; remove frame=.`, o.line);
     }
   // Sequence: participants and messages only.
-  if (m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'))
+  const sequence = m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
+  if (sequence)
     // Groups gather participants into column bands; they hold nodes and sit at the top level.
-    for (const o of m.objects)
+    for (const o of m.objects) {
       assert(
         o.type === 'node' ? by.get(o.parent)?.type !== 'node' : o.parent === 'root' && !o.frame,
         `In a sequence diagram a group is a band of participants: put ${o.id} at the top level and its participants in=${o.id}.`,
         o.line,
       );
+      assert(
+        o.type === 'node' || m.objects.some(x => x.parent === o.id),
+        `Group ${o.id} has no participants, so it has no band to draw. Put a participant in=${o.id} or remove the group.`,
+        o.line,
+      );
+    }
   const messageIds = new Set(m.edges.map(e => e.id)),
     phased = new Set<string>();
   for (const p of m.phases) {
     assert(
-      m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'),
+      sequence,
       'A phase groups messages in a sequence diagram; use layout root sequence.',
       p.line,
     );
@@ -1064,6 +1115,36 @@ function validateReferences(m: Model) {
       assert(!phased.has(x), `${x} is already in another phase.`, p.line);
       phased.add(x);
     }
+    // A phase's band runs from its first message to its last, so it covers all those between.
+    const at = m.edges.flatMap((e, i) => (p.ids.includes(e.id) ? [i] : [])),
+      skipped = m.edges
+        .slice(at[0], at[at.length - 1] + 1)
+        // A `-` message is only the older version's, so it breaks no run of the newer one.
+        .filter(e => !p.ids.includes(e.id) && e.status !== 'removed')
+        .map(e => e.id);
+    assert(
+      !skipped.length,
+      `Phase ${p.id} skips ${skipped.join(', ')}: a phase is a run of consecutive messages. Include it or split the phase.`,
+      p.line,
+    );
+  }
+  if (m.wasOrder) {
+    const { ids, line } = m.wasOrder,
+      edge = (id: string) => m.edges.find(e => e.id === id),
+      warn = (message: string) => m.warnings.push({ code: 'was-order', message, line });
+    assert(
+      m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence'),
+      'was-order gives the older order of a sequence diagram; use layout root sequence.',
+      line,
+    );
+    assert(new Set(ids).size === ids.length, 'was-order lists a message twice.', line);
+    for (const x of ids) {
+      assert(edge(x)?.status !== 'added', `${x} is added, so was-order can't list it.`, line);
+      if (!edge(x)) warn(`was-order lists ${x}, which is not a message. The panels skip it.`);
+    }
+    for (const e of m.edges)
+      if (e.status !== 'added' && !ids.includes(e.id))
+        warn(`was-order leaves out ${e.id}, so the older panel keeps it on its new row.`);
   }
   for (const e of m.edges)
     for (const end of [e.source, e.target]) {
@@ -1071,6 +1152,11 @@ function validateReferences(m: Model) {
       // A line may end on a boxed group's frame, but not on a tint or on a group around its other end.
       const o = by.get(end)!,
         other = end === e.source ? e.target : e.source;
+      assert(
+        !sequence || o.type === 'node',
+        `A message joins participants, and ${end} is a group. End ${e.id} on one of its participants.`,
+        e.line,
+      );
       assert(
         o.type === 'node' || !o.frame,
         `${end} is a ${o.frame} group, which has no frame for a line to end on. Connect to one of its members, or use frame=box.`,
@@ -1086,7 +1172,13 @@ function validateReferences(m: Model) {
       );
     }
   (m.appearance.notes ?? []).forEach((n, i) => {
-    if (n.near) exists(n.near, m.noteLines[i]);
+    if (!n.near || by.has(n.near)) return;
+    if (!messageIds.has(n.near)) return exists(n.near, m.noteLines[i]);
+    assert(
+      sequence,
+      `near=${n.near} names a connection. Only a sequence diagram anchors a note to a message; use a node or group here.`,
+      m.noteLines[i],
+    );
   });
   const edgeIds = new Set(m.edges.map(e => e.id));
   for (const s of m.appearance.states ?? [])

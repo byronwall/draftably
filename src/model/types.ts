@@ -6,6 +6,7 @@ export type PortSide = Side | 'auto';
 export type Direction = 'RIGHT' | 'DOWN';
 export type Theme = 'light' | 'dark';
 import type { DiagramAppearance, Shade } from './appearance';
+import type { EndMarker } from './markers';
 import type { Spot, Status } from './status';
 
 export type ShapeKind =
@@ -27,6 +28,10 @@ export interface DiagramNode {
   title: string;
   /** Title before a change, from `was=` on a `~` line. */
   was?: string;
+  /** Shape before a change, from `was-shape=` on a `~` line. */
+  wasShape?: ShapeKind;
+  /** Count before a change, from `was-count=` on a `~` line; 1 means a single box. */
+  wasCount?: number | string;
   /** A link to open from exported drawings. */
   href?: string;
   /** How many things this box stands for, or a symbol such as `N`; drawn as a stack with a badge. */
@@ -63,6 +68,10 @@ export interface DiagramEdge {
   /** Label before a change, from `was=` on a `~` line. */
   was?: string;
   directed: boolean;
+  /** The mark at the target end, when it isn't the plain arrow; see `headOf`. */
+  head?: EndMarker;
+  /** The mark at the source end, when it has one; see `tailOf`. */
+  tail?: EndMarker;
   emphasis: boolean;
   dashed: boolean;
   /** How it differs between two versions of the diagram. */
@@ -264,8 +273,21 @@ export type NodeGeometry = Record<string, NodeLayout>;
 /** The panel a sequence diagram is drawn on, and a row band for each `phase`. */
 export interface SequenceLayout {
   panel: Rect;
-  phases: Array<{ id: string; label: string; y: number; h: number }>;
+  phases: SequencePhase[];
+  /** Left edge for phase labels, when a note in the left margin widens the panel past them. */
+  phaseX?: number;
+  /** Spots of the notes that sit in a side margin, by index in `appearance.notes`. */
+  notes?: Array<Rect | null>;
+  /** With `notes`: the panel without those margins, for drawings with their notes in the frame. */
+  inner?: Rect;
+  /**
+   * From `was-order`: each message's row and the phase bands in the older message order, and how
+   * much further that order runs down the panel.
+   */
+  before?: { rows: Record<string, number>; phases: SequencePhase[]; grow: number };
 }
+
+export type SequencePhase = { id: string; label: string; y: number; h: number };
 
 /** Any object that can be selected: a shape, a container, or a connection. */
 export type Entity = DiagramNode | DiagramGroup | DiagramEdge;

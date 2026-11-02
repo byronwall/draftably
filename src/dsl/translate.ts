@@ -23,7 +23,7 @@ import {
   layoutStatement,
   num,
   quoted,
-  removeFromStates,
+  removeEdge,
   removeReferences,
   removeWhere,
   setAttr,
@@ -202,11 +202,7 @@ export function translateEdit(input: EditInput): EditResult {
       removeReferences(source, o.id);
     }
   const afterEdges = new Set(after.graph.edges.map(e => e.id));
-  for (const e of before.graph.edges)
-    if (!afterEdges.has(e.id)) {
-      removeWhere(source, s => s === edgeStatement(source, e.id));
-      removeFromStates(source, e.id);
-    }
+  for (const e of before.graph.edges) if (!afterEdges.has(e.id)) removeEdge(source, e.id);
 
   // New containers (outermost first), then new shapes.
   const beforeIds = new Set(objectsOf(before).map(o => o.id));
@@ -273,6 +269,8 @@ export function translateEdit(input: EditInput): EditResult {
     s.args = [s.args[0], bare(sid(e.from)), bare('->'), bare(sid(e.to))];
     if (e.label) s.args.push(quoted(e.label));
     setAttr(s, 'directed', e.directed === false ? bare('false') : undefined);
+    setAttr(s, 'head', e.head ? bare(e.head) : undefined);
+    setAttr(s, 'tail', e.tail ? bare(e.tail) : undefined);
     const kind = getAttr(s, 'kind')?.value;
     if (e.dashed) setAttr(s, 'kind', bare('async'));
     else if (kind === 'async') setAttr(s, 'kind', undefined);
@@ -479,13 +477,34 @@ function reorderCells(input: EditInput, sid: (id: string) => string, id: string)
   return true;
 }
 
+/**
+ * Write the lane order a drop leaves a scope in: its participants and bands left to right as they
+ * now stand. Returns whether the order changed.
+ */
+function reorderLanes(input: EditInput, scope: string) {
+  const { source, scene, after } = input,
+    lanes = scene.objects
+      .filter(o => o.parent === scope && after.layout.nodes[o.id])
+      .sort((a, b) => a.x - b.x)
+      .map(o => o.id),
+    mid = (id: string) => after.layout.nodes[id].x + after.layout.nodes[id].w / 2,
+    order = [...lanes].sort((a, b) => mid(a) - mid(b));
+  if (order.every((id, i) => id === lanes[i])) return false;
+  removeWhere(source, s => s.command === 'order' && s.args[0]?.value === scope);
+  addRefinement(source, statement('order', [bare(scope), ...order.map(id => bare(id))]));
+  return true;
+}
+
 function placeSelection(
   input: EditInput,
   sid: (id: string) => string,
   notes: string[],
   drops: Drop[],
 ) {
-  const { source, before, after, label } = input;
+  const { source, before, after, label } = input,
+    // A sequence places everything in lanes, so no position would change the drawing.
+    lanes = layoutStatement(source, 'root')?.args[1]?.value === 'sequence';
+  let keptLane = false;
   // Positions are written in the containers that lay objects out, so soft groups drop out: a
   // moved soft group places each of its members instead, with a `stay` at its new position.
   const scene = layoutView(input.scene),
@@ -546,6 +565,7 @@ function placeSelection(
     const parentChanged = !compiled || compiled.parent !== sid(parentOf(id));
     // Resizing can snap a frame's corner to the grid; that is not a request to move it.
     const moved =
+      !lanes &&
       !!now &&
       !label.startsWith('Resize') &&
       (parentChanged ||
@@ -554,6 +574,16 @@ function placeSelection(
     const resized =
       !!compiled && (Math.abs(is.w - compiled.w) > 0.5 || Math.abs(is.h - compiled.h) > 0.5);
 
+    if (
+      lanes &&
+      compiled &&
+      was &&
+      !label.startsWith('Resize') &&
+      (Math.abs(is.x - was.x) > 0.5 || Math.abs(is.y - was.y) > 0.5)
+    ) {
+      if (!reorderLanes(input, compiled.parent)) keptLane = true;
+      else notes.push('reordered the lanes');
+    }
     if (label === 'Clear manual markers' && compiled) {
       removeWhere(
         source,
@@ -562,7 +592,7 @@ function placeSelection(
       notes.push(`released ${sourceId}`);
       continue;
     }
-    if (!!was?.pinned !== !!is.pinned) {
+    if (!lanes && !!was?.pinned !== !!is.pinned) {
       const at = now && moved ? now : compiled ? { x: compiled.localX, y: compiled.localY } : now;
       if (!at) continue;
       clearPosition(source, sourceId);
@@ -671,7 +701,7 @@ function placeSelection(
       }
     }
 
-    if (resized && compiled) {
+    if (resized && compiled && !(lanes && compiled.type === 'group')) {
       if (compiled.type === 'node') {
         removeWhere(source, s => s.command === 'size' && s.args[0]?.value === sourceId);
         addRefinement(
@@ -700,7 +730,12 @@ function placeSelection(
     }
     if (notes.length > noted) placed.push(sourceId);
   }
-  const anchored = anchorSurroundings(source, scene, placed);
+  notes.splice(0, notes.length, ...new Set(notes));
+  if (keptLane && !notes.length)
+    throw new UnsupportedEdit(
+      'A participant stays in its lane. Drag it past a neighbor to reorder.',
+    );
+  const anchored = lanes ? [] : anchorSurroundings(source, scene, placed);
   if (anchored.length) notes.push(`anchored ${anchored.length} nearby`);
 }
 

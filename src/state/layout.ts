@@ -1,5 +1,6 @@
 /** Automatic layout: bounded passes, previewed rebuilds, and the layout lab's options. */
 import { batch, createRoot, createSignal } from 'solid-js';
+import { LANES_HOLD } from '../dsl/layout-edits';
 import {
   LayoutLab,
   type LayoutOptions,
@@ -150,6 +151,10 @@ export type LayoutOutcome =
 export async function runLayout(options: RunLayoutOptions = {}): Promise<LayoutOutcome> {
   if (state.busy()) return { status: 'busy' };
   if (fileMode() && options.mode === 'rebuild') return runRecipe(options);
+  if (doc.layout.sequence) {
+    toast(LANES_HOLD);
+    return { status: 'cancelled' };
+  }
   prepareForEdit();
   const before = snapshot(),
     startRevision = revision(),

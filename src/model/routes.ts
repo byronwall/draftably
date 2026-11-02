@@ -4,11 +4,13 @@ import {
   type Route,
   type RoutingResult,
 } from '../engines/routing-engine.js';
-import { clamp, manhattan, overlaps, rounded, roundedPath } from './geometry';
+import { clamp, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { edgeLabelSize, groupTitleLines } from './labels';
+import { edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
+import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import {
+  findEdge,
   findNode,
   isCell,
   isCollapsed,
@@ -70,6 +72,8 @@ export interface LabelAvoid {
   routes?: Point[][];
   /** Thin strips along group borders. */
   borders?: Rect[];
+  /** The marks at line ends. A spot that hides one costs as much as a line through the text. */
+  marks?: Rect[];
 }
 
 /** Whether an orthogonal segment passes through a rectangle. */
@@ -135,6 +139,7 @@ function labelSpots(
       else if (!shared && hits(near)) c += 1;
     }
     for (const b of avoid.borders ?? []) if (overlaps(r, b, 2)) c += 2;
+    for (const m of avoid.marks ?? []) if (overlaps(r, m, 1)) c += 5;
     // A label pressed against a box reads as part of it; a spot a little further along is clearer.
     if (obstacles.some(o => overlaps(r, o, BOX_CLEARANCE))) c += 1;
     return c;
@@ -166,8 +171,12 @@ function labelSpots(
       base = len + (flat ? 50 : 0),
       // Beside a level segment the label sits just above or below it; a vertical segment runs
       // through the label, which may shift a little to either side, or far enough to clear a
-      // line running alongside while its own line still crosses it.
-      offsets = flat ? [0, -(h / 2 + 4), h / 2 + 4] : [0, -(h - 4), h - 4, ...beside(a, b)],
+      // line running alongside while its own line still crosses it. A short line with marks
+      // adds a spot a step further out, which clears the tallest mark.
+      clear = avoid.marks?.length ? [-(h / 2 + 7), h / 2 + 7] : [],
+      offsets = flat
+        ? [0, -(h / 2 + 4), h / 2 + 4, ...clear]
+        : [0, -(h - 4), h - 4, ...beside(a, b)],
       steps = Math.max(2, Math.ceil(len / 6));
     for (let k = 0; k <= steps; k++) {
       const t = k / steps,
@@ -661,6 +670,11 @@ export function drawRoutes(
       }),
     ],
   };
+  // A plain arrow claims no room, so a diagram without markers places its labels as it did.
+  const marks = result.routes.flatMap(route => {
+    const edge = findEdge(doc, route.id);
+    return edge && hasMarkers(edge) ? markerRects(route.points, edge) : [];
+  });
   // Labels are placed together once every route exists, so none sits on a line drawn after it.
   const message = (route: Route) => doc.layout.edges[route.id]?.row !== undefined;
   const labelled = result.routes.filter(route => byEdge.get(route.id)!.label && !message(route)),
@@ -670,7 +684,11 @@ export function drawRoutes(
         return {
           label: byEdge.get(route.id)!.label!,
           points: route.points,
-          avoid: { routes: result.routes.filter(r => r !== route).map(r => r.points), borders },
+          avoid: {
+            routes: result.routes.filter(r => r !== route).map(r => r.points),
+            borders,
+            marks,
+          },
           dx: cfg.labelDx || 0,
           dy: cfg.labelDy || 0,
         };
@@ -689,29 +707,47 @@ export function drawRoutes(
     labels.set(
       route,
       route.from === route.to
-        ? { x: route.points[1].x + 4 + w / 2, y: (route.points[1].y + route.points[2].y) / 2, w, h }
+        ? {
+            x: route.points[1].x + SELF_LOOP.label + w / 2,
+            y: (route.points[1].y + route.points[2].y) / 2,
+            w,
+            h,
+          }
         : { x: (a.x + b.x) / 2, y: a.y - h / 2 - 1, w, h },
     );
   }
   const frames = vg.groups.flatMap(g =>
     g.frame || isCollapsed(doc, g.id) ? [] : [rects.get(g.id)!],
   );
-  return result.routes.map(route => {
-    const c = crosses.get(route.id);
+  const whole = wholeLines(
+    result.routes.map(r => {
+      const edge = findEdge(doc, r.id);
+      return { points: r.points, marks: edge ? markerRects(r.points, edge) : [] };
+    }),
+  );
+  const drawn = result.routes.map((route, i) => {
+    const c = crosses.get(route.id),
+      edge = findEdge(doc, route.id);
     return {
       ...route,
       label: labels.get(route) ?? null,
-      path: roundedPath(route.points, radius),
+      path: roundedPath(edge ? stoppedPoints(route.points, edge) : route.points, radius),
       halo: haloPath(
         route.points,
-        result.routes.filter(r => r !== route).map(r => r.points),
+        result.routes
+          .filter((_, j) => j !== i && !(whole.has(i) && whole.has(j)))
+          .map(r => r.points),
         frames,
       ),
       ...(c?.to ? { cross: c.to.cross } : c?.from ? { cross: c.from.cross } : {}),
     };
   });
+  // Later lines draw over earlier ones, so a whole line goes last and the other line gives way.
+  return [...drawn.filter((_, i) => !whole.has(i)), ...drawn.filter((_, i) => whole.has(i))];
 }
 
+/** Width of the halo under a connection, in drawing units. */
+export const HALO_WIDTH = 8;
 /** How far a halo piece runs each way from a crossing, along the line. */
 export const HALO_REACH = 7;
 
@@ -726,9 +762,31 @@ function crossing(a: Seg, b: Seg): Point | null {
   if (!h || !v) return null;
   const x = v[0].x,
     y = h[0].y,
-    inside = (t: number, p: number, q: number) =>
+    between = (t: number, p: number, q: number) =>
       t > Math.min(p, q) + 0.5 && t < Math.max(p, q) - 0.5;
-  return inside(x, h[0].x, h[1].x) && inside(y, v[0].y, v[1].y) ? { x, y } : null;
+  return between(x, h[0].x, h[1].x) && between(y, v[0].y, v[1].y) ? { x, y } : null;
+}
+
+/**
+ * The lines, by index, that another line's halo would cut at a mark. A halo there leaves half a
+ * mark, or on a short line almost nothing, so these lines stay whole.
+ */
+export function wholeLines(lines: { points: Point[]; marks: Rect[] }[]): Set<number> {
+  const out = new Set<number>();
+  lines.forEach(({ points, marks }, i) => {
+    const hit = lines.some(
+      (other, j) =>
+        j !== i &&
+        segsOf(points).some(s =>
+          segsOf(other.points).some(c => {
+            const p = crossing(s, c);
+            return p && marks.some(m => inside(p, m, HALO_WIDTH / 2));
+          }),
+        ),
+    );
+    if (hit) out.add(i);
+  });
+  return out;
 }
 
 /** The pieces of `points` around each place it crosses `others` or a frame's border, as a path. */
@@ -765,9 +823,6 @@ export function haloPath(points: Point[], others: Point[][], frames: Rect[]): st
   }
   return out.join('');
 }
-
-/** Run of a self-message's loop out to the right of its lifeline, and its drop. */
-const SELF_LOOP = { out: 36, down: 22 };
 
 /**
  * A sequence message: a straight line at its row from the source's lifeline (the middle of the

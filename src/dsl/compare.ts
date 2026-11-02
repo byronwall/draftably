@@ -5,29 +5,87 @@
  * that holds both versions instead of two near-identical files.
  */
 import {
+  bare,
   DslError,
   parseModel,
   printSource,
   quoted,
   readSource,
+  type Model,
   type ModelEdge,
   type ModelObject,
   type SourceLine,
   type Statement,
+  type Word,
 } from './syntax';
 
 const DECLARATIONS = ['node', 'group', 'edge'];
 
-/** Differences that make a declaration `~`; the layout and labels it implies, not its line. */
-const objectKey = (o: ModelObject) => [o.label, o.parent, o.color, o.shade, o.shape].join('\0');
-const edgeKey = (e: ModelEdge) =>
-  [e.source, e.target, e.label, e.dashed, e.from, e.to, e.directed !== false].join('\0');
+/** What makes a declaration `~`: every parsed field but its line, so new fields count by default. */
+const meaning = ({ line: _, ...fields }: ModelObject | ModelEdge) => JSON.stringify(fields);
+
+/** A statement's content, whatever its comment or the order of its attributes. */
+const content = (s: Statement) =>
+  JSON.stringify([
+    s.command,
+    s.args.map(w => w.value),
+    s.attrs.map(([k, w]) => [k, w.value]).sort(),
+  ]);
+
+/** The statements that marks can't carry, each by its content, with a name to report it by. */
+const undeclared = (lines: SourceLine[]) =>
+  new Map(
+    lines.flatMap(l =>
+      l.kind === 'statement' && !DECLARATIONS.includes(l.command)
+        ? [
+            [
+              content(l),
+              l.args[0]?.quoted === false ? `${l.command} ${l.args[0].value}` : l.command,
+            ],
+          ]
+        : [],
+    ),
+  );
+
+/** The attributes of one declaration that differ between versions; `in` is reported as a move. */
+const attrChanges = (old: Statement, now: Statement) => {
+  const value = (s: Statement, name: string) => s.attrs.find(([k]) => k === name)?.[1].value;
+  return [...new Set([...old.attrs, ...now.attrs].map(([k]) => k))].filter(
+    k => k !== 'in' && value(old, k) !== value(now, k),
+  );
+};
+
+/**
+ * A changed node's old shape and count as `was-` words, and the attributes those draw. A marker's
+ * box is a thin cut between cells, so a change to or from one keeps its report instead.
+ */
+const pastNode = (old: ModelObject, now: ModelObject) => {
+  const boxed = old.shape !== 'marker' && now.shape !== 'marker',
+    words: [string, Word][] = [];
+  if (boxed && old.shape !== now.shape) words.push(['was-shape', bare(old.shape)]);
+  if ((old.count ?? 1) !== (now.count ?? 1)) words.push(['was-count', bare(old.count ?? 1)]);
+  return { words, drawn: boxed ? ['shape', 'count'] : ['count'] };
+};
+
+/** Whether what both lists hold comes in the same order in each. */
+const sameOrder = (a: { id: string }[], b: { id: string }[]) => {
+  const shared = (x: { id: string }[], y: { id: string }[]) =>
+    x.filter(o => y.some(p => p.id === o.id)).map(o => o.id);
+  return shared(a, b).join('\0') === shared(b, a).join('\0');
+};
+
+const nodesOf = (m: Model) => m.objects.filter(o => o.type === 'node');
+
+const isSequence = (m: Model) =>
+  m.layouts.some(l => l.scope === 'root' && l.algorithm === 'sequence');
 
 const keyOf = (s: Statement) => (s.command === 'edge' ? 'edge:' : 'object:') + s.args[0]?.value;
 
 /**
  * Merge two plain versions into one marked file. `moved` lists groups that changed container:
- * they keep one position, so the older panel draws them in their new container.
+ * they keep one position, so the older panel draws them in their new container. `unshown` lists
+ * the other changes with no old version in the file, which both panels draw as they are now.
+ * `reordered` says a sequence's messages changed order, which `was-order` records.
  */
 export function compareSources(before: string, after: string): string {
   return compareDetailed(before, after).merged;
@@ -37,17 +95,16 @@ export function compareDetailed(before: string, after: string) {
   const docs = [readSource(before), readSource(after)];
   for (const doc of docs)
     for (const s of doc.lines)
-      if (s.kind === 'statement' && s.mark)
+      if (s.kind === 'statement' && (s.mark || s.command === 'was-order'))
         throw new DslError('Compare plain files; this one already has change marks.', s.line);
   const [old, next] = [parseModel(docs[0]), parseModel(docs[1])];
-  const was = new Map<string, { key: string; label: string }>([
-    ...old.objects.map(o => ['object:' + o.id, { key: objectKey(o), label: o.label }] as const),
-    ...old.edges.map(e => ['edge:' + e.id, { key: edgeKey(e), label: e.label }] as const),
-  ]);
-  const now = new Map<string, string>([
-    ...next.objects.map(o => ['object:' + o.id, objectKey(o)] as const),
-    ...next.edges.map(e => ['edge:' + e.id, edgeKey(e)] as const),
-  ]);
+  const [was, now] = [old, next].map(
+    m =>
+      new Map<string, ModelObject | ModelEdge>([
+        ...m.objects.map(o => ['object:' + o.id, o] as const),
+        ...m.edges.map(e => ['edge:' + e.id, e] as const),
+      ]),
+  );
   const scopes = new Set(next.layouts.map(l => l.scope));
   // A node in another container, or an edge that joins other objects or touches such a node, is
   // a different thing in each version, as is a changed direction: remove the old one under a
@@ -80,17 +137,19 @@ export function compareDetailed(before: string, after: string) {
         .map(e => 'edge:' + e.id),
     ]);
   // A removed line, joined to the old copies of moved nodes; a split one also takes a spare ID.
+  const spares = new Map<string, string>();
   const removedLine = (line: Statement): Statement => {
     const args = line.args.map(w => ({ ...w })),
       own = split.has(keyOf(line));
     if (line.command === 'edge') {
-      if (own) args[0].value = spare('edge:', args[0].value);
+      if (own) spares.set(line.args[0].value, (args[0].value = spare('edge:', args[0].value)));
       for (const i of [1, 3]) args[i].value = movedNodes.get(args[i].value) ?? args[i].value;
     } else if (own) args[0].value = movedNodes.get(args[0].value)!;
     return { ...line, args, mark: '-', comment: undefined };
   };
 
-  const out: SourceLine[] = [];
+  const out: SourceLine[] = [],
+    unshown: string[] = [];
   for (const line of docs[1].lines) {
     if (line.kind !== 'statement' || !DECLARATIONS.includes(line.command)) {
       out.push(line);
@@ -98,12 +157,30 @@ export function compareDetailed(before: string, after: string) {
     }
     const prior = was.get(keyOf(line));
     if (!prior || split.has(keyOf(line))) out.push({ ...line, mark: '+' });
-    else if (prior.key !== now.get(keyOf(line))) {
-      const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '';
+    else if (meaning(prior) !== meaning(now.get(keyOf(line))!)) {
+      const label = line.args[line.command === 'edge' ? 4 : 1]?.value ?? '',
+        { words, drawn } =
+          'shape' in prior
+            ? pastNode(prior, now.get(keyOf(line)) as ModelObject)
+            : { words: [], drawn: [] },
+        attrs = attrChanges(
+          docs[0].lines.find(
+            (l): l is Statement =>
+              l.kind === 'statement' &&
+              DECLARATIONS.includes(l.command) &&
+              keyOf(l) === keyOf(line),
+          )!,
+          line,
+        ).filter(k => !drawn.includes(k));
+      if (attrs.length) unshown.push(`${line.args[0].value} (${attrs.join(', ')})`);
       out.push({
         ...line,
         mark: '~',
-        attrs: label !== prior.label ? [...line.attrs, ['was', quoted(prior.label)]] : line.attrs,
+        attrs: [
+          ...line.attrs,
+          ...(label !== prior.label ? [['was', quoted(prior.label)] as [string, Word]] : []),
+          ...words,
+        ],
       });
     } else out.push(line);
   }
@@ -139,7 +216,27 @@ export function compareDetailed(before: string, after: string) {
     out.splice(anchor + 1, 0, removed);
     anchor += 1;
   }
+  const [gone, kept] = [undeclared(docs[0].lines), undeclared(out)];
+  for (const [text, name] of [...gone, ...kept])
+    if (!gone.has(text) || !kept.has(text)) unshown.push(name);
+  let reordered = false;
+  if (isSequence(old) && isSequence(next)) {
+    if (!sameOrder(nodesOf(old), nodesOf(next))) unshown.push('participant order');
+    // Rows come from file order, so the older order needs a line when the merged file loses it.
+    const edges = out.filter((l): l is Statement => l.kind === 'statement' && l.command === 'edge'),
+      order = old.edges.map(e => spares.get(e.id) ?? e.id);
+    if (edges.filter(l => l.mark !== '+').some((l, i) => l.args[0].value !== order[i])) {
+      reordered = true;
+      out.splice(out.indexOf(edges.at(-1)!) + 1, 0, {
+        kind: 'statement',
+        command: 'was-order',
+        args: order.map(bare),
+        attrs: [],
+        line: 0,
+      });
+    }
+  }
   const merged = printSource({ lines: out });
   parseModel(merged);
-  return { merged, moved };
+  return { merged, moved, unshown: [...new Set(unshown)], reordered };
 }

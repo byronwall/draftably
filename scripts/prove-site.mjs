@@ -663,7 +663,11 @@ const journeys = {
     await page.screenshot({ path: path.join(proof.out, 'import-warning.png') });
     await page.getByRole('button', { name: 'Cancel' }).click();
     check('cancel keeps the current editor document', page.url() === before);
-    await choose('unsupported.mmd', 'sequenceDiagram\n Alice->>Bob: Hello');
+    await choose('sequence.mmd', 'sequenceDiagram\n actor Alice\n Alice->>Bob: Hello');
+    await page.getByText('Review import changes').waitFor();
+    await page.getByRole('button', { name: 'Cancel' }).click();
+    check('a Mermaid sequence reaches import review', page.url() === before);
+    await choose('unsupported.mmd', 'classDiagram\n Alice <|-- Bob');
     await page.getByText('Could not open file').waitFor();
     check('unsupported input keeps the current editor document', page.url() === before);
     await page.context().close();

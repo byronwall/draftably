@@ -3,7 +3,7 @@
 This is a reviewed projection of the Pro research, checked October 28, 2026.
 The baseline is `2995a98eef31803fa8669a7ada5c8f8892486bb7`.
 See [the decision](summary.md), [next steps](next-steps.md), and
-[the source conversation](https://chatgpt.com/c/6ae1522f-1664-83ea-aade-5b585e44394d).
+[the committed reports](../../intent/diagram-library-coverage/assets/pro-results/diagram-library-gaps-2026-10-27/ASSET_INDEX.md).
 
 N = native; P = partial or ordinary approximation; C = custom application work;
 E = named extension or separate edition; U = unavailable in the evaluated scope;

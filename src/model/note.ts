@@ -1,13 +1,13 @@
 /**
  * Notes: sentences on a diagram that never move its layout, from `note` statements. An anchored
- * note (`near=`) is placed after layout in free space beside its object; a note without one sits
- * in the frame under the subtitle. The viewer, `inspect --svg` and the editor's exports all place
- * and draw them from here.
+ * note (`near=`) is placed after layout in free space beside its object or sequence message; a
+ * note without one sits in the frame under the subtitle. The viewer, `inspect --svg` and the
+ * editor's exports all place and draw them from here.
  */
 import { swatchFor, type ResolvedAppearance } from './appearance';
 import type { BoundedRoute } from './bounds';
 import { measureText, wrapLines } from './fonts';
-import { contains, overlaps } from './geometry';
+import { contains, overlaps, rectUnion } from './geometry';
 import type { Diagram, Rect } from './types';
 
 export const NOTE_SIDES = ['below', 'above', 'left', 'right'] as const;
@@ -15,9 +15,9 @@ export type NoteSide = (typeof NOTE_SIDES)[number];
 
 export interface Note {
   text: string;
-  /** The node or group the note sits beside; the frame when unset. */
+  /** The node, group or sequence message the note sits beside; the frame when unset. */
   near?: string;
-  /** Which side of `near`; `below` when unset. */
+  /** Which side of `near`; `below` when unset, or `right` for a message. */
   side?: NoteSide;
   /** Wrap width; `NOTE_WIDTH` when unset. */
   width?: number;
@@ -39,7 +39,11 @@ export interface PlacedNote {
 export const NOTE_WIDTH = 280;
 const GAP = 16,
   PAD_X = 12,
-  PAD_Y = 8;
+  PAD_Y = 8,
+  /** Room between a note and a message's row, and between notes stacked in a margin. */
+  ROW_GAP = 8,
+  /** How far each try moves a note along its row, away from the message. */
+  ROW_STEP = 24;
 
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -53,9 +57,58 @@ export function noteBox(look: ResolvedAppearance, note: Note): PlacedNote {
 }
 
 /**
- * Place every anchored note beside its object, clear of shapes, group borders, lines and earlier
- * notes when a nearby spot allows it. Frame notes, and notes whose object is not drawn, come back
- * `inFrame` at 0,0 for `diagramFrame` to place.
+ * Spots in a sequence's side margins, by index in `notes`, for notes on the messages in `rows`.
+ * `left` and `right` are the margins' inner edges and `top` the highest a note goes. A note is
+ * level with its row, or pushed down clear of the note above it. The panel grows round these, so
+ * no note here can cover the drawing.
+ */
+export function marginNotes(
+  look: ResolvedAppearance,
+  notes: readonly Note[],
+  rows: ReadonlyMap<string, number>,
+  { left, right, top }: { left: number; right: number; top: number },
+) {
+  const spots: Array<Rect | null> = notes.map(() => null);
+  for (const side of ['left', 'right'] as const) {
+    let free = top;
+    notes
+      .map((note, i) => ({ note, i, row: rows.get(note.near ?? '') }))
+      .filter(n => n.row !== undefined && (n.note.side ?? 'right') === side)
+      .sort((a, b) => a.row! - b.row!)
+      .forEach(({ note, i, row }) => {
+        const { w, h } = noteBox(look, note).rect,
+          y = Math.max(free, Math.round(row! - h / 2));
+        spots[i] = { x: side === 'right' ? right : left - w, y, w, h };
+        free = y + h + ROW_GAP;
+      });
+  }
+  return spots;
+}
+
+/** A route label's box; a label's `x` and `y` are its center. */
+const labelBox = (l: NonNullable<BoundedRoute['label']>) => ({
+  ...l,
+  x: l.x - l.w / 2,
+  y: l.y - l.h / 2,
+});
+
+/**
+ * Tries above or below a message's row, level with the row so the note still reads as its own:
+ * over the message, then at each of its ends, then further along the row to either side.
+ */
+function rowSpots(row: Rect, lanes: Rect, side: NoteSide, w: number, h: number): Rect[] {
+  const x = (at: number) => Math.round(Math.max(lanes.x, Math.min(at, lanes.x + lanes.w - w))),
+    mid = x(row.x + (row.w - w) / 2),
+    xs = [mid, x(row.x), x(row.x + row.w - w)];
+  for (let d = ROW_STEP; d < lanes.w; d += ROW_STEP) xs.push(x(mid - d), x(mid + d));
+  const y = side === 'below' ? row.y + row.h + ROW_GAP : row.y - ROW_GAP - h;
+  return [...new Set(xs)].map(at => ({ x: at, y: Math.round(y), w, h }));
+}
+
+/**
+ * Place every anchored note beside its object or message, clear of shapes, group borders, lines
+ * and earlier notes when a nearby spot allows it. Frame notes, and notes whose object is not drawn,
+ * come back `inFrame` at 0,0 for `diagramFrame` to place.
  */
 export function placeNotes(
   doc: Diagram,
@@ -77,16 +130,34 @@ export function placeNotes(
         };
       }),
     ),
-    placed: Rect[] = [];
+    seq = doc.layout.sequence,
+    // A sequence's labels sit on their rows, in the way of a note; elsewhere nothing changes.
+    labels = routes.flatMap(r => (seq && r.label ? [labelBox(r.label)] : [])),
+    margins = doc.appearance.notes?.flatMap((_, i) => seq?.notes?.[i] ?? []) ?? [],
+    placed: Rect[] = [...margins];
   const clear = (r: Rect) =>
     !shapes.some(s => overlaps(s, r, 4)) &&
     !lines.some(s => overlaps(s, r)) &&
+    !labels.some(s => overlaps(s, r)) &&
     !placed.some(s => overlaps(s, r, 8)) &&
     // A note may sit inside a group, but not across its border.
     frames.every(g => !overlaps(g, r) || contains(g, r));
-  return (doc.appearance.notes ?? []).map(note => {
+  return (doc.appearance.notes ?? []).map((note, i) => {
     const box = noteBox(look, note),
-      at = note.near ? rects.get(note.near) : undefined;
+      at = note.near ? rects.get(note.near) : undefined,
+      message = at ? undefined : routes.find(r => r.id === note.near);
+    if (message) {
+      const margin = seq?.notes?.[i];
+      if (margin) return { ...box, rect: margin };
+      const row = rectUnion([
+          ...message.points.map(p => ({ ...p, w: 0, h: 0 })),
+          ...(message.label ? [labelBox(message.label)] : []),
+        ]),
+        spots = rowSpots(row, rectUnion(shapes), note.side ?? 'below', box.rect.w, box.rect.h),
+        spot = spots.find(r => clear(r) && contains(seq!.panel, r));
+      placed.push(spot ?? spots[0]);
+      return { ...box, rect: spot ?? spots[0], ...(spot ? {} : { overlaps: true }) };
+    }
     if (!at) return { ...box, inFrame: true };
     const { w, h } = box.rect,
       side = note.side ?? 'below',

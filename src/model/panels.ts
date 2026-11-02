@@ -9,27 +9,78 @@ import type { Diagram } from './types';
 
 export type PanelSide = 'before' | 'after';
 
-/** The document as it was (`before`: no added objects, old labels) or is (`after`: no removed). */
+/**
+ * The merged document with each change as it was: old labels, shapes, counts, rows and phase
+ * bands. Every object stays in its place and every line stays in.
+ */
+export function oldDoc(doc: Diagram): Diagram {
+  const styles = { ...doc.styles },
+    seq = doc.layout.sequence,
+    grow = seq?.before?.grow ?? 0;
+  for (const n of doc.graph.nodes)
+    if (n.wasShape) styles[n.id] = { ...styles[n.id], shape: n.wasShape };
+  const edges = { ...doc.layout.edges },
+    boxes = { ...doc.layout.nodes };
+  for (const [id, row] of Object.entries(seq?.before?.rows ?? {}))
+    edges[id] = { ...edges[id], row };
+  // A sequence's groups are column bands, as long as its lifelines.
+  if (grow)
+    for (const g of doc.graph.groups) boxes[g.id] = { ...boxes[g.id], h: boxes[g.id].h + grow };
+  return {
+    ...doc,
+    styles,
+    layout: {
+      ...doc.layout,
+      edges,
+      nodes: boxes,
+      ...(seq?.before
+        ? {
+            sequence: {
+              ...seq,
+              phases: seq.before.phases,
+              panel: { ...seq.panel, h: seq.panel.h + grow },
+            },
+          }
+        : {}),
+    },
+    graph: {
+      nodes: doc.graph.nodes.map(n => ({
+        ...n,
+        title: n.was ?? n.title,
+        ...(n.wasCount !== undefined ? { count: n.wasCount === 1 ? undefined : n.wasCount } : {}),
+        ...(n.lifeline ? { lifeline: n.lifeline + grow } : {}),
+      })),
+      groups: doc.graph.groups.map(g => ({ ...g, title: g.was ?? g.title })),
+      edges: doc.graph.edges.map(e => ({ ...e, label: e.was ?? e.label })),
+    },
+  };
+}
+
+/** Panels repeat the drawing and put its notes in the frame, so a sequence drops its margins. */
+export function withoutMargins(doc: Diagram): Diagram {
+  const seq = doc.layout.sequence;
+  if (!seq?.inner) return doc;
+  const { inner, notes: _notes, phaseX: _phaseX, ...rest } = seq;
+  return { ...doc, layout: { ...doc.layout, sequence: { ...rest, panel: inner } } };
+}
+
+/** The document as it was (`before`: no added objects, old values) or is (`after`: no removed). */
 export function panelDoc(doc: Diagram, side: PanelSide): Diagram {
   const hidden = side === 'before' ? 'added' : 'removed',
     keep = (id: string) => doc.styles[id]?.status !== hidden,
-    old = side === 'before';
-  const nodes = doc.graph.nodes
-    .filter(n => keep(n.id))
-    .map(n => (old && n.was !== undefined ? { ...n, title: n.was } : n));
+    plain = withoutMargins(doc),
+    version = side === 'before' ? oldDoc(plain) : plain;
+  const nodes = version.graph.nodes.filter(n => keep(n.id));
   const ids = new Set(nodes.map(n => n.id));
-  const groups = doc.graph.groups
-    .filter(g => keep(g.id))
-    .map(g => (old && g.was !== undefined ? { ...g, title: g.was } : g));
   return fitFrames(
     {
-      ...doc,
+      ...version,
       graph: {
         nodes,
-        groups,
-        edges: doc.graph.edges
-          .filter(e => e.status !== hidden && ids.has(e.from) && ids.has(e.to))
-          .map(e => (old && e.was !== undefined ? { ...e, label: e.was } : e)),
+        groups: version.graph.groups.filter(g => keep(g.id)),
+        edges: version.graph.edges.filter(
+          e => e.status !== hidden && ids.has(e.from) && ids.has(e.to),
+        ),
       },
     },
     new Set(

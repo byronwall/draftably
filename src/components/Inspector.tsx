@@ -6,6 +6,7 @@ import {
   findEdge,
   findGroup,
   findNode,
+  findObject,
   isCell,
   isGroup,
   styleOf,
@@ -19,6 +20,7 @@ import {
   swatchFor,
   type Shade,
 } from '../model/appearance';
+import { headOf, MARKERS, tailOf } from '../model/markers';
 import { DSL_SHAPES } from '../dsl/syntax';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
@@ -52,7 +54,9 @@ export function Inspector() {
         <Match when={ids().length === 1 && findEdge(doc, ids()[0]) && ids()[0]}>
           {id => <EdgeInspector id={id()} />}
         </Match>
-        <Match when={ids().length === 1 && ids()[0]}>{id => <ObjectInspector id={id()} />}</Match>
+        <Match when={ids().length === 1 && findObject(doc, ids()[0]) && ids()[0]}>
+          {id => <ObjectInspector id={id()} />}
+        </Match>
       </Switch>
     </fieldset>
   );
@@ -211,13 +215,17 @@ function MultipleSelected(props: { count: number }) {
     <>
       <Heading title={`${props.count} selected`} />
       <Section>
-        <div class="align-row" role="group" aria-label="Align and distribute">
-          <For each={ALIGN_COMMANDS}>{command => <IconCommand command={command} />}</For>
-        </div>
+        <Show when={!doc.layout.sequence}>
+          <div class="align-row" role="group" aria-label="Align and distribute">
+            <For each={ALIGN_COMMANDS}>{command => <IconCommand command={command} />}</For>
+          </div>
+        </Show>
         <div class="fields-2">
           <CommandButton command="group">Wrap container</CommandButton>
           <CommandButton command="duplicate">Duplicate</CommandButton>
-          <CommandButton command="pin">Pin</CommandButton>
+          <Show when={!doc.layout.sequence}>
+            <CommandButton command="pin">Pin</CommandButton>
+          </Show>
           <CommandButton command="layout">Improve</CommandButton>
         </div>
       </Section>
@@ -238,6 +246,8 @@ const SIDE_OPTIONS = (['auto', 'left', 'right', 'top', 'bottom'] as PortSide[]).
   side => [side, capitalize(side)] as const,
 );
 
+const MARKER_OPTIONS = MARKERS.map(m => [m, capitalize(m.replace('-', ' '))] as const);
+
 function EdgeInspector(props: { id: string }) {
   const edge = () => findEdge(doc, props.id)!;
   const cfg = () => doc.layout.edges[props.id] || {};
@@ -252,7 +262,7 @@ function EdgeInspector(props: { id: string }) {
           onCommit={v => edit('Edit label', d => edits.setEdgeLabel(d, props.id, v))}
         />
         <Checkbox
-          label="Arrow"
+          label="Directed"
           checked={edge().directed}
           onChange={v => edit('Edit directed', d => edits.setEdge(d, props.id, { directed: v }))}
         />
@@ -268,6 +278,24 @@ function EdgeInspector(props: { id: string }) {
             onChange={v => edit('Edit emphasis', d => edits.setEdge(d, props.id, { emphasis: v }))}
           />
         </Show>
+      </Section>
+      <Section title="Ends">
+        <div class="fields-2">
+          <SelectField
+            label="Tail"
+            value={tailOf(edge())}
+            options={MARKER_OPTIONS}
+            disabled={!edge().directed}
+            onChange={v => edit('Edit tail', d => edits.setEdge(d, props.id, { tail: v }))}
+          />
+          <SelectField
+            label="Head"
+            value={headOf(edge())}
+            options={MARKER_OPTIONS}
+            disabled={!edge().directed}
+            onChange={v => edit('Edit head', d => edits.setEdge(d, props.id, { head: v }))}
+          />
+        </div>
       </Section>
       <Section title="Ports">
         <div class="fields-2">
@@ -318,6 +346,8 @@ function ObjectInspector(props: { id: string }) {
   const object = () => findNode(doc, props.id) ?? findGroup(doc, props.id)!;
   const style = () => styleOf(doc, props.id);
   const shapes = () => (fileMode() ? SHAPES.filter(s => DSL_SHAPES.includes(s as never)) : SHAPES);
+  // A sequence places everything in lanes, so only a participant's size is the file's to set.
+  const lanes = () => !!doc.layout.sequence;
   return (
     <>
       <Heading title={container() ? 'Container' : 'Shape'} />
@@ -376,10 +406,29 @@ function ObjectInspector(props: { id: string }) {
           )}
         </Show>
       </Section>
-      <Section title="Position">
-        <GeometryFields id={props.id} />
-        <PinControl id={props.id} />
-      </Section>
+      <Show
+        when={!lanes()}
+        fallback={
+          <Show when={!container()}>
+            <Section title="Size">
+              <div class="fields-2">
+                <GeometryField id={props.id} label="Width" field="w" />
+                <GeometryField id={props.id} label="Height" field="h" />
+              </div>
+            </Section>
+          </Show>
+        }
+      >
+        <Section title="Position">
+          <div class="fields-2">
+            <GeometryField id={props.id} label="X" field="x" />
+            <GeometryField id={props.id} label="Y" field="y" />
+            <GeometryField id={props.id} label="Width" field="w" />
+            <GeometryField id={props.id} label="Height" field="h" />
+          </div>
+          <PinControl id={props.id} />
+        </Section>
+      </Show>
       <Show when={container()} fallback={<ShapeSections id={props.id} />}>
         <ContainerSections id={props.id} />
       </Show>
@@ -393,22 +442,15 @@ function ObjectInspector(props: { id: string }) {
   );
 }
 
-function GeometryFields(props: { id: string }) {
-  const r = () => geometry(props.id);
-  const field = (label: string, key: 'x' | 'y' | 'w' | 'h') => (
-    <NumberField
-      label={label}
-      value={Math.round(r()[key])}
-      onChange={v => edit('Edit ' + key, d => edits.setGeometry(d, props.id, key, v))}
-    />
-  );
+function GeometryField(props: { id: string; label: string; field: 'x' | 'y' | 'w' | 'h' }) {
   return (
-    <div class="fields-2">
-      {field('X', 'x')}
-      {field('Y', 'y')}
-      {field('Width', 'w')}
-      {field('Height', 'h')}
-    </div>
+    <NumberField
+      label={props.label}
+      value={Math.round(geometry(props.id)[props.field])}
+      onChange={v =>
+        edit('Edit ' + props.field, d => edits.setGeometry(d, props.id, props.field, v))
+      }
+    />
   );
 }
 
@@ -468,7 +510,9 @@ function ShapeSections(props: { id: string }) {
     <>
       {/* A file cannot store these yet. */}
       <Show when={!fileMode()}>
-        <IntentSection id={props.id} />
+        <Show when={!doc.layout.sequence}>
+          <IntentSection id={props.id} />
+        </Show>
         <details class="inspector-section">
           <summary>Label & icon</summary>
           <SelectField

@@ -128,7 +128,10 @@ draftably compare before.draft after.draft --svg > diff.svg
 
 Prints one file that holds two versions of a diagram, with `+`, `-` and `~`
 [change marks](#change-marks) on the lines that differ. `--write <file>` saves it, `--svg` draws it,
-and `--png <out.png>` saves an image at the `--scale` that `inspect` uses.
+and `--png <out.png>` saves an image at the `--scale` that `inspect` uses. Stderr prints the size of
+the change, then any `Changes with no old version to draw`, which both panels show as they are now.
+The file records the old shape, count and message order, so a Before panel draws them. An image
+with panels carries the same list beside the Before label.
 
 ## vary
 

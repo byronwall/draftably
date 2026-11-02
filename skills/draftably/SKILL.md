@@ -120,14 +120,14 @@ layout services row gap=56
 | `diagram "title" version=1`        | Optional, at most one. Exports and the viewer draw the title above the drawing; `width=` widens the frame                                                                                                                                                                                                                                                                                                                      |
 | `compare "before" "after"`         | Optional, at most one. Exports draw a marked file as two aligned panels with these labels                                                                                                                                                                                                                                                                                                                                      |
 | `subtitle "text"`                  | Optional, at most one. One line under the title in exports: the takeaway, not a second title                                                                                                                                                                                                                                                                                                                                   |
-| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`                                                                                                                                                                                                                                                                                                             |
+| `+node`, `-node`, `~node`, `.node` | Change marks (also on `group` and `edge`): added, removed, changed, unchanged context. `~` takes `was="old label"`; `~node` also takes `was-shape=` and `was-count=`                                                                                                                                                                                                                                                           |
 | `node id "label"`                  | `in=group`, `color=`, `shade=`, `shape=box\|pill\|circle\|diamond\|text\|marker`, `href=`, `count=N`, cells: `span=N`                                                                                                                                                                                                                                                                                                          |
 | `group id "label"`                 | `in=group` (groups nest), `color=`, `shade=`, `frame=box\|soft\|none`, `fold=never` (keep a tall group in one column)                                                                                                                                                                                                                                                                                                          |
 | `theme name`                       | Preset look (see below); optional, at most one                                                                                                                                                                                                                                                                                                                                                                                 |
 | `legend family "meaning"`          | `shade=`. One row of a color key drawn beside the diagram; one line per color you use                                                                                                                                                                                                                                                                                                                                          |
-| `note "text"`                      | A sentence that never moves layout. `near=id side=below\|above\|left\|right` places it beside an object; without `near` it sits under the subtitle. `width=` (280 default)                                                                                                                                                                                                                                                     |
+| `note "text"`                      | A sentence that never moves layout. `near=id side=below\|above\|left\|right` places it beside an object or sequence message; without `near` it sits under the subtitle. `width=` (280 default)                                                                                                                                                                                                                                 |
 | `theme-color family`               | `shade=50..950`, `fill=`, `stroke=`, `ink=`: change a built-in shade or define a new family                                                                                                                                                                                                                                                                                                                                    |
-| `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout                                                                                                                                                                                                                |
+| `edge id source -> target "label"` | Ends are nodes, or a boxed group (the line ends on its frame). Label optional. `kind=async` draws dashed; `from=`/`to=` `auto\|left\|right\|top\|bottom` pick sides; `constraint=false` leaves it out of layout; `head=`/`tail=` `arrow\|none\|triangle\|open-triangle\|diamond\|open-diamond\|circle\|cross` mark its ends                                                                                                    |
 | `layout scope flow\|row\|column`   | `gap=8..300`, `direction=auto\|right\|down`, `min-width=`, `min-height=`; flow: `fold=auto\|never`                                                                                                                                                                                                                                                                                                                             |
 | `layout group cells`               | The group's nodes touch, edge to edge, under a title band (see Cells). `direction=`, `columns=N` grid                                                                                                                                                                                                                                                                                                                          |
 | `layout scope engine=name`         | Layout engine for a scope's whole subtree (see below)                                                                                                                                                                                                                                                                                                                                                                          |
@@ -182,8 +182,11 @@ Good defaults:
   and the lines tangle. Draw independent flows as groups side by side instead.
 - An exchange between participants: `layout root sequence`. Nodes are participants across the
   top; each `edge` line is one message, in file order; `kind=async` for replies. A top-level
-  `group` makes a column band of its participants (client, server), and
-  `phase id "label" m1 m2 ...` draws a run of messages as a labelled row band (preview, apply).
+  `group` makes a column band of its participants (client, server); it needs a participant, and
+  a message ends on a participant, not a group. `order root` places bands and ungrouped
+  participants, and `order group` places a band's members. `phase id "label" m1 m2 ...` draws a
+  run of consecutive messages as a labelled row band (preview, apply). A phase can't skip a
+  message; include it or split the phase. Rows show order, not elapsed time.
   **Fits** the order of calls and replies in one exchange. **Doesn't fit** structure (what
   contains or depends on what) or more than about eight participants; use groups and a flow.
 - One object made of parts, or a table: `layout groupId cells` (see Cells). **Fits** a request
@@ -283,6 +286,12 @@ content area.
   may use it as adjacency. Omission or `directed=true` means the usual directed edge.
   `constraint=false` independently removes it from engine layout. For undirected relationship
   graphs, try `layout root engine=stress`.
+- Use `head=` (target end, default `arrow`) and `tail=` (source end, default `none`) only when an
+  end means something: `tail=arrow` for a two-way link, `tail=diamond head=none` for composition,
+  `tail=open-diamond head=none` for aggregation, `head=open-triangle` for inheritance. `circle` and
+  `cross` are the other marks. `head=none` hides the head but keeps a directed relation that ranks
+  layout. `check` rejects `head=` or `tail=` on a `directed=false` edge. Crow's feet and cardinality
+  don't exist; say them in the edge label.
 - A feedback edge (a refetch, a retry back to the start) pulls the section it points at below its
   source. Add `constraint=false` to draw it without letting it rank anything.
 - Use color to mean something, not for decoration:
@@ -300,11 +309,16 @@ content area.
     are drawn in stepped shades. Never give a member its container's family at a pale shade.
   - `check` reports `many-colors` and `color-matches-container`; fix both before handing back.
 - To show a change, write one file with both versions merged and mark only the lines that
-  differ: `+` added, `-` removed, `~` changed (`was="old label"`), `.` unchanged context. Never
+  differ: `+` added, `-` removed, `~` changed (`was="old label"`, `was-shape=circle`,
+  `was-count=2`, with `was-count=1` for one box), `.` unchanged context. Never
   write two near-identical diagrams for the reader to compare. Marked files draw in change colors
   only, so don't add colors or legend lines to show the change. With two plain versions on disk,
   `draftably compare old.draft new.draft --write diff.draft` writes the marked file and prints
-  the change's size (`3 added, 1 changed, 2 removed.`) on stderr. To mark a node that moved
+  the change's size (`3 added, 1 changed, 2 removed.`) on stderr, then any
+  `Changes with no old version to draw: …`, which both panels show as they are now; say so when
+  you hand the diagram back. `compare` writes the `was` words for you. In a sequence, `was-order`
+  lists the older message order (`was-order m1 m2 m3`), and it leaves out `+` messages. To mark a
+  node that moved
   container by hand, remove the old one as `-node <id>-was ... in=<old>` and add the new one. Add
   `compare "main" "PR 123"` when the reader needs each version whole; leave it out for one merged
   drawing. `direction=right` (rows align) or `direction=down` (columns align) fixes the
@@ -314,7 +328,9 @@ content area.
 - To define a term or add a sentence of context, write `note "…"` (under the subtitle) or
   `note "…" near=id side=below` (beside one object). Never fake one with `node … shape=text`:
   a node takes part in layout and pushes rows and ranks apart. `check` warns `note-overlap` when
-  an anchored note has no clear spot; try another side or leave out `near=`.
+  an anchored note has no clear spot; try another side or leave out `near=`. In a sequence,
+  `note "…" near=m1` sits level with that message in the right margin; `side=left` takes the left
+  margin. Rows are tight, so `side=above` and `side=below` often warn `note-overlap`.
 - Collapse many similar things into one node with `count=42` (drawn as a stack with a `×42` badge)
   instead of drawing each one. For "one per item" with no real number, use a symbol: `count=N`
   draws `×N` (also `count=many`), so no one asks where a made-up number came from.

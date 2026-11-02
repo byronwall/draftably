@@ -11,6 +11,7 @@ import type { Diagram, Point, Rect } from './types';
 export const ROUTE_INK = 4;
 
 export interface BoundedRoute {
+  id?: string;
   points: readonly Point[];
   label: { x: number; y: number; w: number; h: number } | null;
 }

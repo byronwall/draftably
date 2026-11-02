@@ -366,11 +366,21 @@ export function insertStep(
     },
     target,
   );
-  const to = edge.to;
+  const to = edge.to,
+    { head, tail: _tail, ...ends } = clone(edge);
   edge.to = id;
+  delete edge.head;
   doc.layout.edges[edge.id] = { fromSide: cfg.fromSide || 'auto', toSide: 'auto' };
   const second = uid('e');
-  doc.graph.edges.push({ ...clone(edge), id: second, from: id, to, label: '' });
+  // The tail stays at the source and the head stays at the target.
+  doc.graph.edges.push({
+    ...ends,
+    ...(head ? { head } : {}),
+    id: second,
+    from: id,
+    to,
+    label: '',
+  });
   doc.layout.edges[second] = { fromSide: 'auto', toSide: cfg.toSide || 'auto' };
   return id;
 }
@@ -652,10 +662,14 @@ export function setContainer(doc: Diagram, id: string, patch: Partial<ContainerL
 export function setEdge(
   doc: Diagram,
   id: string,
-  patch: Partial<Pick<DiagramEdge, 'directed' | 'dashed' | 'emphasis'>>,
+  patch: Partial<Pick<DiagramEdge, 'directed' | 'dashed' | 'emphasis' | 'head' | 'tail'>>,
 ) {
   const e = findEdge(doc, id);
-  if (e) Object.assign(e, patch);
+  if (!e) return;
+  Object.assign(e, patch);
+  // Only a directed edge has marks to write, and a default end stays unwritten.
+  if (!e.directed || e.head === 'arrow') delete e.head;
+  if (!e.directed || e.tail === 'none') delete e.tail;
 }
 
 export function setEdgeLayout(doc: Diagram, id: string, patch: Partial<EdgeLayout>) {

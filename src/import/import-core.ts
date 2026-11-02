@@ -1,4 +1,6 @@
 /** Build native source from the facts retained by an importer. */
+import type { EndMarker } from '../model/markers';
+
 export type Format = 'dot' | 'mermaid' | 'd2';
 export type Impact = 'syntax' | 'semantics' | 'appearance' | 'layout' | 'security' | 'limit';
 export interface Diagnostic {
@@ -25,6 +27,8 @@ export interface NativeEdge {
   to: string;
   label: string;
   directed: boolean;
+  head?: EndMarker;
+  tail?: EndMarker;
   dashed?: boolean;
   constraint?: false;
   fromSide?: 'left' | 'right' | 'top' | 'bottom';
@@ -41,12 +45,25 @@ export interface NativeColor {
   stroke: string;
   ink: string;
 }
+export interface NativePhase {
+  id: string;
+  label: string;
+  members: string[];
+}
+export interface NativeNote {
+  text: string;
+  near?: string;
+  side?: 'left' | 'right' | 'above' | 'below';
+}
 export interface NativePlan {
   title: string;
   objects: NativeObject[];
   edges: NativeEdge[];
   layouts: NativeLayout[];
   colors: NativeColor[];
+  /** Sequence diagrams only. */
+  phases?: NativePhase[];
+  notes?: NativeNote[];
 }
 export interface IdMapping {
   kind: string;
@@ -207,6 +224,8 @@ export function finish(
   for (const e of plan.edges) {
     let s = 'edge ' + e.id + ' ' + e.from + ' -> ' + e.to + ' ' + quote(e.label);
     if (!e.directed) s += ' directed=false';
+    if (e.head && e.head !== 'arrow') s += ' head=' + e.head;
+    if (e.tail && e.tail !== 'none') s += ' tail=' + e.tail;
     if (e.dashed) s += ' kind=async';
     if (e.constraint === false) s += ' constraint=false';
     if (e.fromSide) s += ' from=' + e.fromSide;
@@ -217,6 +236,14 @@ export function finish(
     lines.push(
       'layout ' + l.scope + ' ' + l.kind + (l.direction ? ' direction=' + l.direction : ''),
     );
+  for (const p of plan.phases ?? [])
+    lines.push(['phase', p.id, quote(p.label), ...p.members].join(' '));
+  for (const n of plan.notes ?? []) {
+    let s = 'note ' + quote(n.text);
+    if (n.near) s += ' near=' + n.near;
+    if (n.side) s += ' side=' + n.side;
+    lines.push(s);
+  }
   const nativeSource = lines.join('\n') + '\n';
   if (nativeSource.length > LIMITS.nativeSourceChars)
     error(
