@@ -11,7 +11,6 @@ import { INTENT_LABELS, intentPlacements } from '../../model/edits';
 import type { IntentRole, LayoutAlgorithmId } from '../../model/types';
 import {
   actualSize,
-  cancelGeneration,
   comparison,
   emphasizeLayer,
   fitAll,
@@ -20,10 +19,10 @@ import {
   setAllLabels,
   setCameraMode,
   setComparisonIntent,
-  setComparisonMode,
   setIntentPlacement,
   setLayerOpacity,
   setLayerVisible,
+  shownCells,
   updateConfig,
   applyCandidate,
   type CameraMode,
@@ -48,25 +47,14 @@ function savedAxes<T>(params: Record<string, T>) {
 export function ComparisonSidebar() {
   const config = () => comparison.config!;
   const routing = () => config().mode === 'routing';
+  const anchorTitle = () =>
+    [
+      ...(comparison.baseline?.graph.nodes ?? []),
+      ...(comparison.baseline?.graph.groups ?? []),
+    ].find(n => n.id === comparison.focusId)?.title ?? 'the first shape';
   return (
     <aside class="comparison-sidebar" aria-label="Comparison settings">
       <div class="panel-scroll stack">
-        <div class="segmented full" role="tablist" aria-label="Comparison type">
-          <button
-            type="button"
-            aria-pressed={!routing()}
-            onClick={() => setComparisonMode('layout')}
-          >
-            Layouts
-          </button>
-          <button
-            type="button"
-            aria-pressed={routing()}
-            onClick={() => setComparisonMode('routing')}
-          >
-            Ports & routes
-          </button>
-        </div>
         <Show when={comparison.presentation === 'overlay'}>
           <LayerControls />
         </Show>
@@ -98,10 +86,8 @@ export function ComparisonSidebar() {
           </div>
           <p class="hint">
             {comparison.presentation === 'overlay'
-              ? 'All layers share one scale. Clicking aligns that object by translation only; candidate geometry is unchanged.'
-              : comparison.cameraMode === 'focus'
-                ? 'Click a shape to center the same object in every panel. Drag and zoom stay synchronized.'
-                : 'Drag / scroll to pan. Pinch to zoom. Click any shape to set the overlay anchor.'}
+              ? `Layers align on ${anchorTitle()}. Click a shape to align on it instead.`
+              : 'Drag or scroll to pan. Pinch to zoom.'}
           </p>
         </section>
         <details class="sidebar-section">
@@ -161,10 +147,15 @@ function Settings() {
         when={!routing()}
         fallback={
           <>
-            <p class="hint">
-              <strong>Same nodes, different paths.</strong> Zoom in or switch to Overlay to compare
-              individual connections.
-            </p>
+            <SelectField
+              label="Compare"
+              value={config().kind}
+              options={[
+                ['routes', 'Suggested alternatives'],
+                ['parameters', 'Parameter grid'],
+              ]}
+              onChange={kind => ensureAxes({ kind })}
+            />
             <Show when={!fileMode()}>
               <Checkbox
                 label="Release fixed port sides"
@@ -205,7 +196,7 @@ function Settings() {
       </Show>
 
       <Show
-        when={!routing() && config().kind === 'algorithms'}
+        when={config().kind !== 'parameters'}
         fallback={
           <div class="fields-2">
             <SelectField
@@ -236,29 +227,31 @@ function Settings() {
           </div>
         }
       >
-        <details open={!comparison.cells.length}>
-          <summary>Approaches · {config().algorithms.length} selected</summary>
-          <div class="checkbox-grid" role="group" aria-label="Approaches to compare">
-            <For each={LayoutLab.algorithms}>
-              {a => (
-                <label class="checkbox" {...tip(a.name, undefined, a.short)}>
-                  <input
-                    type="checkbox"
-                    checked={config().algorithms.includes(a.id)}
-                    onChange={e =>
-                      updateConfig({
-                        algorithms: e.currentTarget.checked
-                          ? [...config().algorithms, a.id]
-                          : config().algorithms.filter(id => id !== a.id),
-                      })
-                    }
-                  />
-                  <span>{a.name}</span>
-                </label>
-              )}
-            </For>
-          </div>
-        </details>
+        <Show when={!routing()}>
+          <details>
+            <summary>Approaches · {config().algorithms.length} selected</summary>
+            <div class="checkbox-grid" role="group" aria-label="Approaches to compare">
+              <For each={LayoutLab.algorithms}>
+                {a => (
+                  <label class="checkbox" {...tip(a.name, undefined, a.short)}>
+                    <input
+                      type="checkbox"
+                      checked={config().algorithms.includes(a.id)}
+                      onChange={e =>
+                        updateConfig({
+                          algorithms: e.currentTarget.checked
+                            ? [...config().algorithms, a.id]
+                            : config().algorithms.filter(id => id !== a.id),
+                        })
+                      }
+                    />
+                    <span>{a.name}</span>
+                  </label>
+                )}
+              </For>
+            </div>
+          </details>
+        </Show>
       </Show>
 
       <Show when={!routing()}>
@@ -293,13 +286,8 @@ function Settings() {
           disabled={comparison.busy}
           onClick={() => generate()}
         >
-          {comparison.cells.length ? 'Regenerate' : 'Generate'} {routing() ? 'routes' : 'layouts'}
+          Regenerate {routing() ? 'routes' : 'layouts'}
         </button>
-        <Show when={comparison.busy}>
-          <button type="button" class="button" onClick={cancelGeneration}>
-            Stop
-          </button>
-        </Show>
       </div>
     </section>
   );
@@ -367,7 +355,7 @@ function LayerControls() {
       </p>
       <Index each={comparison.cells}>
         {(c, i) => (
-          <Show when={c().status === 'ready'}>
+          <Show when={c().status === 'ready' && shownCells().includes(i)}>
             <div
               class="layer-row"
               classList={{ active: i === comparison.overlay.active }}
