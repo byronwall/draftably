@@ -1,0 +1,28 @@
+diagram "Support ticket triage" version=1
+
+# A flat decision flow: no containers, decision diamonds, and labeled branches.
+node intake "Ticket received" shape=pill color=blue
+node classify "Auto-classify topic"
+node outage "Known outage?" shape=diamond color=amber
+node link "Link to incident" color=rose
+node billing "Billing question?" shape=diamond color=amber
+node finance "Route to billing team"
+node vip "Enterprise plan?" shape=diamond color=amber
+node priority "Priority queue" color=violet
+node general "General queue"
+node resolved "Resolved" shape=pill color=mint
+
+edge e1 intake -> classify
+edge e2 classify -> outage
+edge e3 outage -> link "yes"
+edge e4 outage -> billing "no"
+edge e5 billing -> finance "yes"
+edge e6 billing -> vip "no"
+edge e7 vip -> priority "yes"
+edge e8 vip -> general "no"
+edge e9 link -> resolved kind=async
+edge e10 finance -> resolved
+edge e11 priority -> resolved
+edge e12 general -> resolved
+
+layout root flow gap=40 direction=right

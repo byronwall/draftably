@@ -1,0 +1,646 @@
+{
+  "status": "DEVELOPMENT PROPOSAL ONLY; freeze before reading heldout outcomes",
+  "selection_pool": "Exactly the nine preselected layout\u00d7routing combinations; default-routing references benchmark them but cannot be substituted into this selected set.",
+  "selection_rule": "Exhaustive equal-budget subsets; maximize hard-valid case union, then acceptable case\u00d7profile coverage, then minimize equal-family mean regret on valid covered jobs, then lexical IDs. Frozen scores and practical bands use the full 12-combination comparison universe (3 default-routing references + 9 joint alternatives).",
+  "development_cases": [
+    "architecture-03",
+    "authored-03",
+    "containers-03",
+    "cycles-03",
+    "dags-03",
+    "disconnected-03",
+    "hierarchies-03",
+    "networks-03",
+    "pipelines-03",
+    "presentation-03",
+    "recipes-02",
+    "routing-03"
+  ],
+  "profiles": [
+    "readable",
+    "compact",
+    "traceable",
+    "stable",
+    "specialist"
+  ],
+  "fixed_global_choice": {
+    "joint_id": "engine:boundary-align:RIGHT|routing:clearance-4",
+    "layout_method": "engine:boundary-align:RIGHT",
+    "routing_policy": "clearance-4",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {}
+    },
+    "routing": {
+      "clearance": 4,
+      "portGap": 16,
+      "edgeGap": 16,
+      "bendPenalty": 32,
+      "crossingPenalty": 360,
+      "sharedPenalty": 8,
+      "parallelPenalty": 18,
+      "portStability": 20,
+      "fanoutPenalty": 50,
+      "passes": 3,
+      "cornerRadius": 6,
+      "standoff": 20
+    }
+  },
+  "fixed_global_stats": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-4"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 21,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 6.0847940797827516,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 3,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 4,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 4,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 5,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 5,
+        "feasible": 11
+      }
+    }
+  },
+  "fixed_global_against_current_raw": {
+    "paired_jobs": 12,
+    "comparable_geometry": 12,
+    "exact_geometry_changed": 11,
+    "geometry_changed_over_1px": 11,
+    "hard_valid_candidates": 11,
+    "hard_valid_baselines": 11,
+    "valid_gained": 0,
+    "valid_lost": 0,
+    "both_valid_pairs": 11,
+    "mean_balanced_delta_both_valid": -8.683910727272727,
+    "mean_traceable_delta_both_valid": -15.86542581818182,
+    "mean_route_length_delta_both_valid": -2447.382727272727,
+    "mean_area_delta_both_valid": -88189.22727272728,
+    "gain_witnesses": [],
+    "loss_witnesses": [],
+    "best_soft_witness": {
+      "stratum": "source-layout-then-routing",
+      "control": "joint-global-choice",
+      "level": "engine:boundary-align:RIGHT|routing:clearance-4",
+      "case_id": "disconnected-03",
+      "family": "disconnected",
+      "trial_id": "D-joint-disconnected-03-layout3-route2",
+      "baseline_id": "C-development-disconnected-03-current",
+      "status": "ok",
+      "baseline_status": "ok",
+      "hard_valid": true,
+      "baseline_hard_valid": true,
+      "valid_gained": false,
+      "valid_lost": false,
+      "exact_geometry_changed": true,
+      "geometry_changed_over_1px": true,
+      "rounded_bin_hash_changed": true,
+      "rendered_path_changed": true,
+      "changed_port_pair_count": 5,
+      "max_node_box_coordinate_delta": 328,
+      "routing_ms": 119.2380850000045,
+      "baseline_routing_ms": 127.95469899999443,
+      "delta_hardDefects": 0,
+      "delta_layoutHardDefects": 0,
+      "delta_routingHardDefects": 0,
+      "delta_requiredIntentFailures": 0,
+      "delta_blockedRoutes": 0,
+      "delta_overlaps": 0,
+      "delta_throughNodes": 0,
+      "delta_authoredSideViolations": 0,
+      "delta_pinScopeViolations": 0,
+      "delta_crossings": 0,
+      "delta_sharedLength": 0,
+      "delta_laneDeficit": 1014.72,
+      "delta_bends": -8,
+      "delta_tinyJogs": 0,
+      "delta_hooks": -3,
+      "delta_backEdges": 0,
+      "delta_routeLength": -1734.9999999999998,
+      "delta_detourMean": -0.0016419999999999213,
+      "delta_labelDefects": 0,
+      "delta_titleTextHits": 0,
+      "delta_titleBandHits": 0,
+      "delta_area": -102792,
+      "delta_aspectError": -0.149478,
+      "delta_diPer10": -35,
+      "delta_score_balanced": -35,
+      "delta_score_traceable": -55.0,
+      "delta_score_direct": -57.5,
+      "candidate_edit_changedSides": null,
+      "baseline_edit_changedSides": null,
+      "delta_edit_changedSides": null,
+      "candidate_edit_changedSideRate": null,
+      "baseline_edit_changedSideRate": null,
+      "delta_edit_changedSideRate": null,
+      "candidate_edit_changedRoutes": null,
+      "baseline_edit_changedRoutes": null,
+      "delta_edit_changedRoutes": null,
+      "candidate_edit_changedRouteRate": null,
+      "baseline_edit_changedRouteRate": null,
+      "delta_edit_changedRouteRate": null,
+      "candidate_edit_meanDisplacement": null,
+      "baseline_edit_meanDisplacement": null,
+      "delta_edit_meanDisplacement": null,
+      "candidate_edit_translationAdjustedMean": null,
+      "baseline_edit_translationAdjustedMean": null,
+      "delta_edit_translationAdjustedMean": null,
+      "candidate_edit_orderFlipRate": null,
+      "baseline_edit_orderFlipRate": null,
+      "delta_edit_orderFlipRate": null
+    },
+    "worst_soft_witness": {
+      "stratum": "source-layout-then-routing",
+      "control": "joint-global-choice",
+      "level": "engine:boundary-align:RIGHT|routing:clearance-4",
+      "case_id": "architecture-03",
+      "family": "architecture",
+      "trial_id": "D-joint-architecture-03-layout3-route2",
+      "baseline_id": "C-development-architecture-03-current",
+      "status": "ok",
+      "baseline_status": "ok",
+      "hard_valid": true,
+      "baseline_hard_valid": true,
+      "valid_gained": false,
+      "valid_lost": false,
+      "exact_geometry_changed": true,
+      "geometry_changed_over_1px": true,
+      "rounded_bin_hash_changed": true,
+      "rendered_path_changed": true,
+      "changed_port_pair_count": 7,
+      "max_node_box_coordinate_delta": 751,
+      "routing_ms": 1045.5823679999994,
+      "baseline_routing_ms": 266.93000100000063,
+      "delta_hardDefects": 0,
+      "delta_layoutHardDefects": 0,
+      "delta_routingHardDefects": 0,
+      "delta_requiredIntentFailures": 0,
+      "delta_blockedRoutes": 0,
+      "delta_overlaps": 0,
+      "delta_throughNodes": 0,
+      "delta_authoredSideViolations": 0,
+      "delta_pinScopeViolations": 0,
+      "delta_crossings": 2,
+      "delta_sharedLength": 0,
+      "delta_laneDeficit": 0,
+      "delta_bends": 13,
+      "delta_tinyJogs": 0,
+      "delta_hooks": 0,
+      "delta_backEdges": 3,
+      "delta_routeLength": 2082,
+      "delta_detourMean": -0.015459999999999807,
+      "delta_labelDefects": 0,
+      "delta_titleTextHits": 1,
+      "delta_titleBandHits": 1,
+      "delta_area": 226968,
+      "delta_aspectError": 0.8062100000000001,
+      "delta_diPer10": 5.909091,
+      "delta_score_balanced": 5.909091,
+      "delta_score_traceable": 8.181818,
+      "delta_score_direct": 5.4545449999999995,
+      "candidate_edit_changedSides": null,
+      "baseline_edit_changedSides": null,
+      "delta_edit_changedSides": null,
+      "candidate_edit_changedSideRate": null,
+      "baseline_edit_changedSideRate": null,
+      "delta_edit_changedSideRate": null,
+      "candidate_edit_changedRoutes": null,
+      "baseline_edit_changedRoutes": null,
+      "delta_edit_changedRoutes": null,
+      "candidate_edit_changedRouteRate": null,
+      "baseline_edit_changedRouteRate": null,
+      "delta_edit_changedRouteRate": null,
+      "candidate_edit_meanDisplacement": null,
+      "baseline_edit_meanDisplacement": null,
+      "delta_edit_meanDisplacement": null,
+      "candidate_edit_translationAdjustedMean": null,
+      "baseline_edit_translationAdjustedMean": null,
+      "delta_edit_translationAdjustedMean": null,
+      "candidate_edit_orderFlipRate": null,
+      "baseline_edit_orderFlipRate": null,
+      "delta_edit_orderFlipRate": null
+    }
+  },
+  "three_combination_portfolio": [
+    {
+      "joint_id": "engine:boundary-align:RIGHT|routing:clearance-4",
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "clearance-4",
+      "layout": {
+        "engine": "boundary-align",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "engine:force:RIGHT|routing:clearance-22",
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "clearance-22",
+      "layout": {
+        "engine": "force",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 22,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "clearance-4",
+      "layout": {
+        "engine": "compound-flow",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {
+          "rank-gap": 24,
+          "node-gap": 12
+        }
+      },
+      "routing": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    }
+  ],
+  "three_combination_portfolio_stats": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 36,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 1.038350308430693,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 7,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 9,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 6,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 7,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 7,
+        "feasible": 11
+      }
+    }
+  },
+  "nine_combination_pool": [
+    {
+      "joint_id": "engine:boundary-align:RIGHT|routing:clearance-22",
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "clearance-22",
+      "layout": {
+        "engine": "boundary-align",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 22,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "engine:boundary-align:RIGHT|routing:clearance-4",
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "clearance-4",
+      "layout": {
+        "engine": "boundary-align",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "engine:boundary-align:RIGHT|routing:portGap-28",
+      "layout_method": "engine:boundary-align:RIGHT",
+      "routing_policy": "portGap-28",
+      "layout": {
+        "engine": "boundary-align",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 10,
+        "portGap": 28,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "engine:force:RIGHT|routing:clearance-22",
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "clearance-22",
+      "layout": {
+        "engine": "force",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 22,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "engine:force:RIGHT|routing:clearance-4",
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "clearance-4",
+      "layout": {
+        "engine": "force",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "engine:force:RIGHT|routing:portGap-28",
+      "layout_method": "engine:force:RIGHT",
+      "routing_policy": "portGap-28",
+      "layout": {
+        "engine": "force",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      },
+      "routing": {
+        "clearance": 10,
+        "portGap": 28,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "clearance-22",
+      "layout": {
+        "engine": "compound-flow",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {
+          "rank-gap": 24,
+          "node-gap": 12
+        }
+      },
+      "routing": {
+        "clearance": 22,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "clearance-4",
+      "layout": {
+        "engine": "compound-flow",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {
+          "rank-gap": 24,
+          "node-gap": 12
+        }
+      },
+      "routing": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "joint_id": "tuned:compound-flow:RIGHT:p1|routing:portGap-28",
+      "layout_method": "tuned:compound-flow:RIGHT:p1",
+      "routing_policy": "portGap-28",
+      "layout": {
+        "engine": "compound-flow",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {
+          "rank-gap": 24,
+          "node-gap": 12
+        }
+      },
+      "routing": {
+        "clearance": 10,
+        "portGap": 28,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    }
+  ],
+  "nine_combination_oracle_stats": {
+    "methods": [
+      "engine:boundary-align:RIGHT|routing:clearance-22",
+      "engine:boundary-align:RIGHT|routing:clearance-4",
+      "engine:boundary-align:RIGHT|routing:portGap-28",
+      "engine:force:RIGHT|routing:clearance-22",
+      "engine:force:RIGHT|routing:clearance-4",
+      "engine:force:RIGHT|routing:portGap-28",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-22",
+      "tuned:compound-flow:RIGHT:p1|routing:clearance-4",
+      "tuned:compound-flow:RIGHT:p1|routing:portGap-28"
+    ],
+    "always_available": [],
+    "hard_valid_case_union": 11,
+    "cases": 12,
+    "acceptable_profile_jobs": 54,
+    "profile_jobs": 60,
+    "feasible_profile_jobs": 55,
+    "equal_family_mean_regret_on_covered_valid_jobs": 0.02657519762586773,
+    "score_regret_available_jobs": 55,
+    "per_profile": {
+      "readable": {
+        "acceptable": 10,
+        "feasible": 11
+      },
+      "compact": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "traceable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "stable": {
+        "acceptable": 11,
+        "feasible": 11
+      },
+      "specialist": {
+        "acceptable": 11,
+        "feasible": 11
+      }
+    }
+  },
+  "deployment_distinction": "The fixed global choice can be deployed without an oracle. The three- and nine-combination results are per-job choice upper bounds for Compare, not automatic selection. No new input-feature router selector is fitted here.",
+  "guard": "Report raw direct hard-valid losses against current; any hard-validity fallback must be separately labeled and its cost included. No soft-quality fallback or heldout retuning is authorized by this proposal.",
+  "compiler_coupling_limit": "Routing options are applied after actual source compilation. This evaluates source-produced positions plus production routing, not changing compiler spacing with router settings.",
+  "source_data_sha256": "9e62c6b7dd885c80ac1ddde2d7ff7ea43eb6b4b1360c1e97ad56ce05c19d6f91",
+  "routing_proposal_sha256": "034acffd95dc747fe0c4d0acf0137a7980b7fd3dfdb0dbe6e641e97b0ba24f71"
+}

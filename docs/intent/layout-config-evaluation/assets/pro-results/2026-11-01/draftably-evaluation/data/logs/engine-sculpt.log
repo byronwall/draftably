@@ -1,0 +1,55 @@
+[sculpt geometry] PASS Feather is one at the center and exactly zero at and beyond the radius
+[sculpt geometry] PASS Smooth falloff is bounded and monotonically decreasing
+[sculpt geometry] PASS Soft edge remains continuous at the core and outer rim
+[sculpt geometry] PASS Radius hit testing uses distance to the rectangle, not only its center
+[sculpt geometry] PASS compound-flow: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS compound-flow: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS boundary-align: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS boundary-align: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS compound-spring: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS compound-spring: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS tidy: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS tidy: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS stress: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS stress: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS force: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS force: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS flow: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS flow: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS layered: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS layered: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS tree: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS tree: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS grid: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS grid: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS separate: checkpoints begin at exact authored geometry and end at the actual solver output
+[sculpt geometry] PASS separate: finite checkpoint coordinates with bounded history memory
+[sculpt geometry] PASS Journey generation does not mutate source document
+[sculpt geometry] PASS Same source and settings produce the same recorded geometry
+[sculpt geometry] PASS Lookahead chooses a future checkpoint without moving its input
+[sculpt geometry] PASS Local holds protect the node through every ancestor move and solver checkpoint
+[sculpt geometry] PASS Temporary holds are not converted to exported pin metadata
+[sculpt geometry] PASS Invocation-only constraints stay out of persistent settings
+[sculpt geometry] PASS Actual pins survive the complete recorded path
+[sculpt geometry] PASS tidy: source immutable and graph/settings/frame sizes unchanged
+[sculpt geometry] PASS tidy: outside the brush remains bit-identical; displacement stays under the weighted cap
+[sculpt geometry] PASS tidy: no new or worsened rectangle collision
+[sculpt geometry] PASS flow: source immutable and graph/settings/frame sizes unchanged
+[sculpt geometry] PASS flow: outside the brush remains bit-identical; displacement stays under the weighted cap
+[sculpt geometry] PASS flow: no new or worsened rectangle collision
+[sculpt geometry] PASS space: source immutable and graph/settings/frame sizes unchanged
+[sculpt geometry] PASS space: outside the brush remains bit-identical; displacement stays under the weighted cap
+[sculpt geometry] PASS space: no new or worsened rectangle collision
+[sculpt geometry] PASS restore: source immutable and graph/settings/frame sizes unchanged
+[sculpt geometry] PASS restore: outside the brush remains bit-identical; displacement stays under the weighted cap
+[sculpt geometry] PASS restore: no new or worsened rectangle collision
+[sculpt geometry] PASS Brush respects explicit pins
+[sculpt geometry] PASS Brush respects session local holds
+[sculpt geometry] PASS Empty brush is a true no-op
+[sculpt geometry] PASS Local restore approaches the chosen past coordinate
+[sculpt geometry] PASS Missing restore IDs never move or resurrect nodes
+[sculpt geometry] PASS Brush edits children without moving or resizing any container
+[sculpt geometry] PASS A pinned container shields its descendants from brush effects
+[sculpt geometry] PASS 80 repeated dabs preserve graph and container identities
+[sculpt geometry] PASS 80 repeated dabs do not introduce or worsen collisions
+[sculpt geometry] COMPLETE 55

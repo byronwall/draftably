@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Blinded Draftably visual judgment",
+  "type": "object",
+  "required": ["id", "verdict", "reason", "severity", "confidence", "defects", "inspectedPng", "pngSha256", "metricAgreement", "engineOrSettingsIdentity"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^P[0-9]{3}$"},
+    "family": {"type": "string"},
+    "split": {"type": "string", "enum": ["development", "development-supplement", "heldout"]},
+    "verdict": {"type": "string", "enum": ["A-better", "same", "B-better"]},
+    "reason": {"type": "string", "minLength": 20},
+    "severity": {"type": "integer", "minimum": 0, "maximum": 3},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "defects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["side", "severity", "cause", "description"],
+        "properties": {
+          "side": {"type": "string", "enum": ["A", "B", "both"]},
+          "severity": {"type": "integer", "minimum": 1, "maximum": 3},
+          "cause": {"type": "string"},
+          "description": {"type": "string", "minLength": 10}
+        }
+      }
+    },
+    "appearanceNote": {"type": "string"},
+    "inspectedPng": {"type": "string"},
+    "pngSha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "inspectedCrops": {"type": "array", "items": {"type": "object", "required": ["path", "sha256"], "properties": {"path": {"type": "string"}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}}}},
+    "renderPath": {"type": "string"},
+    "metricAgreement": {"const": "not assessed while blinded"},
+    "engineOrSettingsIdentity": {"const": "not read"}
+  }
+}

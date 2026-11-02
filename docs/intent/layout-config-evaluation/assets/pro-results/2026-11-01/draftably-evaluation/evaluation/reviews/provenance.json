@@ -1,0 +1,102 @@
+{
+  "schema": "draftably-independent-review-recovery-1.0",
+  "recovered_at": "2026-11-02T00:50:38.886170+00:00",
+  "recovery_reason": "Final handoff requires replayable independent analyses without hidden notebook state. Exact snippets remained available in the tool-call history.",
+  "analysis_checks_rerun_during_recovery": false,
+  "product_geometry_calls_during_recovery": 0,
+  "refitting_during_recovery": false,
+  "frozen_code_modified": false,
+  "original_environment": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "node": "v24.22.1"
+  },
+  "recovered_executed_bodies": [
+    {
+      "file": "evaluation/reviews/executed_heldout_edit_integrity.py",
+      "sha256": "f70bc77f5107ac9da8661638d1deedc1f3efc170e696e7912e7caf068ce36d78",
+      "origin": "Python body copied from a previously executed tool-call heredoc in the visible conversation history; shell delimiters removed; no formula or result changes",
+      "original_output_chunk_id": "0da04f",
+      "original_process_session_id": null,
+      "maps_to": "data/analysis/heldout-edit-review.json",
+      "original_observed_results": {
+        "file_hash_checks": 16,
+        "distinct_geometry_signatures": 398,
+        "mismatches": 0
+      },
+      "recovery_rerun": false
+    },
+    {
+      "file": "evaluation/reviews/executed_heldout_edit_arithmetic.py",
+      "sha256": "a1af6dc6ea92e95ad4a89cfaf9c5b04c0d9fabaa33258949d5ce2fd8795a1bf9",
+      "origin": "Python body copied from a previously executed tool-call heredoc in the visible conversation history; shell delimiters removed; no formula or result changes",
+      "original_output_chunk_id": "f50f49",
+      "original_process_session_id": 82398,
+      "maps_to": "data/analysis/heldout-edit-review.json",
+      "original_observed_results": {
+        "paired_summary_fields": 744,
+        "full_fields": 372,
+        "applicable_fields": 372,
+        "discrepancies": 0
+      },
+      "recovery_rerun": false
+    },
+    {
+      "file": "evaluation/reviews/executed_preoutcome_routing_validation.py",
+      "sha256": "26fd164a4a57e39e5548803bed70a090221b4566420be3c798c2ba1a1e626bc0",
+      "origin": "Python body copied from a previously executed tool-call heredoc in the visible conversation history; shell delimiters removed; no formula or result changes",
+      "original_output_chunk_id": "ee7b07",
+      "original_process_session_id": null,
+      "maps_to": "data/analysis/pre-outcome-routing-review.json",
+      "original_observed_results": {
+        "assertions_passed": 13,
+        "planned_references": 288,
+        "outcome_jsonl_reads": 0
+      },
+      "recovery_rerun": false
+    },
+    {
+      "file": "evaluation/reviews/executed_heldout_routing_reconciliation.py",
+      "sha256": "12b7d2cbc6c6fe8bb89805c0c786467d49d0238c0f74838c584615cb7c6e8eed",
+      "origin": "Python body copied from a previously executed tool-call heredoc in the visible conversation history; shell delimiters removed; no formula or result changes",
+      "original_output_chunk_id": "1101a9",
+      "original_process_session_id": 1308,
+      "maps_to": "data/analysis/heldout-routing-review.json",
+      "original_observed_results": {
+        "policy_job_records": 2112,
+        "main_summary_rows": 330,
+        "direct_pair_summaries": 39,
+        "representative_bootstrap_fields": 96,
+        "geometry_signatures": 318,
+        "nonrouting_document_comparisons": 243,
+        "discrepancies": 0
+      },
+      "recovery_rerun": false
+    },
+    {
+      "file": "evaluation/reviews/executed_routing_decision_followup.py",
+      "sha256": "40fdb1501d9e05a0562095b58d3f06f40c92f432076d67caf0dc33bc103af5c3",
+      "origin": "Python body copied from a previously executed tool-call heredoc in the visible conversation history; shell delimiters removed; no formula or result changes",
+      "original_output_chunk_id": "2fa59a",
+      "original_process_session_id": null,
+      "maps_to": "data/analysis/heldout-routing-review.json",
+      "original_observed_results": {
+        "decision_table_rows": 11,
+        "discrepancies": 0
+      },
+      "recovery_rerun": false
+    }
+  ],
+  "portability_launcher": {
+    "file": "evaluation/reviews/replay.py",
+    "sha256": "491833e557bd4145328e40067f65385dbcbc69e17c8c9e316e1a904f5faee47a",
+    "status": "New packaging utility; not used for the original checks and not executed to repeat them during recovery.",
+    "change_to_recovered_code_at_replay": "Substitutes only the original root=pathlib.Path(...) literal with the detected bundle root. Arithmetic remains the recovered executed body.",
+    "syntax_only_validation_passed": true
+  },
+  "readme": {
+    "file": "evaluation/reviews/README.md",
+    "sha256": "7bafc467eadf3b510f6b0177d0f34a726ebdcb8369f7c055372bab809a5b585d"
+  },
+  "coverage_caveats": "See README.md for descriptive source-inspection conclusions, original derivation inputs, representative rather than exhaustive uncertainty checks, and historical metadata in the verbatim follow-up."
+}

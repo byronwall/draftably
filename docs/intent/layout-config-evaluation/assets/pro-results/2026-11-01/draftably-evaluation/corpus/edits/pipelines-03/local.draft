@@ -1,0 +1,19 @@
+diagram "Pipelines evaluation 03" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Phase 1"
+node n1 "Phase 2"
+node n2 "Phase 3"
+node n3 "Phase 4"
+node n4 "Phase 5"
+node n5 "Phase 6"
+edge e0 n0 -> n1 "next"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4 "next"
+edge e4 n4 -> n5
+
+layout root flow direction=right gap=48
+
+
+nudge n1 dx=0 dy=56

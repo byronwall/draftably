@@ -1,0 +1,33 @@
+{
+  "version": "edit-analysis-1.0",
+  "createdAt": "2026-11-01T23:31:09.350240+00:00",
+  "preOutcomeStatement": "Written before the edit-analysis author inspected E outcomes; formulas follow the earlier frozen evaluation protocol and parent-approved clarification.",
+  "canonicalTrial": "first terminal record; later accidental attempts never promote results",
+  "estimands": {
+    "cold": "same guarded policy before and after edit",
+    "warm": "same current-source drawing, same prior sides, manual/pin/scope constraints for all candidate actions"
+  },
+  "guard": {
+    "policies": [
+      "best-single",
+      "feature-selector"
+    ],
+    "trigger": "raw candidate hard-invalid or failed/timed_out, and current edited source output hard-valid",
+    "softThreshold": null,
+    "warmGuard": "not evaluated unless matching warm constraint certification is explicitly supplied",
+    "metricsReference": "Recompute fallback movement against the candidate policy pre-edit reference.",
+    "runtime": "sum raw operation cost plus measured current-source fallback operation cost; label derived serial estimate, not a measured guard UI interaction"
+  },
+  "stableScore": "balanced DI per10 + translationAdjustedMean/24 +5*changedSideRate; requires available movement/history and valid result",
+  "requestedGlobalReflow": "stable score =balanced DI per10; omit BOTH displacement and side-churn penalties but retain every raw component",
+  "negativeControl": "color_control kept separate from ordinary edit aggregates; exact geometry,1px comparator, node-only and route/path changes reported; missing reference route history stays unavailable",
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 20261101,
+    "unit": "base diagram; retain its complete five-edit bundle",
+    "interval": "2.5th and97.5th percentile of paired base means",
+    "noHumanSignificanceClaim": true
+  },
+  "denominators": "Failures stay in hard validity and runtime denominators. Soft/movement paired comparisons show available and jointly-valid counts. No pooling warm and cold references.",
+  "heldoutGuard": "Default development-only. Heldout requires explicit --split heldout --allow-heldout-after-freeze and existing data/policy-freeze.json."
+}

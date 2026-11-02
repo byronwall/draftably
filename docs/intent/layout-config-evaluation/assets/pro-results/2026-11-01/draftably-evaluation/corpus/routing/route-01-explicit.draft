@@ -1,0 +1,18 @@
+diagram "Tight stacked neighbours" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node c "c"
+node d "d"
+edge e0 a -> b from=bottom to=top
+edge e1 c -> d
+layout root flow direction=auto fold=never
+size a width=160 height=56
+pin a x=0 y=0
+size b width=160 height=56
+pin b x=0 y=76
+size c width=160 height=56
+pin c x=360 y=0
+size d width=160 height=56
+pin d x=360 y=200

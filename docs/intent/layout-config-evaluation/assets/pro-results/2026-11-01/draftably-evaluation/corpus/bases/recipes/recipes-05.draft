@@ -1,0 +1,30 @@
+diagram "Recipes evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group g0 "Participant band 0"
+group g1 "Participant band 1"
+group g2 "Participant band 2"
+node n0 "Actor 0" in=g0
+node n1 "Actor 1" in=g0
+node n2 "Actor 2" in=g0
+node n3 "Actor 3" in=g1
+node n4 "Actor 4" in=g1
+node n5 "Actor 5" in=g1
+node n6 "Actor 6" in=g2
+node n7 "Actor 7" in=g2
+node n8 "Actor 8" in=g2
+edge e0 n0 -> n3 "request"
+edge e1 n3 -> n6 "read"
+edge e2 n6 -> n7 "lookup"
+edge e3 n7 -> n6 "found"
+edge e4 n6 -> n3 "response"
+edge e5 n3 -> n3 "cache"
+edge e6 n3 -> n0 "reply"
+edge e7 n1 -> n4 "another request"
+edge e8 n4 -> n8 "audit"
+edge e9 n8 -> n2 "notification"
+
+layout root sequence
+
+phase first "Initial lookup" e0 e1 e2 e3 e4 e5 e6
+phase second "Follow-up" e7 e8 e9

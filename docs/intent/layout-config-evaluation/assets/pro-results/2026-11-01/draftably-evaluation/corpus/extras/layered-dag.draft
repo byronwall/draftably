@@ -1,0 +1,493 @@
+diagram "Optional scale 220 layered-dag" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Item 0"
+node n1 "Item 1"
+node n2 "Item 2"
+node n3 "Item 3"
+node n4 "Item 4"
+node n5 "Item 5"
+node n6 "Item 6"
+node n7 "Item 7"
+node n8 "Item 8"
+node n9 "Item 9"
+node n10 "Item 10"
+node n11 "Item 11"
+node n12 "Item 12"
+node n13 "Item 13"
+node n14 "Item 14"
+node n15 "Item 15"
+node n16 "Item 16"
+node n17 "Item 17"
+node n18 "Item 18"
+node n19 "Item 19"
+node n20 "Item 20"
+node n21 "Item 21"
+node n22 "Item 22"
+node n23 "Item 23"
+node n24 "Item 24"
+node n25 "Item 25"
+node n26 "Item 26"
+node n27 "Item 27"
+node n28 "Item 28"
+node n29 "Item 29"
+node n30 "Item 30"
+node n31 "Item 31"
+node n32 "Item 32"
+node n33 "Item 33"
+node n34 "Item 34"
+node n35 "Item 35"
+node n36 "Item 36"
+node n37 "Item 37"
+node n38 "Item 38"
+node n39 "Item 39"
+node n40 "Item 40"
+node n41 "Item 41"
+node n42 "Item 42"
+node n43 "Item 43"
+node n44 "Item 44"
+node n45 "Item 45"
+node n46 "Item 46"
+node n47 "Item 47"
+node n48 "Item 48"
+node n49 "Item 49"
+node n50 "Item 50"
+node n51 "Item 51"
+node n52 "Item 52"
+node n53 "Item 53"
+node n54 "Item 54"
+node n55 "Item 55"
+node n56 "Item 56"
+node n57 "Item 57"
+node n58 "Item 58"
+node n59 "Item 59"
+node n60 "Item 60"
+node n61 "Item 61"
+node n62 "Item 62"
+node n63 "Item 63"
+node n64 "Item 64"
+node n65 "Item 65"
+node n66 "Item 66"
+node n67 "Item 67"
+node n68 "Item 68"
+node n69 "Item 69"
+node n70 "Item 70"
+node n71 "Item 71"
+node n72 "Item 72"
+node n73 "Item 73"
+node n74 "Item 74"
+node n75 "Item 75"
+node n76 "Item 76"
+node n77 "Item 77"
+node n78 "Item 78"
+node n79 "Item 79"
+node n80 "Item 80"
+node n81 "Item 81"
+node n82 "Item 82"
+node n83 "Item 83"
+node n84 "Item 84"
+node n85 "Item 85"
+node n86 "Item 86"
+node n87 "Item 87"
+node n88 "Item 88"
+node n89 "Item 89"
+node n90 "Item 90"
+node n91 "Item 91"
+node n92 "Item 92"
+node n93 "Item 93"
+node n94 "Item 94"
+node n95 "Item 95"
+node n96 "Item 96"
+node n97 "Item 97"
+node n98 "Item 98"
+node n99 "Item 99"
+node n100 "Item 100"
+node n101 "Item 101"
+node n102 "Item 102"
+node n103 "Item 103"
+node n104 "Item 104"
+node n105 "Item 105"
+node n106 "Item 106"
+node n107 "Item 107"
+node n108 "Item 108"
+node n109 "Item 109"
+node n110 "Item 110"
+node n111 "Item 111"
+node n112 "Item 112"
+node n113 "Item 113"
+node n114 "Item 114"
+node n115 "Item 115"
+node n116 "Item 116"
+node n117 "Item 117"
+node n118 "Item 118"
+node n119 "Item 119"
+node n120 "Item 120"
+node n121 "Item 121"
+node n122 "Item 122"
+node n123 "Item 123"
+node n124 "Item 124"
+node n125 "Item 125"
+node n126 "Item 126"
+node n127 "Item 127"
+node n128 "Item 128"
+node n129 "Item 129"
+node n130 "Item 130"
+node n131 "Item 131"
+node n132 "Item 132"
+node n133 "Item 133"
+node n134 "Item 134"
+node n135 "Item 135"
+node n136 "Item 136"
+node n137 "Item 137"
+node n138 "Item 138"
+node n139 "Item 139"
+node n140 "Item 140"
+node n141 "Item 141"
+node n142 "Item 142"
+node n143 "Item 143"
+node n144 "Item 144"
+node n145 "Item 145"
+node n146 "Item 146"
+node n147 "Item 147"
+node n148 "Item 148"
+node n149 "Item 149"
+node n150 "Item 150"
+node n151 "Item 151"
+node n152 "Item 152"
+node n153 "Item 153"
+node n154 "Item 154"
+node n155 "Item 155"
+node n156 "Item 156"
+node n157 "Item 157"
+node n158 "Item 158"
+node n159 "Item 159"
+node n160 "Item 160"
+node n161 "Item 161"
+node n162 "Item 162"
+node n163 "Item 163"
+node n164 "Item 164"
+node n165 "Item 165"
+node n166 "Item 166"
+node n167 "Item 167"
+node n168 "Item 168"
+node n169 "Item 169"
+node n170 "Item 170"
+node n171 "Item 171"
+node n172 "Item 172"
+node n173 "Item 173"
+node n174 "Item 174"
+node n175 "Item 175"
+node n176 "Item 176"
+node n177 "Item 177"
+node n178 "Item 178"
+node n179 "Item 179"
+node n180 "Item 180"
+node n181 "Item 181"
+node n182 "Item 182"
+node n183 "Item 183"
+node n184 "Item 184"
+node n185 "Item 185"
+node n186 "Item 186"
+node n187 "Item 187"
+node n188 "Item 188"
+node n189 "Item 189"
+node n190 "Item 190"
+node n191 "Item 191"
+node n192 "Item 192"
+node n193 "Item 193"
+node n194 "Item 194"
+node n195 "Item 195"
+node n196 "Item 196"
+node n197 "Item 197"
+node n198 "Item 198"
+node n199 "Item 199"
+node n200 "Item 200"
+node n201 "Item 201"
+node n202 "Item 202"
+node n203 "Item 203"
+node n204 "Item 204"
+node n205 "Item 205"
+node n206 "Item 206"
+node n207 "Item 207"
+node n208 "Item 208"
+node n209 "Item 209"
+node n210 "Item 210"
+node n211 "Item 211"
+node n212 "Item 212"
+node n213 "Item 213"
+node n214 "Item 214"
+node n215 "Item 215"
+node n216 "Item 216"
+node n217 "Item 217"
+node n218 "Item 218"
+node n219 "Item 219"
+edge e0 n0 -> n20
+edge e1 n1 -> n21
+edge e2 n2 -> n22
+edge e3 n3 -> n23
+edge e4 n4 -> n24
+edge e5 n5 -> n25
+edge e6 n6 -> n26
+edge e7 n7 -> n27
+edge e8 n8 -> n28
+edge e9 n9 -> n29
+edge e10 n10 -> n30
+edge e11 n11 -> n31
+edge e12 n12 -> n32
+edge e13 n13 -> n33
+edge e14 n14 -> n34
+edge e15 n15 -> n35
+edge e16 n16 -> n36
+edge e17 n17 -> n37
+edge e18 n18 -> n38
+edge e19 n19 -> n39
+edge e20 n20 -> n40
+edge e21 n21 -> n41
+edge e22 n22 -> n42
+edge e23 n23 -> n43
+edge e24 n24 -> n44
+edge e25 n25 -> n45
+edge e26 n26 -> n46
+edge e27 n27 -> n47
+edge e28 n28 -> n48
+edge e29 n29 -> n49
+edge e30 n30 -> n50
+edge e31 n31 -> n51
+edge e32 n32 -> n52
+edge e33 n33 -> n53
+edge e34 n34 -> n54
+edge e35 n35 -> n55
+edge e36 n36 -> n56
+edge e37 n37 -> n57
+edge e38 n38 -> n58
+edge e39 n39 -> n59
+edge e40 n40 -> n60
+edge e41 n41 -> n61
+edge e42 n42 -> n62
+edge e43 n43 -> n63
+edge e44 n44 -> n64
+edge e45 n45 -> n65
+edge e46 n46 -> n66
+edge e47 n47 -> n67
+edge e48 n48 -> n68
+edge e49 n49 -> n69
+edge e50 n50 -> n70
+edge e51 n51 -> n71
+edge e52 n52 -> n72
+edge e53 n53 -> n73
+edge e54 n54 -> n74
+edge e55 n55 -> n75
+edge e56 n56 -> n76
+edge e57 n57 -> n77
+edge e58 n58 -> n78
+edge e59 n59 -> n79
+edge e60 n60 -> n80
+edge e61 n61 -> n81
+edge e62 n62 -> n82
+edge e63 n63 -> n83
+edge e64 n64 -> n84
+edge e65 n65 -> n85
+edge e66 n66 -> n86
+edge e67 n67 -> n87
+edge e68 n68 -> n88
+edge e69 n69 -> n89
+edge e70 n70 -> n90
+edge e71 n71 -> n91
+edge e72 n72 -> n92
+edge e73 n73 -> n93
+edge e74 n74 -> n94
+edge e75 n75 -> n95
+edge e76 n76 -> n96
+edge e77 n77 -> n97
+edge e78 n78 -> n98
+edge e79 n79 -> n99
+edge e80 n80 -> n100
+edge e81 n81 -> n101
+edge e82 n82 -> n102
+edge e83 n83 -> n103
+edge e84 n84 -> n104
+edge e85 n85 -> n105
+edge e86 n86 -> n106
+edge e87 n87 -> n107
+edge e88 n88 -> n108
+edge e89 n89 -> n109
+edge e90 n90 -> n110
+edge e91 n91 -> n111
+edge e92 n92 -> n112
+edge e93 n93 -> n113
+edge e94 n94 -> n114
+edge e95 n95 -> n115
+edge e96 n96 -> n116
+edge e97 n97 -> n117
+edge e98 n98 -> n118
+edge e99 n99 -> n119
+edge e100 n100 -> n120
+edge e101 n101 -> n121
+edge e102 n102 -> n122
+edge e103 n103 -> n123
+edge e104 n104 -> n124
+edge e105 n105 -> n125
+edge e106 n106 -> n126
+edge e107 n107 -> n127
+edge e108 n108 -> n128
+edge e109 n109 -> n129
+edge e110 n110 -> n130
+edge e111 n111 -> n131
+edge e112 n112 -> n132
+edge e113 n113 -> n133
+edge e114 n114 -> n134
+edge e115 n115 -> n135
+edge e116 n116 -> n136
+edge e117 n117 -> n137
+edge e118 n118 -> n138
+edge e119 n119 -> n139
+edge e120 n120 -> n140
+edge e121 n121 -> n141
+edge e122 n122 -> n142
+edge e123 n123 -> n143
+edge e124 n124 -> n144
+edge e125 n125 -> n145
+edge e126 n126 -> n146
+edge e127 n127 -> n147
+edge e128 n128 -> n148
+edge e129 n129 -> n149
+edge e130 n130 -> n150
+edge e131 n131 -> n151
+edge e132 n132 -> n152
+edge e133 n133 -> n153
+edge e134 n134 -> n154
+edge e135 n135 -> n155
+edge e136 n136 -> n156
+edge e137 n137 -> n157
+edge e138 n138 -> n158
+edge e139 n139 -> n159
+edge e140 n140 -> n160
+edge e141 n141 -> n161
+edge e142 n142 -> n162
+edge e143 n143 -> n163
+edge e144 n144 -> n164
+edge e145 n145 -> n165
+edge e146 n146 -> n166
+edge e147 n147 -> n167
+edge e148 n148 -> n168
+edge e149 n149 -> n169
+edge e150 n150 -> n170
+edge e151 n151 -> n171
+edge e152 n152 -> n172
+edge e153 n153 -> n173
+edge e154 n154 -> n174
+edge e155 n155 -> n175
+edge e156 n156 -> n176
+edge e157 n157 -> n177
+edge e158 n158 -> n178
+edge e159 n159 -> n179
+edge e160 n160 -> n180
+edge e161 n161 -> n181
+edge e162 n162 -> n182
+edge e163 n163 -> n183
+edge e164 n164 -> n184
+edge e165 n165 -> n185
+edge e166 n166 -> n186
+edge e167 n167 -> n187
+edge e168 n168 -> n188
+edge e169 n169 -> n189
+edge e170 n170 -> n190
+edge e171 n171 -> n191
+edge e172 n172 -> n192
+edge e173 n173 -> n193
+edge e174 n174 -> n194
+edge e175 n175 -> n195
+edge e176 n176 -> n196
+edge e177 n177 -> n197
+edge e178 n178 -> n198
+edge e179 n179 -> n199
+edge e180 n180 -> n200
+edge e181 n181 -> n201
+edge e182 n182 -> n202
+edge e183 n183 -> n203
+edge e184 n184 -> n204
+edge e185 n185 -> n205
+edge e186 n186 -> n206
+edge e187 n187 -> n207
+edge e188 n188 -> n208
+edge e189 n189 -> n209
+edge e190 n190 -> n210
+edge e191 n191 -> n211
+edge e192 n192 -> n212
+edge e193 n193 -> n213
+edge e194 n194 -> n214
+edge e195 n195 -> n215
+edge e196 n196 -> n216
+edge e197 n197 -> n217
+edge e198 n198 -> n218
+edge e199 n199 -> n219
+edge e200 n0 -> n21
+edge e201 n3 -> n24
+edge e202 n6 -> n27
+edge e203 n9 -> n30
+edge e204 n12 -> n33
+edge e205 n15 -> n36
+edge e206 n18 -> n39
+edge e207 n21 -> n42
+edge e208 n24 -> n45
+edge e209 n27 -> n48
+edge e210 n30 -> n51
+edge e211 n33 -> n54
+edge e212 n36 -> n57
+edge e213 n39 -> n60
+edge e214 n42 -> n63
+edge e215 n45 -> n66
+edge e216 n48 -> n69
+edge e217 n51 -> n72
+edge e218 n54 -> n75
+edge e219 n57 -> n78
+edge e220 n60 -> n81
+edge e221 n63 -> n84
+edge e222 n66 -> n87
+edge e223 n69 -> n90
+edge e224 n72 -> n93
+edge e225 n75 -> n96
+edge e226 n78 -> n99
+edge e227 n81 -> n102
+edge e228 n84 -> n105
+edge e229 n87 -> n108
+edge e230 n90 -> n111
+edge e231 n93 -> n114
+edge e232 n96 -> n117
+edge e233 n99 -> n120
+edge e234 n102 -> n123
+edge e235 n105 -> n126
+edge e236 n108 -> n129
+edge e237 n111 -> n132
+edge e238 n114 -> n135
+edge e239 n117 -> n138
+edge e240 n120 -> n141
+edge e241 n123 -> n144
+edge e242 n126 -> n147
+edge e243 n129 -> n150
+edge e244 n132 -> n153
+edge e245 n135 -> n156
+edge e246 n138 -> n159
+edge e247 n141 -> n162
+edge e248 n144 -> n165
+edge e249 n147 -> n168
+edge e250 n150 -> n171
+edge e251 n153 -> n174
+edge e252 n156 -> n177
+edge e253 n159 -> n180
+edge e254 n162 -> n183
+edge e255 n165 -> n186
+edge e256 n168 -> n189
+edge e257 n171 -> n192
+edge e258 n174 -> n195
+edge e259 n177 -> n198
+edge e260 n180 -> n201
+edge e261 n183 -> n204
+edge e262 n186 -> n207
+edge e263 n189 -> n210
+edge e264 n192 -> n213
+edge e265 n195 -> n216
+edge e266 n198 -> n219
+
+layout root flow direction=right gap=48
+

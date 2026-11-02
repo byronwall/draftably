@@ -1,0 +1,705 @@
+{
+  "status": "pass",
+  "fixtures": 3,
+  "analyticalChecks": 13,
+  "actualCompilerCalls": 0,
+  "actualLayoutCalls": 0,
+  "actualRouterCalls": 0,
+  "frozenMetricsModified": false,
+  "scoringOrPolicyChanges": false,
+  "records": [
+    {
+      "id": "two-ended-access-with-unrelated-body-obstacle",
+      "kind": "analytical only; no product execution",
+      "originalUnscoredNodeIntersectionIssues": [],
+      "naiveFlagRemovalIssues": [
+        {
+          "kind": "edge-through-node",
+          "detail": "e through intentional_from_cell"
+        },
+        {
+          "kind": "edge-through-node",
+          "detail": "e through intentional_to_cell"
+        },
+        {
+          "kind": "edge-through-node",
+          "detail": "e through unrelated_body_obstacle"
+        }
+      ],
+      "supplementary": {
+        "drawnRoutes": 1,
+        "crossRoutes": 1,
+        "checkedCrossRoutes": 1,
+        "bothEndpointAccessRoutes": 1,
+        "fromOnlyAccessRoutes": 0,
+        "toOnlyAccessRoutes": 0,
+        "measureCalls": 2,
+        "findings": [
+          {
+            "edgeId": "e",
+            "obstacleId": "unrelated_body_obstacle",
+            "detail": "e through unrelated_body_obstacle",
+            "classification": "supplementary unscored raw-body obstacle intersection",
+            "fromExtension": true,
+            "toExtension": true
+          }
+        ],
+        "otherCollapsedGroupFindings": [],
+        "gaps": [],
+        "routes": [
+          {
+            "edgeId": "e",
+            "fromExtension": true,
+            "toExtension": true,
+            "rawStartIndex": 2,
+            "rawPointCount": 2,
+            "verified": true,
+            "drawnPointCount": 6,
+            "rawFrom": "e:from",
+            "rawTo": "e:to"
+          }
+        ]
+      },
+      "artifact": {
+        "doc": {
+          "graph": {
+            "nodes": [
+              {
+                "id": "a",
+                "parentId": "ga",
+                "title": "a"
+              },
+              {
+                "id": "b",
+                "parentId": "gb",
+                "title": "b"
+              },
+              {
+                "id": "intentional_from_cell",
+                "parentId": "ga",
+                "title": "intentional_from_cell"
+              },
+              {
+                "id": "intentional_to_cell",
+                "parentId": "gb",
+                "title": "intentional_to_cell"
+              },
+              {
+                "id": "unrelated_body_obstacle",
+                "title": "unrelated_body_obstacle"
+              }
+            ],
+            "groups": [
+              {
+                "id": "ga",
+                "title": "ga"
+              },
+              {
+                "id": "gb",
+                "title": "gb"
+              }
+            ],
+            "edges": [
+              {
+                "id": "e",
+                "from": "a",
+                "to": "b",
+                "directed": true
+              }
+            ]
+          },
+          "layout": {
+            "nodes": {
+              "a": {
+                "x": 20,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "b": {
+                "x": 340,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "intentional_from_cell": {
+                "x": 50,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "intentional_to_cell": {
+                "x": 310,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "unrelated_body_obstacle": {
+                "x": 170,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "ga": {
+                "x": 0,
+                "y": -30,
+                "w": 80,
+                "h": 60
+              },
+              "gb": {
+                "x": 300,
+                "y": -30,
+                "w": 80,
+                "h": 60
+              }
+            },
+            "edges": {
+              "e": {}
+            },
+            "containers": {
+              "ga": {
+                "cellsBand": 10
+              },
+              "gb": {
+                "cellsBand": 10
+              }
+            }
+          },
+          "styles": {
+            "a": {
+              "shape": "box"
+            },
+            "b": {
+              "shape": "box"
+            },
+            "intentional_from_cell": {
+              "shape": "box"
+            },
+            "intentional_to_cell": {
+              "shape": "box"
+            },
+            "unrelated_body_obstacle": {
+              "shape": "box"
+            }
+          },
+          "collapsed": [],
+          "settings": {
+            "direction": "RIGHT",
+            "routing": {
+              "edgeGap": 16
+            }
+          }
+        },
+        "input": {
+          "nodes": [
+            {
+              "id": "a",
+              "parentId": "ga",
+              "x": 20,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "b",
+              "parentId": "gb",
+              "x": 340,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "intentional_from_cell",
+              "parentId": "ga",
+              "x": 50,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "intentional_to_cell",
+              "parentId": "gb",
+              "x": 310,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "unrelated_body_obstacle",
+              "x": 170,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "e:from",
+              "x": 94,
+              "y": -16,
+              "w": 2,
+              "h": 32,
+              "shape": "box"
+            },
+            {
+              "id": "e:to",
+              "x": 284,
+              "y": -16,
+              "w": 2,
+              "h": 32,
+              "shape": "box"
+            }
+          ],
+          "groups": [
+            {
+              "id": "ga",
+              "x": 0,
+              "y": -30,
+              "w": 80,
+              "h": 60
+            },
+            {
+              "id": "gb",
+              "x": 300,
+              "y": -30,
+              "w": 80,
+              "h": 60
+            }
+          ],
+          "edges": [
+            {
+              "id": "e",
+              "from": "e:from",
+              "to": "e:to",
+              "directed": true,
+              "cfg": {
+                "fromSide": "right",
+                "toSide": "left"
+              }
+            }
+          ]
+        },
+        "rawRouting": {
+          "routes": [
+            {
+              "id": "e",
+              "from": "e:from",
+              "to": "e:to",
+              "fromSide": "right",
+              "toSide": "left",
+              "fromOffset": 0,
+              "toOffset": 0,
+              "blocked": false,
+              "points": [
+                {
+                  "x": 96,
+                  "y": 0
+                },
+                {
+                  "x": 284,
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        },
+        "routes": [
+          {
+            "id": "e",
+            "from": "e:from",
+            "to": "e:to",
+            "fromSide": "right",
+            "toSide": "left",
+            "fromOffset": 0,
+            "toOffset": 0,
+            "blocked": false,
+            "points": [
+              {
+                "x": 40,
+                "y": 0
+              },
+              {
+                "x": 94,
+                "y": 0
+              },
+              {
+                "x": 96,
+                "y": 0
+              },
+              {
+                "x": 284,
+                "y": 0
+              },
+              {
+                "x": 286,
+                "y": 0
+              },
+              {
+                "x": 340,
+                "y": 0
+              }
+            ],
+            "cross": [
+              {
+                "x": 286,
+                "y": 0
+              },
+              {
+                "x": 340,
+                "y": 0
+              }
+            ],
+            "label": null,
+            "path": "",
+            "halo": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "two-ended-access-only-intentional-terminal-crossings",
+      "kind": "analytical only; no product execution",
+      "originalUnscoredNodeIntersectionIssues": [],
+      "naiveFlagRemovalIssues": [
+        {
+          "kind": "edge-through-node",
+          "detail": "e through intentional_from_cell"
+        },
+        {
+          "kind": "edge-through-node",
+          "detail": "e through intentional_to_cell"
+        }
+      ],
+      "supplementary": {
+        "drawnRoutes": 1,
+        "crossRoutes": 1,
+        "checkedCrossRoutes": 1,
+        "bothEndpointAccessRoutes": 1,
+        "fromOnlyAccessRoutes": 0,
+        "toOnlyAccessRoutes": 0,
+        "measureCalls": 2,
+        "findings": [],
+        "otherCollapsedGroupFindings": [],
+        "gaps": [],
+        "routes": [
+          {
+            "edgeId": "e",
+            "fromExtension": true,
+            "toExtension": true,
+            "rawStartIndex": 2,
+            "rawPointCount": 2,
+            "verified": true,
+            "drawnPointCount": 6,
+            "rawFrom": "e:from",
+            "rawTo": "e:to"
+          }
+        ]
+      },
+      "artifact": {
+        "doc": {
+          "graph": {
+            "nodes": [
+              {
+                "id": "a",
+                "parentId": "ga",
+                "title": "a"
+              },
+              {
+                "id": "b",
+                "parentId": "gb",
+                "title": "b"
+              },
+              {
+                "id": "intentional_from_cell",
+                "parentId": "ga",
+                "title": "intentional_from_cell"
+              },
+              {
+                "id": "intentional_to_cell",
+                "parentId": "gb",
+                "title": "intentional_to_cell"
+              }
+            ],
+            "groups": [
+              {
+                "id": "ga",
+                "title": "ga"
+              },
+              {
+                "id": "gb",
+                "title": "gb"
+              }
+            ],
+            "edges": [
+              {
+                "id": "e",
+                "from": "a",
+                "to": "b",
+                "directed": true
+              }
+            ]
+          },
+          "layout": {
+            "nodes": {
+              "a": {
+                "x": 20,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "b": {
+                "x": 340,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "intentional_from_cell": {
+                "x": 50,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "intentional_to_cell": {
+                "x": 310,
+                "y": -10,
+                "w": 20,
+                "h": 20
+              },
+              "ga": {
+                "x": 0,
+                "y": -30,
+                "w": 80,
+                "h": 60
+              },
+              "gb": {
+                "x": 300,
+                "y": -30,
+                "w": 80,
+                "h": 60
+              }
+            },
+            "edges": {
+              "e": {}
+            },
+            "containers": {
+              "ga": {
+                "cellsBand": 10
+              },
+              "gb": {
+                "cellsBand": 10
+              }
+            }
+          },
+          "styles": {
+            "a": {
+              "shape": "box"
+            },
+            "b": {
+              "shape": "box"
+            },
+            "intentional_from_cell": {
+              "shape": "box"
+            },
+            "intentional_to_cell": {
+              "shape": "box"
+            }
+          },
+          "collapsed": [],
+          "settings": {
+            "direction": "RIGHT",
+            "routing": {
+              "edgeGap": 16
+            }
+          }
+        },
+        "input": {
+          "nodes": [
+            {
+              "id": "a",
+              "parentId": "ga",
+              "x": 20,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "b",
+              "parentId": "gb",
+              "x": 340,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "intentional_from_cell",
+              "parentId": "ga",
+              "x": 50,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "intentional_to_cell",
+              "parentId": "gb",
+              "x": 310,
+              "y": -10,
+              "w": 20,
+              "h": 20,
+              "shape": "box"
+            },
+            {
+              "id": "e:from",
+              "x": 94,
+              "y": -16,
+              "w": 2,
+              "h": 32,
+              "shape": "box"
+            },
+            {
+              "id": "e:to",
+              "x": 284,
+              "y": -16,
+              "w": 2,
+              "h": 32,
+              "shape": "box"
+            }
+          ],
+          "groups": [
+            {
+              "id": "ga",
+              "x": 0,
+              "y": -30,
+              "w": 80,
+              "h": 60
+            },
+            {
+              "id": "gb",
+              "x": 300,
+              "y": -30,
+              "w": 80,
+              "h": 60
+            }
+          ],
+          "edges": [
+            {
+              "id": "e",
+              "from": "e:from",
+              "to": "e:to",
+              "directed": true,
+              "cfg": {
+                "fromSide": "right",
+                "toSide": "left"
+              }
+            }
+          ]
+        },
+        "rawRouting": {
+          "routes": [
+            {
+              "id": "e",
+              "from": "e:from",
+              "to": "e:to",
+              "fromSide": "right",
+              "toSide": "left",
+              "fromOffset": 0,
+              "toOffset": 0,
+              "blocked": false,
+              "points": [
+                {
+                  "x": 96,
+                  "y": 0
+                },
+                {
+                  "x": 284,
+                  "y": 0
+                }
+              ]
+            }
+          ]
+        },
+        "routes": [
+          {
+            "id": "e",
+            "from": "e:from",
+            "to": "e:to",
+            "fromSide": "right",
+            "toSide": "left",
+            "fromOffset": 0,
+            "toOffset": 0,
+            "blocked": false,
+            "points": [
+              {
+                "x": 40,
+                "y": 0
+              },
+              {
+                "x": 94,
+                "y": 0
+              },
+              {
+                "x": 96,
+                "y": 0
+              },
+              {
+                "x": 284,
+                "y": 0
+              },
+              {
+                "x": 286,
+                "y": 0
+              },
+              {
+                "x": 340,
+                "y": 0
+              }
+            ],
+            "cross": [
+              {
+                "x": 286,
+                "y": 0
+              },
+              {
+                "x": 340,
+                "y": 0
+              }
+            ],
+            "label": null,
+            "path": "",
+            "halo": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "missing-raw-body-is-a-coverage-gap",
+      "kind": "analytical only; no product execution",
+      "supplementary": {
+        "drawnRoutes": 1,
+        "crossRoutes": 1,
+        "checkedCrossRoutes": 0,
+        "bothEndpointAccessRoutes": 0,
+        "fromOnlyAccessRoutes": 0,
+        "toOnlyAccessRoutes": 0,
+        "measureCalls": 0,
+        "findings": [],
+        "otherCollapsedGroupFindings": [],
+        "gaps": [
+          {
+            "edgeId": "e",
+            "reason": "missing saved raw router route"
+          }
+        ],
+        "routes": []
+      }
+    }
+  ],
+  "createdAt": "2026-11-01T23:53:46.656Z",
+  "metricSha256": "a3c12d9f7c37771fba8f19306e79f9fcd07eca4b4fff31c9d0b3b6409582b191",
+  "auditCodeSha256": "516a3a733bd87c95a31fec652cff44676fc5eb8b11d36269da8fee3edcb2ad5d"
+}

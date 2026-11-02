@@ -1,0 +1,158 @@
+[
+  {
+    "id": "P011",
+    "A": "C-development-pipelines-03-tidy-RIGHT",
+    "B": "C-development-pipelines-03-stress-RIGHT",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base pipelines-03; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P012",
+    "A": "C-development-dags-02-compound-spring-DOWN",
+    "B": "C-development-dags-02-current",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base dags-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P013",
+    "A": "C-development-hierarchies-03-tree-DOWN",
+    "B": "C-development-hierarchies-03-force-RIGHT",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base hierarchies-03; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P014",
+    "A": "C-development-architecture-01-force-DOWN",
+    "B": "C-development-architecture-01-boundary-align-RIGHT",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base architecture-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P015",
+    "A": "C-development-cycles-01-stress-RIGHT",
+    "B": "C-development-cycles-01-layered-DOWN",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base cycles-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P016",
+    "A": "C-development-networks-02-boundary-align-DOWN",
+    "B": "C-development-networks-02-compound-spring-RIGHT",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base networks-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P017",
+    "A": "C-development-disconnected-01-grid-RIGHT",
+    "B": "C-development-disconnected-01-compound-flow-RIGHT",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base disconnected-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P018",
+    "A": "C-development-routing-01-compound-spring-DOWN",
+    "B": "C-development-routing-01-layered-RIGHT",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base routing-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P019",
+    "A": "C-development-containers-03-flow-RIGHT",
+    "B": "C-development-containers-03-compound-flow-DOWN",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base containers-03; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P020",
+    "A": "C-development-presentation-02-grid-RIGHT",
+    "B": "C-development-presentation-02-current",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base presentation-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P021",
+    "A": "C-development-authored-01-tree-DOWN",
+    "B": "C-development-authored-01-flow-DOWN",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base authored-01; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P022",
+    "A": "C-development-recipes-02-tree-RIGHT",
+    "B": "C-development-recipes-02-compound-spring-DOWN",
+    "selectionReason": "Seeded stratified family sample; seed20261101; selected base recipes-02; unequal completed geometry, validity unrestricted."
+  },
+  {
+    "id": "P023",
+    "A": "C-development-routing-03-layered-RIGHT",
+    "B": "C-development-routing-03-compound-flow-RIGHT",
+    "selectionReason": "Contested engine witness for compound-flow; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P024",
+    "A": "C-development-routing-03-boundary-align-RIGHT",
+    "B": "C-development-routing-03-layered-RIGHT",
+    "selectionReason": "Contested engine witness for boundary-align; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P025",
+    "A": "C-development-routing-03-compound-spring-RIGHT",
+    "B": "C-development-routing-03-layered-RIGHT",
+    "selectionReason": "Contested engine witness for compound-spring; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P026",
+    "A": "C-development-routing-03-tidy-RIGHT",
+    "B": "C-development-routing-03-layered-RIGHT",
+    "selectionReason": "Contested engine witness for tidy; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P027",
+    "A": "C-development-routing-03-layered-RIGHT",
+    "B": "C-development-routing-03-stress-RIGHT",
+    "selectionReason": "Contested engine witness for stress; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P028",
+    "A": "C-development-routing-04-stress-RIGHT",
+    "B": "C-development-routing-04-force-RIGHT",
+    "selectionReason": "Contested engine witness for force; largest available balanced-score margin versus best geometrically distinct other engine; margin=19.000000. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P029",
+    "A": "C-development-routing-03-layered-RIGHT",
+    "B": "C-development-routing-03-flow-RIGHT",
+    "selectionReason": "Contested engine witness for flow; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P030",
+    "A": "C-development-dags-02-layered-RIGHT",
+    "B": "C-development-dags-02-compound-spring-RIGHT",
+    "selectionReason": "Contested engine witness for layered; largest available balanced-score margin versus best geometrically distinct other engine; margin=2.142857. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P031",
+    "A": "C-development-authored-03-boundary-align-DOWN",
+    "B": "C-development-authored-03-tree-RIGHT",
+    "selectionReason": "Contested engine witness for tree; largest available balanced-score margin versus best geometrically distinct other engine; margin=1.428571. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P032",
+    "A": "C-development-authored-03-grid-RIGHT",
+    "B": "C-development-authored-03-boundary-align-DOWN",
+    "selectionReason": "Contested engine witness for grid; largest available balanced-score margin versus best geometrically distinct other engine; margin=1.428571. This selection does not establish unique practical value."
+  },
+  {
+    "id": "P033",
+    "A": "D-routing-route-12-bendPenalty-0",
+    "B": "D-side-route-12-top-top",
+    "selectionReason": "Explicit port override versus best tested automatic numeric setting; includes beneficial and adverse witnesses."
+  },
+  {
+    "id": "P034",
+    "A": "D-routing-route-03-bendPenalty-80",
+    "B": "D-port-route-03-authored",
+    "selectionReason": "Explicit port override versus best tested automatic numeric setting; includes beneficial and adverse witnesses."
+  },
+  {
+    "id": "P035",
+    "A": "C-development-pipelines-04-recipe-column",
+    "B": "C-development-pipelines-04-current",
+    "selectionReason": "Metric/directness disagreement: lowest balanced score versus shortest routes; route-length ratio=5.8180."
+  },
+  {
+    "id": "P036",
+    "A": "C-development-networks-03-force-RIGHT",
+    "B": "C-development-networks-03-compound-flow-RIGHT",
+    "selectionReason": "Metric/directness disagreement: lowest balanced score versus shortest routes; route-length ratio=3.8651."
+  }
+]

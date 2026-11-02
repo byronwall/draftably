@@ -1,0 +1,41 @@
+diagram "Visual Notes: an agent saves a note" version=1
+
+# expect order-x agent_side mcp_side data_side
+# expect near denied auth 60
+# expect right-of denied auth
+
+theme ink
+
+group agent_side "Agent session" color=slate
+node user "User asks" in=agent_side shape=pill
+node agent "Claude" in=agent_side
+node paths "notes_list_paths" in=agent_side
+
+group mcp_side "MCP server" color=violet
+node auth "Token check" in=mcp_side shape=diamond
+node create "notes_create" in=mcp_side
+node render "Markdown → blocks" in=mcp_side
+
+group data_side "App data" color=mint
+node docs "Docs service" in=data_side
+node pg "Postgres" in=data_side color=amber
+node activity "Activity log" in=data_side
+
+node denied "401 Unauthorized" in=mcp_side color=red
+
+edge m1 user -> agent
+edge m2 agent -> paths "pick a path"
+edge m3 paths -> auth
+edge m4 auth -> create "valid"
+edge m5 auth -> denied "missing" kind=async
+edge m6 create -> render
+edge m7 render -> docs
+edge m8 docs -> pg "insert"
+edge m9 docs -> activity "record" kind=async
+edge m10 create -> agent "appUrl" kind=async
+
+layout root flow direction=right gap=56
+layout agent_side column gap=24
+layout mcp_side column gap=24
+layout data_side column gap=24
+near denied auth side=right

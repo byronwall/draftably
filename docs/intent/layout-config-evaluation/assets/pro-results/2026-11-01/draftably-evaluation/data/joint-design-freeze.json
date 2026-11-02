@@ -1,0 +1,106 @@
+{
+  "at": "2026-11-01T23:32:07.258093+00:00",
+  "cases": [
+    "pipelines-03",
+    "dags-03",
+    "hierarchies-03",
+    "architecture-03",
+    "cycles-03",
+    "networks-03",
+    "disconnected-03",
+    "routing-03",
+    "containers-03",
+    "presentation-03",
+    "authored-03",
+    "recipes-02"
+  ],
+  "layouts": [
+    {
+      "method": "tuned:compound-flow:RIGHT:p1",
+      "layout": {
+        "engine": "compound-flow",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {
+          "rank-gap": 24,
+          "node-gap": 12
+        }
+      }
+    },
+    {
+      "method": "engine:force:RIGHT",
+      "layout": {
+        "engine": "force",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      }
+    },
+    {
+      "method": "engine:boundary-align:RIGHT",
+      "layout": {
+        "engine": "boundary-align",
+        "direction": "RIGHT",
+        "keepFit": true,
+        "attrs": {}
+      }
+    }
+  ],
+  "routingPolicies": [
+    {
+      "id": "clearance-22",
+      "settings": {
+        "clearance": 22,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "id": "clearance-4",
+      "settings": {
+        "clearance": 4,
+        "portGap": 16,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    },
+    {
+      "id": "portGap-28",
+      "settings": {
+        "clearance": 10,
+        "portGap": 28,
+        "edgeGap": 16,
+        "bendPenalty": 32,
+        "crossingPenalty": 360,
+        "sharedPenalty": 8,
+        "parallelPenalty": 18,
+        "portStability": 20,
+        "fanoutPenalty": 50,
+        "passes": 3,
+        "cornerRadius": 6,
+        "standoff": 20
+      }
+    }
+  ],
+  "tasks": 108,
+  "taskSha256": "ce19246cbf3190b71e8ad1f66d8c692a81dbb0d2ee595bb53f20ab1a98328db0",
+  "selection": "Layout: three distinct-engine globally ranked development methods; routing: exact best three-policy fully observed fixed-geometry portfolio; no heldout data.",
+  "specialistPreservation": "Nested cell recipes remain; unrelated root sequence/lane replacements excluded."
+}

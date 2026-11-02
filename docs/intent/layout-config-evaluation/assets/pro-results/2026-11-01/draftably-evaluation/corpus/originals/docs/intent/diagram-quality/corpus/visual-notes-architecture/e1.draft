@@ -1,0 +1,50 @@
+diagram "Visual Notes: system map" version=1
+
+# expect below s3 postgres
+# expect aligned-x agent browser cli extension
+
+group clients "Clients" color=sky
+node browser "Web app" in=clients color=sky
+node extension "Chrome extension" in=clients color=teal
+node cli "Apple Notes CLI" in=clients color=green
+node agent "Agent (MCP)" in=clients color=violet
+
+group app "SolidStart app" color=slate
+group routes "HTTP routes" in=app
+node docs_api "/api/docs" in=routes color=blue
+node auth "/api/auth" in=routes color=rose
+node mcp "MCP endpoint" in=routes color=violet
+group services "Services" in=app
+node docs_svc "Docs service" in=services color=blue
+node embed "Embeddings + UMAP" in=services color=orange
+node ai "AI runs + chat" in=services color=amber
+node jobs "Job queue" in=services color=stone
+
+node postgres "Postgres (Prisma)" color=mint
+node s3 "Object storage" color=red
+
+edge a1 browser -> docs_svc "query / action"
+edge a2 extension -> docs_api "clip page"
+edge a3 cli -> docs_api "post markdown"
+edge a4 agent -> mcp "tool call"
+edge a5 docs_api -> docs_svc
+edge a6 mcp -> docs_svc
+edge a7 browser -> auth
+edge a8 docs_svc -> postgres
+edge a9 docs_svc -> s3 "images"
+edge a10 docs_svc -> jobs "enqueue" kind=async
+edge a11 jobs -> embed kind=async
+edge a12 jobs -> ai kind=async
+edge a13 embed -> postgres
+
+layout root engine=compound-flow
+
+# Layout refinements
+near s3 postgres side=below gap=75
+stay clients x=0 y=41
+stay app x=281 y=0
+stay postgres x=1645 y=234
+near browser cli side=above gap=17 offset=-14
+stay extension x=5 y=240
+stay cli x=0 y=160
+stay agent x=11 y=0

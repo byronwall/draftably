@@ -1,0 +1,38 @@
+diagram "Billing schema" version=1
+subtitle "Each invoice belongs to one account; each line item belongs to one invoice."
+
+# Tables: each entity is a group of cells in two columns, and foreign keys join rows.
+
+group accounts "accounts" color=blue
+layout accounts cells columns=2
+node accounts.id "id" in=accounts
+node accounts.id_t "uuid" in=accounts
+node accounts.name "name" in=accounts
+node accounts.name_t "text" in=accounts
+node accounts.plan "plan" in=accounts
+node accounts.plan_t "text" in=accounts
+
+group invoices "invoices" color=teal
+layout invoices cells columns=2
+node invoices.id "id" in=invoices
+node invoices.id_t "uuid" in=invoices
+node invoices.account "account_id" in=invoices
+node invoices.account_t "uuid" in=invoices
+node invoices.total "total_cents" in=invoices
+node invoices.total_t "bigint" in=invoices
+node invoices.due "due_on" in=invoices
+node invoices.due_t "date" in=invoices
+
+group items "line_items" color=violet
+layout items cells columns=2
+node items.id "id" in=items
+node items.id_t "uuid" in=items
+node items.invoice "invoice_id" in=items
+node items.invoice_t "uuid" in=items
+node items.amount "amount_cents" in=items
+node items.amount_t "bigint" in=items
+
+edge invoice_account invoices.account -> accounts.id
+edge item_invoice items.invoice -> invoices.id
+
+layout root flow direction=right gap=96

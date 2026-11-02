@@ -1,0 +1,218 @@
+
+ RUN  v5.0.3 /workspace/scratch/8279601ec156/baseline
+
+ ❯ tests/docs-search.test.ts (0 test)
+ ❯ tests/import-d2.test.ts (0 test)
+ ❯ tests/site-highlight.test.ts (0 test)
+ ❯ tests/site-docs.test.ts (0 test)
+ ❯ tests/site-move.test.ts (0 test)
+ ❯ tests/site-css.test.ts (1 test | 1 failed) 6ms
+   × site.css opens no rule inside an ordinary rule 5ms
+ ❯ tests/add-changeset.test.ts (1 test | 1 failed) 5ms
+   ❯ pnpm changeset:add (1)
+     × writes a file that passes format:check 4ms
+ ❯ tests/site-find.test.ts (0 test)
+ ❯ tests/workspace.test.ts (7 tests | 4 skipped) 10259ms
+ ❯ tests/open-port.test.ts (3 tests | 3 failed) 10015ms
+   ❯ open port selection (3)
+     × moves past a default port held on IPv6 5011ms
+     × refuses an explicit port held on IPv6 5002ms
+     × lets the OS choose for port 0 1ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/docs-search.test.ts [ tests/docs-search.test.ts ]
+Error: Cannot find module '../site/docs/find' imported from /workspace/scratch/8279601ec156/baseline/tests/docs-search.test.ts
+ ❯ tests/docs-search.test.ts:2:1
+      1| import { describe, expect, it } from 'vitest';
+      2| import { marks, search, words } from '../site/docs/find';
+       | ^
+      3|
+      4| const top = (query: string) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  tests/import-d2.test.ts [ tests/import-d2.test.ts ]
+Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/baseline/docs/intent/diagram-imports/assets/pro-results/2026-10-31/adapter-kit/d2-probe-results.json'
+ ❯ tests/import-d2.test.ts:11:6
+      9|
+     10| const fixture = JSON.parse(
+     11|   fs.readFileSync(
+       |      ^
+     12|     path.resolve(
+     13|       'docs/intent/diagram-imports/assets/pro-results/2026-10-31/adapt…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  tests/site-docs.test.ts [ tests/site-docs.test.ts ]
+Error: ENOENT: no such file or directory, scandir '/workspace/scratch/8279601ec156/baseline/site/docs/pages'
+ ❯ tests/site-docs.test.ts:11:9
+      9| const files = [
+     10|   'docs/DSL.md',
+     11|   ...fs.readdirSync(pages).map(f => path.relative(root, path.join(page…
+       |         ^
+     12| ];
+     13|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  tests/site-find.test.ts [ tests/site-find.test.ts ]
+Error: Cannot find module '../site/docs/find' imported from /workspace/scratch/8279601ec156/baseline/tests/site-find.test.ts
+ ❯ tests/site-find.test.ts:2:1
+      1| import { describe, expect, it } from 'vitest';
+      2| import { search } from '../site/docs/find';
+       | ^
+      3|
+      4| // Task searches lead to the browser steps, not to format internals.
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  tests/site-highlight.test.ts [ tests/site-highlight.test.ts ]
+Error: Cannot find module '../site/highlight' imported from /workspace/scratch/8279601ec156/baseline/tests/site-highlight.test.ts
+ ❯ tests/site-highlight.test.ts:3:1
+      1| import fs from 'node:fs';
+      2| import { describe, expect, it } from 'vitest';
+      3| import { COMMANDS, tokenizeLine } from '../site/highlight';
+       | ^
+      4|
+      5| describe('site highlighter', () => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  tests/site-move.test.ts [ tests/site-move.test.ts ]
+Error: Cannot find module '../site/live/move' imported from /workspace/scratch/8279601ec156/baseline/tests/site-move.test.ts
+ ❯ tests/site-move.test.ts:4:1
+      2| import { compile } from '../src/dsl/compile';
+      3| import { findExample } from '../src/model/examples';
+      4| import { moveObject } from '../site/live/move';
+       | ^
+      5|
+      6| // The landing page's live diagram saves a drag into the source; the r…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+ FAIL  tests/workspace.test.ts > workspace server
+Error: Hook timed out in 10000ms.
+If this is a long-running hook, pass a timeout value as the last argument or configure it globally with "hookTimeout".
+ ❯ tests/workspace.test.ts:40:3
+     38|   let root: string, workspace: Workspace, server: http.Server, base: s…
+     39|
+     40|   beforeAll(async () => {
+       |   ^
+     41|     root = fs.mkdtempSync(path.join(os.tmpdir(), 'draft-workspace-'));
+     42|     fs.mkdirSync(path.join(root, 'docs'));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/12]⎯
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/add-changeset.test.ts > pnpm changeset:add > writes a file that passes format:check
+Error: ENOENT: no such file or directory, scandir '.changeset'
+ ❯ tests/add-changeset.test.ts:7:28
+      5| describe('pnpm changeset:add', () => {
+      6|   it('writes a file that passes format:check', () => {
+      7|     const before = new Set(readdirSync('.changeset'));
+       |                            ^
+      8|     execFileSync('node', [
+      9|       'scripts/add-changeset.ts',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/12]⎯
+
+ FAIL  tests/open-port.test.ts > open port selection > moves past a default port held on IPv6
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/open-port.test.ts:20:3
+     18|
+     19| describe('open port selection', () => {
+     20|   it('moves past a default port held on IPv6', async () => {
+       |   ^
+     21|     const held = await decoy();
+     22|     const server = http.createServer();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/12]⎯
+
+ FAIL  tests/open-port.test.ts > open port selection > refuses an explicit port held on IPv6
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/open-port.test.ts:28:3
+     26|   });
+     27|
+     28|   it('refuses an explicit port held on IPv6', async () => {
+       |   ^
+     29|     const held = await decoy();
+     30|     const server = http.createServer();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/12]⎯
+
+ FAIL  tests/open-port.test.ts > open port selection > lets the OS choose for port 0
+Error: listen EPERM: operation not permitted 127.0.0.1
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/12]⎯
+
+ FAIL  tests/site-css.test.ts > site.css opens no rule inside an ordinary rule
+Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/baseline/site/site.css'
+ ❯ tests/site-css.test.ts:8:6
+      6| it('site.css opens no rule inside an ordinary rule', () => {
+      7|   const css = fs
+      8|     .readFileSync(new URL('../site/site.css', import.meta.url), 'utf8')
+       |      ^
+      9|     .replace(/\/\*[\s\S]*?\*\//g, '');
+     10|   const open: boolean[] = [];
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/12]⎯
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 3 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted 127.0.0.1
+ ❯ Server.setupListenHandle [as _listen2] node:net:2368:21
+ ❯ listenInCluster node:net:2499:12
+ ❯ node:net:2728:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:90:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '127.0.0.1' }
+This error originated in "tests/workspace.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted ::1
+ ❯ Server.setupListenHandle [as _listen2] node:net:2368:21
+ ❯ listenInCluster node:net:2499:12
+ ❯ node:net:2728:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:90:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '::1' }
+This error originated in "tests/open-port.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "moves past a default port held on IPv6". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+
+⎯⎯⎯⎯⎯ Uncaught Exception ⎯⎯⎯⎯⎯
+Error: listen EPERM: operation not permitted ::1
+ ❯ Server.setupListenHandle [as _listen2] node:net:2368:21
+ ❯ listenInCluster node:net:2499:12
+ ❯ node:net:2728:7
+ ❯ processTicksAndRejections node:internal/process/task_queues:90:21
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { code: 'EPERM', errno: -1, syscall: 'listen', address: '::1' }
+This error originated in "tests/open-port.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The last test to run before this error was "refuses an explicit port held on IPv6". This means either:
+- the error was thrown while Vitest was running this test, or
+- the error was thrown after the test completed, and this was the most recent test at that point.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  10 failed | 62 passed | 1 skipped (73)
+      Tests  5 failed | 392 passed | 8 skipped (405)
+     Errors  3 errors
+   Start at  17:53:43
+   Duration  16.17s (tests 73%, transform 14%, import 12%, worker 1%)
+
+    Isolate  73 workers spawned · ~154ms startup each (spawn + environment, per file)
+             at least ~1.45s faster with isolate: false — reuses workers across files instead of one per file
+

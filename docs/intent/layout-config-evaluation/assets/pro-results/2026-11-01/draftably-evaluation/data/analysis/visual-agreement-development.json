@@ -1,0 +1,2419 @@
+{
+  "at": "2026-11-01T23:34:34.707Z",
+  "sources": [
+    {
+      "phase": "routing",
+      "file": "data/visual-judgments-routing.json",
+      "sha256": "b3832b86fdf0b90c22b0e5f6cbfc915d5ce077c7a29e3eb46c9020c72baf410f",
+      "recordedAt": "2026-11-01T23:16:53.697674+00:00",
+      "reviewer": "one expert model assessment; not independent human validation"
+    },
+    {
+      "phase": "development",
+      "file": "data/visual-judgments-development.json",
+      "sha256": "9eafaf34317213540b976f53e9cf94b40f77eb037766a1b4fcce2f0c13230b24",
+      "recordedAt": "2026-11-01T23:33:17.989Z",
+      "reviewer": "one expert model assessment; not independent human validation"
+    }
+  ],
+  "pairs": 36,
+  "counts": {
+    "A-better": 11,
+    "B-better": 13,
+    "same": 12
+  },
+  "agreement": {
+    "balanced": {
+      "exactThreeWayAgreement": 24,
+      "total": 36,
+      "numericPreferenceVisualTie": 3,
+      "numericTieVisualPreference": 4,
+      "reversal": 5
+    },
+    "traceable": {
+      "exactThreeWayAgreement": 24,
+      "total": 36,
+      "numericPreferenceVisualTie": 3,
+      "numericTieVisualPreference": 4,
+      "reversal": 5
+    },
+    "direct": {
+      "exactThreeWayAgreement": 24,
+      "total": 36,
+      "numericPreferenceVisualTie": 4,
+      "numericTieVisualPreference": 4,
+      "reversal": 4
+    }
+  },
+  "withinBandPairs": 8,
+  "withinBandVisualDifferences": [
+    "P017"
+  ],
+  "limitation": "One expert model; selected/overlapping diagram pairs, not independent users or a population-accuracy estimate. DI is a diagnostic, not ground truth. Symmetric pair band check differs from profile-oracle candidate acceptance.",
+  "judgments": [
+    {
+      "id": "P001",
+      "verdict": "same",
+      "reason": "The return and local retry remain clear in both images. A has square bends and B rounded bends; the visible style change does not change connection tracing for this case.",
+      "severity": 0,
+      "confidence": 0.98,
+      "defects": [],
+      "appearanceNote": "Rounded versus square corners is visibly different even when the route topology and task outcome appear equivalent.",
+      "family": "cycles",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P001.png",
+      "pngSha256": "1cd95f26029c3bab8f3b3044c7afc1666a214e308b5e0784a2e8c629bca6872d",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-17-cornerRadius-0",
+      "B": "D-routing-route-17-cornerRadius-12",
+      "selectionReason": "Appearance only",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 1.25,
+        "traceable": 1.25,
+        "direct": 5,
+        "area": 175180,
+        "routeLength": 1056,
+        "crossings": 0,
+        "bends": 6,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 1.25,
+        "traceable": 1.25,
+        "direct": 5,
+        "area": 175180,
+        "routeLength": 1056,
+        "crossings": 0,
+        "bends": 6,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P002",
+      "verdict": "B-better",
+      "reason": "A sends the a-to-b connection behind both tall obstacle boxes, so a reader loses the connection through the middle. B takes a clear outer path and sends c-to-d through the central passage. The longer outer path is justified by avoiding hidden connections.",
+      "severity": 3,
+      "confidence": 0.99,
+      "defects": [
+        {
+          "side": "A",
+          "severity": 3,
+          "cause": "routing-obstacle",
+          "description": "The horizontal a-to-b line disappears behind the left and right tall boxes; it reads as interrupted or connected to those obstacles."
+        },
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "routing-detour",
+          "description": "The c-to-d line goes around the far right despite the visible passage between the two obstacles."
+        }
+      ],
+      "family": "authored",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P002.png",
+      "pngSha256": "400d1b7ca9590f22edec5aee9a700db8952932d41aeb3dbcf64d3c4ecfbdac10",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-19-clearance-22",
+      "B": "D-routing-route-19-clearance-4",
+      "selectionReason": "Clearance adverse combination",
+      "metricsA": {
+        "hardValid": false,
+        "hardDefects": 3,
+        "requiredIntentFailures": 0,
+        "balanced": 73.333333,
+        "traceable": 93.333333,
+        "direct": 95,
+        "area": 426560,
+        "routeLength": 1934,
+        "crossings": 1,
+        "bends": 4,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 3.333333,
+        "traceable": 6.666667,
+        "direct": 13.333333,
+        "area": 443760,
+        "routeLength": 2098,
+        "crossings": 0,
+        "bends": 4,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P003",
+      "verdict": "A-better",
+      "reason": "Both avoid the central obstacle, but B adds an extra sideways step immediately above a before reaching the top corridor. A has the simpler continuous exit and is easier to trace.",
+      "severity": 1,
+      "confidence": 0.96,
+      "defects": [
+        {
+          "side": "B",
+          "severity": 1,
+          "cause": "routing-order",
+          "description": "An unnecessary small stair step above a interrupts an otherwise simple route around the blocker."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P003.png",
+      "pngSha256": "b914e3126560b66489fd52618466025fd9346fe96e0ace64fcfe407f83f1b915",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-03-standoff-40",
+      "B": "D-routing-route-03-standoff-0",
+      "selectionReason": "Departure spacing",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 3.333333,
+        "traceable": 6.666667,
+        "direct": 13.333333,
+        "area": 160000,
+        "routeLength": 962,
+        "crossings": 0,
+        "bends": 3,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10,
+        "traceable": 16.666667,
+        "direct": 23.333333,
+        "area": 160000,
+        "routeLength": 962,
+        "crossings": 0,
+        "bends": 5,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P004",
+      "verdict": "A-better",
+      "reason": "A keeps sources leaving right and targets receiving from the left, with a readable central crossing region. B replaces that organization with long loops around the outside, backward-facing exits and arrivals from several sides. The reduced visual crossing concentration is not worth the tracing detours.",
+      "severity": 2,
+      "confidence": 0.98,
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "routing-detour",
+          "description": "Several connections wrap around the entire outside of the six-node drawing."
+        },
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "routing-ports",
+          "description": "a2 leaves toward the left margin and b0 receives a line from below; endpoint sides no longer consistently communicate left-to-right relationships."
+        },
+        {
+          "side": "A",
+          "severity": 1,
+          "cause": "routing-clearance",
+          "description": "The middle crossing region is busy, but the halo breaks and consistent endpoint direction still permit tracing."
+        }
+      ],
+      "family": "networks",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P004.png",
+      "pngSha256": "f20c82cf9fc394029c7948d183b8e7038c69982558991369abdaf466a810fe5c",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-10-crossingPenalty-0",
+      "B": "D-routing-route-10-crossingPenalty-900",
+      "selectionReason": "Crossing versus detour",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 28.888889,
+        "traceable": 73.333333,
+        "direct": 42.777778,
+        "area": 210800,
+        "routeLength": 4476,
+        "crossings": 17,
+        "bends": 18,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 27.777778,
+        "traceable": 46.666667,
+        "direct": 59.444444,
+        "area": 244982,
+        "routeLength": 5826,
+        "crossings": 1,
+        "bends": 21,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": true
+    },
+    {
+      "id": "P005",
+      "verdict": "same",
+      "reason": "Both show separated parallel request, audit and reply lines with the same apparent labels, endpoints and long a-to-d branch. No meaningful tracing difference is visible.",
+      "severity": 0,
+      "confidence": 0.99,
+      "defects": [],
+      "family": "networks",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P005.png",
+      "pngSha256": "bda3750d758e61f640df5f48c3ee6f9258baa6ac79e9a7887c7ef278631f47f2",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-09-sharedPenalty-0",
+      "B": "D-routing-route-09-sharedPenalty-16",
+      "selectionReason": "Shared segments",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5,
+        "traceable": 8.333333,
+        "direct": 15,
+        "area": 199200,
+        "routeLength": 1724,
+        "crossings": 0,
+        "bends": 3,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5,
+        "traceable": 8.333333,
+        "direct": 15,
+        "area": 199200,
+        "routeLength": 1724,
+        "crossings": 0,
+        "bends": 3,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P006",
+      "verdict": "same",
+      "reason": "A spreads the three hub exits farther apart than B. Both remain symmetric, separated and immediately traceable to a, b and c; neither provides a material task advantage in this sparse fan.",
+      "severity": 0,
+      "confidence": 0.95,
+      "defects": [],
+      "appearanceNote": "Port spacing is visibly different, but a geometric difference need not be a useful quality win.",
+      "family": "dags",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P006.png",
+      "pngSha256": "240359e7c02d0ab10383704da2b2309b6738be46b040d64aac57e790b95e2048",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-05-portGap-28",
+      "B": "D-routing-route-05-portGap-6",
+      "selectionReason": "Fan spacing",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 153600,
+        "routeLength": 664,
+        "crossings": 0,
+        "bends": 4,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 153600,
+        "routeLength": 688,
+        "crossings": 0,
+        "bends": 4,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P007",
+      "verdict": "same",
+      "reason": "Both keep the same clear fan-in, fan-out and second fan-in structure. The paths and spacing appear equivalent at the supplied review size, with labels and endpoints equally legible.",
+      "severity": 0,
+      "confidence": 0.98,
+      "defects": [],
+      "family": "dags",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P007.png",
+      "pngSha256": "17e4a4fac25622907807d7612faa50156b4429c7735f9f9d9ef71658341c0bba",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-history-route-22-True-100",
+      "B": "D-history-route-22-True-0",
+      "selectionReason": "Shared prior after edit",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 377360,
+        "routeLength": 2262.67,
+        "crossings": 0,
+        "bends": 18,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 377360,
+        "routeLength": 2262.67,
+        "crossings": 0,
+        "bends": 18,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P008",
+      "verdict": "same",
+      "reason": "Both expose the read, write and extra-branch relationships in the same arrangement. Neither resolves the cramped write arrival along b’s left edge or the small blocker’s awkward label wrap. No material difference is visible.",
+      "severity": 0,
+      "confidence": 0.91,
+      "defects": [
+        {
+          "side": "both",
+          "severity": 2,
+          "cause": "routing-clearance",
+          "description": "The write line runs directly along b’s left border before its arrow arrives, weakening the distinction between connector and box outline."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "label-placement",
+          "description": "The blocker label breaks as “block” / “er” in a very narrow box."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P008.png",
+      "pngSha256": "044a698a8689f4cf734c43b1e58c31554c647c6133fa3257845369c3f5e47a56",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-21-passes-5",
+      "B": "D-routing-route-21-passes-1",
+      "selectionReason": "Finishing passes",
+      "metricsA": {
+        "hardValid": false,
+        "hardDefects": 1,
+        "requiredIntentFailures": 0,
+        "balanced": 8,
+        "traceable": 14,
+        "direct": 16,
+        "area": 323760,
+        "routeLength": 1772,
+        "crossings": 0,
+        "bends": 9,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": false,
+        "hardDefects": 1,
+        "requiredIntentFailures": 0,
+        "balanced": 8,
+        "traceable": 14,
+        "direct": 16,
+        "area": 323760,
+        "routeLength": 1772,
+        "crossings": 0,
+        "bends": 9,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P009",
+      "verdict": "A-better",
+      "reason": "A keeps “return inside group” attached to the short return loop. B shortens the connection to a straight line but leaves that label floating well above it. The small, clear loop is preferable to uncertain label ownership.",
+      "severity": 2,
+      "confidence": 0.99,
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "label-placement",
+          "description": "“return inside group” is separated from its straight b-to-a line and can read as a free annotation."
+        }
+      ],
+      "family": "architecture",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P009.png",
+      "pngSha256": "d23af174a0adbd7d6db6db9ecdf5eb819fdd11d494623595339d859e0cb22470",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-port-route-12-authored",
+      "B": "D-port-route-12-automatic",
+      "selectionReason": "Authored side constraint",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 8.333333,
+        "traceable": 5,
+        "direct": 13.333333,
+        "area": 384560,
+        "routeLength": 934,
+        "crossings": 0,
+        "bends": 4,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 18.333333,
+        "traceable": 18.333333,
+        "direct": 23.333333,
+        "area": 384560,
+        "routeLength": 734,
+        "crossings": 0,
+        "bends": 2,
+        "labels": 1
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P010",
+      "verdict": "same",
+      "reason": "The connection pattern and label placements appear the same. Both remain traceable, but the two long top labels and “cancel pending” stand noticeably above their short straight lines; neither candidate improves this label-association cost.",
+      "severity": 0,
+      "confidence": 0.98,
+      "defects": [
+        {
+          "side": "both",
+          "severity": 2,
+          "cause": "label-placement",
+          "description": "Long labels above a-to-b, b-to-c and d-to-e are visually detached from the short lines they describe."
+        }
+      ],
+      "family": "presentation",
+      "split": "development",
+      "inspectedPng": "renders/blinded/P010.png",
+      "pngSha256": "622dcafaadc741d639913f725a7fefdd37a315b02f78e520b9c47bbb8430778a",
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "routing",
+      "A": "D-routing-route-15-bendPenalty-80",
+      "B": "D-routing-route-15-bendPenalty-0",
+      "selectionReason": "Label ownership and bends",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 20,
+        "traceable": 28,
+        "direct": 26,
+        "area": 236640,
+        "routeLength": 1176,
+        "crossings": 0,
+        "bends": 3,
+        "labels": 3
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 20,
+        "traceable": 28,
+        "direct": 26,
+        "area": 236640,
+        "routeLength": 1176,
+        "crossings": 0,
+        "bends": 3,
+        "labels": 3
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P011",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.99,
+      "reason": "Both panels make the six-phase left-to-right sequence immediately clear. Straight connections and the two 'next' labels have equally clear ownership; small spacing differences do not change the task.",
+      "defects": [],
+      "appearanceNote": "Small changes in gap lengths are visible but do not create a useful preference.",
+      "family": "pipelines",
+      "split": "development",
+      "task": "Explain a reading sequence from input to output.",
+      "inspectedPng": "renders/blinded/P011.png",
+      "pngSha256": "415a8d2ee54a05ffdadd9ff4b4be80f717969e1a53e57e894369550f10b96f22",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 400
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-pipelines-03-tidy-RIGHT",
+      "B": "C-development-pipelines-03-stress-RIGHT",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base pipelines-03; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 4,
+        "traceable": 2,
+        "direct": 4,
+        "area": 71344,
+        "routeLength": 290,
+        "crossings": 0,
+        "bends": 0,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 4,
+        "traceable": 2,
+        "direct": 4,
+        "area": 70392,
+        "routeLength": 273,
+        "crossings": 0,
+        "bends": 0,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P012",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B keeps Source, Build, Test and Release adjacent in a compact left-to-right overview. A separates the same stages by large vertical and horizontal gaps, requiring long scans along the three Build-to-Test and Test-to-Release connections.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "related stages separated",
+          "description": "Build, Test and Release are separated by large empty areas; their dependency paths are long despite belonging to one pipeline."
+        }
+      ],
+      "appearanceNote": "B's rollback path goes back upward, while A's final rollback is below; the much stronger stage overview still favors B.",
+      "family": "dags",
+      "split": "development",
+      "task": "Trace prerequisites and downstream dependents.",
+      "inspectedPng": "renders/blinded/P012.png",
+      "pngSha256": "2ef9dc336414d259ac5e3c88c0b62e4f9e810edb3df2439f5fa23fda60b35adf",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 4302
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-dags-02-compound-spring-DOWN",
+      "B": "C-development-dags-02-current",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base dags-02; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.714286,
+        "traceable": 15,
+        "direct": 13.571429,
+        "area": 1179579,
+        "routeLength": 4635,
+        "crossings": 0,
+        "bends": 20,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 3.571429,
+        "traceable": 5,
+        "direct": 4.285714,
+        "area": 580356,
+        "routeLength": 2008,
+        "crossings": 0,
+        "bends": 16,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P013",
+      "verdict": "A-better",
+      "severity": 1,
+      "confidence": 0.89,
+      "reason": "A exposes a regular tree with aligned depth levels and paired sibling branches, making subtree boundaries easy to recognize. B remains traceable but staggers nodes of the same depth and spreads sibling groups unevenly.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 1,
+          "cause": "hierarchy alignment",
+          "description": "Nodes at the same tree depth occupy noticeably different horizontal positions, making depth and sibling grouping less immediate."
+        }
+      ],
+      "appearanceNote": "A needs more horizontal extent and its overview text is smaller; B offers larger labels in a taller shape. The preference is modest and concerns structural regularity, not a mandated orientation.",
+      "family": "hierarchies",
+      "split": "development",
+      "task": "Locate ownership and inspect a subtree.",
+      "inspectedPng": "renders/blinded/P013.png",
+      "pngSha256": "325a2c20b3b440a433fe574a02ef7f28ec5db2d6df8c1b4a79d0deeb2eb11bd2",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1992
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-hierarchies-03-tree-DOWN",
+      "B": "C-development-hierarchies-03-force-RIGHT",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base hierarchies-03; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0.666667,
+        "traceable": 0.333333,
+        "direct": 0.666667,
+        "area": 1456192,
+        "routeLength": 7336,
+        "crossings": 0,
+        "bends": 60,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 1896804,
+        "routeLength": 4360,
+        "crossings": 0,
+        "bends": 52,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P014",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B places the upstream APIs near the refresh jobs and keeps the server-to-phone story legible across adjacent groups. A puts the upstream APIs far below their callers and carries several long connections around the left perimeter.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote dependent group",
+          "description": "The upstream API group is far below the refresh jobs that use it, producing long parallel outer paths and remote labels."
+        }
+      ],
+      "appearanceNote": "Both panels preserve nested group ownership and readable boundary crossings; B has some empty container area but a shorter explanatory scan.",
+      "family": "architecture",
+      "split": "development",
+      "task": "Explain boundaries and cross-system calls.",
+      "inspectedPng": "renders/blinded/P014.png",
+      "pngSha256": "35879d5ce50abee477ae6630239a42d183e15aa0753ec690d87f1001329ef24d",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2968
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-architecture-01-force-DOWN",
+      "B": "C-development-architecture-01-boundary-align-RIGHT",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base architecture-01; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 24.615385,
+        "traceable": 33.076923,
+        "direct": 38.461538,
+        "area": 1306620,
+        "routeLength": 7130,
+        "crossings": 0,
+        "bends": 30,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 6.923077,
+        "traceable": 7.692308,
+        "direct": 9.230769,
+        "area": 2158280,
+        "routeLength": 5045,
+        "crossings": 0,
+        "bends": 19,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P015",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.92,
+      "reason": "Both panels show the consultation sequence, the return for another round, the saved session, and the exit clearly. A is a long horizontal strip and B is a tall vertical flow; neither orientation is specified by the task, and neither introduces a decisive tracing defect.",
+      "defects": [],
+      "appearanceNote": "The aspect ratios differ substantially. A's labels are smaller at the paired overview scale, while B requires a longer vertical scan. Treat this as a presentation choice rather than a universal quality win.",
+      "family": "cycles",
+      "split": "development",
+      "task": "Explain a lifecycle, retry, or feedback loop.",
+      "inspectedPng": "renders/blinded/P015.png",
+      "pngSha256": "93cf528a45fce96d2e5e5c727931f51a7764ad24e5733b7e24ab3349b2f14fee",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 4204
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-cycles-01-stress-RIGHT",
+      "B": "C-development-cycles-01-layered-DOWN",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base cycles-01; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 2.272727,
+        "traceable": 1.363636,
+        "direct": 3.636364,
+        "area": 409727.5,
+        "routeLength": 2057.14,
+        "crossings": 0,
+        "bends": 15,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.454545,
+        "traceable": 8.181818,
+        "direct": 9.090909,
+        "area": 395808,
+        "routeLength": 1830.5,
+        "crossings": 0,
+        "bends": 14,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P016",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.97,
+      "reason": "Both panels clearly connect the coding agent through the CLI, viewer/API paths and server to the five storage destinations. A is a balanced top-to-bottom view and B a compact left-to-right view; connections and labels are unambiguous in each.",
+      "defects": [],
+      "appearanceNote": "The terminal fan is arranged horizontally in A and vertically in B; both group the related destinations usefully.",
+      "family": "networks",
+      "split": "development",
+      "task": "Inspect relationships without imposing a main direction.",
+      "inspectedPng": "renders/blinded/P016.png",
+      "pngSha256": "8371b4e7a565ad3393a8539d8374662b3f95057531d2363e022eeb0b93e62c26",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1444
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-networks-02-boundary-align-DOWN",
+      "B": "C-development-networks-02-compound-spring-RIGHT",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base networks-02; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0.909091,
+        "traceable": 1.818182,
+        "direct": 0.909091,
+        "area": 573416,
+        "routeLength": 1906,
+        "crossings": 0,
+        "bends": 14,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0.909091,
+        "traceable": 0.909091,
+        "direct": 1.818182,
+        "area": 562185,
+        "routeLength": 1794,
+        "crossings": 0,
+        "bends": 17,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P017",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A packs all eight independent items into a clear two-column overview. B spends a long vertical strip and leaves a broad empty column, making an overview of the disconnected items unnecessarily costly.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "unhelpful component packing",
+          "description": "Eight unconnected items are placed in one long column despite ample unused horizontal space."
+        }
+      ],
+      "family": "disconnected",
+      "split": "development",
+      "task": "Pack independent components into a useful overview.",
+      "inspectedPng": "renders/blinded/P017.png",
+      "pngSha256": "a1c89eda9fb18824de3cefc88955d0cc94f30b91cb06b2c4576bf9571fe9f795",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 3862
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-disconnected-01-grid-RIGHT",
+      "B": "C-development-disconnected-01-compound-flow-RIGHT",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base disconnected-01; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 104192,
+        "routeLength": 0,
+        "crossings": 0,
+        "bends": 0,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 101024,
+        "routeLength": 0,
+        "crossings": 0,
+        "bends": 0,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": true,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": true,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P018",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B keeps the services close and makes the event bus's related calls visible in one compact region. A leaves substantial empty area inside the order service and carries cancellation and event routes over long outer paths.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "dispersed event relationships",
+          "description": "The service actions and event bus are spread across a large vertical drawing, with remote cancellation routes and excessive empty container area."
+        }
+      ],
+      "appearanceNote": "Both retain distinguishable service colors and readable labels. The preference is for the shorter explanatory scan, not a claim that B has no congested ports.",
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P018.png",
+      "pngSha256": "b98bd6a93e6f35c594736e85f7d76e164ee74f0c7aa9d5d1f57989ae4ea736cb",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1970
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-01-compound-spring-DOWN",
+      "B": "C-development-routing-01-layered-RIGHT",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base routing-01; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 18.5,
+        "traceable": 27.5,
+        "direct": 28,
+        "area": 770848,
+        "routeLength": 3659.45,
+        "crossings": 2,
+        "bends": 17,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 7,
+        "traceable": 13,
+        "direct": 11,
+        "area": 526848,
+        "routeLength": 3742.54,
+        "crossings": 2,
+        "bends": 14,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P019",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.92,
+      "reason": "A is compact, but its far-right return routes visually merge against the right edges of Components 0, 5 and 10, weakening connection identity. B uses more area yet separates the returning paths sufficiently to trace their origins and destinations more reliably.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "merged routes along node borders",
+          "description": "The rightmost vertical return paths share the same visual corridor against several component borders, so the route into one component can look continuous past another."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "tangent arrival",
+          "description": "Several vertical routes end at a box's right edge with a tiny hooked arrow rather than a clearly separated final approach."
+        }
+      ],
+      "appearanceNote": "Both preserve nested title ownership and the labelled group endpoint. Detail crops confirmed the problematic right-edge approaches; B's larger footprint is a real tradeoff.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P019-A-detail.png",
+          "sha256": "6db91315127104a24a3b2b44dc868554ee14472e361c7cab4f096e0756ea8bdb",
+          "width": 902,
+          "height": 1028
+        },
+        {
+          "path": "renders/blinded/P019-B-detail.png",
+          "sha256": "b00242a6a4572bd614d45dcb9afdd80847e25a53530292ff855f3f911023f9cf",
+          "width": 1460,
+          "height": 780
+        }
+      ],
+      "family": "containers",
+      "split": "development",
+      "task": "Read nesting, boundary endpoints, and title ownership.",
+      "inspectedPng": "renders/blinded/P019.png",
+      "pngSha256": "12b935d159b5282cdfae16f3ef117bb3379fce43ee49593033c37be25fe4f7e2",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2462
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-containers-03-flow-RIGHT",
+      "B": "C-development-containers-03-compound-flow-DOWN",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base containers-03; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": false,
+        "hardDefects": 4,
+        "requiredIntentFailures": 0,
+        "balanced": 24.642857,
+        "traceable": 40.357143,
+        "direct": 31.785714,
+        "area": 1107768,
+        "routeLength": 7359,
+        "crossings": 3,
+        "bends": 31,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": false,
+        "hardDefects": 6,
+        "requiredIntentFailures": 0,
+        "balanced": 31.071429,
+        "traceable": 44.642857,
+        "direct": 37.5,
+        "area": 798720,
+        "routeLength": 6812,
+        "crossings": 3,
+        "bends": 28,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": true
+    },
+    {
+      "id": "P020",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B aligns the driven adapters beside the outbound ports, completing one coherent left-to-right explanation. A drops those adapters far below the application and adds three long parallel descents without improving the visible relationships.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "related adapters displaced",
+          "description": "Postgres, Stripe and Email are placed far below the ports that feed them, adding a large empty region and remote connecting paths."
+        }
+      ],
+      "family": "presentation",
+      "split": "development",
+      "task": "Fit an explanation to a requested presentation format.",
+      "inspectedPng": "renders/blinded/P020.png",
+      "pngSha256": "04f074d34076bc3be2cf08dcf566c19ca3bd9efc89cb8d40990f22deec29d5a0",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1072
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-presentation-02-grid-RIGHT",
+      "B": "C-development-presentation-02-current",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base presentation-02; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 4.615385,
+        "traceable": 7.692308,
+        "direct": 3.846154,
+        "area": 956760,
+        "routeLength": 3221.02,
+        "crossings": 2,
+        "bends": 20,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 4.615385,
+        "traceable": 7.692308,
+        "direct": 3.846154,
+        "area": 473760,
+        "routeLength": 2063.02,
+        "crossings": 2,
+        "bends": 20,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P021",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.94,
+      "reason": "Both panels preserve a legible build-and-run progression across Repository, Builder, Runner and the host. A is more compact, while B uses more vertical spacing and a stepped progression; detailed inspection shows the db.json label remains clearly attached in both.",
+      "defects": [],
+      "appearanceNote": "Static images do not establish whether authored pins or local edit scope were preserved. That constraint question is deliberately left to the separate measurements.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P021-A-detail.png",
+          "sha256": "f904d8aa0c696b7de3bb464a2862aef3ba1acf94994f4d896e7dd0a4aa8f8752",
+          "width": 1300,
+          "height": 676
+        },
+        {
+          "path": "renders/blinded/P021-B-detail.png",
+          "sha256": "b064ba3e6408750609365d8bcf52fc075d2e2995cccffb50079cfc9d547910cc",
+          "width": 1300,
+          "height": 812
+        }
+      ],
+      "family": "authored",
+      "split": "development",
+      "task": "Improve a local region while retaining authored constraints.",
+      "inspectedPng": "renders/blinded/P021.png",
+      "pngSha256": "319b11ac9b20c6f83fac8d928e634f626ba13b82136c46304cf66bb511e0bb0a",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 886
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-authored-01-tree-DOWN",
+      "B": "C-development-authored-01-flow-DOWN",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base authored-01; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 14.545455,
+        "traceable": 20.454545,
+        "direct": 22.727273,
+        "area": 1271534,
+        "routeLength": 4369.75,
+        "crossings": 0,
+        "bends": 20,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 15.454545,
+        "traceable": 20,
+        "direct": 24.545455,
+        "area": 1548120,
+        "routeLength": 4662.5,
+        "crossings": 0,
+        "bends": 20,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P022",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A keeps the three schema tables near one another and makes both field-to-field references easy to inspect together. B separates adjacent tables by large empty vertical regions, so tracing two simple references requires a long scan.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "related tables separated",
+          "description": "The line_items, invoices and accounts tables occupy a tall, sparse arrangement with unnecessarily long reference routes."
+        }
+      ],
+      "family": "recipes",
+      "split": "development",
+      "task": "Preserve the structure encoded by a specialized recipe.",
+      "inspectedPng": "renders/blinded/P022.png",
+      "pngSha256": "74c0af7f1cac1d14080ec7e23c81178090286dd1f77a86a18b53bf3da0b84a58",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2956
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-recipes-02-tree-RIGHT",
+      "B": "C-development-recipes-02-compound-spring-DOWN",
+      "selectionReason": "Seeded stratified family sample; seed20261101; selected base recipes-02; unequal completed geometry, validity unrestricted.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 85,
+        "traceable": 125,
+        "direct": 145,
+        "area": 132662,
+        "routeLength": 797,
+        "crossings": 0,
+        "bends": 6,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 40,
+        "traceable": 50,
+        "direct": 80,
+        "area": 305523,
+        "routeLength": 945,
+        "crossings": 0,
+        "bends": 4,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": true
+    },
+    {
+      "id": "P023",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B brings the feedback route through the open central gap above Endpoint 6, so the two hubs can be related directly. A sends the same labelled feedback around the bottom of the entire endpoint column, adding a distracting outer detour.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback connection from the right hub to the left hub loops around the entire lower fan instead of using the visible central gap."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Request/reply labels immediately beside Endpoints 6 and 7 have little free line length and require extra attention among adjacent hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P023.png",
+      "pngSha256": "b492ca6e03c7c5e29bf65c5fdd104133562d6d58b9e16f702ceb5b047b0142a6",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-03-layered-RIGHT",
+      "B": "C-development-routing-03-compound-flow-RIGHT",
+      "selectionReason": "Contested engine witness for compound-flow; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.652174,
+        "traceable": 20.652174,
+        "direct": 15.652174,
+        "area": 594814.5,
+        "routeLength": 9082,
+        "crossings": 10,
+        "bends": 34,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.869565,
+        "traceable": 10.217391,
+        "direct": 8.695652,
+        "area": 553089,
+        "routeLength": 8380,
+        "crossings": 4,
+        "bends": 30,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P024",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "A routes feedback through the open central gap above Endpoint 6, keeping its ownership close to the two hubs. B runs feedback around the bottom of the full fan, creating a much longer visual excursion for the same hub-to-hub relationship.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback line loops around the lower endpoint fan before returning to the left hub."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "The short request/reply routes beside Endpoints 6 and 7 leave labels close to adjacent hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P024.png",
+      "pngSha256": "fc7934f7c425e6435d386a567d8f3d15827597941874c06370d01c53d2fbaa55",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-03-boundary-align-RIGHT",
+      "B": "C-development-routing-03-layered-RIGHT",
+      "selectionReason": "Contested engine witness for boundary-align; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.869565,
+        "traceable": 10.217391,
+        "direct": 8.695652,
+        "area": 553089,
+        "routeLength": 8380,
+        "crossings": 4,
+        "bends": 30,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.652174,
+        "traceable": 20.652174,
+        "direct": 15.652174,
+        "area": 594814.5,
+        "routeLength": 9082,
+        "crossings": 10,
+        "bends": 34,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P025",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B keeps the feedback relationship near the hubs by using the central opening above Endpoint 6. A takes the feedback line around the entire bottom of the fan, requiring a substantial detour to read one connection.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback route leaves the hub region and loops around the bottom of all lower endpoints."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Short request/reply routes at Endpoints 6 and 7 leave labels close to the hub's adjacent connection ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P025.png",
+      "pngSha256": "92eb76ed97cf1ed09a3af22d7482191133f728b2d926bb2cb8f2e0f35cc0a53f",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-03-compound-spring-RIGHT",
+      "B": "C-development-routing-03-layered-RIGHT",
+      "selectionReason": "Contested engine witness for compound-spring; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.869565,
+        "traceable": 10.217391,
+        "direct": 8.695652,
+        "area": 553089,
+        "routeLength": 8380,
+        "crossings": 4,
+        "bends": 30,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.652174,
+        "traceable": 20.652174,
+        "direct": 15.652174,
+        "area": 594814.5,
+        "routeLength": 9082,
+        "crossings": 10,
+        "bends": 34,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": true
+    },
+    {
+      "id": "P026",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "A uses the central open corridor for the feedback connection between the hubs. B sends that relationship around the full lower fan, requiring a long detour and moving its label far from the hub region.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "Feedback follows a long outside path below Endpoint 11 instead of staying near the hubs."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "The request/reply labels near Endpoints 6 and 7 have limited space among neighboring hub connections."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P026.png",
+      "pngSha256": "64b480c0d312f3eba1473e1a087c7dca78ddb2696436087b7314cf547049a201",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-03-tidy-RIGHT",
+      "B": "C-development-routing-03-layered-RIGHT",
+      "selectionReason": "Contested engine witness for tidy; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.869565,
+        "traceable": 10.217391,
+        "direct": 8.695652,
+        "area": 553089,
+        "routeLength": 8380,
+        "crossings": 4,
+        "bends": 30,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.652174,
+        "traceable": 20.652174,
+        "direct": 15.652174,
+        "area": 594814.5,
+        "routeLength": 9082,
+        "crossings": 10,
+        "bends": 34,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P027",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B makes the feedback relationship local to the hubs by crossing the clear space above Endpoint 6. A loops the same labelled connection below the entire endpoint fan, making it unnecessarily laborious to trace.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "The feedback line runs down and around all lower endpoints before returning to the left hub."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Labels on the short request/reply routes near Endpoints 6 and 7 sit close to adjacent hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P027.png",
+      "pngSha256": "b0e58c5e73d8f3377afa8b2c14a5d6cac2641308077ca5c4ef95e354928485b6",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-03-layered-RIGHT",
+      "B": "C-development-routing-03-stress-RIGHT",
+      "selectionReason": "Contested engine witness for stress; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.652174,
+        "traceable": 20.652174,
+        "direct": 15.652174,
+        "area": 594814.5,
+        "routeLength": 9082,
+        "crossings": 10,
+        "bends": 34,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.869565,
+        "traceable": 10.217391,
+        "direct": 8.695652,
+        "area": 553089,
+        "routeLength": 8380,
+        "crossings": 4,
+        "bends": 30,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P028",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B separates the two endpoint families into two readable fans around their own hubs. A interleaves all endpoints in one very tall column, producing many long paths across the shared corridor and a costly scan to discover which hub receives each connection.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "interleaved fan membership",
+          "description": "Endpoints for two hubs are interleaved in a single column, so their routes repeatedly traverse the same central corridor."
+        },
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "remote inter-hub detours",
+          "description": "Return and handoff take long routes across the top of the full drawing despite the large visible gap between the two fans."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded fan ports",
+          "description": "Many edges arrive on the top and bottom of each hub, making the final approach locally dense."
+        }
+      ],
+      "appearanceNote": "The full-sized B render was inspected. B's clearer family separation outweighs its poor inter-hub routing, but the latter remains a visible defect.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P028-B-full.png",
+          "sha256": "77e28b68af6c4ee0c0a0526f0a9f84a8dcd3fca651f71ddcc5efdd73d33021d3",
+          "width": 3016,
+          "height": 2862
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P028.png",
+      "pngSha256": "dd508f9a38c7d1cb37837db176f73c63cb42f007ae64d494a8c6718fa51b8a5b",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 6840
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-04-stress-RIGHT",
+      "B": "C-development-routing-04-force-RIGHT",
+      "selectionReason": "Contested engine witness for force; largest available balanced-score margin versus best geometrically distinct other engine; margin=19.000000. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 43.375,
+        "traceable": 106.375,
+        "direct": 40.375,
+        "area": 1845684,
+        "routeLength": 34267,
+        "crossings": 119,
+        "bends": 53,
+        "labels": 2
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 24.375,
+        "traceable": 45.375,
+        "direct": 35,
+        "area": 1858320,
+        "routeLength": 22368,
+        "crossings": 34,
+        "bends": 58,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P029",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "B keeps the labelled feedback close to both hubs by using the central corridor. A sends it around the bottom of the endpoint column, adding a conspicuous outside loop that does not help identify the connection.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "remote feedback detour",
+          "description": "Feedback loops below the lower fan and its label sits far from both hub endpoints."
+        },
+        {
+          "side": "both",
+          "severity": 1,
+          "cause": "crowded short-edge labels",
+          "description": "Short request/reply connections around Endpoints 6 and 7 leave labels close to the neighboring hub ports."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace one connection through congested ports and corridors.",
+      "inspectedPng": "renders/blinded/P029.png",
+      "pngSha256": "a58dbd20dde7406dc0e24b26f9d3e5bd8d880af914584beac874523393ecf229",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 2180
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-routing-03-layered-RIGHT",
+      "B": "C-development-routing-03-flow-RIGHT",
+      "selectionReason": "Contested engine witness for flow; largest available balanced-score margin versus best geometrically distinct other engine; margin=4.782609. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 10.652174,
+        "traceable": 20.652174,
+        "direct": 15.652174,
+        "area": 594814.5,
+        "routeLength": 9082,
+        "crossings": 10,
+        "bends": 34,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.869565,
+        "traceable": 10.217391,
+        "direct": 8.695652,
+        "area": 553089,
+        "routeLength": 8380,
+        "crossings": 4,
+        "bends": 30,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P030",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "A presents Source, Build, Test and Release as adjacent stages, so prerequisites can be read across one coherent pipeline. B raises the Test group far above the other stages and leaves long empty runs in both the test dependencies and rollback connection.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "related stages separated",
+          "description": "Test is distant from Build and Release, and Roll back is remote from production, so the simple dependency story requires several large scans."
+        }
+      ],
+      "family": "dags",
+      "split": "development",
+      "task": "Trace prerequisites and downstream dependents.",
+      "inspectedPng": "renders/blinded/P030.png",
+      "pngSha256": "9165e6bed9fd1e712bb20a3580c20735fd46cb8e32de98d6c7d33ac2f0f7149e",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 856
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-dags-02-layered-RIGHT",
+      "B": "C-development-dags-02-compound-spring-RIGHT",
+      "selectionReason": "Contested engine witness for layered; largest available balanced-score margin versus best geometrically distinct other engine; margin=2.142857. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 3.571429,
+        "traceable": 6.428571,
+        "direct": 4.285714,
+        "area": 590940,
+        "routeLength": 2214,
+        "crossings": 0,
+        "bends": 18,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 5.714286,
+        "traceable": 7.857143,
+        "direct": 10,
+        "area": 2005913,
+        "routeLength": 5826,
+        "crossings": 0,
+        "bends": 19,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P031",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.98,
+      "reason": "Both panels show the same clear local chain and the distant protected chain connected by a legible handoff. A leaves the last local item downward and B leaves it rightward; each path remains simple and its label belongs clearly to the connection.",
+      "defects": [],
+      "appearanceNote": "The bend placement and label location differ visibly. The static pair does not establish prior authored coordinates or whether a protected region moved.",
+      "family": "authored",
+      "split": "development",
+      "task": "Improve a local region while retaining authored constraints.",
+      "inspectedPng": "renders/blinded/P031.png",
+      "pngSha256": "0f06f493cf3b6a178be0dda06288f3d7f845de7eb31d0cda76e10d80d7bbcc05",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 818
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-authored-03-boundary-align-DOWN",
+      "B": "C-development-authored-03-tree-RIGHT",
+      "selectionReason": "Contested engine witness for tree; largest available balanced-score margin versus best geometrically distinct other engine; margin=1.428571. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 4.285714,
+        "traceable": 2.857143,
+        "direct": 5.714286,
+        "area": 911840,
+        "routeLength": 1058,
+        "crossings": 0,
+        "bends": 1,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 2.857143,
+        "traceable": 1.428571,
+        "direct": 2.857143,
+        "area": 911840,
+        "routeLength": 1004,
+        "crossings": 0,
+        "bends": 2,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P032",
+      "verdict": "same",
+      "severity": 0,
+      "confidence": 0.98,
+      "reason": "Both panels make the local chain, distant chain and handoff immediately traceable. A uses a rightward departure before stepping down and B departs downward before running right; this visible route difference has no reliable task advantage.",
+      "defects": [],
+      "appearanceNote": "The static picture is insufficient to judge preservation of authored pins or edit scope; no such claim is made here.",
+      "family": "authored",
+      "split": "development",
+      "task": "Improve a local region while retaining authored constraints.",
+      "inspectedPng": "renders/blinded/P032.png",
+      "pngSha256": "a774d04744cd0d205bad60f2cc245c2d1d5706760c3eb47c71e8727010e0ba8d",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 818
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-authored-03-grid-RIGHT",
+      "B": "C-development-authored-03-boundary-align-DOWN",
+      "selectionReason": "Contested engine witness for grid; largest available balanced-score margin versus best geometrically distinct other engine; margin=1.428571. This selection does not establish unique practical value.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 2.857143,
+        "traceable": 1.428571,
+        "direct": 2.857143,
+        "area": 911840,
+        "routeLength": 1004,
+        "crossings": 0,
+        "bends": 2,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 4.285714,
+        "traceable": 2.857143,
+        "direct": 5.714286,
+        "area": 911840,
+        "routeLength": 1058,
+        "crossings": 0,
+        "bends": 1,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P033",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.99,
+      "reason": "B places 'return inside group' directly on a short return loop, making its connection ownership immediate. A has a shorter straight return but leaves the label floating well above that line, which weakens the association.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "detached label ownership",
+          "description": "The return label floats in the space above the a-to-b gap while the actual return line runs at the boxes' mid-height."
+        }
+      ],
+      "appearanceNote": "Both external connections leave the group clearly and the container border yields at the crossings. The added short loop in B is worth its label-ownership benefit.",
+      "family": "architecture",
+      "split": "development",
+      "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+      "inspectedPng": "renders/blinded/P033.png",
+      "pngSha256": "d3c9b214d675e02bd42cf4ee9a17f930fe1876aa41efdd47dfa9c905d27686e5",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1440
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "D-routing-route-12-bendPenalty-0",
+      "B": "D-side-route-12-top-top",
+      "selectionReason": "Explicit port override versus best tested automatic numeric setting; includes beneficial and adverse witnesses.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 18.333333,
+        "traceable": 18.333333,
+        "direct": 23.333333,
+        "area": 384560,
+        "routeLength": 734,
+        "crossings": 0,
+        "bends": 2,
+        "labels": 1
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 8.333333,
+        "traceable": 5,
+        "direct": 13.333333,
+        "area": 384560,
+        "routeLength": 934,
+        "crossings": 0,
+        "bends": 4,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P034",
+      "verdict": "A-better",
+      "severity": 3,
+      "confidence": 0.99,
+      "reason": "A visibly routes the a-to-b connection over the central blocker and preserves the other two direct connections. In B the apparent a-to-b line disappears behind the blocker, making it look as if the blocker were part of the relationship or the connection were interrupted.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 3,
+          "cause": "connection hidden by obstacle",
+          "description": "The horizontal a-to-b connection is occluded by the central blocker and cannot be followed continuously through open space."
+        }
+      ],
+      "family": "routing",
+      "split": "development",
+      "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+      "inspectedPng": "renders/blinded/P034.png",
+      "pngSha256": "2b0f989a564800e54abb8213074cdc5fecebcade882bea612a2366f2d29585f7",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 1480
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "D-routing-route-03-bendPenalty-80",
+      "B": "D-port-route-03-authored",
+      "selectionReason": "Explicit port override versus best tested automatic numeric setting; includes beneficial and adverse witnesses.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 3.333333,
+        "traceable": 6.666667,
+        "direct": 13.333333,
+        "area": 160000,
+        "routeLength": 962,
+        "crossings": 0,
+        "bends": 3,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": false,
+        "hardDefects": 2,
+        "requiredIntentFailures": 0,
+        "balanced": 26.666667,
+        "traceable": 26.666667,
+        "direct": 26.666667,
+        "area": 150000,
+        "routeLength": 780,
+        "crossings": 0,
+        "bends": 0,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "A-better",
+        "traceable": "A-better",
+        "direct": "A-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P035",
+      "verdict": "B-better",
+      "severity": 2,
+      "confidence": 0.98,
+      "reason": "B presents all 28 phases in four ordered left-to-right rows with clear return-to-next-row links. A's single 28-item vertical strip makes the overall process difficult to survey; the full-sized B render confirms the wraps remain unambiguous.",
+      "defects": [
+        {
+          "side": "A",
+          "severity": 2,
+          "cause": "unwieldy process overview",
+          "description": "A very long one-column chain forces a large vertical scan to compare early and late phases."
+        }
+      ],
+      "appearanceNote": "A is locally simple and has shorter individual links. B's row-return paths are longer, but they preserve a clear reading sequence and produce a much more usable overview.",
+      "inspectedCrops": [
+        {
+          "path": "renders/blinded/P035-B-full.png",
+          "sha256": "ffaa5c383e52ace2d4d82b87366a48650fc4be0519051e29df7ee254e071dccb",
+          "width": 3108,
+          "height": 1228
+        }
+      ],
+      "family": "pipelines",
+      "split": "development",
+      "task": "Explain a reading sequence from input to output.",
+      "inspectedPng": "renders/blinded/P035.png",
+      "pngSha256": "cb31a4995c0d3148de9aa7d7ae70b14103d2355491ccc6223fd3f73e82b91d8f",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 15200
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-pipelines-04-recipe-column",
+      "B": "C-development-pipelines-04-current",
+      "selectionReason": "Metric/directness disagreement: lowest balanced score versus shortest routes; route-length ratio=5.8180.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0.740741,
+        "traceable": 0.37037,
+        "direct": 0.740741,
+        "area": 412132,
+        "routeLength": 945,
+        "crossings": 0,
+        "bends": 0,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 0,
+        "traceable": 0,
+        "direct": 0,
+        "area": 719312,
+        "routeLength": 5498,
+        "crossings": 0,
+        "bends": 6,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "same",
+        "traceable": "same",
+        "direct": "same"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": false
+    },
+    {
+      "id": "P036",
+      "verdict": "A-better",
+      "severity": 2,
+      "confidence": 0.97,
+      "reason": "A places the neighbors around Entity 0 and keeps paired relationships near the center, communicating a network. B stacks every neighbor in a long column and sends the hub relationships around the outside, imposing an unhelpful apparent sequence and making local relationships remote.",
+      "defects": [
+        {
+          "side": "B",
+          "severity": 2,
+          "cause": "network forced into long column",
+          "description": "The hub is far from most neighbors and its connections wrap around a tall stack, obscuring the intended neighborhood overview."
+        },
+        {
+          "side": "A",
+          "severity": 1,
+          "cause": "crowded central routes",
+          "description": "Several short hub connections share a tight region beside Entity 0 and near Entities 7 and 8."
+        }
+      ],
+      "family": "networks",
+      "split": "development",
+      "task": "Inspect relationships without imposing a main direction.",
+      "inspectedPng": "renders/blinded/P036.png",
+      "pngSha256": "68bf79a06b6b34ca923c5a3bd62b9c492977b3db6109a0685f44c841865bf461",
+      "pngDimensions": {
+        "width": 3600,
+        "height": 5008
+      },
+      "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs",
+      "metricAgreement": "not assessed while blinded",
+      "engineOrSettingsIdentity": "not read",
+      "phase": "development",
+      "A": "C-development-networks-03-force-RIGHT",
+      "B": "C-development-networks-03-compound-flow-RIGHT",
+      "selectionReason": "Metric/directness disagreement: lowest balanced score versus shortest routes; route-length ratio=3.8651.",
+      "metricsA": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 20.588235,
+        "traceable": 40.588235,
+        "direct": 22.352941,
+        "area": 340736,
+        "routeLength": 2471.54,
+        "crossings": 4,
+        "bends": 35,
+        "labels": 0
+      },
+      "metricsB": {
+        "hardValid": true,
+        "hardDefects": 0,
+        "requiredIntentFailures": 0,
+        "balanced": 7.647059,
+        "traceable": 15.882353,
+        "direct": 19.705882,
+        "area": 412412,
+        "routeLength": 9552.83,
+        "crossings": 1,
+        "bends": 27,
+        "labels": 0
+      },
+      "symmetricPracticalEquivalence": false,
+      "predictions": {
+        "balanced": "B-better",
+        "traceable": "B-better",
+        "direct": "B-better"
+      },
+      "pairWithinPracticalBandButVisualDifference": false,
+      "selectedMetricReversal": true
+    }
+  ]
+}

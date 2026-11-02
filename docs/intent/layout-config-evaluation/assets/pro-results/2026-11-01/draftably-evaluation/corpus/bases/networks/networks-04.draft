@@ -1,0 +1,149 @@
+diagram "Networks evaluation 04" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Entity 0" shape=circle
+node n1 "Entity 1"
+node n2 "Entity 2"
+node n3 "Entity 3"
+node n4 "Entity 4"
+node n5 "Entity 5"
+node n6 "Entity 6"
+node n7 "Entity 7"
+node n8 "Entity 8"
+node n9 "Entity 9"
+node n10 "Entity 10"
+node n11 "Entity 11"
+node n12 "Entity 12"
+node n13 "Entity 13"
+node n14 "Entity 14"
+node n15 "Entity 15"
+node n16 "Entity 16"
+node n17 "Entity 17"
+node n18 "Entity 18"
+node n19 "Entity 19"
+node n20 "Entity 20"
+node n21 "Entity 21"
+node n22 "Entity 22"
+node n23 "Entity 23"
+node n24 "Entity 24"
+node n25 "Entity 25"
+node n26 "Entity 26"
+node n27 "Entity 27"
+node n28 "Entity 28"
+node n29 "Entity 29"
+node n30 "Entity 30"
+node n31 "Entity 31"
+node n32 "Entity 32"
+node n33 "Entity 33"
+node n34 "Entity 34"
+node n35 "Entity 35"
+node n36 "Entity 36"
+node n37 "Entity 37"
+node n38 "Entity 38"
+node n39 "Entity 39"
+node n40 "Entity 40"
+node n41 "Entity 41"
+node n42 "Entity 42"
+node n43 "Entity 43"
+node n44 "Entity 44"
+edge e0 n0 -> n1 directed=false
+edge e1 n0 -> n5 directed=false
+edge e2 n1 -> n2 directed=false
+edge e3 n1 -> n4 directed=false
+edge e4 n1 -> n11 directed=false
+edge e5 n1 -> n14 directed=false
+edge e6 n2 -> n3 directed=false
+edge e7 n2 -> n10 directed=false
+edge e8 n3 -> n4 directed=false
+edge e9 n3 -> n13 directed=false
+edge e10 n4 -> n5 directed=false
+edge e11 n4 -> n12 directed=false
+edge e12 n4 -> n14 directed=false
+edge e13 n4 -> n20 directed=false
+edge e14 n5 -> n6 directed=false
+edge e15 n6 -> n7 directed=false
+edge e16 n6 -> n14 directed=false
+edge e17 n7 -> n8 directed=false
+edge e18 n7 -> n9 directed=false
+edge e19 n7 -> n14 directed=false
+edge e20 n8 -> n9 directed=false
+edge e21 n8 -> n10 directed=false
+edge e22 n9 -> n10 directed=false
+edge e23 n9 -> n12 directed=false
+edge e24 n10 -> n11 directed=false
+edge e25 n11 -> n12 directed=false
+edge e26 n12 -> n13 directed=false
+edge e27 n13 -> n14 directed=false
+edge e28 n14 -> n0 directed=false
+edge e29 n15 -> n16 directed=false
+edge e30 n15 -> n19 directed=false
+edge e31 n15 -> n25 directed=false
+edge e32 n15 -> n27 directed=false
+edge e33 n16 -> n17 directed=false
+edge e34 n16 -> n19 directed=false
+edge e35 n16 -> n20 directed=false
+edge e36 n16 -> n26 directed=false
+edge e37 n17 -> n18 directed=false
+edge e38 n17 -> n19 directed=false
+edge e39 n17 -> n24 directed=false
+edge e40 n17 -> n27 directed=false
+edge e41 n18 -> n19 directed=false
+edge e42 n18 -> n24 directed=false
+edge e43 n18 -> n26 directed=false
+edge e44 n18 -> n28 directed=false
+edge e45 n19 -> n20 directed=false
+edge e46 n19 -> n23 directed=false
+edge e47 n19 -> n28 directed=false
+edge e48 n19 -> n34 directed=false
+edge e49 n20 -> n21 directed=false
+edge e50 n20 -> n23 directed=false
+edge e51 n20 -> n29 directed=false
+edge e52 n21 -> n22 directed=false
+edge e53 n21 -> n28 directed=false
+edge e54 n22 -> n23 directed=false
+edge e55 n22 -> n24 directed=false
+edge e56 n22 -> n29 directed=false
+edge e57 n23 -> n24 directed=false
+edge e58 n24 -> n25 directed=false
+edge e59 n25 -> n26 directed=false
+edge e60 n26 -> n27 directed=false
+edge e61 n27 -> n28 directed=false
+edge e62 n28 -> n29 directed=false
+edge e63 n29 -> n15 directed=false
+edge e64 n30 -> n31 directed=false
+edge e65 n30 -> n36 directed=false
+edge e66 n30 -> n43 directed=false
+edge e67 n30 -> n44 directed=false
+edge e68 n31 -> n32 directed=false
+edge e69 n32 -> n33 directed=false
+edge e70 n32 -> n36 directed=false
+edge e71 n32 -> n43 directed=false
+edge e72 n32 -> n44 directed=false
+edge e73 n33 -> n34 directed=false
+edge e74 n33 -> n38 directed=false
+edge e75 n34 -> n35 directed=false
+edge e76 n34 -> n37 directed=false
+edge e77 n34 -> n43 directed=false
+edge e78 n34 -> n44 directed=false
+edge e79 n35 -> n36 directed=false
+edge e80 n35 -> n38 directed=false
+edge e81 n35 -> n39 directed=false
+edge e82 n35 -> n41 directed=false
+edge e83 n35 -> n42 directed=false
+edge e84 n35 -> n43 directed=false
+edge e85 n36 -> n37 directed=false
+edge e86 n36 -> n43 directed=false
+edge e87 n37 -> n38 directed=false
+edge e88 n38 -> n8 directed=false
+edge e89 n38 -> n39 directed=false
+edge e90 n38 -> n40 directed=false
+edge e91 n39 -> n40 directed=false
+edge e92 n40 -> n41 directed=false
+edge e93 n40 -> n43 directed=false
+edge e94 n41 -> n42 directed=false
+edge e95 n42 -> n43 directed=false
+edge e96 n43 -> n44 directed=false
+edge e97 n44 -> n30 directed=false
+
+layout root flow direction=right gap=48
+

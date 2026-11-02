@@ -1,0 +1,75 @@
+diagram "Recipes evaluation 06" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group overview "Overview"
+group table "Packet header"
+group workers "Workers"
+group queue "Queue"
+node n0 "Field 0" in=table span=2
+node n1 "Field 1" in=table span=2
+node n2 "Field 2" in=table span=2
+node n3 "Field 3" in=table span=2
+node n4 "Field 4" in=table span=2
+node n5 "Field 5" in=table span=2
+node n6 "Field 6" in=table span=2
+node n7 "Field 7" in=table span=2
+node n8 "Field 8" in=table span=2
+node n9 "Field 9" in=table span=2
+node n10 "Field 10" in=table span=2
+node n11 "Field 11" in=table span=2
+node n12 "Unit 12" in=workers
+node n13 "Unit 13" in=workers
+node n14 "Unit 14" in=workers
+node n15 "Unit 15" in=workers
+node n16 "Unit 16" in=workers
+node n17 "Unit 17" in=workers
+node n18 "Unit 18" in=workers
+node n19 "Unit 19" in=workers
+node n20 "Unit 20" in=workers
+node n21 "Unit 21" in=workers
+node n22 "Unit 22" in=workers
+node n23 "Unit 23" in=workers
+node n24 "Unit 24" in=queue
+node n25 "Unit 25" in=queue
+node n26 "Unit 26" in=queue
+node n27 "Unit 27" in=queue
+node n28 "Unit 28" in=queue
+node n29 "Unit 29" in=queue
+node n30 "Unit 30" in=queue
+node n31 "Unit 31" in=queue
+node n32 "Unit 32" in=queue
+node n33 "Unit 33" in=queue
+node n34 "Unit 34" in=queue
+node n35 "Unit 35" in=queue
+edge e0 n12 -> n13
+edge e1 n13 -> n14
+edge e2 n14 -> n15
+edge e3 n15 -> n16
+edge e4 n16 -> n17
+edge e5 n17 -> n18
+edge e6 n18 -> n19
+edge e7 n19 -> n20
+edge e8 n20 -> n21
+edge e9 n21 -> n22
+edge e10 n22 -> n23
+edge e11 n23 -> n24
+edge e12 n24 -> n25
+edge e13 n25 -> n26
+edge e14 n26 -> n27
+edge e15 n27 -> n28
+edge e16 n28 -> n29
+edge e17 n29 -> n30
+edge e18 n30 -> n31
+edge e19 n31 -> n32
+edge e20 n32 -> n33
+edge e21 n33 -> n34
+edge e22 n34 -> n35
+edge e23 n0 -> n12 "decode"
+edge e24 n11 -> n35 "checksum"
+
+layout root row gap=64
+layout overview column gap=24
+layout table cells unit=bit columns=16
+layout workers row gap=24
+layout queue column gap=24
+

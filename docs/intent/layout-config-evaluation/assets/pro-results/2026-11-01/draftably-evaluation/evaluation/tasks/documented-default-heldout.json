@@ -1,0 +1,370 @@
+[
+  {
+    "id": "C-doc-heldout-pipelines-05",
+    "stage": "C-documented-default",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-pipelines-06",
+    "stage": "C-documented-default",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-dags-05",
+    "stage": "C-documented-default",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-dags-06",
+    "stage": "C-documented-default",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-hierarchies-05",
+    "stage": "C-documented-default",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-hierarchies-06",
+    "stage": "C-documented-default",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-architecture-05",
+    "stage": "C-documented-default",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-architecture-06",
+    "stage": "C-documented-default",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-cycles-05",
+    "stage": "C-documented-default",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-cycles-06",
+    "stage": "C-documented-default",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-networks-05",
+    "stage": "C-documented-default",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-networks-06",
+    "stage": "C-documented-default",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-disconnected-05",
+    "stage": "C-documented-default",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-disconnected-06",
+    "stage": "C-documented-default",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-routing-05",
+    "stage": "C-documented-default",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-routing-06",
+    "stage": "C-documented-default",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-containers-05",
+    "stage": "C-documented-default",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-containers-06",
+    "stage": "C-documented-default",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-presentation-05",
+    "stage": "C-documented-default",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-presentation-06",
+    "stage": "C-documented-default",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-authored-05",
+    "stage": "C-documented-default",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-authored-06",
+    "stage": "C-documented-default",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-doc-heldout-recipes-06",
+    "stage": "C-documented-default",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "auto",
+      "keepFit": true
+    },
+    "tag": "documented-default",
+    "timeoutMs": 15000
+  }
+]

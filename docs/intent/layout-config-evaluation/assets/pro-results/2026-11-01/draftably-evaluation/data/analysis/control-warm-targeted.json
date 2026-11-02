@@ -1,0 +1,1641 @@
+{
+  "estimand": "Supplemental supported-sibling scope experiment, separate from the original invalid cross-parent selections. Every scope shares the same patched input, reference, and prior-route availability per case; scope requirements themselves differ.",
+  "trials": 50,
+  "scope_trials": 48,
+  "checkpoint_growth_trials": 2,
+  "statuses": {
+    "ok": 44,
+    "timed_out": 6
+  },
+  "per_scope": [
+    {
+      "scope": "all",
+      "jobs": 12,
+      "statuses": {
+        "ok": 11,
+        "timed_out": 1
+      },
+      "hard_valid": 9,
+      "hard_defect_count_completed": 45,
+      "pin_scope_violation_count_completed": 0,
+      "required_intent_failure_count_completed": 0,
+      "routing_hard_defect_count_completed": 44,
+      "hard_failure_witnesses": [
+        {
+          "case_id": "architecture-04",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-04-all",
+          "method": null,
+          "status": "timed_out",
+          "hard_valid": false,
+          "geometry": null,
+          "hard": [],
+          "intent_failures": []
+        },
+        {
+          "case_id": "containers-04",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-04-all",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-containers-04-all.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e0"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e1"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e10"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e11"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e12"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e13"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e14"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e15"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e16"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e17"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e18"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e19"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e2"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e20"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e21"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e22"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e23"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e24"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e25"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e26"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e27"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e28"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e29"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e3"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e30"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e31"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e32"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e33"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e34"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e35"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e4"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e5"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e6"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e7"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e8"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e9"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n4"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n8"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n12"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n16"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n20"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n24"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n28"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n32"
+            }
+          ],
+          "intent_failures": []
+        },
+        {
+          "case_id": "recipes-04",
+          "family": "recipes",
+          "trial_id": "D-target-scope-recipes-04-all",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-recipes-04-all.json.gz",
+          "hard": [
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "commander \u00d7 comms"
+            }
+          ],
+          "intent_failures": []
+        }
+      ],
+      "paired_with_all": null
+    },
+    {
+      "scope": "selection",
+      "jobs": 12,
+      "statuses": {
+        "ok": 11,
+        "timed_out": 1
+      },
+      "hard_valid": 10,
+      "hard_defect_count_completed": 44,
+      "pin_scope_violation_count_completed": 0,
+      "required_intent_failure_count_completed": 0,
+      "routing_hard_defect_count_completed": 44,
+      "hard_failure_witnesses": [
+        {
+          "case_id": "architecture-04",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-04-selection",
+          "method": null,
+          "status": "timed_out",
+          "hard_valid": false,
+          "geometry": null,
+          "hard": [],
+          "intent_failures": []
+        },
+        {
+          "case_id": "containers-04",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-04-selection",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-containers-04-selection.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e0"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e1"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e10"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e11"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e12"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e13"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e14"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e15"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e16"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e17"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e18"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e19"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e2"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e20"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e21"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e22"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e23"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e24"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e25"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e26"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e27"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e28"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e29"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e3"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e30"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e31"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e32"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e33"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e34"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e35"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e4"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e5"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e6"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e7"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e8"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e9"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n4"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n8"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n12"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n16"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n20"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n24"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n28"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n32"
+            }
+          ],
+          "intent_failures": []
+        }
+      ],
+      "paired_with_all": {
+        "paired_jobs": 12,
+        "comparable_geometry": 11,
+        "exact_geometry_changed": 9,
+        "geometry_changed_over_1px": 9,
+        "hard_valid_candidates": 10,
+        "hard_valid_baselines": 9,
+        "valid_gained": 1,
+        "valid_lost": 0,
+        "both_valid_pairs": 9,
+        "mean_balanced_delta_both_valid": -1.4640728888888888,
+        "mean_traceable_delta_both_valid": -1.044862777777778,
+        "mean_route_length_delta_both_valid": 202.72444444444452,
+        "mean_area_delta_both_valid": 6548.54757177779,
+        "gain_witnesses": [
+          "D-target-scope-recipes-04-selection"
+        ],
+        "loss_witnesses": [],
+        "best_soft_witness": {
+          "stratum": "targeted-valid-sibling-scope",
+          "control": "scope",
+          "level": "selection",
+          "case_id": "architecture-01",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-01-selection",
+          "baseline_id": "D-target-scope-architecture-01-all",
+          "status": "ok",
+          "baseline_status": "ok",
+          "hard_valid": true,
+          "baseline_hard_valid": true,
+          "valid_gained": false,
+          "valid_lost": false,
+          "exact_geometry_changed": true,
+          "geometry_changed_over_1px": true,
+          "rounded_bin_hash_changed": true,
+          "rendered_path_changed": true,
+          "changed_port_pair_count": 0,
+          "max_node_box_coordinate_delta": 47.99800000000005,
+          "routing_ms": 674.5334789999761,
+          "baseline_routing_ms": 883.2646360000363,
+          "delta_hardDefects": 0,
+          "delta_layoutHardDefects": 0,
+          "delta_routingHardDefects": 0,
+          "delta_requiredIntentFailures": 0,
+          "delta_blockedRoutes": 0,
+          "delta_overlaps": 0,
+          "delta_throughNodes": 0,
+          "delta_authoredSideViolations": 0,
+          "delta_pinScopeViolations": 0,
+          "delta_crossings": 0,
+          "delta_sharedLength": 0,
+          "delta_laneDeficit": 0,
+          "delta_bends": 0,
+          "delta_tinyJogs": 0,
+          "delta_hooks": 0,
+          "delta_backEdges": 0,
+          "delta_routeLength": 365.7000000000003,
+          "delta_detourMean": 0,
+          "delta_labelDefects": -2,
+          "delta_titleTextHits": 0,
+          "delta_titleBandHits": 0,
+          "delta_area": -13670.583513000049,
+          "delta_aspectError": -0.010552999999999924,
+          "delta_diPer10": -10.0,
+          "delta_score_balanced": -10.0,
+          "delta_score_traceable": -10.0,
+          "delta_score_direct": -10.0,
+          "candidate_edit_changedSides": 0,
+          "baseline_edit_changedSides": 0,
+          "delta_edit_changedSides": 0,
+          "candidate_edit_changedSideRate": 0,
+          "baseline_edit_changedSideRate": 0,
+          "delta_edit_changedSideRate": 0,
+          "candidate_edit_changedRoutes": 9,
+          "baseline_edit_changedRoutes": 13,
+          "delta_edit_changedRoutes": -4,
+          "candidate_edit_changedRouteRate": 0.692308,
+          "baseline_edit_changedRouteRate": 1,
+          "delta_edit_changedRouteRate": -0.30769199999999997,
+          "candidate_edit_meanDisplacement": 43.910786,
+          "baseline_edit_meanDisplacement": 48.051562,
+          "delta_edit_meanDisplacement": -4.140775999999995,
+          "candidate_edit_translationAdjustedMean": 43.910786,
+          "baseline_edit_translationAdjustedMean": 48.119947,
+          "delta_edit_translationAdjustedMean": -4.209161000000002,
+          "candidate_edit_orderFlipRate": 0.017544,
+          "baseline_edit_orderFlipRate": 0.017544,
+          "delta_edit_orderFlipRate": 0.0
+        },
+        "worst_soft_witness": {
+          "stratum": "targeted-valid-sibling-scope",
+          "control": "scope",
+          "level": "selection",
+          "case_id": "containers-01",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-01-selection",
+          "baseline_id": "D-target-scope-containers-01-all",
+          "status": "ok",
+          "baseline_status": "ok",
+          "hard_valid": true,
+          "baseline_hard_valid": true,
+          "valid_gained": false,
+          "valid_lost": false,
+          "exact_geometry_changed": true,
+          "geometry_changed_over_1px": true,
+          "rounded_bin_hash_changed": true,
+          "rendered_path_changed": true,
+          "changed_port_pair_count": 1,
+          "max_node_box_coordinate_delta": 47.83099999999999,
+          "routing_ms": 170.66148500004783,
+          "baseline_routing_ms": 236.22672899998724,
+          "delta_hardDefects": 0,
+          "delta_layoutHardDefects": 0,
+          "delta_routingHardDefects": 0,
+          "delta_requiredIntentFailures": 0,
+          "delta_blockedRoutes": 0,
+          "delta_overlaps": 0,
+          "delta_throughNodes": 0,
+          "delta_authoredSideViolations": 0,
+          "delta_pinScopeViolations": 0,
+          "delta_crossings": 0,
+          "delta_sharedLength": 0,
+          "delta_laneDeficit": 0,
+          "delta_bends": -1,
+          "delta_tinyJogs": 0,
+          "delta_hooks": 0,
+          "delta_backEdges": 0,
+          "delta_routeLength": 227.4400000000005,
+          "delta_detourMean": -0.019584000000000046,
+          "delta_labelDefects": 0,
+          "delta_titleTextHits": 0,
+          "delta_titleBandHits": 0,
+          "delta_area": 6418.620000000112,
+          "delta_aspectError": -0.005587999999999982,
+          "delta_diPer10": 1.0,
+          "delta_score_balanced": 1.0,
+          "delta_score_traceable": 1.0,
+          "delta_score_direct": 1,
+          "candidate_edit_changedSides": 0,
+          "baseline_edit_changedSides": 1,
+          "delta_edit_changedSides": -1,
+          "candidate_edit_changedSideRate": 0,
+          "baseline_edit_changedSideRate": 0.1,
+          "delta_edit_changedSideRate": -0.1,
+          "candidate_edit_changedRoutes": 0,
+          "baseline_edit_changedRoutes": 10,
+          "delta_edit_changedRoutes": -10,
+          "candidate_edit_changedRouteRate": 0,
+          "baseline_edit_changedRouteRate": 1,
+          "delta_edit_changedRouteRate": -1,
+          "candidate_edit_meanDisplacement": 2.601549,
+          "baseline_edit_meanDisplacement": 32.748292,
+          "delta_edit_meanDisplacement": -30.146743,
+          "candidate_edit_translationAdjustedMean": 2.601549,
+          "baseline_edit_translationAdjustedMean": 32.613079,
+          "delta_edit_translationAdjustedMean": -30.01153,
+          "candidate_edit_orderFlipRate": 0.005263,
+          "baseline_edit_orderFlipRate": 0.005263,
+          "delta_edit_orderFlipRate": 0.0
+        }
+      }
+    },
+    {
+      "scope": "neighbourhood",
+      "jobs": 12,
+      "statuses": {
+        "ok": 11,
+        "timed_out": 1
+      },
+      "hard_valid": 10,
+      "hard_defect_count_completed": 44,
+      "pin_scope_violation_count_completed": 0,
+      "required_intent_failure_count_completed": 0,
+      "routing_hard_defect_count_completed": 44,
+      "hard_failure_witnesses": [
+        {
+          "case_id": "architecture-04",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-04-neighbourhood",
+          "method": null,
+          "status": "timed_out",
+          "hard_valid": false,
+          "geometry": null,
+          "hard": [],
+          "intent_failures": []
+        },
+        {
+          "case_id": "containers-04",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-04-neighbourhood",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-containers-04-neighbourhood.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e0"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e1"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e10"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e11"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e12"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e13"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e14"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e15"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e16"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e17"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e18"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e19"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e2"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e20"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e21"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e22"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e23"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e24"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e25"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e26"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e27"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e28"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e29"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e3"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e30"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e31"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e32"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e33"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e34"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e35"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e4"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e5"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e6"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e7"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e8"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e9"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n4"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n8"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n12"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n16"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n20"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n24"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n28"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n32"
+            }
+          ],
+          "intent_failures": []
+        }
+      ],
+      "paired_with_all": {
+        "paired_jobs": 12,
+        "comparable_geometry": 11,
+        "exact_geometry_changed": 9,
+        "geometry_changed_over_1px": 9,
+        "hard_valid_candidates": 10,
+        "hard_valid_baselines": 9,
+        "valid_gained": 1,
+        "valid_lost": 0,
+        "both_valid_pairs": 9,
+        "mean_balanced_delta_both_valid": -1.3714803333333332,
+        "mean_traceable_delta_both_valid": -0.8596775555555557,
+        "mean_route_length_delta_both_valid": 202.52333333333337,
+        "mean_area_delta_both_valid": 3581.136016222218,
+        "gain_witnesses": [
+          "D-target-scope-recipes-04-neighbourhood"
+        ],
+        "loss_witnesses": [],
+        "best_soft_witness": {
+          "stratum": "targeted-valid-sibling-scope",
+          "control": "scope",
+          "level": "neighbourhood",
+          "case_id": "architecture-01",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-01-neighbourhood",
+          "baseline_id": "D-target-scope-architecture-01-all",
+          "status": "ok",
+          "baseline_status": "ok",
+          "hard_valid": true,
+          "baseline_hard_valid": true,
+          "valid_gained": false,
+          "valid_lost": false,
+          "exact_geometry_changed": true,
+          "geometry_changed_over_1px": true,
+          "rounded_bin_hash_changed": true,
+          "rendered_path_changed": true,
+          "changed_port_pair_count": 0,
+          "max_node_box_coordinate_delta": 47.99800000000005,
+          "routing_ms": 727.6642460000003,
+          "baseline_routing_ms": 883.2646360000363,
+          "delta_hardDefects": 0,
+          "delta_layoutHardDefects": 0,
+          "delta_routingHardDefects": 0,
+          "delta_requiredIntentFailures": 0,
+          "delta_blockedRoutes": 0,
+          "delta_overlaps": 0,
+          "delta_throughNodes": 0,
+          "delta_authoredSideViolations": 0,
+          "delta_pinScopeViolations": 0,
+          "delta_crossings": 0,
+          "delta_sharedLength": 0,
+          "delta_laneDeficit": 0,
+          "delta_bends": 0,
+          "delta_tinyJogs": 0,
+          "delta_hooks": 0,
+          "delta_backEdges": 0,
+          "delta_routeLength": 365.7000000000003,
+          "delta_detourMean": 0,
+          "delta_labelDefects": -2,
+          "delta_titleTextHits": 0,
+          "delta_titleBandHits": 0,
+          "delta_area": -13670.583513000049,
+          "delta_aspectError": -0.010552999999999924,
+          "delta_diPer10": -10.0,
+          "delta_score_balanced": -10.0,
+          "delta_score_traceable": -10.0,
+          "delta_score_direct": -10.0,
+          "candidate_edit_changedSides": 0,
+          "baseline_edit_changedSides": 0,
+          "delta_edit_changedSides": 0,
+          "candidate_edit_changedSideRate": 0,
+          "baseline_edit_changedSideRate": 0,
+          "delta_edit_changedSideRate": 0,
+          "candidate_edit_changedRoutes": 9,
+          "baseline_edit_changedRoutes": 13,
+          "delta_edit_changedRoutes": -4,
+          "candidate_edit_changedRouteRate": 0.692308,
+          "baseline_edit_changedRouteRate": 1,
+          "delta_edit_changedRouteRate": -0.30769199999999997,
+          "candidate_edit_meanDisplacement": 43.910786,
+          "baseline_edit_meanDisplacement": 48.051562,
+          "delta_edit_meanDisplacement": -4.140775999999995,
+          "candidate_edit_translationAdjustedMean": 43.910786,
+          "baseline_edit_translationAdjustedMean": 48.119947,
+          "delta_edit_translationAdjustedMean": -4.209161000000002,
+          "candidate_edit_orderFlipRate": 0.017544,
+          "baseline_edit_orderFlipRate": 0.017544,
+          "delta_edit_orderFlipRate": 0.0
+        },
+        "worst_soft_witness": {
+          "stratum": "targeted-valid-sibling-scope",
+          "control": "scope",
+          "level": "neighbourhood",
+          "case_id": "containers-02",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-02-neighbourhood",
+          "baseline_id": "D-target-scope-containers-02-all",
+          "status": "ok",
+          "baseline_status": "ok",
+          "hard_valid": true,
+          "baseline_hard_valid": true,
+          "valid_gained": false,
+          "valid_lost": false,
+          "exact_geometry_changed": true,
+          "geometry_changed_over_1px": true,
+          "rounded_bin_hash_changed": true,
+          "rendered_path_changed": true,
+          "changed_port_pair_count": 3,
+          "max_node_box_coordinate_delta": 74.82300000000001,
+          "routing_ms": 339.7214189999504,
+          "baseline_routing_ms": 925.6655940000201,
+          "delta_hardDefects": 0,
+          "delta_layoutHardDefects": 0,
+          "delta_routingHardDefects": 0,
+          "delta_requiredIntentFailures": 0,
+          "delta_blockedRoutes": 0,
+          "delta_overlaps": 0,
+          "delta_throughNodes": 0,
+          "delta_authoredSideViolations": 0,
+          "delta_pinScopeViolations": 0,
+          "delta_crossings": -1,
+          "delta_sharedLength": 0,
+          "delta_laneDeficit": 0,
+          "delta_bends": 2,
+          "delta_tinyJogs": 0,
+          "delta_hooks": 1,
+          "delta_backEdges": 0,
+          "delta_routeLength": 273.96999999999935,
+          "delta_detourMean": 0.026536000000000115,
+          "delta_labelDefects": -1,
+          "delta_titleTextHits": 0,
+          "delta_titleBandHits": 0,
+          "delta_area": 10398.39599999995,
+          "delta_aspectError": -0.007566000000000017,
+          "delta_diPer10": 1.6666670000000003,
+          "delta_score_balanced": 1.6666670000000003,
+          "delta_score_traceable": 0.8333329999999997,
+          "delta_score_direct": 5.416665999999999,
+          "candidate_edit_changedSides": 0,
+          "baseline_edit_changedSides": 3,
+          "delta_edit_changedSides": -3,
+          "candidate_edit_changedSideRate": 0,
+          "baseline_edit_changedSideRate": 0.25,
+          "delta_edit_changedSideRate": -0.25,
+          "candidate_edit_changedRoutes": 6,
+          "baseline_edit_changedRoutes": 11,
+          "delta_edit_changedRoutes": -5,
+          "candidate_edit_changedRouteRate": 0.5,
+          "baseline_edit_changedRouteRate": 0.916667,
+          "delta_edit_changedRouteRate": -0.416667,
+          "candidate_edit_meanDisplacement": 47.362873,
+          "baseline_edit_meanDisplacement": 19.883998,
+          "delta_edit_meanDisplacement": 27.478875000000002,
+          "candidate_edit_translationAdjustedMean": 12.200662,
+          "baseline_edit_translationAdjustedMean": 19.70521,
+          "delta_edit_translationAdjustedMean": -7.5045480000000016,
+          "candidate_edit_orderFlipRate": 0.010526,
+          "baseline_edit_orderFlipRate": 0,
+          "delta_edit_orderFlipRate": 0.010526
+        }
+      }
+    },
+    {
+      "scope": "container",
+      "jobs": 12,
+      "statuses": {
+        "ok": 11,
+        "timed_out": 1
+      },
+      "hard_valid": 6,
+      "hard_defect_count_completed": 50,
+      "pin_scope_violation_count_completed": 0,
+      "required_intent_failure_count_completed": 0,
+      "routing_hard_defect_count_completed": 44,
+      "hard_failure_witnesses": [
+        {
+          "case_id": "architecture-03",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-03-container",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-architecture-03-container.json.gz",
+          "hard": [
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "g0 \u00d7 g1"
+            }
+          ],
+          "intent_failures": []
+        },
+        {
+          "case_id": "containers-04",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-04-container",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-containers-04-container.json.gz",
+          "hard": [
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e0"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e1"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e10"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e11"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e12"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e13"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e14"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e15"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e16"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e17"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e18"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e19"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e2"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e20"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e21"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e22"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e23"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e24"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e25"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e26"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e27"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e28"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e29"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e3"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e30"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e31"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e32"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e33"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e34"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e35"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e4"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e5"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e6"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e7"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e8"
+            },
+            {
+              "kind": "routing",
+              "defect": "blocked-route",
+              "detail": "e9"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n4"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n8"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n12"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n16"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n20"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n24"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n28"
+            },
+            {
+              "kind": "routing",
+              "defect": "edge-through-node",
+              "detail": "e35 through n32"
+            }
+          ],
+          "intent_failures": []
+        },
+        {
+          "case_id": "authored-01",
+          "family": "authored",
+          "trial_id": "D-target-scope-authored-01-container",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-authored-01-container.json.gz",
+          "hard": [
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "output \u00d7 runtime"
+            },
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "r_install \u00d7 build"
+            },
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "build \u00d7 runtime"
+            }
+          ],
+          "intent_failures": []
+        },
+        {
+          "case_id": "recipes-04",
+          "family": "recipes",
+          "trial_id": "D-target-scope-recipes-04-container",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-recipes-04-container.json.gz",
+          "hard": [
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "commander \u00d7 comms"
+            }
+          ],
+          "intent_failures": []
+        },
+        {
+          "case_id": "dags-02",
+          "family": "dags",
+          "trial_id": "D-target-scope-dags-02-container",
+          "method": null,
+          "status": "ok",
+          "hard_valid": false,
+          "geometry": "data/geometry/D-target-scope-dags-02-container.json.gz",
+          "hard": [
+            {
+              "kind": "layout",
+              "defect": "node-overlap",
+              "detail": "build \u00d7 test"
+            }
+          ],
+          "intent_failures": []
+        },
+        {
+          "case_id": "architecture-04",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-04-container",
+          "method": null,
+          "status": "timed_out",
+          "hard_valid": false,
+          "geometry": null,
+          "hard": [],
+          "intent_failures": []
+        }
+      ],
+      "paired_with_all": {
+        "paired_jobs": 12,
+        "comparable_geometry": 11,
+        "exact_geometry_changed": 9,
+        "geometry_changed_over_1px": 9,
+        "hard_valid_candidates": 6,
+        "hard_valid_baselines": 9,
+        "valid_gained": 0,
+        "valid_lost": 3,
+        "both_valid_pairs": 6,
+        "mean_balanced_delta_both_valid": -1.8162391666666664,
+        "mean_traceable_delta_both_valid": -1.9978633333333338,
+        "mean_route_length_delta_both_valid": 179.8416666666666,
+        "mean_area_delta_both_valid": 14879.467235833357,
+        "gain_witnesses": [],
+        "loss_witnesses": [
+          "D-target-scope-architecture-03-container",
+          "D-target-scope-authored-01-container",
+          "D-target-scope-dags-02-container"
+        ],
+        "best_soft_witness": {
+          "stratum": "targeted-valid-sibling-scope",
+          "control": "scope",
+          "level": "container",
+          "case_id": "architecture-01",
+          "family": "architecture",
+          "trial_id": "D-target-scope-architecture-01-container",
+          "baseline_id": "D-target-scope-architecture-01-all",
+          "status": "ok",
+          "baseline_status": "ok",
+          "hard_valid": true,
+          "baseline_hard_valid": true,
+          "valid_gained": false,
+          "valid_lost": false,
+          "exact_geometry_changed": true,
+          "geometry_changed_over_1px": true,
+          "rounded_bin_hash_changed": true,
+          "rendered_path_changed": true,
+          "changed_port_pair_count": 0,
+          "max_node_box_coordinate_delta": 47.99800000000005,
+          "routing_ms": 413.03876200004015,
+          "baseline_routing_ms": 883.2646360000363,
+          "delta_hardDefects": 0,
+          "delta_layoutHardDefects": 0,
+          "delta_routingHardDefects": 0,
+          "delta_requiredIntentFailures": 0,
+          "delta_blockedRoutes": 0,
+          "delta_overlaps": 0,
+          "delta_throughNodes": 0,
+          "delta_authoredSideViolations": 0,
+          "delta_pinScopeViolations": 0,
+          "delta_crossings": 0,
+          "delta_sharedLength": 0,
+          "delta_laneDeficit": 0,
+          "delta_bends": 0,
+          "delta_tinyJogs": 0,
+          "delta_hooks": 0,
+          "delta_backEdges": 0,
+          "delta_routeLength": 605.7600000000002,
+          "delta_detourMean": 0,
+          "delta_labelDefects": -2,
+          "delta_titleTextHits": 0,
+          "delta_titleBandHits": 0,
+          "delta_area": 19835.600594999967,
+          "delta_aspectError": 0.015064999999999995,
+          "delta_diPer10": -10.0,
+          "delta_score_balanced": -10.0,
+          "delta_score_traceable": -10.0,
+          "delta_score_direct": -10.0,
+          "candidate_edit_changedSides": 0,
+          "baseline_edit_changedSides": 0,
+          "delta_edit_changedSides": 0,
+          "candidate_edit_changedSideRate": 0,
+          "baseline_edit_changedSideRate": 0,
+          "delta_edit_changedSideRate": 0,
+          "candidate_edit_changedRoutes": 3,
+          "baseline_edit_changedRoutes": 13,
+          "delta_edit_changedRoutes": -10,
+          "candidate_edit_changedRouteRate": 0.230769,
+          "baseline_edit_changedRouteRate": 1,
+          "delta_edit_changedRouteRate": -0.769231,
+          "candidate_edit_meanDisplacement": 14.122535,
+          "baseline_edit_meanDisplacement": 48.051562,
+          "delta_edit_meanDisplacement": -33.929027,
+          "candidate_edit_translationAdjustedMean": 14.122535,
+          "baseline_edit_translationAdjustedMean": 48.119947,
+          "delta_edit_translationAdjustedMean": -33.997412000000004,
+          "candidate_edit_orderFlipRate": 0.017544,
+          "baseline_edit_orderFlipRate": 0.017544,
+          "delta_edit_orderFlipRate": 0.0
+        },
+        "worst_soft_witness": {
+          "stratum": "targeted-valid-sibling-scope",
+          "control": "scope",
+          "level": "container",
+          "case_id": "containers-02",
+          "family": "containers",
+          "trial_id": "D-target-scope-containers-02-container",
+          "baseline_id": "D-target-scope-containers-02-all",
+          "status": "ok",
+          "baseline_status": "ok",
+          "hard_valid": true,
+          "baseline_hard_valid": true,
+          "valid_gained": false,
+          "valid_lost": false,
+          "exact_geometry_changed": true,
+          "geometry_changed_over_1px": true,
+          "rounded_bin_hash_changed": true,
+          "rendered_path_changed": true,
+          "changed_port_pair_count": 2,
+          "max_node_box_coordinate_delta": 47.789,
+          "routing_ms": 344.1063500000164,
+          "baseline_routing_ms": 925.6655940000201,
+          "delta_hardDefects": 0,
+          "delta_layoutHardDefects": 0,
+          "delta_routingHardDefects": 0,
+          "delta_requiredIntentFailures": 0,
+          "delta_blockedRoutes": 0,
+          "delta_overlaps": 0,
+          "delta_throughNodes": 0,
+          "delta_authoredSideViolations": 0,
+          "delta_pinScopeViolations": 0,
+          "delta_crossings": -1,
+          "delta_sharedLength": 0,
+          "delta_laneDeficit": 0,
+          "delta_bends": 1,
+          "delta_tinyJogs": 0,
+          "delta_hooks": 1,
+          "delta_backEdges": 0,
+          "delta_routeLength": 172.92999999999938,
+          "delta_detourMean": 0.02261500000000005,
+          "delta_labelDefects": -1,
+          "delta_titleTextHits": 0,
+          "delta_titleBandHits": 0,
+          "delta_area": -16131.189999999944,
+          "delta_aspectError": 0.01185200000000003,
+          "delta_diPer10": 3.3333340000000007,
+          "delta_score_balanced": 3.3333340000000007,
+          "delta_score_traceable": 4.166665999999999,
+          "delta_score_direct": 7.916665999999999,
+          "candidate_edit_changedSides": 1,
+          "baseline_edit_changedSides": 3,
+          "delta_edit_changedSides": -2,
+          "candidate_edit_changedSideRate": 0.083333,
+          "baseline_edit_changedSideRate": 0.25,
+          "delta_edit_changedSideRate": -0.166667,
+          "candidate_edit_changedRoutes": 12,
+          "baseline_edit_changedRoutes": 11,
+          "delta_edit_changedRoutes": 1,
+          "candidate_edit_changedRouteRate": 1,
+          "baseline_edit_changedRouteRate": 0.916667,
+          "delta_edit_changedRouteRate": 0.08333299999999999,
+          "candidate_edit_meanDisplacement": 15.989025,
+          "baseline_edit_meanDisplacement": 19.883998,
+          "delta_edit_meanDisplacement": -3.8949729999999985,
+          "candidate_edit_translationAdjustedMean": 15.989025,
+          "baseline_edit_translationAdjustedMean": 19.70521,
+          "delta_edit_translationAdjustedMean": -3.716185000000001,
+          "candidate_edit_orderFlipRate": 0,
+          "baseline_edit_orderFlipRate": 0,
+          "delta_edit_orderFlipRate": 0
+        }
+      }
+    }
+  ],
+  "checkpoint_growth_outcomes": [
+    {
+      "trial_id": "D-target-input-D-warm-architecture-04-growContainers-False",
+      "level": false,
+      "status": "timed_out",
+      "error": "Trial exceeded 15000 ms"
+    },
+    {
+      "trial_id": "D-target-input-D-warm-architecture-04-growContainers-True",
+      "level": true,
+      "status": "timed_out",
+      "error": "Trial exceeded 15000 ms"
+    }
+  ],
+  "availability": "Architecture-04 uses the existing layout checkpoint because current routing timed out. It supplies no fabricated prior routes. All six supplemental architecture-04 attempts also time out at 15 seconds.",
+  "interpretation": "Scope is an authored movement constraint, not a knob whose smallest defect index wins. A scoped result can be less globally tidy while correctly preserving outside objects. Original 14 unsupported-scope and six missing-input outcomes remain unchanged."
+}

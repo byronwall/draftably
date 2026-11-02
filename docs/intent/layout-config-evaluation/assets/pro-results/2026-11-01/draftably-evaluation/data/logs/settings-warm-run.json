@@ -1,0 +1,17 @@
+{
+  "runId": "settings-warm",
+  "started": "2026-11-01T23:31:54.564Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 1,
+  "planned": 444,
+  "priorCompleted": 0,
+  "executed": 444,
+  "failed": 20,
+  "timedOut": 0,
+  "skipped": 0,
+  "taskSha256": "9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e",
+  "finished": "2026-11-01T23:33:17.160Z",
+  "elapsedSeconds": 82.596,
+  "persistedDistinct": 444
+}

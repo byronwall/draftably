@@ -1,0 +1,242 @@
+[
+  {
+    "id": "P037",
+    "a": "C-heldout-pipelines-06-layered-RIGHT",
+    "b": "C-heldout-pipelines-06-grid-RIGHT",
+    "split": "heldout",
+    "family": "pipelines",
+    "task": "Explain a reading sequence from input to output.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P038",
+    "a": "C-heldout-dags-05-force-RIGHT",
+    "b": "C-heldout-dags-05-grid-RIGHT",
+    "split": "heldout",
+    "family": "dags",
+    "task": "Trace prerequisites and downstream dependents.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P039",
+    "a": "C-heldout-hierarchies-06-stress-RIGHT",
+    "b": "C-heldout-hierarchies-06-layered-DOWN",
+    "split": "heldout",
+    "family": "hierarchies",
+    "task": "Locate ownership and inspect a subtree.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P040",
+    "a": "C-heldout-architecture-05-grid-DOWN",
+    "b": "C-heldout-architecture-05-stress-DOWN",
+    "split": "heldout",
+    "family": "architecture",
+    "task": "Explain boundaries and cross-system calls.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P041",
+    "a": "C-heldout-cycles-06-flow-RIGHT",
+    "b": "C-heldout-cycles-06-stress-DOWN",
+    "split": "heldout",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P042",
+    "a": "C-heldout-networks-05-boundary-align-RIGHT",
+    "b": "C-heldout-networks-05-grid-RIGHT",
+    "split": "heldout",
+    "family": "networks",
+    "task": "Inspect relationships without imposing a main direction.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P043",
+    "a": "C-heldout-disconnected-06-tree-RIGHT",
+    "b": "C-heldout-disconnected-06-layered-RIGHT",
+    "split": "heldout",
+    "family": "disconnected",
+    "task": "Pack independent components into a useful overview.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P044",
+    "a": "C-heldout-routing-05-stress-DOWN",
+    "b": "C-heldout-routing-05-compound-flow-RIGHT",
+    "split": "heldout",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P045",
+    "a": "C-heldout-containers-06-stress-DOWN",
+    "b": "C-heldout-containers-06-tree-RIGHT",
+    "split": "heldout",
+    "family": "containers",
+    "task": "Read nesting, boundary endpoints, and title ownership.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P046",
+    "a": "C-heldout-presentation-06-tree-DOWN",
+    "b": "C-heldout-presentation-06-boundary-align-RIGHT",
+    "split": "heldout",
+    "family": "presentation",
+    "task": "Fit an explanation to a requested presentation format.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P047",
+    "a": "C-heldout-authored-06-compound-flow-DOWN",
+    "b": "C-heldout-authored-06-compound-flow-RIGHT",
+    "split": "heldout",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "category": "family",
+    "reason": "Seeded family sample; all completed sampled candidate geometries are identical. Keep this as an authored-constraint identity negative control instead of excluding the family."
+  },
+  {
+    "id": "P048",
+    "a": "C-heldout-recipes-06-layered-RIGHT",
+    "b": "C-heldout-recipes-06-flow-DOWN",
+    "split": "heldout",
+    "family": "recipes",
+    "task": "Preserve the structure encoded by a specialized recipe.",
+    "category": "family",
+    "reason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P049",
+    "a": "C-heldout-architecture-05-force-RIGHT",
+    "b": "G-selected-heldout-architecture-05-compound-spring-p3",
+    "split": "heldout",
+    "family": "architecture",
+    "task": "Explain boundaries and cross-system calls.",
+    "category": "frozen-portfolio-regression",
+    "reason": "Largest remaining frozen configuration-portfolio regret; profile readable; regret 5.191630425418563; no heldout refitting."
+  },
+  {
+    "id": "P050",
+    "a": "C-heldout-routing-05-tree-RIGHT",
+    "b": "C-heldout-routing-05-tree-DOWN",
+    "split": "heldout",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "category": "frozen-portfolio-regression",
+    "reason": "Largest remaining frozen configuration-portfolio regret; profile specialist; regret 1.7647060000000003; no heldout refitting."
+  },
+  {
+    "id": "P051",
+    "a": "C-heldout-routing-06-recipe-none",
+    "b": "G-selected-heldout-routing-06-flow-p1",
+    "split": "heldout",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "category": "frozen-portfolio-regression",
+    "reason": "Largest remaining frozen configuration-portfolio regret; profile compact; regret 1.6966149566623692; no heldout refitting."
+  },
+  {
+    "id": "P052",
+    "a": "G-selected-heldout-cycles-06-tree-p1",
+    "b": "C-heldout-cycles-06-compound-flow-RIGHT",
+    "split": "heldout",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "category": "frozen-portfolio-regression",
+    "reason": "Largest remaining frozen configuration-portfolio regret; profile traceable; regret 1.3725490000000002; no heldout refitting."
+  },
+  {
+    "id": "P053",
+    "a": "C-heldout-cycles-06-compound-flow-RIGHT",
+    "b": "C-heldout-cycles-06-tree-RIGHT",
+    "split": "heldout",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "category": "omitted-engine",
+    "reason": "Contested omitted engine compound-flow: largest balanced-score margin against the best distinct retained-engine output; margin 1.372549. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P054",
+    "a": "C-heldout-cycles-06-compound-spring-RIGHT",
+    "b": "C-heldout-cycles-06-tree-RIGHT",
+    "split": "heldout",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "category": "omitted-engine",
+    "reason": "Contested omitted engine compound-spring: largest balanced-score margin against the best distinct retained-engine output; margin 0.588235. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P055",
+    "a": "C-heldout-cycles-05-stress-DOWN",
+    "b": "C-heldout-cycles-05-boundary-align-DOWN",
+    "split": "heldout",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "category": "omitted-engine",
+    "reason": "Contested omitted engine stress: largest balanced-score margin against the best distinct retained-engine output; margin 0.000000. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P056",
+    "a": "C-heldout-cycles-06-flow-RIGHT",
+    "b": "C-heldout-cycles-06-tree-RIGHT",
+    "split": "heldout",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "category": "omitted-engine",
+    "reason": "Contested omitted engine flow: largest balanced-score margin against the best distinct retained-engine output; margin 0.980392. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P057",
+    "a": "C-doc-heldout-disconnected-05",
+    "b": "C-heldout-disconnected-05-recipe-row",
+    "split": "heldout",
+    "family": "disconnected",
+    "task": "Pack independent components into a useful overview.",
+    "category": "metric-directness",
+    "reason": "Lowest balanced score versus shortest routes; length ratio 5.6151; visual assessment checks detour cost independently."
+  },
+  {
+    "id": "P058",
+    "a": "C-heldout-presentation-06-recipe-none",
+    "b": "G-selected-heldout-presentation-06-compound-flow-p1",
+    "split": "heldout",
+    "family": "presentation",
+    "task": "Fit an explanation to a requested presentation format.",
+    "category": "metric-directness",
+    "reason": "Lowest balanced score versus shortest routes; length ratio 3.0441; visual assessment checks detour cost independently."
+  },
+  {
+    "id": "P059",
+    "a": "G-selected-heldout-architecture-05-compound-spring-p3",
+    "b": "G-selected-heldout-architecture-05-layered-p1",
+    "split": "heldout",
+    "family": "architecture",
+    "task": "Explain boundaries and cross-system calls.",
+    "category": "metric-directness",
+    "reason": "Lowest balanced score versus shortest routes; length ratio 2.8656; visual assessment checks detour cost independently."
+  },
+  {
+    "id": "P060",
+    "a": "C-heldout-routing-05-tree-DOWN",
+    "b": "C-heldout-routing-05-grid-DOWN",
+    "split": "heldout",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "category": "metric-directness",
+    "reason": "Lowest balanced score versus shortest routes; length ratio 2.4338; visual assessment checks detour cost independently."
+  }
+]

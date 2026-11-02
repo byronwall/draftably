@@ -1,0 +1,31 @@
+diagram "Fixed K3,3 connection tracing" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a0 "a0"
+node b0 "b0"
+node a1 "a1"
+node b1 "b1"
+node a2 "a2"
+node b2 "b2"
+edge e0 a0 -> b0 from=right to=left
+edge e1 a0 -> b1
+edge e2 a0 -> b2
+edge e3 a1 -> b0
+edge e4 a1 -> b1
+edge e5 a1 -> b2
+edge e6 a2 -> b0
+edge e7 a2 -> b1
+edge e8 a2 -> b2
+layout root flow direction=auto fold=never
+size a0 width=120 height=60
+pin a0 x=0 y=0
+size b0 width=120 height=60
+pin b0 x=500 y=0
+size a1 width=120 height=60
+pin a1 x=0 y=140
+size b1 width=120 height=60
+pin b1 x=500 y=140
+size a2 width=120 height=60
+pin a2 x=0 y=280
+size b2 width=120 height=60
+pin b2 x=500 y=280

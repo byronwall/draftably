@@ -1,0 +1,5 @@
+scope,jobs,hard_valid,hard_defect_count_completed,pin_scope_violation_count_completed,required_intent_failure_count_completed,routing_hard_defect_count_completed,paired_with_all
+all,12,9,45,0,0,44,
+selection,12,10,44,0,0,44,
+neighbourhood,12,10,44,0,0,44,
+container,12,6,50,0,0,44,

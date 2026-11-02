@@ -1,0 +1,56 @@
+diagram "Order pipeline" version=1
+
+# An order from intake to fulfilment, arranged by a layout engine instead of a built-in recipe.
+# Try other engines with Compare in the viewer, or change the layout line at the end.
+group intake "Intake" color=blue
+node web "Web checkout" in=intake
+node partner "Partner API" in=intake
+node gateway "Order gateway" in=intake
+
+group core "Order core" color=mint
+node validate "Validate" in=core
+node price "Price & tax" in=core
+node reserve "Reserve stock" in=core
+node charge "Charge card" in=core shape=pill
+
+group fulfil "Fulfilment" color=amber
+node pick "Pick & pack" in=fulfil
+node ship "Ship" in=fulfil
+node notify "Notify customer" in=fulfil
+
+node ledger "Ledger" color=violet
+node events "Event bus" color=slate shape=pill
+
+edge e1 web -> gateway
+edge e2 partner -> gateway
+edge e3 gateway -> validate
+edge e4 validate -> price
+edge e5 price -> reserve
+edge e6 reserve -> charge
+edge e7 charge -> pick "paid"
+edge e8 pick -> ship
+edge e9 ship -> notify
+edge e10 charge -> ledger kind=async
+edge e11 ship -> events kind=async
+edge e12 events -> notify kind=async
+
+layout root engine=layered
+
+# Layout refinements
+stay intake x=4 y=98
+stay core x=483 y=78
+stay price x=50 y=0
+stay reserve x=172 y=80
+stay charge x=216 y=0
+stay fulfil x=964 y=34
+stay ship x=52 y=111
+stay notify x=216 y=96
+stay ledger x=1085 y=309
+stay events x=1444 y=173
+stay validate x=0 y=80
+stay pick x=0 y=0
+stay partner x=0 y=79
+stay gateway x=215 y=42
+stay web x=0 y=0
+node audit "Audit trail" color=violet
+edge e13 ledger -> audit

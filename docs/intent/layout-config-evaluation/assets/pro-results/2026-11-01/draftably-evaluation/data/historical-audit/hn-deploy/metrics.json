@@ -1,0 +1,654 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [
+      "left-of build runtime"
+    ],
+    "nodes": 11,
+    "groups": 4,
+    "edges": 11,
+    "warnings": [
+      "warning Edge d6 (pkg -> r_install) crosses the title of runtime. The layout could not avoid it; move or resize a neighbour. [edge-through-title]",
+      "Warnings: 11 nodes, 4 groups, 11 connections."
+    ],
+    "flowDir": "right",
+    "width": 1314,
+    "height": 537,
+    "aspect": 2.45,
+    "density": 0.162,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 12,
+    "bendsPerEdge": 1.09,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 276,
+    "theme": "blueprint",
+    "fills": 9,
+    "minTextContrast": 5.83,
+    "groupFill": {
+      "build": 0.83,
+      "source": 0.77,
+      "host": 0.78,
+      "runtime": 0.7
+    },
+    "groupGaps": {
+      "build | source": 83,
+      "build | host": 125,
+      "host | runtime": 76,
+      "runtime | source": 96
+    },
+    "emptyArea": {
+      "share": 0.31,
+      "boxes": 21.4,
+      "w": 1314,
+      "h": 169,
+      "x": 0,
+      "y": 155
+    },
+    "edgeStretch": [
+      {
+        "id": "d1",
+        "kind": "forward",
+        "length": 585,
+        "detour": 1.15,
+        "span": 0.41
+      },
+      {
+        "id": "d2",
+        "kind": "forward",
+        "length": 640,
+        "detour": 1.2,
+        "span": 0.45
+      },
+      {
+        "id": "d5",
+        "kind": "wrap",
+        "length": 1023,
+        "detour": 1.11,
+        "span": 0.72
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 1,
+      "edge-hugs-node": 4,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 1,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 1,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 17.2,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "d1 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d2 (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d1 along code"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d1 along pkg"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "d1 along build"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "d1 between build's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d2 along code"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d2 along dockerfile"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "d2 12px from build"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 49–69 across groups"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 76–125px"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1314×169px at 0,155 (31% of the drawing, room for 21 boxes)"
+      },
+      {
+        "kind": "expectation-failed",
+        "detail": "left-of build runtime"
+      }
+    ],
+    "checks": [
+      {
+        "line": "left-of build runtime",
+        "pass": false
+      }
+    ]
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [
+      "below host runtime"
+    ],
+    "nodes": 11,
+    "groups": 4,
+    "edges": 11,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1983,
+    "height": 542,
+    "aspect": 3.66,
+    "density": 0.106,
+    "aligned": 0.82,
+    "crossings": 0,
+    "bends": 18,
+    "bendsPerEdge": 1.64,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 359,
+    "theme": "blueprint",
+    "fills": 9,
+    "minTextContrast": 5.83,
+    "groupFill": {
+      "build": 0.83,
+      "source": 0.77,
+      "host": 0.78,
+      "runtime": 0.7
+    },
+    "groupGaps": {
+      "build | source": 56,
+      "build | runtime": 53,
+      "host | runtime": 133
+    },
+    "emptyArea": {
+      "share": 0.5,
+      "boxes": 51.8,
+      "w": 1386,
+      "h": 387,
+      "x": 0,
+      "y": 155
+    },
+    "edgeStretch": [
+      {
+        "id": "d1",
+        "kind": "forward",
+        "length": 558,
+        "detour": 1.16,
+        "span": 0.27
+      },
+      {
+        "id": "d2",
+        "kind": "forward",
+        "length": 613,
+        "detour": 1.21,
+        "span": 0.3
+      },
+      {
+        "id": "d6",
+        "kind": "forward",
+        "length": 1461,
+        "detour": 1.24,
+        "span": 0.71
+      },
+      {
+        "id": "d9",
+        "kind": "wrap",
+        "length": 583,
+        "detour": 1.26,
+        "span": 0.28
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 4,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 5,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 2,
+      "edge-in-slot": 2,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 1,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 20,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "d1 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d2 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d5 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d6 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d1 along code"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d1 along pkg"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "d1 along build"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "d1 between build's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d2 along code"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d2 along dockerfile"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "d2 12px from build"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d5 along output"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "d5 11px from build"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "d5 between build's members and its border"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 49–69 across groups"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 53–133px"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"defines\" on source"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "d6 1461px, 0.71 of the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1386×387px at 0,155 (50% of the drawing, room for 52 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 15,
+      "meanMove": 501,
+      "maxMove": 1368,
+      "moved": 11,
+      "alignedMean": 501,
+      "alignedMoved": 11,
+      "orderFlips": 47,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 15,
+      "meanMove": 501,
+      "maxMove": 1368,
+      "moved": 11,
+      "alignedMean": 501,
+      "alignedMoved": 11,
+      "orderFlips": 47,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "checks": [
+      {
+        "line": "below host runtime",
+        "pass": true
+      }
+    ]
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [
+      "keeps-order",
+      "near health serve 120"
+    ],
+    "nodes": 12,
+    "groups": 4,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 2195,
+    "height": 558,
+    "aspect": 3.93,
+    "density": 0.101,
+    "aligned": 0.83,
+    "crossings": 0,
+    "bends": 20,
+    "bendsPerEdge": 1.54,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 348,
+    "theme": "blueprint",
+    "fills": 9,
+    "minTextContrast": 5.83,
+    "groupFill": {
+      "build": 0.83,
+      "source": 0.77,
+      "host": 0.78,
+      "runtime": 0.67
+    },
+    "groupGaps": {
+      "build | source": 56,
+      "build | runtime": 53,
+      "host | runtime": 133
+    },
+    "emptyArea": {
+      "share": 0.49,
+      "boxes": 58.5,
+      "w": 1492,
+      "h": 403,
+      "x": 0,
+      "y": 155
+    },
+    "edgeStretch": [
+      {
+        "id": "d1",
+        "kind": "forward",
+        "length": 558,
+        "detour": 1.16,
+        "span": 0.25
+      },
+      {
+        "id": "d13",
+        "kind": "wrap",
+        "length": 636,
+        "detour": 1.11,
+        "span": 0.28
+      },
+      {
+        "id": "d2",
+        "kind": "forward",
+        "length": 613,
+        "detour": 1.21,
+        "span": 0.27
+      },
+      {
+        "id": "d6",
+        "kind": "forward",
+        "length": 1461,
+        "detour": 1.24,
+        "span": 0.64
+      },
+      {
+        "id": "d9",
+        "kind": "wrap",
+        "length": 467,
+        "detour": 1.31,
+        "span": 0.21
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 1,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 4,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 5,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 3,
+      "edge-in-slot": 2,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 1,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 17.7,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "d1 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d2 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d5 (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "d6 (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d1 along code"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d1 along pkg"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "d1 along build"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "d1 between build's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d2 along code"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d2 along dockerfile"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "d2 12px from build"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "d5 along output"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "d5 11px from build"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "d5 between build's members and its border"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "d6 12px from build"
+      },
+      {
+        "kind": "padding-varies",
+        "detail": "top padding 49–69 across groups"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 53–133px"
+      },
+      {
+        "kind": "label-on-group-border",
+        "detail": "\"defines\" on source"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "d6 1461px, 0.64 of the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1492×403px at 0,155 (49% of the drawing, room for 59 boxes)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 15,
+      "meanMove": 32,
+      "maxMove": 107,
+      "moved": 4,
+      "alignedMean": 32,
+      "alignedMoved": 4,
+      "orderFlips": 0,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 15,
+      "meanMove": 528,
+      "maxMove": 1470,
+      "moved": 11,
+      "alignedMean": 528,
+      "alignedMoved": 11,
+      "orderFlips": 43,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "checks": [
+      {
+        "line": "keeps-order",
+        "pass": true,
+        "why": "0 order flips"
+      },
+      {
+        "line": "near health serve 120",
+        "pass": true,
+        "why": "gap 50px"
+      }
+    ]
+  }
+]

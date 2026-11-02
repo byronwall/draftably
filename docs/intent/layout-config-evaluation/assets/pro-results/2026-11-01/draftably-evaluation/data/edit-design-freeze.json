@@ -1,0 +1,27 @@
+{
+  "at": "2026-11-01T23:22:07.595335+00:00",
+  "bases": 24,
+  "families": 12,
+  "developmentBases": 12,
+  "heldoutBases": 12,
+  "editsPerBase": 4,
+  "negativeControlsPerBase": 1,
+  "sourcePolicies": [
+    "current-source",
+    "best-single",
+    "feature-selector"
+  ],
+  "warmPolicies": [
+    "current-tidy",
+    "separate-only",
+    "group-aware"
+  ],
+  "sharedState": "Every warm policy receives the same current-source positions and prior port sides; no chaining.",
+  "protections": "Same input pins/manual flags and scope for each warm policy; respectManual=true is an explicit job requirement, not the shipped false default.",
+  "localMove": "Reapply the authored 56px local nudge to prior positions before repair.",
+  "structuralEscape": "Sequence/lanes use current compiled recipe geometry; marked compile-recipe, not credited as a raw warm-engine run.",
+  "colorControl": "Cold: normal compile. Warm: retain positions and reroute; no unsolicited layout pass.",
+  "partialReference": "If source routing timed out, completed layout checkpoint can supply geometry; unavailable prior route history and churn are marked, never fabricated.",
+  "requestedGlobalReflow": "Record movement but do not penalize it as an unintended stability failure.",
+  "sourceDirection": "A requested change-direction overrides a policy default or predicted direction."
+}

@@ -1,0 +1,20 @@
+{"at":"2026-11-02T00:22:39.949Z","runId":"edits-policies-heldout","event":"start","started":"2026-11-02T00:22:39.948Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":120,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-02T00:23:08.633Z","runId":"edits-policies-heldout","event":"progress","complete":20,"total":120,"last":"E-cold-dags-05-color_control-feature-selector","status":"ok","elapsedSeconds":29}
+{"at":"2026-11-02T00:23:32.542Z","runId":"edits-policies-heldout","event":"progress","complete":40,"total":120,"last":"E-cold-architecture-05-color_control-feature-selector","status":"ok","elapsedSeconds":53}
+{"at":"2026-11-02T00:23:39.758Z","runId":"edits-policies-heldout","event":"progress","complete":60,"total":120,"last":"E-cold-networks-05-color_control-feature-selector","status":"ok","elapsedSeconds":60}
+{"at":"2026-11-02T00:23:46.534Z","runId":"edits-policies-heldout","event":"progress","complete":80,"total":120,"last":"E-cold-routing-05-color_control-feature-selector","status":"ok","elapsedSeconds":67}
+{"at":"2026-11-02T00:23:49.574Z","runId":"edits-policies-heldout","event":"progress","complete":100,"total":120,"last":"E-cold-presentation-05-color_control-feature-selector","status":"ok","elapsedSeconds":70}
+{"at":"2026-11-02T00:23:50.041Z","runId":"edits-policies-heldout","event":"progress","complete":120,"total":120,"last":"E-cold-recipes-05-color_control-feature-selector","status":"ok","elapsedSeconds":70}
+{"at":"2026-11-02T00:23:50.067Z","runId":"edits-policies-heldout","event":"complete","started":"2026-11-02T00:22:39.948Z","node":"v24.22.1","platform":"linux","workers":1,"policySha256":"9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649","planned":120,"priorCompleted":0,"executed":120,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6","finished":"2026-11-02T00:23:50.051Z","elapsedSeconds":70.103,"persistedDistinct":120}

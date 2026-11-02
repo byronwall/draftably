@@ -1,0 +1,176 @@
+diagram "Architecture evaluation 06" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group g0 "Subsystem 1"
+group g1 "Subsystem 2"
+group g2 "Subsystem 3"
+group g3 "Subsystem 4"
+group g4 "Subsystem 5"
+group g5 "Subsystem 6"
+group g6 "Subsystem 7"
+node n0 "Service 1" in=g0
+node n1 "Service 2" in=g1
+node n2 "Service 3" in=g2
+node n3 "Service 4" in=g3
+node n4 "Service 5" in=g4
+node n5 "Service 6" in=g5
+node n6 "Service 7" in=g6
+node n7 "Service 8" in=g0
+node n8 "Service 9" in=g1
+node n9 "Service 10" in=g2
+node n10 "Service 11" in=g3
+node n11 "Service 12" in=g4
+node n12 "Service 13" in=g5
+node n13 "Service 14" in=g6
+node n14 "Service 15" in=g0
+node n15 "Service 16" in=g1
+node n16 "Service 17" in=g2
+node n17 "Service 18" in=g3
+node n18 "Service 19" in=g4
+node n19 "Service 20" in=g5
+node n20 "Service 21" in=g6
+node n21 "Service 22" in=g0
+node n22 "Service 23" in=g1
+node n23 "Service 24" in=g2
+node n24 "Service 25" in=g3
+node n25 "Service 26" in=g4
+node n26 "Service 27" in=g5
+node n27 "Service 28" in=g6
+node n28 "Service 29" in=g0
+node n29 "Service 30" in=g1
+node n30 "Service 31" in=g2
+node n31 "Service 32" in=g3
+node n32 "Service 33" in=g4
+node n33 "Service 34" in=g5
+node n34 "Service 35" in=g6
+node n35 "Service 36" in=g0
+node n36 "Service 37" in=g1
+node n37 "Service 38" in=g2
+node n38 "Service 39" in=g3
+node n39 "Service 40" in=g4
+node n40 "Service 41" in=g5
+node n41 "Service 42" in=g6
+node n42 "Service 43" in=g0
+node n43 "Service 44" in=g1
+node n44 "Service 45" in=g2
+node n45 "Service 46" in=g3
+node n46 "Service 47" in=g4
+node n47 "Service 48" in=g5
+node n48 "Service 49" in=g6
+node n49 "Service 50" in=g0
+node n50 "Service 51" in=g1
+node n51 "Service 52" in=g2
+node n52 "Service 53" in=g3
+node n53 "Service 54" in=g4
+node n54 "Service 55" in=g5
+node n55 "Service 56" in=g6
+node n56 "Service 57" in=g0
+node n57 "Service 58" in=g1
+node n58 "Service 59" in=g2
+node n59 "Service 60" in=g3
+node n60 "Service 61" in=g4
+node n61 "Service 62" in=g5
+node n62 "Service 63" in=g6
+edge e0 n0 -> n1 "call"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8 "call"
+edge e8 n8 -> n9
+edge e9 n9 -> n10
+edge e10 n10 -> n11
+edge e11 n11 -> n12
+edge e12 n12 -> n13
+edge e13 n13 -> n14
+edge e14 n14 -> n15 "call"
+edge e15 n15 -> n16
+edge e16 n16 -> n17
+edge e17 n17 -> n18
+edge e18 n18 -> n19
+edge e19 n19 -> n20
+edge e20 n20 -> n21
+edge e21 n21 -> n22 "call"
+edge e22 n22 -> n23
+edge e23 n23 -> n24
+edge e24 n24 -> n25
+edge e25 n25 -> n26
+edge e26 n26 -> n27
+edge e27 n27 -> n28
+edge e28 n28 -> n29 "call"
+edge e29 n29 -> n30
+edge e30 n30 -> n31
+edge e31 n31 -> n32
+edge e32 n32 -> n33
+edge e33 n33 -> n34
+edge e34 n34 -> n35
+edge e35 n35 -> n36 "call"
+edge e36 n36 -> n37
+edge e37 n37 -> n38
+edge e38 n38 -> n39
+edge e39 n39 -> n40
+edge e40 n40 -> n41
+edge e41 n41 -> n42
+edge e42 n42 -> n43 "call"
+edge e43 n43 -> n44
+edge e44 n44 -> n45
+edge e45 n45 -> n46
+edge e46 n46 -> n47
+edge e47 n47 -> n48
+edge e48 n48 -> n49
+edge e49 n49 -> n50 "call"
+edge e50 n50 -> n51
+edge e51 n51 -> n52
+edge e52 n52 -> n53
+edge e53 n53 -> n54
+edge e54 n54 -> n55
+edge e55 n55 -> n56
+edge e56 n56 -> n57 "call"
+edge e57 n57 -> n58
+edge e58 n58 -> n59
+edge e59 n59 -> n60
+edge e60 n60 -> n61
+edge e61 n61 -> n62
+edge e62 n0 -> n3
+edge e63 n3 -> n6 "event" kind=async
+edge e64 n6 -> n9
+edge e65 n9 -> n12 "event" kind=async
+edge e66 n12 -> n15
+edge e67 n15 -> n18 "event" kind=async
+edge e68 n18 -> n21
+edge e69 n21 -> n24 "event" kind=async
+edge e70 n24 -> n27
+edge e71 n27 -> n30 "event" kind=async
+edge e72 n30 -> n33
+edge e73 n33 -> n36 "event" kind=async
+edge e74 n36 -> n39
+edge e75 n39 -> n42 "event" kind=async
+edge e76 n42 -> n45
+edge e77 n45 -> n48 "event" kind=async
+edge e78 n48 -> n51
+edge e79 n51 -> n54 "event" kind=async
+edge e80 n54 -> n57
+edge e81 n57 -> n60 "event" kind=async
+edge e82 n0 -> n21 "boundary call"
+edge e83 n2 -> n23 "boundary call"
+edge e84 n4 -> n25 "boundary call"
+edge e85 n6 -> n27 "boundary call"
+edge e86 n8 -> n29 "boundary call"
+edge e87 n10 -> n31 "boundary call"
+edge e88 n12 -> n33 "boundary call"
+edge e89 n14 -> n35 "boundary call"
+edge e90 n16 -> n37 "boundary call"
+edge e91 n18 -> n39 "boundary call"
+edge e92 n20 -> n41 "boundary call"
+edge e93 n22 -> n43 "boundary call"
+edge e94 n24 -> n45 "boundary call"
+edge e95 n26 -> n47 "boundary call"
+edge e96 n28 -> n49 "boundary call"
+edge e97 n30 -> n51 "boundary call"
+edge e98 n32 -> n53 "boundary call"
+edge e99 n34 -> n55 "boundary call"
+
+layout root flow direction=right gap=48
+

@@ -1,0 +1,42 @@
+diagram "Recipes: add a list item to the Kroger cart" version=1
+
+# expect left-of browser server
+# expect left-of server kroger
+# expect keeps-order
+# expect near failed request 160
+
+theme fieldnotes
+theme-color basil shade=200 fill="#E4F0DC" stroke="#9DBF86" ink="#203A12"
+theme-color basil shade=600 fill="#4F7A34" stroke="#3B5E25" ink="#FFFFFF"
+
+group browser "Browser" color=basil shade=200
+node list "Shopping list" in=browser color=basil shade=600
+node search "Kroger search popup" in=browser color=basil shade=600
+
+group server "Next.js server"
+node trpc "tRPC handler" in=server
+node router "krogerRouter" in=server
+node request "krogerRequest" in=server
+node failed "Mark purchase failed" in=server
+
+node db "Postgres (Prisma)"
+
+group kroger "Kroger API"
+node products "Product search" in=kroger
+node oauth "OAuth token" in=kroger
+node cart "Cart add" in=kroger
+
+edge k1 list -> search
+edge k2 search -> trpc
+edge k3 trpc -> router
+edge k4 router -> products
+edge k5 router -> db
+edge k6 router -> request
+edge k7 request -> oauth
+edge k8 request -> cart
+edge k9 router -> list kind=async
+edge k10 request -> failed "rejected"
+edge k11 failed -> db
+edge k12 failed -> list "error toast" kind=async
+
+layout root engine=layered direction=right

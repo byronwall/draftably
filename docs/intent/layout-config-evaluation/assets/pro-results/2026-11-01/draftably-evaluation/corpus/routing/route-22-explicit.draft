@@ -1,0 +1,37 @@
+diagram "Balanced fan-in and fan-out" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a0 "a0"
+node b0 "b0"
+node a1 "a1"
+node b1 "b1"
+node a2 "a2"
+node b2 "b2"
+node hub1 "hub1"
+node hub2 "hub2"
+edge e0 a0 -> hub1 from=right to=left
+edge e1 hub1 -> b0
+edge e2 b0 -> hub2
+edge e3 a1 -> hub1
+edge e4 hub1 -> b1
+edge e5 b1 -> hub2
+edge e6 a2 -> hub1
+edge e7 hub1 -> b2
+edge e8 b2 -> hub2
+layout root flow direction=auto fold=never
+size a0 width=140 height=56
+pin a0 x=0 y=0
+size b0 width=140 height=56
+pin b0 x=620 y=0
+size a1 width=140 height=56
+pin a1 x=0 y=150
+size b1 width=140 height=56
+pin b1 x=620 y=150
+size a2 width=140 height=56
+pin a2 x=0 y=300
+size b2 width=140 height=56
+pin b2 x=620 y=300
+size hub1 width=160 height=80
+pin hub1 x=250 y=150
+size hub2 width=160 height=80
+pin hub2 x=900 y=150

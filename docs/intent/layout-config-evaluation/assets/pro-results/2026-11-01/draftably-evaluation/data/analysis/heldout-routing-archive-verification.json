@@ -1,0 +1,7 @@
+{
+  "verified": 318,
+  "checked": 318,
+  "mismatches": [],
+  "verification": "Canonical geometrySignature hash: node/group boxes, selected sides and route point sequences.",
+  "excludes": "SVG path/halo strings and other archive content are not covered by the trial geometry hash. This is not whole-archive byte identity."
+}

@@ -1,0 +1,19 @@
+diagram "Authored top exit around own source" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node state "state"
+node model "model"
+node dsl "dsl"
+node other "other"
+edge e0 state -> model "calls" from=top to=left
+edge e1 other -> dsl
+edge e2 dsl -> model
+layout root flow direction=auto fold=never
+size state width=164 height=63
+pin state x=216 y=131
+size model width=164 height=63
+pin model x=644 y=152
+size dsl width=164 height=63
+pin dsl x=429 y=183
+size other width=164 height=63
+pin other x=210 y=420

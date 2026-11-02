@@ -1,0 +1,3222 @@
+[
+  {
+    "id": "D-target-scope-architecture-01-all",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "external",
+        "device"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "external",
+        "device"
+      ],
+      "move": {
+        "algolia": {
+          "dx": 80,
+          "dy": 40
+        },
+        "external": {
+          "dx": 80,
+          "dy": 40
+        },
+        "firebase": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-01-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "external",
+        "device"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "external",
+        "device"
+      ],
+      "move": {
+        "algolia": {
+          "dx": 80,
+          "dy": 40
+        },
+        "external": {
+          "dx": 80,
+          "dy": 40
+        },
+        "firebase": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-01-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "external",
+        "device"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "external",
+        "device"
+      ],
+      "move": {
+        "algolia": {
+          "dx": 80,
+          "dy": 40
+        },
+        "external": {
+          "dx": 80,
+          "dy": 40
+        },
+        "firebase": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-01-container",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "external",
+        "device"
+      ],
+      "containerId": "external"
+    },
+    "patchDoc": {
+      "manual": [
+        "external",
+        "device"
+      ],
+      "move": {
+        "algolia": {
+          "dx": 80,
+          "dy": 40
+        },
+        "external": {
+          "dx": 80,
+          "dy": 40
+        },
+        "firebase": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-02-all",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "clients",
+        "app"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "clients",
+        "app"
+      ],
+      "move": {
+        "clients": {
+          "dx": 80,
+          "dy": 40
+        },
+        "browser": {
+          "dx": 80,
+          "dy": 40
+        },
+        "agent": {
+          "dx": 80,
+          "dy": 40
+        },
+        "extension": {
+          "dx": 80,
+          "dy": 40
+        },
+        "cli": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-02-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "clients",
+        "app"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "clients",
+        "app"
+      ],
+      "move": {
+        "clients": {
+          "dx": 80,
+          "dy": 40
+        },
+        "browser": {
+          "dx": 80,
+          "dy": 40
+        },
+        "agent": {
+          "dx": 80,
+          "dy": 40
+        },
+        "extension": {
+          "dx": 80,
+          "dy": 40
+        },
+        "cli": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-02-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "clients",
+        "app"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "clients",
+        "app"
+      ],
+      "move": {
+        "clients": {
+          "dx": 80,
+          "dy": 40
+        },
+        "browser": {
+          "dx": 80,
+          "dy": 40
+        },
+        "agent": {
+          "dx": 80,
+          "dy": 40
+        },
+        "extension": {
+          "dx": 80,
+          "dy": 40
+        },
+        "cli": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-02-container",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-02",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "clients",
+        "app"
+      ],
+      "containerId": "clients"
+    },
+    "patchDoc": {
+      "manual": [
+        "clients",
+        "app"
+      ],
+      "move": {
+        "clients": {
+          "dx": 80,
+          "dy": 40
+        },
+        "browser": {
+          "dx": 80,
+          "dy": 40
+        },
+        "agent": {
+          "dx": 80,
+          "dy": 40
+        },
+        "extension": {
+          "dx": 80,
+          "dy": 40
+        },
+        "cli": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-03-all",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-03-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-03-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-03-container",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ],
+      "containerId": "g0"
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-04-all",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "system",
+        "g5"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "system",
+        "g5"
+      ],
+      "move": {
+        "n13": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n39": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n40": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n15": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n45": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n37": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n26": {
+          "dx": 80,
+          "dy": 40
+        },
+        "system": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n25": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n18": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n43": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n19": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n34": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n38": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n14": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n46": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n21": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n10": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n33": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n31": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n36": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n42": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n7": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n22": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n30": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n27": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n44": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g4": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-04-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "system",
+        "g5"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "system",
+        "g5"
+      ],
+      "move": {
+        "n13": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n39": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n40": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n15": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n45": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n37": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n26": {
+          "dx": 80,
+          "dy": 40
+        },
+        "system": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n25": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n18": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n43": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n19": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n34": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n38": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n14": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n46": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n21": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n10": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n33": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n31": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n36": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n42": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n7": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n22": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n30": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n27": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n44": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g4": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-04-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "system",
+        "g5"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "system",
+        "g5"
+      ],
+      "move": {
+        "n13": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n39": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n40": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n15": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n45": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n37": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n26": {
+          "dx": 80,
+          "dy": 40
+        },
+        "system": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n25": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n18": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n43": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n19": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n34": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n38": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n14": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n46": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n21": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n10": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n33": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n31": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n36": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n42": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n7": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n22": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n30": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n27": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n44": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g4": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-architecture-04-container",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "system",
+        "g5"
+      ],
+      "containerId": "system"
+    },
+    "patchDoc": {
+      "manual": [
+        "system",
+        "g5"
+      ],
+      "move": {
+        "n13": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n39": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n40": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n15": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n45": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n37": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n26": {
+          "dx": 80,
+          "dy": 40
+        },
+        "system": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n25": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n9": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n18": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n43": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n19": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n34": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n38": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n14": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n46": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n21": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n10": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n33": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n31": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n36": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n2": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n42": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n7": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n3": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n22": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n30": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g1": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n27": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n6": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n44": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g4": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-01-all",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "iam",
+        "region"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "iam",
+        "region"
+      ],
+      "move": {
+        "iam": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-01-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "iam",
+        "region"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "iam",
+        "region"
+      ],
+      "move": {
+        "iam": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-01-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "iam",
+        "region"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "iam",
+        "region"
+      ],
+      "move": {
+        "iam": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-01-container",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "iam",
+        "region"
+      ],
+      "containerId": "account"
+    },
+    "patchDoc": {
+      "manual": [
+        "iam",
+        "region"
+      ],
+      "move": {
+        "iam": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-02-all",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "users",
+        "cluster"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "users",
+        "cluster"
+      ],
+      "move": {
+        "users": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-02-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "users",
+        "cluster"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "users",
+        "cluster"
+      ],
+      "move": {
+        "users": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-02-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "users",
+        "cluster"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "users",
+        "cluster"
+      ],
+      "move": {
+        "users": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-02-container",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-02",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "users",
+        "cluster"
+      ],
+      "containerId": "cluster"
+    },
+    "patchDoc": {
+      "manual": [
+        "users",
+        "cluster"
+      ],
+      "move": {
+        "users": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-04-all",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-04-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-04-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-containers-04-container",
+    "stage": "D-warm-targeted",
+    "caseId": "containers-04",
+    "family": "containers",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-containers-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "g0",
+        "g1"
+      ],
+      "containerId": "outer"
+    },
+    "patchDoc": {
+      "manual": [
+        "g0",
+        "g1"
+      ],
+      "move": {
+        "n32": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n24": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n8": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "g0": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n16": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n4": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n12": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n20": {
+          "dx": 80,
+          "dy": 40
+        },
+        "n28": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-01-all",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "host"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "host"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "output": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-01-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "host"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "host"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "output": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-01-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "host"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "host"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "output": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-01-container",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-01",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-01-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "host"
+      ],
+      "containerId": "source"
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "host"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "b_build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "output": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-03-all",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "n5",
+        "n6"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n5",
+        "n6"
+      ],
+      "move": {
+        "n5": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-03-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "n5",
+        "n6"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n5",
+        "n6"
+      ],
+      "move": {
+        "n5": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-03-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "n5",
+        "n6"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n5",
+        "n6"
+      ],
+      "move": {
+        "n5": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-authored-03-container",
+    "stage": "D-warm-targeted",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-authored-03-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "n5",
+        "n6"
+      ],
+      "containerId": "distant"
+    },
+    "patchDoc": {
+      "manual": [
+        "n5",
+        "n6"
+      ],
+      "move": {
+        "n5": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-02-all",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "accounts",
+        "invoices"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "accounts",
+        "invoices"
+      ],
+      "move": {
+        "accounts": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-02-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "accounts",
+        "invoices"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "accounts",
+        "invoices"
+      ],
+      "move": {
+        "accounts": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-02-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "accounts",
+        "invoices"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "accounts",
+        "invoices"
+      ],
+      "move": {
+        "accounts": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-02-container",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "accounts",
+        "invoices"
+      ],
+      "containerId": "accounts"
+    },
+    "patchDoc": {
+      "manual": [
+        "accounts",
+        "invoices"
+      ],
+      "move": {
+        "accounts": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.name": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.plan_t": {
+          "dx": 80,
+          "dy": 40
+        },
+        "accounts.id": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-04-all",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "commander",
+        "comms"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "commander",
+        "comms"
+      ],
+      "move": {
+        "resolve": {
+          "dx": 80,
+          "dy": 40
+        },
+        "commander": {
+          "dx": 80,
+          "dy": 40
+        },
+        "room": {
+          "dx": 80,
+          "dy": 40
+        },
+        "declare": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-04-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "commander",
+        "comms"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "commander",
+        "comms"
+      ],
+      "move": {
+        "resolve": {
+          "dx": 80,
+          "dy": 40
+        },
+        "commander": {
+          "dx": 80,
+          "dy": 40
+        },
+        "room": {
+          "dx": 80,
+          "dy": 40
+        },
+        "declare": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-04-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "commander",
+        "comms"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "commander",
+        "comms"
+      ],
+      "move": {
+        "resolve": {
+          "dx": 80,
+          "dy": 40
+        },
+        "commander": {
+          "dx": 80,
+          "dy": 40
+        },
+        "room": {
+          "dx": 80,
+          "dy": 40
+        },
+        "declare": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-recipes-04-container",
+    "stage": "D-warm-targeted",
+    "caseId": "recipes-04",
+    "family": "recipes",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-recipes-04-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "commander",
+        "comms"
+      ],
+      "containerId": "oncall"
+    },
+    "patchDoc": {
+      "manual": [
+        "commander",
+        "comms"
+      ],
+      "move": {
+        "resolve": {
+          "dx": 80,
+          "dy": 40
+        },
+        "commander": {
+          "dx": 80,
+          "dy": 40
+        },
+        "room": {
+          "dx": 80,
+          "dy": 40
+        },
+        "declare": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-dags-02-all",
+    "stage": "D-warm-targeted",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-dags-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "release"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "release"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "compile": {
+          "dx": 80,
+          "dy": 40
+        },
+        "image": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "all",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-dags-02-selection",
+    "stage": "D-warm-targeted",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-dags-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "selection",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "release"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "release"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "compile": {
+          "dx": 80,
+          "dy": 40
+        },
+        "image": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "selection",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-dags-02-neighbourhood",
+    "stage": "D-warm-targeted",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-dags-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "neighbourhood",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "release"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "release"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "compile": {
+          "dx": 80,
+          "dy": 40
+        },
+        "image": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "neighbourhood",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-scope-dags-02-container",
+    "stage": "D-warm-targeted",
+    "caseId": "dags-02",
+    "family": "dags",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-dags-02-current.json.gz",
+    "allowPartialReference": true,
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "container",
+      "maxMove": 48,
+      "selected": [
+        "build",
+        "release"
+      ],
+      "containerId": "source"
+    },
+    "patchDoc": {
+      "manual": [
+        "build",
+        "release"
+      ],
+      "move": {
+        "build": {
+          "dx": 80,
+          "dy": 40
+        },
+        "install": {
+          "dx": 80,
+          "dy": 40
+        },
+        "compile": {
+          "dx": 80,
+          "dy": 40
+        },
+        "image": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "control": "scope",
+    "level": "container",
+    "tag": "valid-sibling-scope-target",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "D-target-input-D-warm-architecture-04-growContainers-False",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-04-current.json.gz",
+    "options": {
+      "algorithm": "compound-flow",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "growContainers": false
+    },
+    "patchDoc": {
+      "manual": [
+        "n0",
+        "n1"
+      ],
+      "move": {
+        "n47": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "history": true,
+    "control": "growContainers",
+    "level": false,
+    "tag": "checkpoint-input-supplement",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "D-target-input-D-warm-architecture-04-growContainers-True",
+    "stage": "D-warm-targeted",
+    "caseId": "architecture-04",
+    "family": "architecture",
+    "split": "development",
+    "kind": "warm",
+    "reference": "data/geometry/C-development-architecture-04-current.json.gz",
+    "options": {
+      "algorithm": "compound-flow",
+      "mode": "pass",
+      "warmStart": true,
+      "settle": false,
+      "scope": "all",
+      "maxMove": 48,
+      "growContainers": true
+    },
+    "patchDoc": {
+      "manual": [
+        "n0",
+        "n1"
+      ],
+      "move": {
+        "n47": {
+          "dx": 80,
+          "dy": 40
+        }
+      }
+    },
+    "history": true,
+    "control": "growContainers",
+    "level": true,
+    "tag": "checkpoint-input-supplement",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  }
+]

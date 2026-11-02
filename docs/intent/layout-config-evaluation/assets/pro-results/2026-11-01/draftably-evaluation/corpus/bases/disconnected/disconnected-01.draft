@@ -1,0 +1,14 @@
+diagram "Disconnected evaluation 01" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Item 0"
+node n1 "Item 1"
+node n2 "Item 2"
+node n3 "Item 3"
+node n4 "Item 4"
+node n5 "Item 5"
+node n6 "Item 6"
+node n7 "Item 7"
+
+layout root flow direction=right gap=48
+

@@ -1,0 +1,41 @@
+{
+  "split": "development",
+  "canonicalRule": "First terminal row per trial ID",
+  "productionCalls": 0,
+  "stems": [
+    {
+      "stem": "screen-development",
+      "attempts": 1202,
+      "canonical": 1198,
+      "duplicates": 4,
+      "completeRows": 1094,
+      "verified": 1094
+    },
+    {
+      "stem": "documented-default-development",
+      "attempts": 46,
+      "canonical": 46,
+      "duplicates": 0,
+      "completeRows": 43,
+      "verified": 43
+    },
+    {
+      "stem": "selected-presets-development",
+      "attempts": 306,
+      "canonical": 306,
+      "duplicates": 0,
+      "completeRows": 278,
+      "verified": 278
+    },
+    {
+      "stem": "tuning-development",
+      "attempts": 480,
+      "canonical": 480,
+      "duplicates": 0,
+      "completeRows": 480,
+      "verified": 480
+    }
+  ],
+  "mismatches": [],
+  "missing": []
+}

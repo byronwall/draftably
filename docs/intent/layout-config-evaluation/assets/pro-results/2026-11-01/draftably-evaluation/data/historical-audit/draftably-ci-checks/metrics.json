@@ -1,0 +1,395 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [
+      "reads-x pr install changeset skill release_check fast"
+    ],
+    "nodes": 13,
+    "groups": 0,
+    "edges": 13,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1332,
+    "height": 406,
+    "aspect": 3.28,
+    "density": 0.24,
+    "aligned": 0.92,
+    "crossings": 1,
+    "bends": 17,
+    "bendsPerEdge": 1.31,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 266,
+    "theme": "signal",
+    "fills": 6,
+    "minTextContrast": 5.71,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.26,
+      "boxes": 14,
+      "w": 736,
+      "h": 190,
+      "x": 596,
+      "y": 216
+    },
+    "edgeStretch": [
+      {
+        "id": "c12",
+        "kind": "forward",
+        "length": 508,
+        "detour": 1.74,
+        "span": 0.36
+      },
+      {
+        "id": "c5",
+        "kind": "wrap",
+        "length": 1820,
+        "detour": 1.84,
+        "span": 1.31
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 4.6,
+    "issues": [
+      {
+        "kind": "ragged-bends",
+        "detail": "fail in R: turns at 884, 852"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "c5 1820px wrap, longer than the diagonal"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "736×190px at 596,216 (26% of the drawing, room for 14 boxes)"
+      }
+    ],
+    "checks": [
+      {
+        "line": "reads-x pr install changeset skill release_check fast",
+        "pass": true,
+        "why": "4 along, 1 wraps"
+      }
+    ]
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [
+      "reads-x pr install changeset skill release_check fast",
+      "order-x merged version_pr npm"
+    ],
+    "nodes": 16,
+    "groups": 0,
+    "edges": 16,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1167,
+    "height": 508,
+    "aspect": 2.3,
+    "density": 0.27,
+    "aligned": 1,
+    "crossings": 1,
+    "bends": 19,
+    "bendsPerEdge": 1.19,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 214,
+    "theme": "signal",
+    "fills": 7,
+    "minTextContrast": 5.71,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.09,
+      "boxes": 5.6,
+      "w": 309,
+      "h": 180,
+      "x": 858,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "c12",
+        "kind": "forward",
+        "length": 508,
+        "detour": 1.74,
+        "span": 0.4
+      },
+      {
+        "id": "c6",
+        "kind": "wrap",
+        "length": 1308,
+        "detour": 1.32,
+        "span": 1.03
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 1.9,
+    "issues": [
+      {
+        "kind": "ragged-bends",
+        "detail": "fail in R: turns at 668, 636"
+      },
+      {
+        "kind": "long-edge",
+        "detail": "c6 1308px wrap, longer than the diagonal"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 13,
+      "meanMove": 293,
+      "maxMove": 960,
+      "moved": 13,
+      "alignedMean": 125,
+      "alignedMoved": 5,
+      "orderFlips": 14,
+      "shift": {
+        "x": -216,
+        "y": 140
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 293,
+      "maxMove": 960,
+      "moved": 13,
+      "alignedMean": 125,
+      "alignedMoved": 5,
+      "orderFlips": 14,
+      "shift": {
+        "x": -216,
+        "y": 140
+      }
+    },
+    "checks": [
+      {
+        "line": "reads-x pr install changeset skill release_check fast",
+        "pass": true,
+        "why": "4 along, 1 wraps"
+      },
+      {
+        "line": "order-x merged version_pr npm",
+        "pass": true
+      }
+    ]
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [
+      "order-y pr install release_check",
+      "order-y merged version_pr npm"
+    ],
+    "nodes": 16,
+    "groups": 0,
+    "edges": 16,
+    "warnings": [],
+    "flowDir": "down",
+    "width": 540,
+    "height": 1260,
+    "aspect": 0.43,
+    "density": 0.235,
+    "aligned": 0.88,
+    "crossings": 1,
+    "bends": 16,
+    "bendsPerEdge": 1,
+    "maxBends": 3,
+    "hooks": 0,
+    "backEdges": 0,
+    "edgeLengthPerEdge": 126,
+    "theme": "signal",
+    "fills": 7,
+    "minTextContrast": 5.71,
+    "groupFill": {},
+    "groupGaps": {},
+    "emptyArea": {
+      "share": 0.15,
+      "boxes": 10.3,
+      "w": 188,
+      "h": 548,
+      "x": 0,
+      "y": 712
+    },
+    "edgeStretch": [
+      {
+        "id": "c12",
+        "kind": "forward",
+        "length": 458,
+        "detour": 2.12,
+        "span": 0.33
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 0,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 1,
+      "expectation-failed": 0,
+      "edge-hugs-node": 0,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 0,
+      "edge-in-slot": 0,
+      "edges-too-close": 0,
+      "uneven-channel": 0,
+      "ragged-bends": 0,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 0,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 0,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 1.3,
+    "issues": [
+      {
+        "kind": "long-edge",
+        "detail": "c12 458px, 2.1× the direct way"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 16,
+      "meanMove": 519,
+      "maxMove": 1116,
+      "moved": 16,
+      "alignedMean": 387,
+      "alignedMoved": 16,
+      "orderFlips": 44,
+      "shift": {
+        "x": -267,
+        "y": 328
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 13,
+      "meanMove": 545,
+      "maxMove": 1062,
+      "moved": 13,
+      "alignedMean": 363,
+      "alignedMoved": 13,
+      "orderFlips": 23,
+      "shift": {
+        "x": -384,
+        "y": 372
+      }
+    },
+    "checks": [
+      {
+        "line": "order-y pr install release_check",
+        "pass": true
+      },
+      {
+        "line": "order-y merged version_pr npm",
+        "pass": true
+      }
+    ]
+  }
+]

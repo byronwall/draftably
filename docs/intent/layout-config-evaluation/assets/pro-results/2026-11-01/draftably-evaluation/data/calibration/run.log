@@ -1,0 +1,19 @@
+[calibration] overlapping-boxes: PASS
+[calibration] one-obstacle: PASS
+[calibration] one-obstacle-penetration: PASS
+[calibration] unavoidable-crossing-with-fixed-straight-paths: PASS
+[calibration] avoidable-crossing-detour: PASS
+[calibration] explicit-sides: PASS
+[calibration] explicit-side-violation: PASS
+[calibration] fixed-pin: PASS
+[calibration] fixed-pin-violation: PASS
+[calibration] disconnected: PASS
+[calibration] relabel-no-topology: PASS
+[calibration] label-ownership-other-edge-through-text: PASS
+[calibration] label-detached: PASS
+[calibration] group-title: PASS
+[calibration] translation-invariance: PASS
+[calibration] edge-normalization: PASS
+[calibration] diamond-interior-positive: PASS
+[calibration] diamond-boundary-not-penetration: PASS
+[calibration] completed 18 fixtures; 3 actual router calls

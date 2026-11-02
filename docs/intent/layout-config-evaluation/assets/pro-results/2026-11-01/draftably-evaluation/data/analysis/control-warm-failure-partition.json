@@ -1,0 +1,210 @@
+{
+  "original_failures": 20,
+  "counts": {
+    "input-unavailable": 6,
+    "unsupported-cross-parent-scope": 14
+  },
+  "rows": [
+    {
+      "trial_id": "D-warm-architecture-04-growContainers-False",
+      "case_id": "architecture-04",
+      "control": "growContainers",
+      "level": false,
+      "status": "failed",
+      "classification": "input-unavailable",
+      "error": "Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/deliverables/data/geometry/C-development-architecture-04-current.json.gz'",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-04-growContainers-True",
+      "case_id": "architecture-04",
+      "control": "growContainers",
+      "level": true,
+      "status": "failed",
+      "classification": "input-unavailable",
+      "error": "Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/deliverables/data/geometry/C-development-architecture-04-current.json.gz'",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-03-scope-selection",
+      "case_id": "architecture-03",
+      "control": "scope",
+      "level": "selection",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-03-scope-neighbourhood",
+      "case_id": "architecture-03",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-containers-01-scope-selection",
+      "case_id": "containers-01",
+      "control": "scope",
+      "level": "selection",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-containers-01-scope-neighbourhood",
+      "case_id": "containers-01",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-routing-01-scope-selection",
+      "case_id": "routing-01",
+      "control": "scope",
+      "level": "selection",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-routing-01-scope-neighbourhood",
+      "case_id": "routing-01",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-01-scope-neighbourhood",
+      "case_id": "architecture-01",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-containers-02-scope-neighbourhood",
+      "case_id": "containers-02",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-authored-02-scope-neighbourhood",
+      "case_id": "authored-02",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-routing-02-scope-neighbourhood",
+      "case_id": "routing-02",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-02-scope-neighbourhood",
+      "case_id": "architecture-02",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-containers-03-scope-selection",
+      "case_id": "containers-03",
+      "control": "scope",
+      "level": "selection",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-containers-03-scope-neighbourhood",
+      "case_id": "containers-03",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-authored-01-scope-neighbourhood",
+      "case_id": "authored-01",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "unsupported-cross-parent-scope",
+      "error": "Error: Select objects in one container, or use Whole diagram.",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-04-scope-all",
+      "case_id": "architecture-04",
+      "control": "scope",
+      "level": "all",
+      "status": "failed",
+      "classification": "input-unavailable",
+      "error": "Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/deliverables/data/geometry/C-development-architecture-04-current.json.gz'",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-04-scope-selection",
+      "case_id": "architecture-04",
+      "control": "scope",
+      "level": "selection",
+      "status": "failed",
+      "classification": "input-unavailable",
+      "error": "Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/deliverables/data/geometry/C-development-architecture-04-current.json.gz'",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-04-scope-neighbourhood",
+      "case_id": "architecture-04",
+      "control": "scope",
+      "level": "neighbourhood",
+      "status": "failed",
+      "classification": "input-unavailable",
+      "error": "Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/deliverables/data/geometry/C-development-architecture-04-current.json.gz'",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    },
+    {
+      "trial_id": "D-warm-architecture-04-scope-container",
+      "case_id": "architecture-04",
+      "control": "scope",
+      "level": "container",
+      "status": "failed",
+      "classification": "input-unavailable",
+      "error": "Error: ENOENT: no such file or directory, open '/workspace/scratch/8279601ec156/deliverables/data/geometry/C-development-architecture-04-current.json.gz'",
+      "interpretation": "Original trial remains unsuccessful; not evidence of a completed geometry regression."
+    }
+  ],
+  "supplemental_rule": "Valid-sibling and checkpoint cases are separate later trials; they do not replace original failures or silently repair coverage."
+}

@@ -1,0 +1,140 @@
+diagram "Pipelines evaluation 06" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Phase 1"
+node n1 "Phase 2"
+node n2 "Phase 3"
+node n3 "Phase 4"
+node n4 "Phase 5"
+node n5 "Phase 6"
+node n6 "Phase 7"
+node n7 "Phase 8"
+node n8 "Phase 9"
+node n9 "Phase 10"
+node n10 "Phase 11"
+node n11 "Phase 12"
+node n12 "Phase 13"
+node n13 "Phase 14"
+node n14 "Phase 15"
+node n15 "Phase 16"
+node n16 "Phase 17"
+node n17 "Phase 18"
+node n18 "Phase 19"
+node n19 "Phase 20"
+node n20 "Phase 21"
+node n21 "Phase 22"
+node n22 "Phase 23"
+node n23 "Phase 24"
+node n24 "Phase 25"
+node n25 "Phase 26"
+node n26 "Phase 27"
+node n27 "Phase 28"
+node n28 "Phase 29"
+node n29 "Phase 30"
+node n30 "Phase 31"
+node n31 "Phase 32"
+node n32 "Phase 33"
+node n33 "Phase 34"
+node n34 "Phase 35"
+node n35 "Phase 36"
+node n36 "Phase 37"
+node n37 "Phase 38"
+node n38 "Phase 39"
+node n39 "Phase 40"
+node n40 "Phase 41"
+node n41 "Phase 42"
+node n42 "Phase 43"
+node n43 "Phase 44"
+node n44 "Phase 45"
+node n45 "Phase 46"
+node n46 "Phase 47"
+node n47 "Phase 48"
+node n48 "Phase 49"
+node n49 "Phase 50"
+node n50 "Phase 51"
+node n51 "Phase 52"
+node n52 "Phase 53"
+node n53 "Phase 54"
+node n54 "Phase 55"
+node n55 "Phase 56"
+node n56 "Phase 57"
+node n57 "Phase 58"
+node n58 "Phase 59"
+node n59 "Phase 60"
+node n60 "Phase 61"
+node n61 "Phase 62"
+node n62 "Phase 63"
+node n63 "Phase 64"
+edge e0 n0 -> n1 "next"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4 "next"
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7 "next"
+edge e7 n7 -> n8
+edge e8 n8 -> n9
+edge e9 n9 -> n10 "next"
+edge e10 n10 -> n11
+edge e11 n11 -> n12
+edge e12 n12 -> n13 "next"
+edge e13 n13 -> n14
+edge e14 n14 -> n15
+edge e15 n15 -> n16 "next"
+edge e16 n16 -> n17
+edge e17 n17 -> n18
+edge e18 n18 -> n19 "next"
+edge e19 n19 -> n20
+edge e20 n20 -> n21
+edge e21 n21 -> n22 "next"
+edge e22 n22 -> n23
+edge e23 n23 -> n24
+edge e24 n24 -> n25 "next"
+edge e25 n25 -> n26
+edge e26 n26 -> n27
+edge e27 n27 -> n28 "next"
+edge e28 n28 -> n29
+edge e29 n29 -> n30
+edge e30 n30 -> n31 "next"
+edge e31 n31 -> n32
+edge e32 n32 -> n33
+edge e33 n33 -> n34 "next"
+edge e34 n34 -> n35
+edge e35 n35 -> n36
+edge e36 n36 -> n37 "next"
+edge e37 n37 -> n38
+edge e38 n38 -> n39
+edge e39 n39 -> n40 "next"
+edge e40 n40 -> n41
+edge e41 n41 -> n42
+edge e42 n42 -> n43 "next"
+edge e43 n43 -> n44
+edge e44 n44 -> n45
+edge e45 n45 -> n46 "next"
+edge e46 n46 -> n47
+edge e47 n47 -> n48
+edge e48 n48 -> n49 "next"
+edge e49 n49 -> n50
+edge e50 n50 -> n51
+edge e51 n51 -> n52 "next"
+edge e52 n52 -> n53
+edge e53 n53 -> n54
+edge e54 n54 -> n55 "next"
+edge e55 n55 -> n56
+edge e56 n56 -> n57
+edge e57 n57 -> n58 "next"
+edge e58 n58 -> n59
+edge e59 n59 -> n60
+edge e60 n60 -> n61 "next"
+edge e61 n61 -> n62
+edge e62 n62 -> n63
+edge e63 n0 -> n4 "skip check"
+edge e64 n9 -> n13 "skip check"
+edge e65 n18 -> n22 "skip check"
+edge e66 n27 -> n31 "skip check"
+edge e67 n36 -> n40 "skip check"
+edge e68 n45 -> n49 "skip check"
+edge e69 n54 -> n58 "skip check"
+
+layout root flow direction=right gap=48
+

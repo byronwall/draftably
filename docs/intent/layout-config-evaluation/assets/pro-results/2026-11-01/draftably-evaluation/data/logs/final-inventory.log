@@ -1,0 +1,36 @@
+{
+  "at": "2026-11-02T00:39:51.484915+00:00",
+  "reportingOnly": true,
+  "geometryRuns": 0,
+  "policyRefitted": false,
+  "rows": 175,
+  "csvColumns": 35,
+  "decisions": {
+    "Hide": 61,
+    "Keep": 74,
+    "Merge": 18,
+    "Automate": 21,
+    "Remove": 1
+  },
+  "allEnginesRetained": 11,
+  "allRecipesRetained": 6,
+  "sourceEngineParametersRetained": 15,
+  "routingParametersRetained": 12,
+  "inputHashes": {
+    "inventory-development-evidence.json": "52bbbcfac4ebbbd6e1c435641cf359d83f5bfa9deb953f95396b01ee51b4f9b7",
+    "data/analysis/layout-control-ablations.json": "e2fcb642b77eb1723417b2878bfd700cc8ea15f2ea6c96f3926db3500f48f02e",
+    "data/analysis/heldout/portfolio-evidence-summary.json": "3d5e9e5da64f23976f07133efb1e7ed8a8317c2e011d31f6c30716bf0657bce9",
+    "data/analysis/edits-heldout-applicable-summary.json": "f237f38fe00fcf298a3d3dfaee15109fbb7088177e30521878bef11812307213",
+    "data/analysis/file-auto-ports-probe/result.json": "39928234b1a470652764f6e5d22b356c245b317bc7057441793555734a50d480",
+    "data/analysis/routing-current-heldout-policy-summary.json": "06876938bdd08a9c0a1723359e169a162422399a4afaf4ae9d5077a8882f0298",
+    "data/analysis/routing-current-heldout-pair-summary.json": "9b05c284d086855d977c3c51687aab1566eeab8e9e511e9529e9cb37cffe616f",
+    "data/analysis/joint-heldout-policy-summary.json": "d3bba2ce91a77fa33354b127769a32a66335629d39852cf7162baa3885751488",
+    "data/analysis/heldout-routing-analysis-manifest.json": "4de6b3839d62d9cb3bac737f5796129c7c405a63a73b9fb67ee9b1eb84922509"
+  },
+  "scriptSha256": "af56b5ddf4b835b2a95b81eea7da4374604189f34fde94f38f857abe4b874134",
+  "developmentSnapshotSha256": "52bbbcfac4ebbbd6e1c435641cf359d83f5bfa9deb953f95396b01ee51b4f9b7",
+  "finalJsonSha256": "4e77c411764d0f921c490fc4e984e4681a4e53cc38aef6528a8a62f9ef93126a",
+  "finalCsvSha256": "9b325608b96d32249bc70504ac3e38184a293e33e76eb355d4db81abbd65b7d3",
+  "rootIdPresentationOnly": "Empty raw default retained; final display explicitly says automatic root.",
+  "onlyRemoveDecision": "UI-RELEASE-PORTS, limited to proven no-op file-source checkbox."
+}

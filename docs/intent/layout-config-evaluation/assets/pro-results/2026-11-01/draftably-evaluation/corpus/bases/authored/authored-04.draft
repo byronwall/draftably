@@ -1,0 +1,87 @@
+diagram "Authored evaluation 04" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group local "Editable local region"
+group distant "Protected distant region"
+node n0 "Placed item 0" in=local
+node n1 "Placed item 1" in=local
+node n2 "Placed item 2" in=local
+node n3 "Placed item 3" in=local
+node n4 "Placed item 4" in=local
+node n5 "Placed item 5" in=local
+node n6 "Placed item 6" in=local
+node n7 "Placed item 7" in=local
+node n8 "Placed item 8" in=local
+node n9 "Placed item 9" in=local
+node n10 "Placed item 10" in=local
+node n11 "Placed item 11" in=local
+node n12 "Placed item 12" in=local
+node n13 "Placed item 13" in=local
+node n14 "Placed item 14" in=local
+node n15 "Placed item 15" in=local
+node n16 "Placed item 16" in=local
+node n17 "Placed item 17" in=local
+node n18 "Placed item 18" in=distant
+node n19 "Placed item 19" in=distant
+node n20 "Placed item 20" in=distant
+node n21 "Placed item 21" in=distant
+node n22 "Placed item 22" in=distant
+node n23 "Placed item 23" in=distant
+node n24 "Placed item 24" in=distant
+node n25 "Placed item 25" in=distant
+node n26 "Placed item 26" in=distant
+node n27 "Placed item 27" in=distant
+node n28 "Placed item 28" in=distant
+node n29 "Placed item 29" in=distant
+node n30 "Placed item 30" in=distant
+node n31 "Placed item 31" in=distant
+node n32 "Placed item 32" in=distant
+node n33 "Placed item 33" in=distant
+node n34 "Placed item 34" in=distant
+node n35 "Placed item 35" in=distant
+edge e0 n0 -> n1
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8
+edge e8 n8 -> n9
+edge e9 n9 -> n10
+edge e10 n10 -> n11
+edge e11 n11 -> n12
+edge e12 n12 -> n13
+edge e13 n13 -> n14
+edge e14 n14 -> n15
+edge e15 n15 -> n16
+edge e16 n16 -> n17
+edge e17 n18 -> n19
+edge e18 n19 -> n20
+edge e19 n20 -> n21
+edge e20 n21 -> n22
+edge e21 n22 -> n23
+edge e22 n23 -> n24
+edge e23 n24 -> n25
+edge e24 n25 -> n26
+edge e25 n26 -> n27
+edge e26 n27 -> n28
+edge e27 n28 -> n29
+edge e28 n29 -> n30
+edge e29 n30 -> n31
+edge e30 n31 -> n32
+edge e31 n32 -> n33
+edge e32 n33 -> n34
+edge e33 n34 -> n35
+edge e34 n17 -> n18 "handoff"
+
+layout root flow direction=right gap=48
+layout local flow direction=right gap=48
+layout distant flow direction=down gap=48
+
+pin local x=0 y=0
+pin distant x=4800 y=100
+pin n0 x=0 y=0
+pin n18 x=0 y=0
+near n19 n18 side=below gap=48 strength=required
+stay n2 x=340 y=0 weight=8

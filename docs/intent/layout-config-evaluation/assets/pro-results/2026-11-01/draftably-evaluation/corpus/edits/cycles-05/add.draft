@@ -1,0 +1,38 @@
+diagram "Cycles evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "State 0" shape=pill
+node n1 "State 1" shape=pill
+node n2 "State 2" shape=pill
+node n3 "State 3" shape=pill
+node n4 "State 4" shape=pill
+node n5 "State 5" shape=pill
+node n6 "State 6" shape=pill
+node n7 "State 7" shape=pill
+node n8 "State 8" shape=pill
+node n9 "State 9" shape=pill
+node n10 "State 10" shape=pill
+node n11 "State 11" shape=pill
+edge e0 n0 -> n1
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8
+edge e8 n8 -> n9
+edge e9 n9 -> n10
+edge e10 n10 -> n11
+edge e11 n3 -> n1 "retry" kind=async
+edge e12 n6 -> n5 "retry" kind=async
+edge e13 n10 -> n4 "retry" kind=async
+edge e14 n11 -> n0 "retry" kind=async
+edge e15 n2 -> n8 "associated" directed=false
+edge e16 n4 -> n5 "reverse signal"
+
+layout root flow direction=right gap=48
+
+
+node added_node "New local detail"
+edge added_edge n11 -> added_node "added follow-up"

@@ -1,0 +1,47 @@
+{
+  "selectedOriginalsRead": [
+    "docs/intent/diagram-quality/corpus/srcly-release/v0.draft",
+    "docs/intent/diagram-quality/corpus/visual-notes-ingest/v0.draft",
+    "docs/intent/diagram-quality/corpus/draftably-ci-checks/v0.draft",
+    "examples/ci-cd-pipeline.draft",
+    "docs/intent/diagram-quality/corpus/srcly-node-tree/v0.draft",
+    "docs/intent/diagram-quality/heldout/annotations-modules/v0.draft",
+    "docs/intent/diagram-quality/corpus/hn-offline-architecture/v0.draft",
+    "docs/intent/diagram-quality/corpus/visual-notes-architecture/v0.draft",
+    "docs/intent/diagram-quality/corpus/decisory-session/v0.draft",
+    "examples/order-lifecycle.draft",
+    "docs/intent/diagram-quality/corpus/draftably-code-layers/v0.draft",
+    "docs/intent/diagram-quality/corpus/pgm-cli-context/v0.draft",
+    "examples/order-saga.draft",
+    "examples/observability-stack.draft",
+    "examples/aws-vpc-network.draft",
+    "examples/kubernetes-cluster.draft",
+    "examples/theme-proof.draft",
+    "examples/hexagonal-billing.draft",
+    "docs/intent/diagram-quality/corpus/hn-deploy/e1.draft",
+    "docs/intent/diagram-quality/corpus/visual-notes-mcp-call/e1.draft",
+    "examples/login-sequence.draft",
+    "examples/billing-schema.draft",
+    "examples/support-lanes.draft",
+    "examples/incident-response.draft"
+  ],
+  "guidanceRead": [
+    "AGENTS.md",
+    "docs/DSL.md",
+    "docs/intent/diagram-quality/FEEL.md",
+    "docs/intent/diagram-quality/RUBRIC.md",
+    "docs/intent/diagram-quality/CORPUS.md",
+    "docs/intent/diagram-quality/NEXT.md"
+  ],
+  "implementationRead": [
+    "src/dsl/syntax.ts (tokenizer/model/parameters)",
+    "src/dsl/compile.ts (compile entry/cold rebuild/fit)",
+    "src/dsl/project.ts (projection contract)"
+  ],
+  "testsRead": [
+    "tests/routing-ports.test.ts",
+    "tests/fold-hold.test.ts",
+    "tests/group-fit.test.ts"
+  ],
+  "allOriginalsPreserved": 132
+}

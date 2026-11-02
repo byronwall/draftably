@@ -1,0 +1,18 @@
+{
+  "runId": "edits-policies-heldout",
+  "started": "2026-11-02T00:22:39.948Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 1,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 120,
+  "priorCompleted": 0,
+  "executed": 120,
+  "failed": 0,
+  "timedOut": 0,
+  "skipped": 0,
+  "taskSha256": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+  "finished": "2026-11-02T00:23:50.051Z",
+  "elapsedSeconds": 70.103,
+  "persistedDistinct": 120
+}

@@ -1,0 +1,256 @@
+{
+  "at": "2026-11-01T23:39:55.629804+00:00",
+  "trials": 50,
+  "cases": [
+    {
+      "caseId": "architecture-01",
+      "family": "architecture",
+      "selection": [
+        "external",
+        "device"
+      ],
+      "parent": null,
+      "container": "external",
+      "movedIds": [
+        "algolia",
+        "external",
+        "firebase"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "architecture-02",
+      "family": "architecture",
+      "selection": [
+        "clients",
+        "app"
+      ],
+      "parent": null,
+      "container": "clients",
+      "movedIds": [
+        "agent",
+        "browser",
+        "cli",
+        "clients",
+        "extension"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "architecture-03",
+      "family": "architecture",
+      "selection": [
+        "g0",
+        "g1"
+      ],
+      "parent": null,
+      "container": "g0",
+      "movedIds": [
+        "g0",
+        "n0",
+        "n3",
+        "n6",
+        "n9"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "architecture-04",
+      "family": "architecture",
+      "selection": [
+        "system",
+        "g5"
+      ],
+      "parent": null,
+      "container": "system",
+      "movedIds": [
+        "g0",
+        "g1",
+        "g2",
+        "g3",
+        "g4",
+        "n0",
+        "n1",
+        "n10",
+        "n12",
+        "n13",
+        "n14",
+        "n15",
+        "n16",
+        "n18",
+        "n19",
+        "n2",
+        "n20",
+        "n21",
+        "n22",
+        "n24",
+        "n25",
+        "n26",
+        "n27",
+        "n28",
+        "n3",
+        "n30",
+        "n31",
+        "n32",
+        "n33",
+        "n34",
+        "n36",
+        "n37",
+        "n38",
+        "n39",
+        "n4",
+        "n40",
+        "n42",
+        "n43",
+        "n44",
+        "n45",
+        "n46",
+        "n6",
+        "n7",
+        "n8",
+        "n9",
+        "system"
+      ],
+      "priorHistoryAvailable": false
+    },
+    {
+      "caseId": "containers-01",
+      "family": "containers",
+      "selection": [
+        "iam",
+        "region"
+      ],
+      "parent": "account",
+      "container": "account",
+      "movedIds": [
+        "iam"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "containers-02",
+      "family": "containers",
+      "selection": [
+        "users",
+        "cluster"
+      ],
+      "parent": null,
+      "container": "cluster",
+      "movedIds": [
+        "users"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "containers-04",
+      "family": "containers",
+      "selection": [
+        "g0",
+        "g1"
+      ],
+      "parent": "outer",
+      "container": "outer",
+      "movedIds": [
+        "g0",
+        "n0",
+        "n12",
+        "n16",
+        "n20",
+        "n24",
+        "n28",
+        "n32",
+        "n4",
+        "n8"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "authored-01",
+      "family": "authored",
+      "selection": [
+        "build",
+        "host"
+      ],
+      "parent": null,
+      "container": "source",
+      "movedIds": [
+        "b_build",
+        "b_install",
+        "build",
+        "output"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "authored-03",
+      "family": "authored",
+      "selection": [
+        "n5",
+        "n6"
+      ],
+      "parent": "distant",
+      "container": "distant",
+      "movedIds": [
+        "n5"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "recipes-02",
+      "family": "recipes",
+      "selection": [
+        "accounts",
+        "invoices"
+      ],
+      "parent": null,
+      "container": "accounts",
+      "movedIds": [
+        "accounts",
+        "accounts.id",
+        "accounts.id_t",
+        "accounts.name",
+        "accounts.name_t",
+        "accounts.plan",
+        "accounts.plan_t"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "recipes-04",
+      "family": "recipes",
+      "selection": [
+        "commander",
+        "comms"
+      ],
+      "parent": null,
+      "container": "oncall",
+      "movedIds": [
+        "commander",
+        "declare",
+        "resolve",
+        "room"
+      ],
+      "priorHistoryAvailable": true
+    },
+    {
+      "caseId": "dags-02",
+      "family": "dags",
+      "selection": [
+        "build",
+        "release"
+      ],
+      "parent": null,
+      "container": "source",
+      "movedIds": [
+        "build",
+        "compile",
+        "image",
+        "install"
+      ],
+      "priorHistoryAvailable": true
+    }
+  ],
+  "reason": "Fourteen primary scope probes reached the shipped explicit rejection for cross-parent selections; six primary warm tasks could not load a prior routed architecture04artifact. Preserve those terminal failures and add clearly separated valid-sibling/context probes.",
+  "scopeSelection": "Choose two siblings whose one-hop neighbours remain in the same parent, prefer unpinned top-level objects; this is a supported-input probe, not a retry that improves primary coverage.",
+  "hardReference": "Checkpoint-only inputs supply no fabricated prior routes; route churn remains unavailable."
+}

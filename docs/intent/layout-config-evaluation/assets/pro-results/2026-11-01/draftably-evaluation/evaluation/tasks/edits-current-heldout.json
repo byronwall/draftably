@@ -1,0 +1,1168 @@
+[
+  {
+    "id": "E-cold-pipelines-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/pipelines-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-pipelines-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-pipelines-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/pipelines-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-pipelines-05-current.json.gz",
+    "localIds": [
+      "n16",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-pipelines-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/pipelines-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-pipelines-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-pipelines-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/pipelines-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-pipelines-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-pipelines-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/pipelines-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-pipelines-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-dags-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/dags-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-dags-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-dags-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/dags-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-dags-05-current.json.gz",
+    "localIds": [
+      "n22",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-dags-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/dags-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-dags-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-dags-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/dags-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-dags-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-dags-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/dags-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-dags-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-hierarchies-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/hierarchies-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-hierarchies-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-hierarchies-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/hierarchies-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-hierarchies-05-current.json.gz",
+    "localIds": [
+      "n12",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-hierarchies-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/hierarchies-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-hierarchies-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-hierarchies-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/hierarchies-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-hierarchies-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-hierarchies-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/hierarchies-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-hierarchies-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-architecture-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/architecture-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-architecture-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-architecture-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/architecture-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-architecture-05-current.json.gz",
+    "localIds": [
+      "n18",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-architecture-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/architecture-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-architecture-05-current.json.gz",
+    "localIds": [
+      "n4"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-architecture-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/architecture-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-architecture-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-architecture-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/architecture-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-architecture-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-cycles-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/cycles-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-cycles-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-cycles-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/cycles-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-cycles-05-current.json.gz",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-cycles-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/cycles-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-cycles-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-cycles-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/cycles-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-cycles-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-cycles-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/cycles-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-cycles-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-networks-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/networks-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-networks-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-networks-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/networks-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-networks-05-current.json.gz",
+    "localIds": [
+      "n18",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-networks-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/networks-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-networks-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-networks-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/networks-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-networks-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-networks-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/networks-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-networks-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-disconnected-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/disconnected-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-disconnected-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-disconnected-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/disconnected-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-disconnected-05-current.json.gz",
+    "localIds": [
+      "n6",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-disconnected-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/disconnected-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-disconnected-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-disconnected-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/disconnected-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-disconnected-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-disconnected-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/disconnected-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-disconnected-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-routing-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/routing-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-routing-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-routing-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/routing-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-routing-05-current.json.gz",
+    "localIds": [
+      "n15",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-routing-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/routing-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-routing-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-routing-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/routing-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-routing-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-routing-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/routing-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-routing-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-containers-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/containers-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-containers-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-containers-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/containers-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-containers-05-current.json.gz",
+    "localIds": [
+      "n10",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-containers-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/containers-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-containers-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-containers-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/containers-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-containers-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-containers-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/containers-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-containers-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-presentation-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/presentation-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-presentation-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-presentation-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/presentation-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-presentation-05-current.json.gz",
+    "localIds": [
+      "n20",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-presentation-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/presentation-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-presentation-05-current.json.gz",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-presentation-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/presentation-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-presentation-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-presentation-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/presentation-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-presentation-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-authored-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/authored-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-authored-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-authored-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/authored-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-authored-05-current.json.gz",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-authored-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/authored-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-authored-05-current.json.gz",
+    "localIds": [
+      "n2"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-authored-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/authored-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-authored-05-current.json.gz",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-authored-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/authored-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-authored-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-recipes-05-relabel-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/recipes-05/relabel.draft",
+    "compareReference": "data/geometry/C-heldout-recipes-05-current.json.gz",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "recipes-05",
+    "family": "recipes",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-recipes-05-add-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/recipes-05/add.draft",
+    "compareReference": "data/geometry/C-heldout-recipes-05-current.json.gz",
+    "localIds": [
+      "n8",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "recipes-05",
+    "family": "recipes",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-recipes-05-local-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/recipes-05/local.draft",
+    "compareReference": "data/geometry/C-heldout-recipes-05-current.json.gz",
+    "localIds": [
+      "n0",
+      "n1",
+      "n2"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "local",
+    "editOperation": "participant-order",
+    "caseId": "recipes-05",
+    "family": "recipes",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-recipes-05-direction_or_remove-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/recipes-05/direction_or_remove.draft",
+    "compareReference": "data/geometry/C-heldout-recipes-05-current.json.gz",
+    "localIds": [
+      "e9"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "direction_or_remove",
+    "editOperation": "remove-edge",
+    "caseId": "recipes-05",
+    "family": "recipes",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-cold-recipes-05-color_control-current",
+    "stage": "E-cold",
+    "kind": "source",
+    "sourcePath": "corpus/edits/recipes-05/color_control.draft",
+    "compareReference": "data/geometry/C-heldout-recipes-05-current.json.gz",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-source",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "recipes-05",
+    "family": "recipes",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  }
+]

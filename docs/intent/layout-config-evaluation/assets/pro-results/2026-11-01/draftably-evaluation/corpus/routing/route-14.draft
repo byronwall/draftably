@@ -1,0 +1,33 @@
+diagram "Nested boundaries and external callers" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+group outer "Production region"
+group inner "Application tier" in=outer
+node api "api" in=inner
+node worker "worker" in=inner
+node db "db" in=outer
+node client "client"
+node ops "ops"
+node backup "backup"
+edge e0 client -> api
+edge e1 ops -> worker
+edge e2 api -> db
+edge e3 worker -> backup
+edge e4 db -> backup "backup"
+layout root flow direction=auto fold=never
+pin outer x=200 y=40
+layout outer column gap=24 min-width=620 min-height=500
+pin inner x=0 y=0
+layout inner column gap=24 min-width=540 min-height=240
+size api width=160 height=56
+pin api x=0 y=10
+size worker width=160 height=56
+pin worker x=280 y=10
+size db width=160 height=56
+pin db x=160 y=330
+size client width=160 height=56
+pin client x=0 y=650
+size ops width=160 height=56
+pin ops x=950 y=60
+size backup width=160 height=56
+pin backup x=950 y=650

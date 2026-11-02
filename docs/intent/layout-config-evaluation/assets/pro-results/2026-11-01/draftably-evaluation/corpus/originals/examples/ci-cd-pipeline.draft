@@ -1,0 +1,45 @@
+diagram "CI/CD pipeline" version=1
+
+# One level of containers: each stage is a group, jobs run inside it.
+group source "Source" color=slate
+node push "Push to main" in=source shape=pill
+node pr "Pull request" in=source shape=pill
+
+group build "Build" color=blue
+node install "Install deps" in=build
+node compile "Compile" in=build
+node image "Build container image" in=build
+
+group test "Test" color=violet
+node unit "Unit tests" in=test
+node integ "Integration tests" in=test
+node lint "Lint & typecheck" in=test
+
+group release "Release" color=mint
+node staging "Deploy to staging" in=release
+node smoke "Smoke tests" in=release
+node gate "Manual approval" in=release shape=diamond
+node prod "Deploy to production" in=release
+
+node rollback "Roll back" color=rose
+
+edge e1 push -> install
+edge e2 pr -> install
+edge e3 install -> compile
+edge e4 compile -> image
+edge e5 image -> unit
+edge e6 image -> integ
+edge e7 image -> lint
+edge e8 unit -> staging
+edge e9 integ -> staging
+edge e10 lint -> staging
+edge e11 staging -> smoke
+edge e12 smoke -> gate
+edge e13 gate -> prod "approved"
+edge e14 prod -> rollback "health check fails" kind=async
+
+layout root flow gap=56 direction=right
+layout source column gap=20
+layout build column gap=20
+layout test column gap=20
+layout release column gap=20

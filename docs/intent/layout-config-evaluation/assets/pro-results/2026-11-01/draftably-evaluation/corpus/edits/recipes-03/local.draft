@@ -1,0 +1,36 @@
+diagram "Support ticket lanes" version=1
+subtitle "Who handles each step, in order"
+
+# Swim lanes: each top-level group is a role. Steps take their place in order across all lanes.
+group customer "Customer" color=sky
+group bot "Triage bot" color=slate
+group agents "Support agents" color=mint
+group billing_team "Billing team" color=amber
+
+node opens "Opens a ticket" in=customer shape=pill
+node classify "Auto-classify topic" in=bot
+node outage "Known outage?" in=bot shape=diamond
+node link "Link to incident" in=bot
+node triage "Triage" in=agents
+node vip "Enterprise plan?" in=agents shape=diamond
+node priority "Priority queue" in=agents
+node general "General queue" in=agents
+node refund "Handle billing" in=billing_team
+node resolved "Sees it resolved" in=customer shape=pill
+
+edge e1 opens -> classify
+edge e2 classify -> outage
+edge e3 outage -> link "yes"
+edge e4 outage -> triage "no"
+edge e5 triage -> refund "billing"
+edge e6 triage -> vip "other"
+edge e7 vip -> priority "yes"
+edge e8 vip -> general "no"
+edge e9 link -> resolved kind=async
+edge e10 refund -> resolved
+edge e11 priority -> resolved
+edge e12 general -> resolved
+
+layout root lanes direction=right
+
+order root bot customer agents billing_team

@@ -1,0 +1,262 @@
+[
+  {
+    "id": "P011",
+    "split": "development",
+    "family": "pipelines",
+    "task": "Explain a reading sequence from input to output.",
+    "png": "renders/blinded/P011.png",
+    "svgA": "renders/blinded/P011-A.svg",
+    "svgB": "renders/blinded/P011-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P012",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace prerequisites and downstream dependents.",
+    "png": "renders/blinded/P012.png",
+    "svgA": "renders/blinded/P012-A.svg",
+    "svgB": "renders/blinded/P012-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P013",
+    "split": "development",
+    "family": "hierarchies",
+    "task": "Locate ownership and inspect a subtree.",
+    "png": "renders/blinded/P013.png",
+    "svgA": "renders/blinded/P013-A.svg",
+    "svgB": "renders/blinded/P013-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P014",
+    "split": "development",
+    "family": "architecture",
+    "task": "Explain boundaries and cross-system calls.",
+    "png": "renders/blinded/P014.png",
+    "svgA": "renders/blinded/P014-A.svg",
+    "svgB": "renders/blinded/P014-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P015",
+    "split": "development",
+    "family": "cycles",
+    "task": "Explain a lifecycle, retry, or feedback loop.",
+    "png": "renders/blinded/P015.png",
+    "svgA": "renders/blinded/P015-A.svg",
+    "svgB": "renders/blinded/P015-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P016",
+    "split": "development",
+    "family": "networks",
+    "task": "Inspect relationships without imposing a main direction.",
+    "png": "renders/blinded/P016.png",
+    "svgA": "renders/blinded/P016-A.svg",
+    "svgB": "renders/blinded/P016-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P017",
+    "split": "development",
+    "family": "disconnected",
+    "task": "Pack independent components into a useful overview.",
+    "png": "renders/blinded/P017.png",
+    "svgA": "renders/blinded/P017-A.svg",
+    "svgB": "renders/blinded/P017-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P018",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P018.png",
+    "svgA": "renders/blinded/P018-A.svg",
+    "svgB": "renders/blinded/P018-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P019",
+    "split": "development",
+    "family": "containers",
+    "task": "Read nesting, boundary endpoints, and title ownership.",
+    "png": "renders/blinded/P019.png",
+    "svgA": "renders/blinded/P019-A.svg",
+    "svgB": "renders/blinded/P019-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P020",
+    "split": "development",
+    "family": "presentation",
+    "task": "Fit an explanation to a requested presentation format.",
+    "png": "renders/blinded/P020.png",
+    "svgA": "renders/blinded/P020-A.svg",
+    "svgB": "renders/blinded/P020-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P021",
+    "split": "development",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "png": "renders/blinded/P021.png",
+    "svgA": "renders/blinded/P021-A.svg",
+    "svgB": "renders/blinded/P021-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P022",
+    "split": "development",
+    "family": "recipes",
+    "task": "Preserve the structure encoded by a specialized recipe.",
+    "png": "renders/blinded/P022.png",
+    "svgA": "renders/blinded/P022-A.svg",
+    "svgB": "renders/blinded/P022-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P023",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P023.png",
+    "svgA": "renders/blinded/P023-A.svg",
+    "svgB": "renders/blinded/P023-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P024",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P024.png",
+    "svgA": "renders/blinded/P024-A.svg",
+    "svgB": "renders/blinded/P024-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P025",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P025.png",
+    "svgA": "renders/blinded/P025-A.svg",
+    "svgB": "renders/blinded/P025-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P026",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P026.png",
+    "svgA": "renders/blinded/P026-A.svg",
+    "svgB": "renders/blinded/P026-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P027",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P027.png",
+    "svgA": "renders/blinded/P027-A.svg",
+    "svgB": "renders/blinded/P027-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P028",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P028.png",
+    "svgA": "renders/blinded/P028-A.svg",
+    "svgB": "renders/blinded/P028-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P029",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace one connection through congested ports and corridors.",
+    "png": "renders/blinded/P029.png",
+    "svgA": "renders/blinded/P029-A.svg",
+    "svgB": "renders/blinded/P029-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P030",
+    "split": "development",
+    "family": "dags",
+    "task": "Trace prerequisites and downstream dependents.",
+    "png": "renders/blinded/P030.png",
+    "svgA": "renders/blinded/P030-A.svg",
+    "svgB": "renders/blinded/P030-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P031",
+    "split": "development",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "png": "renders/blinded/P031.png",
+    "svgA": "renders/blinded/P031-A.svg",
+    "svgB": "renders/blinded/P031-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P032",
+    "split": "development",
+    "family": "authored",
+    "task": "Improve a local region while retaining authored constraints.",
+    "png": "renders/blinded/P032.png",
+    "svgA": "renders/blinded/P032-A.svg",
+    "svgB": "renders/blinded/P032-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P033",
+    "split": "development",
+    "family": "architecture",
+    "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+    "png": "renders/blinded/P033.png",
+    "svgA": "renders/blinded/P033-A.svg",
+    "svgB": "renders/blinded/P033-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P034",
+    "split": "development",
+    "family": "routing",
+    "task": "Trace the labelled connection through the group/obstacle boundary and identify its endpoints.",
+    "png": "renders/blinded/P034.png",
+    "svgA": "renders/blinded/P034-A.svg",
+    "svgB": "renders/blinded/P034-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P035",
+    "split": "development",
+    "family": "pipelines",
+    "task": "Explain a reading sequence from input to output.",
+    "png": "renders/blinded/P035.png",
+    "svgA": "renders/blinded/P035-A.svg",
+    "svgB": "renders/blinded/P035-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  },
+  {
+    "id": "P036",
+    "split": "development",
+    "family": "networks",
+    "task": "Inspect relationships without imposing a main direction.",
+    "png": "renders/blinded/P036.png",
+    "svgA": "renders/blinded/P036-A.svg",
+    "svgB": "renders/blinded/P036-B.svg",
+    "renderPath": "production SVG; shipped fonts, labels and routing, repository shoot.mjs"
+  }
+]

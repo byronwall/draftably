@@ -1,0 +1,322 @@
+{
+  "schema": "draftably-edit-context-independent-review-1.0",
+  "reviewed_at": "2026-11-01T23:59:14.686564+00:00",
+  "status": "PASS_WITH_REPORTING_CAVEATS",
+  "joint_policy_freeze_blocker": false,
+  "scope": {
+    "split": "development",
+    "read_only_analysis": true,
+    "only_file_written": "data/analysis/edit-context-review.json",
+    "heldout_files_read": false,
+    "frozen_blind_judgments_read": false,
+    "geometry_algorithms_executed": false,
+    "proposal_files_modified": false,
+    "method": "Source review and independent arithmetic from existing canonical development JSONL and analysis JSON/CSV. Existing archive-integrity results inspected; geometry derivation was not rerun."
+  },
+  "blocking_issues": [],
+  "nonblocking_issues": [],
+  "edit_audit": {
+    "status": "PASS",
+    "actual_edit_outcomes": 360,
+    "actual_outcomes_by_stage": {
+      "edits-current-development": 60,
+      "edits-warm-development": 180,
+      "edits-policies-development": 120
+    },
+    "separate_shared_state_preparation_trials": 12,
+    "derived_record_count": 480,
+    "raw_view_records": 360,
+    "guarded_view_records": 120,
+    "canonical_attempt_policy": "First terminal outcome; all four current edit stages contain only successful terminal rows and no duplicate attempts.",
+    "same_policy_preedit_reference_errors": 0,
+    "references_without_canonical_record": 0,
+    "same_policy_reference_check": "All record reference paths match task declarations; all best-single and feature-selector reference canonical IDs match the declared preeditTrial. All three warm actions have identical reference, edited-reference and protection-state context per case/edit.",
+    "guard_formula_errors": 0,
+    "guard_fallbacks_observed": 0,
+    "preedit_guard_fallbacks_observed": 0,
+    "guard_rule": "Only named cold proposals; raw invalid and current source valid triggers current-source effective output. Same candidate-policy pre-edit reference is retained. Serial estimate includes raw plus fallback operation time. No warm guard is credited.",
+    "global_reflow_records": 88,
+    "hard_valid_global_reflow_records": 81,
+    "global_reflow_penalty_check": "All 81 valid requested-global-reflow records have stable_score equal to score_balanced, with both movement and side-churn penalties omitted and raw measurements retained.",
+    "stable_score_formula_errors": 0,
+    "bootstrap": {
+      "replicates": 2000,
+      "seed": 20261101,
+      "unit": "whole base diagram; eligibility applied within the five-edit bundle",
+      "independently_reproduced_summary_fields": 708,
+      "mismatches": 0,
+      "full_summary_checks": 354,
+      "applicable_summary_checks": 354,
+      "paired_validity": "Failed/invalid outcomes remain in validity and time contrasts. Soft and movement contrasts require both outcomes valid; no invalid result becomes a zero cost."
+    },
+    "color_controls": {
+      "derived_records": 96,
+      "exact_complete_geometry": 96,
+      "hard_valid": 91,
+      "unique_actual_color_outcomes": 72,
+      "note": "Geometry equality and hard validity are separate. The 96 records include duplicated raw/guarded cold views; only 72 distinct color outcomes were executed."
+    },
+    "direction_and_applicability": {
+      "projected_tool_setting_is_compliance_gate": false,
+      "forward_axis_is_compliance_gate": false,
+      "caveat": "projectScene retains the layout-tool default for source recipes without a root engine. The setting mismatch count is not source direction-compliance. Endpoint-center progress includes cycles, returns and hidden descendants and is diagnostic only.",
+      "presentation_03": "Current source direction=down fit=wide preserves earlier node geometry. Separate also preserves old nodes despite a DOWN invocation setting. Its apparent one-job raw hard-validity rescue does not prove the requested direction task was satisfied.",
+      "applicable_warm_counts": {
+        "current-tidy": {
+          "valid": 45,
+          "jobs": 49
+        },
+        "group-aware": {
+          "valid": 45,
+          "jobs": 49
+        },
+        "separate-only": {
+          "valid": 45,
+          "jobs": 49
+        }
+      },
+      "recommendation": "Preserve the global-reflow exclusion and resolve direction-versus-format precedence before claiming independent direction and format controls."
+    },
+    "existing_archive_audit": {
+      "effective_signatures_verified": 480,
+      "reference_signatures_verified": 480,
+      "errors": 0,
+      "scope": "geometry signatures, not whole archive bytes"
+    },
+    "guard_observation_split": "development",
+    "preedit_guard_observation_note": "No pre-edit or post-edit guard fallback was observed in the reviewed development sample only. No heldout guard observation is made."
+  },
+  "context_audit": {
+    "status": "PASS",
+    "canonical_attempt_policy": "First terminal row per trial; no later success promotion.",
+    "joint": {
+      "actual_trials": 108,
+      "successful_trials": 108,
+      "bases": 12,
+      "selected_route_layout_combinations": 9,
+      "matching_default_route_references": 36,
+      "source_and_box_checks": {
+        "matching_source_rows": 108,
+        "zero_node_delta_rows": 108,
+        "note": "Existing checks inspected; this review did not execute geometry comparisons."
+      },
+      "independent_search": {
+        "fixed_candidates": 9,
+        "three_configuration_subsets": 84,
+        "matches_proposal": true
+      },
+      "fixed_global": {
+        "configurations": [
+          "boundary-align:RIGHT + clearance-4"
+        ],
+        "valid_bases": 11,
+        "base_denominator": 12,
+        "acceptable_profile_jobs": 21,
+        "profile_job_denominator": 60
+      },
+      "selected_three": {
+        "configurations": [
+          "boundary-align:RIGHT + clearance-4",
+          "force:RIGHT + clearance-22",
+          "compound-flow:RIGHT:p1 + clearance-4"
+        ],
+        "valid_bases": 11,
+        "base_denominator": 12,
+        "acceptable_profile_jobs": 36,
+        "profile_job_denominator": 60
+      },
+      "nine_combination_oracle": {
+        "valid_bases": 11,
+        "acceptable_profile_jobs": 54,
+        "profile_job_denominator": 60
+      },
+      "twelve_combination_shared_oracle": {
+        "valid_bases": 11,
+        "acceptable_profile_jobs": 55,
+        "profile_job_denominator": 60
+      },
+      "all_twelve_diagnostic_best_three": {
+        "acceptable_profile_jobs": 39,
+        "contains_default_reference": true,
+        "used_in_selected_nine_proposal": false
+      },
+      "fixed_global_vs_current": {
+        "new_invalid": 0,
+        "rescued_valid": 0,
+        "both_valid_bases": 11
+      },
+      "caveat": "Do not replace the 60 total-job denominator with 55 feasible jobs, or describe the 39/60 default-inclusive diagnostic triple as the selected nine-combination result."
+    },
+    "warm_native": {
+      "actual_trials": 132,
+      "successful_trials": 132,
+      "algorithms": 11,
+      "bases": 12,
+      "input_contract": "Unperturbed native drawings; no patchDoc, history=true, scope=all, warmStart=true. Retain-current is an identity alternative and receives no extra execution credit.",
+      "budget_curve": [
+        {
+          "additional_actions": 0,
+          "actions": [],
+          "acceptable_profile_jobs": 37,
+          "denominator": 60
+        },
+        {
+          "additional_actions": 1,
+          "actions": [
+            "force"
+          ],
+          "acceptable_profile_jobs": 47,
+          "denominator": 60
+        },
+        {
+          "additional_actions": 2,
+          "actions": [
+            "boundary-align",
+            "force"
+          ],
+          "acceptable_profile_jobs": 56,
+          "denominator": 60
+        },
+        {
+          "additional_actions": 3,
+          "actions": [
+            "boundary-align",
+            "compound-flow",
+            "force"
+          ],
+          "acceptable_profile_jobs": 60,
+          "denominator": 60
+        }
+      ],
+      "unique_practical_band_contributions": {
+        "boundary-align": 6,
+        "compound-flow": 1,
+        "force": 8,
+        "all_other_algorithms": 0
+      },
+      "three_action_equal_family_mean_regret": 0.0125048211,
+      "caveat": "60/60 acceptable means within the practical bands, not identical to the full oracle and not proof of local-edit stability."
+    },
+    "network": {
+      "actual_trials": 96,
+      "successful_trials": 88,
+      "timed_out_trials": 8,
+      "applicability": "Raw cold engine screen: warmStart=false, settle=true, maxIterations=640. Stable-edit profile is excluded.",
+      "respect_direction_true_pool": {
+        "valid_bases": 11,
+        "base_denominator": 12,
+        "acceptable_profile_jobs": 40,
+        "profile_job_denominator": 48
+      },
+      "both_settings_pool": {
+        "valid_bases": 11,
+        "base_denominator": 12,
+        "acceptable_profile_jobs": 44,
+        "profile_job_denominator": 48
+      },
+      "respect_direction_false_unique_contribution": {
+        "case_id": "cycles-03",
+        "profile_jobs": 4
+      }
+    },
+    "targeted_supplement": {
+      "original_warm_failure_partition": {
+        "unsupported_cross_parent_scope": 14,
+        "unavailable_input": 6
+      },
+      "actual_trials": 50,
+      "supported_scope_trials": 48,
+      "checkpoint_growth_trials": 2,
+      "successful_trials": 44,
+      "timed_out_trials": 6,
+      "timeout_case": "architecture-04",
+      "scope_hard_valid_counts": {
+        "all": {
+          "valid": 9,
+          "total": 12
+        },
+        "selection": {
+          "valid": 10,
+          "total": 12
+        },
+        "neighbourhood": {
+          "valid": 10,
+          "total": 12
+        },
+        "container": {
+          "valid": 6,
+          "total": 12
+        }
+      },
+      "completed_pin_scope_violations": 0,
+      "original_failures_replaced": false,
+      "caveat": "Supported-input supplementary probes do not erase the original unsupported-scope or unavailable-input outcomes."
+    },
+    "existing_archive_audit": {
+      "checked": 440,
+      "mismatches": 0,
+      "scope": "canonical geometry signatures",
+      "verified": 440
+    }
+  },
+  "reporting_recommendations": [
+    "Count 360 actual edit outcomes plus 12 shared-state preparations; do not count 480 derived views as 480 executions.",
+    "State that no pre-edit or post-edit cold guard fallback was triggered in this development sample only; fallback behavior is supported by the declared code rule rather than an observed E rescue.",
+    "Keep projected direction settings and endpoint-center diagnostics separate from intent compliance.",
+    "Use the applicable warm comparison: all three policies have 45/49 hard-valid jobs after global-reflow diagnostics are excluded.",
+    "Distinguish practical-band coverage from exact equality or universal engine dispensability.",
+    "Keep the selected nine joint alternatives separate from the default-inclusive twelve-configuration diagnostic."
+  ],
+  "reviewed_file_sha256": {
+    "evaluation/analyze-edits.py": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+    "evaluation/derive-edit-metrics.mjs": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+    "evaluation/edit-analysis-spec.json": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+    "evaluation/analyze-contexts.py": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+    "data/analysis/edits-development-manifest.json": "fa0f3d99777e007fee5a8fb64a37276b1aa74865e0694374c249f9699651b291",
+    "data/analysis/edits-development-records.json": "bc700d19f82d6c4d6c5f6fe49ce4b5080b46900088168bc4692c74c077afbdc8",
+    "data/analysis/edits-development-paired.json": "eb4fe852b44ad95a29fe6ca55f01d2f5a1b49f5a22bcfa052652bf4f6a7d0b80",
+    "data/analysis/edits-development-applicable-paired.json": "c7980b9a915fd7dcd48b61002442848c816839819b1a89b773036da0e7d8d155",
+    "data/analysis/control-context-manifest.json": "f61981cf51dfd59478c4b24b87d13b467bd860c1bad77173f82c52387a6feda1",
+    "data/analysis/joint-policy-proposal.json": "6f9fabe3299aa429d2d99cc3e59007fd60f8e11ae47ff1ebc62c29f2ef07d7af",
+    "data/analysis/control-context-archive-verification.json": "b6d08563f831a948f9a26a89ddc103c500b5b5fe9d1401d9842177b6a249d4b6",
+    "data/analysis/edits-development-summary.json": "89da546576d368c46882dbe88076ce9f101850e8fe7bd3f2928cd77606ea488a"
+  },
+  "resolved_issues": [
+    {
+      "id": "CONTEXT-OUTPUT-BEFORE-INTEGRITY",
+      "severity": "low",
+      "file": "evaluation/analyze-contexts.py",
+      "location": "main(), canonical archive verification before joint_analysis/network_analysis/warm_analysis/report",
+      "finding": "Context and joint proposal outputs are written before the final archive-integrity check. A future mismatch could leave newly written unverified outputs after the analyzer exits with failure.",
+      "current_impact": "Resolved; current context archive audit verifies 440 canonical geometry signatures with zero mismatches.",
+      "recommendation": "Verify canonical archives before publishing final analysis/proposal outputs, or write temporary outputs and replace final files only after verification succeeds.",
+      "status": "RESOLVED",
+      "resolved_at": "2026-11-01T23:59:14.686564+00:00",
+      "resolution": "Canonical successful output and input references are now collected and verified before any summary or proposal writer runs. References include direct-current joint comparisons, raw network inputs and targeted input references outside the profile pools."
+    }
+  ],
+  "patch_followup": {
+    "scope": "Narrow inspection of the archive-publication ordering/reference coverage and ordinary-edit reporting patches; the full audit and bootstrap were not rerun.",
+    "publication_order_resolved": true,
+    "context_verification_checked": 440,
+    "context_verification_verified": 440,
+    "context_verification_mismatches": 0,
+    "new_ordinary_paired_count_fields_independently_checked": 36,
+    "new_ordinary_paired_count_errors": 0,
+    "ordinary_validity_report": "Completion table explicitly separates all jobs including color from ordinary valid/attempted jobs.",
+    "prior_708_paired_fields": "Original audit result retained. This follow-up reviewed the added ordinary counts and reporting; it did not rerun the original 708 checks.",
+    "code_hashes_match_current_manifests": true
+  },
+  "initial_reviewed_file_sha256": {
+    "evaluation/analyze-edits.py": "69b645a4710131c791feb6cff54dcc08ab7c743cda22ffcec68513cb18e44b56",
+    "evaluation/derive-edit-metrics.mjs": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+    "evaluation/edit-analysis-spec.json": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+    "evaluation/analyze-contexts.py": "ae3ff7121a1baaf9b9d5731050ba62caf8f171fd6685c674f37e2d2d11f9ad16",
+    "data/analysis/edits-development-manifest.json": "2212c5787f457ddbf0753fde47406ffa57402c5589326ccbf42dbb268fc9e674",
+    "data/analysis/edits-development-records.json": "bc700d19f82d6c4d6c5f6fe49ce4b5080b46900088168bc4692c74c077afbdc8",
+    "data/analysis/edits-development-paired.json": "f4f1782438a89ac4f418d4f1d5b3454867493877254290a49a2d6ab736777b6e",
+    "data/analysis/edits-development-applicable-paired.json": "2e5d9e604527bd59439f81a9d2e86168c4c294f2d4a7a33ce5bf486b0b286f89",
+    "data/analysis/control-context-manifest.json": "61f2da2b4d2eede3b6116dd37646b7d79af2305057a8f152992de1be59788b83",
+    "data/analysis/joint-policy-proposal.json": "6f9fabe3299aa429d2d99cc3e59007fd60f8e11ae47ff1ebc62c29f2ef07d7af"
+  }
+}

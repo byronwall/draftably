@@ -1,0 +1,43 @@
+diagram "RAG support assistant" version=1
+
+# Two levels: the platform contains a retrieval subsystem and a generation subsystem.
+node user "Support agent" shape=pill color=slate
+
+group platform "Assistant platform" color=blue
+node api "Chat API" in=platform
+node router "Intent router" in=platform shape=diamond
+
+group retrieval "Retrieval" in=platform color=mint
+node embed "Embed query" in=retrieval
+node vector "Vector index" in=retrieval shape=circle
+node rerank "Re-rank passages" in=retrieval
+
+group generation "Generation" in=platform color=violet
+node prompt "Build prompt" in=generation
+node llm "LLM call" in=generation
+node guard "Policy guardrails" in=generation
+
+group ingest "Ingestion" color=amber
+node docs "Help center docs" in=ingest
+node tickets "Resolved tickets" in=ingest
+node chunk "Chunk & embed" in=ingest
+
+node logs "Feedback log" color=rose
+
+edge ask user -> api "question"
+edge e1 api -> router
+edge e2 router -> embed "needs context"
+edge e3 router -> prompt "small talk"
+edge e4 embed -> vector
+edge e5 vector -> rerank "top 50"
+edge e6 rerank -> prompt "top 5"
+edge e7 prompt -> llm
+edge e8 llm -> guard
+edge e9 guard -> api "answer"
+edge i1 docs -> chunk
+edge i2 tickets -> chunk
+edge i3 chunk -> vector "upsert" kind=async
+edge fb api -> logs "thumbs up/down" kind=async
+
+layout root flow gap=56 direction=right
+layout platform row gap=40

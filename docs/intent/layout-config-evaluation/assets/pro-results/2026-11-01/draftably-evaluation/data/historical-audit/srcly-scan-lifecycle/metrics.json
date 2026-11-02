@@ -1,0 +1,582 @@
+[
+  {
+    "file": "v0.draft",
+    "expectations": [
+      "order-x browser api services"
+    ],
+    "nodes": 12,
+    "groups": 3,
+    "edges": 12,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1410,
+    "height": 465,
+    "aspect": 3.03,
+    "density": 0.176,
+    "aligned": 0.92,
+    "crossings": 3,
+    "bends": 25,
+    "bendsPerEdge": 2.08,
+    "maxBends": 5,
+    "hooks": 0,
+    "backEdges": 2,
+    "edgeLengthPerEdge": 323,
+    "theme": "drafting",
+    "fills": 7,
+    "minTextContrast": 5.65,
+    "groupFill": {
+      "services": 0.33,
+      "browser": 0.82,
+      "api": 0.81
+    },
+    "groupGaps": {
+      "api | browser": 115,
+      "api | services": 98,
+      "cache | services": 99
+    },
+    "emptyArea": {
+      "share": 0.11,
+      "boxes": 7.8,
+      "w": 369,
+      "h": 204,
+      "x": 1041,
+      "y": 261
+    },
+    "edgeStretch": [
+      {
+        "id": "dispatch",
+        "kind": "wrap",
+        "length": 573,
+        "detour": 1.92,
+        "span": 0.39
+      },
+      {
+        "id": "lookup",
+        "kind": "forward",
+        "length": 708,
+        "detour": 1.41,
+        "span": 0.48
+      },
+      {
+        "id": "rollup",
+        "kind": "wrap",
+        "length": 677,
+        "detour": 1.79,
+        "span": 0.46
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 2,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 1,
+      "edge-near-group-border": 2,
+      "edge-in-slot": 2,
+      "edges-too-close": 0,
+      "uneven-channel": 2,
+      "ragged-bends": 2,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 1,
+      "uneven-padding": 1,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 18.3,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "fetch (4)"
+      },
+      {
+        "kind": "many-bends",
+        "detail": "rollup (5)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "fetch along result"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "fetch 11px from api"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "fetch 11px from browser"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "fetch between api's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "lookup along cache"
+      },
+      {
+        "kind": "edge-on-group-border",
+        "detail": "rollup along services"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "rollup between services's members and its border"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈237: gaps 32/16"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "x≈588: gaps 16/37/20"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "app out R: turns at 201, 270"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "scan out D: turns at 175, 200"
+      },
+      {
+        "kind": "jog",
+        "detail": "rollup has a 7px step"
+      },
+      {
+        "kind": "uneven-padding",
+        "detail": "services left 24, right 40, bottom 24"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "services fill 0.33"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 98–115px"
+      }
+    ],
+    "checks": [
+      {
+        "line": "order-x browser api services",
+        "pass": true
+      }
+    ]
+  },
+  {
+    "file": "e1.draft",
+    "expectations": [
+      "order-x browser api services",
+      "near activity scan 120"
+    ],
+    "nodes": 13,
+    "groups": 3,
+    "edges": 14,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1640,
+    "height": 516,
+    "aspect": 3.18,
+    "density": 0.147,
+    "aligned": 0.92,
+    "crossings": 1,
+    "bends": 22,
+    "bendsPerEdge": 1.57,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 283,
+    "theme": "drafting",
+    "fills": 7,
+    "minTextContrast": 5.65,
+    "groupFill": {
+      "services": 0.23,
+      "browser": 0.82,
+      "api": 0.81
+    },
+    "groupGaps": {
+      "api | browser": 115,
+      "api | services": 98,
+      "browser | cache": 172
+    },
+    "emptyArea": {
+      "share": 0.24,
+      "boxes": 21.4,
+      "w": 1195,
+      "h": 172,
+      "x": 445,
+      "y": 344
+    },
+    "edgeStretch": [
+      {
+        "id": "lookup",
+        "kind": "wrap",
+        "length": 897,
+        "detour": 1.22,
+        "span": 0.52
+      },
+      {
+        "id": "overlay",
+        "kind": "back",
+        "length": 721,
+        "detour": 1,
+        "span": 0.42
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 0,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 0,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 1,
+      "edge-hugs-node": 3,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 2,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 1,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 1,
+      "wide-aspect": 0
+    },
+    "defectIndex": 15.8,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "fetch (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "fetch along result"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "fetch 11px from api"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "fetch 11px from browser"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "fetch between api's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "gitlog along activity"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "gitlog along aggregate"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈188: gaps 32/16"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "app out R: turns at 201, 270"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "services fill 0.23"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 98–115px"
+      },
+      {
+        "kind": "off-axis-port",
+        "detail": "gitlog scan→activity arrives sideways"
+      },
+      {
+        "kind": "empty-area",
+        "detail": "1195×172px at 445,344 (24% of the drawing, room for 21 boxes)"
+      },
+      {
+        "kind": "expectation-failed",
+        "detail": "near activity scan 120 (gap 129px)"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 15,
+      "meanMove": 298,
+      "maxMove": 1272,
+      "moved": 15,
+      "alignedMean": 279,
+      "alignedMoved": 8,
+      "orderFlips": 41,
+      "shift": {
+        "x": 0,
+        "y": -49
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 15,
+      "meanMove": 298,
+      "maxMove": 1272,
+      "moved": 15,
+      "alignedMean": 279,
+      "alignedMoved": 8,
+      "orderFlips": 41,
+      "shift": {
+        "x": 0,
+        "y": -49
+      }
+    },
+    "checks": [
+      {
+        "line": "order-x browser api services",
+        "pass": true
+      },
+      {
+        "line": "near activity scan 120",
+        "pass": false,
+        "why": "gap 129px"
+      }
+    ]
+  },
+  {
+    "file": "e2.draft",
+    "expectations": [
+      "order-x browser api services",
+      "below cache jobs",
+      "near cache jobs 60"
+    ],
+    "nodes": 13,
+    "groups": 3,
+    "edges": 14,
+    "warnings": [],
+    "flowDir": "right",
+    "width": 1640,
+    "height": 368,
+    "aspect": 4.46,
+    "density": 0.207,
+    "aligned": 1,
+    "crossings": 0,
+    "bends": 22,
+    "bendsPerEdge": 1.57,
+    "maxBends": 4,
+    "hooks": 0,
+    "backEdges": 4,
+    "edgeLengthPerEdge": 237,
+    "theme": "drafting",
+    "fills": 7,
+    "minTextContrast": 5.65,
+    "groupFill": {
+      "services": 0.26,
+      "browser": 0.82,
+      "api": 0.81
+    },
+    "groupGaps": {
+      "api | browser": 115,
+      "api | services": 98
+    },
+    "emptyArea": {
+      "share": 0.16,
+      "boxes": 9.8,
+      "w": 557,
+      "h": 168,
+      "x": 611,
+      "y": 0
+    },
+    "edgeStretch": [
+      {
+        "id": "overlay",
+        "kind": "back",
+        "length": 951,
+        "detour": 1.32,
+        "span": 0.57
+      }
+    ],
+    "counts": {
+      "node-overlap": 0,
+      "edge-through-node": 0,
+      "label-on-node": 0,
+      "label-near-node": 0,
+      "label-overlap": 0,
+      "label-on-edge": 1,
+      "label-on-group-title": 0,
+      "label-on-group-border": 0,
+      "label-detached": 1,
+      "hook": 0,
+      "arrives-below": 0,
+      "shared-segment": 0,
+      "edge-through-group": 0,
+      "edge-through-title-band": 0,
+      "many-bends": 1,
+      "low-contrast": 0,
+      "clipped": 0,
+      "empty-band": 0,
+      "long-edge": 0,
+      "expectation-failed": 0,
+      "edge-hugs-node": 2,
+      "edge-on-group-border": 0,
+      "edge-near-group-border": 3,
+      "edge-in-slot": 1,
+      "edges-too-close": 0,
+      "uneven-channel": 1,
+      "ragged-bends": 1,
+      "uneven-ports": 0,
+      "off-axis-port": 0,
+      "jog": 0,
+      "uneven-padding": 0,
+      "padding-varies": 0,
+      "mid-word-wrap": 0,
+      "sparse-group": 1,
+      "group-staircase": 0,
+      "tight-group-gap": 0,
+      "uneven-group-gap": 1,
+      "label-through-text": 0,
+      "labels-too-close": 0,
+      "empty-area": 0,
+      "wide-aspect": 0
+    },
+    "defectIndex": 13.6,
+    "issues": [
+      {
+        "kind": "many-bends",
+        "detail": "fetch (4)"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "fetch along result"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "fetch 11px from api"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "fetch 11px from browser"
+      },
+      {
+        "kind": "edge-in-slot",
+        "detail": "fetch between api's members and its border"
+      },
+      {
+        "kind": "edge-hugs-node",
+        "detail": "overlay along result"
+      },
+      {
+        "kind": "edge-near-group-border",
+        "detail": "overlay 11px from api"
+      },
+      {
+        "kind": "uneven-channel",
+        "detail": "y≈188: gaps 32/16"
+      },
+      {
+        "kind": "ragged-bends",
+        "detail": "app out R: turns at 201, 270"
+      },
+      {
+        "kind": "sparse-group",
+        "detail": "services fill 0.26"
+      },
+      {
+        "kind": "uneven-group-gap",
+        "detail": "gaps between groups run 98–115px"
+      },
+      {
+        "kind": "label-detached",
+        "detail": "\"fingerprint\" 88px from its edge"
+      },
+      {
+        "kind": "label-on-edge",
+        "detail": "\"fingerprint\" over run"
+      }
+    ],
+    "stabilityFromPrev": {
+      "shared": 16,
+      "meanMove": 46,
+      "maxMove": 693,
+      "moved": 2,
+      "alignedMean": 46,
+      "alignedMoved": 2,
+      "orderFlips": 8,
+      "shift": {
+        "x": 0,
+        "y": 0
+      }
+    },
+    "stabilityFromV0": {
+      "shared": 15,
+      "meanMove": 255,
+      "maxMove": 602,
+      "moved": 15,
+      "alignedMean": 236,
+      "alignedMoved": 8,
+      "orderFlips": 37,
+      "shift": {
+        "x": 0,
+        "y": -49
+      }
+    },
+    "checks": [
+      {
+        "line": "order-x browser api services",
+        "pass": true
+      },
+      {
+        "line": "below cache jobs",
+        "pass": true
+      },
+      {
+        "line": "near cache jobs 60",
+        "pass": true,
+        "why": "gap 28px"
+      }
+    ]
+  }
+]

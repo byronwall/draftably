@@ -1,0 +1,101 @@
+{
+  "split": "heldout",
+  "records": 480,
+  "verified": {
+    "geometry_derivations": 478,
+    "effective_geometry_hashes_verified": 478,
+    "reference_geometry_hashes_verified": 478,
+    "errors": [],
+    "scope": "Geometry signatures only; not whole archive byte identity. Edit metrics are recomputed without product engine execution."
+  },
+  "policies": [
+    {
+      "stratum": "cold-source",
+      "policy": "best-single",
+      "variant": "guarded",
+      "jobs": 60,
+      "completed_jobs": 60,
+      "hard_valid_jobs": 55,
+      "guard_fallbacks": 1,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "cold-source",
+      "policy": "best-single",
+      "variant": "raw",
+      "jobs": 60,
+      "completed_jobs": 60,
+      "hard_valid_jobs": 54,
+      "guard_fallbacks": 0,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "cold-source",
+      "policy": "current-source",
+      "variant": "raw",
+      "jobs": 60,
+      "completed_jobs": 60,
+      "hard_valid_jobs": 52,
+      "guard_fallbacks": 0,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "cold-source",
+      "policy": "feature-selector",
+      "variant": "guarded",
+      "jobs": 60,
+      "completed_jobs": 60,
+      "hard_valid_jobs": 55,
+      "guard_fallbacks": 1,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "cold-source",
+      "policy": "feature-selector",
+      "variant": "raw",
+      "jobs": 60,
+      "completed_jobs": 60,
+      "hard_valid_jobs": 54,
+      "guard_fallbacks": 0,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "warm-action",
+      "policy": "current-tidy",
+      "variant": "raw",
+      "jobs": 60,
+      "completed_jobs": 59,
+      "hard_valid_jobs": 43,
+      "guard_fallbacks": 0,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "warm-action",
+      "policy": "group-aware",
+      "variant": "raw",
+      "jobs": 60,
+      "completed_jobs": 59,
+      "hard_valid_jobs": 43,
+      "guard_fallbacks": 0,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    },
+    {
+      "stratum": "warm-action",
+      "policy": "separate-only",
+      "variant": "raw",
+      "jobs": 60,
+      "completed_jobs": 60,
+      "hard_valid_jobs": 47,
+      "guard_fallbacks": 0,
+      "color_complete_geometry_exact": 12,
+      "color_complete_geometry_available": 12
+    }
+  ]
+}

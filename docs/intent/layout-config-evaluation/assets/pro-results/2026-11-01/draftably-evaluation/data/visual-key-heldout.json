@@ -1,0 +1,146 @@
+[
+  {
+    "id": "P037",
+    "A": "C-heldout-pipelines-06-layered-RIGHT",
+    "B": "C-heldout-pipelines-06-grid-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P038",
+    "A": "C-heldout-dags-05-grid-RIGHT",
+    "B": "C-heldout-dags-05-force-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P039",
+    "A": "C-heldout-hierarchies-06-layered-DOWN",
+    "B": "C-heldout-hierarchies-06-stress-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P040",
+    "A": "C-heldout-architecture-05-stress-DOWN",
+    "B": "C-heldout-architecture-05-grid-DOWN",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P041",
+    "A": "C-heldout-cycles-06-stress-DOWN",
+    "B": "C-heldout-cycles-06-flow-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P042",
+    "A": "C-heldout-networks-05-grid-RIGHT",
+    "B": "C-heldout-networks-05-boundary-align-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P043",
+    "A": "C-heldout-disconnected-06-tree-RIGHT",
+    "B": "C-heldout-disconnected-06-layered-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P044",
+    "A": "C-heldout-routing-05-stress-DOWN",
+    "B": "C-heldout-routing-05-compound-flow-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P045",
+    "A": "C-heldout-containers-06-stress-DOWN",
+    "B": "C-heldout-containers-06-tree-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P046",
+    "A": "C-heldout-presentation-06-tree-DOWN",
+    "B": "C-heldout-presentation-06-boundary-align-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P047",
+    "A": "C-heldout-authored-06-compound-flow-RIGHT",
+    "B": "C-heldout-authored-06-compound-flow-DOWN",
+    "selectionReason": "Seeded family sample; all completed sampled candidate geometries are identical. Keep this as an authored-constraint identity negative control instead of excluding the family."
+  },
+  {
+    "id": "P048",
+    "A": "C-heldout-recipes-06-flow-DOWN",
+    "B": "C-heldout-recipes-06-layered-RIGHT",
+    "selectionReason": "Seeded family sample; seed 20261102; distinct completed geometry; validity unrestricted."
+  },
+  {
+    "id": "P049",
+    "A": "G-selected-heldout-architecture-05-compound-spring-p3",
+    "B": "C-heldout-architecture-05-force-RIGHT",
+    "selectionReason": "Largest remaining frozen configuration-portfolio regret; profile readable; regret 5.191630425418563; no heldout refitting."
+  },
+  {
+    "id": "P050",
+    "A": "C-heldout-routing-05-tree-RIGHT",
+    "B": "C-heldout-routing-05-tree-DOWN",
+    "selectionReason": "Largest remaining frozen configuration-portfolio regret; profile specialist; regret 1.7647060000000003; no heldout refitting."
+  },
+  {
+    "id": "P051",
+    "A": "G-selected-heldout-routing-06-flow-p1",
+    "B": "C-heldout-routing-06-recipe-none",
+    "selectionReason": "Largest remaining frozen configuration-portfolio regret; profile compact; regret 1.6966149566623692; no heldout refitting."
+  },
+  {
+    "id": "P052",
+    "A": "C-heldout-cycles-06-compound-flow-RIGHT",
+    "B": "G-selected-heldout-cycles-06-tree-p1",
+    "selectionReason": "Largest remaining frozen configuration-portfolio regret; profile traceable; regret 1.3725490000000002; no heldout refitting."
+  },
+  {
+    "id": "P053",
+    "A": "C-heldout-cycles-06-compound-flow-RIGHT",
+    "B": "C-heldout-cycles-06-tree-RIGHT",
+    "selectionReason": "Contested omitted engine compound-flow: largest balanced-score margin against the best distinct retained-engine output; margin 1.372549. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P054",
+    "A": "C-heldout-cycles-06-compound-spring-RIGHT",
+    "B": "C-heldout-cycles-06-tree-RIGHT",
+    "selectionReason": "Contested omitted engine compound-spring: largest balanced-score margin against the best distinct retained-engine output; margin 0.588235. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P055",
+    "A": "C-heldout-cycles-05-boundary-align-DOWN",
+    "B": "C-heldout-cycles-05-stress-DOWN",
+    "selectionReason": "Contested omitted engine stress: largest balanced-score margin against the best distinct retained-engine output; margin 0.000000. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P056",
+    "A": "C-heldout-cycles-06-flow-RIGHT",
+    "B": "C-heldout-cycles-06-tree-RIGHT",
+    "selectionReason": "Contested omitted engine flow: largest balanced-score margin against the best distinct retained-engine output; margin 0.980392. This is a witness, not a new portfolio selection."
+  },
+  {
+    "id": "P057",
+    "A": "C-heldout-disconnected-05-recipe-row",
+    "B": "C-doc-heldout-disconnected-05",
+    "selectionReason": "Lowest balanced score versus shortest routes; length ratio 5.6151; visual assessment checks detour cost independently."
+  },
+  {
+    "id": "P058",
+    "A": "C-heldout-presentation-06-recipe-none",
+    "B": "G-selected-heldout-presentation-06-compound-flow-p1",
+    "selectionReason": "Lowest balanced score versus shortest routes; length ratio 3.0441; visual assessment checks detour cost independently."
+  },
+  {
+    "id": "P059",
+    "A": "G-selected-heldout-architecture-05-layered-p1",
+    "B": "G-selected-heldout-architecture-05-compound-spring-p3",
+    "selectionReason": "Lowest balanced score versus shortest routes; length ratio 2.8656; visual assessment checks detour cost independently."
+  },
+  {
+    "id": "P060",
+    "A": "C-heldout-routing-05-tree-DOWN",
+    "B": "C-heldout-routing-05-grid-DOWN",
+    "selectionReason": "Lowest balanced score versus shortest routes; length ratio 2.4338; visual assessment checks detour cost independently."
+  }
+]

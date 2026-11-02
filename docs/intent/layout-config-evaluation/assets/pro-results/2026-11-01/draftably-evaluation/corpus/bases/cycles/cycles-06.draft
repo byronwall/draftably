@@ -1,0 +1,99 @@
+diagram "Cycles evaluation 06" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "State 0" shape=pill
+node n1 "State 1" shape=pill
+node n2 "State 2" shape=pill
+node n3 "State 3" shape=pill
+node n4 "State 4" shape=pill
+node n5 "State 5" shape=pill
+node n6 "State 6" shape=pill
+node n7 "State 7" shape=pill
+node n8 "State 8" shape=pill
+node n9 "State 9" shape=pill
+node n10 "State 10" shape=pill
+node n11 "State 11" shape=pill
+node n12 "State 12" shape=pill
+node n13 "State 13" shape=pill
+node n14 "State 14" shape=pill
+node n15 "State 15" shape=pill
+node n16 "State 16" shape=pill
+node n17 "State 17" shape=pill
+node n18 "State 18" shape=pill
+node n19 "State 19" shape=pill
+node n20 "State 20" shape=pill
+node n21 "State 21" shape=pill
+node n22 "State 22" shape=pill
+node n23 "State 23" shape=pill
+node n24 "State 24" shape=pill
+node n25 "State 25" shape=pill
+node n26 "State 26" shape=pill
+node n27 "State 27" shape=pill
+node n28 "State 28" shape=pill
+node n29 "State 29" shape=pill
+node n30 "State 30" shape=pill
+node n31 "State 31" shape=pill
+node n32 "State 32" shape=pill
+node n33 "State 33" shape=pill
+node n34 "State 34" shape=pill
+node n35 "State 35" shape=pill
+node n36 "State 36" shape=pill
+node n37 "State 37" shape=pill
+node n38 "State 38" shape=pill
+node n39 "State 39" shape=pill
+node n40 "State 40" shape=pill
+node n41 "State 41" shape=pill
+edge e0 n0 -> n1
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n0 "repeat"
+edge e6 n4 -> n6 "advance"
+edge e7 n6 -> n7
+edge e8 n7 -> n8
+edge e9 n8 -> n9
+edge e10 n9 -> n10
+edge e11 n10 -> n11
+edge e12 n11 -> n6 "repeat"
+edge e13 n10 -> n12 "advance"
+edge e14 n12 -> n13
+edge e15 n13 -> n14
+edge e16 n14 -> n15
+edge e17 n15 -> n16
+edge e18 n16 -> n17
+edge e19 n17 -> n12 "repeat"
+edge e20 n16 -> n18 "advance"
+edge e21 n18 -> n19
+edge e22 n19 -> n20
+edge e23 n20 -> n21
+edge e24 n21 -> n22
+edge e25 n22 -> n23
+edge e26 n23 -> n18 "repeat"
+edge e27 n22 -> n24 "advance"
+edge e28 n24 -> n25
+edge e29 n25 -> n26
+edge e30 n26 -> n27
+edge e31 n27 -> n28
+edge e32 n28 -> n29
+edge e33 n29 -> n24 "repeat"
+edge e34 n28 -> n30 "advance"
+edge e35 n30 -> n31
+edge e36 n31 -> n32
+edge e37 n32 -> n33
+edge e38 n33 -> n34
+edge e39 n34 -> n35
+edge e40 n35 -> n30 "repeat"
+edge e41 n34 -> n36 "advance"
+edge e42 n36 -> n37
+edge e43 n37 -> n38
+edge e44 n38 -> n39
+edge e45 n39 -> n40
+edge e46 n40 -> n41
+edge e47 n41 -> n36 "repeat"
+edge e48 n12 -> n0 "reset" constraint=false kind=async
+edge e49 n24 -> n0 "reset" constraint=false kind=async
+edge e50 n36 -> n0 "reset" constraint=false kind=async
+
+layout root flow direction=right gap=48
+

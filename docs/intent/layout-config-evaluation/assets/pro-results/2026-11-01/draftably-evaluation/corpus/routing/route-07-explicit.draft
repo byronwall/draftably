@@ -1,0 +1,23 @@
+diagram "Diamond with three outgoing branches" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node decision "Ready?" shape=diamond
+node a "a"
+node b "b"
+node c "c"
+node start "start"
+edge e0 decision -> a "yes" from=right to=left
+edge e1 decision -> b "no"
+edge e2 decision -> c "retry later"
+edge e3 start -> decision
+layout root flow direction=auto fold=never
+size decision width=112 height=112
+pin decision x=200 y=160
+size a width=160 height=56
+pin a x=500 y=0
+size b width=160 height=56
+pin b x=500 y=150
+size c width=160 height=56
+pin c x=500 y=310
+size start width=160 height=56
+pin start x=0 y=160

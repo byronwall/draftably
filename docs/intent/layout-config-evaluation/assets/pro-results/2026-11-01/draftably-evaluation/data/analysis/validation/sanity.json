@@ -1,0 +1,166 @@
+{
+  "planned": 20,
+  "rows": [
+    {
+      "id": "C-sanity-empty-compound-flow",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-tidy",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-boundary-align",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-stress",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-flow",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-force",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-layered",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-grid",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-tree",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-empty-compound-spring",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-compound-flow",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-boundary-align",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-compound-spring",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-tidy",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-stress",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-flow",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-force",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-layered",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-tree",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    },
+    {
+      "id": "C-sanity-single-grid",
+      "status": "ok",
+      "hardValid": true,
+      "engineCalls": 1,
+      "diagnostics": [],
+      "hard": []
+    }
+  ],
+  "note": "An empty/single source can legitimately short-circuit an engine call; task execution is not mislabeled as an algorithm invocation."
+}

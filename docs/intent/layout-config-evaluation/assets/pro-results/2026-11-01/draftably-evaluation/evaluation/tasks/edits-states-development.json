@@ -1,0 +1,238 @@
+[
+  {
+    "id": "E-state-pipelines-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-pipelines-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-dags-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-dags-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-hierarchies-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-hierarchies-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-architecture-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-architecture-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-cycles-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-cycles-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-networks-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-networks-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-disconnected-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-disconnected-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-routing-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-routing-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-containers-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-containers-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "policy": "shared-prior-state",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-presentation-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-presentation-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-authored-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-authored-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "policy": "shared-prior-state",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-recipes-03",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-development-recipes-03-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  }
+]

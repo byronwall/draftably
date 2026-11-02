@@ -1,0 +1,155 @@
+{
+  "version": "control-analysis-1.0",
+  "generated_at": "2026-11-01T23:39:24.901198+00:00",
+  "evidence": "Measured completed development outputs; no geometry algorithms executed by this analyzer",
+  "inputs": [
+    {
+      "name": "settings-routing",
+      "state": "complete",
+      "observed_rows": 984,
+      "attempt_rows": 984,
+      "expected_rows": 984,
+      "file_sha256": "a8203c37e033ed831476265801231cc4ff0f84d231f439c1e0d53f44df922ff1",
+      "task_sha256": "fb1190f82ccbcb275eb83b9fbb7d4be8ea60dbaad85c48b20bc0c2f590bcce3d",
+      "status_counts": {
+        "ok": 984
+      },
+      "all_attempt_status_counts": {
+        "ok": 984
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "interactions-routing",
+      "state": "complete",
+      "observed_rows": 432,
+      "attempt_rows": 432,
+      "expected_rows": 432,
+      "file_sha256": "9c5a37f1bb42e407b6fa361f3939bb3bfa78f60061b2d1e7ced5496d928e46ce",
+      "task_sha256": "33fe7ea8018741ba4fb56f274ab57ded962a31c350e489ce3589dbe28a4aa638",
+      "status_counts": {
+        "ok": 432
+      },
+      "all_attempt_status_counts": {
+        "ok": 432
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "settings-layout",
+      "state": "complete",
+      "observed_rows": 756,
+      "attempt_rows": 759,
+      "expected_rows": 756,
+      "file_sha256": "2311d99fb4b84b92fdf98e17f60f5adfb981b69c0c1900776aef7f7c3479fda6",
+      "task_sha256": "481990c97bbd3dcf68a48f4ac3f58e9616248d840f185199088ed443557daf17",
+      "status_counts": {
+        "ok": 696,
+        "timed_out": 60
+      },
+      "all_attempt_status_counts": {
+        "ok": 697,
+        "timed_out": 62
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {
+        "D-layout-architecture-04-groupGap-96": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "ok",
+            "error": null,
+            "geometry": "data/geometry/D-layout-architecture-04-groupGap-96.json.gz",
+            "geometry_hash": "be23d3b7db74a60077c82ff20a2b22c3788c70ee637ea5e4f0c91d5ddf4b5cea"
+          }
+        ],
+        "D-layout-dags-04-nodeGap-12": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          }
+        ],
+        "D-layout-dags-04-nodeGap-24": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "interactions-layout",
+      "state": "complete",
+      "observed_rows": 96,
+      "attempt_rows": 96,
+      "expected_rows": 96,
+      "file_sha256": "edb40fb0c58ff0de8c1c4ab6c977cb40a30bd3908cb27a19211ad4e1231b6b33",
+      "task_sha256": "1fd17300135651d15aeb9651e056843e5e66259c5ed7c2f61b0dbc8203248298",
+      "status_counts": {
+        "ok": 96
+      },
+      "all_attempt_status_counts": {
+        "ok": 96
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "settings-warm",
+      "state": "complete",
+      "observed_rows": 444,
+      "attempt_rows": 444,
+      "expected_rows": 444,
+      "file_sha256": "d31aafb0dacd83f78dc4a84816754511391f8e74a671879a405190487b787fb6",
+      "task_sha256": "9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e",
+      "status_counts": {
+        "ok": 424,
+        "failed": 20
+      },
+      "all_attempt_status_counts": {
+        "ok": 424,
+        "failed": 20
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    }
+  ],
+  "settings_spec_sha256": "1eb81e26b3e8ebfeb9e8b6f6c06394249dca7d4607e29154555e2b5889e6a327",
+  "analysis_script_sha256": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+  "heldout_read": false,
+  "geometry_tolerance_px": 1.0,
+  "pair_rows": 1848,
+  "score_gains": "Lower is better; signed candidate minus baseline deltas in comparisons; positive baseline minus winner gain in summaries.",
+  "equivalence_note": "Actual elementwise comparator, identical route point counts and side identity; boxed coordinates <=1px and Euclidean route-point distance <=1px. Binned hashes retained only as a separate descriptive column.",
+  "canonical_attempt_rule": "First terminal row per distinct trial; later accidental attempts are diagnostics only.",
+  "archive_verification": {
+    "verified": 2632,
+    "checked": 2632,
+    "mismatches": [],
+    "verification": "Canonical geometrySignature hash: node/group boxes, selected sides and route point sequences.",
+    "excludes": "SVG path/halo strings and other archive content are not covered by the trial geometry hash. This is not whole-archive byte identity."
+  },
+  "timing_note": "Single-run values are not repeated timing evidence."
+}

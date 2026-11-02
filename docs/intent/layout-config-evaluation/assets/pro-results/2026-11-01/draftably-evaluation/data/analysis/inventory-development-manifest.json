@@ -1,0 +1,16 @@
+{
+  "rows": 175,
+  "recommendation_ids_unique": true,
+  "decisions": {
+    "Hide": 61,
+    "Keep": 74,
+    "Merge": 18,
+    "Automate": 21,
+    "Remove": 1
+  },
+  "heldout_access": false,
+  "geometry_algorithm_calls": 0,
+  "script_sha256": "7fa81c6b349aa26e1c3b57a878ff6959f02e04c752c14d60fd4ddc8d1d2d5b21",
+  "engine_implementation_retention": "All11 retained; public disclosure can shrink independently.",
+  "final_policy_caution": "This table has complete UI dispositions and development evidence. The final cold/heldout policy recommendation must cite its own frozen selection and gate results."
+}

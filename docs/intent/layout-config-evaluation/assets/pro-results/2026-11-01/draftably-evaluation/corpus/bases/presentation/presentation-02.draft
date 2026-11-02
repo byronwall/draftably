@@ -1,0 +1,44 @@
+diagram "Hexagonal billing service" version=1
+
+# Ports and adapters: the domain core sits inside the application, adapters on either side.
+group driving "Driving adapters" color=blue
+node rest "REST controller" in=driving
+node cli "Admin CLI" in=driving
+node cron "Monthly scheduler" in=driving
+
+group app "Billing application" color=slate
+group in_ports "Inbound ports" in=app color=blue
+node invoice_uc "CreateInvoice" in=in_ports shape=pill
+node refund_uc "IssueRefund" in=in_ports shape=pill
+
+group core "Domain core" in=app color=mint
+node invoice "Invoice" in=core
+node pricing "Pricing rules" in=core
+node ledger "Ledger entry" in=core
+
+group out_ports "Outbound ports" in=app color=amber
+node repo_port "InvoiceRepository" in=out_ports shape=pill
+node pay_port "PaymentGateway" in=out_ports shape=pill
+node notify_port "Notifier" in=out_ports shape=pill
+
+group driven "Driven adapters" color=amber
+node postgres "Postgres" in=driven
+node stripe "Stripe" in=driven
+node email "Email (SES)" in=driven
+
+edge a1 rest -> invoice_uc
+edge a2 cron -> invoice_uc
+edge a3 cli -> refund_uc
+edge c1 invoice_uc -> invoice
+edge c2 invoice -> pricing
+edge c3 refund_uc -> ledger
+edge c4 invoice -> ledger
+edge p1 invoice -> repo_port
+edge p2 ledger -> pay_port
+edge p3 invoice -> notify_port
+edge x1 repo_port -> postgres
+edge x2 pay_port -> stripe
+edge x3 notify_port -> email kind=async
+
+layout root flow gap=56 direction=right
+layout app row gap=40

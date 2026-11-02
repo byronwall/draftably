@@ -1,0 +1,24 @@
+{
+  "policyFreezeSha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "heldoutOutcomesRead": false,
+  "fittedAnyPolicy": false,
+  "currentSourceTasks": 72,
+  "jointTasks": 216,
+  "routePolicies": [
+    "clearance-22",
+    "clearance-4",
+    "portGap-28"
+  ],
+  "layoutMethods": [
+    "tuned:compound-flow:RIGHT:p1",
+    "engine:force:RIGHT",
+    "engine:boundary-align:RIGHT"
+  ],
+  "sourceIntent": "Preserved from the unchanged source-layout reference; numeric routing does not erase authored constraints.",
+  "partialReferences": "Only completed-layout checkpoints, with referencePartial=true and no invented prior routes.",
+  "history": "Empty for all candidates; this is cold-source routing, not incremental history testing.",
+  "specialistFallback": [
+    "recipes-05"
+  ],
+  "scoring": "Stored development rules only. Current-source routing and joint routing use separately declared comparison pools."
+}

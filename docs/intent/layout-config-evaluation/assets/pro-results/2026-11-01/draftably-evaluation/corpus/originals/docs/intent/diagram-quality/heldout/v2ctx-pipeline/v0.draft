@@ -1,0 +1,34 @@
+diagram "video-to-context: one recording to a context package" version=1
+
+# expect reads-y input audio transcript report
+# expect above input report
+
+theme drafting
+
+node input "Recording or memo" shape=pill color=primary
+node has_video "Has video?" shape=diamond
+node audio "FFmpeg: extract audio"
+node frames "FFmpeg: sample frames"
+node transcriber "Parakeet or whisper.cpp" color=slate
+node transcript "Timestamped transcript" color=amber
+node shots "Screenshots" color=amber
+node sheet "Contact sheet" color=amber
+node llm_on "--run-llm?" shape=diamond
+node analysis "OpenAI analysis" color=slate
+node report "HTML report" shape=pill color=primary
+
+edge v1 input -> has_video
+edge v2 has_video -> audio "no"
+edge v3 has_video -> frames "yes"
+edge v4 frames -> audio
+edge v5 audio -> transcriber
+edge v6 transcriber -> transcript
+edge v7 frames -> shots
+edge v8 shots -> sheet
+edge v9 transcript -> llm_on
+edge v10 llm_on -> analysis "yes"
+edge v11 llm_on -> report "no"
+edge v12 analysis -> report
+edge v13 sheet -> report
+
+layout root engine=layered direction=down

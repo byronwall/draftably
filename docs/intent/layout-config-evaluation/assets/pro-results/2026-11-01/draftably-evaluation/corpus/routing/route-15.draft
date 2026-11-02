@@ -1,0 +1,24 @@
+diagram "Long edge labels in contested gaps" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node c "c"
+node d "d"
+node e "e"
+edge e0 a -> b "loaded before render"
+edge e1 b -> c "persist source ID and timestamp"
+edge e2 d -> e "cancel pending"
+edge e3 a -> e "retry with context"
+edge e4 d -> b "refresh"
+layout root flow direction=auto fold=never
+size a width=160 height=56
+pin a x=0 y=80
+size b width=160 height=56
+pin b x=260 y=80
+size c width=160 height=56
+pin c x=520 y=80
+size d width=160 height=56
+pin d x=260 y=300
+size e width=160 height=56
+pin e x=520 y=300

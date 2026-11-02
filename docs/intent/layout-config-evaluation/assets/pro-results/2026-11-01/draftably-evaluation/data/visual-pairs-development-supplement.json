@@ -1,0 +1,29 @@
+[
+  {
+    "id": "P061",
+    "a": "C-repair-containers-01-compound-flow",
+    "b": "C-repair-containers-01-tidy",
+    "family": "containers",
+    "task": "Trace connections through the nested container structure while preserving the existing drawing.",
+    "reason": "Development warm-engine retention witness; selected before heldout outcomes. Native warm input, not the protected edit-sequence estimand.",
+    "split": "development-supplement"
+  },
+  {
+    "id": "P062",
+    "a": "D-joint-architecture-03-layout3-route1",
+    "b": "C-development-architecture-03-force-RIGHT",
+    "family": "architecture",
+    "task": "Explain the architecture and follow connections between named components and groups.",
+    "reason": "Development joint routing/layout niche gain compared with a strong default-routing layout alternative; adverse high-clearance combinations remain in numeric tables.",
+    "split": "development-supplement"
+  },
+  {
+    "id": "P063",
+    "a": "D-network-cycles-03-compound-spring-False",
+    "b": "D-network-cycles-03-compound-spring-True",
+    "family": "cycles",
+    "task": "Understand the relationships and feedback loops without imposing an unnecessary one-way reading order.",
+    "reason": "Development raw cold direction-objective witness. Not source serialization or warm editing.",
+    "split": "development-supplement"
+  }
+]

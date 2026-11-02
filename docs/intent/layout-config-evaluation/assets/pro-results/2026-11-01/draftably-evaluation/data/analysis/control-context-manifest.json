@@ -1,0 +1,200 @@
+{
+  "at": "2026-11-01T23:58:30.979408+00:00",
+  "inputs": [
+    {
+      "name": "joint-development",
+      "state": "complete",
+      "observed_rows": 108,
+      "attempt_rows": 108,
+      "expected_rows": 108,
+      "file_sha256": "9e62c6b7dd885c80ac1ddde2d7ff7ea43eb6b4b1360c1e97ad56ce05c19d6f91",
+      "task_sha256": "ce19246cbf3190b71e8ad1f66d8c692a81dbb0d2ee595bb53f20ab1a98328db0",
+      "status_counts": {
+        "ok": 108
+      },
+      "all_attempt_status_counts": {
+        "ok": 108
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "network-direction",
+      "state": "complete",
+      "observed_rows": 96,
+      "attempt_rows": 96,
+      "expected_rows": 96,
+      "file_sha256": "e0c8fc9dd187273f452715ac0632662978632e807f488c52a61b4b86b0ca8e90",
+      "task_sha256": "495ff90cd7ac93a8dcb096a9d420b0b92b980644b1d86ac286cd7ee6f1a928fd",
+      "status_counts": {
+        "ok": 88,
+        "timed_out": 8
+      },
+      "all_attempt_status_counts": {
+        "ok": 88,
+        "timed_out": 8
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "settings-warm",
+      "state": "complete",
+      "observed_rows": 444,
+      "attempt_rows": 444,
+      "expected_rows": 444,
+      "file_sha256": "d31aafb0dacd83f78dc4a84816754511391f8e74a671879a405190487b787fb6",
+      "task_sha256": "9b75c7c24330f9588ea145c34f373ebc3b70176b1540ca8a512472e690f8813e",
+      "status_counts": {
+        "ok": 424,
+        "failed": 20
+      },
+      "all_attempt_status_counts": {
+        "ok": 424,
+        "failed": 20
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "screen-development",
+      "state": "complete",
+      "observed_rows": 1198,
+      "attempt_rows": 1202,
+      "expected_rows": 1198,
+      "file_sha256": "cd068a11c206940c490cb18a40976dbaaa2588712b7971ee01a7cca0d90e63d8",
+      "task_sha256": "2fd56213b2d3dfcb3b6a9041e6dcbd8067dff6d1ad6560acd8c9d01b8d487dc8",
+      "status_counts": {
+        "ok": 1094,
+        "timed_out": 104
+      },
+      "all_attempt_status_counts": {
+        "ok": 1094,
+        "timed_out": 108
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {
+        "C-development-dags-04-layered-DOWN": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          }
+        ],
+        "C-development-dags-04-tree-RIGHT": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          }
+        ],
+        "C-development-dags-04-tree-DOWN": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          }
+        ],
+        "C-development-dags-04-grid-RIGHT": [
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 15000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          },
+          {
+            "status": "timed_out",
+            "error": "Trial exceeded 90000 ms",
+            "geometry": null,
+            "geometry_hash": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "tuning-development",
+      "state": "complete",
+      "observed_rows": 480,
+      "attempt_rows": 480,
+      "expected_rows": 480,
+      "file_sha256": "35a41f828b7fc083e926d40c43aeac083948be631fd8ebfc628466dc3c3592bf",
+      "task_sha256": "cd329d93e89afeed1aed23ea46f392ad595a215b951569cdce5e12f48081c963",
+      "status_counts": {
+        "ok": 480
+      },
+      "all_attempt_status_counts": {
+        "ok": 480
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "selected-presets-development",
+      "state": "complete",
+      "observed_rows": 306,
+      "attempt_rows": 306,
+      "expected_rows": 306,
+      "file_sha256": "c3f0713c74fe9f0216716652f44228f82f06ca9c0acc06ab2ff2dbea4099d805",
+      "task_sha256": "8df108761fd88b185f1ee2a7475d6917ef9470fe2681079d9fab17467e9a2f4f",
+      "status_counts": {
+        "ok": 278,
+        "timed_out": 28
+      },
+      "all_attempt_status_counts": {
+        "ok": 278,
+        "timed_out": 28
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    },
+    {
+      "name": "warm-targeted",
+      "state": "complete",
+      "observed_rows": 50,
+      "attempt_rows": 50,
+      "expected_rows": 50,
+      "file_sha256": "af7d79f8b4b843e54a05d9a3200550e7fe4589b0e85b746aac4f79dac4822ff6",
+      "task_sha256": "60c3d618a78042c5398e7e64e3b305d0005442e7f12b35d250a303c20d2a98ad",
+      "status_counts": {
+        "ok": 44,
+        "timed_out": 6
+      },
+      "all_attempt_status_counts": {
+        "ok": 44,
+        "timed_out": 6
+      },
+      "retry_policy": "FIRST terminal row is the canonical outcome for one distinct trial. Later accidental attempts cannot improve coverage or policy selection. Every attempt remains in original JSONL and is enumerated here. Canonical success archives are verified against the first row hash before analysis.",
+      "retries": {}
+    }
+  ],
+  "analyzer_sha256": "6e63b6042749eb2ac81c0631c536fc41b11a71b6906eff48d276a18419b6179b",
+  "profile_analyzer_sha256": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+  "control_analyzer_sha256": "19c4ab36f0ebb041ba0dc2dd5851fe4edd6c7667f75a16d390af520467c5e62f",
+  "heldout_access": false,
+  "geometry_or_routing_calls": 0,
+  "verified_canonical_geometries": 440,
+  "warm_pass_trial_count": 132,
+  "joint_trial_count": 108,
+  "network_trial_count": 96
+}

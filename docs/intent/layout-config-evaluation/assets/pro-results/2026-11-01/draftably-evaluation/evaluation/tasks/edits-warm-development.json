@@ -1,0 +1,7208 @@
+[
+  {
+    "id": "E-warm-pipelines-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n5",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n5",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n5",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-pipelines-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-pipelines-03.json.gz",
+    "editedReference": "data/geometry/E-cold-pipelines-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "pipelines-03",
+    "family": "pipelines",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n7",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n7",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n7",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-dags-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-dags-03.json.gz",
+    "editedReference": "data/geometry/E-cold-dags-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "dags-03",
+    "family": "dags",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n30",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n30",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n30",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "RIGHT"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "RIGHT"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "RIGHT"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-hierarchies-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-hierarchies-03.json.gz",
+    "editedReference": "data/geometry/E-cold-hierarchies-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n9",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n9",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n9",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "g0",
+      "selected": [
+        "g0"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n3": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n3"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "g0",
+      "selected": [
+        "g0"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n3": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n3"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "g0",
+      "selected": [
+        "g0"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n3": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n3"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-architecture-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-architecture-03.json.gz",
+    "editedReference": "data/geometry/E-cold-architecture-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "architecture-03",
+    "family": "architecture",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n8",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n8",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n8",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-cycles-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-cycles-03.json.gz",
+    "editedReference": "data/geometry/E-cold-cycles-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "cycles-03",
+    "family": "cycles",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n13",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n13",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n13",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-networks-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-networks-03.json.gz",
+    "editedReference": "data/geometry/E-cold-networks-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n15",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n15",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n15",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-disconnected-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-disconnected-03.json.gz",
+    "editedReference": "data/geometry/E-cold-disconnected-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "disconnected-03",
+    "family": "disconnected",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-routing-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-routing-03.json.gz",
+    "editedReference": "data/geometry/E-cold-routing-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "routing-03",
+    "family": "routing",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "n13",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "n13",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "n13",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "g0",
+      "selected": [
+        "g0"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ],
+      "move": {
+        "n5": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n5"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "g0",
+      "selected": [
+        "g0"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ],
+      "move": {
+        "n5": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n5"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "g0",
+      "selected": [
+        "g0"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ],
+      "move": {
+        "n5": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n5"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-containers-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-containers-03.json.gz",
+    "editedReference": "data/geometry/E-cold-containers-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "containers-03",
+    "family": "containers",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "n11",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "neighbourhood",
+      "selected": [
+        "n1"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [],
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-presentation-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-presentation-03.json.gz",
+    "editedReference": "data/geometry/E-cold-presentation-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "e0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "n7",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "n7",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "n7",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "local",
+      "selected": [
+        "local"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ],
+      "move": {
+        "n2": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n2"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "local",
+      "selected": [
+        "local"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ],
+      "move": {
+        "n2": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n2"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "local",
+      "selected": [
+        "local"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ],
+      "move": {
+        "n2": {
+          "dx": 0,
+          "dy": 56
+        }
+      }
+    },
+    "action": "repair",
+    "localIds": [
+      "n2"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "local-nudge",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all",
+      "direction": "DOWN"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "repair",
+    "localIds": [
+      "root"
+    ],
+    "requestedGlobalReflow": true,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "change-direction",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-authored-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-authored-03.json.gz",
+    "editedReference": "data/geometry/E-cold-authored-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n4",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "action": "retain",
+    "localIds": [
+      "n0"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-relabel-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "e1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-relabel-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "e1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-relabel-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-relabel-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "e1"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "relabel",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-add-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "resolved",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-add-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "resolved",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-add-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-add-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "resolved",
+      "added_node",
+      "added_edge"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "add",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-local-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "customer",
+      "selected": [
+        "customer"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "customer",
+      "bot"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "local",
+    "editOperation": "lane-order",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-local-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "customer",
+      "selected": [
+        "customer"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "customer",
+      "bot"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "local",
+    "editOperation": "lane-order",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-local-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-local-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "container",
+      "containerId": "customer",
+      "selected": [
+        "customer"
+      ]
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "customer",
+      "bot"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "local",
+    "editOperation": "lane-order",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-direction_or_remove-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "e12"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "direction_or_remove",
+    "editOperation": "remove-edge",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-direction_or_remove-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "e12"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "direction_or_remove",
+    "editOperation": "remove-edge",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-direction_or_remove-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-direction_or_remove-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "compile-recipe",
+    "localIds": [
+      "e12"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "direction_or_remove",
+    "editOperation": "remove-edge",
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-color_control-current-tidy",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "tidy",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "opens"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "current-tidy",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-color_control-separate-only",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "separate",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "opens"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "separate-only",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-warm-recipes-03-color_control-group-aware",
+    "stage": "E-warm",
+    "kind": "warm-edit",
+    "reference": "data/geometry/E-state-recipes-03.json.gz",
+    "editedReference": "data/geometry/E-cold-recipes-03-color_control-current.json.gz",
+    "history": true,
+    "options": {
+      "algorithm": "boundary-align",
+      "mode": "pass",
+      "maxMove": 48,
+      "stability": 65,
+      "iterations": 32,
+      "respectManual": true,
+      "growContainers": false,
+      "scope": "all"
+    },
+    "patchDoc": {
+      "manual": [
+        "classify"
+      ],
+      "collapsed": []
+    },
+    "action": "retain",
+    "localIds": [
+      "opens"
+    ],
+    "requestedGlobalReflow": false,
+    "policy": "group-aware",
+    "editId": "color_control",
+    "editOperation": null,
+    "caseId": "recipes-03",
+    "family": "recipes",
+    "split": "development",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  }
+]

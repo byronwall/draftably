@@ -1,0 +1,18 @@
+{
+  "runId": "screen-heldout",
+  "started": "2026-11-02T00:02:05.635Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 599,
+  "priorCompleted": 0,
+  "executed": 599,
+  "failed": 0,
+  "timedOut": 118,
+  "skipped": 0,
+  "taskSha256": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+  "finished": "2026-11-02T00:16:43.292Z",
+  "elapsedSeconds": 877.657,
+  "persistedDistinct": 599
+}

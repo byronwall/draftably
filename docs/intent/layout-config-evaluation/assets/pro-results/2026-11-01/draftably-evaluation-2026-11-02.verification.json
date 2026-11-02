@@ -1,0 +1,40 @@
+{
+  "at": "2026-11-02T00:55:40.339177+00:00",
+  "registeredTrialCount": 8203,
+  "canonicalStatuses": {
+    "ok": 7731,
+    "timed_out": 452,
+    "failed": 20
+  },
+  "mainReportsWithoutPlaceholders": 19,
+  "relativeReportLinksChecked": 124,
+  "missingRelativeReportLinks": [],
+  "inventoryRows": 175,
+  "inventoryValidationPassed": true,
+  "frozenVisualPairs": 63,
+  "geometryAlgorithmsExecutedByPackaging": 0,
+  "excludedReproducibleIntermediates": [
+    "__pycache__ directories",
+    "*.pyc"
+  ],
+  "archivePrefix": "draftably-evaluation",
+  "finalIndependentAudit": "evaluation/final-accounting-audit.md",
+  "archive": "/workspace/scratch/8279601ec156/draftably-evaluation-2026-11-02.zip",
+  "archiveBytes": 110644078,
+  "archiveSha256": "73f28b3957493a6815ccfa4399393603e969e65e7ff0c033e267dab7a89515a3",
+  "filesIncludingManifest": 21706,
+  "filesWithSha256": 21705,
+  "uncompressedBytes": 387163908,
+  "contentGroups": {
+    "top-level reports": 24,
+    "baseline-packet": 1,
+    "corpus": 431,
+    "data": 20792,
+    "evaluation": 186,
+    "renders": 270,
+    "reports": 1
+  },
+  "zipCrcCheckPassed": true,
+  "allArchivedContentHashesMatch": true,
+  "manifestSha256": "2ced8024917ee9a6f6e1b74be5edda6530ccd253106b2390920b5988b90bd448"
+}

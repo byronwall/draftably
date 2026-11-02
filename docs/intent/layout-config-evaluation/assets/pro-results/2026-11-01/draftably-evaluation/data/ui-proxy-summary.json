@@ -1,0 +1,20 @@
+{
+  "current": {
+    "jobs": 10,
+    "steps": 45,
+    "decisions": 18,
+    "manual_configuration_attempts": 10
+  },
+  "goals": {
+    "jobs": 10,
+    "steps": 40,
+    "decisions": 20,
+    "manual_configuration_attempts": 3
+  },
+  "automatic_compare": {
+    "jobs": 10,
+    "steps": 36,
+    "decisions": 17,
+    "manual_configuration_attempts": 3
+  }
+}

@@ -1,0 +1,770 @@
+[
+  {
+    "case_id": "route-01",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-01.json.gz"
+  },
+  {
+    "case_id": "route-02",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-02.json.gz"
+  },
+  {
+    "case_id": "route-03",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-03.json.gz"
+  },
+  {
+    "case_id": "route-04",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-04.json.gz"
+  },
+  {
+    "case_id": "route-05",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-05.json.gz"
+  },
+  {
+    "case_id": "route-06",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "target": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-06.json.gz"
+  },
+  {
+    "case_id": "route-07",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-07.json.gz"
+  },
+  {
+    "case_id": "route-08",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-08.json.gz"
+  },
+  {
+    "case_id": "route-09",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-09.json.gz"
+  },
+  {
+    "case_id": "route-10",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b0": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-10.json.gz"
+  },
+  {
+    "case_id": "route-11",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "orders": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-11.json.gz"
+  },
+  {
+    "case_id": "route-12",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-12.json.gz"
+  },
+  {
+    "case_id": "route-13",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-13.json.gz"
+  },
+  {
+    "case_id": "route-14",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "api": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-14.json.gz"
+  },
+  {
+    "case_id": "route-15",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-15.json.gz"
+  },
+  {
+    "case_id": "route-16",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-16.json.gz"
+  },
+  {
+    "case_id": "route-17",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-17.json.gz"
+  },
+  {
+    "case_id": "route-18",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b3": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-18.json.gz"
+  },
+  {
+    "case_id": "route-19",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-19.json.gz"
+  },
+  {
+    "case_id": "route-20",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "model": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-20.json.gz"
+  },
+  {
+    "case_id": "route-21",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-21.json.gz"
+  },
+  {
+    "case_id": "route-22",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "hub1": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-22.json.gz"
+  },
+  {
+    "case_id": "route-23",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "n0": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-23.json.gz"
+  },
+  {
+    "case_id": "route-24",
+    "stratum": "empty-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": false,
+    "patchDoc": {
+      "move": {
+        "external": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-24.json.gz"
+  },
+  {
+    "case_id": "route-01",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-01.json.gz"
+  },
+  {
+    "case_id": "route-02",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-02.json.gz"
+  },
+  {
+    "case_id": "route-03",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-03.json.gz"
+  },
+  {
+    "case_id": "route-04",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-04.json.gz"
+  },
+  {
+    "case_id": "route-05",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-05.json.gz"
+  },
+  {
+    "case_id": "route-06",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "target": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-06.json.gz"
+  },
+  {
+    "case_id": "route-07",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-07.json.gz"
+  },
+  {
+    "case_id": "route-08",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-08.json.gz"
+  },
+  {
+    "case_id": "route-09",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-09.json.gz"
+  },
+  {
+    "case_id": "route-10",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b0": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-10.json.gz"
+  },
+  {
+    "case_id": "route-11",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "orders": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-11.json.gz"
+  },
+  {
+    "case_id": "route-12",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-12.json.gz"
+  },
+  {
+    "case_id": "route-13",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-13.json.gz"
+  },
+  {
+    "case_id": "route-14",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "api": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-14.json.gz"
+  },
+  {
+    "case_id": "route-15",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-15.json.gz"
+  },
+  {
+    "case_id": "route-16",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "n1": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-16.json.gz"
+  },
+  {
+    "case_id": "route-17",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-17.json.gz"
+  },
+  {
+    "case_id": "route-18",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b3": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-18.json.gz"
+  },
+  {
+    "case_id": "route-19",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "b": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-19.json.gz"
+  },
+  {
+    "case_id": "route-20",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "model": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-20.json.gz"
+  },
+  {
+    "case_id": "route-21",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "a": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-21.json.gz"
+  },
+  {
+    "case_id": "route-22",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "hub1": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-22.json.gz"
+  },
+  {
+    "case_id": "route-23",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "n0": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-23.json.gz"
+  },
+  {
+    "case_id": "route-24",
+    "stratum": "shared-prior",
+    "candidate_count": 3,
+    "identical_input_context": true,
+    "history": true,
+    "patchDoc": {
+      "move": {
+        "external": {
+          "dx": 0,
+          "dy": 24
+        }
+      }
+    },
+    "reference": "data/geometry/D-freeze-route-24.json.gz"
+  }
+]

@@ -1,0 +1,26 @@
+diagram "Two obstacles form a narrow passage" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node top "top"
+node bottom "bottom"
+node c "c"
+node d "d"
+edge e0 a -> b
+edge e1 c -> d
+edge e2 a -> d
+edge e3 c -> b
+layout root flow direction=auto fold=never
+size a width=100 height=48
+pin a x=0 y=100
+size b width=100 height=48
+pin b x=620 y=100
+size top width=200 height=76
+pin top x=240 y=0
+size bottom width=200 height=76
+pin bottom x=240 y=164
+size c width=100 height=48
+pin c x=0 y=280
+size d width=100 height=48
+pin d x=620 y=280

@@ -1,0 +1,29 @@
+diagram "Srcly: from merged PR to PyPI" version=1
+
+# expect reads-y merge rp relpr review tag verify tests build wheel pypi
+
+theme signal
+
+node merge "PR squash-merged" shape=pill color=blue shade=100
+node rp "Release Please" color=blue shade=300
+node relpr "Release PR open" color=blue shade=400
+node review "Approve release?" shape=diamond color=blue shade=500
+node tag "Tag v<version>" color=blue shade=600
+node verify "Tag matches version" color=blue shade=700
+node tests "Client + server tests" color=blue shade=700
+node build "build-srcly.sh" color=blue shade=800
+node wheel "Test installed wheel" color=blue shade=800
+node pypi "Publish to PyPI" shape=pill color=blue shade=900
+
+edge e1 merge -> rp "push to main"
+edge e2 rp -> relpr "open / update"
+edge e3 relpr -> review
+edge e4 review -> tag "merge"
+edge e5 tag -> verify "dispatch release.yml"
+edge e6 verify -> tests
+edge e7 tests -> build
+edge e8 build -> wheel
+edge e9 wheel -> pypi "artifacts"
+edge e10 review -> merge "wait for more" kind=async
+
+layout root flow direction=down gap=40

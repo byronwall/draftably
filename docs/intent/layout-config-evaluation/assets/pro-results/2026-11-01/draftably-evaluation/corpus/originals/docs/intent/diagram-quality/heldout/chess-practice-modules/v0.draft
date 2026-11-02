@@ -1,0 +1,37 @@
+diagram "Quiet Chess: what the practice screen imports" version=1
+
+# expect near practice runner 160
+# expect near chessutil chessjs 160
+
+theme signal
+
+node app "App.tsx" color=teal shade=800
+node practice "PracticeView" color=teal shade=600
+node notebook "NotebookView" color=teal shade=600
+node runner "PuzzleRunner" color=teal shade=500
+node board "Board" color=teal shade=400
+node coach "coach.ts" color=teal shade=400
+node engine "engine.ts" color=teal shade=300
+node library "library.ts" color=teal shade=300
+node storage "storage.ts" color=teal shade=200
+node chessutil "chessutil.ts" color=teal shade=200
+node chessjs "chess.js" shape=pill
+node content "content/*.json" shape=pill
+
+edge m1 app -> practice
+edge m2 app -> notebook
+edge m3 app -> storage
+edge m4 practice -> runner
+edge m5 practice -> coach
+edge m6 notebook -> library
+edge m7 runner -> board
+edge m8 runner -> engine
+edge m9 runner -> library
+edge m10 runner -> chessutil
+edge m11 coach -> library
+edge m12 coach -> chessutil
+edge m13 library -> storage
+edge m14 library -> content
+edge m15 chessutil -> chessjs
+
+layout root engine=stress

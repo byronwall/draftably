@@ -1,0 +1,35 @@
+{
+  "failed": [
+    {
+      "name": "back navigation actually restores a cached page",
+      "ok": false,
+      "detail": ""
+    }
+  ],
+  "state": {
+    "status": "saved",
+    "compiling": false,
+    "source": "diagram \"Switch 2\" version=1\nnode a \"A\"\n",
+    "diagnostics": []
+  },
+  "console": [
+    "info: [diagram-studio] ready {restored: false, objects: 9}",
+    "error: Failed to load resource: net::ERR_CONNECTION_REFUSED",
+    "info: [diagram-studio] ready {restored: false, objects: 10}",
+    "error: Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}",
+    "info: [diagram-studio] ready {restored: false, objects: 1}"
+  ]
+}

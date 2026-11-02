@@ -1,0 +1,22 @@
+diagram "Parallel and opposing connections" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node c "c"
+node d "d"
+edge e0 a -> b "request"
+edge e1 a -> b "audit"
+edge e2 b -> a "reply"
+edge e3 c -> d "request"
+edge e4 d -> c "reply"
+edge e5 a -> d
+layout root flow direction=auto fold=never
+size a width=180 height=80
+pin a x=0 y=100
+size b width=180 height=80
+pin b x=420 y=100
+size c width=180 height=80
+pin c x=0 y=350
+size d width=180 height=80
+pin d x=420 y=350

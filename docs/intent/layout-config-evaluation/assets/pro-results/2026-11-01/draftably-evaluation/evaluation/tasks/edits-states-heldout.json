@@ -1,0 +1,238 @@
+[
+  {
+    "id": "E-state-pipelines-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-pipelines-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-dags-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-dags-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-hierarchies-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-hierarchies-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-architecture-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-architecture-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-cycles-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-cycles-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-networks-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-networks-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-disconnected-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-disconnected-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-routing-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-routing-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-containers-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-containers-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": [
+        "g0"
+      ]
+    },
+    "policy": "shared-prior-state",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-presentation-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-presentation-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-authored-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-authored-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "local",
+        "distant",
+        "n0",
+        "n6",
+        "n1"
+      ],
+      "collapsed": [
+        "distant"
+      ]
+    },
+    "policy": "shared-prior-state",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  },
+  {
+    "id": "E-state-recipes-05",
+    "stage": "E-warm-state",
+    "kind": "route",
+    "reference": "data/geometry/C-heldout-recipes-05-current.json.gz",
+    "history": true,
+    "patchDoc": {
+      "manual": [
+        "n1"
+      ],
+      "collapsed": []
+    },
+    "policy": "shared-prior-state",
+    "caseId": "recipes-05",
+    "family": "recipes",
+    "split": "heldout",
+    "timeoutMs": 15000,
+    "allowPartialReference": true
+  }
+]

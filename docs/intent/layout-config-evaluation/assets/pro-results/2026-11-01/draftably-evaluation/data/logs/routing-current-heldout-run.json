@@ -1,0 +1,18 @@
+{
+  "runId": "routing-current-heldout",
+  "started": "2026-11-02T00:22:12.546Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 72,
+  "priorCompleted": 0,
+  "executed": 72,
+  "failed": 0,
+  "timedOut": 15,
+  "skipped": 0,
+  "taskSha256": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+  "finished": "2026-11-02T00:24:11.228Z",
+  "elapsedSeconds": 118.682,
+  "persistedDistinct": 72
+}

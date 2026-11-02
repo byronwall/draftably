@@ -1,0 +1,18 @@
+diagram "Avoidable crossing under fixed order" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node web "web"
+node mobile "mobile"
+node accounts "accounts"
+node orders "orders"
+edge e0 web -> orders "orders"
+edge e1 mobile -> accounts "accounts"
+layout root flow direction=auto fold=never
+size web width=160 height=56
+pin web x=0 y=0
+size mobile width=160 height=56
+pin mobile x=0 y=180
+size accounts width=160 height=56
+pin accounts x=420 y=0
+size orders width=160 height=56
+pin orders x=420 y=180

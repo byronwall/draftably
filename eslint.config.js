@@ -13,6 +13,7 @@ export default tseslint.config(
       'packages/cli/dist',
       'reference',
       'docs/intent/diagram-imports/assets/pro-results/2026-10-31',
+      'docs/intent/layout-config-evaluation/assets/pro-results/2026-11-01',
       'tmp',
       'src/engines/*.js',
     ],

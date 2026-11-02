@@ -1,0 +1,9 @@
+tests/docs-search.test.ts(2,38): error TS2307: Cannot find module '../site/docs/find' or its corresponding type declarations.
+tests/docs-search.test.ts(86,17): error TS7006: Parameter 'run' implicitly has an 'any' type.
+tests/docs-search.test.ts(87,14): error TS7006: Parameter 'run' implicitly has an 'any' type.
+tests/site-find.test.ts(2,24): error TS2307: Cannot find module '../site/docs/find' or its corresponding type declarations.
+tests/site-find.test.ts(13,12): error TS7006: Parameter 'h' implicitly has an 'any' type.
+tests/site-highlight.test.ts(3,40): error TS2307: Cannot find module '../site/highlight' or its corresponding type declarations.
+tests/site-highlight.test.ts(17,14): error TS7006: Parameter 't' implicitly has an 'any' type.
+tests/site-highlight.test.ts(20,35): error TS7006: Parameter 't' implicitly has an 'any' type.
+tests/site-move.test.ts(4,28): error TS2307: Cannot find module '../site/live/move' or its corresponding type declarations.

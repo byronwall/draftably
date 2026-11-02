@@ -1,0 +1,14 @@
+{
+  "baseline": "f14d9b891adba75de6cc172b190017ea5a5ca091",
+  "files": 45,
+  "baseDiagrams": 15,
+  "failures": 0,
+  "meanDI": 8.108888888888888,
+  "medianDI": 5.4,
+  "totalHardAudit": 0,
+  "caller": "unchanged scripts/diagram-audit.mjs --no-shots",
+  "cliCallsPerSuccessfulSource": 3,
+  "scheduledCliCalls": 135,
+  "measurement": "production CLI source/geometry/SVG; stock audit metrics",
+  "historicalNotFreshHeldout": true
+}

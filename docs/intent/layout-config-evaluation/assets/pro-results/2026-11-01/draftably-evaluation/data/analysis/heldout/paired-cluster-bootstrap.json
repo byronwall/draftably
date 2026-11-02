@@ -1,0 +1,437 @@
+[
+  {
+    "policy": "implicit-recipe",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.031578947368421054,
+    "ci95": [
+      0.0,
+      0.12631578947368421
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "documented-default",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.05263157894736842,
+    "ci95": [
+      -0.07777777777777777,
+      0.23338235294117624
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "best-fixed-global",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.0736842105263158,
+    "ci95": [
+      -0.049999999999999996,
+      0.225
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "best-fixed-global-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.0736842105263158,
+    "ci95": [
+      -0.049999999999999996,
+      0.225
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k1-configuration-oracle",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421054,
+    "ci95": [
+      -0.02727272727272727,
+      0.30000000000000004
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k1-configuration-oracle-current-fallback",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.14736842105263157,
+    "ci95": [
+      0.00847826086956523,
+      0.3222619047619046
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k1-prelayout-selector",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.0736842105263158,
+    "ci95": [
+      -0.06316985645933015,
+      0.25
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k1-prelayout-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.0736842105263158,
+    "ci95": [
+      -0.06316985645933015,
+      0.25
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k1-goal-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.06315789473684211,
+    "ci95": [
+      -0.06666666666666667,
+      0.22857142857142856
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k2-configuration-oracle",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.21052631578947364,
+    "ci95": [
+      0.01658333333333334,
+      0.41907142857142843
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k2-configuration-oracle-current-fallback",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.24210526315789477,
+    "ci95": [
+      0.0588235294117647,
+      0.44713235294117604
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k2-prelayout-selector",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.10526315789473684,
+    "ci95": [
+      -0.06315789473684211,
+      0.32005555555555526
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k2-prelayout-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.10526315789473684,
+    "ci95": [
+      -0.06315789473684211,
+      0.32005555555555526
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k2-goal-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.0842105263157895,
+    "ci95": [
+      -0.07064171122994653,
+      0.27778985507246373
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k3-configuration-oracle",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.34736842105263155,
+    "ci95": [
+      0.10525062656641604,
+      0.5819602272727264
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k3-configuration-oracle-current-fallback",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.37894736842105264,
+    "ci95": [
+      0.1578759398496241,
+      0.6
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k3-prelayout-selector",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421053,
+    "ci95": [
+      -0.05555555555555555,
+      0.3368585526315789
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k3-prelayout-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421053,
+    "ci95": [
+      -0.05555555555555555,
+      0.3368585526315789
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k3-goal-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.08421052631578947,
+    "ci95": [
+      -0.03809523809523809,
+      0.2090909090909091
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k4-configuration-oracle",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.41052631578947363,
+    "ci95": [
+      0.16,
+      0.6476785714285711
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k4-configuration-oracle-current-fallback",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.4421052631578948,
+    "ci95": [
+      0.2092857142857143,
+      0.6667391304347823
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k4-prelayout-selector",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421053,
+    "ci95": [
+      -0.05555555555555555,
+      0.3368585526315789
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k4-prelayout-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421053,
+    "ci95": [
+      -0.05555555555555555,
+      0.3368585526315789
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k4-goal-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.06315789473684212,
+    "ci95": [
+      -0.047058823529411764,
+      0.1764705882352941
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k5-configuration-oracle",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.45263157894736844,
+    "ci95": [
+      0.21250000000000005,
+      0.6823529411764706
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k5-configuration-oracle-current-fallback",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.48421052631578954,
+    "ci95": [
+      0.24703619909502264,
+      0.7111594202898548
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k5-prelayout-selector",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421053,
+    "ci95": [
+      -0.05555555555555555,
+      0.3368585526315789
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k5-prelayout-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.11578947368421053,
+    "ci95": [
+      -0.05555555555555555,
+      0.3368585526315789
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  },
+  {
+    "policy": "k5-goal-selector-validity-guard",
+    "baseline": "current-authored",
+    "estimand": "difference in equal-family weighted acceptable coverage, conditional on common full-pool oracle feasibility; same denominator as policy summaries",
+    "point": 0.0736842105263158,
+    "ci95": [
+      -0.04,
+      0.18095238095238098
+    ],
+    "draws": 2000,
+    "usableDraws": 2000,
+    "seed": 220611,
+    "method": "paired two-stage family then base resampling; profile jobs remain clustered within base; unavailable-oracle bases remain in sampling frame with zero feasible denominator",
+    "caution": "Only two fresh heldout bases per family; interval is descriptive and cannot establish population prevalence."
+  }
+]

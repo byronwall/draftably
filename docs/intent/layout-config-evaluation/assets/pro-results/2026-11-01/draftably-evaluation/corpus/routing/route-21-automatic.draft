@@ -1,0 +1,27 @@
+diagram "Fan trunks with a small blocking box" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node source "source"
+node a "a"
+node b "b"
+node blocker "blocker"
+node c "c"
+node d "d"
+edge e0 source -> a "read"
+edge e1 source -> b "write"
+edge e2 a -> c
+edge e3 b -> d
+edge e4 source -> d "extra branch"
+layout root flow direction=auto fold=never
+size source width=160 height=56
+pin source x=0 y=150
+size a width=160 height=56
+pin a x=300 y=0
+size b width=160 height=56
+pin b x=260 y=300
+size blocker width=40 height=40
+pin blocker x=200 y=240
+size c width=160 height=56
+pin c x=600 y=150
+size d width=160 height=56
+pin d x=600 y=370

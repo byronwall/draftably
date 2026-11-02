@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="830" viewBox="0 0 1320 830">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="24" y="32" font-family="sans-serif" font-size="21" font-weight="700" fill="#17324d">Preferred development selector — combined, 10 engines</text>
+<text x="24" y="57" font-family="sans-serif" font-size="12" fill="#475467">Exact fitted proposal. Root sequence/lanes preserve current source outside this tree. Guarded policies retain current output on hard failure.</text>
+<path d="M220.0,354 L110,430" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="170.0" y="392.0" font-family="sans-serif" font-size="14" fill="#475467">≤</text>
+<path d="M220.0,354 L330,430" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="280.0" y="392.0" font-family="sans-serif" font-size="14" fill="#475467">&gt;</text>
+<path d="M660.0,524 L550,600" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="610.0" y="562.0" font-family="sans-serif" font-size="14" fill="#475467">≤</text>
+<path d="M660.0,524 L770,600" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="720.0" y="562.0" font-family="sans-serif" font-size="14" fill="#475467">&gt;</text>
+<path d="M1100.0,524 L990,600" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="1050.0" y="562.0" font-family="sans-serif" font-size="14" fill="#475467">≤</text>
+<path d="M1100.0,524 L1210,600" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="1160.0" y="562.0" font-family="sans-serif" font-size="14" fill="#475467">&gt;</text>
+<path d="M880.0,354 L660.0,430" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="775.0" y="392.0" font-family="sans-serif" font-size="14" fill="#475467">≤</text>
+<path d="M880.0,354 L1100.0,430" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="995.0" y="392.0" font-family="sans-serif" font-size="14" fill="#475467">&gt;</text>
+<path d="M550.0,184 L220.0,260" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="390.0" y="222.0" font-family="sans-serif" font-size="14" fill="#475467">≤</text>
+<path d="M550.0,184 L880.0,260" fill="none" stroke="#a6b5c2" stroke-width="2"/>
+<text x="720.0" y="222.0" font-family="sans-serif" font-size="14" fill="#475467">&gt;</text>
+<rect x="10" y="430" width="200" height="94" rx="9" fill="#e7f3fb" stroke="#94adc0"/>
+<text x="110" y="459" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">stress</text>
+<text x="110" y="483" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">RIGHT</text>
+<text x="110" y="506" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">7 development bases</text>
+<rect x="230" y="430" width="200" height="94" rx="9" fill="#e7f3fb" stroke="#94adc0"/>
+<text x="330" y="459" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">compound-flow</text>
+<text x="330" y="483" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">DOWN</text>
+<text x="330" y="506" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">5 development bases</text>
+<rect x="120.0" y="260" width="200" height="94" rx="9" fill="#f2f4f7" stroke="#94adc0"/>
+<text x="220.0" y="289" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">hasDirectedCycle</text>
+<text x="220.0" y="313" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">threshold 0.5</text>
+<text x="220.0" y="336" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">12 development bases</text>
+<rect x="450" y="600" width="200" height="94" rx="9" fill="#e7f3fb" stroke="#94adc0"/>
+<text x="550" y="629" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">layered</text>
+<text x="550" y="653" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">DOWN</text>
+<text x="550" y="676" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">14 development bases</text>
+<rect x="670" y="600" width="200" height="94" rx="9" fill="#e7f3fb" stroke="#94adc0"/>
+<text x="770" y="629" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">force</text>
+<text x="770" y="653" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">RIGHT</text>
+<text x="770" y="676" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">12 development bases</text>
+<rect x="560.0" y="430" width="200" height="94" rx="9" fill="#f2f4f7" stroke="#94adc0"/>
+<text x="660.0" y="459" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">maxDegree</text>
+<text x="660.0" y="483" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">threshold 3.5</text>
+<text x="660.0" y="506" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">26 development bases</text>
+<rect x="890" y="600" width="200" height="94" rx="9" fill="#e7f3fb" stroke="#94adc0"/>
+<text x="990" y="629" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">compound-flow</text>
+<text x="990" y="653" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">RIGHT</text>
+<text x="990" y="676" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">4 development bases</text>
+<rect x="1110" y="600" width="200" height="94" rx="9" fill="#e7f3fb" stroke="#94adc0"/>
+<text x="1210" y="629" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">compound-flow</text>
+<text x="1210" y="653" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">DOWN</text>
+<text x="1210" y="676" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">4 development bases</text>
+<rect x="1000.0" y="430" width="200" height="94" rx="9" fill="#f2f4f7" stroke="#94adc0"/>
+<text x="1100.0" y="459" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">edgeCount</text>
+<text x="1100.0" y="483" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">threshold 13.5</text>
+<text x="1100.0" y="506" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">8 development bases</text>
+<rect x="780.0" y="260" width="200" height="94" rx="9" fill="#f2f4f7" stroke="#94adc0"/>
+<text x="880.0" y="289" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">groupCount</text>
+<text x="880.0" y="313" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">threshold 4.5</text>
+<text x="880.0" y="336" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">34 development bases</text>
+<rect x="450.0" y="90" width="200" height="94" rx="9" fill="#f2f4f7" stroke="#94adc0"/>
+<text x="550.0" y="119" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#17324d">nodeCount</text>
+<text x="550.0" y="143" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#17324d">threshold 10.5</text>
+<text x="550.0" y="166" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#475467">46 development bases</text>
+<text x="24" y="808" font-family="sans-serif" font-size="12" fill="#475467">Depth ≤3; at least4 development bases per leaf. Source features only. Tree quality is measured separately from the configuration oracle.</text></svg>

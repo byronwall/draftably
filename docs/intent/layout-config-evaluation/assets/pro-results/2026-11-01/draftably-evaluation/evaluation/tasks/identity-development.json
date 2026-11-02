@@ -1,0 +1,4082 @@
+[
+  {
+    "id": "C-identity-pipelines-04-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-stress-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-force-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-force-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-flow-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-layered-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-tree-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-grid-rename",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-pipelines-04-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "pipelines-04",
+    "family": "pipelines",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-stress-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-force-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-force-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-flow-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-layered-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-tree-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-grid-rename",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-dags-01-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "dags-01",
+    "family": "dags",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-stress-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-force-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-force-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-flow-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-layered-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-tree-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-grid-rename",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-hierarchies-03-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "hierarchies-03",
+    "family": "hierarchies",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-stress-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-force-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-force-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-flow-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-layered-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-tree-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-grid-rename",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-architecture-01-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "architecture-01",
+    "family": "architecture",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-stress-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-force-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-force-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-flow-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-layered-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-tree-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-grid-rename",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-cycles-01-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "cycles-01",
+    "family": "cycles",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-stress-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-force-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-force-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-flow-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-layered-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-tree-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-grid-rename",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-networks-03-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "networks-03",
+    "family": "networks",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-stress-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-force-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-force-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-flow-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-layered-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-tree-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-grid-rename",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-disconnected-04-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "disconnected-04",
+    "family": "disconnected",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-04.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-stress-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-force-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-force-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-flow-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-layered-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-tree-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-grid-rename",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-routing-02-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "routing-02",
+    "family": "routing",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-stress-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-force-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-force-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-flow-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-layered-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-tree-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-grid-rename",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-containers-01-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "containers-01",
+    "family": "containers",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-01.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-stress-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-force-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-force-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-flow-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-layered-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-tree-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-grid-rename",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-presentation-03-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "presentation-03",
+    "family": "presentation",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-stress-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-force-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-force-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-flow-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-layered-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-tree-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-grid-rename",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-authored-03-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "authored-03",
+    "family": "authored",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-03.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-compound-flow-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-compound-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-boundary-align-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-boundary-align-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-compound-spring-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-compound-spring-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-tidy-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-tidy-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-stress-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-stress-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "stress",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-force-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-force-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-flow-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-flow-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-layered-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-layered-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-tree-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-tree-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-grid-rename",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "rename": true,
+    "tag": "rename",
+    "timeoutMs": 15000
+  },
+  {
+    "id": "C-identity-recipes-02-grid-reorder",
+    "stage": "C-identity",
+    "caseId": "recipes-02",
+    "family": "recipes",
+    "split": "development",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-02.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true
+    },
+    "reorder": true,
+    "tag": "reorder",
+    "timeoutMs": 15000
+  }
+]

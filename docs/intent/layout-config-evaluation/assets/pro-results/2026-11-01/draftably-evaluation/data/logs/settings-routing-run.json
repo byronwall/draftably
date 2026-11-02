@@ -1,0 +1,16 @@
+{
+  "runId": "settings-routing",
+  "started": "2026-11-01T23:03:07.185Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 2,
+  "planned": 984,
+  "priorCompleted": 0,
+  "executed": 984,
+  "failed": 0,
+  "timedOut": 0,
+  "skipped": 0,
+  "taskSha256": "f556d091a8db6646551aa90f6a33b3d3b40eef5d1e5ddfd81c3a68b248bb10a3",
+  "finished": "2026-11-01T23:03:39.458Z",
+  "elapsedSeconds": 32.273
+}

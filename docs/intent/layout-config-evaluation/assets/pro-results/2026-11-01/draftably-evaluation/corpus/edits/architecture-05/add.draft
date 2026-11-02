@@ -1,0 +1,56 @@
+diagram "Architecture evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group system "System boundary"
+group g0 "Subsystem 1" in=system
+group g1 "Subsystem 2" in=system
+group g2 "Subsystem 3" in=system
+group g3 "Subsystem 4"
+node n0 "Service 1" in=g0
+node n1 "Service 2" in=g1
+node n2 "Service 3" in=g2
+node n3 "Service 4" in=g3
+node n4 "Service 5" in=g0
+node n5 "Service 6" in=g1
+node n6 "Service 7" in=g2
+node n7 "Service 8" in=g3
+node n8 "Service 9" in=g0
+node n9 "Service 10" in=g1
+node n10 "Service 11" in=g2
+node n11 "Service 12" in=g3
+node n12 "Service 13" in=g0
+node n13 "Service 14" in=g1
+node n14 "Service 15" in=g2
+node n15 "Service 16" in=g3
+node n16 "Service 17" in=g0
+node n17 "Service 18" in=g1
+node n18 "Service 19" in=g2
+edge e0 n0 -> n1 "call"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8 "call"
+edge e8 n8 -> n9
+edge e9 n9 -> n10
+edge e10 n10 -> n11
+edge e11 n11 -> n12
+edge e12 n12 -> n13
+edge e13 n13 -> n14
+edge e14 n14 -> n15 "call"
+edge e15 n15 -> n16
+edge e16 n16 -> n17
+edge e17 n17 -> n18
+edge e18 n0 -> n3
+edge e19 n3 -> n6 "event" kind=async
+edge e20 n6 -> n9
+edge e21 n9 -> n12 "event" kind=async
+edge e22 n12 -> n15
+
+layout root flow direction=right gap=48
+
+
+node added_node "New local detail" in=g2
+edge added_edge n18 -> added_node "added follow-up"

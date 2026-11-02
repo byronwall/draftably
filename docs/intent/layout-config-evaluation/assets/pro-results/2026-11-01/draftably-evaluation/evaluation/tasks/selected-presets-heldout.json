@@ -1,0 +1,4349 @@
+[
+  {
+    "id": "G-selected-heldout-pipelines-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-05",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-pipelines-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "pipelines-06",
+    "family": "pipelines",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/pipelines/pipelines-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-05",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-dags-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "dags-06",
+    "family": "dags",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/dags/dags-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-05",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-hierarchies-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "hierarchies-06",
+    "family": "hierarchies",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/hierarchies/hierarchies-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-05",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-architecture-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "architecture-06",
+    "family": "architecture",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/architecture/architecture-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-05",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-cycles-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "cycles-06",
+    "family": "cycles",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/cycles/cycles-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-05",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-networks-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "networks-06",
+    "family": "networks",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/networks/networks-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-05",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-disconnected-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "disconnected-06",
+    "family": "disconnected",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/disconnected/disconnected-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-05",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-routing-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "routing-06",
+    "family": "routing",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/routing/routing-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-05",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-containers-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "containers-06",
+    "family": "containers",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/containers/containers-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-05",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-presentation-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "presentation-06",
+    "family": "presentation",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/presentation/presentation-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-05-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-05",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-05.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-authored-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "authored-06",
+    "family": "authored",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/authored/authored-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-compound-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "compound-flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-boundary-align-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "boundary-align",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 0,
+        "alignment": 0
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-compound-spring-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "compound-spring",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "boundary-pull": 100,
+        "hierarchy-sweeps": 4
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-tidy-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "tidy",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-force-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "force",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "compactness": 90,
+        "aspect": "1"
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-flow-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "flow",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "edge-length": 48,
+        "flow-strength": 100
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-layered-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "layered",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-tree-p1",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "tree",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "rank-gap": 24,
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 1,
+    "timeoutMs": 15000
+  },
+  {
+    "id": "G-selected-heldout-recipes-06-grid-p3",
+    "stage": "G-selected-heldout",
+    "caseId": "recipes-06",
+    "family": "recipes",
+    "split": "heldout",
+    "kind": "source",
+    "sourcePath": "corpus/bases/recipes/recipes-06.draft",
+    "layout": {
+      "engine": "grid",
+      "direction": "RIGHT",
+      "keepFit": true,
+      "attrs": {
+        "aspect": "1",
+        "node-gap": 12
+      }
+    },
+    "tag": "selected-preset",
+    "presetIndex": 3,
+    "timeoutMs": 15000
+  }
+]

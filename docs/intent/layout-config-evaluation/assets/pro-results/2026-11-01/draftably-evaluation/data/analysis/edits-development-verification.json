@@ -1,0 +1,7 @@
+{
+  "geometry_derivations": 480,
+  "effective_geometry_hashes_verified": 480,
+  "reference_geometry_hashes_verified": 480,
+  "errors": [],
+  "scope": "Geometry signatures only; not whole archive byte identity. Edit metrics are recomputed without product engine execution."
+}

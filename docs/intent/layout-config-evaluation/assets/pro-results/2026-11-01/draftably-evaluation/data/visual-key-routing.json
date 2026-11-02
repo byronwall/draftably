@@ -1,0 +1,62 @@
+[
+  {
+    "id": "P001",
+    "A": "D-routing-route-17-cornerRadius-0",
+    "B": "D-routing-route-17-cornerRadius-12",
+    "selectionReason": "Appearance only"
+  },
+  {
+    "id": "P002",
+    "A": "D-routing-route-19-clearance-22",
+    "B": "D-routing-route-19-clearance-4",
+    "selectionReason": "Clearance adverse combination"
+  },
+  {
+    "id": "P003",
+    "A": "D-routing-route-03-standoff-40",
+    "B": "D-routing-route-03-standoff-0",
+    "selectionReason": "Departure spacing"
+  },
+  {
+    "id": "P004",
+    "A": "D-routing-route-10-crossingPenalty-0",
+    "B": "D-routing-route-10-crossingPenalty-900",
+    "selectionReason": "Crossing versus detour"
+  },
+  {
+    "id": "P005",
+    "A": "D-routing-route-09-sharedPenalty-0",
+    "B": "D-routing-route-09-sharedPenalty-16",
+    "selectionReason": "Shared segments"
+  },
+  {
+    "id": "P006",
+    "A": "D-routing-route-05-portGap-28",
+    "B": "D-routing-route-05-portGap-6",
+    "selectionReason": "Fan spacing"
+  },
+  {
+    "id": "P007",
+    "A": "D-history-route-22-True-100",
+    "B": "D-history-route-22-True-0",
+    "selectionReason": "Shared prior after edit"
+  },
+  {
+    "id": "P008",
+    "A": "D-routing-route-21-passes-5",
+    "B": "D-routing-route-21-passes-1",
+    "selectionReason": "Finishing passes"
+  },
+  {
+    "id": "P009",
+    "A": "D-port-route-12-authored",
+    "B": "D-port-route-12-automatic",
+    "selectionReason": "Authored side constraint"
+  },
+  {
+    "id": "P010",
+    "A": "D-routing-route-15-bendPenalty-80",
+    "B": "D-routing-route-15-bendPenalty-0",
+    "selectionReason": "Label ownership and bends"
+  }
+]

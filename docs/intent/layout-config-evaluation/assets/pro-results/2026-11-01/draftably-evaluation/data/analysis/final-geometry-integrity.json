@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-02T00:42:07.987Z",
+  "productionCalls": 0,
+  "layoutCalls": 0,
+  "routerCalls": 0,
+  "signatureSource": "evaluation/frozen-development/metrics.mjs",
+  "signatureScope": "Node/group boxes, chosen port sides and route polylines. Not a hash of whole archive bytes, SVG paint, labels, halos or raw source input.",
+  "canonicalSuccessful": 7731,
+  "verified": 7731,
+  "bySplit": {
+    "development": 6445,
+    "heldout": 1286
+  },
+  "missing": [],
+  "malformed": [],
+  "mismatches": [],
+  "extraSavedGeometry": [
+    {
+      "path": "data/geometry/D-layout-architecture-04-groupGap-96.json.gz",
+      "id": "D-layout-architecture-04-groupGap-96",
+      "registered": true,
+      "canonicalStatus": "timed_out"
+    }
+  ],
+  "totalGeometryFiles": 7732
+}

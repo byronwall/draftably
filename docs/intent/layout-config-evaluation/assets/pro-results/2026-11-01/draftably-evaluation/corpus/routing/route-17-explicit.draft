@@ -1,0 +1,20 @@
+diagram "Self-message and nearby obstacle" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node blocker "blocker"
+node d "d"
+edge e0 a -> b from=right to=left
+edge e1 b -> b "retry locally"
+edge e2 b -> d
+edge e3 d -> a "reset" constraint=false
+layout root flow direction=auto fold=never
+size a width=160 height=80
+pin a x=0 y=120
+size b width=160 height=80
+pin b x=300 y=120
+size blocker width=160 height=80
+pin blocker x=300 y=0
+size d width=160 height=80
+pin d x=600 y=120

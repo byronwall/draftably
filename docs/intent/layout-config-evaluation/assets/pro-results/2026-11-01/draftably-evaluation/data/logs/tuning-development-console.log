@@ -1,0 +1,50 @@
+{"at":"2026-11-01T23:06:49.539Z","runId":"tuning-development","event":"start","started":"2026-11-01T23:06:49.538Z","node":"v24.22.1","platform":"linux","workers":2,"planned":480,"priorCompleted":0,"executed":0,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"51df5b25ec7c27eb60a4d6bc30803d25fe06cce8f5a8f63801d2ac1b58e5ed91"}
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+WebSocket server error:
+Error: listen EPERM: operation not permitted 0.0.0.0:24678
+    at Server.setupListenHandle [as _listen2] (node:net:2368:21)
+    at listenInCluster (node:net:2499:12)
+    at Server.listen (node:net:2624:7)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:32577:23)
+    at Object.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:39229:30)
+    at DevEnvironment.listen (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:48066:14)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:52
+    at Array.map (<anonymous>)
+    at file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38870:39
+    at async _createServer (file:///workspace/scratch/8279601ec156/baseline/node_modules/.pnpm/vite@6.4.3_@types+node@22.20.5/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:38890:5)
+{"at":"2026-11-01T23:06:50.854Z","runId":"tuning-development","event":"progress","complete":20,"total":480,"last":"G-tune-pipelines-03-force-p0","status":"ok","elapsedSeconds":1}
+{"at":"2026-11-01T23:06:51.238Z","runId":"tuning-development","event":"progress","complete":40,"total":480,"last":"G-tune-pipelines-03-grid-p3","status":"ok","elapsedSeconds":2}
+{"at":"2026-11-01T23:06:52.243Z","runId":"tuning-development","event":"progress","complete":60,"total":480,"last":"G-tune-dags-03-force-p0","status":"ok","elapsedSeconds":3}
+{"at":"2026-11-01T23:06:54.390Z","runId":"tuning-development","event":"progress","complete":80,"total":480,"last":"G-tune-dags-03-grid-p3","status":"ok","elapsedSeconds":5}
+{"at":"2026-11-01T23:06:55.974Z","runId":"tuning-development","event":"progress","complete":100,"total":480,"last":"G-tune-hierarchies-01-stress-p2","status":"ok","elapsedSeconds":6}
+{"at":"2026-11-01T23:06:57.920Z","runId":"tuning-development","event":"progress","complete":120,"total":480,"last":"G-tune-hierarchies-01-grid-p3","status":"ok","elapsedSeconds":8}
+{"at":"2026-11-01T23:07:09.998Z","runId":"tuning-development","event":"progress","complete":140,"total":480,"last":"G-tune-architecture-03-force-p0","status":"ok","elapsedSeconds":20}
+{"at":"2026-11-01T23:07:20.057Z","runId":"tuning-development","event":"progress","complete":160,"total":480,"last":"G-tune-cycles-02-compound-flow-p0","status":"ok","elapsedSeconds":31}
+{"at":"2026-11-01T23:07:21.294Z","runId":"tuning-development","event":"progress","complete":180,"total":480,"last":"G-tune-cycles-02-stress-p3","status":"ok","elapsedSeconds":32}
+{"at":"2026-11-01T23:07:23.391Z","runId":"tuning-development","event":"progress","complete":200,"total":480,"last":"G-tune-cycles-02-grid-p3","status":"ok","elapsedSeconds":34}
+{"at":"2026-11-01T23:07:28.529Z","runId":"tuning-development","event":"progress","complete":220,"total":480,"last":"G-tune-networks-01-stress-p3","status":"ok","elapsedSeconds":39}
+{"at":"2026-11-01T23:07:32.173Z","runId":"tuning-development","event":"progress","complete":240,"total":480,"last":"G-tune-disconnected-01-compound-flow-p0","status":"ok","elapsedSeconds":43}
+{"at":"2026-11-01T23:07:32.503Z","runId":"tuning-development","event":"progress","complete":260,"total":480,"last":"G-tune-networks-01-grid-p2","status":"ok","elapsedSeconds":43}
+{"at":"2026-11-01T23:07:32.629Z","runId":"tuning-development","event":"progress","complete":280,"total":480,"last":"G-tune-disconnected-01-grid-p3","status":"ok","elapsedSeconds":43}
+{"at":"2026-11-01T23:07:40.151Z","runId":"tuning-development","event":"progress","complete":300,"total":480,"last":"G-tune-routing-01-stress-p3","status":"ok","elapsedSeconds":51}
+{"at":"2026-11-01T23:07:46.071Z","runId":"tuning-development","event":"progress","complete":320,"total":480,"last":"G-tune-containers-01-compound-flow-p0","status":"ok","elapsedSeconds":57}
+{"at":"2026-11-01T23:07:50.593Z","runId":"tuning-development","event":"progress","complete":340,"total":480,"last":"G-tune-containers-01-stress-p3","status":"ok","elapsedSeconds":61}
+{"at":"2026-11-01T23:07:52.341Z","runId":"tuning-development","event":"progress","complete":360,"total":480,"last":"G-tune-containers-01-grid-p3","status":"ok","elapsedSeconds":63}
+{"at":"2026-11-01T23:07:54.206Z","runId":"tuning-development","event":"progress","complete":380,"total":480,"last":"G-tune-presentation-01-force-p0","status":"ok","elapsedSeconds":65}
+{"at":"2026-11-01T23:07:55.112Z","runId":"tuning-development","event":"progress","complete":400,"total":480,"last":"G-tune-presentation-01-grid-p3","status":"ok","elapsedSeconds":66}
+{"at":"2026-11-01T23:07:56.507Z","runId":"tuning-development","event":"progress","complete":420,"total":480,"last":"G-tune-authored-03-stress-p3","status":"ok","elapsedSeconds":67}
+{"at":"2026-11-01T23:07:56.935Z","runId":"tuning-development","event":"progress","complete":440,"total":480,"last":"G-tune-authored-03-grid-p3","status":"ok","elapsedSeconds":67}
+{"at":"2026-11-01T23:07:57.777Z","runId":"tuning-development","event":"progress","complete":460,"total":480,"last":"G-tune-pipelines-01-stress-p3","status":"ok","elapsedSeconds":68}
+{"at":"2026-11-01T23:07:58.367Z","runId":"tuning-development","event":"progress","complete":480,"total":480,"last":"G-tune-pipelines-01-grid-p3","status":"ok","elapsedSeconds":69}
+{"at":"2026-11-01T23:07:58.374Z","runId":"tuning-development","event":"complete","started":"2026-11-01T23:06:49.538Z","node":"v24.22.1","platform":"linux","workers":2,"planned":480,"priorCompleted":0,"executed":480,"failed":0,"timedOut":0,"skipped":0,"taskSha256":"51df5b25ec7c27eb60a4d6bc30803d25fe06cce8f5a8f63801d2ac1b58e5ed91","finished":"2026-11-01T23:07:58.374Z","elapsedSeconds":68.836}

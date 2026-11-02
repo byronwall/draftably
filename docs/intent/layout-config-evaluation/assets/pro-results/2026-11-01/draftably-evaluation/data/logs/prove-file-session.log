@@ -1,0 +1,28 @@
+PASS opened file matches draftably inspect
+PASS resize saved
+PASS resize wrote a requested group size
+PASS drag saved
+PASS drag wrote a relative preference
+PASS pin saved
+PASS pin wrote parent-local coordinates
+PASS camera movement leaves the file unchanged
+PASS undo and redo rewrite the file
+PASS refined file matches draftably inspect
+PASS external addition is visible
+PASS comments and content survive
+PASS relative preference still holds
+PASS pin holds in its group
+PASS distant region stays put
+PASS unavoidable movement is diagnosed — moved: platform, db
+PASS restart reproduces geometry
+PASS invalid source keeps the last drawing and is not overwritten
+PASS stale save is refused and the newer file is kept
+PASS file switching exceeds the browser connection limit without stalling
+FAIL back navigation actually restores a cached page
+PASS back navigation reconnects the cached file and catches up
+PASS forward navigation restores the next file
+
+22/23 checks passed.
+  FAILED: back navigation actually restores a cached page
+Screenshots: tmp/proof/ (failure.png and failure.json)
+Final file: /tmp/draft-proof-yelsXm/architecture.draft

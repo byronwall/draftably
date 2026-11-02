@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1050" viewBox="0 0 1200 1050">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#62758a"/></marker></defs>
+<rect width="1200" height="1050" fill="#f5f8fb"/>
+<style>text{font-family:DejaVu Sans,sans-serif;fill:#172b43}.title{font-size:30px;font-weight:700}.head{font-size:21px;font-weight:700}.body{font-size:17px}.small{font-size:15px}.arrow{fill:none;stroke:#62758a;stroke-width:2.4;marker-end:url(#arrow)}</style>
+<text x="46" y="52" class="title" text-anchor="start">Draftably: from immutable source to a bounded recommendation</text>
+<text x="46" y="82" class="body" text-anchor="start">Actual shipped algorithms • frozen decisions • failures retained • no product changes</text>
+<rect x="46" y="116" width="535" height="126" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="66" y="148" class="head" text-anchor="start">Immutable source</text>
+<text x="66" y="178" class="body" text-anchor="start">Commit f14d9b891adba75de6cc172b190017ea5a5ca091</text>
+<text x="66" y="203" class="body" text-anchor="start">451 original files verified; production compiler and renderer</text>
+<text x="66" y="228" class="body" text-anchor="start">Separate stock checks and real browser flow evidence</text>
+<rect x="619" y="116" width="535" height="126" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="639" y="148" class="head" text-anchor="start">Corpus and user jobs</text>
+<text x="639" y="178" class="body" text-anchor="start">72 bases / 12 families / 5 preference profiles</text>
+<text x="639" y="203" class="body" text-anchor="start">48 development + 24 genuinely new heldout cases</text>
+<text x="639" y="228" class="body" text-anchor="start">24 edit bases; frozen routing fixtures; explicit constraints</text>
+<path d="M313 242V267H886V242 M221 267H979" fill="none" stroke="#62758a" stroke-width="2.4"/>
+<path class="arrow" d="M221 267 L221 293"/>
+<path class="arrow" d="M600 267 L600 293"/>
+<path class="arrow" d="M979 267 L979 293"/>
+<rect x="46" y="295" width="350" height="146" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="66" y="327" class="head" text-anchor="start">Cold source rebuilds</text>
+<text x="66" y="357" class="body" text-anchor="start">10 engines; meaningful directions</text>
+<text x="66" y="382" class="body" text-anchor="start">Native recipes kept separate</text>
+<text x="66" y="407" class="body" text-anchor="start">Full compile → route → labels</text>
+<text x="66" y="432" class="body" text-anchor="start">Defaults + bounded preset search</text>
+<rect x="425" y="295" width="350" height="146" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="445" y="327" class="head" text-anchor="start">Warm editing</text>
+<text x="445" y="357" class="body" text-anchor="start">Shared prior positions and ports</text>
+<text x="445" y="382" class="body" text-anchor="start">Pins, manual flags and scope</text>
+<text x="445" y="407" class="body" text-anchor="start">Local repair vs global reflow</text>
+<text x="445" y="432" class="body" text-anchor="start">Color controls retained</text>
+<rect x="804" y="295" width="350" height="146" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="824" y="327" class="head" text-anchor="start">Routing experiments</text>
+<text x="824" y="357" class="body" text-anchor="start">Fixed positions; 12 parameters</text>
+<text x="824" y="382" class="body" text-anchor="start">Six interaction grids and ports</text>
+<text x="824" y="407" class="body" text-anchor="start">Layout × routing cross-check</text>
+<text x="824" y="432" class="body" text-anchor="start">History isolated by candidate</text>
+<path d="M221 441V455H979V441 M600 441V455" fill="none" stroke="#62758a" stroke-width="2.4"/>
+<path class="arrow" d="M410 455 L410 467"/>
+<path class="arrow" d="M979 455 L979 467"/>
+<rect x="46" y="469" width="729" height="144" rx="13" fill="#eaf2fb" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="66" y="501" class="head" text-anchor="start">Hard validity before soft quality</text>
+<text x="66" y="531" class="body" text-anchor="start">Objects, connections, finite geometry, pins, sides and supported scope</text>
+<text x="66" y="556" class="body" text-anchor="start">Then visible score components, area, length, movement and runtime</text>
+<text x="66" y="581" class="body" text-anchor="start">First terminal attempt wins; timeout checkpoints stay partial</text>
+<text x="66" y="606" class="body" text-anchor="start">Metric coverage gaps remain explicit, with separate diagnostic audits</text>
+<rect x="804" y="469" width="350" height="144" rx="13" fill="#eaf2fb" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="824" y="501" class="head" text-anchor="start">Visual review</text>
+<text x="824" y="531" class="body" text-anchor="start">Production SVG + browser PNG</text>
+<text x="824" y="556" class="body" text-anchor="start">Matched, shuffled A/B pairs</text>
+<text x="824" y="581" class="body" text-anchor="start">Judgments sealed before keys</text>
+<text x="824" y="606" class="body" text-anchor="start">Single expert model; not users</text>
+<path class="arrow" d="M410 613 L410 641 L600 641 L600 667"/>
+<path class="arrow" d="M979 613 L979 641 L600 641"/>
+<rect x="46" y="669" width="1108" height="96" rx="13" fill="#e4f3ed" stroke="#7ba995" stroke-width="1.5"/>
+<text x="66" y="701" class="head" text-anchor="start">Freeze boundary — before heldout execution</text>
+<text x="66" y="731" class="body" text-anchor="start">Metrics, practical bands, subsets, presets, selector trees, dependencies and routing choices sealed by hash</text>
+<text x="66" y="756" class="body" text-anchor="start">Oracle availability is kept separate from a pre-layout selector and from user choice effort</text>
+<path class="arrow" d="M600 765 L600 779 L313 779 L313 791"/>
+<rect x="46" y="793" width="535" height="150" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="66" y="825" class="head" text-anchor="start">Fresh heldout assessment</text>
+<text x="66" y="855" class="body" text-anchor="start">Apply frozen choices once; no refitting</text>
+<text x="66" y="880" class="body" text-anchor="start">Common-job coverage + specialist escape + hard regressions</text>
+<text x="66" y="905" class="body" text-anchor="start">Cluster uncertainty by base or family</text>
+<text x="66" y="930" class="body" text-anchor="start">Heldout visual disagreements do not rewrite scores</text>
+<rect x="619" y="793" width="535" height="150" rx="13" fill="#ffffff" stroke="#c7d5e3" stroke-width="1.5"/>
+<text x="639" y="825" class="head" text-anchor="start">Decision and handoff</text>
+<text x="639" y="855" class="body" text-anchor="start">Default changes require the original 95% coverage gate</text>
+<text x="639" y="880" class="body" text-anchor="start">Separate UI disclosure from implementation deletion</text>
+<text x="639" y="905" class="body" text-anchor="start">Exact inventory + staged implementation plan</text>
+<text x="639" y="930" class="body" text-anchor="start">Reports, raw outcomes, source and replay commands</text>
+<path class="arrow" d="M581 864 L617 864"/>
+<text x="46" y="983" class="head" text-anchor="start">Measurement boundaries</text>
+<text x="46" y="1012" class="body" text-anchor="start">Synthetic frequencies are not market prevalence. Cloud time is not desktop latency. Oracle wins are not automatic choices.</text>
+</svg>

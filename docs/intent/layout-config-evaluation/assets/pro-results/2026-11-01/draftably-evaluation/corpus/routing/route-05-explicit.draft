@@ -1,0 +1,19 @@
+diagram "Three-way fan-out" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node hub "hub"
+node a "a"
+node b "b"
+node c "c"
+edge e0 hub -> a from=right to=left
+edge e1 hub -> b
+edge e2 hub -> c
+layout root flow direction=auto fold=never
+size hub width=160 height=80
+pin hub x=0 y=120
+size a width=160 height=80
+pin a x=320 y=0
+size b width=160 height=80
+pin b x=320 y=120
+size c width=160 height=80
+pin c x=320 y=240

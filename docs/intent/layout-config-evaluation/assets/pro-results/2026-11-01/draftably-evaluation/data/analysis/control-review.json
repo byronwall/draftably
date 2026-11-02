@@ -1,0 +1,34 @@
+{
+  "status": "Internal read-only analysis review completed; not a user study or independent human validation",
+  "reviewer": "/root/inventory_ui/control_review",
+  "reviewed_inputs": [
+    "data/settings-routing.jsonl",
+    "data/interactions-routing.jsonl"
+  ],
+  "heldout_access": false,
+  "geometry_executions": 0,
+  "independent_recomputation": {
+    "one_policy_subsets": 25,
+    "two_policy_subsets": 300,
+    "three_policy_subsets": 2300,
+    "leave_one_control_out_searches": 12,
+    "subsets_per_ablation": 1771,
+    "selected_policies": [
+      "clearance-22",
+      "clearance-4",
+      "portGap-28"
+    ],
+    "selected_hard_valid": 23,
+    "selected_acceptable_case_profiles": 63,
+    "full_pool_acceptable_case_profiles": 69
+  },
+  "issues_resolved": [
+    "Equal-family regret now averages each observed family mean with equal weight, rather than inverse total family size with missing valid cases.",
+    "Sixteen explicit-side pairs vary one nominated edge, not all edges.",
+    "Baseline-winning scalar summary level uses the numeric default instead of null. Default wins exact local-score ties.",
+    "Archive integrity wording explicitly limits verification to the geometry signature, excluding path/halo and remaining archive content."
+  ],
+  "first_terminal_rule": "Earliest terminal record per distinct trial; all later attempts retained as diagnostics and never promote coverage",
+  "analysis_script_sha256_after_corrections": "a1ea0b10d31b73b5bee53110a1bc87a14b8d32b925ad07fb49c8ec3e7ffa039d",
+  "date": "2026-11-01T23:22:28.415304+00:00"
+}

@@ -1,0 +1,255 @@
+{
+  "fittedOnHeldout": false,
+  "policy": {
+    "fixedEngineSet": [
+      "boundary-align",
+      "tidy",
+      "force",
+      "layered",
+      "tree",
+      "grid"
+    ],
+    "minimumExtraGlobalConfigurations": 11,
+    "globalMethods": [
+      "engine:boundary-align:DOWN",
+      "engine:boundary-align:RIGHT",
+      "engine:force:RIGHT",
+      "engine:layered:DOWN",
+      "engine:layered:RIGHT",
+      "engine:tidy:RIGHT",
+      "engine:tree:RIGHT",
+      "tuned:force:RIGHT:p3",
+      "tuned:layered:RIGHT:p1",
+      "tuned:tidy:RIGHT:p3",
+      "tuned:tree:RIGHT:p1"
+    ],
+    "candidateGlobalConfigurations": 18,
+    "subsetsExamined": 230964,
+    "qualifiedAtMinimumSize": 2,
+    "nativeRecipeAvailability": "All six structural recipes, implicit baseline, and authored current source whose engine dependencies are retained; this is separate from the counted global configurations.",
+    "objective": "Smallest configuration count meeting relative95% separately under all common profiles with no new current-valid hard case; ties maximize accepted jobs then valid jobs. Engine set was chosen first; this is not joint exhaustive optimization over every engine/configuration set.",
+    "oracleOnly": true,
+    "developmentSummary": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.9454545454545455,
+      "commonAcceptableCoverage": 0.9615384615384615,
+      "nicheAcceptableCoverage": 0.9222222222222222,
+      "worstFamilyCoverage": 0.75,
+      "familyCoverage": {
+        "architecture": 1.0,
+        "authored": 1.0,
+        "containers": 1.0,
+        "cycles": 0.75,
+        "dags": 1.0,
+        "disconnected": 1.0,
+        "hierarchies": 1.0,
+        "networks": 0.95,
+        "pipelines": 1.0,
+        "presentation": 1.0,
+        "recipes": 0.95,
+        "routing": 0.75
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 208,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 0.15542062249688066,
+      "maxFiniteRegret": 6.428571,
+      "p95FiniteRegret": 0.9090909999999999,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.9318181818181817,
+        "compact": 0.9545454545454544,
+        "traceable": 0.9318181818181817,
+        "stable": 0.9545454545454544,
+        "specialist": 0.9545454545454544
+      },
+      "absoluteAcceptableCoverage": 0.8666666666666667,
+      "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+      "absoluteNicheAcceptableCoverage": 0.8300000000000001,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.75,
+        "authored": 1.0,
+        "containers": 0.5,
+        "cycles": 0.75,
+        "dags": 0.75,
+        "disconnected": 1.0,
+        "hierarchies": 1.0,
+        "networks": 0.95,
+        "pipelines": 1.0,
+        "presentation": 1.0,
+        "recipes": 0.95,
+        "routing": 0.75
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.8928571428571429,
+        "compact": 0.8928571428571429,
+        "traceable": 0.8928571428571429,
+        "stable": 0.8928571428571429,
+        "specialist": 0.8928571428571429
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.9615384615384616,
+        "compact": 0.9615384615384616,
+        "traceable": 0.9615384615384616,
+        "stable": 0.9615384615384616,
+        "specialist": 0.9615384615384616
+      },
+      "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+      "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    }
+  },
+  "heldoutSummary": {
+    "weightedHardValidCoverage": 0.7916666666666665,
+    "acceptableCoverage": 0.8421052631578949,
+    "commonAcceptableCoverage": 0.7999999999999999,
+    "nicheAcceptableCoverage": 0.914285714285714,
+    "worstFamilyCoverage": 0.4,
+    "familyCoverage": {
+      "architecture": 0.4,
+      "authored": 1.0,
+      "containers": null,
+      "cycles": 0.5,
+      "dags": 1.0,
+      "disconnected": 1.0,
+      "hierarchies": 1.0,
+      "networks": 1.0,
+      "pipelines": 0.6,
+      "presentation": 1.0,
+      "recipes": 1.0,
+      "routing": 0.7
+    },
+    "currentValidHardRegressions": 0,
+    "currentValidHardRegressionCases": 0,
+    "oracleUnavailableJobs": 25,
+    "acceptableJobs": 80,
+    "totalJobs": 120,
+    "hardValidJobs": 95,
+    "meanFiniteRegret": 0.20637243252911958,
+    "maxFiniteRegret": 5.191630425418563,
+    "p95FiniteRegret": 1.372549,
+    "specialistCurrentValidLossCases": 0,
+    "specialistProtectedCases": 2,
+    "specialistCurrentValidCases": 2,
+    "profileCoverage": {
+      "readable": 0.8947368421052632,
+      "compact": 0.9473684210526316,
+      "traceable": 0.8947368421052632,
+      "stable": 0.7368421052631579,
+      "specialist": 0.7368421052631579
+    },
+    "absoluteAcceptableCoverage": 0.6666666666666667,
+    "absoluteCommonAcceptableCoverage": 0.6857142857142858,
+    "absoluteNicheAcceptableCoverage": 0.64,
+    "absoluteFamilyCoverage": {
+      "architecture": 0.2,
+      "authored": 1.0,
+      "containers": 0.0,
+      "cycles": 0.5,
+      "dags": 0.5,
+      "disconnected": 1.0,
+      "hierarchies": 1.0,
+      "networks": 0.5,
+      "pipelines": 0.6,
+      "presentation": 1.0,
+      "recipes": 1.0,
+      "routing": 0.7
+    },
+    "commonAbsoluteProfileCoverage": {
+      "readable": 0.7142857142857143,
+      "compact": 0.8571428571428572,
+      "traceable": 0.7142857142857143,
+      "stable": 0.5714285714285715,
+      "specialist": 0.5714285714285715
+    },
+    "commonFeasibleProfileCoverage": {
+      "readable": 0.8333333333333334,
+      "compact": 1.0,
+      "traceable": 0.8333333333333334,
+      "stable": 0.6666666666666667,
+      "specialist": 0.6666666666666667
+    },
+    "worstProfileCommonFeasibleCoverage": 0.6666666666666667,
+    "worstProfileCommonAbsoluteCoverage": 0.5714285714285715,
+    "commonProfileCounts": {
+      "readable": {
+        "acceptableBases": 10,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "compact": {
+        "acceptableBases": 12,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "traceable": {
+        "acceptableBases": 10,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "stable": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      },
+      "specialist": {
+        "acceptableBases": 8,
+        "allCommonBases": 14,
+        "oracleFeasibleBases": 12,
+        "currentValidBases": 11,
+        "currentValidHardRegressionCases": 0
+      }
+    },
+    "currentValidHardRegressionCommonCases": 0
+  }
+}

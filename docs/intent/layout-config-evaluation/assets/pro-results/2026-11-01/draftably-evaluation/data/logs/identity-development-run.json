@@ -1,0 +1,16 @@
+{
+  "runId": "identity-development",
+  "started": "2026-11-01T23:29:17.170Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 3,
+  "planned": 240,
+  "priorCompleted": 0,
+  "executed": 240,
+  "failed": 0,
+  "timedOut": 0,
+  "skipped": 0,
+  "taskSha256": "6d7df00608973ba23ef8cb46bb482c5966142e88a12e8ac0624ce26515769463",
+  "finished": "2026-11-01T23:30:25.109Z",
+  "elapsedSeconds": 67.939
+}

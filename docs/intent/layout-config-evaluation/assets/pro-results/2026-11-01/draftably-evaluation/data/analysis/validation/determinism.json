@@ -1,0 +1,9 @@
+{
+  "plannedCaseEngineGroups": 120,
+  "allSixComplete": 120,
+  "exactAllCompleted": 120,
+  "onePixelAllCompleted": 120,
+  "notFullyObserved": [],
+  "disagreements": [],
+  "method": "Geometry only, excluding timing/report clocks; every completed warmup/repetition checked; failed repetitions are unavailable rather than assumed deterministic."
+}

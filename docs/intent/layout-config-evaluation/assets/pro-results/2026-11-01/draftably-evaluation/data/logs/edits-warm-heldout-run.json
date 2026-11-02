@@ -1,0 +1,18 @@
+{
+  "runId": "edits-warm-heldout",
+  "started": "2026-11-02T00:18:03.162Z",
+  "node": "v24.22.1",
+  "platform": "linux",
+  "workers": 1,
+  "policySha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "planned": 180,
+  "priorCompleted": 0,
+  "executed": 180,
+  "failed": 0,
+  "timedOut": 2,
+  "skipped": 0,
+  "taskSha256": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+  "finished": "2026-11-02T00:21:54.829Z",
+  "elapsedSeconds": 231.667,
+  "persistedDistinct": 180
+}

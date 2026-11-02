@@ -1,0 +1,252 @@
+{
+  "version": "edit-analysis-1.0",
+  "generated_at": "2026-11-02T00:27:08.354082+00:00",
+  "split": "heldout",
+  "heldout_read": true,
+  "source": "Measured E outputs plus declared derived hard-validity guard",
+  "stages": [
+    {
+      "path": "data/edits-current-heldout.jsonl",
+      "file_sha256": "6fdd17acc9944ff6fdf48d62785fd7b59b2730d2f6af2662880ea23bcb3253ae",
+      "attempt_rows": 60,
+      "distinct_terminal_rows": 60,
+      "first_status_counts": {
+        "ok": 60
+      },
+      "all_attempt_status_counts": {
+        "ok": 60
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-current-heldout",
+      "planned_rows": 60,
+      "task_sha256": "4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996",
+      "state": "complete"
+    },
+    {
+      "path": "data/edits-states-heldout.jsonl",
+      "file_sha256": "f8737a2b134ba7e9eb35aaef5a6c087bbbf638ab75deba60ccf43d984cdf53a8",
+      "attempt_rows": 12,
+      "distinct_terminal_rows": 12,
+      "first_status_counts": {
+        "ok": 12
+      },
+      "all_attempt_status_counts": {
+        "ok": 12
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-states-heldout",
+      "planned_rows": 12,
+      "task_sha256": "0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c",
+      "state": "complete"
+    },
+    {
+      "path": "data/edits-warm-heldout.jsonl",
+      "file_sha256": "d5202efc1314a9703def88a873b558b7e31387bb1c2bfded2f69f14908cfc01c",
+      "attempt_rows": 180,
+      "distinct_terminal_rows": 180,
+      "first_status_counts": {
+        "ok": 178,
+        "timed_out": 2
+      },
+      "all_attempt_status_counts": {
+        "ok": 178,
+        "timed_out": 2
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-warm-heldout",
+      "planned_rows": 180,
+      "task_sha256": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+      "state": "complete"
+    },
+    {
+      "path": "data/edits-policies-heldout.jsonl",
+      "file_sha256": "9db4fe7499a8bea86e948b6068dfd75c46e6570b50d1e27ec6640542b18fd5d6",
+      "attempt_rows": 120,
+      "distinct_terminal_rows": 120,
+      "first_status_counts": {
+        "ok": 120
+      },
+      "all_attempt_status_counts": {
+        "ok": 120
+      },
+      "partial_final_line": false,
+      "later_attempts": {},
+      "stage": "edits-policies-heldout",
+      "planned_rows": 120,
+      "task_sha256": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+      "state": "complete"
+    }
+  ],
+  "reference_catalog_files": [
+    {
+      "path": "data/documented-default-heldout.jsonl",
+      "file_sha256": "d82837e3352e3e05969cfbee0498792e3bba23a2eddc3fafc1f16c99f40f5163",
+      "attempt_rows": 23,
+      "distinct_terminal_rows": 23,
+      "first_status_counts": {
+        "ok": 19,
+        "timed_out": 4
+      },
+      "all_attempt_status_counts": {
+        "ok": 19,
+        "timed_out": 4
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-current-heldout.jsonl",
+      "file_sha256": "6fdd17acc9944ff6fdf48d62785fd7b59b2730d2f6af2662880ea23bcb3253ae",
+      "attempt_rows": 60,
+      "distinct_terminal_rows": 60,
+      "first_status_counts": {
+        "ok": 60
+      },
+      "all_attempt_status_counts": {
+        "ok": 60
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-policies-heldout.jsonl",
+      "file_sha256": "9db4fe7499a8bea86e948b6068dfd75c46e6570b50d1e27ec6640542b18fd5d6",
+      "attempt_rows": 120,
+      "distinct_terminal_rows": 120,
+      "first_status_counts": {
+        "ok": 120
+      },
+      "all_attempt_status_counts": {
+        "ok": 120
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-states-heldout.jsonl",
+      "file_sha256": "f8737a2b134ba7e9eb35aaef5a6c087bbbf638ab75deba60ccf43d984cdf53a8",
+      "attempt_rows": 12,
+      "distinct_terminal_rows": 12,
+      "first_status_counts": {
+        "ok": 12
+      },
+      "all_attempt_status_counts": {
+        "ok": 12
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/edits-warm-heldout.jsonl",
+      "file_sha256": "d5202efc1314a9703def88a873b558b7e31387bb1c2bfded2f69f14908cfc01c",
+      "attempt_rows": 180,
+      "distinct_terminal_rows": 180,
+      "first_status_counts": {
+        "ok": 178,
+        "timed_out": 2
+      },
+      "all_attempt_status_counts": {
+        "ok": 178,
+        "timed_out": 2
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/joint-heldout.jsonl",
+      "file_sha256": "c0ba3cab83866c03b59b8a0200aa27aa2397b7adb82bf157e5c950c4e78d2ea2",
+      "attempt_rows": 101,
+      "distinct_terminal_rows": 101,
+      "first_status_counts": {
+        "ok": 84,
+        "timed_out": 17
+      },
+      "all_attempt_status_counts": {
+        "ok": 84,
+        "timed_out": 17
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/routing-current-heldout.jsonl",
+      "file_sha256": "8dcabc3b24a9fe8945648af81fac560f1559cd98bc3cc5692ecd4b43043f9c30",
+      "attempt_rows": 72,
+      "distinct_terminal_rows": 72,
+      "first_status_counts": {
+        "ok": 57,
+        "timed_out": 15
+      },
+      "all_attempt_status_counts": {
+        "ok": 57,
+        "timed_out": 15
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/screen-heldout.jsonl",
+      "file_sha256": "f121951690a1bad6d7c46ebc719fed0b1ab3bc8401ad38c9c7b9d4922b6a66ae",
+      "attempt_rows": 599,
+      "distinct_terminal_rows": 599,
+      "first_status_counts": {
+        "ok": 481,
+        "timed_out": 118
+      },
+      "all_attempt_status_counts": {
+        "ok": 481,
+        "timed_out": 118
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    },
+    {
+      "path": "data/selected-presets-heldout.jsonl",
+      "file_sha256": "bf5c33642e259ebdbf72ce3d9cd8fd601147432e1e84dcceef22456d0d5e0e1b",
+      "attempt_rows": 207,
+      "distinct_terminal_rows": 207,
+      "first_status_counts": {
+        "ok": 173,
+        "timed_out": 34
+      },
+      "all_attempt_status_counts": {
+        "ok": 173,
+        "timed_out": 34
+      },
+      "partial_final_line": false,
+      "later_attempts": {}
+    }
+  ],
+  "design_sha256": "bac85609e8f2a8e54fc64f03149f3538b7e06f9b3819af42680bdcd00ab504f6",
+  "analysis_spec_sha256": "04a4368be32b27060f09fcde17bc51b1fa367e89185a30b8acf94f66be58fd9c",
+  "analysis_code_sha256": "da875c97c5033201ed0d682edc770e9a1f722967f3c15e4c8cc62538bf12ea70",
+  "derivation_code_sha256": "8a55fa30d0d9abbc80addcc6fcedbb9713e80c64df8ecf20ce4239cb38ef05a4",
+  "policy_compact_sha256": "621d7015b7a65427a32b6f22ad735a55ae397c7f94c22c5133b0285ee73f0c4b",
+  "prediction_sha256": "8d5ff45f637d2c5d9874f21d5ecaeb9e7ed8ab606a2c75cf979f292f6f87faec",
+  "policy_freeze_sha256": "9e03b185e72525bcd3bd0bf3b27c9aadc42f09551853005afc349e35ba915649",
+  "records": 480,
+  "verification": {
+    "geometry_derivations": 478,
+    "effective_geometry_hashes_verified": 478,
+    "reference_geometry_hashes_verified": 478,
+    "errors": [],
+    "scope": "Geometry signatures only; not whole archive byte identity. Edit metrics are recomputed without product engine execution."
+  },
+  "bootstrap": {
+    "replicates": 2000,
+    "seed": 20261101,
+    "unit": "base diagram; retain its complete five-edit bundle",
+    "interval": "2.5th and97.5th percentile of paired base means",
+    "noHumanSignificanceClaim": true
+  },
+  "canonical_rule": "First terminal outcome. Later attempts never promote coverage.",
+  "guard_map": {
+    "best-single": true,
+    "feature-selector": true,
+    "current-source": false
+  },
+  "no_geometry_algorithms_executed": true
+}

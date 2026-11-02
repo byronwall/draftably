@@ -1,0 +1,48 @@
+{
+  "at": "2026-11-02T00:42:29.002553+00:00",
+  "reportingOnly": true,
+  "checks": {
+    "json_rows_175": true,
+    "csv_rows_175": true,
+    "csv_columns_35": true,
+    "stable_ids_order_preserved": true,
+    "ids_unique_175": true,
+    "source_ranges_unchanged": true,
+    "raw_defaults_unchanged": true,
+    "all_display_defaults_explicit": true,
+    "only_contextual_remove": true,
+    "all_engine_implementations_retained": true,
+    "all_routing_parameters_retained": true,
+    "final_csv_json_decisions_match": true
+  },
+  "checksPassed": 12,
+  "checksFailed": 0,
+  "categoryCounts": {
+    "engine": 11,
+    "recipe": 6,
+    "recipe-baseline": 1,
+    "layout-setting": 24,
+    "routing-setting": 12,
+    "recipe-setting": 11,
+    "authored-constraint": 32,
+    "runtime-or-ui-control": 24,
+    "brush-setting": 6,
+    "action": 41,
+    "internal-diagnostic": 6,
+    "legacy-input": 1
+  },
+  "decisionCounts": {
+    "Hide": 61,
+    "Keep": 74,
+    "Merge": 18,
+    "Automate": 21,
+    "Remove": 1
+  },
+  "hashes": {
+    "inventory-source.json": "3384280e05e791c8ca3312d0d5a5632c119630367d53385563e52ee9302a4586",
+    "inventory-development-evidence.json": "52bbbcfac4ebbbd6e1c435641cf359d83f5bfa9deb953f95396b01ee51b4f9b7",
+    "inventory-final.json": "4e77c411764d0f921c490fc4e984e4681a4e53cc38aef6528a8a62f9ef93126a",
+    "inventory.csv": "9b325608b96d32249bc70504ac3e38184a293e33e76eb355d4db81abbd65b7d3"
+  },
+  "recipeCountExplanation": "Seven recipe inventory rows comprise six named recipes plus implicit/default behavior; all retained."
+}

@@ -1,0 +1,5035 @@
+{
+  "analysisVersion": "engine-recipe-dependencies-1",
+  "dependencyAnalysisCodeSha256": "c776f1855e46b8436a37ba552e3eb5421bbc92f4b3eef7fe2b09091267a52695",
+  "parentAnalysisCodeSha256": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d",
+  "frozen": false,
+  "fittedOnHeldout": false,
+  "allNonemptySubsetsEachScenario": 1023,
+  "additionalZeroEngineRecipeBaseline": true,
+  "inputs": [
+    {
+      "stem": "screen-development",
+      "exists": true,
+      "expected": 1198,
+      "observed": 1198,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [
+        {
+          "id": "C-development-dags-04-layered-DOWN",
+          "line": 280,
+          "canonicalStatus": "timed_out",
+          "laterStatus": "timed_out",
+          "canonicalGeometryHash": null,
+          "laterGeometryHash": null,
+          "laterWorkerMs": 90000
+        },
+        {
+          "id": "C-development-dags-04-tree-RIGHT",
+          "line": 281,
+          "canonicalStatus": "timed_out",
+          "laterStatus": "timed_out",
+          "canonicalGeometryHash": null,
+          "laterGeometryHash": null,
+          "laterWorkerMs": 90000
+        },
+        {
+          "id": "C-development-dags-04-tree-DOWN",
+          "line": 282,
+          "canonicalStatus": "timed_out",
+          "laterStatus": "timed_out",
+          "canonicalGeometryHash": null,
+          "laterGeometryHash": null,
+          "laterWorkerMs": 90000
+        },
+        {
+          "id": "C-development-dags-04-grid-RIGHT",
+          "line": 283,
+          "canonicalStatus": "timed_out",
+          "laterStatus": "timed_out",
+          "canonicalGeometryHash": null,
+          "laterGeometryHash": null,
+          "laterWorkerMs": 90000
+        }
+      ],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "2fd56213b2d3dfcb3b6a9041e6dcbd8067dff6d1ad6560acd8c9d01b8d487dc8",
+      "resultsSha256": "cd068a11c206940c490cb18a40976dbaaa2588712b7971ee01a7cca0d90e63d8",
+      "statuses": {
+        "ok": 1094,
+        "timed_out": 104
+      }
+    },
+    {
+      "stem": "documented-default-development",
+      "exists": true,
+      "expected": 46,
+      "observed": 46,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "97794c7cc3f5385d2e39c89dea2b45acb43bcfaa405943ab07a73adfcea83af6",
+      "resultsSha256": "eb1f75b4adf56a6f289fe11faa50c76227799fd8591190a781d91c0f3604ad94",
+      "statuses": {
+        "ok": 43,
+        "timed_out": 3
+      }
+    },
+    {
+      "stem": "tuning-development",
+      "exists": true,
+      "expected": 480,
+      "observed": 480,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "cd329d93e89afeed1aed23ea46f392ad595a215b951569cdce5e12f48081c963",
+      "resultsSha256": "35a41f828b7fc083e926d40c43aeac083948be631fd8ebfc628466dc3c3592bf",
+      "statuses": {
+        "ok": 480
+      }
+    },
+    {
+      "stem": "selected-presets-development",
+      "exists": true,
+      "expected": 306,
+      "observed": 306,
+      "missing": [],
+      "canonicalRule": "first terminal row per trial ID; later attempts never improve coverage or policy fitting",
+      "duplicateAttempts": [],
+      "nonterminalRecords": [],
+      "geometryHashMismatches": [],
+      "taskSha256": "8df108761fd88b185f1ee2a7475d6917ef9470fe2681079d9fab17467e9a2f4f",
+      "resultsSha256": "c3f0713c74fe9f0216716652f44228f82f06ca9c0acc06ab2ff2dbea4099d805",
+      "statuses": {
+        "ok": 278,
+        "timed_out": 28
+      }
+    }
+  ],
+  "sourceDependencies": {
+    "pipelines-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "pipelines-02": {
+      "declaredByScope": {
+        "root": "layered"
+      },
+      "all": [
+        "layered"
+      ],
+      "nested": []
+    },
+    "pipelines-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "pipelines-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "dags-01": {
+      "declaredByScope": {
+        "root": "layered"
+      },
+      "all": [
+        "layered"
+      ],
+      "nested": []
+    },
+    "dags-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "dags-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "dags-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "hierarchies-01": {
+      "declaredByScope": {
+        "root": "tree"
+      },
+      "all": [
+        "tree"
+      ],
+      "nested": []
+    },
+    "hierarchies-02": {
+      "declaredByScope": {
+        "root": "tree"
+      },
+      "all": [
+        "tree"
+      ],
+      "nested": []
+    },
+    "hierarchies-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "hierarchies-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "architecture-01": {
+      "declaredByScope": {
+        "root": "compound-flow"
+      },
+      "all": [
+        "compound-flow"
+      ],
+      "nested": []
+    },
+    "architecture-02": {
+      "declaredByScope": {
+        "root": "compound-flow"
+      },
+      "all": [
+        "compound-flow"
+      ],
+      "nested": []
+    },
+    "architecture-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "architecture-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "cycles-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "cycles-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "cycles-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "cycles-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "networks-01": {
+      "declaredByScope": {
+        "root": "stress"
+      },
+      "all": [
+        "stress"
+      ],
+      "nested": []
+    },
+    "networks-02": {
+      "declaredByScope": {
+        "root": "force"
+      },
+      "all": [
+        "force"
+      ],
+      "nested": []
+    },
+    "networks-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "networks-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "disconnected-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "disconnected-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "disconnected-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "disconnected-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "routing-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "routing-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "routing-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "routing-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "containers-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "containers-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "containers-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "containers-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "presentation-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "presentation-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "presentation-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "presentation-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "authored-01": {
+      "declaredByScope": {
+        "build": "grid",
+        "runtime": "grid",
+        "source": "grid"
+      },
+      "all": [
+        "grid"
+      ],
+      "nested": [
+        "grid"
+      ]
+    },
+    "authored-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "authored-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "authored-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "recipes-01": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "recipes-02": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "recipes-03": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    },
+    "recipes-04": {
+      "declaredByScope": {},
+      "all": [],
+      "nested": []
+    }
+  },
+  "scenarioDefinitions": {
+    "recipe-baselines-safe": "Engine choices + all measured recipe baselines + authored source only when it names no engines. Every nested named engine and chosen root engine must be retained.",
+    "recipes-and-authored-safe": "Also allows exact current authored source if all its named engine dependencies are retained. This is a theoretical implementation-availability oracle, not a deployed selector.",
+    "current-ui-fallback": "Current authored source and recipes remain available despite hidden engine dependencies; this supports UI hiding only, never implementation deletion."
+  },
+  "modeDefinitions": {
+    "defaults": "RIGHT/DOWN default engine configurations plus measured documented-default/current/recipe anchors",
+    "selected-presets": "one selected global RIGHT preset per engine plus measured documented-default/current/recipe anchors",
+    "combined": "default RIGHT/DOWN and selected global RIGHT presets for each retained engine, plus measured anchors; theoretical configuration oracle"
+  },
+  "sourceFacts": [
+    "compile.ts engineArrangement filters layouts with explicit engine declarations; built-in row/column/flow/lanes/sequence/cells recipes do not automatically invoke a named LayoutLab engine.",
+    "Nested explicit engine declarations survive sourceFor root replacement and recipe baselines. Dependency-safe availability requires those engine IDs too.",
+    "This is outcome-preservation evidence, not a code-deletion build or source-migration test. Shared library dependencies, exported IDs, stored documents, warm actions, and compatibility must be addressed before implementation deletion."
+  ],
+  "minima": [
+    {
+      "mode": "defaults",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "equal-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.8636363636363636,
+        "absoluteAcceptableCoverage": 0.7916666666666666,
+        "commonAcceptableCoverage": 0.9461538461538461,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153845,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153845,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.4,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.4,
+          "hierarchies": 1.0,
+          "networks": 0.7,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.8
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08183192761996465,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "common80-niche20",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9128571428571429,
+        "acceptableCoverage": 0.906811145510836,
+        "absoluteAcceptableCoverage": 0.836857142857143,
+        "commonAcceptableCoverage": 0.946153846153846,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714283,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384615,
+          "compact": 0.8846153846153844,
+          "traceable": 0.9615384615384615,
+          "stable": 0.9615384615384615,
+          "specialist": 0.9615384615384615
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571427,
+          "compact": 0.8214285714285711,
+          "traceable": 0.8928571428571427,
+          "stable": 0.8928571428571427,
+          "specialist": 0.8928571428571427
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153844,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285711,
+        "worstFamilyCoverage": 0.3999999999999999,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.9500000000000001,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.3999999999999999,
+          "hierarchies": 1.0,
+          "networks": 0.6999999999999996,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.7999999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.05563833957707204,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "common50-niche50",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.8892857142857143,
+        "acceptableCoverage": 0.846875,
+        "absoluteAcceptableCoverage": 0.7742857142857144,
+        "commonAcceptableCoverage": 0.9461538461538462,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714287,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153846,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571428,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571428,
+          "stable": 0.8928571428571428,
+          "specialist": 0.8928571428571428
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.3999999999999999,
+        "familyCoverage": {
+          "architecture": 0.8666666666666666,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333333,
+          "disconnected": 0.3999999999999999,
+          "hierarchies": 1.0,
+          "networks": 0.6999999999999998,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.7999999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.09217341835793708,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "worst-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.8636363636363636,
+        "absoluteAcceptableCoverage": 0.7916666666666666,
+        "commonAcceptableCoverage": 0.9461538461538461,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153845,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153845,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.4,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.4,
+          "hierarchies": 1.0,
+          "networks": 0.7,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.8
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08183192761996465,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "equal-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.8636363636363636,
+        "absoluteAcceptableCoverage": 0.7916666666666666,
+        "commonAcceptableCoverage": 0.9461538461538461,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153845,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153845,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.4,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.4,
+          "hierarchies": 1.0,
+          "networks": 0.7,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.8
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08183192761996465,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "common80-niche20",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9128571428571429,
+        "acceptableCoverage": 0.906811145510836,
+        "absoluteAcceptableCoverage": 0.836857142857143,
+        "commonAcceptableCoverage": 0.946153846153846,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714283,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384615,
+          "compact": 0.8846153846153844,
+          "traceable": 0.9615384615384615,
+          "stable": 0.9615384615384615,
+          "specialist": 0.9615384615384615
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571427,
+          "compact": 0.8214285714285711,
+          "traceable": 0.8928571428571427,
+          "stable": 0.8928571428571427,
+          "specialist": 0.8928571428571427
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153844,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285711,
+        "worstFamilyCoverage": 0.3999999999999999,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.9500000000000001,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.3999999999999999,
+          "hierarchies": 1.0,
+          "networks": 0.6999999999999996,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.7999999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.05563833957707204,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "common50-niche50",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.8892857142857143,
+        "acceptableCoverage": 0.846875,
+        "absoluteAcceptableCoverage": 0.7742857142857144,
+        "commonAcceptableCoverage": 0.9461538461538462,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714287,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153846,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571428,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571428,
+          "stable": 0.8928571428571428,
+          "specialist": 0.8928571428571428
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.3999999999999999,
+        "familyCoverage": {
+          "architecture": 0.8666666666666666,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333333,
+          "disconnected": 0.3999999999999999,
+          "hierarchies": 1.0,
+          "networks": 0.6999999999999998,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.7999999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.09217341835793708,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "worst-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.8636363636363636,
+        "absoluteAcceptableCoverage": 0.7916666666666666,
+        "commonAcceptableCoverage": 0.9461538461538461,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153845,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153845,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.4,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.4,
+          "hierarchies": 1.0,
+          "networks": 0.7,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.8
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08183192761996465,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "current-ui-fallback",
+      "weighting": "equal-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.8636363636363636,
+        "absoluteAcceptableCoverage": 0.7916666666666666,
+        "commonAcceptableCoverage": 0.9461538461538461,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153845,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153845,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.4,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.4,
+          "hierarchies": 1.0,
+          "networks": 0.7,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.8
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08183192761996465,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "current-ui-fallback",
+      "weighting": "common80-niche20",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9128571428571429,
+        "acceptableCoverage": 0.906811145510836,
+        "absoluteAcceptableCoverage": 0.836857142857143,
+        "commonAcceptableCoverage": 0.946153846153846,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714283,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384615,
+          "compact": 0.8846153846153844,
+          "traceable": 0.9615384615384615,
+          "stable": 0.9615384615384615,
+          "specialist": 0.9615384615384615
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571427,
+          "compact": 0.8214285714285711,
+          "traceable": 0.8928571428571427,
+          "stable": 0.8928571428571427,
+          "specialist": 0.8928571428571427
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153844,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285711,
+        "worstFamilyCoverage": 0.3999999999999999,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.9500000000000001,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.3999999999999999,
+          "hierarchies": 1.0,
+          "networks": 0.6999999999999996,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.7999999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.05563833957707204,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "current-ui-fallback",
+      "weighting": "common50-niche50",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.8892857142857143,
+        "acceptableCoverage": 0.846875,
+        "absoluteAcceptableCoverage": 0.7742857142857144,
+        "commonAcceptableCoverage": 0.9461538461538462,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714287,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153846,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571428,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571428,
+          "stable": 0.8928571428571428,
+          "specialist": 0.8928571428571428
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153846,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.3999999999999999,
+        "familyCoverage": {
+          "architecture": 0.8666666666666666,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333333,
+          "disconnected": 0.3999999999999999,
+          "hierarchies": 1.0,
+          "networks": 0.6999999999999998,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.7999999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.09217341835793708,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "defaults",
+      "scenario": "current-ui-fallback",
+      "weighting": "worst-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "defaults",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.8958333333333333,
+        "acceptableCoverage": 0.8636363636363636,
+        "absoluteAcceptableCoverage": 0.7916666666666666,
+        "commonAcceptableCoverage": 0.9461538461538461,
+        "absoluteCommonAcceptableCoverage": 0.8785714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.8846153846153845,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8214285714285714,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.8846153846153845,
+        "worstProfileCommonAbsoluteCoverage": 0.8214285714285714,
+        "worstFamilyCoverage": 0.4,
+        "familyCoverage": {
+          "architecture": 0.8666666666666667,
+          "authored": 1.0,
+          "containers": 0.9,
+          "cycles": 0.95,
+          "dags": 0.7333333333333334,
+          "disconnected": 0.4,
+          "hierarchies": 1.0,
+          "networks": 0.7,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 0.8
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08183192761996465,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 23,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "equal-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.8181818181818182,
+        "absoluteAcceptableCoverage": 0.75,
+        "commonAcceptableCoverage": 0.7846153846153845,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714284,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076923,
+          "compact": 0.846153846153846,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.5,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.9,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.9493679526300918,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "common80-niche20",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 0.8006191950464396,
+        "absoluteAcceptableCoverage": 0.7388571428571429,
+        "commonAcceptableCoverage": 0.7846153846153843,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714282,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076921,
+          "compact": 0.8461538461538458,
+          "traceable": 0.7692307692307689,
+          "stable": 0.8076923076923074,
+          "specialist": 0.8076923076923074
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571426,
+          "compact": 0.7857142857142854,
+          "traceable": 0.714285714285714,
+          "stable": 0.7499999999999997,
+          "specialist": 0.7499999999999997
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076921,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571426,
+        "worstFamilyCoverage": 0.49999999999999983,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.9500000000000001,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.8999999999999999,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.9500000000000001,
+          "recipes": 1.0,
+          "routing": 0.49999999999999983
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.6823529158820195,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "common50-niche50",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 0.8249999999999998,
+        "absoluteAcceptableCoverage": 0.7542857142857142,
+        "commonAcceptableCoverage": 0.7846153846153846,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714285,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076922,
+          "compact": 0.8461538461538461,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076922,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.4999999999999999,
+        "familyCoverage": {
+          "architecture": 0.5999999999999999,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6000000000000001,
+          "dags": 0.8666666666666666,
+          "disconnected": 0.8999999999999999,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.4999999999999999
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 1.053028838290701,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "worst-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.8181818181818182,
+        "absoluteAcceptableCoverage": 0.75,
+        "commonAcceptableCoverage": 0.7846153846153845,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714284,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076923,
+          "compact": 0.846153846153846,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.5,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.9,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.9493679526300918,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "equal-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.8181818181818182,
+        "absoluteAcceptableCoverage": 0.75,
+        "commonAcceptableCoverage": 0.7846153846153845,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714284,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076923,
+          "compact": 0.846153846153846,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.5,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.9,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.9493679526300918,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "common80-niche20",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 0.8006191950464396,
+        "absoluteAcceptableCoverage": 0.7388571428571429,
+        "commonAcceptableCoverage": 0.7846153846153843,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714282,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076921,
+          "compact": 0.8461538461538458,
+          "traceable": 0.7692307692307689,
+          "stable": 0.8076923076923074,
+          "specialist": 0.8076923076923074
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571426,
+          "compact": 0.7857142857142854,
+          "traceable": 0.714285714285714,
+          "stable": 0.7499999999999997,
+          "specialist": 0.7499999999999997
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076921,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571426,
+        "worstFamilyCoverage": 0.49999999999999983,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.9500000000000001,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.8999999999999999,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.9500000000000001,
+          "recipes": 1.0,
+          "routing": 0.49999999999999983
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.6823529158820195,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "common50-niche50",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 0.8249999999999998,
+        "absoluteAcceptableCoverage": 0.7542857142857142,
+        "commonAcceptableCoverage": 0.7846153846153846,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714285,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076922,
+          "compact": 0.8461538461538461,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076922,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.4999999999999999,
+        "familyCoverage": {
+          "architecture": 0.5999999999999999,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6000000000000001,
+          "dags": 0.8666666666666666,
+          "disconnected": 0.8999999999999999,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.4999999999999999
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 1.053028838290701,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "worst-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.8181818181818182,
+        "absoluteAcceptableCoverage": 0.75,
+        "commonAcceptableCoverage": 0.7846153846153845,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714284,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076923,
+          "compact": 0.846153846153846,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.5,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.9,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.9493679526300918,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "current-ui-fallback",
+      "weighting": "equal-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.8181818181818182,
+        "absoluteAcceptableCoverage": 0.75,
+        "commonAcceptableCoverage": 0.7846153846153845,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714284,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076923,
+          "compact": 0.846153846153846,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.5,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.9,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.9493679526300918,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "current-ui-fallback",
+      "weighting": "common80-niche20",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 0.8006191950464396,
+        "absoluteAcceptableCoverage": 0.7388571428571429,
+        "commonAcceptableCoverage": 0.7846153846153843,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714282,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076921,
+          "compact": 0.8461538461538458,
+          "traceable": 0.7692307692307689,
+          "stable": 0.8076923076923074,
+          "specialist": 0.8076923076923074
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571426,
+          "compact": 0.7857142857142854,
+          "traceable": 0.714285714285714,
+          "stable": 0.7499999999999997,
+          "specialist": 0.7499999999999997
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076921,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571426,
+        "worstFamilyCoverage": 0.49999999999999983,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.9500000000000001,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.8999999999999999,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.9500000000000001,
+          "recipes": 1.0,
+          "routing": 0.49999999999999983
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.6823529158820195,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "current-ui-fallback",
+      "weighting": "common50-niche50",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 0.8249999999999998,
+        "absoluteAcceptableCoverage": 0.7542857142857142,
+        "commonAcceptableCoverage": 0.7846153846153846,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714285,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076922,
+          "compact": 0.8461538461538461,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076922,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.4999999999999999,
+        "familyCoverage": {
+          "architecture": 0.5999999999999999,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6000000000000001,
+          "dags": 0.8666666666666666,
+          "disconnected": 0.8999999999999999,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.4999999999999999
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 1.053028838290701,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "selected-presets",
+      "scenario": "current-ui-fallback",
+      "weighting": "worst-family",
+      "minimumContractSize": null,
+      "portfolio": null,
+      "summary": null,
+      "fullTen": {
+        "mode": "selected-presets",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.8181818181818182,
+        "absoluteAcceptableCoverage": 0.75,
+        "commonAcceptableCoverage": 0.7846153846153845,
+        "absoluteCommonAcceptableCoverage": 0.7285714285714284,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.6923076923076923,
+          "compact": 0.846153846153846,
+          "traceable": 0.7692307692307692,
+          "stable": 0.8076923076923076,
+          "specialist": 0.8076923076923076
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.6428571428571428,
+          "compact": 0.7857142857142857,
+          "traceable": 0.7142857142857142,
+          "stable": 0.7499999999999999,
+          "specialist": 0.7499999999999999
+        },
+        "worstProfileCommonFeasibleCoverage": 0.6923076923076923,
+        "worstProfileCommonAbsoluteCoverage": 0.6428571428571428,
+        "worstFamilyCoverage": 0.5,
+        "familyCoverage": {
+          "architecture": 0.6000000000000001,
+          "authored": 0.95,
+          "containers": 1.0,
+          "cycles": 0.6,
+          "dags": 0.8666666666666667,
+          "disconnected": 0.9,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 0.5,
+          "presentation": 0.95,
+          "recipes": 1.0,
+          "routing": 0.5
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.9493679526300918,
+        "contractRelativePerProfile95Pass": false,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 18,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 22,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 20,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 21,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "equal-family",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.9454545454545455,
+        "absoluteAcceptableCoverage": 0.8666666666666667,
+        "commonAcceptableCoverage": 0.9615384615384615,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8928571428571429,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+        "worstFamilyCoverage": 0.75,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.75,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.75
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1517605697241957,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9166666666666666,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "common80-niche20",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 0.9538699690402477,
+        "absoluteAcceptableCoverage": 0.8802857142857143,
+        "commonAcceptableCoverage": 0.9615384615384612,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571426,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384615,
+          "compact": 0.9615384615384615,
+          "traceable": 0.9615384615384615,
+          "stable": 0.9615384615384615,
+          "specialist": 0.9615384615384615
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571427,
+          "compact": 0.8928571428571427,
+          "traceable": 0.8928571428571427,
+          "stable": 0.8928571428571427,
+          "specialist": 0.8928571428571427
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384615,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571427,
+        "worstFamilyCoverage": 0.7499999999999996,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.7499999999999999,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.7499999999999996
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.10940455018856012,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9228571428571429,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714285,
+          "compact": 0.9285714285714285,
+          "traceable": 0.9285714285714285,
+          "stable": 0.9285714285714285,
+          "specialist": 0.9285714285714285
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714285,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "common50-niche50",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 0.9421875,
+        "absoluteAcceptableCoverage": 0.8614285714285714,
+        "commonAcceptableCoverage": 0.9615384615384616,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571429,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571428,
+          "compact": 0.8928571428571428,
+          "traceable": 0.8928571428571428,
+          "stable": 0.8928571428571428,
+          "specialist": 0.8928571428571428
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571428,
+        "worstFamilyCoverage": 0.7499999999999998,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.7500000000000001,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.7499999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1682040725006503,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9142857142857144,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipe-baselines-safe",
+      "weighting": "worst-family",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.9454545454545455,
+        "absoluteAcceptableCoverage": 0.8666666666666667,
+        "commonAcceptableCoverage": 0.9615384615384615,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8928571428571429,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+        "worstFamilyCoverage": 0.75,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.75,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.75
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1517605697241957,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipe-baselines-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9166666666666666,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "equal-family",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.9454545454545455,
+        "absoluteAcceptableCoverage": 0.8666666666666667,
+        "commonAcceptableCoverage": 0.9615384615384615,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8928571428571429,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+        "worstFamilyCoverage": 0.75,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.75,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.75
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1517605697241957,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9166666666666666,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "common80-niche20",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 0.9538699690402477,
+        "absoluteAcceptableCoverage": 0.8802857142857143,
+        "commonAcceptableCoverage": 0.9615384615384612,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571426,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384615,
+          "compact": 0.9615384615384615,
+          "traceable": 0.9615384615384615,
+          "stable": 0.9615384615384615,
+          "specialist": 0.9615384615384615
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571427,
+          "compact": 0.8928571428571427,
+          "traceable": 0.8928571428571427,
+          "stable": 0.8928571428571427,
+          "specialist": 0.8928571428571427
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384615,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571427,
+        "worstFamilyCoverage": 0.7499999999999996,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.7499999999999999,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.7499999999999996
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.10940455018856012,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9228571428571429,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714285,
+          "compact": 0.9285714285714285,
+          "traceable": 0.9285714285714285,
+          "stable": 0.9285714285714285,
+          "specialist": 0.9285714285714285
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714285,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "common50-niche50",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 0.9421875,
+        "absoluteAcceptableCoverage": 0.8614285714285714,
+        "commonAcceptableCoverage": 0.9615384615384616,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571429,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571428,
+          "compact": 0.8928571428571428,
+          "traceable": 0.8928571428571428,
+          "stable": 0.8928571428571428,
+          "specialist": 0.8928571428571428
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571428,
+        "worstFamilyCoverage": 0.7499999999999998,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.7500000000000001,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.7499999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1682040725006503,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9142857142857144,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "recipes-and-authored-safe",
+      "weighting": "worst-family",
+      "minimumContractSize": 6,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree",
+        "grid"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 6,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.9454545454545455,
+        "absoluteAcceptableCoverage": 0.8666666666666667,
+        "commonAcceptableCoverage": 0.9615384615384615,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8928571428571429,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+        "worstFamilyCoverage": 0.75,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.75,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 0.95,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.75
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1517605697241957,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "recipes-and-authored-safe",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9166666666666666,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "current-ui-fallback",
+      "weighting": "equal-family",
+      "minimumContractSize": 5,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 5,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.9500000000000001,
+        "absoluteAcceptableCoverage": 0.8708333333333333,
+        "commonAcceptableCoverage": 0.9615384615384615,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8928571428571429,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+        "worstFamilyCoverage": 0.75,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.75,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.75
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.12109572307630875,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "equal-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9166666666666666,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "current-ui-fallback",
+      "weighting": "common80-niche20",
+      "minimumContractSize": 5,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 5,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 0.9560371517027864,
+        "absoluteAcceptableCoverage": 0.8822857142857143,
+        "commonAcceptableCoverage": 0.9615384615384612,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571426,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384615,
+          "compact": 0.9615384615384615,
+          "traceable": 0.9615384615384615,
+          "stable": 0.9615384615384615,
+          "specialist": 0.9615384615384615
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571427,
+          "compact": 0.8928571428571427,
+          "traceable": 0.8928571428571427,
+          "stable": 0.8928571428571427,
+          "specialist": 0.8928571428571427
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384615,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571427,
+        "worstFamilyCoverage": 0.7499999999999996,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.7499999999999999,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.7499999999999996
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.08671458522797709,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common80-niche20",
+        "hardValidCoverage": 0.9228571428571429,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9228571428571429,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714285,
+          "compact": 0.9285714285714285,
+          "traceable": 0.9285714285714285,
+          "stable": 0.9285714285714285,
+          "specialist": 0.9285714285714285
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714285,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "current-ui-fallback",
+      "weighting": "common50-niche50",
+      "minimumContractSize": 5,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 5,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 0.94765625,
+        "absoluteAcceptableCoverage": 0.8664285714285714,
+        "commonAcceptableCoverage": 0.9615384615384616,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571429,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571428,
+          "compact": 0.8928571428571428,
+          "traceable": 0.8928571428571428,
+          "stable": 0.8928571428571428,
+          "specialist": 0.8928571428571428
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571428,
+        "worstFamilyCoverage": 0.7499999999999998,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.7500000000000001,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.7499999999999998
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.1344432080823317,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "common50-niche50",
+        "hardValidCoverage": 0.9142857142857144,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9142857142857144,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    },
+    {
+      "mode": "combined",
+      "scenario": "current-ui-fallback",
+      "weighting": "worst-family",
+      "minimumContractSize": 5,
+      "portfolio": [
+        "boundary-align",
+        "tidy",
+        "force",
+        "layered",
+        "tree"
+      ],
+      "summary": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 5,
+        "portfolio": [
+          "boundary-align",
+          "tidy",
+          "force",
+          "layered",
+          "tree"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 0.9500000000000001,
+        "absoluteAcceptableCoverage": 0.8708333333333333,
+        "commonAcceptableCoverage": 0.9615384615384615,
+        "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+        "commonFeasibleProfileCoverage": {
+          "readable": 0.9615384615384616,
+          "compact": 0.9615384615384616,
+          "traceable": 0.9615384615384616,
+          "stable": 0.9615384615384616,
+          "specialist": 0.9615384615384616
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.8928571428571429,
+          "compact": 0.8928571428571429,
+          "traceable": 0.8928571428571429,
+          "stable": 0.8928571428571429,
+          "specialist": 0.8928571428571429
+        },
+        "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+        "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+        "worstFamilyCoverage": 0.75,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 0.75,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 0.95,
+          "routing": 0.75
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.12109572307630875,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 25,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      },
+      "fullTen": {
+        "mode": "combined",
+        "scenario": "current-ui-fallback",
+        "size": 10,
+        "portfolio": [
+          "compound-flow",
+          "boundary-align",
+          "compound-spring",
+          "tidy",
+          "stress",
+          "force",
+          "flow",
+          "layered",
+          "tree",
+          "grid"
+        ],
+        "weighting": "worst-family",
+        "hardValidCoverage": 0.9166666666666666,
+        "acceptableCoverage": 1.0,
+        "absoluteAcceptableCoverage": 0.9166666666666666,
+        "commonAcceptableCoverage": 1.0,
+        "absoluteCommonAcceptableCoverage": 0.9285714285714286,
+        "commonFeasibleProfileCoverage": {
+          "readable": 1.0,
+          "compact": 1.0,
+          "traceable": 1.0,
+          "stable": 1.0,
+          "specialist": 1.0
+        },
+        "commonAbsoluteProfileCoverage": {
+          "readable": 0.9285714285714286,
+          "compact": 0.9285714285714286,
+          "traceable": 0.9285714285714286,
+          "stable": 0.9285714285714286,
+          "specialist": 0.9285714285714286
+        },
+        "worstProfileCommonFeasibleCoverage": 1.0,
+        "worstProfileCommonAbsoluteCoverage": 0.9285714285714286,
+        "worstFamilyCoverage": 1.0,
+        "familyCoverage": {
+          "architecture": 1.0,
+          "authored": 1.0,
+          "containers": 1.0,
+          "cycles": 1.0,
+          "dags": 1.0,
+          "disconnected": 1.0,
+          "hierarchies": 1.0,
+          "networks": 1.0,
+          "pipelines": 1.0,
+          "presentation": 1.0,
+          "recipes": 1.0,
+          "routing": 1.0
+        },
+        "currentValidHardRegressionCases": 0,
+        "currentValidHardRegressionCaseIDs": [],
+        "specialistCurrentValidLossCases": 0,
+        "meanFiniteRegret": 0.0,
+        "contractRelativePerProfile95Pass": true,
+        "conservativeAbsolutePerProfile95Pass": false,
+        "commonProfileCounts": {
+          "readable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "compact": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "traceable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "stable": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          },
+          "specialist": {
+            "acceptable": 26,
+            "all": 28,
+            "feasiblePool": 26
+          }
+        }
+      }
+    }
+  ],
+  "minimumConfigurationPolicy": {
+    "fixedEngineSet": [
+      "boundary-align",
+      "tidy",
+      "force",
+      "layered",
+      "tree",
+      "grid"
+    ],
+    "minimumExtraGlobalConfigurations": 11,
+    "globalMethods": [
+      "engine:boundary-align:DOWN",
+      "engine:boundary-align:RIGHT",
+      "engine:force:RIGHT",
+      "engine:layered:DOWN",
+      "engine:layered:RIGHT",
+      "engine:tidy:RIGHT",
+      "engine:tree:RIGHT",
+      "tuned:force:RIGHT:p3",
+      "tuned:layered:RIGHT:p1",
+      "tuned:tidy:RIGHT:p3",
+      "tuned:tree:RIGHT:p1"
+    ],
+    "candidateGlobalConfigurations": 18,
+    "subsetsExamined": 230964,
+    "qualifiedAtMinimumSize": 2,
+    "nativeRecipeAvailability": "All six structural recipes, implicit baseline, and authored current source whose engine dependencies are retained; this is separate from the counted global configurations.",
+    "objective": "Smallest configuration count meeting relative95% separately under all common profiles with no new current-valid hard case; ties maximize accepted jobs then valid jobs. Engine set was chosen first; this is not joint exhaustive optimization over every engine/configuration set.",
+    "oracleOnly": true,
+    "developmentSummary": {
+      "weightedHardValidCoverage": 0.9166666666666666,
+      "acceptableCoverage": 0.9454545454545455,
+      "commonAcceptableCoverage": 0.9615384615384615,
+      "nicheAcceptableCoverage": 0.9222222222222222,
+      "worstFamilyCoverage": 0.75,
+      "familyCoverage": {
+        "architecture": 1.0,
+        "authored": 1.0,
+        "containers": 1.0,
+        "cycles": 0.75,
+        "dags": 1.0,
+        "disconnected": 1.0,
+        "hierarchies": 1.0,
+        "networks": 0.95,
+        "pipelines": 1.0,
+        "presentation": 1.0,
+        "recipes": 0.95,
+        "routing": 0.75
+      },
+      "currentValidHardRegressions": 0,
+      "currentValidHardRegressionCases": 0,
+      "oracleUnavailableJobs": 20,
+      "acceptableJobs": 208,
+      "totalJobs": 240,
+      "hardValidJobs": 220,
+      "meanFiniteRegret": 0.15542062249688066,
+      "maxFiniteRegret": 6.428571,
+      "p95FiniteRegret": 0.9090909999999999,
+      "specialistCurrentValidLossCases": 0,
+      "specialistProtectedCases": 3,
+      "specialistCurrentValidCases": 3,
+      "profileCoverage": {
+        "readable": 0.9318181818181817,
+        "compact": 0.9545454545454544,
+        "traceable": 0.9318181818181817,
+        "stable": 0.9545454545454544,
+        "specialist": 0.9545454545454544
+      },
+      "absoluteAcceptableCoverage": 0.8666666666666667,
+      "absoluteCommonAcceptableCoverage": 0.8928571428571428,
+      "absoluteNicheAcceptableCoverage": 0.8300000000000001,
+      "absoluteFamilyCoverage": {
+        "architecture": 0.75,
+        "authored": 1.0,
+        "containers": 0.5,
+        "cycles": 0.75,
+        "dags": 0.75,
+        "disconnected": 1.0,
+        "hierarchies": 1.0,
+        "networks": 0.95,
+        "pipelines": 1.0,
+        "presentation": 1.0,
+        "recipes": 0.95,
+        "routing": 0.75
+      },
+      "commonAbsoluteProfileCoverage": {
+        "readable": 0.8928571428571429,
+        "compact": 0.8928571428571429,
+        "traceable": 0.8928571428571429,
+        "stable": 0.8928571428571429,
+        "specialist": 0.8928571428571429
+      },
+      "commonFeasibleProfileCoverage": {
+        "readable": 0.9615384615384616,
+        "compact": 0.9615384615384616,
+        "traceable": 0.9615384615384616,
+        "stable": 0.9615384615384616,
+        "specialist": 0.9615384615384616
+      },
+      "worstProfileCommonFeasibleCoverage": 0.9615384615384616,
+      "worstProfileCommonAbsoluteCoverage": 0.8928571428571429,
+      "commonProfileCounts": {
+        "readable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "compact": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "traceable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "stable": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        },
+        "specialist": {
+          "acceptableBases": 25,
+          "allCommonBases": 28,
+          "oracleFeasibleBases": 26,
+          "currentValidBases": 25,
+          "currentValidHardRegressionCases": 0
+        }
+      },
+      "currentValidHardRegressionCommonCases": 0
+    }
+  }
+}

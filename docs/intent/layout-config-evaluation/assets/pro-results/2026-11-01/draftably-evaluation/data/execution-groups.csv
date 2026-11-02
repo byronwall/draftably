@@ -1,0 +1,16 @@
+group,planned,canonical,ok,timed_out,failed,not_started,rawRows,duplicateRows
+Routing position preparation,24,24,24,0,0,0,24,0
+Development engine and recipe screen,1244,1244,1137,107,0,0,1248,4
+Equal-budget preset search and supplementation,786,786,758,28,0,0,786,0
+"Source controls, interactions and replacement ablation",1188,1188,1094,94,0,0,1191,3
+"Routing controls, ports, history and interactions",1416,1416,1416,0,0,0,1416,0
+"Warm settings, network objective and supported-scope probes",590,590,556,14,20,0,590,0
+Development edit trials and shared states,372,372,372,0,0,0,372,0
+Development layout × routing,108,108,108,0,0,0,108,0
+Identity and declaration-order transformations,240,240,240,0,0,0,240,0
+Isolated timing and repeat determinism,720,720,720,0,0,0,720,0
+Empty and single-node sanity,20,20,20,0,0,0,20,0
+Optional 180/220-node scale,6,6,0,6,0,0,6,0
+Heldout source and frozen presets,829,829,673,156,0,0,829,0
+Heldout edit trials and shared states,372,372,370,2,0,0,372,0
+Heldout current-position routing and joint choices,288,288,243,45,0,0,288,0

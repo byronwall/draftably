@@ -1,0 +1,31 @@
+diagram "Hierarchies evaluation 05" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+node n0 "Owner 0"
+node n1 "Owner 1"
+node n2 "Owner 2"
+node n3 "Owner 3"
+node n4 "Owner 4"
+node n5 "Owner 5"
+node n6 "Owner 6"
+node n7 "Owner 7"
+node n8 "Owner 8"
+node n9 "Owner 9"
+node n10 "Owner 10"
+node n11 "Owner 11"
+node n12 "Owner 12"
+edge e0 n0 -> n1 "edited connection label with longer explanatory context"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8
+edge e8 n2 -> n9
+edge e9 n2 -> n10
+edge e10 n2 -> n11
+edge e11 n2 -> n12
+
+layout root flow direction=down gap=48
+

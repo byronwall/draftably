@@ -1,0 +1,33 @@
+diagram "Coolify: one nightly Restic backup" version=1
+
+# expect reads-x timer env inventory backup forget check
+
+theme blueprint
+
+node timer "systemd timer" shape=pill color=primary
+node env "Load env file"
+node has_restic "restic installed?" shape=diamond
+node install "apt install restic"
+node inventory "Write inventory"
+node repo_ok "Repo exists?" shape=diamond
+node init "restic init"
+node backup "restic backup" color=primary
+node forget "forget --prune"
+node check "restic check"
+node done "Backup complete" shape=pill color=primary
+
+edge b1 timer -> env
+edge b2 env -> has_restic
+edge b3 has_restic -> install "no"
+edge b4 has_restic -> inventory "yes"
+edge b5 install -> inventory
+edge b6 inventory -> repo_ok
+edge b7 repo_ok -> init "no"
+edge b8 repo_ok -> backup "yes"
+edge b9 init -> backup
+edge b10 backup -> forget
+edge b11 forget -> check
+edge b12 check -> done
+edge b13 done -> timer "next night"
+
+layout root flow direction=right gap=48

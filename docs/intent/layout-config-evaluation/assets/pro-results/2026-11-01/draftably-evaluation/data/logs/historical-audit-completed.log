@@ -1,0 +1,17 @@
+decisory-session: v0.draft DI=2.3, e1.draft DI=8.1, e2.draft DI=13.8
+draftably-ci-checks: v0.draft DI=4.6, e1.draft DI=1.9, e2.draft DI=1.3
+draftably-code-layers: v0.draft DI=4.5, e1.draft DI=9.5, e2.draft DI=11.2
+draftably-file-session: v0.draft DI=9.2, e1.draft DI=9, e2.draft DI=13
+hn-deploy: v0.draft DI=17.2, e1.draft DI=20, e2.draft DI=17.7
+hn-offline-architecture: v0.draft DI=8.1, e1.draft DI=5.4, e2.draft DI=10
+hn-reading-flow: v0.draft DI=1.3, e1.draft DI=2.2, e2.draft DI=2.8
+pgm-cli-context: v0.draft DI=0, e1.draft DI=3.1, e2.draft DI=4.6
+srcly-add-metric: v0.draft DI=1.3, e1.draft DI=5.4, e2.draft DI=5.4
+srcly-node-tree: v0.draft DI=2.7, e1.draft DI=6.9, e2.draft DI=3.8
+srcly-release: v0.draft DI=2.5, e1.draft DI=5, e2.draft DI=3.5
+srcly-scan-lifecycle: v0.draft DI=18.3, e1.draft DI=15.8, e2.draft DI=13.6
+visual-notes-architecture: v0.draft DI=13.8, e1.draft DI=24.6, e2.draft DI=26.9
+visual-notes-ingest: v0.draft DI=0, e1.draft DI=0.8, e2.draft DI=4.3
+visual-notes-mcp-call: v0.draft DI=6.5, e1.draft DI=11.5, e2.draft DI=11.5
+
+Wrote deliverables/data/historical-audit/summary.md

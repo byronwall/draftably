@@ -1,0 +1,14 @@
+{
+  "classification": "Reporting-only denominator clarification; no policy, metric, formula, selection, or raw-outcome change",
+  "freeze_at": "2026-11-01T23:58:46.719982+00:00",
+  "modified_file": "evaluation/enrich-inventory-development.py",
+  "filesystem_mtime_utc": "2026-11-01T23:59:19.822573+00:00",
+  "timestamp_caution": "Filesystem modification timestamp, not a separate signed event log.",
+  "old_literal": "Applicable E warm jobs exclude requested global reflow; all three tested policies45/49 valid in development. Their raw60-job table also includes11 diagnostic direction jobs.",
+  "new_literal": "Applicable E warm jobs exclude requested global reflow; all three policies are33/37 valid on ordinary local edits plus12/12 unchanged color controls (45/49 total). Their raw60-job table also includes11 diagnostic direction jobs.",
+  "frozen_sha256": "7661d631da7554856ff1d187179ddbba0f84b9db42b7d3475aa1c329f01e3e05",
+  "current_sha256": "7fa81c6b349aa26e1c3b57a878ff6959f02e04c752c14d60fd4ddc8d1d2d5b21",
+  "reconstructed_before_matches_frozen_hash": true,
+  "preserved_before": "evaluation/reporting-amendments/enrich-inventory-development.pre-freeze.py",
+  "preserved_after": "evaluation/reporting-amendments/enrich-inventory-development.post-freeze.py"
+}

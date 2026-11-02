@@ -1,0 +1,32 @@
+diagram "Architecture evaluation 03" version=1
+# New evaluation fixture; deterministic topology; no tuned starting coordinates.
+theme drafting
+group g0 "Subsystem 1"
+group g1 "Subsystem 2"
+group g2 "Subsystem 3"
+node n0 "Service 1" in=g0
+node n1 "Service 2" in=g1
+node n2 "Service 3" in=g2
+node n3 "Service 4" in=g0
+node n4 "Service 5" in=g1
+node n5 "Service 6" in=g2
+node n6 "Service 7" in=g0
+node n7 "Service 8" in=g1
+node n8 "Service 9" in=g2
+node n9 "Service 10" in=g0
+edge e0 n0 -> n1 "call"
+edge e1 n1 -> n2
+edge e2 n2 -> n3
+edge e3 n3 -> n4
+edge e4 n4 -> n5
+edge e5 n5 -> n6
+edge e6 n6 -> n7
+edge e7 n7 -> n8 "call"
+edge e8 n8 -> n9
+edge e9 n0 -> n3
+edge e10 n3 -> n6 "event" kind=async
+
+layout root flow direction=right gap=48
+
+
+nudge n3 dx=0 dy=56

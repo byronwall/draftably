@@ -1,0 +1,1201 @@
+family,policy,role,subset,axis,bases,families,total_jobs,oracle_feasible_jobs,acceptable_jobs,absolute_acceptable_fraction,relative_to_scoped_feasible_pool_fraction,hard_valid_jobs,current_valid_hard_loss_jobs,current_valid_hard_loss_bases,current_invalid_valid_gain_bases,mean_finite_score_regret,p95_finite_score_regret,worst_family_relative_coverage,serial_budget_valid_sensitivity_jobs,serial_budget_acceptable_sensitivity_jobs,serial_budget_unknown_valid_jobs,serial_budget_unknown_acceptable_jobs
+architecture,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,13.774781062964106,13.774781062964106,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,19.410410973369515,19.410410973369515,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,33.913043,33.913043,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,15.000000000000002,15.000000000000002,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,15.000000000000002,15.000000000000002,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,15.000000000000002,15.000000000000002,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,33.913043,33.913043,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,13.695651999999999,13.695651999999999,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,19.419647007266725,31.0125165946739,0.0,5,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,20.869565,32.0217387,0.0,3,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,13.774781062964106,13.774781062964106,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,19.410410973369515,19.410410973369515,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,33.913043,33.913043,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,15.000000000000002,15.000000000000002,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,15.000000000000002,15.000000000000002,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,15.000000000000002,15.000000000000002,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,33.913043,33.913043,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,13.695651999999999,13.695651999999999,0.0,1,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,19.419647007266725,31.0125165946739,0.0,5,0,0,0
+architecture,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,20.869565,32.0217387,0.0,3,0,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,5,4,0.4,0.8,5,0,0,0,0.5217391999999996,2.086956799999998,0.8,5,4,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,3,2,0.3333333333333333,0.6666666666666666,3,0,0,0,0.8695653333333327,2.3478263999999984,0.6666666666666666,3,2,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,5,4,0.4,0.8,5,0,0,0,0.5217391999999996,2.086956799999998,0.8,5,4,0,0
+architecture,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,3,2,0.3333333333333333,0.6666666666666666,3,0,0,0,0.8695653333333327,2.3478263999999984,0.6666666666666666,3,2,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,3.451054724230694,3.451054724230694,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,1.1231188269574481,1.1231188269574481,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,0.8695650000000015,0.8695650000000015,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,0.8695650000000015,0.8695650000000015,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,0.8695650000000015,0.8695650000000015,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,3.478259999999999,3.478259999999999,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,5,1,0.1,0.2,5,0,0,0,1.262660710237629,2.9854675447760446,0.2,5,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,3,1,0.16666666666666666,0.3333333333333333,3,0,0,0,1.449275,3.2173904999999987,0.3333333333333333,3,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,3.451054724230694,3.451054724230694,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,1.1231188269574481,1.1231188269574481,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,0.8695650000000015,0.8695650000000015,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,0.8695650000000015,0.8695650000000015,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,0.8695650000000015,0.8695650000000015,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,3.478259999999999,3.478259999999999,0.0,1,0,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,5,1,0.1,0.2,5,0,0,0,1.262660710237629,2.9854675447760446,0.2,5,1,0,0
+architecture,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,3,1,0.16666666666666666,0.3333333333333333,3,0,0,0,1.449275,3.2173904999999987,0.3333333333333333,3,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,5,4,0.4,0.8,5,0,0,0,0.5217391999999996,2.086956799999998,0.8,5,4,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,3,2,0.3333333333333333,0.6666666666666666,3,0,0,0,0.8695653333333327,2.3478263999999984,0.6666666666666666,3,2,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,2.6086959999999983,2.6086959999999983,0.0,1,0,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,5,4,0.4,0.8,5,0,0,0,0.5217391999999996,2.086956799999998,0.8,5,4,0,0
+architecture,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,3,2,0.3333333333333333,0.6666666666666666,3,0,0,0,0.8695653333333327,2.3478263999999984,0.6666666666666666,3,2,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+architecture,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+authored,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-global,fixed frozen global policy,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,default-three-layouts,matched three-layout default-route oracle benchmark,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-nine-joint,nine-combination oracle diagnostic,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:readable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:compact,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:stable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:specialist,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:balanced,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:traceable,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:direct,2,1,2,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,five_profiles_pooled,2,1,10,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+containers,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,three_route_weights_pooled,2,1,6,0,0,0.0,,0,0,0,0,,,,0,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2234610035484739,1.409790175323414,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,3.9626736912585416,5.725240793098633,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7843140000000001,0.9607842,0.5,2,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7843140000000001,0.9607842,0.5,2,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7843140000000001,0.9607842,0.5,2,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,1.5686269999999998,1.9215683000000001,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,2,0.2,0.2,10,0,0,0,1.6058545389614032,4.158514480351881,0.2,10,2,0,0
+cycles,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,1,0.16666666666666666,0.16666666666666666,6,0,0,0,1.2091503333333333,1.96078475,0.16666666666666666,6,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2234610035484739,1.409790175323414,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,3.9626736912585416,5.725240793098633,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7843140000000001,0.9607842,0.5,2,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7843140000000001,0.9607842,0.5,2,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7843140000000001,0.9607842,0.5,2,1,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,1.5686269999999998,1.9215683000000001,0.0,2,0,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,10,2,0.2,0.2,10,0,0,0,1.6058545389614032,4.158514480351881,0.2,10,2,0,0
+cycles,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,6,1,0.16666666666666666,0.16666666666666666,6,0,0,0,1.2091503333333333,1.96078475,0.16666666666666666,6,1,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.13770151906563388,0.2616328862247044,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.07295633309098726,0.13861703287287577,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9803924999999999,1.8627457499999998,0.5,2,1,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3431375,0.6519612499999999,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3431375,0.6519612499999999,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3431375,0.6519612499999999,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9803924999999999,1.8627457499999998,0.5,2,1,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,0,0.3754650704313242,1.3872554999999984,0.9,10,9,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,5,0.8333333333333334,0.8333333333333334,6,0,0,0,0.4411766666666666,1.6421574999999997,0.8333333333333334,6,5,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.13770151906563388,0.2616328862247044,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.07295633309098726,0.13861703287287577,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9803924999999999,1.8627457499999998,0.5,2,1,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3431375,0.6519612499999999,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3431375,0.6519612499999999,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3431375,0.6519612499999999,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.9803924999999999,1.8627457499999998,0.5,2,1,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,0,0.3754650704313242,1.3872554999999984,0.9,10,9,0,0
+cycles,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,6,5,0.8333333333333334,0.8333333333333334,6,0,0,0,0.4411766666666666,1.6421574999999997,0.8333333333333334,6,5,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1913925457919605,1.3474992275320052,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,3.048833708199971,5.640661221493207,0.5,2,1,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7843140000000001,0.9607842,1.0,2,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7843140000000001,0.9607842,1.0,2,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7843140000000001,0.9607842,1.0,2,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,1.5686269999999998,1.9215683000000001,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.4166728507983863,4.143106380966957,0.5,10,5,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,6,0,0,0,1.2091503333333333,1.96078475,0.3333333333333333,6,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.1913925457919605,1.3474992275320052,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,3.048833708199971,5.640661221493207,0.5,2,1,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7843140000000001,0.9607842,1.0,2,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7843140000000001,0.9607842,1.0,2,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7843140000000001,0.9607842,1.0,2,2,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,1.2745099999999998,1.8921574999999997,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,1.5686269999999998,1.9215683000000001,0.0,2,0,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.4166728507983863,4.143106380966957,0.5,10,5,0,0
+cycles,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,6,2,0.3333333333333333,0.3333333333333333,6,0,0,0,1.2091503333333333,1.96078475,0.3333333333333333,6,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+cycles,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.558047459732126,4.558047459732126,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,5.68468165182796,5.68468165182796,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,10.952381000000003,10.952381000000003,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,5.000000000000002,5.000000000000002,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,5.000000000000002,5.000000000000002,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,5.000000000000002,5.000000000000002,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,10.952381000000003,10.952381000000003,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,4.642857000000003,4.642857000000003,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,6.239022022312018,9.898841130365593,0.0,5,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,6.865079333333336,10.357142900000001,0.0,3,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,0,4.558047459732126,4.558047459732126,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,0,5.68468165182796,5.68468165182796,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,10.952381000000003,10.952381000000003,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,0,5.000000000000002,5.000000000000002,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,0,5.000000000000002,5.000000000000002,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,0,5.000000000000002,5.000000000000002,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,0,10.952381000000003,10.952381000000003,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,0,4.642857000000003,4.642857000000003,0.0,1,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,0,6.239022022312018,9.898841130365593,0.0,5,0,0,0
+dags,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,0,6.865079333333336,10.357142900000001,0.0,3,0,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,0,0.0,0.0,1.0,1,1,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,0,0.0,0.0,1.0,5,5,0,0
+dags,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,0,0.0,0.0,1.0,3,3,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.9655057603023898,3.7344609445745403,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.4814815000000001,2.8148148500000003,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6481485,1.23148215,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6481485,1.23148215,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6481485,1.23148215,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.4814815000000001,2.8148148500000003,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,1,0.648148,1.2314812,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,1,0.948656852060478,3.495389686332628,0.6,10,6,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,1,0.925926,2.5462965000000004,0.5,6,3,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.9655057603023898,3.7344609445745403,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.4814815000000001,2.8148148500000003,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6481485,1.23148215,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6481485,1.23148215,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6481485,1.23148215,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.4814815000000001,2.8148148500000003,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,1,0.648148,1.2314812,0.5,2,1,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,1,0.948656852060478,3.495389686332628,0.6,10,6,0,0
+disconnected,frozen-joint-global,fixed frozen global policy,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,1,0.925926,2.5462965000000004,0.5,6,3,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.13888900000000004,0.26388910000000004,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.13888900000000004,0.26388910000000004,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.02777780000000001,0.15277789999999974,1.0,10,10,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.04629633333333335,0.20833350000000006,1.0,6,6,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.13888900000000004,0.26388910000000004,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.13888900000000004,0.26388910000000004,1.0,2,2,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.02777780000000001,0.15277789999999974,1.0,10,10,0,0
+disconnected,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.04629633333333335,0.20833350000000006,1.0,6,6,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.09259250000000008,0.17592575000000013,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0925925000000003,0.17592575000000055,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.5555555000000001,1.0555554500000002,0.5,2,1,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.1851855,0.35185245,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.1851855,0.35185245,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.1851855,0.35185245,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.5555555000000001,1.0555554500000002,0.5,2,1,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.09259250000000008,0.17592575000000013,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,1,0.2222223000000001,0.7777779999999993,0.9,10,9,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,5,0.8333333333333334,0.8333333333333334,6,0,0,1,0.2777778333333334,0.9259260000000001,0.8333333333333334,6,5,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.09259250000000008,0.17592575000000013,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0925925000000003,0.17592575000000055,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.5555555000000001,1.0555554500000002,0.5,2,1,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.1851855,0.35185245,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.1851855,0.35185245,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.1851855,0.35185245,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.5555555000000001,1.0555554500000002,0.5,2,1,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.09259250000000008,0.17592575000000013,1.0,2,2,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,1,0.2222223000000001,0.7777779999999993,0.9,10,9,0,0
+disconnected,default-three-layouts,matched three-layout default-route oracle benchmark,niche,three_route_weights_pooled,2,1,6,6,5,0.8333333333333334,0.8333333333333334,6,0,0,1,0.2777778333333334,0.9259260000000001,0.8333333333333334,6,5,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,all-nine-joint,nine-combination oracle diagnostic,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+disconnected,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,1,2.413814959595496,2.425609788063109,0.0,2,0,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6589940758783923,1.1874900831134843,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.4166665,0.79166635,1.0,2,2,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.8333335,1.58333365,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,1,0.8333335,1.58333365,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,1,0.8333335,1.58333365,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.4166665,0.79166635,1.0,2,2,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,1,1.3095239999999997,1.6309527,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,1,1.0312285070947775,2.415125496091897,0.5,10,5,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,1,0.8531746666666666,1.666667,0.6666666666666666,6,4,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,1,2.413814959595496,2.425609788063109,0.0,2,0,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6589940758783923,1.1874900831134843,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.4166665,0.79166635,1.0,2,2,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,1,0.8333335,1.58333365,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,1,0.8333335,1.58333365,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,1,0.8333335,1.58333365,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.4166665,0.79166635,1.0,2,2,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,1,1.3095239999999997,1.6309527,0.5,2,1,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,1,1.0312285070947775,2.415125496091897,0.5,10,5,0,0
+hierarchies,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,1,0.8531746666666666,1.666667,0.6666666666666666,6,4,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.035888145030811724,0.06818747555854228,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0071776290061623445,0.03947695953389282,1.0,10,10,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.035888145030811724,0.06818747555854228,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0071776290061623445,0.03947695953389282,1.0,10,10,0,0
+hierarchies,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.2134601622797554,2.305574308331535,0.5,2,1,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6589940758783923,1.1874900831134843,0.5,2,1,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.47619049999999985,0.9047619499999997,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,8,0.8,0.8,10,0,0,1,0.37449084763162954,1.8956015162705522,0.8,10,8,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.15873016666666662,0.7142857499999997,1.0,6,6,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,1,1.2134601622797554,2.305574308331535,0.5,2,1,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,1,0.6589940758783923,1.1874900831134843,0.5,2,1,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.47619049999999985,0.9047619499999997,1.0,2,2,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,10,8,0.8,0.8,10,0,0,1,0.37449084763162954,1.8956015162705522,0.8,10,8,0,0
+hierarchies,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.15873016666666662,0.7142857499999997,1.0,6,6,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,1,0.0,0.0,1.0,2,2,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,1,0.0,0.0,1.0,10,10,0,0
+hierarchies,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,1,0.0,0.0,1.0,6,6,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,1,12.690119820265332,12.690119820265332,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,1,11.259670037003051,11.259670037003051,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,31.538462000000003,31.538462000000003,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,1,15.384615999999998,15.384615999999998,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,1,15.384615999999998,15.384615999999998,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,1,15.384615999999998,15.384615999999998,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,31.538462000000003,31.538462000000003,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,1,16.923077,16.923077,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,1,17.251496771453677,28.307692799999998,0.0,5,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,1,21.282051666666668,30.0769235,0.0,3,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,1,12.690119820265332,12.690119820265332,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,1,11.259670037003051,11.259670037003051,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,31.538462000000003,31.538462000000003,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,1,15.384615999999998,15.384615999999998,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,1,15.384615999999998,15.384615999999998,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,1,15.384615999999998,15.384615999999998,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,31.538462000000003,31.538462000000003,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,1,16.923077,16.923077,0.0,1,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,1,17.251496771453677,28.307692799999998,0.0,5,0,0,0
+networks,frozen-joint-global,fixed frozen global policy,niche,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,1,21.282051666666668,30.0769235,0.0,3,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,1,1.978810687479701,1.978810687479701,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,1,1.5377202406293158,1.5377202406293158,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,3.8461540000000003,3.8461540000000003,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230770000000001,1.9230770000000001,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230770000000001,1.9230770000000001,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230770000000001,1.9230770000000001,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,3.8461540000000003,3.8461540000000003,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230769999999993,1.9230769999999993,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,1,2.2417677856218035,3.47268533749594,0.0,5,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,1,2.5641026666666664,3.6538463,0.0,3,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:readable,2,1,2,1,0,0.0,0.0,1,0,0,1,1.978810687479701,1.978810687479701,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:compact,2,1,2,1,0,0.0,0.0,1,0,0,1,1.5377202406293158,1.5377202406293158,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,3.8461540000000003,3.8461540000000003,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:stable,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230770000000001,1.9230770000000001,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:specialist,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230770000000001,1.9230770000000001,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:balanced,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230770000000001,1.9230770000000001,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:traceable,2,1,2,1,0,0.0,0.0,1,0,0,1,3.8461540000000003,3.8461540000000003,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:direct,2,1,2,1,0,0.0,0.0,1,0,0,1,1.9230769999999993,1.9230769999999993,0.0,1,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,five_profiles_pooled,2,1,10,5,0,0.0,0.0,5,0,0,1,2.2417677856218035,3.47268533749594,0.0,5,0,0,0
+networks,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,three_route_weights_pooled,2,1,6,3,0,0.0,0.0,3,0,0,1,2.5641026666666664,3.6538463,0.0,3,0,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.44947985225102194,0.44947985225102194,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,1,0.044920149237285045,0.044920149237285045,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.7692310000000004,0.7692310000000004,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461599999999985,0.38461599999999985,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461599999999985,0.38461599999999985,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461599999999985,0.38461599999999985,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.7692310000000004,0.7692310000000004,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461499999999926,0.38461499999999926,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,1,0.4065726002976614,0.7052807704502047,1.0,5,5,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,1,0.5128206666666665,0.7307695000000003,1.0,3,3,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.44947985225102194,0.44947985225102194,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,1,0.044920149237285045,0.044920149237285045,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.7692310000000004,0.7692310000000004,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461599999999985,0.38461599999999985,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461599999999985,0.38461599999999985,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461599999999985,0.38461599999999985,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.7692310000000004,0.7692310000000004,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,1,0.38461499999999926,0.38461499999999926,1.0,1,1,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,1,0.4065726002976614,0.7052807704502047,1.0,5,5,0,0
+networks,default-three-layouts,matched three-layout default-route oracle benchmark,niche,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,1,0.5128206666666665,0.7307695000000003,1.0,3,3,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,1,0.0,0.0,1.0,5,5,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,1,0.0,0.0,1.0,3,3,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,1,0.0,0.0,1.0,5,5,0,0
+networks,all-nine-joint,nine-combination oracle diagnostic,niche,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,1,0.0,0.0,1.0,3,3,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,1,0.0,0.0,1.0,5,5,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,1,0.0,0.0,1.0,3,3,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:readable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:compact,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:stable,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:specialist,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:balanced,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:traceable,2,1,2,1,1,0.5,1.0,1,0,0,1,0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:direct,2,1,2,1,1,0.5,1.0,1,0,0,1,0.0,0.0,1.0,1,1,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,five_profiles_pooled,2,1,10,5,5,0.5,1.0,5,0,0,1,0.0,0.0,1.0,5,5,0,0
+networks,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,three_route_weights_pooled,2,1,6,3,3,0.5,1.0,3,0,0,1,0.0,0.0,1.0,3,3,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,0.2233876736645466,0.2711468543512309,0.0,2,0,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,1.3772750322581424,1.8785334945284673,0.0,2,0,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,0.3201325411845378,1.432970416954844,0.6,10,6,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,0.2233876736645466,0.2711468543512309,0.0,2,0,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,1.3772750322581424,1.8785334945284673,0.0,2,0,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,0.3201325411845378,1.432970416954844,0.6,10,6,0,0
+pipelines,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.015235571068350051,0.028947585029865094,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.37478942592408604,0.7120999092557634,0.5,2,1,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,0,0.07800499939848722,0.4259803824780089,0.9,10,9,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.015235571068350051,0.028947585029865094,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.37478942592408604,0.7120999092557634,0.5,2,1,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,0,0.07800499939848722,0.4259803824780089,0.9,10,9,0,0
+pipelines,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.05619457670607453,0.1067696957415416,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5413096275699614,1.0284882923829266,0.5,2,1,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,0,0.11950084085520718,0.6460157093624235,0.9,10,9,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.05619457670607453,0.1067696957415416,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5413096275699614,1.0284882923829266,0.5,2,1,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,10,9,0.9,0.9,10,0,0,0,0.11950084085520718,0.6460157093624235,0.9,10,9,0,0
+pipelines,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+pipelines,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.020309762123161157,0.038588548034006194,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.1139939772518499,0.2165885567785148,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.18798584787500222,0.6270240499999996,1.0,10,10,0,0
+presentation,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.23586216666666668,0.6969302500000001,1.0,6,6,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.020309762123161157,0.038588548034006194,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.1139939772518499,0.2165885567785148,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.18798584787500222,0.6270240499999996,1.0,10,10,0,0
+presentation,frozen-joint-global,fixed frozen global policy,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.23586216666666668,0.6969302500000001,1.0,6,6,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.020309762123161157,0.038588548034006194,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.1139939772518499,0.2165885567785148,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.18798584787500222,0.6270240499999996,1.0,10,10,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.23586216666666668,0.6969302500000001,1.0,6,6,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.020309762123161157,0.038588548034006194,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.1139939772518499,0.2165885567785148,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.09803899999999999,0.18627409999999997,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.6095475,0.76683645,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.18798584787500222,0.6270240499999996,1.0,10,10,0,0
+presentation,frozen-joint-triple,oracle Compare upper bound from frozen three,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.23586216666666668,0.6969302500000001,1.0,6,6,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.5089726752582786,0.8048575405049656,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3013109109245784,0.5073788422740729,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7289000000000001,0.8554985000000002,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.31543050000000006,0.42284775000000013,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.31543050000000006,0.42284775000000013,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.31543050000000006,0.42284775000000013,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7289000000000001,0.8554985000000002,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.5328214999999998,0.8358906499999996,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.4340089172365714,0.855240886489569,1.0,10,10,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.5257173333333334,0.869565,1.0,6,6,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.5089726752582786,0.8048575405049656,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.3013109109245784,0.5073788422740729,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7289000000000001,0.8554985000000002,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.31543050000000006,0.42284775000000013,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.31543050000000006,0.42284775000000013,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.31543050000000006,0.42284775000000013,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.7289000000000001,0.8554985000000002,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.5328214999999998,0.8358906499999996,1.0,2,2,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.4340089172365714,0.855240886489569,1.0,10,10,0,0
+presentation,default-three-layouts,matched three-layout default-route oracle benchmark,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.5257173333333334,0.869565,1.0,6,6,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,all-nine-joint,nine-combination oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+presentation,all-twelve-scoped-pool,full scoped oracle diagnostic,common,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.0051587527692067,3.8098016302614925,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,3.5239284296019426,6.69546401624369,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.7999999999999998,3.4199999999999995,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.2000000000000002,2.2800000000000002,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.2000000000000002,2.2800000000000002,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.2000000000000002,2.2800000000000002,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.7999999999999998,3.4199999999999995,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,2.0,3.8,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.94581743647423,5.68096415005442,0.5,10,5,0,0
+recipes,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.6666666666666667,3.9,0.5,6,3,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.0051587527692067,3.8098016302614925,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,3.5239284296019426,6.69546401624369,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.7999999999999998,3.4199999999999995,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.2000000000000002,2.2800000000000002,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,1.2000000000000002,2.2800000000000002,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,1.2000000000000002,2.2800000000000002,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.7999999999999998,3.4199999999999995,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,2.0,3.8,0.5,2,1,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.94581743647423,5.68096415005442,0.5,10,5,0,0
+recipes,frozen-joint-global,fixed frozen global policy,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.6666666666666667,3.9,0.5,6,3,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.0051587527692067,3.8098016302614925,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5702377216467069,1.0834516711287432,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0,1.9,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7999999999999999,1.5199999999999998,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7999999999999999,1.5199999999999998,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7999999999999999,1.5199999999999998,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0,1.9,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,1.5999999999999999,3.0399999999999996,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.0350792948831826,3.1056746280461254,0.5,10,5,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.1333333333333333,2.9,0.5,6,3,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.0051587527692067,3.8098016302614925,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.5702377216467069,1.0834516711287432,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0,1.9,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7999999999999999,1.5199999999999998,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7999999999999999,1.5199999999999998,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.7999999999999999,1.5199999999999998,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,1.0,1.9,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,1.5999999999999999,3.0399999999999996,0.5,2,1,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,1.0350792948831826,3.1056746280461254,0.5,10,5,0,0
+recipes,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,1.1333333333333333,2.9,0.5,6,3,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.4034362098500592,6.466528798715112,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,2.1801782896123423,4.14233875026345,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,4.4,8.36,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.6,4.9399999999999995,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,2.6,4.9399999999999995,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,2.6,4.9399999999999995,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,4.4,8.36,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,3.3999999999999995,6.459999999999999,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,3.0367228998924802,7.903092588865052,0.5,10,5,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,3.466666666666667,8.3,0.5,6,3,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,3.4034362098500592,6.466528798715112,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,2.1801782896123423,4.14233875026345,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,4.4,8.36,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,2.6,4.9399999999999995,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,2.6,4.9399999999999995,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,2.6,4.9399999999999995,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,4.4,8.36,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,3.3999999999999995,6.459999999999999,0.5,2,1,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,five_profiles_pooled,2,1,10,10,5,0.5,0.5,10,0,0,0,3.0367228998924802,7.903092588865052,0.5,10,5,0,0
+recipes,default-three-layouts,matched three-layout default-route oracle benchmark,niche,three_route_weights_pooled,2,1,6,6,3,0.5,0.5,6,0,0,0,3.466666666666667,8.3,0.5,6,3,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,all-nine-joint,nine-combination oracle diagnostic,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+recipes,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,13.473158944273921,25.59900199412045,0.5,2,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,3.22035699210873,5.929956747701255,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,14.632353,26.213235299999994,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,9.166667,17.4166673,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,9.166667,17.4166673,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,9.166667,17.4166673,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,14.632353,26.213235299999994,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,12.6041665,23.94791635,0.5,2,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,five_profiles_pooled,2,1,10,10,1,0.1,0.1,10,0,0,0,9.93184058727653,27.250843049846527,0.1,10,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,all,three_route_weights_pooled,2,1,6,6,1,0.16666666666666666,0.16666666666666666,6,0,0,0,12.1343955,26.927083249999995,0.16666666666666666,6,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,profile:readable,2,1,2,2,1,0.5,0.5,2,0,0,0,13.473158944273921,25.59900199412045,0.5,2,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,3.22035699210873,5.929956747701255,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,14.632353,26.213235299999994,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,9.166667,17.4166673,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,9.166667,17.4166673,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,9.166667,17.4166673,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,14.632353,26.213235299999994,0.0,2,0,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,route:direct,2,1,2,2,1,0.5,0.5,2,0,0,0,12.6041665,23.94791635,0.5,2,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,five_profiles_pooled,2,1,10,10,1,0.1,0.1,10,0,0,0,9.93184058727653,27.250843049846527,0.1,10,1,0,0
+routing,frozen-joint-global,fixed frozen global policy,niche,three_route_weights_pooled,2,1,6,6,1,0.16666666666666666,0.16666666666666666,6,0,0,0,12.1343955,26.927083249999995,0.16666666666666666,6,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.10484529850296198,0.19920606715562775,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8823530000000019,1.6764707000000036,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.0,0.0,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.0,0.0,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.0,0.0,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8823530000000019,1.6764707000000036,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,0.1974396597005928,1.0649490686526661,0.6,10,6,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,all,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,0.29411766666666733,1.323529500000003,0.6666666666666666,6,4,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:compact,2,1,2,2,1,0.5,0.5,2,0,0,0,0.10484529850296198,0.19920606715562775,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8823530000000019,1.6764707000000036,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:stable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.0,0.0,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,profile:specialist,2,1,2,2,1,0.5,0.5,2,0,0,0,0.0,0.0,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:balanced,2,1,2,2,1,0.5,0.5,2,0,0,0,0.0,0.0,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:traceable,2,1,2,2,1,0.5,0.5,2,0,0,0,0.8823530000000019,1.6764707000000036,0.5,2,1,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,five_profiles_pooled,2,1,10,10,6,0.6,0.6,10,0,0,0,0.1974396597005928,1.0649490686526661,0.6,10,6,0,0
+routing,frozen-joint-triple,oracle Compare upper bound from frozen three,niche,three_route_weights_pooled,2,1,6,6,4,0.6666666666666666,0.6666666666666666,6,0,0,0,0.29411766666666733,1.323529500000003,0.6666666666666666,6,4,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,10.870744597214058,17.65441503470671,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,7.733547576320275,12.068740095008522,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,12.708333,19.2708333,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,7.634804000000001,11.881127300000001,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,7.634804000000001,11.881127300000001,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,7.634804000000001,11.881127300000001,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,12.708333,19.2708333,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,10.784313500000001,17.490195950000004,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,five_profiles_pooled,2,1,10,10,0,0.0,0.0,10,0,0,0,9.316446634706868,19.28367028749265,0.0,10,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,all,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,6,0,0,0,10.375816833333333,19.558823500000003,0.0,6,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:readable,2,1,2,2,0,0.0,0.0,2,0,0,0,10.870744597214058,17.65441503470671,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:compact,2,1,2,2,0,0.0,0.0,2,0,0,0,7.733547576320275,12.068740095008522,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,12.708333,19.2708333,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:stable,2,1,2,2,0,0.0,0.0,2,0,0,0,7.634804000000001,11.881127300000001,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,profile:specialist,2,1,2,2,0,0.0,0.0,2,0,0,0,7.634804000000001,11.881127300000001,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:balanced,2,1,2,2,0,0.0,0.0,2,0,0,0,7.634804000000001,11.881127300000001,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:traceable,2,1,2,2,0,0.0,0.0,2,0,0,0,12.708333,19.2708333,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,route:direct,2,1,2,2,0,0.0,0.0,2,0,0,0,10.784313500000001,17.490195950000004,0.0,2,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,five_profiles_pooled,2,1,10,10,0,0.0,0.0,10,0,0,0,9.316446634706868,19.28367028749265,0.0,10,0,0,0
+routing,default-three-layouts,matched three-layout default-route oracle benchmark,niche,three_route_weights_pooled,2,1,6,6,0,0.0,0.0,6,0,0,0,10.375816833333333,19.558823500000003,0.0,6,0,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,all-nine-joint,nine-combination oracle diagnostic,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,all,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:readable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:compact,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:stable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,profile:specialist,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:balanced,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:traceable,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,route:direct,2,1,2,2,2,1.0,1.0,2,0,0,0,0.0,0.0,1.0,2,2,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,five_profiles_pooled,2,1,10,10,10,1.0,1.0,10,0,0,0,0.0,0.0,1.0,10,10,0,0
+routing,all-twelve-scoped-pool,full scoped oracle diagnostic,niche,three_route_weights_pooled,2,1,6,6,6,1.0,1.0,6,0,0,0,0.0,0.0,1.0,6,6,0,0

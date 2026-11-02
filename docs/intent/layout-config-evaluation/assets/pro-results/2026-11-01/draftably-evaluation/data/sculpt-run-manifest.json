@@ -1,0 +1,22 @@
+{
+  "stage": "baseline-sculpt-regression",
+  "command": "node baseline/tests/engine-sculpt.mjs",
+  "exit_code": 0,
+  "passed_assertions": 54,
+  "failed_assertions": 0,
+  "timing_observation_rows": 1,
+  "geometry_calls_from_executed_test_source": {
+    "journey": 15,
+    "dab": 111,
+    "total": 126
+  },
+  "distinct_geometry_trials": "Not instrumented; repeated trials present, do not count 126 as distinct corpus trials",
+  "source_case_count": 2,
+  "samples": [
+    "branches",
+    "nested-services"
+  ],
+  "completed_utc": "2026-11-01T22:56:58.322023+00:00",
+  "log": "data/logs/engine-sculpt.log",
+  "results": "data/sculpt-geometry-results.json"
+}

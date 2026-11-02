@@ -1,0 +1,25 @@
+{
+  "type": "Analytical counterexamples, not experiment outcomes",
+  "assertions_passed": 13,
+  "assertions_failed": 0,
+  "checks": [
+    "three bases each retain all eight correlated profile/weighting jobs",
+    "hard-invalid zero-score drawing never becomes oracle",
+    "failed default is not substituted for a completed candidate",
+    "fully infeasible base remains explicitly infeasible",
+    "static stable preference ignores incidental reference displacement and churn",
+    "absolute denominator retains the infeasible base",
+    "feasible denominator is reported separately",
+    "current-valid hard loss survives a lower candidate score",
+    "missing compile budget remains unknown rather than zero-time",
+    "unknown budget does not count as known eligible",
+    "resampling units are three bases and two families",
+    "both cluster schemes produce two thousand draws",
+    "a family with no niche bases produces no empty-subset row"
+  ],
+  "heldout_outcomes_opened": false,
+  "geometry_algorithm_calls": 0,
+  "policy_choices_fitted": 0,
+  "analyzer_sha256": "43604a9f7303711084a38b96f47072d2e268fc4606934de07bc2a7aea74b0a4f",
+  "frozen_scorer_sha256": "0eb6fd0e72ad45c84b5d8ed7e6898ede004f674c8fb9d5580f3118f14b174f4d"
+}

@@ -1,0 +1,12 @@
+removed_engine,full_pool_acceptable_loss,full_pool_hard_valid_case_loss,retuned_acceptable_loss
+boundary-align,6,0,6
+compound-flow,1,0,1
+compound-spring,0,0,0
+flow,0,0,0
+force,8,0,8
+grid,0,0,0
+layered,0,0,0
+separate,0,0,0
+stress,0,0,0
+tidy,0,0,0
+tree,0,0,0

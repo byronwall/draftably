@@ -1,0 +1,25 @@
+diagram "Sixty-pixel passage between tall obstacles" version=1
+theme drafting
+# Fixed geometry router witness. Pins are local to parent content.
+node a "a"
+node b "b"
+node left "left"
+node right "right"
+node c "c"
+node d "d"
+edge e0 a -> b
+edge e1 c -> d
+edge e2 a -> d
+layout root flow direction=auto fold=never
+size a width=100 height=56
+pin a x=0 y=220
+size b width=100 height=56
+pin b x=760 y=220
+size left width=160 height=320
+pin left x=250 y=80
+size right width=160 height=320
+pin right x=470 y=80
+size c width=160 height=56
+pin c x=370 y=0
+size d width=160 height=56
+pin d x=370 y=440

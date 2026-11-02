@@ -1,0 +1,116 @@
+{
+  "at": "2026-11-02T00:38:30.554924+00:00",
+  "split": "heldout",
+  "noGeometryExecution": true,
+  "heldoutCensusTotals": {
+    "artifacts": 1286,
+    "drawnRoutes": 34912,
+    "crossRoutes": 0,
+    "checkedCrossRoutes": 0,
+    "bothEndpointAccessRoutes": 0,
+    "fromOnlyAccessRoutes": 0,
+    "toOnlyAccessRoutes": 0,
+    "newUnscoredNativeNodeFindings": 0,
+    "canonicalGeometryHashMismatches": 0,
+    "unregisteredArtifactsNotOpened": 0,
+    "oppositeOrUnspecifiedSplitArtifactsNotOpened": 6446,
+    "coverageGaps": 0
+  },
+  "heldoutPlanned": 1489,
+  "heldoutCanonicalTerminalRecords": 1489,
+  "heldoutCanonicalStatuses": {
+    "ok": 1286,
+    "timed_out": 203
+  },
+  "missingTerminalRecords": [],
+  "missingSuccessfulArtifacts": [],
+  "extraOrNoncanonicalHeldoutArtifacts": [],
+  "missingOrMalformedSuccessfulInputHashes": [],
+  "taskSnapshotHashMismatches": 0,
+  "taskHashChecks": [
+    {
+      "path": "evaluation/tasks/documented-default-heldout.json",
+      "expected": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "actual": "2576c3ea5b24e6ae6458501c52ac5c2bddf2c7bb089ed22a65d1c0dc970d0432",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/edits-current-heldout.json",
+      "expected": "4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996",
+      "actual": "4832d51af96d5c718e927a457c9cda0616c2930883a35abfaee032dbb8be1996",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/edits-policies-heldout.json",
+      "expected": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+      "actual": "16e479c9c120c287cd871278d8b3b4b1ea66c36d34e7751ffa402015e5ed7ce6",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/edits-states-heldout.json",
+      "expected": "0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c",
+      "actual": "0a6c365bb659557f02d238f50a023ecf5048e34768af291666ddd7eb26d3439c",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/edits-warm-heldout.json",
+      "expected": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+      "actual": "2d36b12a0c20daa28e1916ea39989f17d3adfcd23ac90c1516b68075511ebc87",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/joint-heldout.json",
+      "expected": "53496c83d73103158f098e746ce2be9997fb1339b55c7d56d414b0554067b5d2",
+      "actual": "53496c83d73103158f098e746ce2be9997fb1339b55c7d56d414b0554067b5d2",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/routing-current-heldout.json",
+      "expected": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+      "actual": "fdde9c5daf73d8a093bddaab8304c0740a68c026c9b195adcf986f3c98138779",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/screen-heldout.json",
+      "expected": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "actual": "788b9eac57e2b21ff7680cb9b96201c123b14b28eb0836ea0d2df3a92a098bb8",
+      "matches": true
+    },
+    {
+      "path": "evaluation/tasks/selected-presets-heldout.json",
+      "expected": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "actual": "e06cdaa686075cab4e657ba7295ce5a98cfb6c2f9f1db0827655adef8278c8e0",
+      "matches": true
+    }
+  ],
+  "inputHashVerificationScope": "Presence/format of the immutable successful-row inputHash plus task-definition snapshot hash equality; no warm-state input reconstruction or product calls. Geometry identity independently verified by frozen census.",
+  "preservedDevelopmentAudit": {
+    "path": "data/analysis/cell-access-audit-development.json",
+    "sha256": "814d7d912dde4b57979761ef32ff17b0a597aabe98d33fe1cc2ebfa0fe029867",
+    "snapshotStarted": "2026-11-01T23:53:46.656Z",
+    "totals": {
+      "artifacts": 6446,
+      "drawnRoutes": 76263,
+      "crossRoutes": 0,
+      "checkedCrossRoutes": 0,
+      "bothEndpointAccessRoutes": 0,
+      "fromOnlyAccessRoutes": 0,
+      "toOnlyAccessRoutes": 0,
+      "newUnscoredNativeNodeFindings": 0,
+      "canonicalGeometryHashMismatches": 0,
+      "unregisteredArtifactsNotOpened": 0,
+      "oppositeOrUnspecifiedSplitArtifactsNotOpened": 0,
+      "coverageGaps": 0
+    },
+    "canonicalStatuses": {
+      "ok": 6445,
+      "timed_out": 1
+    }
+  },
+  "caveats": [
+    "Zero cross routes means the actual corpus never exercises the cell-access exemption path; zero findings is not proof the exemption is safe.",
+    "203 heldout timeouts have no completed drawn-route artifacts and are excluded from geometric census, but remain terminal failure records.",
+    "Development census includes noncanonical saved artifacts; its artifact count is not an execution success count.",
+    "Analytical calibration has 3 fixtures and13 checks; no production engine or router calls."
+  ]
+}
