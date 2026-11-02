@@ -341,8 +341,13 @@ a.button {
     color 0.12s;
 }
 
-.segmented button:hover {
+.segmented button:hover:not(:disabled) {
   color: var(--text);
+}
+
+.segmented button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .segmented button[aria-pressed='true'] {

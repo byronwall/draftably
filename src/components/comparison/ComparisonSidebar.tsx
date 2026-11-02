@@ -376,7 +376,7 @@ function LayerControls() {
               >
                 <span class="color-dot" />
                 <span class="truncate">
-                  {i + 1}. {c().title}
+                  {shownCells().indexOf(i) + 1}. {c().title}
                 </span>
               </button>
               <output>{Math.round(c().layer.opacity * 100)}%</output>
@@ -398,17 +398,22 @@ function LayerControls() {
         checked={comparison.overlay.allLabels}
         onChange={setAllLabels}
       />
-      <button
-        type="button"
-        class="button primary full"
-        disabled={comparison.cells[comparison.overlay.active]?.status !== 'ready'}
-        onClick={() => applyCandidate(comparison.overlay.active)}
+      <Show
+        when={!comparison.cells[comparison.overlay.active]?.current}
+        fallback={<p class="hint">Emphasize another layer to apply it.</p>}
       >
-        Apply emphasized candidate
-      </button>
-      <p class="hint">
-        Overlay alignment is visual only. Apply keeps the candidate’s original coordinates.
-      </p>
+        <button
+          type="button"
+          class="button primary full"
+          disabled={comparison.cells[comparison.overlay.active]?.status !== 'ready'}
+          onClick={() => applyCandidate(comparison.overlay.active)}
+        >
+          Apply emphasized candidate
+        </button>
+        <p class="hint">
+          Overlay alignment is visual only. Apply keeps the candidate’s original coordinates.
+        </p>
+      </Show>
     </section>
   );
 }
