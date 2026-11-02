@@ -3,7 +3,7 @@
  * Screenshots for PRs and visual checks, using the repository's Playwright and an installed
  * Playwright Chromium.
  *
- *   pnpm shoot <target> <out.png> [--size 1440x900] [--wait 500]
+ *   pnpm shoot <target> <out.png> [--size 1440x900] [--wait 500] [--run '<js>']
  *   pnpm shoot <target> <out.png> --crop x,y,w,h
  *   pnpm shoot --sheet <out.png> [--cols N] [Label::]<target> [Label::]<target> ...
  *
@@ -13,6 +13,8 @@
  * Without `--size`, a file target is captured at its own size and a URL at 1440x900.
  * `--crop` zooms in on one region at 2x: x,y,w,h are in the target's own pixels (a PNG's pixels,
  * an SVG's or diagram's units, a page's CSS pixels). Use it to inspect detail in a large render.
+ * `--run` evaluates JavaScript in a URL's page before the capture, to open a panel or a dialog. An
+ * async expression is awaited. `--wait` applies before it runs and again before the capture.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -23,7 +25,7 @@ import { chromium } from 'playwright-core';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const usage = `Usage:
-  pnpm shoot <target> <out.png> [--size WxH] [--wait ms] [--crop x,y,w,h]
+  pnpm shoot <target> <out.png> [--size WxH] [--wait ms] [--crop x,y,w,h] [--run js]
   pnpm shoot --sheet <out.png> [--cols N] [Label::]<target> ...`;
 
 const args = process.argv.slice(2);
@@ -37,6 +39,7 @@ const sheet = args.includes('--sheet') ? (args.splice(args.indexOf('--sheet'), 1
 const size = option('--size');
 const wait = Number(option('--wait') ?? 300);
 const cols = option('--cols');
+const run = option('--run');
 const crop = option('--crop')?.split(',').map(Number);
 if (crop && (crop.length !== 4 || crop.some(n => !Number.isFinite(n)))) {
   console.error('--crop takes x,y,w,h');
@@ -123,6 +126,10 @@ try {
     const [w, h] = (size ?? '1440x900').split('x').map(Number);
     const page = await browser.newPage({ viewport: { width: w, height: h }, deviceScaleFactor: 2 });
     await page.goto(url, { waitUntil: 'load' });
+    if (run) {
+      await page.waitForTimeout(wait);
+      await page.evaluate(`(async () => { ${run} })()`);
+    }
     await page.waitForTimeout(wait);
     // Without an explicit size, an image is cropped to itself and a page is captured whole.
     const image =

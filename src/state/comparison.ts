@@ -35,8 +35,8 @@ import { setComparisonCloser } from './sculpt';
 import { toast } from './toast';
 import { closeMenu, setLayoutLabOpen } from './ui';
 import {
+  changedLine,
   commitSource,
-  currentSource,
   fileBlocked,
   fileMode,
   sourceScope,
@@ -166,7 +166,9 @@ function candidateSource(baseline: Diagram, spec: CandidateSpec, config: Compari
   if (!scope)
     throw Error('A layout recipe arranges the whole diagram or one container, not a selection.');
   const settings = LayoutLab.settings({ ...baseline.settings, ...spec.patch, mode: 'rebuild' });
-  return sourceWithRecipe(scope, settings).source;
+  const asked = spec.patch.direction;
+  const direction = asked ? (asked === 'DOWN' ? 'down' : 'right') : undefined;
+  return sourceWithRecipe(scope, settings, direction).source;
 }
 
 export function openComparison(mode: ComparisonMode = 'layout') {
@@ -375,12 +377,7 @@ export function applyCandidate(i: number) {
 }
 
 /** The `layout` or `routing` line a file candidate writes, as Apply would save it. */
-export function candidateChange(source: string): string {
-  const now = new Set(currentSource().split('\n'));
-  return (
-    source.split('\n').find(l => /^(layout|routing)\b/.test(l) && !now.has(l)) ?? 'Same as the file'
-  );
-}
+export const candidateChange = (source: string) => changedLine(source) ?? 'Same as the file';
 
 /** Save a file candidate's source: its layout recipe or routing line. */
 function applyToFile(cell: Candidate & { source: string }) {
