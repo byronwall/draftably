@@ -561,6 +561,8 @@ export interface ResolvedAppearance {
   /** Every family and the shades it defines: built-in ones plus the file's own. */
   families: Map<string, Map<Shade, Swatch>>;
   custom: Set<string>;
+  /** Strike a removed object's title through (`config strike-removed=on`). */
+  strikeRemoved: boolean;
 }
 
 /** Height of a group's title band, derived from the title's line height. */
@@ -632,6 +634,7 @@ export function resolveAppearance(appearance?: DiagramAppearance): ResolvedAppea
     groupHeader: groupHeaderFor(title.lineHeight),
     families,
     custom,
+    strikeRemoved: !!a.config?.strikeRemoved,
   };
   if (cache.size > 50) cache.clear();
   cache.set(key, resolved);

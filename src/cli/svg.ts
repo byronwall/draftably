@@ -8,7 +8,7 @@ import { countText, STACK_OFFSETS } from '../model/stack';
 import { measureText } from '../model/fonts';
 import { diagramFrame, type DiagramFrame } from '../model/frame';
 import { headingMarkup } from '../model/heading';
-import { legendMarkup } from '../model/legend';
+import { legendMarkup, markerMarkup } from '../model/legend';
 import { noteMarkup, placeNotes } from '../model/note';
 import { drawnSwatch, participantAccent } from '../model/colors';
 import { truncateText } from '../model/fonts';
@@ -34,6 +34,7 @@ import {
   HALO_GAP,
   haloInk,
   isDiff,
+  MARKER,
   statusPaint,
   usedStatuses,
   withState,
@@ -75,6 +76,15 @@ const markMarkup = (m: LinkMark, x: number, y: number, ink: string) =>
 /** Hover for links, which a browser applies to an SVG opened on its own. */
 const LINK_CSS =
   'a.link{cursor:pointer}a.link:hover .shape{stroke-width:2.4px}a.link:hover .link-mark{stroke-width:2px}';
+
+/** A status's title marks: strike and ink fade, as attributes on a text element. */
+const strikeAttr = (p: StatusPaint) =>
+  (p.strike ? ' text-decoration="line-through"' : '') +
+  (p.inkFade ? ` fill-opacity="${p.inkFade}"` : '');
+
+/** The removed marker on a shape's top-right corner. */
+const cornerMarker = (p: StatusPaint, r: Rect, ink: string, canvas: string) =>
+  p.marker ? markerMarkup(r.x + r.w - MARKER.inset, r.y + MARKER.inset, ink, canvas) : '';
 
 /** A status's fade, as an attribute on the element that groups an object's marks. */
 const fade = (p: StatusPaint) => (p.opacity < 1 ? ` opacity="${p.opacity}"` : '');
@@ -193,7 +203,7 @@ function sceneMarkup(
               h =>
                 `<rect x="${r.x + h.x}" y="${r.y + h.y}" width="${h.w}" height="${h.h}" rx="${SOFT_RADIUS}" fill="${c.fill}"/>`,
             ),
-            `<text x="${r.x + hull[0].x + SOFT_TITLE.x}" y="${r.y + hull[0].y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(truncateText(g.title, Math.max(40, hull[0].w - 2 * SOFT_PAD), look.annotation))}</text>`,
+            `<text x="${r.x + hull[0].x + SOFT_TITLE.x}" y="${r.y + hull[0].y + SOFT_TITLE.y}" dominant-baseline="central" ${font(look.annotation)} fill="${c.ink}"${strikeAttr(p)}>${esc(truncateText(g.title, Math.max(40, hull[0].w - 2 * SOFT_PAD), look.annotation))}</text>`,
             '</g>',
           ],
           opts,
@@ -215,7 +225,7 @@ function sceneMarkup(
           ...cellsChromeMarkup(doc, look, g.id, r),
           ...title.map(
             (line, i) =>
-              `<text x="${r.x + tx}" y="${r.y + band + i * look.groupTitle.lineHeight}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${esc(line)}</text>`,
+              `<text x="${r.x + tx}" y="${r.y + band + i * look.groupTitle.lineHeight}" dominant-baseline="central" ${font(look.groupTitle)} fill="${c.ink}"${strikeAttr(p)}>${esc(line)}</text>`,
           ),
           g.href
             ? markMarkup(
@@ -229,6 +239,7 @@ function sceneMarkup(
                 c.ink,
               )
             : '',
+          cornerMarker(p, r, c.stroke, look.canvas),
           '</g>',
         ],
         opts,
@@ -277,7 +288,7 @@ function sceneMarkup(
               `<rect x="${c.x}" y="${l.y - l.h / 2}" width="${c.w}" height="${l.h}" rx="${all.length > 1 ? 0 : 4}" ${s}/>`,
           ),
         ),
-        `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
+        `<text x="${l.x}" y="${l.y - ((lines.length - 1) * type.lineHeight) / 2}" text-anchor="middle" dominant-baseline="central" ${font(type)} fill="${ink}"${strikeAttr(p)}>${lines.length === 1 ? esc(lines[0]) : lines.map((line, i) => `<tspan x="${l.x}" dy="${i ? type.lineHeight : 0}">${esc(line)}</tspan>`).join('')}</text>`,
       );
     out.push('</g>');
   }
@@ -314,7 +325,7 @@ function sceneMarkup(
           accent && style.shape === 'box'
             ? `<path d="${accentPath(r, radius)}" fill="${accent}"/>`
             : '',
-          `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${p.strike ? ' text-decoration="line-through"' : ''}>` +
+          `<text x="${r.x + label.x}" y="${first}" text-anchor="middle" dominant-baseline="central" ${font(look.title)} fill="${ink}"${strikeAttr(p)}>` +
             label.lines
               .map(
                 (line, i) =>
@@ -327,6 +338,7 @@ function sceneMarkup(
               `<text x="${r.x + r.w - bw / 2 + 6}" y="${r.y}" text-anchor="middle" dominant-baseline="central" ${font(look.annotation)} fill="${look.canvas}">${esc(badge)}</text>`
             : '',
           mark ? markMarkup(mark, r.x, r.y, mark.inside ? c.ink : look.muted) : '',
+          badge ? '' : cornerMarker(p, r, c.stroke, look.canvas),
           '</g>',
         ],
         opts,

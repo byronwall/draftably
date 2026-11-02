@@ -203,6 +203,7 @@ export function EdgeView(props: EdgeViewProps) {
               font-family={labelType().family}
               font-size={String(labelType().size)}
               font-weight={String(labelType().weight)}
+              fill-opacity={paint().inkFade}
               text-decoration={paint().strike ? 'line-through' : undefined}
             >
               <For each={labelLines()}>

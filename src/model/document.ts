@@ -504,7 +504,8 @@ export function normalizeAppearance(input: Raw): DiagramAppearance {
     const config: FileConfig = {};
     if (typeof cfg.linkBase === 'string') config.linkBase = cfg.linkBase;
     if (EDITORS.includes(cfg.editor)) config.editor = cfg.editor;
-    if (config.linkBase !== undefined || config.editor) out.config = config;
+    if (cfg.strikeRemoved === true) config.strikeRemoved = true;
+    if (Object.keys(config).length) out.config = config;
   }
   const states: EmphasisState[] = [];
   for (const st of Array.isArray(input.states) ? input.states : [])

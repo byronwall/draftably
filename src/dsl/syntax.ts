@@ -382,7 +382,11 @@ export interface Model {
 }
 
 /** `config` keys and the setting each sets. */
-export const CONFIG_KEYS = { 'link-base': 'linkBase', editor: 'editor' } as const;
+export const CONFIG_KEYS = {
+  'link-base': 'linkBase',
+  editor: 'editor',
+  'strike-removed': 'strikeRemoved',
+} as const;
 
 /** Theme attributes in the file and the override each sets. */
 export const THEME_ATTRS = {
@@ -625,6 +629,8 @@ export function parseModel(source: string | SourceDoc): Model {
             });
           configLines.set(key, line);
           if (key === 'editor') config.editor = choice('editor', 'vscode', EDITORS);
+          else if (key === 'strike-removed')
+            config.strikeRemoved = choice(key, 'off', ['on', 'off'] as const) === 'on';
           else {
             assert(w.quoted, `Expected ${key}="path" in double quotes.`);
             config.linkBase = w.value;

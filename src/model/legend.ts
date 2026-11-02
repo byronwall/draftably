@@ -1,10 +1,15 @@
 /** The color key drawn under an exported diagram, shared by `inspect --svg` and the editor's export. */
 import { NODE_SHADE, swatchFor, type LegendEntry, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { statusLabel, statusPaint, statusSwatch, type StatusCount } from './status';
+import { MARKER, statusLabel, statusPaint, statusSwatch, type StatusCount } from './status';
 
 const esc = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** The removed marker, a minus in a disc of radius `r`, centred at (x, y). */
+export const markerMarkup = (x: number, y: number, ink: string, canvas: string, r = MARKER.r) =>
+  `<circle cx="${x}" cy="${y}" r="${r}" fill="${ink}" stroke="${canvas}" stroke-width="${r / 4.5}"/>` +
+  `<path d="M${x - r / 2},${y} h${r}" stroke="${canvas}" stroke-width="${r / 4}" stroke-linecap="round"/>`;
 
 /** Space between change entries, which share one row. */
 const STATUS_GAP = 24;
@@ -59,18 +64,29 @@ export function legendMarkup(
       const c = swatchFor(look, e.family, e.shade ?? NODE_SHADE, 'node');
       return entry(x, i, `fill="${c.fill}" stroke="${c.stroke}"`, e.label);
     }),
-    // A change entry draws a neutral box with that mark's border, dash and fade.
+    // A change entry draws a box with that mark's fill, border, dash, fade and marker.
     ...statuses.map(s => {
       const p = statusPaint(look, s.status),
         c = statusSwatch(look, s.status, 'node'),
         label = statusLabel(s),
         at = left;
       left += entryW(look, label) + STATUS_GAP;
-      return entry(
-        at,
-        legend.length,
-        `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="3 2"` : ''} opacity="${p.opacity}"`,
-        label,
+      return (
+        entry(
+          at,
+          legend.length,
+          `fill="${c.fill}" stroke="${c.stroke}" stroke-width="${p.width ?? 1}"${p.dash ? ` stroke-dasharray="3 2"` : ''} opacity="${p.opacity}"`,
+          label,
+        ) +
+        (p.marker
+          ? markerMarkup(
+              at + 16,
+              y + 12 + legend.length * row + (row - 12) / 2,
+              c.stroke,
+              look.canvas,
+              4,
+            )
+          : '')
       );
     }),
   ].join('');

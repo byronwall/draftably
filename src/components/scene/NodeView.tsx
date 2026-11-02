@@ -6,14 +6,14 @@ import { portPoint } from '../../model/routes';
 import { resolveAppearance } from '../../model/appearance';
 import { drawnSwatch, participantAccent } from '../../model/colors';
 import { accentPath } from '../../cli/svg';
-import { HALO_GAP, haloInk, statusPaint } from '../../model/status';
+import { HALO_GAP, haloInk, MARKER, statusPaint } from '../../model/status';
 import { countText, STACK_OFFSETS } from '../../model/stack';
 import { measureText } from '../../model/fonts';
 import { linkMark } from '../../model/link';
 import type { Diagram, NodeLayout, Side } from '../../model/types';
 import { SceneGlyph } from '../Icon';
 import { LinkMarkView } from './LinkMark';
-import { pinSpot, PositionBadge, ResizeHandles, SceneText } from './parts';
+import { pinSpot, PositionBadge, RemovedMarker, ResizeHandles, SceneText } from './parts';
 
 const SIDES: Side[] = ['left', 'right', 'top', 'bottom'];
 
@@ -198,7 +198,16 @@ export function NodeView(props: NodeViewProps) {
         type={look().title}
         fill={label().mode === 'center' && style().shape !== 'text' ? color().ink : look().text}
         strike={paint().strike}
+        fade={paint().inkFade}
       />
+      <Show when={paint().marker && !node().count}>
+        <RemovedMarker
+          x={props.rect.w - MARKER.inset}
+          y={MARKER.inset}
+          ink={color().stroke}
+          canvas={look().canvas}
+        />
+      </Show>
       <Show when={node().count}>
         {count => {
           const text = () => countText(count()),

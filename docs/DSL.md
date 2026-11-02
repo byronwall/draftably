@@ -492,12 +492,14 @@ node api "API gateway"
 -edge notify api -> hook "notify"
 ```
 
-| Mark | Meaning                      | Drawn as                                               |
-| ---- | ---------------------------- | ------------------------------------------------------ |
-| `+`  | Added                        | Pale green fill, strong green border; green line       |
-| `~`  | Changed                      | Pale amber fill, strong amber border; amber line       |
-| `-`  | Removed                      | Pale red fill, dashed red border, title struck through |
-| `.`  | Unchanged, shown for context | Neutral and faded                                      |
+| Mark | Meaning                      | Drawn as                                                                        |
+| ---- | ---------------------------- | ------------------------------------------------------------------------------- |
+| `+`  | Added                        | Pale green fill, strong green border; green line                                |
+| `~`  | Changed                      | Pale amber fill, strong amber border; amber line                                |
+| `-`  | Removed                      | Paler red fill, dashed red border, a − disc on the corner; title stays readable |
+| `.`  | Unchanged, shown for context | Neutral and faded                                                               |
+
+`config strike-removed=on` also strikes each removed title through.
 
 `draftably compare before.draft after.draft` writes these marks for you. It matches nodes,
 groups and edges by ID, prints the newer file with `+` and `~` on its new and changed lines, and

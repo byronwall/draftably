@@ -36,7 +36,11 @@ describe('change marks', () => {
     ]);
     const svg = renderSvg(doc);
     expect(svg).toContain('1 shown for context');
-    expect(svg).toContain('line-through');
+    // A removed title stays readable unless the file asks for a strike.
+    expect(svg).not.toContain('line-through');
+    const struck = `${SOURCE}config strike-removed=on\n`;
+    const strikeDoc = normalize(JSON.parse(JSON.stringify(projectScene(checkSource(struck)))));
+    expect(renderSvg(strikeDoc)).toContain('line-through');
   });
 
   it('rejects marks and was= where they mean nothing', () => {

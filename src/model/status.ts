@@ -5,8 +5,8 @@
  * A file with change marks is a diff, and in a diff color means change and nothing else:
  * unchanged shapes turn neutral, containers become quiet outlines, unchanged lines go grey, and
  * only added (green), changed (amber) and removed (red) objects keep a hue, as a tinted fill with
- * a strong border. Each status also has a border weight, dash, fade or strike, so a diff still
- * reads in grayscale.
+ * a strong border. Each status also has a border weight, dash, fade or marker, so a diff still
+ * reads in grayscale. A removed title stays readable; `config strike-removed=on` strikes it.
  */
 import {
   ensureContrast,
@@ -65,9 +65,16 @@ export interface StatusPaint {
   opacity: number;
   /** Strike the title through. */
   strike: boolean;
+  /** Fade of the title text alone, on top of `opacity`. */
+  inkFade?: number;
+  /** Draw the removed marker, a minus in a disc, on the shape's top-right corner. */
+  marker?: boolean;
   /** Draw an accent ring around the shape (`haloInk`). */
   halo?: boolean;
 }
+
+/** The removed marker's radius and its inset from a shape's top-right corner. */
+export const MARKER = { r: 7, inset: 2 };
 
 /** Room between a shape and its focus ring. */
 export const HALO_GAP = 4;
@@ -99,7 +106,15 @@ function changePaint(look: ResolvedAppearance, status?: Status): StatusPaint {
     case 'changed':
       return { stroke, width: 2, opacity: 1, strike: false };
     case 'removed':
-      return { stroke, width: 2, dash: '6 4', opacity: 0.75, strike: true };
+      return {
+        stroke,
+        width: 2,
+        dash: '6 4',
+        opacity: 1,
+        strike: look.strikeRemoved,
+        inkFade: 0.8,
+        marker: true,
+      };
     case 'context':
       return { ...PLAIN, opacity: CONTEXT_FADE };
     default:
@@ -125,9 +140,14 @@ export function statusSwatch(
   const hue = HUES[status ?? 'same'];
   if (!hue)
     return kind === 'group' ? { fill: look.canvas, stroke: look.muted, ink: look.text } : look.node;
-  const tint = swatchFor(look, hue, look.dark ? 900 : kind === 'group' ? 50 : 100);
+  // A removed object takes a paler tint, and a removed container none, so its text reads.
+  const removed = status === 'removed',
+    fill =
+      removed && kind === 'group' && !look.dark
+        ? look.canvas
+        : swatchFor(look, hue, look.dark ? 900 : kind === 'group' || removed ? 50 : 100).fill;
   return {
-    fill: tint.fill,
+    fill,
     stroke: strokeOf(look, status!),
     ink: swatchFor(look, hue, look.dark ? 100 : 900).fill,
   };
