@@ -106,10 +106,7 @@ export function Toolbar() {
           aria-expanded={menuOpen('appearance')}
           onClick={menuButton('appearance')}
         />
-        <Show when={workspace()}>
-          <CommandButton command="toggle-files" pressed={filesShown()} />
-        </Show>
-        <CommandButton command="toggle-objects" pressed={objectsOpen()} />
+        <CommandButton command="toggle-sidebar" pressed={filesShown() || objectsOpen()} />
         <CommandButton command="toggle-inspector" pressed={propertiesOpen()} />
         <button
           type="button"

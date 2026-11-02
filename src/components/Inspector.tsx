@@ -19,15 +19,25 @@ import {
   swatchFor,
   type Shade,
 } from '../model/appearance';
+import { DSL_SHAPES } from '../dsl/syntax';
 import { NODE_ICONS, SHAPE_LABELS, SHAPES } from '../model/styles';
 import type { ColorKey, IntentRole, LabelMode, PortSide, ShapeKind } from '../model/types';
 import { setColor, setLayoutIntent, setShade } from '../state/actions';
 import { runCommand, type CommandId } from '../state/commands';
-import { doc, selectedIds, selectItems, transact } from '../state/document';
+import { doc, mutate, selectedIds, selectItems, transact } from '../state/document';
 import { fileMode } from '../state/file-session';
 import { geometry, routesById } from '../state/scene';
 import { timelineOpen } from '../state/sculpt';
-import { Checkbox, Field, IconButton, NumberField, SelectField, tip } from './controls';
+import { setRightTab } from '../state/ui';
+import {
+  CommandButton as IconCommand,
+  Checkbox,
+  Field,
+  IconButton,
+  NumberField,
+  SelectField,
+  tip,
+} from './controls';
 import { describeLink, openLink } from '../state/links';
 
 /** Properties of the selection, or diagram-wide preferences when nothing is selected. */
@@ -63,15 +73,10 @@ function Section(props: { title?: string; children: JSX.Element }) {
   );
 }
 
-function Heading(props: { title: string; pill?: string; pinned?: boolean }) {
+function Heading(props: { title: string }) {
   return (
     <div class="inspector-heading">
       <strong>{props.title}</strong>
-      <Show when={props.pill}>
-        <span class="pill" classList={{ accent: props.pinned }}>
-          {props.pill}
-        </span>
-      </Show>
     </div>
   );
 }
@@ -176,41 +181,44 @@ function NothingSelected() {
         <IntentSummary />
       </Show>
       <Section>
+        {/* Editor preferences, which belong to the session and not to the drawing. */}
         <Checkbox
           label="Snap to nearby shapes"
           checked={doc.settings.snap}
-          onChange={v => edit('Edit snap', d => void (d.settings.snap = v))}
+          onChange={v => mutate(d => void (d.settings.snap = v))}
         />
         <Checkbox
           label="Show manual position badges"
           checked={doc.settings.showManual}
-          onChange={v => edit('Edit showManual', d => void (d.settings.showManual = v))}
+          onChange={v => mutate(d => void (d.settings.showManual = v))}
         />
       </Section>
     </>
   );
 }
 
+const ALIGN_COMMANDS: CommandId[] = [
+  'align-left',
+  'align-center',
+  'align-top',
+  'align-middle',
+  'distribute-x',
+  'distribute-y',
+];
+
 function MultipleSelected(props: { count: number }) {
   return (
     <>
       <Heading title={`${props.count} selected`} />
       <Section>
+        <div class="align-row" role="group" aria-label="Align and distribute">
+          <For each={ALIGN_COMMANDS}>{command => <IconCommand command={command} />}</For>
+        </div>
         <div class="fields-2">
-          <CommandButton command="layout">Improve</CommandButton>
           <CommandButton command="group">Wrap container</CommandButton>
           <CommandButton command="duplicate">Duplicate</CommandButton>
           <CommandButton command="pin">Pin</CommandButton>
-        </div>
-      </Section>
-      <Section title="Align">
-        <div class="fields-2">
-          <CommandButton command="align-left">Left</CommandButton>
-          <CommandButton command="align-top">Top</CommandButton>
-          <CommandButton command="align-center">Horizontal center</CommandButton>
-          <CommandButton command="align-middle">Vertical center</CommandButton>
-          <CommandButton command="distribute-x">Distribute X</CommandButton>
-          <CommandButton command="distribute-y">Distribute Y</CommandButton>
+          <CommandButton command="layout">Improve</CommandButton>
         </div>
       </Section>
       <Section title="Color">
@@ -253,11 +261,13 @@ function EdgeInspector(props: { id: string }) {
           checked={edge().dashed}
           onChange={v => edit('Edit dashed', d => edits.setEdge(d, props.id, { dashed: v }))}
         />
-        <Checkbox
-          label="Emphasis"
-          checked={edge().emphasis}
-          onChange={v => edit('Edit emphasis', d => edits.setEdge(d, props.id, { emphasis: v }))}
-        />
+        <Show when={!fileMode()}>
+          <Checkbox
+            label="Emphasis"
+            checked={edge().emphasis}
+            onChange={v => edit('Edit emphasis', d => edits.setEdge(d, props.id, { emphasis: v }))}
+          />
+        </Show>
       </Section>
       <Section title="Ports">
         <div class="fields-2">
@@ -279,19 +289,22 @@ function EdgeInspector(props: { id: string }) {
           />
         </div>
         <p class="hint">
-          Resolved: {route()?.fromSide ?? '—'} → {route()?.toSide ?? '—'}. Auto ports can switch to
-          avoid crossings.
+          Drawn {route()?.fromSide ?? '—'} → {route()?.toSide ?? '—'}
         </p>
         <div class="fields-2">
           <CommandButton command="reverse-edge">Reverse</CommandButton>
-          <CommandButton command="reset-route">Reset bends</CommandButton>
           <CommandButton command="auto-ports">Use auto ports</CommandButton>
           <CommandButton command="insert-step">Insert step · Tab</CommandButton>
+          <Show when={!fileMode()}>
+            <CommandButton command="reset-route">Reset bends</CommandButton>
+          </Show>
         </div>
-        <p class="hint">
-          Double-click a line to add a bend. Double-click a bend to remove it. Alt-drag a label to
-          move it.
-        </p>
+        <Show when={!fileMode()}>
+          <p class="hint">
+            Double-click a line to add a bend. Double-click a bend to remove it. Alt-drag a label to
+            move it.
+          </p>
+        </Show>
       </Section>
       <CommandButton command="delete" class="danger ghost full">
         Delete connection
@@ -304,14 +317,10 @@ function ObjectInspector(props: { id: string }) {
   const container = () => isGroup(doc, props.id);
   const object = () => findNode(doc, props.id) ?? findGroup(doc, props.id)!;
   const style = () => styleOf(doc, props.id);
-  const rect = () => geometry(props.id);
+  const shapes = () => (fileMode() ? SHAPES.filter(s => DSL_SHAPES.includes(s as never)) : SHAPES);
   return (
     <>
-      <Heading
-        title={container() ? 'Container' : 'Shape'}
-        pill={rect().pinned ? 'Pinned' : rect().manual ? 'Manual' : 'Automatic'}
-        pinned={rect().pinned}
-      />
+      <Heading title={container() ? 'Container' : 'Shape'} />
       <Section>
         <TextField
           label="Label"
@@ -340,7 +349,7 @@ function ObjectInspector(props: { id: string }) {
           <SelectField<ShapeKind>
             label="Shape"
             value={style().shape}
-            options={SHAPES.map(s => [s, SHAPE_LABELS[s]] as const)}
+            options={shapes().map(s => [s, SHAPE_LABELS[s]] as const)}
             onChange={shape => edit('Edit shape', d => edits.setStyle(d, props.id, { shape }))}
           />
         </Show>
@@ -408,25 +417,21 @@ function PinControl(props: { id: string }) {
   const inherited = () => ancestors(doc, props.id).find(a => geometry(a).pinned);
   const note = () => {
     const parent = inherited();
-    if (parent) return `Protected by pinned container “${findGroup(doc, parent)?.title}”.`;
-    if (r().pinned) return 'Layout keeps this position. You can still drag it.';
-    if (r().manual)
-      return (
-        'Moved by hand. ' +
-        (doc.settings.respectManual
-          ? '“Keep manual positions” is on.'
-          : 'Layout may move it. Pin to protect it.')
-      );
-    return 'Layout is free to move this object.';
+    if (parent) return `Held by pinned container “${findGroup(doc, parent)?.title}”.`;
+    if (r().manual && !r().pinned)
+      return doc.settings.respectManual ? 'Moved by hand and protected.' : 'Moved by hand.';
+    return null;
   };
   return (
     <>
       <Checkbox
-        label="Pin during layout"
+        label="Pin"
         checked={!!r().pinned}
         onChange={v => edit('Edit pinned', d => void (d.layout.nodes[props.id].pinned = v))}
       />
-      <p class="hint">{note()}</p>
+      <Show when={note()}>
+        <p class="hint">{note()}</p>
+      </Show>
     </>
   );
 }
@@ -461,27 +466,30 @@ function ShapeSections(props: { id: string }) {
     nodeLabel(doc, props.id, findNode(doc, props.id)!.title, geometry(props.id)).mode;
   return (
     <>
-      <IntentSection id={props.id} />
-      <details class="inspector-section">
-        <summary>Label & icon</summary>
-        <SelectField
-          label="Label position"
-          value={labelMode()}
-          options={LABEL_MODES.map(mode => [mode, capitalize(mode)] as const)}
-          onChange={mode => edit('Edit mode', d => edits.setLabelMode(d, props.id, mode))}
-        />
-        <SelectField
-          label="Icon"
-          value={style().icon || ''}
-          options={[['', 'None'], ...NODE_ICONS.map(i => [i, capitalize(i)] as const)]}
-          onChange={icon => edit('Edit icon', d => edits.setStyle(d, props.id, { icon }))}
-        />
-        <Show when={style().shape === 'image'}>
-          <CommandButton command="replace-image" class="full">
-            Replace image
-          </CommandButton>
-        </Show>
-      </details>
+      {/* A file cannot store these yet. */}
+      <Show when={!fileMode()}>
+        <IntentSection id={props.id} />
+        <details class="inspector-section">
+          <summary>Label & icon</summary>
+          <SelectField
+            label="Label position"
+            value={labelMode()}
+            options={LABEL_MODES.map(mode => [mode, capitalize(mode)] as const)}
+            onChange={mode => edit('Edit mode', d => edits.setLabelMode(d, props.id, mode))}
+          />
+          <SelectField
+            label="Icon"
+            value={style().icon || ''}
+            options={[['', 'None'], ...NODE_ICONS.map(i => [i, capitalize(i)] as const)]}
+            onChange={icon => edit('Edit icon', d => edits.setStyle(d, props.id, { icon }))}
+          />
+          <Show when={style().shape === 'image'}>
+            <CommandButton command="replace-image" class="full">
+              Replace image
+            </CommandButton>
+          </Show>
+        </details>
+      </Show>
       <Section>
         <ParentSelect id={props.id} />
         <CommandButton command="add-connected" class="full">
@@ -492,47 +500,50 @@ function ShapeSections(props: { id: string }) {
   );
 }
 
+const openArrange = () => setRightTab('arrange');
+
 function ContainerSections(props: { id: string }) {
   const cfg = () => doc.layout.containers[props.id];
   return (
     <>
       <Section title="Contents">
-        <SelectField
-          label="Arrange contents"
-          value={cfg()?.direction || 'inherit'}
-          options={[
-            ['inherit', 'Follow diagram'],
-            ['RIGHT', 'Left to right'],
-            ['DOWN', 'Top to bottom'],
-          ]}
-          onChange={direction =>
-            edit('Edit direction', d => edits.setContainer(d, props.id, { direction }))
-          }
-        />
-        <NumberField
-          label="Inner padding"
-          value={cfg()?.padding || 24}
-          min={12}
-          max={80}
-          onChange={padding =>
-            edit('Edit padding', d => edits.setContainer(d, props.id, { padding }))
-          }
-        />
         <Show
           when={fileMode()}
           fallback={
-            <div class="fields-2">
-              <CommandButton command="layout">Layout inside</CommandButton>
-              <CommandButton command="fit-container">Fit contents</CommandButton>
-            </div>
+            <>
+              <SelectField
+                label="Arrange contents"
+                value={cfg()?.direction || 'inherit'}
+                options={[
+                  ['inherit', 'Follow diagram'],
+                  ['RIGHT', 'Left to right'],
+                  ['DOWN', 'Top to bottom'],
+                ]}
+                onChange={direction =>
+                  edit('Edit direction', d => edits.setContainer(d, props.id, { direction }))
+                }
+              />
+              <NumberField
+                label="Inner padding"
+                value={cfg()?.padding || 24}
+                min={12}
+                max={80}
+                onChange={padding =>
+                  edit('Edit padding', d => edits.setContainer(d, props.id, { padding }))
+                }
+              />
+              <div class="fields-2">
+                <CommandButton command="layout">Improve inside</CommandButton>
+                <CommandButton command="fit-container">Fit contents</CommandButton>
+              </div>
+            </>
           }
         >
+          <button type="button" class="button" onClick={() => openArrange()}>
+            Arrange this group
+          </button>
           <CommandButton command="reflow-group">Reflow group</CommandButton>
         </Show>
-        <p class="hint">
-          Drag any edge or corner to resize the frame. Its contents stay put. Drag inside the empty
-          frame to move the whole container.
-        </p>
       </Section>
       <Section>
         <ParentSelect id={props.id} />
@@ -552,7 +563,8 @@ const roleOf = (id: string): IntentRole | null =>
 
 function IntentSection(props: { id: string }) {
   return (
-    <Section title="Layout intent">
+    <details class="inspector-section">
+      <summary>Layout intent</summary>
       <Show
         when={roleOf(props.id)}
         fallback={
@@ -585,10 +597,7 @@ function IntentSection(props: { id: string }) {
           </>
         )}
       </Show>
-      <p class="hint">
-        A preferred area, not a fixed coordinate. Pins and container boundaries still win.
-      </p>
-    </Section>
+    </details>
   );
 }
 
