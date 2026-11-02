@@ -16,6 +16,9 @@ export const tip = (label: string, keys?: string, hint?: string) => ({
   'data-tip-hint': hint,
 });
 
+/** Attributes for text that may be cut off: the tooltip shows all of it, only when it is cut. */
+export const cutTip = { 'data-tip': '', 'data-tip-cut': '' };
+
 export function IconButton(
   props: {
     icon: string;

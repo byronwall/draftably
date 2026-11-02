@@ -256,7 +256,7 @@ function candidateSource(baseline: Diagram, spec: CandidateSpec, config: Compari
   if (config.run !== 'rebuild') return null;
   const scope = sourceScope(config);
   if (!scope)
-    throw Error('A layout recipe arranges the whole diagram or one container, not a selection.');
+    throw Error('A layout line arranges the whole diagram or one group, not a selection.');
   const settings = LayoutLab.settings({ ...baseline.settings, ...spec.patch, mode: 'rebuild' });
   const asked = spec.patch.direction;
   const direction = asked ? (asked === 'DOWN' ? 'down' : 'right') : undefined;
@@ -310,7 +310,7 @@ export function cancelGeneration() {
   running = null;
   if (cmp.busy) {
     setCmp('busy', false);
-    setProgress('Cancelled. Completed candidates remain available.');
+    setProgress(`Stopped · ${cmp.cells.filter(c => c.status === 'ready').length} ready`);
   }
 }
 
@@ -329,8 +329,7 @@ setComparisonCloser(closeComparison);
 
 export function updateConfig(patch: Partial<ComparisonConfig>) {
   setCmp('config', c => ({ ...c!, ...patch }));
-  if (cmp.cells.length)
-    setProgress('Settings changed. Generate to replace this sheet; the editor remains untouched.');
+  if (cmp.cells.length) setProgress('Settings changed. Regenerate to see them.');
 }
 
 /** Switch between layout and routing comparisons, from the same frozen starting point. */
@@ -352,13 +351,11 @@ export async function generate(override?: Partial<ComparisonConfig>) {
   try {
     specs = ExplorerLab.specs(config);
     if (cmp.baseline.graph.nodes.length > 160 || cmp.baseline.graph.edges.length > 360)
-      throw Error(
-        'Comparison is limited to 160 shapes / 360 edges. Use a smaller working diagram for the grid.',
-      );
+      throw Error('Compare handles up to 160 shapes and 360 lines.');
     if (config.scope === 'selection' && !config.selected.length)
-      throw Error('No objects were selected when this explorer opened.');
+      throw Error('Select shapes before you open Compare.');
     if (config.scope === 'container' && !config.containerId)
-      throw Error('Select one container before opening the explorer.');
+      throw Error('Select one group before you open Compare.');
   } catch (error) {
     setProgress(error instanceof Error ? error.message : String(error), true);
     return { status: 'error' };
@@ -428,7 +425,7 @@ export async function generate(override?: Partial<ComparisonConfig>) {
   running = null;
   const ready = cmp.cells.filter(c => c.status === 'ready').length;
   setCmp('busy', false);
-  setProgress(`${ready} of ${specs.length} ready · nothing changes until you Apply`);
+  setProgress('');
   console.info('[compare] generated', {
     ready,
     total: specs.length,

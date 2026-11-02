@@ -1,4 +1,6 @@
 .comparison {
+  --comparison-header: 44px;
+
   inset: 0;
   width: 100vw;
   max-width: none;
@@ -18,7 +20,7 @@
     'header header'
     'sidebar main';
   grid-template-columns: clamp(250px, 21vw, 310px) minmax(0, 1fr);
-  grid-template-rows: 44px minmax(0, 1fr);
+  grid-template-rows: var(--comparison-header) minmax(0, 1fr);
 }
 
 .comparison.controls-hidden[open] {
@@ -73,6 +75,11 @@
   gap: var(--space-2);
   padding-top: var(--space-3);
   border-top: 1px solid var(--line);
+}
+
+.panel-scroll > .sidebar-section:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .sidebar-section > h3 {
@@ -209,15 +216,34 @@ details.sidebar-section[open] > summary,
   font-size: var(--text-sm);
 }
 
+.candidate-pending:not(.error-text) {
+  background: linear-gradient(100deg, transparent 30%, var(--hover) 50%, transparent 70%) 0 0 / 300%
+    100%;
+  animation: candidate-pending 1.6s linear infinite;
+}
+
+@keyframes candidate-pending {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candidate-pending:not(.error-text) {
+    animation: none;
+  }
+}
+
 .candidate-card > footer {
   flex: none;
   min-width: 0;
   padding: 3px 10px;
-  overflow: hidden;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: var(--text-xs);
-  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -347,7 +373,6 @@ details.sidebar-section[open] > summary,
 
 .layer-row input[type='range'] {
   grid-area: slider;
-  accent-color: var(--layer-color);
 }
 
 .layer-row output {
@@ -391,9 +416,35 @@ details.sidebar-section[open] > summary,
     grid-template-columns: 0 minmax(0, 1fr);
   }
 
+  .comparison {
+    --comparison-header: 80px;
+  }
+
+  .comparison-header {
+    flex-wrap: wrap;
+    align-content: center;
+    gap: var(--space-1) var(--space-2);
+    padding: 0 var(--space-2);
+  }
+
+  .comparison-header kbd {
+    display: none;
+  }
+
+  .comparison-progress {
+    order: 1;
+    text-align: right;
+  }
+
+  .candidate-grid {
+    grid-template-rows: none;
+    grid-auto-rows: minmax(220px, 1fr);
+    overflow-y: auto;
+  }
+
   .comparison:not(.controls-hidden) .comparison-sidebar {
     position: fixed;
-    top: 56px;
+    top: var(--comparison-header);
     bottom: 0;
     left: 0;
     z-index: 5;
@@ -401,14 +452,15 @@ details.sidebar-section[open] > summary,
     box-shadow: var(--shadow-lg);
   }
 
-  .comparison-heading,
-  .comparison-header > .hint {
+  .comparison-heading {
     display: none;
   }
 }
 
 /* The layout or routing line a diagram-file candidate writes. */
 .candidate-recipe {
-  font: 600 var(--text-xs) / 1.4 var(--mono);
-  overflow-wrap: anywhere;
+  display: block;
+  overflow: hidden;
+  font: var(--text-xs) / 1.4 var(--mono);
+  text-overflow: ellipsis;
 }

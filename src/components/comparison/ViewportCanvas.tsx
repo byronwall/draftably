@@ -1,6 +1,7 @@
 import { onCleanup, onMount, type JSX } from 'solid-js';
 import { wheelZoomFactor } from '../../model/camera';
 import {
+  applyCandidate,
   chooseAnchor,
   effectiveCamera,
   fitAll,
@@ -169,6 +170,11 @@ export function ViewportCanvas(props: {
       e.preventDefault();
       e.stopPropagation();
       chooseAnchor(chosen.dataset.id!);
+      return;
+    }
+    if (e.key === 'Enter' && props.index >= 0 && !comparison.cells[props.index].current) {
+      e.preventDefault();
+      applyCandidate(props.index);
       return;
     }
     if (e.key.startsWith('Arrow')) {
