@@ -46,6 +46,24 @@ These decisions stand unless an entry below argues otherwise, with evidence.
 | Routing channels may cost up to ~10% area; **drop-and-repack is deferred (#72)**              | #66, #72 | unused channels leave lopsided margins (uneven-padding 4 → 5, S3). #72 fixes two renders and doubles compile time       | **deferred** (item 7)                                          |
 | A bundle into one side keeps the 16px stagger                                                 | #60, #69 | none seen                                                                                                               | keep                                                           |
 
+### Kept: all ten rebuild engines and the current defaults
+
+The layout and routing evaluation in #372 (72 diagrams, 24 held out, 8,203 trials at `f14d9b8`)
+tested whether fewer engines would do. They would not:
+
+- The best six-engine pool (boundary-align, tidy, force, layered, tree, grid) accepted 11, 12, 11,
+  10 and 10 of 12 held-out diagrams across five preference profiles. That count assumes a perfect
+  choice after seeing every output.
+- A selector that picks an engine from graph features accepted only 5, 4, 3, 3 and 3 of 12.
+- Compound-spring, compound-flow and flow each won a held-out case that no other engine drew
+  well: architecture-05, cycles-06 and routing-06.
+- `clearance=22` made 6 of 16 valid held-out drawings invalid. Keep it a Compare alternative, not a
+  default.
+
+The study instead led to a smaller editor (#373, #377, #379). Engine choice is out of the routine
+panel, and every engine stays in Compare and Exact layout. Before you remove an engine or change a
+default, freeze the rule and test it on new held-out diagrams that include lanes and cell routes.
+
 ### Deferred trade-off: #72 (drop unused channels and re-pack)
 
 #72 routes each file with channels once more in `quick` mode, drops channel sides no line used,
@@ -283,6 +301,9 @@ global routing work that the feedback stack did not take on. [FEEL.md](FEEL.md) 
   (item 4; pgm, tasks).
 - **Back-runs inside a group**: lines between members running against the reading direction, to
   score group folds against root wraps (item 2).
+- **Which phase timed out**: in #372, 433 of 452 timeouts finished layout and stalled in routing
+  or labels. Compare's 30 s timeout in `src/lib/engine-tasks.ts` does not say which. Time the two
+  phases so a dense-route timeout points at the router.
 - **Known false alarms to retire:** `left-of external server` (hn-offline v0, now intended by
   #78's sink seat), `left-of build runtime` (hn-deploy fold), `above …` on stress layouts
   (code-layers). Rewrite those expectations or teach the checks about folds and stress.
