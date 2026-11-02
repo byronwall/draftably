@@ -403,10 +403,7 @@ const journeys = {
       /Whole diagram/.test(await panel.textContent()),
     );
     await page.locator('[data-id="web"]').first().click({ force: true });
-    check(
-      '#307 a selection narrows the scope',
-      /the selection|this group/.test(await panel.textContent()),
-    );
+    check('#307 a selection narrows the scope', /1 shape/.test(await panel.textContent()));
     check(
       '#307 the toolbar tooltip agrees',
       /the selection|this group/.test(await button.getAttribute('data-tip-hint')),
@@ -420,7 +417,7 @@ const journeys = {
     await phone.click('.popover .menu-item:has-text("Layout")');
     const menu = await phone.locator('.popover').textContent();
     check('#307 the phone menu states the scope', /Small moves in the whole diagram/.test(menu));
-    check('#307 the phone menu says how to keep a preview', /until you Apply/.test(menu));
+    check('#307 the phone menu offers a comparison', /Compare alternatives/.test(menu));
     await phone.keyboard.press('Escape');
     check('F08 the phone shows where work is kept', await phone.isVisible('.save-status'));
     await phone.screenshot({ path: path.join(proof.out, 'phone-brand.png') });
