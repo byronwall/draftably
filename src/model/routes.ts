@@ -7,7 +7,7 @@ import {
 import { clamp, inside, manhattan, overlaps, rounded, roundedPath } from './geometry';
 import { resolveAppearance, type ResolvedAppearance } from './appearance';
 import { measureText } from './fonts';
-import { edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
+import { edgeLabelLines, edgeLabelSize, groupTitleLines, SELF_LOOP } from './labels';
 import { hasMarkers, markerRects, stoppedPoints } from './markers';
 import {
   findEdge,
@@ -122,18 +122,19 @@ function labelSpots(
     w: r.w + 2 * d,
     h: r.h + 2 * d,
   });
-  // The text itself, inside the label's padding (8px each side, one line of the annotation type).
-  const size = look.annotation.size;
+  // The text itself, inside the label's padding: 8px each side, its lines of the annotation type.
+  const ink =
+    look.annotation.size + (edgeLabelLines(label, look).length - 1) * look.annotation.lineHeight;
   const cost = (p: Point) => {
     const r = box(p),
-      ink = { x: r.x + 8, y: p.y - size / 2, w: Math.max(1, w - 16), h: size },
+      text = { x: r.x + 8, y: p.y - ink / 2, w: Math.max(1, w - 16), h: ink },
       through = grown(r, -1),
       touch = grown(r, 3),
       near = grown(r, LINE_CLEARANCE);
     let c = 0;
     for (const { route, shared } of lines) {
       const hits = (q: Rect) => route.some((s, i) => i && segmentHits(route[i - 1], s, q));
-      if (hits(ink)) c += shared ? 1 : 5;
+      if (hits(text)) c += shared ? 1 : 5;
       else if (hits(through)) c += shared ? 1 : 3;
       else if (!shared && hits(touch)) c += 2;
       else if (!shared && hits(near)) c += 1;

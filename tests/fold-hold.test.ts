@@ -36,10 +36,10 @@ describe('a relabel keeps the fold', () => {
     expect(labelled).toEqual(plain);
   });
 
-  it('takes another row only when the labels no longer fit at all', () => {
+  it('keeps every step in its row when long labels wrap', () => {
     const long = 'a label far too long to share a row with its neighbours';
     const labelled = rows(source(Object.fromEntries(steps.slice(1).map((_, i) => [i, long]))));
-    expect(Math.max(...Object.values(labelled))).toBeGreaterThan(Math.max(...Object.values(plain)));
+    expect(labelled).toEqual(plain);
   });
 });
 

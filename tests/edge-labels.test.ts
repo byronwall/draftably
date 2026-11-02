@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { checkSource } from '../src/dsl/compile';
 import { overlaps } from '../src/model/geometry';
-import { edgeLabelSize } from '../src/model/labels';
+import { resolveAppearance } from '../src/model/appearance';
+import { edgeLabelLines, edgeLabelSize, LABEL_WRAP } from '../src/model/labels';
 import { placeEdgeLabel, placeEdgeLabels } from '../src/model/routes';
 import type { Point, Rect } from '../src/model/types';
 
@@ -50,9 +51,14 @@ describe('edge label placement', () => {
     expect(existing.some(o => overlaps(rect, o, 6))).toBe(false);
   });
 
-  it('sizes long labels from the rendered edge font without a width cap', () => {
-    const label = 'a connection label that is long enough to exceed the old width limit '.repeat(2);
-    expect(edgeLabelSize(label).w).toBeGreaterThan(280);
+  it('wraps a long flow label and breaks it at each \\n', () => {
+    const look = resolveAppearance(),
+      long = 'a connection label that is long enough to need more than one line',
+      one = edgeLabelSize('short');
+    expect(edgeLabelSize(long).w).toBeLessThanOrEqual(LABEL_WRAP + 16);
+    expect(edgeLabelLines(long, look).length).toBeGreaterThan(1);
+    expect(edgeLabelLines('first line\nsecond line', look)).toEqual(['first line', 'second line']);
+    expect(edgeLabelSize('first line\nsecond line').h).toBe(one.h + look.annotation.lineHeight);
   });
 
   it('stays on its own route instead of sitting on another edge', () => {
