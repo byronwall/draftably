@@ -291,7 +291,7 @@ function sequenced(scene: Scene): Scene {
     if (a + 1 < parts.length)
       holds[a + 1].push({
         from: a,
-        room: right + (across(a + 1) ? 2 * SEQ_BAND_PAD + parts[a + 1].w / 2 : SEQ_SELF_CLEAR),
+        room: right + SEQ_SELF_CLEAR + (across(a + 1) ? 2 * SEQ_BAND_PAD + parts[a + 1].w / 2 : 0),
       });
   }
   // Centres: each lane takes the header gap from its neighbour, or what holds it, if that is more.
