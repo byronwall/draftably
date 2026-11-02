@@ -8,7 +8,7 @@ last_updated: '2026-10-30'
 
 # PR 221 review
 
-Checked on 2026-10-30 against `main` at `dd2abab`. The research baseline is `2995a98`, 118 commits
+[The plan](plan.md) replaces the recommended order below. Checked on 2026-10-30 against `main` at `dd2abab`. The research baseline is `2995a98`, 118 commits
 earlier. I ran the probes below with the real CLI. I did not recheck competitor claims, except
 that I recounted the two CSVs and looked at one Graphviz cell.
 
@@ -118,8 +118,7 @@ protect the feature, not proof that people want it.
 
 - A phase with `m1 m3` passes `check` with `m2` between them, so the research's point stands: a
   band can enclose a message that is not listed. Do not build fragments on `phase` as it is.
-- `kind=data` parses but does nothing, and `kind=sync` is its equal. Decide this before message
-  kinds gain meaning.
+- `kind=data` parsed but did nothing at this review. On 2026-11-01, `check` rejects it.
 - Unquoted `href=https://…` silently loses its path, because `//` starts a comment. `check` does
   not catch it. This is a separate, small bug.
 - PR 28 (rich nodes) is planning only, 15 days old, and covers images and icons. It overlaps the

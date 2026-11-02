@@ -78,12 +78,7 @@ end means, and which messages are alternatives. Nobody needs to read a subtitle 
   example files, one uses a sequence, four use cells, and none has PK/FK or cardinality text. The
   corpus was built to test layout, so this is a weak signal, not proof of low demand.
 
-## What still needs your input
+## Status
 
-1. What does a Before panel promise?
-2. Which job leads the language work: PR review, hand-written technical documents, or adoption?
-3. How should PR 221 land, given that it is stale, conflicted and red?
-
-## Next step after confirmation
-
-Shape the comparison slice first. It needs no new grammar and does not depend on the other bets.
+Byron answered these questions on 2026-11-01. [The plan](plan.md) records the decisions and
+replaces the next step that this brief proposed.

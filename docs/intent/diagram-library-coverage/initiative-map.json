@@ -5,20 +5,28 @@
     "slug": "diagram-library-coverage",
     "scale": "capability",
     "current_phase": "intent",
-    "last_updated": "2026-10-30",
+    "last_updated": "2026-11-01",
     "summary": "Decide which diagram types and features draftably gains next, starting from the PR 221 gap analysis against 15 alternatives.",
     "status": "planned",
-    "next_action": "Absorb round 1 answers, then shape the comparison slice."
+    "next_action": "Build the slices in plan.md, then retire the initiative."
   },
   "artifacts": {
-    "intent_brief": { "path": "intent-brief.md", "status": "draft", "updated_at": "2026-10-30" },
-    "brainstorm": { "path": "brainstorm.md", "status": "not-requested", "updated_at": null },
-    "shape_brief": { "path": "shape-brief.md", "status": "not-created", "updated_at": null },
-    "implementation_plan": {
-      "path": "implementation-plan.md",
+    "intent_brief": {
+      "path": "intent-brief.md",
+      "status": "draft",
+      "updated_at": "2026-10-30"
+    },
+    "brainstorm": {
+      "path": "brainstorm.md",
+      "status": "not-requested",
+      "updated_at": null
+    },
+    "shape_brief": {
+      "path": "shape-brief.md",
       "status": "not-created",
       "updated_at": null
-    }
+    },
+    "implementation_plan": "plan.md"
   },
   "sources": [
     {
@@ -231,6 +239,10 @@
     {
       "date": "2026-10-30",
       "event": "Created from a review of PR 221 against main at dd2abab. Lifecycle status set to planned; no implementation exists."
+    },
+    {
+      "date": "2026-11-01",
+      "event": "Byron chose diagram quality as the lead job, honest then faithful Before panels, four added slices, and a merge of PR 221 without a refresh. plan.md records the order."
     }
   ],
   "closure": null
