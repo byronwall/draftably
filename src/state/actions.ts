@@ -365,6 +365,7 @@ export function setColor(color: Diagram['styles'][string]['color']) {
 export function chooseTheme(theme: ThemeId) {
   transact('Change theme', d => {
     d.appearance = {
+      ...d.appearance,
       theme,
       overrides: {},
       colors: d.appearance.colors.filter(c => !isBuiltInFamily(c.family)),

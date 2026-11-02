@@ -5,8 +5,9 @@ import { checkSource, compile } from '../src/dsl/compile';
 import { projectScene, visibleRects } from '../src/dsl/project';
 import { computeRoutes } from '../src/model/routes';
 
-import { resolveAppearance } from '../src/model/appearance';
-import { edgeLabelLines } from '../src/model/labels';
+import { PRESETS, contrast, resolveAppearance, type ThemeId } from '../src/model/appearance';
+import { drawnSwatch, participantAccent } from '../src/model/colors';
+import { edgeLabelLines, edgeLabelSize } from '../src/model/labels';
 
 const login = readFileSync(path.join(__dirname, '../examples/login-sequence.draft'), 'utf8');
 
@@ -124,5 +125,162 @@ describe('sequence groups and phases', () => {
 
   it('refuses a phase that lists something other than a message', () => {
     expect(() => checkSource(source.replace('m3 m4', 'm3 nope'))).toThrow(/Unknown message nope/);
+  });
+});
+
+describe('sequence lane order', () => {
+  const lanes = (...lines: string[]) => {
+    const scene = checkSource([...lines, 'layout root sequence'].join('\n'));
+    return scene.objects
+      .filter(o => o.type === 'node')
+      .sort((a, b) => a.x - b.x)
+      .map(o => o.id);
+  };
+  const band = ['group g "G"', 'node a "A" in=g', 'node z "Z"', 'node b "B" in=g'];
+
+  it('applies the root order to groups and participants, then each group its own', () => {
+    expect(lanes(...band)).toEqual(['a', 'b', 'z']);
+    expect(lanes(...band, 'order root z g')).toEqual(['z', 'a', 'b']);
+    expect(lanes(...band, 'order g b a')).toEqual(['b', 'a', 'z']);
+    expect(lanes(...band, 'order root z g', 'order g b a')).toEqual(['z', 'b', 'a']);
+    expect(lanes(...band, 'order root g z', 'order g b a')).toEqual(['b', 'a', 'z']);
+  });
+
+  it('keeps a group whole where the root order puts it', () => {
+    const file = ['group g "G"', 'node a "A" in=g', 'node b "B"', 'node c "C" in=g'];
+    expect(lanes(...file, 'order root g b')).toEqual(['a', 'c', 'b']);
+    expect(lanes(...file, 'order root g b', 'order g c a')).toEqual(['c', 'a', 'b']);
+  });
+});
+
+describe('sequence validation', () => {
+  const nodes = ['node a "A"', 'node b "B"'],
+    messages = ['edge m1 a -> b "1"', 'edge m2 b -> a "2"', 'edge m3 a -> b "3"'];
+  const check = (...lines: string[]) =>
+    checkSource([...nodes, ...messages, ...lines, 'layout root sequence'].join('\n'));
+
+  it('refuses a phase that skips a message, and keeps unphased messages legal', () => {
+    expect(() => check('phase outer "Outer" m1 m3', 'phase inner "Inner" m2')).toThrow(
+      /Phase outer skips m2.*Include it or split the phase/,
+    );
+    expect(() => check('phase first "First" m1 m2')).not.toThrow();
+    expect(() => check('phase last "Last" m3 m2')).not.toThrow();
+  });
+
+  it('draws phases in message order, without overlap', () => {
+    const { phases } = check('phase late "Late" m3', 'phase early "Early" m1 m2').sequence!;
+    expect(phases.map(p => p.id)).toEqual(['early', 'late']);
+    expect(phases[0].y + phases[0].h).toBeLessThanOrEqual(phases[1].y);
+  });
+
+  it('refuses a message that ends on a group only in a sequence', () => {
+    const file = ['group g "G"', 'node a "A" in=g', 'node b "B"', 'edge m1 g -> b "Wrong"'];
+    expect(() => checkSource([...file, 'layout root sequence'].join('\n'))).toThrow(
+      /m1 on one of its participants/,
+    );
+    expect(() => checkSource(file.join('\n'))).not.toThrow();
+  });
+
+  it('refuses an empty band, and keeps an empty diagram editable', () => {
+    expect(() => checkSource('group empty "Empty"\nnode a "A"\nlayout root sequence')).toThrow(
+      /Group empty has no participants/,
+    );
+    const empty = checkSource('diagram "Empty" version=1\nlayout root sequence');
+    expect(empty.sequence).toBeUndefined();
+    expect(empty.objects).toEqual([]);
+  });
+});
+
+describe('sequence spacing', () => {
+  const look = resolveAppearance();
+  const centres = (scene: ReturnType<typeof checkSource>, ...ids: string[]) =>
+    ids.map(id => scene.byId.get(id)!).map(o => o.x + o.w / 2);
+
+  it("holds a distant message's lanes apart by its whole label", () => {
+    const scene = checkSource(
+      [
+        'theme drafting padding-y=4',
+        'node a "A"',
+        'node b "B"',
+        'node c "C"',
+        'size a width=40 height=32',
+        'size b width=40 height=32',
+        'size c width=40 height=32',
+        'edge e a -> c "MMMMMMMMMMMMMMMMMMM"',
+        'order root a b c',
+        'layout root sequence',
+      ].join('\n'),
+    );
+    expect(centres(scene, 'a', 'b', 'c')).toEqual([36, 116, 228]);
+  });
+
+  const self = (label: string, ...rest: string[]) =>
+    [
+      'node a "A"',
+      'node b "B"',
+      'node c "C"',
+      `edge m1 b -> b "${label}"`,
+      ...rest,
+      'layout root sequence',
+    ].join('\n');
+  const labels = (source: string) => {
+    const doc = projectScene(checkSource(source)),
+      { vg, rects } = visibleRects(doc);
+    return new Map(computeRoutes(doc, vg, rects).routes.map(r => [r.id, r]));
+  };
+
+  it("keeps a self-message's loop and label clear of the next lane", () => {
+    const text = 'check password hash and more',
+      source = self(text),
+      scene = checkSource(source),
+      [, b, c] = centres(scene, 'a', 'b', 'c'),
+      m1 = labels(source).get('m1')!;
+    expect(c).toBeGreaterThanOrEqual(b + 36 + 4 + edgeLabelSize(text, look, true).w + 8);
+    expect(c - (m1.label!.x + m1.label!.w / 2)).toBeGreaterThanOrEqual(8);
+  });
+
+  it("grows the panel for a self-message on the last lane, and its band's edge", () => {
+    const text = 'check password hash and more',
+      source = ['group g "G"', 'node a "A"', 'node c "C" in=g', `edge m1 c -> c "${text}"`];
+    const file = [...source, 'layout root sequence'].join('\n'),
+      scene = checkSource(file),
+      { label } = labels(file).get('m1')!,
+      { panel } = scene.sequence!,
+      group = scene.byId.get('g')!;
+    expect(panel.x + panel.w).toBeGreaterThanOrEqual(label!.x + label!.w / 2 + 20);
+    expect(group.x + group.w).toBeGreaterThanOrEqual(label!.x + label!.w / 2);
+  });
+
+  it('puts the row after a self-message below its label', () => {
+    const long = 'load the account row then verify the salted password hash against it twice',
+      source = self(long, 'edge m2 a -> c "next"'),
+      routes = labels(source),
+      m1 = routes.get('m1')!.label!,
+      m2 = routes.get('m2')!.label!;
+    expect(edgeLabelSize(long, look, true).h).toBeGreaterThan(40);
+    expect(m2.y - m2.h / 2).toBeGreaterThanOrEqual(m1.y + m1.h / 2 + 8);
+  });
+
+  it('keeps the lifelines past a tall last self-message', () => {
+    const long = 'load the account row then verify the salted password hash against it twice',
+      source = self(long),
+      m1 = labels(source).get('m1')!.label!,
+      b = checkSource(source).byId.get('b')!;
+    expect(b.y + b.h + b.lifeline!).toBeGreaterThan(m1.y + m1.h / 2);
+  });
+});
+
+describe('sequence headers', () => {
+  it('outlines a participant with no color in every theme', () => {
+    for (const theme of Object.keys(PRESETS) as ThemeId[]) {
+      const doc = projectScene(
+          checkSource(`theme ${theme}\nnode a "A"\nnode b "B" color=blue\nlayout root sequence`),
+        ),
+        look = resolveAppearance(doc.appearance),
+        plain = drawnSwatch(doc, look, 'a', 'node');
+      expect(contrast(plain.stroke, plain.fill)).toBeGreaterThan(1.5);
+      expect(participantAccent(doc, look, 'a')).toBeUndefined();
+      expect(participantAccent(doc, look, 'b')).toBe(drawnSwatch(doc, look, 'b', 'node').stroke);
+    }
   });
 });

@@ -162,6 +162,12 @@ export const edgeLabelType = (r: ResolvedAppearance, message = false): TypeProfi
 export const edgeLabelLines = (label: string, r: ResolvedAppearance, message = false) =>
   message ? wrapLines(label, MESSAGE_WRAP, edgeLabelType(r, true)) : [label];
 
+/**
+ * A self-message's loop: its run out to the right of the lifeline and its drop. Its label sits
+ * `label` past the loop, centred on the drop.
+ */
+export const SELF_LOOP = { out: 36, down: 22, label: 4 };
+
 /** Box for a connection label in the diagram's annotation type. */
 export function edgeLabelSize(
   label: string,
@@ -174,5 +180,19 @@ export function edgeLabelSize(
   return {
     w: Math.round(Math.max(36, w)),
     h: Math.round(lines.length * type.lineHeight + 6),
+  };
+}
+
+/**
+ * What a self-message draws, measured from where its row meets the lifeline: how far right, how
+ * far above the row and how far below it.
+ */
+export function selfMessageInk(label: string | undefined, r: ResolvedAppearance) {
+  if (!label) return { right: SELF_LOOP.out, above: 0, below: SELF_LOOP.down };
+  const { w, h } = edgeLabelSize(label, r, true);
+  return {
+    right: SELF_LOOP.out + SELF_LOOP.label + w,
+    above: Math.max(0, h / 2 - SELF_LOOP.down / 2),
+    below: Math.max(SELF_LOOP.down, SELF_LOOP.down / 2 + h / 2),
   };
 }

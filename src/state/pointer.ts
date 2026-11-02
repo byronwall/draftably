@@ -442,8 +442,8 @@ function startObjectDrag(e: PointerEvent, canvas: Element, id: string, doubleCan
     positions,
     frames,
     refRect: clone(objectRect(doc, lookup, id)),
-    // A dragged cell stays in its group: dropping it there reorders the cells.
-    keepParent: e.altKey || roots.some(r => isCell(doc, r)),
+    // A dragged cell stays in its group, and a participant in its band: the drop reorders them.
+    keepParent: e.altKey || !!doc.layout.sequence || roots.some(r => isCell(doc, r)),
     doubleCandidate,
   });
 }
